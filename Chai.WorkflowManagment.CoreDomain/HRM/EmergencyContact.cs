@@ -17,8 +17,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string HouseNo { get; set; }
         public string TelephoneHome { get; set; }
         public string TelephoneOffice { get; set; }
-        public virtual Employee Employee { get; set; }
-        public virtual AppUser AppUser { get; set; }
-        public virtual VehicleRequest VehicleRequest { get; set; }
+        public virtual HRM.Employee Employee { get; set; }
+    
     }
 }

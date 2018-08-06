@@ -89,6 +89,10 @@
     <Compile Include="DataAccess\ExpUtility.cs" />
     <Compile Include="DataAccess\WorkspaceFactory.cs" />
     <Compile Include="DataAccess\WorkflowManagmentDbContext.cs" />
+    <Compile Include="Setting\JobTitle.cs" />
+    <Compile Include="Setting\Program.cs" />
+    <Compile Include="Setting\Position.cs" />
+    <Compile Include="HRM\EmployeeDetail.cs" />
     <Compile Include="HRM\EmergencyContact.cs" />
     <Compile Include="HRM\Employee.cs" />
     <Compile Include="IEntity.cs" />
