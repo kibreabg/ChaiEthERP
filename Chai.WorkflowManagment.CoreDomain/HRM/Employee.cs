@@ -24,6 +24,6 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public string PersonalEmail { get; set; }
         public string ChaiEMail { get; set; }
         public string Photo { get; set; }
-        public Boolean Status { get; set; }  //to align with bit data type 
+        public Boolean Status { get; set; }   
     }
 }
