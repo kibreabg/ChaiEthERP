@@ -11,6 +11,7 @@ using Chai.WorkflowManagment.CoreDomain.Requests;
 using Chai.WorkflowManagment.CoreDomain.TravelLogs;
 using Chai.WorkflowManagment.CoreDomain.Request;
 using Chai.WorkflowManagment.CoreDomain.Approval;
+using Chai.WorkflowManagment.CoreDomain.HRM;
 
 
 namespace Chai.WorkflowManagment.CoreDomain.DataAccess
@@ -107,7 +108,15 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
         public DbSet<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
         public DbSet<PurchaseOrderSoleVendor> PurchaseOrderSoleVendors { get; set; }
         public DbSet<PurchaseOrderSoleVendorDetail> PurchaseOrderSoleVendorDetails { get; set; }
-
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Contract> Contracts { get; set; }
+        public DbSet<FamilyDetail> FamilyDetails { get; set; }
+        public DbSet<EmployeeDetail> EmployeeDetails { get; set; }
+        public DbSet<Education> Educations { get; set; }
+        public DbSet<EmergencyContact> EmergencyContacts { get; set; }
+        public DbSet<Termination> Terminations { get; set; }
+        public DbSet<TerminationReason> TerminationReasons { get; set; }
+        public DbSet<WorkExperience> WorkExperiences { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             //modelBuilder.Entity<AppUser>().HasMany(p => p.AppUserRoles).WithMany();

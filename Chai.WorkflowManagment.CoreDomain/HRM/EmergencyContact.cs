@@ -5,7 +5,7 @@ using System.Text;
 using Chai.WorkflowManagment.CoreDomain.Setting;
 using Chai.WorkflowManagment.CoreDomain.Users;
 
-namespace Chai.WorkflowManagment.CoreDomain.Requests
+namespace Chai.WorkflowManagment.CoreDomain.HRM
 {
     public partial class EmergencyContact : IEntity
     {
