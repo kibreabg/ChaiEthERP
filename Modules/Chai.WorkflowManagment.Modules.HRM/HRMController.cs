@@ -31,7 +31,19 @@ namespace Chai.WorkflowManagment.Modules.HRM
         {
             _workspace = ZadsServices.Workspace;
         }
-        
+        #region CurrentObject
+        public object CurrentObject
+        {
+            get
+            {
+                return GetCurrentContext().Session["CurrentObject"];
+            }
+            set
+            {
+                GetCurrentContext().Session["CurrentObject"] = value;
+            }
+        }
+        #endregion
         #region Entity Manipulation
         public void SaveOrUpdateEntity<T>(T item) where T : class
         {
