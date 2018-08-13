@@ -78,7 +78,13 @@
     <Compile Include="HRMController.cs" />
     <Compile Include="HRMModuleInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\ManageHRPresenter.cs" />
+    <Compile Include="Views\EmployeeProfilePresenter.cs" />
+    <Compile Include="Views\EmployeeListPresenter.cs" />
     <Compile Include="Views\DefaultPresenter.cs" />
+    <Compile Include="Views\IManageHRView.cs" />
+    <Compile Include="Views\IEmployeeProfileView.cs" />
+    <Compile Include="Views\IEmployeeListView.cs" />
     <Compile Include="Views\IDefaultView.cs" />
   </ItemGroup>
   <ItemGroup>

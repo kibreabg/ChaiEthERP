@@ -92,6 +92,9 @@
     <Compile Include="HRM\Contract.cs" />
     <Compile Include="HRM\Education.cs" />
     <Compile Include="HRM\FamilyDetail.cs" />
+    <Compile Include="HRM\Termination.cs" />
+    <Compile Include="HRM\TerminationReason.cs" />
+    <Compile Include="HRM\WorkExperience.cs" />
     <Compile Include="Setting\JobTitle.cs" />
     <Compile Include="Setting\Program.cs" />
     <Compile Include="Setting\Position.cs" />
