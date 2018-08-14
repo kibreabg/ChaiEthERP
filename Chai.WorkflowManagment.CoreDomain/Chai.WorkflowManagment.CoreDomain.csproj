@@ -89,6 +89,7 @@
     <Compile Include="DataAccess\ExpUtility.cs" />
     <Compile Include="DataAccess\WorkspaceFactory.cs" />
     <Compile Include="DataAccess\WorkflowManagmentDbContext.cs" />
+    <Compile Include="HRM\Warning.cs" />
     <Compile Include="HRM\Contract.cs" />
     <Compile Include="HRM\Education.cs" />
     <Compile Include="HRM\FamilyDetail.cs" />

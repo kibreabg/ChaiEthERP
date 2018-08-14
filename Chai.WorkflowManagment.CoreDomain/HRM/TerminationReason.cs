@@ -7,6 +7,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
 {
    public class TerminationReason :IEntity
     {
+       
         public int Id { get; set; }
         public int TerminationReasonId { get; set; }
         public string Reason { get; set; }

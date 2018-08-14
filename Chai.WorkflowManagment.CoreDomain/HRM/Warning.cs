@@ -7,17 +7,14 @@ using Chai.WorkflowManagment.CoreDomain.Users;
 
 namespace Chai.WorkflowManagment.CoreDomain.HRM
 {
-    public partial class EmergencyContact : IEntity
+    public partial class Warning : IEntity
     {
         public int Id { get; set; }
-        public string FullName { get; set; }
-        public string SubCity { get; set; }
 
-        public string Woreda { get; set; }
-        public string HouseNo { get; set; }
-        public string TelephoneHome { get; set; }
-        public string TelephoneOffice { get; set; }
+        public string WarningDescription { get; set; }
+        public DateTime WarningDate { get; set; }
+          
         public virtual HRM.Employee Employee { get; set; }
-    
+
     }
 }
