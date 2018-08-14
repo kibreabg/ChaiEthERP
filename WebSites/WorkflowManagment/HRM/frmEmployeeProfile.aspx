@@ -4,24 +4,44 @@
 <%@ MasterType TypeName="Chai.WorkflowManagment.Modules.Shell.BaseMaster" %>
 
 <asp:Content ID="content" ContentPlaceHolderID="DefaultContent" runat="Server">
+    <script src="../js/libs/jquery-2.0.2.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // fuelux wizard
+            var wizard = $('.wizard').wizard();
 
+            wizard.on('finished', function (e, data) {
+                //$("#fuelux-wizard").submit();
+                //console.log("submitted!");
+                $.smallBox({
+                    title: "Congratulations! Your form was submitted",
+                    content: "<i class='fa fa-clock-o'></i> <i>1 seconds ago...</i>",
+                    color: "#5F895F",
+                    iconSmall: "fa fa-check bounce animated",
+                    timeout: 4000
+                });
+
+            });
+        });
+    </script>
     <section id="widget-grid" class="">
 
         <!-- row -->
         <div class="row">
 
             <!-- NEW WIDGET START -->
-            <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
+            <article class="col-sm-12 sortable-grid ui-sortable">
 
                 <!-- Widget ID (each widget will need unique ID)-->
 
                 <!-- end widget -->
 
                 <div class="jarviswidget jarviswidget-sortable" id="wid-id-2" data-widget-editbutton="false" data-widget-deletebutton="false" role="widget" style="">
-                    
+
                     <header role="heading">
                         <div class="jarviswidget-ctrls" role="menu"><a href="javascript:void(0);" class="button-icon jarviswidget-toggle-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Collapse"><i class="fa fa-minus "></i></a><a href="javascript:void(0);" class="button-icon jarviswidget-fullscreen-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand "></i></a></div>
-                        <div class="widget-toolbar" role="menu"><a data-toggle="dropdown" class="dropdown-toggle color-box selector" href="javascript:void(0);"></a>
+                        <div class="widget-toolbar" role="menu">
+                            <a data-toggle="dropdown" class="dropdown-toggle color-box selector" href="javascript:void(0);"></a>
                             <ul class="dropdown-menu arrow-box-up-right color-select pull-right">
                                 <li><span class="bg-color-green" data-widget-setstyle="jarviswidget-color-green" rel="tooltip" data-placement="left" data-original-title="Green Grass"></span></li>
                                 <li><span class="bg-color-greenDark" data-widget-setstyle="jarviswidget-color-greenDark" rel="tooltip" data-placement="top" data-original-title="Dark Green"></span></li>
@@ -94,63 +114,143 @@
                                 <form class="form-horizontal" id="fuelux-wizard" method="post">
 
                                     <div class="step-pane active" id="step1">
-                                        <h3><strong>Step 1 </strong>- Validation states</h3>
+                                        <h3><strong>Step 1 </strong>- Basic Information</h3>
 
                                         <!-- wizard form starts here -->
                                         <fieldset>
 
-                                            <div class="form-group has-warning">
-                                                <label class="col-md-2 control-label">Input warning</label>
-                                                <div class="col-md-10">
-                                                    <div class="input-group">
-                                                        <input class="form-control" type="text">
-                                                        <span class="input-group-addon"><i class="fa fa-warning"></i></span>
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                                            <asp:TextBox ID="txtFirstName" runat="server" CssClass="form-control" placeholder="First Name"></asp:TextBox>
+                                                        </div>
                                                     </div>
-                                                    <span class="help-block">Something may have gone wrong</span>
                                                 </div>
-
-                                            </div>
-
-                                            <div class="form-group has-error">
-                                                <label class="col-md-2 control-label">Input error</label>
-                                                <div class="col-md-10">
-                                                    <div class="input-group">
-                                                        <input class="form-control" type="text">
-                                                        <span class="input-group-addon"><i class="glyphicon glyphicon-remove-circle"></i></span>
-                                                    </div>
-                                                    <span class="help-block"><i class="fa fa-warning"></i>Please correct the error</span>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group has-success">
-                                                <label class="col-md-2 control-label">Input success</label>
-                                                <div class="col-md-10">
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
-                                                        <input class="form-control" type="text">
-                                                        <span class="input-group-addon"><i class="fa fa-check"></i></span>
-                                                    </div>
-                                                    <span class="help-block">Something may have gone wrong</span>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="control-label col-md-2">Input icon success</label>
-                                                <div class="col-md-10">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-
-                                                            <div class="input-icon-left">
-                                                                <i class="fa txt-color-green fa-check"></i>
-                                                                <input class="form-control" placeholder="Left Icon" type="text">
-                                                            </div>
-
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                                            <asp:TextBox ID="txtLastName" runat="server" CssClass="form-control" placeholder="Last Name"></asp:TextBox>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                                            <asp:TextBox ID="txtGender" runat="server" CssClass="form-control" placeholder="Gender"></asp:TextBox>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+                                                            <asp:TextBox ID="txtDateOfBirth" runat="server" CssClass="form-control" placeholder="Date of Birth"></asp:TextBox>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                                            <asp:TextBox ID="txtMaritalStatus" runat="server" CssClass="form-control" placeholder="Marital Status"></asp:TextBox>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon"><i class="fa fa-flag fa-fw"></i></span>
+                                                            <asp:TextBox ID="txtNationality" runat="server" CssClass="form-control" placeholder="Nationality"></asp:TextBox>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>                                            
+                                            <div class="row">                                                
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
+                                                            <asp:TextBox ID="txtPhone" runat="server" CssClass="form-control" data-mask="+(999) 999-99-99-99" data-mask-placeholder="X" placeholder="Phone"></asp:TextBox>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon"><i class="fa fa-mobile fa-fw"></i></span>
+                                                            <asp:TextBox ID="txtCellPhone" runat="server" CssClass="form-control" placeholder="Cell Phone"></asp:TextBox>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">                                                
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon"><i class="fa fa-envelope fa-fw"></i></span>
+                                                            <asp:TextBox ID="txtChaiEmail" runat="server" CssClass="form-control" placeholder="CHAI Email"></asp:TextBox>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon"><i class="fa fa-envelope fa-fw"></i></span>
+                                                            <asp:TextBox ID="txtPersonalEmail" runat="server" CssClass="form-control" placeholder="Personal Email"></asp:TextBox>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon"><i class="fa fa-flag fa-fw"></i></span>
+                                                            <asp:TextBox ID="txtCountry" runat="server" CssClass="form-control" placeholder="Country"></asp:TextBox>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                                            <asp:TextBox ID="txtCity" runat="server" CssClass="form-control" placeholder="City"></asp:TextBox>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon"><i class="fa fa-map-marker fa-fw"></i></span>
+                                                            <asp:TextBox ID="txtAddress" runat="server" CssClass="form-control" placeholder="Address"></asp:TextBox>
+                                                        </div>
+                                                    </div>
+                                                </div>                                                
+                                            </div>
                                         </fieldset>
+                                        <div class="form-actions">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <button class="btn btn-default" type="submit">
+                                                        Cancel
+                                                    </button>
+                                                    <button class="btn btn-primary" type="submit">
+                                                        <i class="fa fa-save"></i>
+                                                        Submit
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                     </div>
 
