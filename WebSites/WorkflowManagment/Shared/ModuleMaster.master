@@ -80,14 +80,14 @@
                     <li class="">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span>Administration</span> <i class="fa fa-angle-down"></i></a>
                         <ul class="dropdown-menu pull-right">
-                           <li class="active">
-                                    <asp:LinkButton ID="lnkAdmin" runat="server" OnClick="lnkAdmin_Click" Visible="false">Admin</asp:LinkButton>
-                                    <%--<a href="<%=this.Page.ResolveUrl(string.Format("~/Admin/Default.aspx?{0}=0", Chai.WorkflowManagment.Shared.AppConstants.TABID)) %>"  id="adminlink">Admin</a>--%>
-                           </li>
+                            <li class="active">
+                                <asp:LinkButton ID="lnkAdmin" runat="server" OnClick="lnkAdmin_Click" Visible="false">Admin</asp:LinkButton>
+                                <%--<a href="<%=this.Page.ResolveUrl(string.Format("~/Admin/Default.aspx?{0}=0", Chai.WorkflowManagment.Shared.AppConstants.TABID)) %>"  id="adminlink">Admin</a>--%>
+                            </li>
                             <li>
-                                   <asp:LinkButton ID="lnkassign" runat="server" Visible="false" OnClick="lnkassign_Click">Assign job</asp:LinkButton>
-                                   <%--<a href="<%=this.Page.ResolveUrl(string.Format("~/Admin/AssignJob.aspx?{0}=0", Chai.WorkflowManagment.Shared.AppConstants.TABID)) %>"  id="assignlink">Assign Job</a>--%>
-                           </li>
+                                <asp:LinkButton ID="lnkassign" runat="server" Visible="false" OnClick="lnkassign_Click">Assign job</asp:LinkButton>
+                                <%--<a href="<%=this.Page.ResolveUrl(string.Format("~/Admin/AssignJob.aspx?{0}=0", Chai.WorkflowManagment.Shared.AppConstants.TABID)) %>"  id="assignlink">Assign Job</a>--%>
+                            </li>
                             <li>
                                 <a href="<%=this.Page.ResolveUrl(string.Format("~/ChangePassword.aspx?{0}=0", Chai.WorkflowManagment.Shared.AppConstants.TABID)) %>">Change Password</a>
                             </li>
@@ -137,10 +137,10 @@
                     <span><a href="javascript:void(0);" data-action="launchFullscreen" title="Full Screen"><i class="fa fa-arrows-alt"></i></a></span>
                 </div>
                 <!-- end fullscreen button -->
-                   <div  class="btn-header  pull-right">
-                 <span><a data-toggle="modal"  id="searchLink" href="#mailModal">Need Help?</a></span>
-			
-			  </div>
+                <div class="btn-header  pull-right">
+                    <span><a data-toggle="modal" id="searchLink" href="#mailModal">Need Help?</a></span>
+
+                </div>
 
             </div>
             <!-- end pulled right: nav area -->
@@ -213,62 +213,62 @@
             </div>
         </div>
         <div class="modal fade" id="mailModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">Send Support Message</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="lblFrom">Name</label>
-                                <asp:TextBox ID="txtFrom" CssClass="form-control" ToolTip="From" runat="server"></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="RfvFrom" ControlToValidate="txtFrom" CssClass="validator" InitialValue="" Text="*" runat="server" ErrorMessage="From Required" ValidationGroup="Send"></asp:RequiredFieldValidator>
-                            </div>
-                        </div>
-                        </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="lblTo">To</label>
-                                <asp:TextBox ID="txtTo" CssClass="form-control" ToolTip="To" runat="server" Text="supportwfms@clintonhealthaccess.org"></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="RfvTo" ControlToValidate="txtTo" CssClass="validator" InitialValue="" Text="*" runat="server" ErrorMessage="To Required" ValidationGroup="Send"></asp:RequiredFieldValidator>
-                            </div>
-                        </div>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">Send Support Message</h4>
                     </div>
-                       <div class="row">
-                           
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="lblSubject">Subject</label>
-                                <asp:TextBox ID="txtSubject" CssClass="form-control" ToolTip="Subject" runat="server"></asp:TextBox>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="modal-body">
                         <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="lblMessage">Message</label>
-                                 <asp:TextBox ID="txtMessage" CssClass="form-control" ToolTip="Subject" runat="server" TextMode="MultiLine"></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="RfvMessage" ControlToValidate="txtMessage" InitialValue="" CssClass="validator" Text="*" runat="server" ErrorMessage="Message Required" ValidationGroup="Send"></asp:RequiredFieldValidator>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="lblFrom">Name</label>
+                                    <asp:TextBox ID="txtFrom" CssClass="form-control" ToolTip="From" runat="server"></asp:TextBox>
+                                    <asp:RequiredFieldValidator ID="RfvFrom" ControlToValidate="txtFrom" CssClass="validator" InitialValue="" Text="*" runat="server" ErrorMessage="From Required" ValidationGroup="Send"></asp:RequiredFieldValidator>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row" style="text-align: right;">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <asp:Button ID="btnSend" runat="server"  Text="Send" CssClass="btn btn-primary" ValidationGroup="Send" OnClick="btnSend_Click"></asp:Button>
-                                <asp:Button ID="btnCancelSend" Text="Close" runat="server" class="btn btn-primary"></asp:Button>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="lblTo">To</label>
+                                    <asp:TextBox ID="txtTo" CssClass="form-control" ToolTip="To" runat="server" Text="supportwfms@clintonhealthaccess.org"></asp:TextBox>
+                                    <asp:RequiredFieldValidator ID="RfvTo" ControlToValidate="txtTo" CssClass="validator" InitialValue="" Text="*" runat="server" ErrorMessage="To Required" ValidationGroup="Send"></asp:RequiredFieldValidator>
+                                </div>
                             </div>
                         </div>
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="lblSubject">Subject</label>
+                                    <asp:TextBox ID="txtSubject" CssClass="form-control" ToolTip="Subject" runat="server"></asp:TextBox>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="lblMessage">Message</label>
+                                    <asp:TextBox ID="txtMessage" CssClass="form-control" ToolTip="Subject" runat="server" TextMode="MultiLine"></asp:TextBox>
+                                    <asp:RequiredFieldValidator ID="RfvMessage" ControlToValidate="txtMessage" InitialValue="" CssClass="validator" Text="*" runat="server" ErrorMessage="Message Required" ValidationGroup="Send"></asp:RequiredFieldValidator>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="text-align: right;">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <asp:Button ID="btnSend" runat="server" Text="Send" CssClass="btn btn-primary" ValidationGroup="Send" OnClick="btnSend_Click"></asp:Button>
+                                    <asp:Button ID="btnCancelSend" Text="Close" runat="server" class="btn btn-primary"></asp:Button>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-                    
+
                 </div>
-               
             </div>
         </div>
-    </div>
     </form>
     <!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
     <script type="text/javascript" data-pace-options='{ "restartOnRequestAfter": true }' src="../js/plugin/pace/pace.min.js"></script>
@@ -343,9 +343,11 @@
     <!-- Voice command : plugin -->
     <script type="text/javascript" src="../js/speech/voicecommand.min.js"></script>
 
-    <!-- PAGE RELATED PLUGIN(S) 
-		<script src="..."></script>-->
+    <!-- TIME PICKER PLUGIN-->
     <script type="text/javascript" src="../js/plugin/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
+    <!-- WIZARD PLUGIN -->
+    <script type="text/javascript"  src="../js/plugin/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+    <script type="text/javascript"  src="../js/plugin/fuelux/wizard/wizard.min.js"></script>
 
     <script type="text/javascript">
 
@@ -422,12 +424,12 @@
         })();
 
     </script>
-     <script type="text/javascript">
-         function showSearch() {
-             $(document).ready(function () {
-                 $('#mailModal').modal('show');
-             });
-         }
+    <script type="text/javascript">
+        function showSearch() {
+            $(document).ready(function () {
+                $('#mailModal').modal('show');
+            });
+        }
     </script>
 </body>
 </html>
