@@ -7,7 +7,6 @@ using Microsoft.Practices.CompositeWeb;
 using Microsoft.Practices.CompositeWeb.Interfaces;
 using Microsoft.Practices.CompositeWeb.Utility;
 using Microsoft.Practices.ObjectBuilder;
-
 using Chai.WorkflowManagment.CoreDomain;
 using Chai.WorkflowManagment.CoreDomain.DataAccess;
 using Chai.WorkflowManagment.CoreDomain.Admins;
@@ -18,6 +17,7 @@ using Chai.WorkflowManagment.Shared.Navigation;
 
 using System.Data;
 using Chai.WorkflowManagment.CoreDomain.Requests;
+using Chai.WorkflowManagment.CoreDomain.HRM;
 
 namespace Chai.WorkflowManagment.Modules.HRM
 {
@@ -42,6 +42,16 @@ namespace Chai.WorkflowManagment.Modules.HRM
             {
                 GetCurrentContext().Session["CurrentObject"] = value;
             }
+        }
+        #endregion
+        #region Employee Search 
+        public IList<Employee> ListEmployees(string EmpNo, string FullName,int project)
+        {
+            string filterExpression = "";
+            
+           filterExpression = "SELECT * FROM Employees Where 1 = Case when '" + FullName + "' = '' Then 1 When (Employees.FirstName + ' ' + Employees.lastName) = '" + FullName + "' Then 1 END ";
+            // return WorkspaceFactory.CreateReadOnly().Queryable<CashPaymentRequest>(filterExpression).ToList();
+            return _workspace.SqlQuery<Employee>(filterExpression).ToList();
         }
         #endregion
         #region Entity Manipulation
