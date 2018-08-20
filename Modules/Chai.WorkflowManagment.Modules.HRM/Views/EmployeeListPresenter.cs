@@ -6,7 +6,7 @@ using Microsoft.Practices.CompositeWeb;
 
 namespace Chai.WorkflowManagment.Modules.HRM.Views
 {
-    public class DefaultPresenter : Presenter<IDefaultView>
+    public class EmployeeListPresenter : Presenter<IEmployeeListView>
     {
 
         // NOTE: Uncomment the following code if you want ObjectBuilder to inject the module controller
