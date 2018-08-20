@@ -3,7 +3,7 @@ using Microsoft.Practices.ObjectBuilder;
 
 namespace Chai.WorkflowManagment.Modules.HRM.Views
 {
-	public partial class Default : Microsoft.Practices.CompositeWeb.Web.UI.Page, IDefaultView
+	public partial class Default : POCBasePage, IDefaultView
 	{
 		private DefaultPresenter _presenter;
 

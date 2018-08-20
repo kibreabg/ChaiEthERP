@@ -4,12 +4,14 @@ using System.Linq;
 using Microsoft.Practices.CompositeWeb;
 using Microsoft.Practices.CompositeWeb.Interfaces;
 using Microsoft.Practices.ObjectBuilder;
-
 using Chai.WorkflowManagment.CoreDomain;
 using Chai.WorkflowManagment.CoreDomain.DataAccess;
 using Chai.WorkflowManagment.Services;
 using Chai.WorkflowManagment.Shared.Navigation;
 
+
+using System.Data;
+using Chai.WorkflowManagment.CoreDomain.Requests;
 using Chai.WorkflowManagment.CoreDomain.HRM;
 
 namespace Chai.WorkflowManagment.Modules.HRM
@@ -175,6 +177,16 @@ namespace Chai.WorkflowManagment.Modules.HRM
             }
         }
         #endregion
+        #region Employee Search 
+        public IList<Employee> ListEmployees(string EmpNo, string FullName,int project)
+        {
+            string filterExpression = "";
+            
+           filterExpression = "SELECT * FROM Employees Where 1 = Case when '" + FullName + "' = '' Then 1 When (Employees.FirstName + ' ' + Employees.lastName) = '" + FullName + "' Then 1 END ";
+            // return WorkspaceFactory.CreateReadOnly().Queryable<CashPaymentRequest>(filterExpression).ToList();
+            return _workspace.SqlQuery<Employee>(filterExpression).ToList();
+        }
+        #endregion
         #region Entity Manipulation
         public void SaveOrUpdateEntity<T>(T item) where T : class
         {
@@ -186,7 +198,7 @@ namespace Chai.WorkflowManagment.Modules.HRM
 
             _workspace.CommitChanges();
             _workspace.Refresh(item);
-        }       
+        }
 
         public void DeleteEntity<T>(T item) where T : class
         {

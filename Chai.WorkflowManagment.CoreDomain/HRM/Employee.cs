@@ -19,7 +19,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             this.FamilyDetails = new List<FamilyDetail>();
             this.Terminations = new List<Termination>();
             this.WorkExperiences = new List<WorkExperience>();
-
+           
         }
         public int Id { get; set; }
 
@@ -37,7 +37,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public string PersonalEmail { get; set; }
         public string ChaiEMail { get; set; }
         public string Photo { get; set; }
-        public Boolean Status { get; set; }
+        public Nullable<Boolean> Status { get; set; }
 
         public virtual AppUser AppUser { get; set; }
         public virtual IList<Contract> Contracts { get; set; }
@@ -61,7 +61,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             return null;
         }
 
-
+     
         public virtual void RemoveEmployeeDetail(int Id)
         {
             foreach (EmployeeDetail ED in EmployeeDetails)
