@@ -87,6 +87,8 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             return WorkspaceFactory.CreateReadOnly().Query<ItemAccount>(x => x.Status == "Active").OrderBy(x => x.AccountName).ToList();
         }
+
+       
         public ItemAccount GetItemAccount(int ItemAccountId)
         {
             return _workspace.Single<ItemAccount>(x => x.Id == ItemAccountId);
@@ -243,6 +245,46 @@ namespace Chai.WorkflowManagment.Modules.Setting
             filterExpression = "SELECT  *  FROM EmployeePositions Where Status = 'Active'";
 
             return _workspace.SqlQuery<EmployeePosition>(filterExpression).ToList();
+
+        }
+        #endregion
+        #region JobTitle
+
+        public IList<JobTitle> GetJobTitles()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<JobTitle>(null).OrderBy(x => x.JobTitleName).ToList();
+        }
+        public JobTitle GetJobTitle(int JTId)
+        {
+            return _workspace.Single<JobTitle>(x => x.Id == JTId);
+        }
+        public IList<JobTitle> ListJobTitles()
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM JobTitles ";
+
+            return _workspace.SqlQuery<JobTitle>(filterExpression).ToList();
+
+        }
+        #endregion
+        #region Program
+
+        public IList<Program> GetPrograms()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<Program>(null).OrderBy(x => x.ProgramName).ToList();
+        }
+        public Program GetProgram(int progId)
+        {
+            return _workspace.Single<Program>(x => x.Id == progId);
+        }
+        public IList<Program> ListPrograms()
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM Programs ";
+
+            return _workspace.SqlQuery<Program>(filterExpression).ToList();
 
         }
         #endregion

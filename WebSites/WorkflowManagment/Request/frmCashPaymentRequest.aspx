@@ -118,7 +118,7 @@
                                     <div class="tab-content padding-10">
                                         <div class="tab-pane active" id="iss1">
                                             <asp:DataGrid ID="dgCashPaymentDetail" runat="server" AutoGenerateColumns="false"
-                                                CellPadding="0" CssClass="table table-striped table-bordered table-hover" DataKeyField="Id"
+                                                CellPadding="0" CssClass="ui-jqgrid-btable table table-bordered table-striped" DataKeyField="Id"
                                                 GridLines="None" OnCancelCommand="dgCashPaymentDetail_CancelCommand" OnDeleteCommand="dgCashPaymentDetail_DeleteCommand"
                                                 OnEditCommand="dgCashPaymentDetail_EditCommand" OnItemCommand="dgCashPaymentDetail_ItemCommand"
                                                 OnItemDataBound="dgCashPaymentDetail_ItemDataBound" OnUpdateCommand="dgCashPaymentDetail_UpdateCommand"

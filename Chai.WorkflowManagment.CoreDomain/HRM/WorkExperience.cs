@@ -9,7 +9,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
     {
 
         public int Id { get; set; }
-        public int EmployeeId { get; set; }
+        public virtual HRM.Employee Employee { get; set; }
         public string EmployerName { get; set; }
         public string EmployerAddress { get; set; }
         public DateTime StartDate { get; set; }
