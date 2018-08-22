@@ -23,6 +23,47 @@
 
             });
         });
+
+        function movetofamily() {
+            $(document).ready(function () {
+                var wizard = $('.wizard').wizard();
+
+                wizard.wizard('selectedItem', {
+                    step: 2
+                });
+            });
+        }
+
+        function movetoemergency() {
+            $(document).ready(function () {
+                var wizard = $('.wizard').wizard();
+
+                wizard.wizard('selectedItem', {
+                    step: 3
+                });
+            });
+        }
+
+        function movetoeducation() {
+            $(document).ready(function () {
+                var wizard = $('.wizard').wizard();
+
+                wizard.wizard('selectedItem', {
+                    step: 4
+                });
+            });
+        }
+
+        function movetowork() {
+            $(document).ready(function () {
+                var wizard = $('.wizard').wizard();
+
+                wizard.wizard('selectedItem', {
+                    step: 5
+                });
+            });
+        }
+        
     </script>
     <section id="widget-grid" class="">
 
@@ -111,234 +152,592 @@
                                 </div>
                             </div>
                             <div class="step-content">
-                                <form class="form-horizontal" id="fuelux-wizard" method="post">
-
-                                    <div class="step-pane active" id="step1">
-                                        <h3><strong>Step 1 </strong>- Basic Information</h3>
-
-                                        <!-- wizard form starts here -->
-                                        <fieldset>
-
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
-                                                            <asp:TextBox ID="txtFirstName" runat="server" CssClass="form-control" placeholder="First Name"></asp:TextBox>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
-                                                            <asp:TextBox ID="txtLastName" runat="server" CssClass="form-control" placeholder="Last Name"></asp:TextBox>
-                                                        </div>
+                                <div class="step-pane active" id="step1">
+                                    <h3><strong>Step 1 </strong>- Basic Information</h3>
+                                    <!-- wizard form starts here -->
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtFirstName" runat="server" CssClass="form-control" placeholder="First Name"></asp:TextBox>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
-                                                            <asp:TextBox ID="txtGender" runat="server" CssClass="form-control" placeholder="Gender"></asp:TextBox>
-                                                        </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtLastName" runat="server" CssClass="form-control" placeholder="Last Name"></asp:TextBox>
                                                     </div>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
-                                                            <asp:TextBox ID="txtDateOfBirth" runat="server" CssClass="form-control" placeholder="Date of Birth"></asp:TextBox>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
-                                                            <asp:TextBox ID="txtMaritalStatus" runat="server" CssClass="form-control" placeholder="Marital Status"></asp:TextBox>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><i class="fa fa-flag fa-fw"></i></span>
-                                                            <asp:TextBox ID="txtNationality" runat="server" CssClass="form-control" placeholder="Nationality"></asp:TextBox>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>                                            
-                                            <div class="row">                                                
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
-                                                            <asp:TextBox ID="txtPhone" runat="server" CssClass="form-control" data-mask="+(999) 999-99-99-99" data-mask-placeholder="X" placeholder="Phone"></asp:TextBox>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><i class="fa fa-mobile fa-fw"></i></span>
-                                                            <asp:TextBox ID="txtCellPhone" runat="server" CssClass="form-control" placeholder="Cell Phone"></asp:TextBox>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">                                                
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><i class="fa fa-envelope fa-fw"></i></span>
-                                                            <asp:TextBox ID="txtChaiEmail" runat="server" CssClass="form-control" placeholder="CHAI Email"></asp:TextBox>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><i class="fa fa-envelope fa-fw"></i></span>
-                                                            <asp:TextBox ID="txtPersonalEmail" runat="server" CssClass="form-control" placeholder="Personal Email"></asp:TextBox>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><i class="fa fa-flag fa-fw"></i></span>
-                                                            <asp:TextBox ID="txtCountry" runat="server" CssClass="form-control" placeholder="Country"></asp:TextBox>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
-                                                            <asp:TextBox ID="txtCity" runat="server" CssClass="form-control" placeholder="City"></asp:TextBox>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <div class="form-group">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><i class="fa fa-map-marker fa-fw"></i></span>
-                                                            <asp:TextBox ID="txtAddress" runat="server" CssClass="form-control" placeholder="Address"></asp:TextBox>
-                                                        </div>
-                                                    </div>
-                                                </div>                                                
-                                            </div>
-                                        </fieldset>
-                                        <div class="form-actions">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <button class="btn btn-default" type="submit">
-                                                        Cancel
-                                                    </button>
-                                                    <button class="btn btn-primary" type="submit">
-                                                        <i class="fa fa-save"></i>
-                                                        Submit
-                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
-
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                                        <asp:DropDownList ID="ddlGender" runat="server" CssClass="form-control">
+                                                            <asp:ListItem Value="" Text="Select Gender"></asp:ListItem>
+                                                            <asp:ListItem Value="Male" Text="Male"></asp:ListItem>
+                                                            <asp:ListItem Value="Female" Text="Female"></asp:ListItem>
+                                                        </asp:DropDownList>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtDateOfBirth" runat="server" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" placeholder="Date of Birth"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                                        <asp:DropDownList ID="ddlMaritalStatus" runat="server" CssClass="form-control">
+                                                            <asp:ListItem Value="" Text="Select Marital Status"></asp:ListItem>
+                                                            <asp:ListItem Value="Single" Text="Single"></asp:ListItem>
+                                                            <asp:ListItem Value="Married" Text="Married"></asp:ListItem>
+                                                            <asp:ListItem Value="Divorced" Text="Divorced"></asp:ListItem>
+                                                            <asp:ListItem Value="Widowed" Text="Widowed"></asp:ListItem>
+                                                        </asp:DropDownList>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-flag fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtNationality" runat="server" CssClass="form-control" placeholder="Nationality"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtPhone" runat="server" CssClass="form-control" data-mask="+(999) 999-99-99-99" data-mask-placeholder="X" placeholder="Phone"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-mobile fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtCellPhone" runat="server" CssClass="form-control" data-mask="+(999) 999-99-99-99" data-mask-placeholder="X" placeholder="Cell Phone"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-envelope fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtChaiEmail" runat="server" CssClass="form-control" placeholder="CHAI Email"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-envelope fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtPersonalEmail" runat="server" CssClass="form-control" placeholder="Personal Email"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-flag fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtCountry" runat="server" CssClass="form-control" placeholder="Country"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-map-marker fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtCity" runat="server" CssClass="form-control" placeholder="City"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-map-marker fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtAddress" runat="server" CssClass="form-control" placeholder="Address"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div class="form-actions">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button class="btn btn-default" type="submit">
+                                                    Cancel
+                                                </button>
+                                                <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" CssClass="btn btn-primary"></asp:Button>
+                                            </div>
+                                        </div>
                                     </div>
+                                </div>
 
-                                    <div class="step-pane" id="step2">
-                                        <h3><strong>Step 2 </strong>- Alerts</h3>
-
-                                        <div class="alert alert-warning fade in">
-                                            <button class="close" data-dismiss="alert">
-                                                ×
-                                            </button>
-                                            <i class="fa-fw fa fa-warning"></i>
-                                            <strong>Warning</strong> Your monthly traffic is reaching limit.
+                                <div class="step-pane" id="step2">
+                                    <h3><strong>Step 2 </strong>- Family Details</h3>
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtFamFirstName" runat="server" CssClass="form-control" placeholder="First Name"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtFamLastName" runat="server" CssClass="form-control" placeholder="Last Name"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-
-                                        <div class="alert alert-success fade in">
-                                            <button class="close" data-dismiss="alert">
-                                                ×
-                                            </button>
-                                            <i class="fa-fw fa fa-check"></i>
-                                            <strong>Success</strong> The page has been added.
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                                        <asp:DropDownList ID="ddlFamGender" runat="server" CssClass="form-control">
+                                                            <asp:ListItem Value="" Text="Select Gender"></asp:ListItem>
+                                                            <asp:ListItem Value="Male" Text="Male"></asp:ListItem>
+                                                            <asp:ListItem Value="Female" Text="Female"></asp:ListItem>
+                                                        </asp:DropDownList>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtFamDateOfBirth" runat="server" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" placeholder="Date of Birth"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-
-                                        <div class="alert alert-info fade in">
-                                            <button class="close" data-dismiss="alert">
-                                                ×
-                                            </button>
-                                            <i class="fa-fw fa fa-info"></i>
-                                            <strong>Info!</strong> You have 198 unread messages.
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtFamDateOfMarriage" runat="server" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" placeholder="Date of Marriage"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <label class="col-md-1 control-label">Attach Certificate</label>
+                                            <div class="col-sm-5">
+                                                <div class="form-group">
+                                                    <div class="smart-form">
+                                                        <div class="input input-file">
+                                                            <asp:FileUpload ID="fuCertificate" runat="server" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-
-                                        <div class="alert alert-danger fade in">
-                                            <button class="close" data-dismiss="alert">
-                                                ×
-                                            </button>
-                                            <i class="fa-fw fa fa-times"></i>
-                                            <strong>Error!</strong> The daily cronjob has failed.
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtFamCellPhone" runat="server" CssClass="form-control" data-mask="+(999) 999-99-99-99" data-mask-placeholder="X" placeholder="Cell Phone"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-mobile fa-fw"></i></span>
+                                                        <asp:DropDownList ID="ddlFamRelationship" runat="server" CssClass="form-control">
+                                                            <asp:ListItem Value="" Text="Select Relationship"></asp:ListItem>
+                                                            <asp:ListItem Value="Child" Text="Child"></asp:ListItem>
+                                                            <asp:ListItem Value="Spouse" Text="Spouse"></asp:ListItem>
+                                                            <asp:ListItem Value="Parent" Text="Parent"></asp:ListItem>
+                                                        </asp:DropDownList>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-
+                                    </fieldset>
+                                    <div class="form-actions">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button class="btn btn-default" type="submit">
+                                                    Cancel
+                                                </button>
+                                                <asp:Button ID="btnFamSave" runat="server" Text="Save & Add New" OnClick="btnFamSave_Click" CssClass="btn btn-primary"></asp:Button>
+                                            </div>
+                                        </div>
                                     </div>
+                                    <fieldset>
+                                        <legend></legend>
+                                    </fieldset>
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <h1>Family Members</h1>
+                                                <asp:GridView ID="grvFamilyDetails"
+                                                    runat="server" AutoGenerateColumns="False" DataKeyNames="Id" OnSelectedIndexChanged="grvFamilyDetails_SelectedIndexChanged" AllowPaging="True" OnPageIndexChanging="grvFamilyDetails_PageIndexChanging"
+                                                    CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
+                                                    <RowStyle CssClass="rowstyle" />
+                                                    <Columns>
+                                                        <asp:BoundField DataField="FirstName" HeaderText="First Name" SortExpression="FirstName" />
+                                                        <asp:BoundField DataField="LastName" HeaderText="Last Name" SortExpression="LastName" />
+                                                        <asp:BoundField DataField="DateOfBirth" HeaderText="Date Of Birth" SortExpression="DateOfBirth" />
+                                                        <asp:BoundField DataField="Gender" HeaderText="Gender" SortExpression="Gender" />
+                                                        <asp:BoundField DataField="Relationship" HeaderText="Relationship" SortExpression="Relationship" />
+                                                        <asp:CommandField ShowSelectButton="True" />
+                                                    </Columns>
+                                                    <FooterStyle CssClass="FooterStyle" />
+                                                    <HeaderStyle CssClass="headerstyle" />
+                                                    <PagerStyle CssClass="PagerStyle" />
+                                                    <RowStyle CssClass="rowstyle" />
+                                                </asp:GridView>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
 
-                                    <div class="step-pane" id="step3">
-                                        <h3><strong>Step 3 </strong>- Wizard continued</h3>
-                                        <br>
-                                        <br>
-                                        <h1 class="text-center text-primary">This will be your Step 3 </h1>
-                                        <br>
-                                        <br>
-                                        <br>
-                                        <br>
+                                <div class="step-pane" id="step3">
+                                    <h3><strong>Step 3 </strong>- Emergency Contact</h3>
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtEmergFullName" runat="server" CssClass="form-control" placeholder="Full Name"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-map-marker fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtEmergSubCity" runat="server" CssClass="form-control" placeholder="Sub-City"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-map-marker fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtEmergWoreda" runat="server" CssClass="form-control" placeholder="Woreda"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-map-marker fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtEmergHouseNo" runat="server" CssClass="form-control" placeholder="House No."></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtEmergTelephoneHome" runat="server" CssClass="form-control" placeholder="Telephone Home"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtEmergTelephoneOffice" runat="server" CssClass="form-control" placeholder="Telephone Office"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div class="form-actions">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button class="btn btn-default" type="submit">
+                                                    Cancel
+                                                </button>
+                                                <asp:Button ID="btnEmergSave" runat="server" Text="Save & Add New" OnClick="btnEmergSave_Click" CssClass="btn btn-primary"></asp:Button>
+                                            </div>
+                                        </div>
                                     </div>
+                                    <fieldset>
+                                        <legend></legend>
+                                    </fieldset>
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <h1>Emergency Contacts</h1>
+                                                <asp:GridView ID="grvEmergContacts"
+                                                    runat="server" AutoGenerateColumns="False" DataKeyNames="Id" OnSelectedIndexChanged="grvEmergContacts_SelectedIndexChanged" AllowPaging="True" OnPageIndexChanging="grvEmergContacts_PageIndexChanging"
+                                                    CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
+                                                    <RowStyle CssClass="rowstyle" />
+                                                    <Columns>
+                                                        <asp:BoundField DataField="FullName" HeaderText="Full Name" SortExpression="FullName" />
+                                                        <asp:BoundField DataField="SubCity" HeaderText="Sub City" SortExpression="SubCity" />
+                                                        <asp:BoundField DataField="Woreda" HeaderText="Woreda" SortExpression="Woreda" />
+                                                        <asp:BoundField DataField="HouseNo" HeaderText="House No." SortExpression="HouseNo" />
+                                                        <asp:BoundField DataField="TelephoneHome" HeaderText="Telephone Home" SortExpression="TelephoneHome" />
+                                                        <asp:BoundField DataField="TelephoneOffice" HeaderText="Telephone Office" SortExpression="TelephoneOffice" />
+                                                        <asp:CommandField ShowSelectButton="True" />
+                                                    </Columns>
+                                                    <FooterStyle CssClass="FooterStyle" />
+                                                    <HeaderStyle CssClass="headerstyle" />
+                                                    <PagerStyle CssClass="PagerStyle" />
+                                                    <RowStyle CssClass="rowstyle" />
+                                                </asp:GridView>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
 
-                                    <div class="step-pane" id="step4">
-                                        <h3><strong>Step 4 </strong>- Wizard continued...</h3>
-                                        <br>
-                                        <br>
-                                        <h1 class="text-center text-danger">This will be your Step 4 </h1>
-                                        <br>
-                                        <br>
-                                        <br>
-                                        <br>
+                                <div class="step-pane" id="step4">
+                                    <h3><strong>Step 4 </strong>- Education</h3>
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtEduInstType" runat="server" CssClass="form-control" placeholder="Institution Type"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-home fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtEduInstName" runat="server" CssClass="form-control" placeholder="Institution Name"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-home fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtEduInstLocation" runat="server" CssClass="form-control" placeholder="Institution Location"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-home fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtEduMajor" runat="server" CssClass="form-control" placeholder="Major"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtEduLevel" runat="server" CssClass="form-control" placeholder="Educational Level"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtEduGradYear" runat="server" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" placeholder="Graduation Year"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtEduSpecialAward" runat="server" CssClass="form-control" placeholder="Special Award"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div class="form-actions">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button class="btn btn-default" type="submit">
+                                                    Cancel
+                                                </button>
+                                                <asp:Button ID="btnEduSave" runat="server" Text="Save & Add New" OnClick="btnEduSave_Click" CssClass="btn btn-primary"></asp:Button>
+                                            </div>
+                                        </div>
                                     </div>
+                                    <fieldset>
+                                        <legend></legend>
+                                    </fieldset>
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <h1>Educational Background</h1>
+                                                <asp:GridView ID="grvEducations"
+                                                    runat="server" AutoGenerateColumns="False" DataKeyNames="Id" OnSelectedIndexChanged="grvEducations_SelectedIndexChanged" AllowPaging="True" OnPageIndexChanging="grvEducations_PageIndexChanging"
+                                                    CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
+                                                    <RowStyle CssClass="rowstyle" />
+                                                    <Columns>
+                                                        <asp:BoundField DataField="InstitutionType" HeaderText="Institution Type" SortExpression="InstitutionType" />
+                                                        <asp:BoundField DataField="InstitutionName" HeaderText="Institution Name" SortExpression="InstitutionName" />
+                                                        <asp:BoundField DataField="InstitutionLocation" HeaderText="Institution Location" SortExpression="InstitutionLocation" />
+                                                        <asp:BoundField DataField="Major" HeaderText="Major" SortExpression="Major" />
+                                                        <asp:BoundField DataField="EducationalLevel" HeaderText="Educational Level" SortExpression="EducationalLevel" />
+                                                        <asp:BoundField DataField="GraduationYear" HeaderText="Graduation Year" SortExpression="GraduationYear" />
+                                                        <asp:CommandField ShowSelectButton="True" />
+                                                    </Columns>
+                                                    <FooterStyle CssClass="FooterStyle" />
+                                                    <HeaderStyle CssClass="headerstyle" />
+                                                    <PagerStyle CssClass="PagerStyle" />
+                                                    <RowStyle CssClass="rowstyle" />
+                                                </asp:GridView>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
 
-                                    <div class="step-pane" id="step5">
-                                        <h3><strong>Step 5 </strong>- Work Experience</h3>
-                                        <br>
-                                        <br>
-                                        <h1 class="text-center text-success"><i class="fa fa-check"></i>Congratulations!
+                                <div class="step-pane" id="step5">
+                                    <h3><strong>Step 5 </strong>- Work Experience</h3>
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtWorkEmpName" runat="server" CssClass="form-control" placeholder="Employer Name"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtWorkEmpAddress" runat="server" CssClass="form-control" placeholder="Employer Address"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtWorkStartDate" runat="server" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" placeholder="Start Date"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtWorkEndDate" runat="server" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" placeholder="End Date"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtWorkJobTitle" runat="server" CssClass="form-control" placeholder="Job Title"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtWorkTypeOfEmp" runat="server" CssClass="form-control" placeholder="Type of Employer"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div class="form-actions">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button class="btn btn-default" type="submit">
+                                                    Cancel
+                                                </button>
+                                                <asp:Button ID="btnWorkSave" runat="server" Text="Save & Add New" OnClick="btnWorkSave_Click" CssClass="btn btn-primary"></asp:Button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <fieldset>
+                                        <legend></legend>
+                                    </fieldset>
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <h1>Work Experiences</h1>
+                                                <asp:GridView ID="grvWorkExperiences"
+                                                    runat="server" AutoGenerateColumns="False" DataKeyNames="Id" OnSelectedIndexChanged="grvWorkExperiences_SelectedIndexChanged" AllowPaging="True" OnPageIndexChanging="grvWorkExperiences_PageIndexChanging"
+                                                    CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
+                                                    <RowStyle CssClass="rowstyle" />
+                                                    <Columns>
+                                                        <asp:BoundField DataField="EmployerName" HeaderText="Employee Name" SortExpression="EmployerName" />
+                                                        <asp:BoundField DataField="EmployerAddress" HeaderText="Employee Address" SortExpression="EmployerAddress" />
+                                                        <asp:BoundField DataField="StartDate" HeaderText="Start Date" SortExpression="StartDate" />
+                                                        <asp:BoundField DataField="EndDate" HeaderText="End Date" SortExpression="EndDate" />
+                                                        <asp:BoundField DataField="JobTitle" HeaderText="Job Title" SortExpression="JobTitle" />
+                                                        <asp:CommandField ShowSelectButton="True" />
+                                                    </Columns>
+                                                    <FooterStyle CssClass="FooterStyle" />
+                                                    <HeaderStyle CssClass="headerstyle" />
+                                                    <PagerStyle CssClass="PagerStyle" />
+                                                    <RowStyle CssClass="rowstyle" />
+                                                </asp:GridView>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="step-pane" id="step6">
+                                    <h3><strong>Step 5 </strong>- Finished!</h3>
+                                    <br>
+                                    <br>
+                                    <h1 class="text-center text-success"><i class="fa fa-check"></i>Congratulations!
 													<br>
-                                            <small>Click finish to end wizard</small></h1>
-                                        <br>
-                                        <br>
-                                        <br>
-                                        <br>
-                                    </div>
-                                    <div class="step-pane" id="step6">
-                                        <h3><strong>Step 5 </strong>- Finished!</h3>
-                                        <br>
-                                        <br>
-                                        <h1 class="text-center text-success"><i class="fa fa-check"></i>Congratulations!
-													<br>
-                                            <small>Click finish to end wizard</small></h1>
-                                        <br>
-                                        <br>
-                                        <br>
-                                        <br>
-                                    </div>
+                                        <small>Click finish to end wizard</small></h1>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                </div>
 
-                                </form>
                             </div>
 
                         </div>
