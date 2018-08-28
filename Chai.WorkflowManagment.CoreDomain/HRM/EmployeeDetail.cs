@@ -16,7 +16,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
 
         public virtual Setting.Program Program { get; set; }
         public virtual HRM.Employee Employee { get; set; }
-        public int  DutyStationId { get; set; }
+        public string  DutyStation { get; set; }
 
         public decimal Salary { get;  set;}
        

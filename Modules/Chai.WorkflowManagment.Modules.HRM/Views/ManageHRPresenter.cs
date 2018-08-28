@@ -26,12 +26,12 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             _controller = controller;
             _settingController = settingController;
         }
-
+       
         public override void OnViewLoaded()
         {
             if (View.GetId > 0)
             {
-                _controller.CurrentObject = _controller.GetEmployeeActivity(1);
+                _controller.CurrentObject = _controller.GetEmployee(1);
             }
             CurrentEmployee = _controller.CurrentObject as Employee;
         }
@@ -42,12 +42,14 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 int id = 1;
                 if (id > 0)
-                    _controller.CurrentObject = _controller.GetEmployeeActivity(1);
+                    _controller.CurrentObject = _controller.GetEmployee(1);
                 else
                     _controller.CurrentObject = new Employee();
             }
         }
 
+       
+        
         #region Employee
 
         public Employee CurrentEmployee
@@ -59,7 +61,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 {
                     int id = View.GetId;
                     if (id > 0)
-                        _employee = _controller.GetEmployeeActivity(1);
+                        _employee = _controller.GetEmployee(1);
                     else
                         _employee = new Employee();
                 }
