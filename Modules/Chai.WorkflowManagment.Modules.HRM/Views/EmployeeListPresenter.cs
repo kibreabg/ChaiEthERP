@@ -32,6 +32,10 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         {
             return _controller.ListEmployees(EmpNo, FullName, project);
         }
+        public decimal EmpLeaveTaken(int empid, DateTime LeaveSettingDate)
+        {
+            return _controller.TotalleaveTaken(empid, LeaveSettingDate);
+        }
         // TODO: Handle other view events and set state in the view
     }
 }

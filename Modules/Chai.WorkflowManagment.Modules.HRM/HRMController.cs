@@ -18,6 +18,7 @@ using Chai.WorkflowManagment.Shared.Navigation;
 using System.Data;
 using Chai.WorkflowManagment.CoreDomain.Requests;
 using Chai.WorkflowManagment.CoreDomain.HRM;
+using Chai.WorkflowManagment.CoreDomain.Request;
 
 namespace Chai.WorkflowManagment.Modules.HRM
 {
@@ -52,6 +53,19 @@ namespace Chai.WorkflowManagment.Modules.HRM
            filterExpression = "SELECT * FROM Employees Where 1 = Case when '" + FullName + "' = '' Then 1 When (Employees.FirstName + ' ' + Employees.lastName) = '" + FullName + "' Then 1 END ";
             // return WorkspaceFactory.CreateReadOnly().Queryable<CashPaymentRequest>(filterExpression).ToList();
             return _workspace.SqlQuery<Employee>(filterExpression).ToList();
+        }
+        public decimal TotalleaveTaken(int EmpId, DateTime Leavedatesetting)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT *  FROM LeaveRequests Inner Join LeaveTypes on LeaveRequests.LeaveType_Id = LeaveTypes.Id "
+                               + " Where LeaveTypes.LeaveTypeName = 'Annual Leave' and LeaveRequests.CurrentStatus= 'Issued' and LeaveRequests.Requester = '" + EmpId + "' and LeaveRequests.RequestedDate >= '" + Leavedatesetting + "'";
+            // return WorkspaceFactory.CreateReadOnly().Queryable<CashPaymentRequest>(filterExpression).ToList();
+            IList<LeaveRequest> EmpLeaverequest = _workspace.SqlQuery<LeaveRequest>(filterExpression).ToList();
+            return EmpLeaverequest.Sum(x => x.RequestedDays);
+
+
+
         }
         #endregion
         #region Entity Manipulation

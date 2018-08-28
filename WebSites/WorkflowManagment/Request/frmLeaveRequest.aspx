@@ -39,21 +39,28 @@
                                     <asp:TextBox ID="txtRequestNo" runat="server" Visible="true" ReadOnly="true"></asp:TextBox>
                                 </label>
                             </section>--%>
-                            <section class="col col-4">
+                            <section class="col col-3">
                                 <label class="label">
                                     Requester</label>
                                 <label class="input">
                                     <asp:TextBox ID="txtRequester" runat="server" Visible="true"></asp:TextBox>
                                 </label>
                             </section>
-                            <section class="col col-4">
+                            <section class="col col-3">
                                 <label class="label">
-                                    Employee No.
+                                    Employee ID
                                 </label>
                                 <label class="input">
                                     <asp:TextBox ID="txtEmployeeNo" runat="server" Visible="true"></asp:TextBox></label>
                             </section>
-                            <section class="col col-4">
+                            <section class="col col-3">
+                                <label class="label">
+                                    Duty Station
+                                </label>
+                                <label class="input">
+                                    <asp:TextBox ID="txtDutystation" runat="server" Visible="true"></asp:TextBox></label>
+                            </section>
+                            <section class="col col-3">
                                 <label id="lblRequestDate" runat="server" class="label" visible="true">
                                     Request Date</label>
                                 <label class="input">
@@ -73,22 +80,30 @@
                                     <asp:RequiredFieldValidator ID="RfvRequestType" runat="server" CssClass="validator" ControlToValidate="ddlLeaveType" ErrorMessage="Leave Type Required" InitialValue="0" SetFocusOnError="True" ValidationGroup="Save"></asp:RequiredFieldValidator>
                                 </label>
                             </section>
-                            <section class="col col-2">
+                            <section class="col col-3">
                                 <label cssclass="label" id="lblAddress" runat="server" visible="false">
                                     Address while on leave
                                 </label>
                                 <label class="input">
                                     <asp:TextBox ID="txtAddress" runat="server" Visible="false" TabIndex="1"></asp:TextBox></label>
                             </section>
-                            <section class="col col-2">
+                            <section class="col col-3">
                                 <label cssclass="label" id="lblCompReason" runat="server" visible="false">
                                     Reason</label>
                                 <label class="input">
                                     <asp:TextBox ID="txtCompReason" runat="server" Visible="false" TabIndex="2"></asp:TextBox></label>
                             </section>
+                             <section class="col col-3">
+                                <label cssclass="label" id="lblattach" runat="server" visible="false">
+                                    Attach Letter</label>
+                                <label class="input">
+                                    <asp:FileUpload ID="FileUpload1" runat="server" Visible="false" OnDataBinding="FileUpload1_DataBinding" /></label>
+                            </section>
                         </div>
+                         <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                                <ContentTemplate>
                         <div class="row">
-                            <section class="col col-6">
+                            <section class="col col-3">
                                 <label class="label">
                                     Date From</label>
                                 <label class="input">
@@ -99,36 +114,52 @@
                                     <asp:CompareValidator ID="CompareValidator1" runat="server" ErrorMessage="Date From must be less than Date To" ControlToCompare="txtDateTo" ControlToValidate="txtDateFrom" ValidationGroup="Save" Type="Date" Operator="LessThanEqual"></asp:CompareValidator>
                                 </label>
                             </section>
-                            <section class="col col-6">
+                            <section class="col col-3">
+                                <label id="lblapplyfor" runat="server" class="label" visible="true">
+                                    I wish to apply for
+                                </label>
+                                <label class="input">
+                                    <asp:TextBox ID="txtapplyfor" runat="server" Visible="true" placeholder="Days" TabIndex="6" AutoPostBack="False" OnTextChanged="txtapplyfor_TextChanged"></asp:TextBox>
+                                     <cc1:FilteredTextBoxExtender ID="txtapplyfor_FilteredTextBoxExtender" runat="server" FilterType="Custom, Numbers" TargetControlID="txtapplyfor" ValidChars=".">
+                                </cc1:FilteredTextBoxExtender>
+                                    <asp:RequiredFieldValidator ID="Rfvapplyfor" runat="server" CssClass="validator" ControlToValidate="txtapplyfor" ErrorMessage="I wish to apply for Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Save"></asp:RequiredFieldValidator>
+                                </label>
+                                
+                            </section>
+                           
+                                <section class="col col-3">
+                                <label class="label">
+                                    Type</label>
+                                <label class="select">
+                                   <asp:DropDownList ID="ddltype" runat="server" AppendDataBoundItems="True" AutoPostBack="True" OnSelectedIndexChanged="ddltype_SelectedIndexChanged">
+                                       <asp:ListItem Value="">Select Type</asp:ListItem> 
+                                       <asp:ListItem Value="Full Day">Full Day</asp:ListItem>
+                                       <asp:ListItem Value="Half Day">Half Day</asp:ListItem>
+                                    </asp:DropDownList><i></i>
+                                    <asp:RequiredFieldValidator ID="rfvtype" runat="server" CssClass="validator" ControlToValidate="ddltype" ErrorMessage="Type Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Save"></asp:RequiredFieldValidator>
+                                </label>
+                            </section>
+                            <section class="col col-3">
                                 <label class="label">
                                     Date To</label>
                                 <label class="input">
                                     <i class="icon-append fa fa-calendar"></i>
                                     <asp:TextBox ID="txtDateTo" runat="server" Visible="true" CssClass="form-control datepicker"
-                                        data-dateformat="mm/dd/yy" TabIndex="4" OnTextChanged="txtDateTo_TextChanged"></asp:TextBox>
+                                        data-dateformat="mm/dd/yy" TabIndex="4" OnTextChanged="txtDateTo_TextChanged" Enabled="false"></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="RfvDateTo" runat="server" ControlToValidate="txtDateTo" CssClass="validator" ErrorMessage="Date To Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Save"></asp:RequiredFieldValidator>
                                 </label>
                             </section>
+                                    
                         </div>
                         <div class="row">
-                            <section class="col col-4">
-                                <label id="lblapplyfor" runat="server" class="label" visible="true">
-                                    I wish to apply for
-                                </label>
-                                <label class="input">
-                                    <asp:TextBox ID="txtapplyfor" runat="server" Visible="true" placeholder="Days" TabIndex="6" AutoPostBack="True" OnTextChanged="txtapplyfor_TextChanged"></asp:TextBox>
-                                     <cc1:FilteredTextBoxExtender ID="txtapplyfor_FilteredTextBoxExtender" runat="server" FilterType="Custom, Numbers" TargetControlID="txtapplyfor" ValidChars=".">
-                                </cc1:FilteredTextBoxExtender>
-                                    <asp:RequiredFieldValidator ID="Rfvapplyfor" runat="server" CssClass="validator" ControlToValidate="txtapplyfor" ErrorMessage="I wish to apply for Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Save"></asp:RequiredFieldValidator>
-                                </label>
-                            </section>
+                            
                             <section class="col col-4">
                                 <asp:Label runat="server" ID="lblforward" class="label">
                                     Leave day's brought forward</asp:Label>
                                 <label class="input">
-                                    <asp:TextBox ID="txtforward" runat="server" ReadOnly="true" Visible="true" OnTextChanged="txtforward_TextChanged" placeholder="Days" TabIndex="5" AutoPostBack="True"></asp:TextBox>
+                                    <asp:TextBox ID="txtforward" runat="server" ReadOnly="true" Visible="true" OnTextChanged="txtforward_TextChanged" placeholder="Days" TabIndex="5" AutoPostBack="False"></asp:TextBox>
                                     <asp:Label ID="lblnoempleavesetting" runat="server" Text="" ForeColor="Red" Visible="true"></asp:Label>
-                                    <asp:Label ID="lblOpeningBalance" runat="server" Text="Opening Balance:-" ForeColor="Green" Visible="false"></asp:Label><asp:Label ID="lblOBValue" runat="server" Text="" ForeColor="Green" Visible="false"></asp:Label>
+                                    <asp:Label ID="lblrequesteddays" runat="server" Text="Requested Days:-" ForeColor="Green" Visible="false"></asp:Label><asp:Label ID="lblRdays" runat="server" Text="" ForeColor="Green" Visible="false"></asp:Label>
                                     <%--<asp:RequiredFieldValidator ID="RfvForward" runat="server" ControlToValidate="txtforward" ErrorMessage="Leave day's brought forward Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Save">*</asp:RequiredFieldValidator>--%>
                                 </label>
                             </section>
@@ -141,6 +172,11 @@
                                 <%--<asp:RequiredFieldValidator ID="rfvbalance" runat="server" ControlToValidate="txtbalance" ErrorMessage="Leave days balance Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Save">*</asp:RequiredFieldValidator>--%>
                             </section>
                         </div>
+                         </ContentTemplate>
+                                <Triggers>
+                                    <asp:AsyncPostBackTrigger ControlID="ddltype" EventName="SelectedIndexChanged" />
+                                </Triggers>
+                            </asp:UpdatePanel>
                     </fieldset>
                     <footer>
                         <asp:Button ID="btnRequest" runat="server" CssClass="btn btn-primary" OnClick="btnRequest_Click" Text="Request" ValidationGroup="Save" TabIndex="8" />

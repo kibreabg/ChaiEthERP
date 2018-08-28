@@ -21,6 +21,7 @@ using Chai.WorkflowManagment.CoreDomain.Requests;
 using Chai.WorkflowManagment.CoreDomain.TravelLogs;
 using Chai.WorkflowManagment.Enums;
 using Chai.WorkflowManagment.CoreDomain.Request;
+using Chai.WorkflowManagment.CoreDomain.HRM;
 
 namespace Chai.WorkflowManagment.Modules.Request
 {
@@ -503,7 +504,12 @@ namespace Chai.WorkflowManagment.Modules.Request
         }
 
         #endregion
-
+        #region Employee
+        public Employee GetEmployee(int empid)
+        {
+              return _workspace.Single<Employee>(x => x.Id == empid);
+        }
+        #endregion
         #region Entity Manipulation
         public void SaveOrUpdateEntity<T>(T item) where T : class
         {

@@ -2,6 +2,7 @@
 using Microsoft.Practices.ObjectBuilder;
 using System.Web.UI.WebControls;
 using Chai.WorkflowManagment.Shared;
+using Chai.WorkflowManagment.CoreDomain.HRM;
 
 namespace Chai.WorkflowManagment.Modules.HRM.Views
 {
@@ -47,7 +48,27 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         protected void GRVEmployeeList_RowDataBound(object sender, System.Web.UI.WebControls.GridViewRowEventArgs e)
         {
+            if (_presenter.ListEmployees(txtSrchEmpNo.Text, txtSrchSrchFullName.Text, int.Parse(ddlSrchSrchProgram.SelectedValue))!= null)
+            {
+                if (e.Row.RowType == DataControlRowType.DataRow)
+                {
 
+                    Employee emp = e.Row.DataItem as Employee;
+                    e.Row.Cells[2].Text = emp.GetEmployeeProgram();
+                    e.Row.Cells[3].Text = emp.GetEmployeePosition();
+                    decimal balance = Convert.ToInt32(emp.EmployeeLeaveBalance()) - _presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value);
+                    e.Row.Cells[4].Text = balance.ToString();
+                    decimal balanceYE = Convert.ToInt32(emp.EmployeeLeaveBalanceYE() - _presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value));
+                    e.Row.Cells[6].Text = balanceYE.ToString();
+                    if (txtContractEndDate.Text != "")
+                    {
+                      
+                        decimal balanceCED = Convert.ToInt32(emp.EmployeeLeaveBalanceCED(Convert.ToDateTime(txtContractEndDate.Text))) - _presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value);
+                        e.Row.Cells[5].Text = balance.ToString();
+                    }
+                }
+                
+            }
         }
 
         protected void GRVEmployeeList_PageIndexChanging(object sender, System.Web.UI.WebControls.GridViewPageEventArgs e)
@@ -77,6 +98,11 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 Response.Redirect(String.Format("~/HRM/frmEmployeeProfile.aspx?{0}=2&Id={1}", AppConstants.TABID, GRVEmployeeList.DataKeys[row.RowIndex].Values[0]));
 
 
+
+        }
+
+        protected void txtContractEndDate_TextChanged(object sender, EventArgs e)
+        {
 
         }
     }

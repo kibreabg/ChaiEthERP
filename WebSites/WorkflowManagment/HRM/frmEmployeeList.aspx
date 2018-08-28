@@ -34,6 +34,16 @@
                                 </label>
                             </section>
                         </div>
+                        <div class="row">
+                            <section class="col col-4">
+                                <asp:Label ID="Label1" runat="server" Text="Contract End Date" CssClass="label"></asp:Label>
+                                <label class="input">
+                                    <i class="icon-append fa fa-calendar"></i>
+                                    <asp:TextBox ID="txtContractEndDate" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" AutoPostBack="true" runat="server" Visible="true" OnTextChanged="txtContractEndDate_TextChanged"></asp:TextBox>
+                                </label>
+                            </section>
+                           
+                        </div>
                     </fieldset>
                     <footer>
                         <asp:Button ID="btnFind" runat="server" Text="Find" CssClass="btn btn-primary" OnClick="btnFind_Click"></asp:Button>
@@ -54,8 +64,11 @@
                 <Columns>
                     <asp:BoundField DataField="FirstName" HeaderText="First Name" />    
                     <asp:BoundField DataField="LastName" HeaderText="Last Name" />
-                    <asp:BoundField DataField="Gender" HeaderText="Gender" />
-                     <asp:BoundField DataField="DateOfBirth" HeaderText="Date Of Birth" />
+                    <asp:BoundField  HeaderText="Program" />
+                    <asp:BoundField  HeaderText="Position" />
+                    <asp:BoundField HeaderText="Leave Balance as of Today" />
+                    <asp:BoundField HeaderText="Leave Balance as of contarct End Date" />
+                    <asp:BoundField HeaderText="Leave Balance as of year End Date" />
                     <asp:TemplateField HeaderText="Action">
                                 <ItemTemplate>
                                     <div class="btn-group open">
