@@ -16,12 +16,14 @@ namespace Chai.WorkflowManagment.CoreDomain.Request
         public int Id { get; set; }
         public string RequestNo { get; set; }
         public string EmployeeNo { get; set; }
-        public int RequestedDays { get; set; }
+        public decimal RequestedDays { get; set; }
+        public int? Applyfor { get; set; }
         public int Requester { get; set; }
 
-        public int Forward { get; set; }
-        public int Balance { get; set; }
+        public decimal Forward { get; set; }
+        public decimal Balance { get; set; }
         public virtual LeaveType LeaveType { get; set; }
+        public string Type { get; set; }
 
         public DateTime DateFrom { get; set; }
 
@@ -35,7 +37,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Request
         public string CurrentStatus { get; set; }
         public string ProgressStatus { get; set; }
         public string Addresswhileonleave { get; set; }
-        
+        public string FilePath { get; set; }
         public virtual IList<LeaveRequestStatus> LeaveRequestStatuses { get; set; }
 
         public virtual LeaveRequestStatus GetLeaveRequestStatus(int Id)

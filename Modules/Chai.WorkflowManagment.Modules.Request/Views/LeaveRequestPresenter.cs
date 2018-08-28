@@ -7,6 +7,7 @@ using Chai.WorkflowManagment.CoreDomain.Request;
 using Chai.WorkflowManagment.Shared;
 using Chai.WorkflowManagment.CoreDomain.Users;
 using Chai.WorkflowManagment.CoreDomain.Setting;
+using Chai.WorkflowManagment.CoreDomain.HRM;
 
 namespace Chai.WorkflowManagment.Modules.Request.Views
 {
@@ -109,6 +110,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _settingcontroller.GetActiveEmployeeLeaveRequest(CurrentUser().Id, true);
         }
+        public IList<Holiday> GetHolidays()
+        {
+            return _settingcontroller.ListHolidays();
+        }
         public LeaveType GetLeaveType(int Id)
         {
             return _settingcontroller.GetLeaveType(Id);
@@ -124,6 +129,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public AssignJob GetAssignedJobbycurrentuser(int UserId)
         {
             return _controller.GetAssignedJobbycurrentuser(UserId);
+        }
+        public Employee GetEmployee(int empId)
+        {
+            return _controller.GetEmployee(empId);
+        }
+        public decimal EmpLeaveTaken(int empid, DateTime LeaveSettingDate)
+        {
+            return _settingcontroller.TotalleaveTaken(empid, LeaveSettingDate);
         }
         public AppUser CurrentUser()
         {

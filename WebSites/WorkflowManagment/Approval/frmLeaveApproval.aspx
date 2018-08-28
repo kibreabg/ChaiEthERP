@@ -19,6 +19,12 @@
             docprint.focus();
         }
     </script>
+    <script type="text/javascript">
+        function newTab() {
+            document.forms[0].target = "_blank";
+        }
+    </script>
+
     <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
         <header>
             <span class="widget-icon"><i class="fa fa-edit"></i></span>
@@ -79,6 +85,7 @@
                                             </ItemTemplate>
                                             </asp:TemplateField> 
                 <asp:BoundField DataField="LeaveType.LeaveTypeName" HeaderText="LeaveType" SortExpression="LeaveType.LeaveTypeName" />
+                <asp:BoundField DataField="Type" HeaderText="Type" SortExpression="Type" />
                 <asp:TemplateField HeaderText="Date From">
                                             <ItemTemplate>
                                               <asp:Label ID="lblFrom" runat="server" Text='<%# Eval("DateFrom", "{0:dd/MM/yyyy}")%>' ></asp:Label>
@@ -131,7 +138,11 @@
                                 <div class="smart-form">
                                     <fieldset>
                                         <div class="row">
+                                             <section class="col col-3">
+                                                <asp:Label ID="lblDS" runat="server" Text="Employee Duty Station" CssClass="label" Visible="false"></asp:Label>
 
+                                                <asp:Label ID="lblEDS" runat="server" Text="" CssClass="label" Visible="false" ></asp:Label>
+                                            </section>
                                             <section class="col col-3">
                                                 <asp:Label ID="lblLeaveType" runat="server" Text="Leave Type" CssClass="label"></asp:Label>
 
@@ -143,11 +154,14 @@
                                                 <asp:Label ID="lblrequesteddaysres" runat="server" Text="" CssClass="label"></asp:Label>
                                             </section>
                                              <section class="col col-3">
-                                                <asp:Label ID="lblViewBalance" runat="server" Text="Employee Leave Balance" CssClass="label" Visible="false"></asp:Label>
+                                                <asp:Label ID="lblViewBalance" runat="server" Text="Employee Leave Balance as of Today" CssClass="label" Visible="false"></asp:Label>
 
-                                                <asp:Label ID="lblViewBalRes" runat="server" Text="" CssClass="label" Visible="false"></asp:Label>
+                                                <asp:Label ID="lblViewBalRes" runat="server" Text="" CssClass="label" Visible="false" ></asp:Label>
                                             </section>
-                                            
+                                           
+                                             <section class="col col-3">
+                                                 <asp:LinkButton ID="lnkEduDownload" runat="server" OnClientClick="newTab();" OnClick="lnkEduDownload_Clicked">View Sick Leave Attachment</asp:LinkButton>
+                                            </section>
                                         </div>
                                         <div class="row">
 

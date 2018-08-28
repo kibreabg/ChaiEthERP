@@ -13,6 +13,8 @@ using Chai.WorkflowManagment.CoreDomain.Setting;
 using log4net;
 using System.Reflection;
 using log4net.Config;
+using Chai.WorkflowManagment.CoreDomain.HRM;
+using System.IO;
 
 namespace Chai.WorkflowManagment.Modules.Approval.Views
 {
@@ -322,18 +324,27 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             btnApprove.Enabled = true;
             lblLeaveTyperes.Text = _presenter.CurrentLeaveRequest.LeaveType.LeaveTypeName;
             lblrequesteddaysres.Text = _presenter.CurrentLeaveRequest.RequestedDays.ToString();
+            if (_presenter.CurrentLeaveRequest.LeaveType.LeaveTypeName.Contains("Sick Leave"))
+            {
+                lnkEduDownload.Visible = true;
+            }
+            else
+            {
+                lnkEduDownload.Visible = false;
+            }
             if (_presenter.CurrentLeaveRequest.LeaveType.LeaveTypeName.Contains("Annual"))
             {
                 lblViewBalance.Visible = true;
                 lblViewBalRes.Visible = true;
-                EmployeeLeave empleave = _presenter.GetEmployeeLeave(_presenter.CurrentLeaveRequest.Requester);
-                if (empleave != null)
+                Employee employee = _presenter.GetEmployee(_presenter.CurrentLeaveRequest.Requester);
+                lblEDS.Text = employee.GetEmployeeDutyStation();
+                if (employee != null)
                 {
-                    lblViewBalRes.Text = CalculateLeave(empleave).ToString();//calculate leave
+                    lblViewBalRes.Text = (employee.EmployeeLeaveBalance() - _presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value)).ToString();
                 }
                 else
                 {
-                    lblViewBalRes.Text = "Emplyee Annual Leave setting is not defined,Please Contact HR Officer.";
+                    lblViewBalRes.Text = "Employee Annual Leave setting is not defined,Please Contact HR Officer.";
                 }
             }
             BindLeaveRequestStatus();
@@ -440,6 +451,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 grvStatuses.DataBind();
             }
         }
+        protected void lnkEduDownload_Clicked(object sender, EventArgs e)
+        {
+            string certificatePath = (sender as LinkButton).CommandArgument;
+            Response.AppendHeader("Content-Type", "application/pdf");
+            Response.AppendHeader("Content-Disposition", "inline; filename=" + Path.GetFileName(_presenter.CurrentLeaveRequest.FilePath));
+            Response.WriteFile(_presenter.CurrentLeaveRequest.FilePath);
+            Response.End();
+        }
+
         protected void grvStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (_presenter.CurrentLeaveRequest.LeaveRequestStatuses != null)

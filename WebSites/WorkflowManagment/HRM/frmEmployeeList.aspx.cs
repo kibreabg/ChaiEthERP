@@ -2,41 +2,42 @@
 using Microsoft.Practices.ObjectBuilder;
 using System.Web.UI.WebControls;
 using Chai.WorkflowManagment.Shared;
+using Chai.WorkflowManagment.CoreDomain.HRM;
 
 namespace Chai.WorkflowManagment.Modules.HRM.Views
 {
-    public partial class EmployeeList : POCBasePage, IEmployeeListView
+	public partial class EmployeeList : POCBasePage, IEmployeeListView
     {
-        private EmployeeListPresenter _presenter;
+		private EmployeeListPresenter _presenter;
 
-        protected void Page_Load(object sender, EventArgs e)
-        {
-            if (!this.IsPostBack)
-            {
-                this._presenter.OnViewInitialized();
-                GRVEmployeeList.DataSource = _presenter.ListEmployees(txtSrchEmpNo.Text, txtSrchSrchFullName.Text, int.Parse(ddlSrchSrchProgram.SelectedValue));
-                GRVEmployeeList.DataBind();
-            }
+		protected void Page_Load(object sender, EventArgs e)
+		{
+			if (!this.IsPostBack)
+			{
+				this._presenter.OnViewInitialized();
+            GRVEmployeeList.DataSource = _presenter.ListEmployees(txtSrchEmpNo.Text, txtSrchSrchFullName.Text, int.Parse(ddlSrchSrchProgram.SelectedValue));
+            GRVEmployeeList.DataBind();
+        }
             this._presenter.OnViewLoaded();
-            
+
         }
 
-        [CreateNew]
-        public EmployeeListPresenter Presenter
-        {
-            get
-            {
-                return this._presenter;
-            }
-            set
-            {
+		[CreateNew]
+		public EmployeeListPresenter Presenter
+		{
+			get
+			{
+				return this._presenter;
+			}
+			set
+			{
                 if (value == null)
-                    throw new ArgumentNullException("value");
+					throw new ArgumentNullException("value");
 
-                this._presenter = value;
-                this._presenter.View = this;
-            }
-        }
+				this._presenter = value;
+				this._presenter.View = this;
+			}
+		}
         public override string PageID
         {
             get
@@ -48,7 +49,27 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         protected void GRVEmployeeList_RowDataBound(object sender, System.Web.UI.WebControls.GridViewRowEventArgs e)
         {
+            if (_presenter.ListEmployees(txtSrchEmpNo.Text, txtSrchSrchFullName.Text, int.Parse(ddlSrchSrchProgram.SelectedValue))!= null)
+            {
+                if (e.Row.RowType == DataControlRowType.DataRow)
+                {
 
+                    Employee emp = e.Row.DataItem as Employee;
+                    e.Row.Cells[2].Text = emp.GetEmployeeProgram();
+                    e.Row.Cells[3].Text = emp.GetEmployeePosition();
+                    decimal balance = Convert.ToInt32(emp.EmployeeLeaveBalance()) - _presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value);
+                    e.Row.Cells[4].Text = balance.ToString();
+                    decimal balanceYE = Convert.ToInt32(emp.EmployeeLeaveBalanceYE() - _presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value));
+                    e.Row.Cells[6].Text = balanceYE.ToString();
+                    if (txtContractEndDate.Text != "")
+                    {
+
+                        decimal balanceCED = Convert.ToInt32(emp.EmployeeLeaveBalanceCED(Convert.ToDateTime(txtContractEndDate.Text))) - _presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value);
+                        e.Row.Cells[5].Text = balance.ToString();
+                    }
+        }
+
+            }
         }
 
         protected void GRVEmployeeList_PageIndexChanging(object sender, System.Web.UI.WebControls.GridViewPageEventArgs e)
@@ -76,6 +97,12 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 Response.Redirect(String.Format("~/HRM/frmManageHR.aspx?{0}=6&Id={1}", AppConstants.TABID, GRVEmployeeList.DataKeys[row.RowIndex].Values[0]));
             else if (ddlAction.SelectedItem.Text == "Preview")
                 Response.Redirect(String.Format("~/HRM/frmEmployeeProfile.aspx?{0}=6&EmpId={1}", AppConstants.TABID, GRVEmployeeList.DataKeys[row.RowIndex].Values[0]));
+                
+        }
+
+        protected void txtContractEndDate_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

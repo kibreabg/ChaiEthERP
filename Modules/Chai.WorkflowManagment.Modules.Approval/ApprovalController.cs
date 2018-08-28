@@ -18,6 +18,7 @@ using System.Data;
 using Chai.WorkflowManagment.CoreDomain.Requests;
 using Chai.WorkflowManagment.CoreDomain.Request;
 using Chai.WorkflowManagment.CoreDomain.Approval;
+using Chai.WorkflowManagment.CoreDomain.HRM;
 
 namespace Chai.WorkflowManagment.Modules.Approval
 {
@@ -347,7 +348,12 @@ namespace Chai.WorkflowManagment.Modules.Approval
             else { return 0; }
         }
         #endregion
-
+        #region Employee
+        public Employee GetEmployee(int empid)
+        {
+            return _workspace.Single<Employee>(x => x.Id == empid);
+        }
+        #endregion
         #region Entity Manipulation
         public void SaveOrUpdateEntity<T>(T item) where T : class
         {
