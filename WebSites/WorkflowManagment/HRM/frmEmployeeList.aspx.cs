@@ -5,37 +5,38 @@ using Chai.WorkflowManagment.Shared;
 
 namespace Chai.WorkflowManagment.Modules.HRM.Views
 {
-	public partial class EmployeeList : POCBasePage, IEmployeeListView
+    public partial class EmployeeList : POCBasePage, IEmployeeListView
     {
-		private EmployeeListPresenter _presenter;
+        private EmployeeListPresenter _presenter;
 
-		protected void Page_Load(object sender, EventArgs e)
-		{
-			if (!this.IsPostBack)
-			{
-				this._presenter.OnViewInitialized();
-			}
-			this._presenter.OnViewLoaded();
-            GRVEmployeeList.DataSource = _presenter.ListEmployees(txtSrchEmpNo.Text, txtSrchSrchFullName.Text, int.Parse(ddlSrchSrchProgram.SelectedValue));
-            GRVEmployeeList.DataBind();
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!this.IsPostBack)
+            {
+                this._presenter.OnViewInitialized();
+                GRVEmployeeList.DataSource = _presenter.ListEmployees(txtSrchEmpNo.Text, txtSrchSrchFullName.Text, int.Parse(ddlSrchSrchProgram.SelectedValue));
+                GRVEmployeeList.DataBind();
+            }
+            this._presenter.OnViewLoaded();
+            
         }
 
-		[CreateNew]
-		public EmployeeListPresenter Presenter
-		{
-			get
-			{
-				return this._presenter;
-			}
-			set
-			{
-				if(value == null)
-					throw new ArgumentNullException("value");
+        [CreateNew]
+        public EmployeeListPresenter Presenter
+        {
+            get
+            {
+                return this._presenter;
+            }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException("value");
 
-				this._presenter = value;
-				this._presenter.View = this;
-			}
-		}
+                this._presenter = value;
+                this._presenter.View = this;
+            }
+        }
         public override string PageID
         {
             get
@@ -62,22 +63,19 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             GRVEmployeeList.DataSource = _presenter.ListEmployees(txtSrchEmpNo.Text, txtSrchSrchFullName.Text, int.Parse(ddlSrchSrchProgram.SelectedValue));
             GRVEmployeeList.DataBind();
         }
-        protected void ddlAction_SelectedIndexChanged1(object sender, EventArgs e)
-        {
 
+        protected void ddlAction1_SelectedIndexChanged(object sender, EventArgs e)
+        {
             DropDownList ddl = (DropDownList)sender;
             GridViewRow row = (GridViewRow)ddl.NamingContainer;
             GridViewRow grdRow = GRVEmployeeList.SelectedRow;
 
-            DropDownList ddlAction = row.FindControl("ddlAction") as DropDownList;
+            DropDownList ddlAction = row.FindControl("ddlAction1") as DropDownList;
             int index = GRVEmployeeList.SelectedIndex;
             if (ddlAction.SelectedItem.Text == "Manage HR")
-                Response.Redirect(String.Format("~/HRM/frmManageHR.aspx?{0}=2&Id={1}", AppConstants.TABID, GRVEmployeeList.DataKeys[row.RowIndex].Values[0]));
+                Response.Redirect(String.Format("~/HRM/frmManageHR.aspx?{0}=6&Id={1}", AppConstants.TABID, GRVEmployeeList.DataKeys[row.RowIndex].Values[0]));
             else if (ddlAction.SelectedItem.Text == "Preview")
-                Response.Redirect(String.Format("~/HRM/frmEmployeeProfile.aspx?{0}=2&Id={1}", AppConstants.TABID, GRVEmployeeList.DataKeys[row.RowIndex].Values[0]));
-
-
-
+                Response.Redirect(String.Format("~/HRM/frmEmployeeProfile.aspx?{0}=6&EmpId={1}", AppConstants.TABID, GRVEmployeeList.DataKeys[row.RowIndex].Values[0]));
         }
     }
 }

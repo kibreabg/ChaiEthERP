@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Chai.WorkflowManagment.CoreDomain.HRM
 {
@@ -19,6 +16,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public string EducationalLevel { get; set; }
         public Nullable<DateTime> GraduationYear { get; set; }
         public string SpecialAward { get; set; }
+        public string Certificate { get; set; }
         public virtual Employee Employee { get; set; }
     }
 }

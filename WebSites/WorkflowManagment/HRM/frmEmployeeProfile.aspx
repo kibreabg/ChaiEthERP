@@ -24,6 +24,10 @@
             });
         });
 
+        function newTab() {
+            document.forms[0].target = "_blank";
+        }
+
         function movetofamily() {
             $(document).ready(function () {
                 var wizard = $('.wizard').wizard();
@@ -63,7 +67,7 @@
                 });
             });
         }
-        
+
     </script>
     <section id="widget-grid" class="">
 
@@ -334,51 +338,57 @@
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <div class="input-group">
-                                                        <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
-                                                        <asp:TextBox ID="txtFamDateOfBirth" runat="server" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" placeholder="Date of Birth"></asp:TextBox>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <div class="form-group">
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
-                                                        <asp:TextBox ID="txtFamDateOfMarriage" runat="server" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" placeholder="Date of Marriage"></asp:TextBox>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <label class="col-md-1 control-label">Attach Certificate</label>
-                                            <div class="col-sm-5">
-                                                <div class="form-group">
-                                                    <div class="smart-form">
-                                                        <div class="input input-file">
-                                                            <asp:FileUpload ID="fuCertificate" runat="server" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <div class="form-group">
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
-                                                        <asp:TextBox ID="txtFamCellPhone" runat="server" CssClass="form-control" data-mask="+(999) 999-99-99-99" data-mask-placeholder="X" placeholder="Cell Phone"></asp:TextBox>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <div class="form-group">
-                                                    <div class="input-group">
                                                         <span class="input-group-addon"><i class="fa fa-mobile fa-fw"></i></span>
-                                                        <asp:DropDownList ID="ddlFamRelationship" runat="server" CssClass="form-control">
+                                                        <asp:DropDownList ID="ddlFamRelationship" AutoPostBack="true" runat="server" CssClass="form-control" OnSelectedIndexChanged="ddlFamRelationship_SelectedIndexChanged">
                                                             <asp:ListItem Value="" Text="Select Relationship"></asp:ListItem>
                                                             <asp:ListItem Value="Child" Text="Child"></asp:ListItem>
                                                             <asp:ListItem Value="Spouse" Text="Spouse"></asp:ListItem>
                                                             <asp:ListItem Value="Parent" Text="Parent"></asp:ListItem>
                                                         </asp:DropDownList>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <asp:Panel ID="pnlFamDateOfBirth" Visible="false" runat="server">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+                                                            <asp:TextBox ID="txtFamDateOfBirth" runat="server" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" placeholder="Date of Birth"></asp:TextBox>
+                                                        </div>
+                                                    </div>
+                                                </asp:Panel>
+                                            </div>
+                                            <asp:Panel ID="pnlFamCertificate" Visible="false" runat="server">
+                                                <label class="col-md-1 control-label">Attach Certificate</label>
+                                                <div class="col-sm-5">
+                                                    <div class="form-group">
+                                                        <div class="smart-form">
+                                                            <div class="input input-file">
+                                                                <asp:FileUpload ID="fuCertificate" runat="server" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </asp:Panel>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <asp:Panel ID="pnlFamDateOfMarriage" Visible="false" runat="server">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+                                                            <asp:TextBox ID="txtFamDateOfMarriage" runat="server" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" placeholder="Date of Marriage"></asp:TextBox>
+                                                        </div>
+                                                    </div>
+                                                </asp:Panel>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-mobile fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtFamCellPhone" runat="server" CssClass="form-control" data-mask="+(999) 999-99-99-99" data-mask-placeholder="X" placeholder="Cell Phone"></asp:TextBox>
                                                     </div>
                                                 </div>
                                             </div>
@@ -390,6 +400,7 @@
                                                 <button class="btn btn-default" type="submit">
                                                     Cancel
                                                 </button>
+                                                <asp:Button ID="btnFamDelete" runat="server" Text="Delete" OnClick="btnFamDelete_Click" OnClientClick="javascript:return confirm('Are you sure you want to delete this family information?');" Enabled="false" CssClass="btn btn-primary"></asp:Button>
                                                 <asp:Button ID="btnFamSave" runat="server" Text="Save & Add New" OnClick="btnFamSave_Click" CssClass="btn btn-primary"></asp:Button>
                                             </div>
                                         </div>
@@ -411,6 +422,11 @@
                                                         <asp:BoundField DataField="DateOfBirth" HeaderText="Date Of Birth" SortExpression="DateOfBirth" />
                                                         <asp:BoundField DataField="Gender" HeaderText="Gender" SortExpression="Gender" />
                                                         <asp:BoundField DataField="Relationship" HeaderText="Relationship" SortExpression="Relationship" />
+                                                        <asp:TemplateField HeaderText="Certificate">
+                                                            <ItemTemplate>
+                                                                <asp:LinkButton ID="lnkFamDownload" Text="Preview" CommandArgument='<%# Eval("Certificate") %>' runat="server" OnClientClick="newTab();" OnClick="lnkFamDownload_Clicked"></asp:LinkButton>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
                                                         <asp:CommandField ShowSelectButton="True" />
                                                     </Columns>
                                                     <FooterStyle CssClass="FooterStyle" />
@@ -438,10 +454,16 @@
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <div class="input-group">
-                                                        <span class="input-group-addon"><i class="fa fa-map-marker fa-fw"></i></span>
-                                                        <asp:TextBox ID="txtEmergSubCity" runat="server" CssClass="form-control" placeholder="Sub-City"></asp:TextBox>
+                                                        <span class="input-group-addon"><i class="fa fa-mobile fa-fw"></i></span>
+                                                        <asp:DropDownList ID="ddlEmergRelationship" runat="server" CssClass="form-control">
+                                                            <asp:ListItem Value="" Text="Select Relationship"></asp:ListItem>
+                                                            <asp:ListItem Value="Child" Text="Child"></asp:ListItem>
+                                                            <asp:ListItem Value="Spouse" Text="Spouse"></asp:ListItem>
+                                                            <asp:ListItem Value="Parent" Text="Parent"></asp:ListItem>
+                                                        </asp:DropDownList>
                                                     </div>
                                                 </div>
+
                                             </div>
                                         </div>
                                         <div class="row">
@@ -457,7 +479,25 @@
                                                 <div class="form-group">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><i class="fa fa-map-marker fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtEmergSubCity" runat="server" CssClass="form-control" placeholder="Sub-City"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-map-marker fa-fw"></i></span>
                                                         <asp:TextBox ID="txtEmergHouseNo" runat="server" CssClass="form-control" placeholder="House No."></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-mobile fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtEmergCellPhone" runat="server" CssClass="form-control" data-mask="+(999) 999-99-99-99" data-mask-placeholder="X" placeholder="Cell Phone"></asp:TextBox>
                                                     </div>
                                                 </div>
                                             </div>
@@ -467,7 +507,7 @@
                                                 <div class="form-group">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
-                                                        <asp:TextBox ID="txtEmergTelephoneHome" runat="server" CssClass="form-control" placeholder="Telephone Home"></asp:TextBox>
+                                                        <asp:TextBox ID="txtEmergTelephoneHome" runat="server" CssClass="form-control" data-mask="+(999) 999-99-99-99" data-mask-placeholder="X" placeholder="Telephone Home"></asp:TextBox>
                                                     </div>
                                                 </div>
                                             </div>
@@ -475,7 +515,18 @@
                                                 <div class="form-group">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
-                                                        <asp:TextBox ID="txtEmergTelephoneOffice" runat="server" CssClass="form-control" placeholder="Telephone Office"></asp:TextBox>
+                                                        <asp:TextBox ID="txtEmergTelephoneOffice" runat="server" CssClass="form-control" data-mask="+(999) 999-99-99-99" data-mask-placeholder="X" placeholder="Telephone Office"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="smart-form">
+                                                    <div class="inline-group">
+                                                        <label class="checkbox">
+                                                            <asp:CheckBox ID="ckIsPrimary" runat="server" />
+                                                            <i></i>Is Primary Contact</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -487,6 +538,7 @@
                                                 <button class="btn btn-default" type="submit">
                                                     Cancel
                                                 </button>
+                                                <asp:Button ID="btnEmergDelete" runat="server" Text="Delete" OnClick="btnEmergDelete_Click" OnClientClick="javascript:return confirm('Are you sure you want to delete this emergency contact?');" Enabled="false" CssClass="btn btn-primary"></asp:Button>
                                                 <asp:Button ID="btnEmergSave" runat="server" Text="Save & Add New" OnClick="btnEmergSave_Click" CssClass="btn btn-primary"></asp:Button>
                                             </div>
                                         </div>
@@ -528,15 +580,20 @@
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <div class="input-group">
-                                                        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
-                                                        <asp:TextBox ID="txtEduInstType" runat="server" CssClass="form-control" placeholder="Institution Type"></asp:TextBox>
+                                                        <span class="input-group-addon"><i class="fa fa-institution fa-fw"></i></span>
+                                                        <asp:DropDownList ID="ddlEduInstType" CssClass="form-control" runat="server">
+                                                            <asp:ListItem Value="" Text="Select Institution Type"></asp:ListItem>
+                                                            <asp:ListItem Value="Government" Text="Government"></asp:ListItem>
+                                                            <asp:ListItem Value="Private" Text="Private"></asp:ListItem>
+                                                            <asp:ListItem Value="International" Text="International"></asp:ListItem>
+                                                        </asp:DropDownList>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <div class="input-group">
-                                                        <span class="input-group-addon"><i class="fa fa-home fa-fw"></i></span>
+                                                        <span class="input-group-addon"><i class="fa fa-institution fa-fw"></i></span>
                                                         <asp:TextBox ID="txtEduInstName" runat="server" CssClass="form-control" placeholder="Institution Name"></asp:TextBox>
                                                     </div>
                                                 </div>
@@ -546,7 +603,7 @@
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <div class="input-group">
-                                                        <span class="input-group-addon"><i class="fa fa-home fa-fw"></i></span>
+                                                        <span class="input-group-addon"><i class="fa fa-map-marker fa-fw"></i></span>
                                                         <asp:TextBox ID="txtEduInstLocation" runat="server" CssClass="form-control" placeholder="Institution Location"></asp:TextBox>
                                                     </div>
                                                 </div>
@@ -554,7 +611,7 @@
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <div class="input-group">
-                                                        <span class="input-group-addon"><i class="fa fa-home fa-fw"></i></span>
+                                                        <span class="input-group-addon"><i class="fa fa-pencil-square-o fa-fw"></i></span>
                                                         <asp:TextBox ID="txtEduMajor" runat="server" CssClass="form-control" placeholder="Major"></asp:TextBox>
                                                     </div>
                                                 </div>
@@ -564,15 +621,20 @@
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <div class="input-group">
-                                                        <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
-                                                        <asp:TextBox ID="txtEduLevel" runat="server" CssClass="form-control" placeholder="Educational Level"></asp:TextBox>
+                                                        <span class="input-group-addon"><i class="fa fa-graduation-cap fa-fw"></i></span>
+                                                        <asp:DropDownList ID="ddlEduLevel" CssClass="form-control" runat="server">
+                                                            <asp:ListItem Value="" Text="Select Educational Level"></asp:ListItem>
+                                                            <asp:ListItem Value="Bachelor" Text="Bachelor"></asp:ListItem>
+                                                            <asp:ListItem Value="Masters" Text="Masters"></asp:ListItem>
+                                                            <asp:ListItem Value="PHD" Text="PHD"></asp:ListItem>
+                                                        </asp:DropDownList>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <div class="input-group">
-                                                        <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
+                                                        <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
                                                         <asp:TextBox ID="txtEduGradYear" runat="server" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" placeholder="Graduation Year"></asp:TextBox>
                                                     </div>
                                                 </div>
@@ -582,8 +644,18 @@
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <div class="input-group">
-                                                        <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
+                                                        <span class="input-group-addon"><i class="fa fa-trophy fa-fw"></i></span>
                                                         <asp:TextBox ID="txtEduSpecialAward" runat="server" CssClass="form-control" placeholder="Special Award"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <label class="col-md-1 control-label">Attach Certificate</label>
+                                            <div class="col-sm-5">
+                                                <div class="form-group">
+                                                    <div class="smart-form">
+                                                        <div class="input input-file">
+                                                            <asp:FileUpload ID="fuEduCertificate" runat="server" />
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -595,6 +667,7 @@
                                                 <button class="btn btn-default" type="submit">
                                                     Cancel
                                                 </button>
+                                                <asp:Button ID="btnEduDelete" runat="server" Text="Delete" OnClick="btnEduDelete_Click" OnClientClick="javascript:return confirm('Are you sure you want to delete this education information?');" Enabled="false" CssClass="btn btn-primary"></asp:Button>
                                                 <asp:Button ID="btnEduSave" runat="server" Text="Save & Add New" OnClick="btnEduSave_Click" CssClass="btn btn-primary"></asp:Button>
                                             </div>
                                         </div>
@@ -617,6 +690,11 @@
                                                         <asp:BoundField DataField="Major" HeaderText="Major" SortExpression="Major" />
                                                         <asp:BoundField DataField="EducationalLevel" HeaderText="Educational Level" SortExpression="EducationalLevel" />
                                                         <asp:BoundField DataField="GraduationYear" HeaderText="Graduation Year" SortExpression="GraduationYear" />
+                                                        <asp:TemplateField HeaderText="Certificate">
+                                                            <ItemTemplate>
+                                                                <asp:LinkButton ID="lnkEduDownload" Text="Preview" CommandArgument='<%# Eval("Certificate") %>' runat="server" OnClientClick="newTab();" OnClick="lnkEduDownload_Clicked"></asp:LinkButton>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
                                                         <asp:CommandField ShowSelectButton="True" />
                                                     </Columns>
                                                     <FooterStyle CssClass="FooterStyle" />
@@ -636,16 +714,16 @@
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <div class="input-group">
-                                                        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
-                                                        <asp:TextBox ID="txtWorkEmpName" runat="server" CssClass="form-control" placeholder="Employer Name"></asp:TextBox>
+                                                        <span class="input-group-addon"><i class="fa fa-institution fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtWorkOrgName" runat="server" CssClass="form-control" placeholder="Organization Name"></asp:TextBox>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <div class="input-group">
-                                                        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
-                                                        <asp:TextBox ID="txtWorkEmpAddress" runat="server" CssClass="form-control" placeholder="Employer Address"></asp:TextBox>
+                                                        <span class="input-group-addon"><i class="fa fa-map-marker fa-fw"></i></span>
+                                                        <asp:TextBox ID="txtWorkOrgAddress" runat="server" CssClass="form-control" placeholder="Organization Address"></asp:TextBox>
                                                     </div>
                                                 </div>
                                             </div>
@@ -672,7 +750,7 @@
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <div class="input-group">
-                                                        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                                        <span class="input-group-addon"><i class="fa fa-briefcase fa-fw"></i></span>
                                                         <asp:TextBox ID="txtWorkJobTitle" runat="server" CssClass="form-control" placeholder="Job Title"></asp:TextBox>
                                                     </div>
                                                 </div>
@@ -680,7 +758,7 @@
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <div class="input-group">
-                                                        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                                        <span class="input-group-addon"><i class="fa fa-building fa-fw"></i></span>
                                                         <asp:TextBox ID="txtWorkTypeOfEmp" runat="server" CssClass="form-control" placeholder="Type of Employer"></asp:TextBox>
                                                     </div>
                                                 </div>
@@ -693,6 +771,7 @@
                                                 <button class="btn btn-default" type="submit">
                                                     Cancel
                                                 </button>
+                                                <asp:Button ID="btnWorkExpDelete" runat="server" Text="Delete" OnClick="btnWorkExpDelete_Click" OnClientClick="javascript:return confirm('Are you sure you want to delete this work experience?');" Enabled="false" CssClass="btn btn-primary"></asp:Button>
                                                 <asp:Button ID="btnWorkSave" runat="server" Text="Save & Add New" OnClick="btnWorkSave_Click" CssClass="btn btn-primary"></asp:Button>
                                             </div>
                                         </div>

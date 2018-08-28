@@ -10,7 +10,7 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
 {
     public partial class DefaultMaster : BaseMaster
     {
-        
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!this.IsPostBack)
@@ -27,8 +27,8 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
             FormsAuthentication.SignOut();
         }
         private void UserRole()
-        { 
-            foreach(AppUserRole userroles in CurrentUser.AppUserRoles)
+        {
+            foreach (AppUserRole userroles in CurrentUser.AppUserRoles)
             {
                 if (userroles.Role.Name.Contains("Administrator"))
                 {
@@ -39,15 +39,15 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
                 {
                     lnkAdmin.Visible = false;
                 }
-               
+
             }
-                  
+
         }
         private void UserApprover()
         {
             foreach (AppUserRole userroles in CurrentUser.AppUserRoles)
             {
-                
+
                 if (userroles.Role.Name.Contains("Approver") || userroles.Role.Name.Contains("Reviewer") || userroles.Role.Name.Contains("Preparer") || userroles.Role.Name.Contains("Authorizer") || userroles.Role.Name.Contains("Payer"))
                 {
                     lnkassign.Visible = true;
@@ -63,6 +63,10 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         protected void lnkAdmin_Click(object sender, EventArgs e)
         {
             this.Page.Response.Redirect(string.Format("~/Admin/Default.aspx?{0}=0", Chai.WorkflowManagment.Shared.AppConstants.TABID));
+        }
+        protected void lnkEditProfile_Click(object sender, EventArgs e)
+        {
+            this.Page.Response.Redirect(string.Format("~/HRM/frmEmployeeProfile.aspx?{0}=6&EmpId={1}", Chai.WorkflowManagment.Shared.AppConstants.TABID, CurrentUser.Id));
         }
         protected void lnkassign_Click(object sender, EventArgs e)
         {
@@ -85,9 +89,9 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         private void clearControls()
         {
             txtFrom.Text = "";
-            txtSubject.Text="";
-            txtMessage.Text="";
+            txtSubject.Text = "";
+            txtMessage.Text = "";
 
         }
-}
+    }
 }

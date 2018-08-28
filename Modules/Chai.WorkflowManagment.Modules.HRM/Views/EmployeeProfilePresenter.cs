@@ -5,6 +5,7 @@ using Microsoft.Practices.ObjectBuilder;
 using Microsoft.Practices.CompositeWeb;
 using Chai.WorkflowManagment.CoreDomain.Users;
 using Chai.WorkflowManagment.CoreDomain.HRM;
+using Chai.WorkflowManagment.Modules.Admin;
 
 namespace Chai.WorkflowManagment.Modules.HRM.Views
 {
@@ -15,10 +16,12 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         //       The code will not work in the Shell module, as a module controller is not created by default
         //
         private HRMController _controller;
-        private Employee _employee;
-        public EmployeeProfilePresenter([CreateNew] HRMController controller)
+        private AppUser _appUser;
+        private AdminController _adminController;
+        public EmployeeProfilePresenter([CreateNew] HRMController controller, AdminController adminController)
         {
             _controller = controller;
+            _adminController = adminController;
         }
 
         public override void OnViewLoaded()
@@ -26,41 +29,41 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             // TODO: Implement code that will be executed every time the view loads
             if (View.GetEmployeeId > 0)
             {
-                _controller.CurrentObject = _controller.GetEmployee(View.GetEmployeeId);
+                _controller.CurrentObject = _adminController.GetUser(View.GetEmployeeId);
             }
-            CurrentEmployee = _controller.CurrentObject as Employee;
+            CurrentAppUser = _controller.CurrentObject as AppUser;
         }
 
         public override void OnViewInitialized()
         {
             // TODO: Implement code that will be executed the first time the view loads
-            if (_employee == null)
+            if (_appUser == null)
             {
                 int id = View.GetEmployeeId;
                 if (id > 0)
-                    _controller.CurrentObject = _controller.GetEmployee(id);
+                    _controller.CurrentObject = _adminController.GetUser(id);
                 else
-                    _controller.CurrentObject = new Employee();
+                    _controller.CurrentObject = new AppUser();
             }
         }
 
-        public Employee CurrentEmployee
+        public AppUser CurrentAppUser
         {
             get
             {
-                if (_employee == null)
+                if (_appUser == null)
                 {
                     int id = View.GetEmployeeId;
                     if (id > 0)
-                        _employee = _controller.GetEmployee(id);
+                        _appUser = _adminController.GetUser(id);
                     else
-                        _employee = new Employee();
+                        _appUser = new AppUser();
                 }
-                return _employee;
+                return _appUser;
             }
             set
             {
-                _employee = value;
+                _appUser = value;
             }
         }
 
@@ -70,53 +73,71 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             return _controller.GetCurrentUser();
         }
 
-        public FamilyDetail GetFamilyDetail(int famId)
+        public void SaveOrUpdateEmployee()
         {
-            return _controller.GetFamilyDetail(famId);
-        }
+            Employee employee = null;
+            if (CurrentAppUser.Employee == null)
+                employee = new Employee();
+            else
+                employee = CurrentAppUser.Employee;
+            employee.FirstName = View.GetFirstName;
+            employee.LastName = View.GetLastName;
+            employee.Gender = View.GetGender;
+            employee.DateOfBirth = View.GetDateOfBirth;
+            employee.MaritalStatus = View.GetMaritalStatus;
+            employee.Nationality = View.GetNationality;
+            employee.Address = View.GetAddress;
+            employee.City = View.GetCity;
+            employee.Country = View.GetCountry;
+            employee.Phone = View.GetPhone;
+            employee.CellPhone = View.GetCellPhone;
+            employee.PersonalEmail = View.GetPersonalEmail;
+            employee.ChaiEMail = View.GetChaiEmail;
+            CurrentAppUser.Employee = employee;
+            CurrentAppUser.Employee.AppUser = CurrentAppUser;
 
+            _controller.SaveOrUpdateEntity(CurrentAppUser);
+            _controller.CurrentObject = null;
+        }
+        public void SaveOrUpdateEmployee(AppUser currentAppUser)
+        {
+            _controller.SaveOrUpdateEntity(currentAppUser);
+            _controller.CurrentObject = null;
+        }
+        public FamilyDetail GetFamilyDetail(int famDetId)
+        {
+            return _controller.GetFamilyDetail(famDetId);
+        }
         public EmergencyContact GetEmergencyContact(int emergId)
         {
             return _controller.GetEmergencyContact(emergId);
         }
-
         public Education GetEducation(int eduId)
         {
             return _controller.GetEducation(eduId);
         }
-
         public WorkExperience GetWorkExperience(int workExpId)
         {
             return _controller.GetWorkExperience(workExpId);
         }
-
-        public void SaveOrUpdateEmployee()
+        public void DeleteFamilyDetail(FamilyDetail familyDetail)
         {
-            Employee Employee = CurrentEmployee;
-            Employee.FirstName = View.GetFirstName;
-            Employee.LastName = View.GetLastName;
-            Employee.Gender = View.GetGender;
-            Employee.DateOfBirth = View.GetDateOfBirth;
-            Employee.MaritalStatus = View.GetMaritalStatus;
-            Employee.Nationality = View.GetNationality;
-            Employee.Address = View.GetAddress;
-            Employee.City = View.GetCity;
-            Employee.Country = View.GetCountry;
-            Employee.Phone = View.GetPhone;
-            Employee.CellPhone = View.GetCellPhone;
-            Employee.PersonalEmail = View.GetPersonalEmail;
-            Employee.ChaiEMail = View.GetChaiEmail;
-            Employee.Status = true;
-
-            _controller.SaveOrUpdateEntity(Employee);
-            _controller.CurrentObject = null;
+            _controller.DeleteEntity(familyDetail);
+        }
+        public void DeleteEmergencyContact(EmergencyContact emergContact)
+        {
+            _controller.DeleteEntity(emergContact);
+        }
+        public void DeleteEducation(Education education)
+        {
+            _controller.DeleteEntity(education);
+        }
+        public void DeleteWorkExperience(WorkExperience workExperience)
+        {
+            _controller.DeleteEntity(workExperience);
         }
 
-        public void SaveOrUpdateEmployee(Employee currentEmployee)
-        {
-            _controller.SaveOrUpdateEntity(currentEmployee);
-            _controller.CurrentObject = null;
-        }        
+
     }
 }
 

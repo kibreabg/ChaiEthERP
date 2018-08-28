@@ -53,114 +53,21 @@ namespace Chai.WorkflowManagment.Modules.HRM
             }
             else { return 0; }
         }
-        #endregion
-        #region Family Detail
-        public IList<FamilyDetail> GetFamilyDetails()
+        public FamilyDetail GetFamilyDetail(int famDetId)
         {
-            return WorkspaceFactory.CreateReadOnly().Query<FamilyDetail>(null).ToList();
+            return _workspace.Single<FamilyDetail>(x => x.Id == famDetId);
         }
-        public FamilyDetail GetFamilyDetail(int id)
+        public EmergencyContact GetEmergencyContact(int emergId)
         {
-            return _workspace.Single<FamilyDetail>(x => x.Id == id);
+            return _workspace.Single<EmergencyContact>(x => x.Id == emergId);
         }
-        public IList<FamilyDetail> ListFamilyDetails()
+        public Education GetEducation(int eduId)
         {
-            string filterExpression = "";
-
-            filterExpression = "SELECT * FROM FamilyDetails ORDER BY FamilyDetails.Id Desc ";
-
-            return _workspace.SqlQuery<FamilyDetail>(filterExpression).ToList();
-
-        }      
-
-        public int GetLastFamilyDetailId()
-        {
-            if (_workspace.Last<FamilyDetail>() != null)
-            {
-                return _workspace.Last<FamilyDetail>().Id;
-            }
-            else { return 0; }
-        }        
-        #endregion
-        #region Emergency Contact
-        public IList<EmergencyContact> GetEmergencyContacts()
-        {
-            return WorkspaceFactory.CreateReadOnly().Query<EmergencyContact>(null).ToList();
+            return _workspace.Single<Education>(x => x.Id == eduId);
         }
-        public EmergencyContact GetEmergencyContact(int id)
+        public WorkExperience GetWorkExperience(int workExpId)
         {
-            return _workspace.Single<EmergencyContact>(x => x.Id == id);
-        }
-        public IList<EmergencyContact> ListEmergencyContacts()
-        {
-            string filterExpression = "";
-
-            filterExpression = "SELECT * FROM EmergencyContacts ORDER BY EmergencyContacts.Id Desc ";
-
-            return _workspace.SqlQuery<EmergencyContact>(filterExpression).ToList();
-
-        }
-        public int GetLastEmergencyContactId()
-        {
-            if (_workspace.Last<EmergencyContact>() != null)
-            {
-                return _workspace.Last<EmergencyContact>().Id;
-            }
-            else { return 0; }
-        }
-        #endregion
-        #region Education
-        public IList<Education> GetEducations()
-        {
-            return WorkspaceFactory.CreateReadOnly().Query<Education>(null).ToList();
-        }
-        public Education GetEducation(int id)
-        {
-            return _workspace.Single<Education>(x => x.Id == id);
-        }
-        public IList<Education> ListEducations()
-        {
-            string filterExpression = "";
-
-            filterExpression = "SELECT * FROM Educations ORDER BY Educations.Id Desc ";
-
-            return _workspace.SqlQuery<Education>(filterExpression).ToList();
-
-        }
-        public int GetLastEducationId()
-        {
-            if (_workspace.Last<Education>() != null)
-            {
-                return _workspace.Last<Education>().Id;
-            }
-            else { return 0; }
-        }
-        #endregion
-        #region Work Experience
-        public IList<WorkExperience> GetWorkExperiences()
-        {
-            return WorkspaceFactory.CreateReadOnly().Query<WorkExperience>(null).ToList();
-        }
-        public WorkExperience GetWorkExperience(int id)
-        {
-            return _workspace.Single<WorkExperience>(x => x.Id == id);
-        }
-        public IList<WorkExperience> ListWorkExperiences()
-        {
-            string filterExpression = "";
-
-            filterExpression = "SELECT * FROM WorkExperiences ORDER BY WorkExperiences.Id Desc ";
-
-            return _workspace.SqlQuery<WorkExperience>(filterExpression).ToList();
-
-        }
-        public int GetLastWorkExperienceId()
-        {
-            if (_workspace.Last<WorkExperience>() != null)
-            {
-                return _workspace.Last<WorkExperience>().Id;
-            }
-            else { return 0; }
+            return _workspace.Single<WorkExperience>(x => x.Id == workExpId);
         }
         #endregion
 

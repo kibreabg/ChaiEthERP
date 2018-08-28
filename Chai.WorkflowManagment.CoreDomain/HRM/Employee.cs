@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Chai.WorkflowManagment.CoreDomain.Setting;
 using Chai.WorkflowManagment.CoreDomain.Users;
+using System.ComponentModel.DataAnnotations;
 
 namespace Chai.WorkflowManagment.CoreDomain.HRM
 {
@@ -19,7 +20,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             this.FamilyDetails = new List<FamilyDetail>();
             this.Terminations = new List<Termination>();
             this.WorkExperiences = new List<WorkExperience>();
-           
+
         }
         public int Id { get; set; }
 
@@ -38,7 +39,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public string ChaiEMail { get; set; }
         public string Photo { get; set; }
         public Nullable<Boolean> Status { get; set; }
-
+        [Required]
         public virtual AppUser AppUser { get; set; }
         public virtual IList<Contract> Contracts { get; set; }
         public virtual IList<Education> Educations { get; set; }
@@ -61,7 +62,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             return null;
         }
 
-     
+
         public virtual void RemoveEmployeeDetail(int Id)
         {
             foreach (EmployeeDetail ED in EmployeeDetails)
@@ -100,7 +101,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         }
         #endregion
         #region Education
-        public virtual Education GetEducations(int Id)
+        public virtual Education GetEducation(int Id)
         {
 
             foreach (Education ED in Educations)
@@ -125,7 +126,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         }
         #endregion
         #region EmergencyContact
-        public virtual EmergencyContact GetEmergencyContacts(int Id)
+        public virtual EmergencyContact GetEmergencyContact(int Id)
         {
 
             foreach (EmergencyContact ED in EmergencyContacts)
@@ -150,7 +151,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         }
         #endregion
         #region FamilyDetail
-        public virtual FamilyDetail GetFamilyDetails(int Id)
+        public virtual FamilyDetail GetFamilyDetail(int Id)
         {
 
             foreach (FamilyDetail FD in FamilyDetails)
@@ -200,7 +201,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         }
         #endregion
         #region WorkExperience
-        public virtual WorkExperience GetWorkExperiences(int Id)
+        public virtual WorkExperience GetWorkExperience(int Id)
         {
 
             foreach (WorkExperience WE in WorkExperiences)

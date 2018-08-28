@@ -1,43 +1,40 @@
 ﻿using System;
-using System.Text;
-using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Practices.CompositeWeb;
-using Microsoft.Practices.CompositeWeb.Web;
-using Microsoft.Practices.CompositeWeb.Interfaces;
 using Microsoft.Practices.ObjectBuilder;
 
 using Chai.WorkflowManagment.CoreDomain.Users;
 using Chai.WorkflowManagment.Shared;
 using Chai.WorkflowManagment.CoreDomain.Setting;
+using Chai.WorkflowManagment.Shared.MailSender;
 
 namespace Chai.WorkflowManagment.Modules.Admin.Views
 {
     public class UserEditPresenter : Presenter<IUserEditView>
     {
         private AdminController _controller;
-        
+
         private AppUser _user;
 
         public UserEditPresenter([CreateNew] AdminController controller)
         {
             _controller = controller;
-          
+
         }
 
         public override void OnViewLoaded()
         {
-            
+
         }
 
         public override void OnViewInitialized()
         {
-           
+
         }
 
         public AppUser CurrentUser
         {
-            get 
+            get
             {
                 if (_user == null)
                 {
@@ -47,7 +44,8 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                     else
                         _user = new AppUser();
                 }
-                return _user; }
+                return _user;
+            }
         }
 
         public Role GetRoleById(int roleid)
@@ -59,17 +57,18 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
             return _controller.GetRoles;
         }
 
-        public void SaveOrUpdateUser()       
+        public void SaveOrUpdateUser()
         {
             AppUser user = CurrentUser;
 
             if (user.Id <= 0)
                 user.UserName = View.GetUserName;
-            
+
             user.FirstName = View.GetFirstName;
             user.LastName = View.GetLastName;
             user.EmployeeNo = View.GetEmployeeNo;
             user.Email = View.GetEmail;
+            user.PersonalEmail = View.GetPersonalEmail;
             user.IsActive = View.GetIsActive;
             user.DateModified = DateTime.Now;
             user.EmployeePosition = View.EmployeePosition;
@@ -88,6 +87,9 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
 
             if (user.Id <= 0 && user.Password == null)
                 throw new Exception("Password is required");
+            //Send Email on their personal email the first time they're registered.
+            if (user.Id <= 0)
+                EmailSender.Send(user.PersonalEmail, "Welcome to CHAI ERP System", "Hello " + (user.FullName).ToUpper() + " You can access the ERP system by clicking the following link");
 
             _controller.SaveOrUpdateUser(user);
         }
@@ -105,8 +107,8 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
 
         public void DeleteUser()
         {
-            if (CurrentUser.Id >0)
-               _controller.DeleteEntity<AppUser>(CurrentUser);
+            if (CurrentUser.Id > 0)
+                _controller.DeleteEntity<AppUser>(CurrentUser);
         }
 
         public void CancelPage()

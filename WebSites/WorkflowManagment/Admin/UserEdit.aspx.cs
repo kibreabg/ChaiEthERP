@@ -195,6 +195,10 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
         {
             get { return this.txtEmail.Text; }
         }
+        public string GetPersonalEmail
+        {
+            get { return this.txtPersonalEmail.Text; }
+        }
 
         public bool GetIsActive
         {

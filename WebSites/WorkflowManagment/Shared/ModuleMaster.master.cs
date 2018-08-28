@@ -22,7 +22,7 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
             UserRole();
             UserApprover();
         }
-        
+
         protected override void OnInit(EventArgs e)
         {
             base.OnInit(e);
@@ -65,6 +65,10 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         protected void lnkAdmin_Click(object sender, EventArgs e)
         {
             this.Page.Response.Redirect(string.Format("~/Admin/Default.aspx?{0}=0", Chai.WorkflowManagment.Shared.AppConstants.TABID));
+        }
+        protected void lnkEditProfile_Click(object sender, EventArgs e)
+        {
+            this.Page.Response.Redirect(string.Format("~/HRM/frmEmployeeProfile.aspx?{0}=6&EmpId={1}", Chai.WorkflowManagment.Shared.AppConstants.TABID, CurrentUser.Id));
         }
         protected void lnkassign_Click(object sender, EventArgs e)
         {

@@ -85,12 +85,15 @@
                                 <%--<a href="<%=this.Page.ResolveUrl(string.Format("~/Admin/Default.aspx?{0}=0", Chai.WorkflowManagment.Shared.AppConstants.TABID)) %>"  id="adminlink">Admin</a>--%>
                             </li>
                             <li>
+                                <asp:LinkButton ID="lnkEditProfile" runat="server" OnClick="lnkEditProfile_Click" Visible="true">Edit Profile</asp:LinkButton>
+                            </li>
+                            <li>
                                 <asp:LinkButton ID="lnkassign" runat="server" Visible="false" OnClick="lnkassign_Click">Assign job</asp:LinkButton>
                                 <%--<a href="<%=this.Page.ResolveUrl(string.Format("~/Admin/AssignJob.aspx?{0}=0", Chai.WorkflowManagment.Shared.AppConstants.TABID)) %>"  id="assignlink">Assign Job</a>--%>
                             </li>
                             <li>
                                 <a href="<%=this.Page.ResolveUrl(string.Format("~/ChangePassword.aspx?{0}=0", Chai.WorkflowManagment.Shared.AppConstants.TABID)) %>">Change Password</a>
-                            </li>
+                            </li>                            
                             <li>
                                 <asp:LoginStatus runat="server" ID="LoginStatus1" LogoutAction="Redirect" LogoutPageUrl="UserLogin.aspx" />
                             </li>
@@ -207,7 +210,7 @@
         <div class="page-footer">
             <div class="row">
                 <div class="col-xs-12 col-sm-6">
-                    <span class="txt-color-white">CHAI Zimbabwe</span>
+                    <span class="txt-color-white">CHAI Ethiopia ERP</span>
                 </div>
 
             </div>
