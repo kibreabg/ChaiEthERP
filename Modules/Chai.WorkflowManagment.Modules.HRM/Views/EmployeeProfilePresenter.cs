@@ -93,6 +93,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             employee.CellPhone = View.GetCellPhone;
             employee.PersonalEmail = View.GetPersonalEmail;
             employee.ChaiEMail = View.GetChaiEmail;
+            employee.SDLeaveBalance = 0;
+            employee.LeaveSettingDate = DateTime.Now.Date;
             CurrentAppUser.Employee = employee;
             CurrentAppUser.Employee.AppUser = CurrentAppUser;
 

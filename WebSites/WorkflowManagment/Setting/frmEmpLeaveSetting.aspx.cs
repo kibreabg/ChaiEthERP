@@ -7,6 +7,7 @@ using Microsoft.Practices.ObjectBuilder;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web;
 using System.Web.Services;
@@ -26,11 +27,11 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
             {
                 this._presenter.OnViewInitialized();
                 BindCostSharing();
-               
+
             }
-            
+
             this._presenter.OnViewLoaded();
-         
+
 
         }
 
@@ -52,44 +53,60 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         }
         public override string PageID
         {
-            
+
             get
             {
                 return "{FAC4E85E-A360-4F0E-55A6-099B38F4D615}";
             }
         }
-        
+
         private void BindCostSharing()
         {
-               
+
             dgItemDetail.DataSource = _presenter.GetEmployees();
             dgItemDetail.DataBind();
         }
-      
-       
+
+
         private void SetEmployeeOpeningBalance()
         {
-            int index = 0;
-            
-            foreach (DataGridItem dgi in dgItemDetail.Items)
+            try
             {
-                int id = (int)dgItemDetail.DataKeys[dgi.ItemIndex];
+                int index = 0;
 
-                Employee detail;
-                
-                detail = _presenter.GetEmployee(id);
-                if (detail != null)
+                foreach (DataGridItem dgi in dgItemDetail.Items)
                 {
-                    TextBox txtOpeningLeavebalance = dgi.FindControl("txtOpeningLeavebalance") as TextBox;
-                    detail.SDLeaveBalance = Convert.ToInt32(txtOpeningLeavebalance.Text);
-                    TextBox txtLeaveSettingDate = dgi.FindControl("txtOpeningLeavebalancedate") as TextBox;
-                    detail.LeaveSettingDate = Convert.ToDateTime(txtLeaveSettingDate.Text);
-                    _presenter.SaveOrUpdateEmpLeaveSetting(detail);
-                }
-                index++;
+                    int id = (int)dgItemDetail.DataKeys[dgi.ItemIndex];
 
+                    Employee detail;
+
+                    detail = _presenter.GetEmployee(id);
+                    if (detail != null)
+                    {
+                        TextBox txtOpeningLeavebalance = dgi.FindControl("txtOpeningLeavebalance") as TextBox;
+                        detail.SDLeaveBalance = Convert.ToInt32(txtOpeningLeavebalance.Text);
+                        TextBox txtLeaveSettingDate = dgi.FindControl("txtOpeningLeavebalancedate") as TextBox;
+                        detail.LeaveSettingDate = Convert.ToDateTime(txtLeaveSettingDate.Text);
+                        _presenter.SaveOrUpdateEmpLeaveSetting(detail);
+                    }
+                    index++;
+
+                }
             }
-           
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw;
+            }
             Master.ShowMessage(new AppMessage("Employee Opening Balance successfully saved", Chai.WorkflowManagment.Enums.RMessageType.Info));
         }
 
@@ -106,7 +123,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 detail = _presenter.GetEmployee(id);
                 if (detail != null)
                 {
-                  decimal balance =  Convert.ToInt32(detail.EmployeeLeaveBalanceYE()) -  _presenter.EmpLeaveTaken(detail.Id, detail.LeaveSettingDate.Value);
+                    decimal balance = Convert.ToInt32(detail.EmployeeLeaveBalanceYE()) - _presenter.EmpLeaveTaken(detail.Id, detail.LeaveSettingDate.Value);
                     if (balance > 20)
                         detail.SDLeaveBalance = 20;
                     else
