@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Chai.WorkflowManagment.CoreDomain.Setting;
 using Chai.WorkflowManagment.CoreDomain.Users;
+using System.ComponentModel.DataAnnotations;
 
 namespace Chai.WorkflowManagment.CoreDomain.HRM
 {
@@ -38,8 +39,10 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public string PersonalEmail { get; set; }
         public string ChaiEMail { get; set; }
         public string Photo { get; set; }
+        public Nullable<decimal> SDLeaveBalance { get; set; }
+        public DateTime? LeaveSettingDate { get; set; }
         public Nullable<Boolean> Status { get; set; }
-
+        [Required]
         public virtual AppUser AppUser { get; set; }
         public virtual IList<Contract> Contracts { get; set; }
         public virtual IList<Education> Educations { get; set; }
@@ -103,7 +106,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         }
         #endregion
         #region Education
-        public virtual Education GetEducations(int Id)
+        public virtual Education GetEducation(int Id)
         {
 
             foreach (Education ED in Educations)
@@ -128,7 +131,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         }
         #endregion
         #region EmergencyContact
-        public virtual EmergencyContact GetEmergencyContacts(int Id)
+        public virtual EmergencyContact GetEmergencyContact(int Id)
         {
 
             foreach (EmergencyContact ED in EmergencyContacts)
@@ -153,7 +156,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         }
         #endregion
         #region FamilyDetail
-        public virtual FamilyDetail GetFamilyDetails(int Id)
+        public virtual FamilyDetail GetFamilyDetail(int Id)
         {
 
             foreach (FamilyDetail FD in FamilyDetails)
@@ -203,7 +206,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         }
         #endregion
         #region WorkExperience
-        public virtual WorkExperience GetWorkExperiences(int Id)
+        public virtual WorkExperience GetWorkExperience(int Id)
         {
 
             foreach (WorkExperience WE in WorkExperiences)
@@ -225,6 +228,197 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                     break;
                 }
             }
+        }
+        #endregion
+        #region Employee detail
+        public virtual string GetEmployeeDutyStation()
+        {
+            if (EmployeeDetails.Count != 0)
+
+                return EmployeeDetails.Last().DutyStation;
+            else
+                return "";
+        }
+        public virtual string GetEmployeeProgram()
+        {
+            if (EmployeeDetails.Count != 0)
+
+                return EmployeeDetails.Last().Program.ProgramName;
+            else
+                return "";
+        }
+        public virtual string GetEmployeePosition()
+        {
+            if (EmployeeDetails.Count != 0)
+
+                return EmployeeDetails.Last().Position.PositionName;
+            else
+                return "";
+        }
+        #endregion
+
+        #region Leave calculation Methods
+        public virtual DateTime GetEmployeeHiredDate()
+        {
+            if (Contracts.Count != 0)
+            {
+                foreach (Contract cn in Contracts)
+                {
+                    if (cn.Reason == "ReHired")
+                        return cn.ContractStartDate;
+                }
+                return Contracts[0].ContractStartDate;
+            }
+            else
+                return new DateTime();
+            
+        }
+
+        public virtual decimal Leavefromhiredtonow()
+        {
+            DateTime DateHired = GetEmployeeHiredDate();
+           
+            decimal leaveEnti = 0;
+            decimal Sumleave = 0;
+            TimeSpan workingdays = DateTime.Now - DateHired;
+            decimal wd = workingdays.Days;
+
+
+            int count = 1;
+            if (wd > 365)
+            {
+                while (wd > 365)
+                {
+                    leaveEnti = leaveEnti + 2;
+                    if (count >= 6)
+                        Sumleave = Sumleave + 30;
+                    else
+                        Sumleave = Sumleave + (20 + Convert.ToInt32(leaveEnti));
+
+                    count++;
+                    wd = wd - 365;
+                }
+                if (wd < 365)
+                {
+
+                   // leaveEnti = leaveEnti + Math.Round(wd / 365);
+                    Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365));
+                }
+            }
+            else { //leaveEnti = leaveEnti + Math.Round(wd / 365);
+                   Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365));
+            }
+
+            return Sumleave;
+        }
+        public virtual decimal LeavefromhiredtoYE()
+        {
+            DateTime YE = new  DateTime(DateTime.Now.Year, 12, 31);
+
+            decimal leaveEnti = 0;
+            decimal Sumleave = 0;
+            TimeSpan workingdays = YE - GetEmployeeHiredDate();
+            decimal wd = workingdays.Days;
+
+
+            int count = 1;
+            if (wd > 365)
+            {
+                while (wd > 365)
+                {
+                    leaveEnti = leaveEnti + 2;
+                    if (count >= 6)
+                        Sumleave = Sumleave + 30;
+                    else
+                        Sumleave = Sumleave + (20 + Convert.ToInt32(leaveEnti));
+
+                    count++;
+                    wd = wd - 365;
+                }
+                if (wd < 365)
+                {
+                    Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365));
+                }
+            }
+            else { Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365)); }
+
+            return Sumleave;
+        }
+        public virtual decimal LeavefromhiredtoCED(DateTime CED)
+        {
+            DateTime ced = CED;
+
+            decimal leaveEnti = 0;
+            decimal Sumleave = 0;
+            TimeSpan workingdays =  ced - GetEmployeeHiredDate();
+            decimal wd = workingdays.Days;
+
+
+            int count = 1;
+            if (wd > 365)
+            {
+                while (wd > 365)
+                {
+                    leaveEnti = leaveEnti + 2;
+                    if (count >= 6)
+                        Sumleave = Sumleave + 30;
+                    else
+                        Sumleave = Sumleave + (20 + Convert.ToInt32(leaveEnti));
+
+                    count++;
+                    wd = wd - 365;
+                }
+                if (wd < 365)
+                {
+                    Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365));
+                }
+            }
+            else { Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365)); }
+
+            return Sumleave;
+        }
+
+        public virtual decimal LeavefromhiredtoSettingDate()
+        {
+            decimal leaveEnti = 0;
+            decimal Sumleave = 0;
+            TimeSpan workingdays = LeaveSettingDate.Value - GetEmployeeHiredDate();
+            decimal wd = workingdays.Days;
+            int count = 1;
+            if (wd > 365)
+            {
+                while (wd > 365)
+                {
+                    leaveEnti = leaveEnti + 2;
+                    if (count >= 6)
+                        Sumleave = Sumleave + 30;
+                    else
+                        Sumleave = Sumleave + (20 + Convert.ToInt32(leaveEnti));
+
+                    count++;
+                    wd = wd - 365;
+                }
+                if (wd < 365)
+                {
+                    Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365));
+                }
+            }
+            else { Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365)); }
+
+            return Sumleave;
+        }
+
+        public virtual decimal EmployeeLeaveBalance()
+        {
+            return (Leavefromhiredtonow() - LeavefromhiredtoSettingDate()) + SDLeaveBalance.Value;
+        }
+        public virtual decimal EmployeeLeaveBalanceCED(DateTime CED)
+        {
+            return (LeavefromhiredtoCED(CED) - LeavefromhiredtoSettingDate()) + SDLeaveBalance.Value;
+        }
+        public virtual decimal EmployeeLeaveBalanceYE()
+        {
+            return (LeavefromhiredtoYE() - LeavefromhiredtoSettingDate()) + SDLeaveBalance.Value;
         }
         #endregion
 

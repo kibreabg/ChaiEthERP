@@ -23,7 +23,9 @@ namespace Chai.WorkflowManagment.Shared
 
             if (exc.InnerException != null)
             {
-                ErrorLog.Error("Inner Exception Type: " + exc.InnerException.GetType().ToString());
+                var InnerExc = new StringBuilder();
+                InnerExc.AppendLine("<b>Inner Exception Type: </b>" + exc.InnerException.GetType().ToString());
+                ErrorLog.Error(InnerExc.ToString());
                 ErrorLog.Error("Inner Exception: " + exc.InnerException.Message);
                 if (exc.InnerException.InnerException != null)
                     ErrorLog.Error("Second Level Exception: " + exc.InnerException.InnerException.Message);
@@ -33,7 +35,9 @@ namespace Chai.WorkflowManagment.Shared
                     ErrorLog.Error("Inner Stack Trace: " + exc.InnerException.StackTrace);
                 }
             }
-            ErrorLog.Error("Exception Type: " + exc.GetType().ToString());
+            var Exc = new StringBuilder();
+            Exc.AppendLine("<b>Exception Type: </b>" + exc.GetType().ToString());
+            ErrorLog.Error(Exc.ToString());
             ErrorLog.Error("Exception: " + exc.Message);
             ErrorLog.Error("Source: " + source);
             if (exc.StackTrace != null)

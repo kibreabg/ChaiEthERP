@@ -9,12 +9,14 @@ using Chai.WorkflowManagment.CoreDomain.Admins;
 using Chai.WorkflowManagment.CoreDomain.Setting;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using Chai.WorkflowManagment.CoreDomain.HRM;
 
 namespace Chai.WorkflowManagment.CoreDomain.Users
 {
     [Table("AppUsers", Schema = "dbo")]
     public partial class AppUser : IEntity, IIdentity
     {
+        private IList<AppUserRole> _appUserRole;
         public AppUser()
         {
             this._appUserRole = new List<AppUserRole>();
@@ -27,25 +29,24 @@ namespace Chai.WorkflowManagment.CoreDomain.Users
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
+        public string PersonalEmail { get; set; }
         public string EmployeeNo { get; set; }
         public Nullable<int> Superviser { get; set; }
-        public virtual EmployeePosition EmployeePosition { get; set; }
-       
+        public virtual EmployeePosition EmployeePosition { get; set; }       
         public Nullable<bool> IsAssignedJob { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> LastLogin { get; set; }
         public string LastIp { get; set; }
         public System.DateTime DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
-        public Nullable<System.DateTime> TerminationDate { get; set; }
-
-        private IList<AppUserRole> _appUserRole;
+        public Nullable<System.DateTime> TerminationDate { get; set; }        
         public virtual IList<AppUserRole> AppUserRoles
         {
             get { return _appUserRole; }
             set { _appUserRole = value; }
         }
         public virtual IList<Project> Projects { get; set; }
+        public virtual Employee Employee { get; set; }
 
         #region public methods
 

@@ -67,13 +67,10 @@
                                 </label>
                             </section>
                         </div>
-
-
                         <div class="row">
                             <section class="col col-6">
                                 <label class="label">Superviser</label>
                                 <label class="select">
-
                                     <asp:DropDownList ID="ddlSuperviser" runat="server" AppendDataBoundItems="True" DataTextField="FullName" DataValueField="Id">
                                         <asp:ListItem Value="-1">Select Superviser</asp:ListItem>
                                     </asp:DropDownList><i></i>
@@ -90,8 +87,6 @@
                             <section class="col col-6">
                                 <label class="label">Email</label>
                                 <label class="input">
-
-
                                     <asp:TextBox ID="txtEmail" runat="server"></asp:TextBox>
                                     <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" CssClass="validator" ControlToValidate="txtEmail"
                                         Display="Dynamic" ErrorMessage="Invalid Email Address" ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"
@@ -110,7 +105,24 @@
                         </div>
                         <div class="row">
                             <section class="col col-6">
-                                    <asp:CheckBox ID="chkActive" runat="server" Text="Is Active" Checked="True"></asp:CheckBox>
+                                <label class="label">Personal Email</label>
+                                <label class="input">
+                                    <asp:TextBox ID="txtPersonalEmail" runat="server"></asp:TextBox>
+                                    <asp:RegularExpressionValidator ID="revPersonalEmail" runat="server" CssClass="validator" ControlToValidate="txtPersonalEmail"
+                                        Display="Dynamic" ErrorMessage="Invalid Personal Email Address" ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"
+                                        SetFocusOnError="True"></asp:RegularExpressionValidator>
+                                    <cc1:ValidatorCalloutExtender ID="vcePersonalEmail"
+                                        runat="server" Enabled="True" TargetControlID="revPersonalEmail" Width="300px">
+                                    </cc1:ValidatorCalloutExtender>
+                                    &nbsp;<asp:RequiredFieldValidator ID="rfvPersonalEmail" runat="server" ControlToValidate="txtPersonalEmail"
+                                        Display="Dynamic" ErrorMessage="Personal Email is required"
+                                        SetFocusOnError="True"></asp:RequiredFieldValidator>
+                                </label>
+                            </section>
+                        </div>
+                        <div class="row">
+                            <section class="col col-6">
+                                <asp:CheckBox ID="chkActive" runat="server" Text="Is Active" Checked="True"></asp:CheckBox>
                             </section>
                         </div>
                         <div class="row">
@@ -120,9 +132,9 @@
 
 
                                     <asp:TextBox ID="txtPassword1" type="password" runat="server" TextMode="Password"></asp:TextBox></label>
-                                 <asp:RegularExpressionValidator ID="Regex2" runat="server" ControlToValidate="txtPassword1"
-    ValidationExpression="^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$"
-    ErrorMessage="Minimum 8 characters atleast 1 Alphabet, 1 Number and 1 Special Character" ForeColor="Red" />
+                                <asp:RegularExpressionValidator ID="Regex2" runat="server" ControlToValidate="txtPassword1"
+                                    ValidationExpression="^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$"
+                                    ErrorMessage="Minimum 8 characters atleast 1 Alphabet, 1 Number and 1 Special Character" ForeColor="Red" />
                             </section>
                         </div>
                         <div class="row">

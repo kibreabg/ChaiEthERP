@@ -5,6 +5,8 @@ using log4net;
 using Chai.WorkflowManagment.CoreDomain.HRM;
 using System.Web.UI.WebControls;
 using System.Web.UI;
+using Chai.WorkflowManagment.Enums;
+using System.IO;
 
 namespace Chai.WorkflowManagment.Modules.HRM.Views
 {
@@ -143,43 +145,65 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         private void BindEmployee()
         {
-            txtFirstName.Text = _presenter.CurrentEmployee.FirstName;
-            txtLastName.Text = _presenter.CurrentEmployee.LastName;
-            ddlGender.SelectedValue = _presenter.CurrentEmployee.Gender;
-            txtDateOfBirth.Text = Convert.ToDateTime(_presenter.CurrentEmployee.DateOfBirth).ToShortDateString();
-            ddlMaritalStatus.SelectedValue = _presenter.CurrentEmployee.MaritalStatus;
-            txtNationality.Text = _presenter.CurrentEmployee.Nationality;
-            txtPhone.Text = _presenter.CurrentEmployee.Phone;
-            txtCellPhone.Text = _presenter.CurrentEmployee.CellPhone;
-            txtChaiEmail.Text = _presenter.CurrentEmployee.ChaiEMail;
-            txtPersonalEmail.Text = _presenter.CurrentEmployee.PersonalEmail;
-            txtCountry.Text = _presenter.CurrentEmployee.Country;
-            txtCity.Text = _presenter.CurrentEmployee.City;
-            txtAddress.Text = _presenter.CurrentEmployee.Address;
+            if (_presenter.CurrentAppUser.Employee == null)
+            {
+                txtFirstName.Text = _presenter.CurrentUser().FirstName;
+                txtLastName.Text = _presenter.CurrentUser().LastName;
+                txtChaiEmail.Text = _presenter.CurrentUser().Email;
+            }
+            if (_presenter.CurrentAppUser.Employee != null)
+            {
+                txtFirstName.Text = _presenter.CurrentAppUser.Employee.FirstName;
+                txtLastName.Text = _presenter.CurrentAppUser.Employee.LastName;
+                ddlGender.SelectedValue = _presenter.CurrentAppUser.Employee.Gender;
+                txtDateOfBirth.Text = Convert.ToDateTime(_presenter.CurrentAppUser.Employee.DateOfBirth).ToShortDateString();
+                ddlMaritalStatus.SelectedValue = _presenter.CurrentAppUser.Employee.MaritalStatus;
+                txtNationality.Text = _presenter.CurrentAppUser.Employee.Nationality;
+                txtPhone.Text = _presenter.CurrentAppUser.Employee.Phone;
+                txtCellPhone.Text = _presenter.CurrentAppUser.Employee.CellPhone;
+                txtChaiEmail.Text = _presenter.CurrentAppUser.Employee.ChaiEMail;
+                txtPersonalEmail.Text = _presenter.CurrentAppUser.Employee.PersonalEmail;
+                txtCountry.Text = _presenter.CurrentAppUser.Employee.Country;
+                txtCity.Text = _presenter.CurrentAppUser.Employee.City;
+                txtAddress.Text = _presenter.CurrentAppUser.Employee.Address;
+            }
+
 
         }
         private void BindFamilyDetails()
         {
-            grvFamilyDetails.DataSource = _presenter.CurrentEmployee.FamilyDetails;
-            grvFamilyDetails.DataBind();
+            if (_presenter.CurrentAppUser.Employee != null)
+            {
+                grvFamilyDetails.DataSource = _presenter.CurrentAppUser.Employee.FamilyDetails;
+                grvFamilyDetails.DataBind();
+            }
         }
 
         private void BindEmergencyContacts()
         {
-            grvEmergContacts.DataSource = _presenter.CurrentEmployee.EmergencyContacts;
-            grvEmergContacts.DataBind();
+            if (_presenter.CurrentAppUser.Employee != null)
+            {
+                grvEmergContacts.DataSource = _presenter.CurrentAppUser.Employee.EmergencyContacts;
+                grvEmergContacts.DataBind();
+            }
         }
 
         private void BindEducations()
         {
-            grvEducations.DataSource = _presenter.CurrentEmployee.Educations;
-            grvEducations.DataBind();
+            if (_presenter.CurrentAppUser.Employee != null)
+            {
+                grvEducations.DataSource = _presenter.CurrentAppUser.Employee.Educations;
+                grvEducations.DataBind();
+            }
         }
 
         private void BindWorkExperiences()
         {
-            grvWorkExperiences.DataSource = _presenter.CurrentEmployee.WorkExperiences;
-            grvWorkExperiences.DataBind();
+            if (_presenter.CurrentAppUser.Employee != null)
+            {
+                grvWorkExperiences.DataSource = _presenter.CurrentAppUser.Employee.WorkExperiences;
+                grvWorkExperiences.DataBind();
+            }
         }
 
         protected void grvFamilyDetails_PageIndexChanging(object sender, GridViewPageEventArgs e)
@@ -191,7 +215,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         protected void grvFamilyDetails_SelectedIndexChanged(object sender, EventArgs e)
         {
             famId = Convert.ToInt32(grvFamilyDetails.SelectedDataKey[0]);
-            FamilyDetail familyDetail = _presenter.GetFamilyDetail(famId);
+            Session["famId"] = Convert.ToInt32(grvFamilyDetails.SelectedDataKey[0]);
+            FamilyDetail familyDetail = _presenter.CurrentAppUser.Employee.GetFamilyDetail(famId);
             txtFamFirstName.Text = familyDetail.FirstName;
             txtFamLastName.Text = familyDetail.LastName;
             txtFamCellPhone.Text = familyDetail.CellPhone;
@@ -199,6 +224,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             txtFamDateOfMarriage.Text = Convert.ToDateTime(familyDetail.DateOfMarriage).ToShortDateString();
             ddlFamGender.SelectedValue = familyDetail.Gender;
             ddlFamRelationship.SelectedValue = familyDetail.Relationship;
+
+            btnFamDelete.Enabled = true;
 
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetofamily();", true);
         }
@@ -212,7 +239,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         protected void grvEmergContacts_SelectedIndexChanged(object sender, EventArgs e)
         {
             emergId = Convert.ToInt32(grvEmergContacts.SelectedDataKey[0]);
-            EmergencyContact emergencyContact = _presenter.GetEmergencyContact(emergId);
+            Session["emergContId"] = Convert.ToInt32(grvEmergContacts.SelectedDataKey[0]);
+            EmergencyContact emergencyContact = _presenter.CurrentAppUser.Employee.GetEmergencyContact(emergId);
             txtEmergFullName.Text = emergencyContact.FullName;
             txtEmergSubCity.Text = emergencyContact.SubCity;
             txtEmergWoreda.Text = emergencyContact.Woreda;
@@ -232,12 +260,13 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         protected void grvEducations_SelectedIndexChanged(object sender, EventArgs e)
         {
             eduId = Convert.ToInt32(grvEducations.SelectedDataKey[0]);
-            Education education = _presenter.GetEducation(eduId);
+            Session["eduId"] = Convert.ToInt32(grvEducations.SelectedDataKey[0]);
+            Education education = _presenter.CurrentAppUser.Employee.GetEducation(eduId);
             txtEduInstName.Text = education.InstitutionName;
-            txtEduInstType.Text = education.InstitutionType;
+            ddlEduInstType.SelectedValue = education.InstitutionType;
             txtEduInstLocation.Text = education.InstitutionLocation;
             txtEduMajor.Text = education.Major;
-            txtEduLevel.Text = education.EducationalLevel;
+            ddlEduLevel.SelectedValue = education.EducationalLevel;
             txtEduGradYear.Text = Convert.ToDateTime(education.GraduationYear).ToShortDateString();
             txtEduSpecialAward.Text = education.SpecialAward;
 
@@ -253,15 +282,45 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         protected void grvWorkExperiences_SelectedIndexChanged(object sender, EventArgs e)
         {
             workExpId = Convert.ToInt32(grvWorkExperiences.SelectedDataKey[0]);
-            WorkExperience workExperience = _presenter.GetWorkExperience(workExpId);
-            txtWorkEmpName.Text = workExperience.EmployerName;
-            txtWorkEmpAddress.Text = workExperience.EmployerAddress;
+            Session["workExpId"] = Convert.ToInt32(grvWorkExperiences.SelectedDataKey[0]);
+            WorkExperience workExperience = _presenter.CurrentAppUser.Employee.GetWorkExperience(workExpId);
+            txtWorkOrgName.Text = workExperience.EmployerName;
+            txtWorkOrgAddress.Text = workExperience.EmployerAddress;
             txtWorkStartDate.Text = Convert.ToDateTime(workExperience.StartDate).ToShortDateString();
             txtWorkEndDate.Text = Convert.ToDateTime(workExperience.EndDate).ToShortDateString();
             txtWorkJobTitle.Text = workExperience.JobTitle;
             txtWorkTypeOfEmp.Text = workExperience.TypeOfEmployer;
 
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetowork();", true);
+        }
+
+        protected void ddlFamRelationship_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ddlFamRelationship.SelectedValue == "Spouse")
+            {
+                pnlFamDateOfMarriage.Visible = true;
+                pnlFamCertificate.Visible = true;
+                pnlFamDateOfBirth.Visible = false;
+                txtFamDateOfBirth.Text = String.Empty;
+            }
+            else if (ddlFamRelationship.SelectedValue == "Child")
+            {
+                pnlFamDateOfBirth.Visible = true;
+                pnlFamCertificate.Visible = true;
+                pnlFamDateOfMarriage.Visible = false;
+                txtFamDateOfMarriage.Text = String.Empty;
+            }
+            else if (ddlFamRelationship.SelectedValue == "Parent")
+            {
+                pnlFamDateOfMarriage.Visible = false;
+                pnlFamDateOfBirth.Visible = false;
+                pnlFamCertificate.Visible = false;
+                txtFamDateOfMarriage.Text = String.Empty;
+                txtFamDateOfBirth.Text = String.Empty;
+            }
+
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetofamily();", true);
+
         }
 
         protected void btnSave_Click(object sender, EventArgs e)
@@ -274,14 +333,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             }
             catch (Exception ex)
             {
-                if (ex.InnerException != null)
-                {
-                    if (ex.InnerException.InnerException.Message.Contains("Violation of UNIQUE KEY"))
-                    {
-                        Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", Chai.WorkflowManagment.Enums.RMessageType.Error));
-                        //AutoNumber();
-                    }
-                }
+                Master.ShowMessage(new AppMessage("Error: While Updating Employee Profile!", RMessageType.Error));
+                ExceptionUtility.LogException(ex, "frmEmployeeProfile.aspx");
             }
         }
 
@@ -289,32 +342,46 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         {
             try
             {
-                FamilyDetail familyDetail = new FamilyDetail();
+                FamilyDetail familyDetail = null;
+                if (Session["famId"] != null)
+                    familyDetail = _presenter.CurrentAppUser.Employee.GetFamilyDetail(Convert.ToInt32(Session["famId"]));
+                else
+                    familyDetail = new FamilyDetail();
+
                 familyDetail.FirstName = txtFamFirstName.Text;
                 familyDetail.LastName = txtFamLastName.Text;
-                familyDetail.DateOfBirth = Convert.ToDateTime(txtFamDateOfBirth.Text);
+                if (!String.IsNullOrEmpty(txtFamDateOfBirth.Text))
+                    familyDetail.DateOfBirth = Convert.ToDateTime(txtFamDateOfBirth.Text);
+                else
+                    familyDetail.DateOfBirth = null;
                 familyDetail.Gender = ddlFamGender.SelectedValue;
                 familyDetail.Relationship = ddlFamRelationship.SelectedValue;
                 familyDetail.CellPhone = txtFamCellPhone.Text;
-                familyDetail.DateOfMarriage = Convert.ToDateTime(txtFamDateOfMarriage.Text);
+                if (!String.IsNullOrEmpty(txtFamDateOfMarriage.Text))
+                    familyDetail.DateOfMarriage = Convert.ToDateTime(txtFamDateOfMarriage.Text);
+                else
+                    familyDetail.DateOfMarriage = null;
+                //Attached Certificates
+                if (fuCertificate != null)
+                {
+                    string fileName = Path.GetFileName(fuCertificate.PostedFile.FileName);
+                    familyDetail.Certificate = "~/Certificates/" + fileName;
+                    fuCertificate.PostedFile.SaveAs(Server.MapPath("~/Certificates/") + fileName);
+                }
 
-                _presenter.CurrentEmployee.FamilyDetails.Add(familyDetail);
-                _presenter.SaveOrUpdateEmployee(_presenter.CurrentEmployee);
+                if (Session["famId"] == null)
+                    _presenter.CurrentAppUser.Employee.FamilyDetails.Add(familyDetail);
+                _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
                 BindFamilyDetails();
-                Master.ShowMessage(new AppMessage("You've Successfully Updated Your Family Information!", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Session["famId"] = null;
+                Master.ShowMessage(new AppMessage("You've Successfully Updated Your Family Information!", RMessageType.Info));
                 Log.Info(_presenter.CurrentUser().FullName + " has updated his/her Family Information");
                 ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetofamily();", true);
             }
             catch (Exception ex)
             {
-                if (ex.InnerException != null)
-                {
-                    if (ex.InnerException.InnerException.Message.Contains("Violation of UNIQUE KEY"))
-                    {
-                        Master.ShowMessage(new AppMessage("Please Click Request button Again, There is a duplicate Number", Chai.WorkflowManagment.Enums.RMessageType.Error));
-                        //AutoNumber();
-                    }
-                }
+                Master.ShowMessage(new AppMessage("Error: While Updating Family Information!", RMessageType.Error));
+                ExceptionUtility.LogException(ex, "frmEmployeeProfile.aspx");
             }
         }
 
@@ -322,31 +389,35 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         {
             try
             {
-                EmergencyContact emergencyContact = new EmergencyContact();
+                EmergencyContact emergencyContact = null;
+                if (Session["emergContId"] != null)
+                    emergencyContact = _presenter.CurrentAppUser.Employee.GetEmergencyContact(Convert.ToInt32(Session["emergContId"]));
+                else
+                    emergencyContact = new EmergencyContact();
+
                 emergencyContact.FullName = txtEmergFullName.Text;
+                emergencyContact.Relationship = ddlEmergRelationship.SelectedValue;
                 emergencyContact.SubCity = txtEmergSubCity.Text;
                 emergencyContact.Woreda = txtEmergWoreda.Text;
                 emergencyContact.HouseNo = txtEmergHouseNo.Text;
                 emergencyContact.TelephoneHome = txtEmergTelephoneHome.Text;
                 emergencyContact.TelephoneOffice = txtEmergTelephoneOffice.Text;
+                emergencyContact.CellPhone = txtEmergCellPhone.Text;
+                emergencyContact.IsPrimaryContact = ckIsPrimary.Checked;
 
-                _presenter.CurrentEmployee.EmergencyContacts.Add(emergencyContact);
-                _presenter.SaveOrUpdateEmployee(_presenter.CurrentEmployee);
+                if (Session["emergContId"] == null)
+                    _presenter.CurrentAppUser.Employee.EmergencyContacts.Add(emergencyContact);
+                _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
                 BindEmergencyContacts();
-                Master.ShowMessage(new AppMessage("You've Successfully Updated Your Emergency Contacts!", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Session["emergContId"] = null;
+                Master.ShowMessage(new AppMessage("You've Successfully Updated Your Emergency Contacts!", RMessageType.Info));
                 Log.Info(_presenter.CurrentUser().FullName + " has updated his/her Emergency Contacts");
                 ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetoemergency();", true);
             }
             catch (Exception ex)
             {
-                if (ex.InnerException != null)
-                {
-                    if (ex.InnerException.InnerException.Message.Contains("Violation of UNIQUE KEY"))
-                    {
-                        Master.ShowMessage(new AppMessage("Please Click Request button Again, There is a duplicate Number", Chai.WorkflowManagment.Enums.RMessageType.Error));
-                        //AutoNumber();
-                    }
-                }
+                Master.ShowMessage(new AppMessage("Error: While Updating Emergency Contact Information!", RMessageType.Error));
+                ExceptionUtility.LogException(ex, "frmEmployeeProfile.aspx");
             }
         }
 
@@ -354,32 +425,40 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         {
             try
             {
-                Education education = new Education();
-                education.InstitutionType = txtEduInstType.Text;
+                Education education = null;
+                if (Session["eduId"] != null)
+                    education = _presenter.CurrentAppUser.Employee.GetEducation(Convert.ToInt32(Session["eduId"]));
+                else
+                    education = new Education();
+
+                education.InstitutionType = ddlEduInstType.SelectedValue;
                 education.InstitutionName = txtEduInstName.Text;
                 education.InstitutionLocation = txtEduInstLocation.Text;
                 education.Major = txtEduMajor.Text;
-                education.EducationalLevel = txtEduLevel.Text;
+                education.EducationalLevel = ddlEduLevel.SelectedValue;
                 education.GraduationYear = Convert.ToDateTime(txtEduGradYear.Text);
                 education.SpecialAward = txtEduSpecialAward.Text;
+                //Attached Certificates
+                string fileName = Path.GetFileName(fuEduCertificate.PostedFile.FileName);
+                if (fileName != String.Empty)
+                {
+                    education.Certificate = "~/Certificates/" + fileName;
+                    fuEduCertificate.PostedFile.SaveAs(Server.MapPath("~/Certificates/") + fileName);
+                }
 
-                _presenter.CurrentEmployee.Educations.Add(education);
-                _presenter.SaveOrUpdateEmployee(_presenter.CurrentEmployee);
+                if (Session["eduId"] == null)
+                    _presenter.CurrentAppUser.Employee.Educations.Add(education);
+                _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
+                Session["eduId"] = null;
                 BindEducations();
-                Master.ShowMessage(new AppMessage("You've Successfully Updated Your Education Information!", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("You've Successfully Updated Your Education Information!", RMessageType.Info));
                 Log.Info(_presenter.CurrentUser().FullName + " has updated his/her Education Information");
                 ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetoeducation();", true);
             }
             catch (Exception ex)
             {
-                if (ex.InnerException != null)
-                {
-                    if (ex.InnerException.InnerException.Message.Contains("Violation of UNIQUE KEY"))
-                    {
-                        Master.ShowMessage(new AppMessage("Please Click Request button Again, There is a duplicate Number", Chai.WorkflowManagment.Enums.RMessageType.Error));
-                        //AutoNumber();
-                    }
-                }
+                Master.ShowMessage(new AppMessage("Error: While Updating Education Information!", RMessageType.Error));
+                ExceptionUtility.LogException(ex, "frmEmployeeProfile.aspx");
             }
         }
 
@@ -387,32 +466,143 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         {
             try
             {
-                WorkExperience workExperience = new WorkExperience();
-                workExperience.EmployerName = txtWorkEmpName.Text;
-                workExperience.EmployerAddress = txtWorkEmpAddress.Text;
+                WorkExperience workExperience = null;
+                if (Session["workExpId"] != null)
+                    workExperience = _presenter.CurrentAppUser.Employee.GetWorkExperience(Convert.ToInt32(Session["workExpId"]));
+                else
+                    workExperience = new WorkExperience();
+
+                workExperience.EmployerName = txtWorkOrgName.Text;
+                workExperience.EmployerAddress = txtWorkOrgAddress.Text;
                 workExperience.StartDate = Convert.ToDateTime(txtWorkStartDate.Text);
                 workExperience.EndDate = Convert.ToDateTime(txtWorkEndDate.Text);
                 workExperience.JobTitle = txtWorkJobTitle.Text;
                 workExperience.TypeOfEmployer = txtWorkTypeOfEmp.Text;
 
-                _presenter.CurrentEmployee.WorkExperiences.Add(workExperience);
-                _presenter.SaveOrUpdateEmployee(_presenter.CurrentEmployee);
+                if (Session["workExpId"] == null)
+                    _presenter.CurrentAppUser.Employee.WorkExperiences.Add(workExperience);
+                _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
                 BindWorkExperiences();
-                Master.ShowMessage(new AppMessage("You've Successfully Updated Your Work Experiences!", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Session["workExpId"] = null;
+                Master.ShowMessage(new AppMessage("You've Successfully Updated Your Work Experiences!", RMessageType.Info));
                 Log.Info(_presenter.CurrentUser().FullName + " has updated his/her Work Experiences");
                 ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetowork();", true);
             }
             catch (Exception ex)
             {
-                if (ex.InnerException != null)
-                {
-                    if (ex.InnerException.InnerException.Message.Contains("Violation of UNIQUE KEY"))
-                    {
-                        Master.ShowMessage(new AppMessage("Please Click Request button Again, There is a duplicate Number", Chai.WorkflowManagment.Enums.RMessageType.Error));
-                        //AutoNumber();
-                    }
-                }
+                Master.ShowMessage(new AppMessage("Error: While Updating Work Experience!", RMessageType.Error));
+                ExceptionUtility.LogException(ex, "frmEmployeeProfile.aspx");
             }
+        }
+
+        protected void lnkEduDownload_Clicked(object sender, EventArgs e)
+        {
+            string certificatePath = (sender as LinkButton).CommandArgument;
+            Response.AppendHeader("Content-Type", "application/pdf");
+            Response.AppendHeader("Content-Disposition", "inline; filename=" + Path.GetFileName(certificatePath));
+            Response.WriteFile(certificatePath);
+            Response.End();
+        }
+
+        protected void lnkFamDownload_Clicked(object sender, EventArgs e)
+        {
+            string certificatePath = (sender as LinkButton).CommandArgument;
+            Response.AppendHeader("Content-Type", "application/pdf");
+            Response.AppendHeader("Content-Disposition", "inline; filename=" + Path.GetFileName(certificatePath));
+            Response.WriteFile(certificatePath);
+            Response.End();
+        }
+        
+        protected void btnFamDelete_Click(object sender, EventArgs e)
+        {
+            _presenter.CurrentAppUser.Employee.RemoveFamilyDetail(Convert.ToInt32(Session["famId"]));
+            FamilyDetail delFamilyDetail = _presenter.GetFamilyDetail(Convert.ToInt32(Session["famId"]));
+            if (delFamilyDetail != null)
+                _presenter.DeleteFamilyDetail(delFamilyDetail);
+            _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
+            Session["famId"] = null;
+            //Clear the fields
+            txtFamFirstName.Text = String.Empty;
+            txtFamLastName.Text = String.Empty;
+            txtFamCellPhone.Text = String.Empty;
+            txtFamDateOfBirth.Text = String.Empty;
+            txtFamDateOfMarriage.Text = String.Empty;
+            ddlFamGender.SelectedValue = "";
+            ddlFamRelationship.SelectedValue = "";
+
+            BindFamilyDetails();
+            btnFamDelete.Enabled = false;
+            Master.ShowMessage(new AppMessage("Family Information Is Successfully Deleted!", RMessageType.Info));
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetofamily();", true);
+        }
+
+        protected void btnEmergDelete_Click(object sender, EventArgs e)
+        {
+            _presenter.CurrentAppUser.Employee.RemoveEmergencyContact(Convert.ToInt32(Session["emergContId"]));
+            EmergencyContact delEmergContact = _presenter.GetEmergencyContact(Convert.ToInt32(Session["emergContId"]));
+            if (delEmergContact != null)
+                _presenter.DeleteEmergencyContact(delEmergContact);
+            _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
+            Session["emergContId"] = null;
+            //Clear the fields
+            txtEmergCellPhone.Text = String.Empty;
+            txtEmergFullName.Text = String.Empty;
+            txtEmergHouseNo.Text = String.Empty;
+            txtEmergSubCity.Text = String.Empty;
+            txtEmergTelephoneHome.Text = String.Empty;
+            txtEmergTelephoneOffice.Text = String.Empty;
+            txtEmergWoreda.Text = String.Empty;
+            ddlEmergRelationship.SelectedValue = "";
+
+            BindEmergencyContacts();
+            btnEmergDelete.Enabled = false;
+            Master.ShowMessage(new AppMessage("Emergency Contact Information Is Successfully Deleted!", RMessageType.Info));
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetoemergency();", true);
+        }
+
+        protected void btnEduDelete_Click(object sender, EventArgs e)
+        {
+            _presenter.CurrentAppUser.Employee.RemoveEducation(Convert.ToInt32(Session["eduId"]));
+            Education delEducation = _presenter.GetEducation(Convert.ToInt32(Session["eduId"]));
+            if (delEducation != null)
+                _presenter.DeleteEducation(delEducation);
+            _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
+            Session["eduId"] = null;
+            //Clear the fields
+            txtEduGradYear.Text = String.Empty;
+            txtEduInstLocation.Text = String.Empty;
+            txtEduInstName.Text = String.Empty;
+            txtEduMajor.Text = String.Empty;
+            txtEduSpecialAward.Text = String.Empty;
+            ddlEduInstType.SelectedValue = "";
+            ddlEduLevel.SelectedValue = "";
+
+            BindEducations();
+            btnEduDelete.Enabled = false;
+            Master.ShowMessage(new AppMessage("Education Information Is Successfully Deleted!", RMessageType.Info));
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetoeducation();", true);
+        }
+
+        protected void btnWorkExpDelete_Click(object sender, EventArgs e)
+        {
+            _presenter.CurrentAppUser.Employee.RemoveWorkExperience(Convert.ToInt32(Session["workExpId"]));
+            WorkExperience delWorkExp = _presenter.GetWorkExperience(Convert.ToInt32(Session["workExpId"]));
+            if (delWorkExp != null)
+                _presenter.DeleteWorkExperience(delWorkExp);
+            _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
+            Session["workExpId"] = null;
+            //Clear the fields
+            txtWorkEndDate.Text = String.Empty;
+            txtWorkJobTitle.Text = String.Empty;
+            txtWorkOrgAddress.Text = String.Empty;
+            txtWorkOrgName.Text = String.Empty;
+            txtWorkStartDate.Text = String.Empty;
+            txtWorkTypeOfEmp.Text = String.Empty;
+
+            BindWorkExperiences();
+            btnWorkExpDelete.Enabled = false;
+            Master.ShowMessage(new AppMessage("Work Experience Is Successfully Deleted!", RMessageType.Info));
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetowork();", true);
         }
 
     }

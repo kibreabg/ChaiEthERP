@@ -15,6 +15,7 @@ using System.Web.UI.WebControls;
 using log4net;
 using System.Reflection;
 using log4net.Config;
+using Chai.WorkflowManagment.CoreDomain.HRM;
 
 namespace Chai.WorkflowManagment.Modules.Request.Views
 {
@@ -24,6 +25,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         private static readonly ILog Log = LogManager.GetLogger("AuditTrailLog");
         private LeaveRequest _leaverequest;
         private int _leaverequestId = 0;
+        private decimal requesteddays = 0;
+        private Employee employee = null;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!this.IsPostBack)
@@ -33,13 +36,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 XmlConfigurator.Configure();
                 PopLeaveType();
                 BindSearchLeaveRequestGrid();
-                // if (_presenter.CurrentLeaveRequest.Id <= 0)
-                //{
-                //    AutoNumber();
-                // }
+
             }
             this._presenter.OnViewLoaded();
-            BindInitialValues();
+            employee = _presenter.GetEmployee(_presenter.CurrentUser().Id);
+            if (employee != null)
+                BindInitialValues();
 
 
         }
@@ -86,19 +88,19 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             AppUser CurrentUser = _presenter.CurrentUser();
             txtRequester.Text = CurrentUser.FirstName + " " + CurrentUser.LastName;
+            // txtEmployeeNo.Text = employee.EmpId;
             //txtEmployeeNo.Text = CurrentUser.EmployeeNo;
+            txtDutystation.Text = employee.GetEmployeeDutyStation();
             if (_presenter.CurrentLeaveRequest.Id <= 0)
             {
 
                 txtRequestDate.Text = DateTime.Today.Date.ToShortDateString();
-               
+
 
             }
         }
         private void BindLeaveRequest()
         {
-
-
 
             if (_presenter.CurrentLeaveRequest.Id > 0)
             {
@@ -111,7 +113,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 txtDateFrom.Text = _presenter.CurrentLeaveRequest.DateFrom.ToString();
                 txtDateTo.Text = _presenter.CurrentLeaveRequest.DateTo.ToString();
                 txtAddress.Text = _presenter.CurrentLeaveRequest.Addresswhileonleave;
-                txtapplyfor.Text = _presenter.CurrentLeaveRequest.RequestedDays.ToString();
+                txtapplyfor.Text = _presenter.CurrentLeaveRequest.Applyfor.ToString();
                 txtCompReason.Text = _presenter.CurrentLeaveRequest.CompassionateReason;
                 txtbalance.Text = _presenter.CurrentLeaveRequest.Balance.ToString();
                 txtforward.Text = _presenter.CurrentLeaveRequest.Forward.ToString();
@@ -132,13 +134,15 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 _presenter.CurrentLeaveRequest.DateFrom = Convert.ToDateTime(txtDateFrom.Text);
                 _presenter.CurrentLeaveRequest.DateTo = Convert.ToDateTime(txtDateTo.Text);
                 _presenter.CurrentLeaveRequest.Addresswhileonleave = txtAddress.Text;
-                _presenter.CurrentLeaveRequest.RequestedDays = int.Parse(txtapplyfor.Text);
+                _presenter.CurrentLeaveRequest.Applyfor = Convert.ToInt32(txtapplyfor.Text);
+                _presenter.CurrentLeaveRequest.RequestedDays = Convert.ToDecimal(Session["Requesteddays"]);
                 _presenter.CurrentLeaveRequest.CompassionateReason = txtCompReason.Text;
-                _presenter.CurrentLeaveRequest.Balance = txtbalance.Text != "" ? int.Parse(txtbalance.Text) : 0;
-                _presenter.CurrentLeaveRequest.Forward = txtforward.Text != "" ? int.Parse(txtforward.Text) : 0;
-
+                _presenter.CurrentLeaveRequest.Balance = txtbalance.Text != "" ? Convert.ToDecimal(txtbalance.Text) : 0;
+                _presenter.CurrentLeaveRequest.Forward = txtforward.Text != "" ? Convert.ToDecimal(txtforward.Text) : 0;
+                _presenter.CurrentLeaveRequest.Type = ddltype.SelectedValue;
+                _presenter.CurrentLeaveRequest.FilePath = UploadFile();
                 SaveLeaveRequestStatus();
-               
+
             }
             catch (Exception ex)
             {
@@ -191,7 +195,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void GetCurrentApprover()
         {
-            if (!(ddlLeaveType.SelectedItem.Text == "Annual Leave" && int.Parse(txtbalance.Text) <= 0))
+            if (!(ddlLeaveType.SelectedItem.Text == "Annual Leave" && Convert.ToDecimal(txtbalance.Text) <= 0))
             {
                 foreach (LeaveRequestStatus LRS in _presenter.CurrentLeaveRequest.LeaveRequestStatuses)
                 {
@@ -260,26 +264,48 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 if (ddlLeaveType.SelectedItem.Text != "Annual Leave")
                 {
-                    GetCurrentApprover();
-                    _presenter.SaveOrUpdateLeaveRequest(_presenter.CurrentLeaveRequest);
-                   
-                    ClearForm();
-                    BindSearchLeaveRequestGrid();
-                    Master.ShowMessage(new AppMessage("Successfully did a Leave  Request, Reference No - <b>'" + _presenter.CurrentLeaveRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                    Log.Info(_presenter.CurrentUser().FullName + " has requested for a Leave Type of " + ddlLeaveType.SelectedValue);
-                }
-                else if (ddlLeaveType.SelectedItem.Text == "Annual Leave" && Convert.ToInt32(txtapplyfor.Text) < (txtforward.Text != "" ? Convert.ToInt32(txtforward.Text) : 0))
+                    if (ddlLeaveType.SelectedItem.Text != "Sick Leave")
                     {
                         GetCurrentApprover();
                         _presenter.SaveOrUpdateLeaveRequest(_presenter.CurrentLeaveRequest);
+
                         ClearForm();
                         BindSearchLeaveRequestGrid();
                         Master.ShowMessage(new AppMessage("Successfully did a Leave  Request, Reference No - <b>'" + _presenter.CurrentLeaveRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
                         Log.Info(_presenter.CurrentUser().FullName + " has requested for a Leave Type of " + ddlLeaveType.SelectedValue);
                     }
-                    else
-                    { Master.ShowMessage(new AppMessage("You don't have sufficient Annual Leave days", Chai.WorkflowManagment.Enums.RMessageType.Error)); }
-                
+                    else if (ddlLeaveType.SelectedItem.Text == "Sick Leave")
+                    {
+                        if (_presenter.CurrentLeaveRequest.FilePath != "")
+                        {
+                            GetCurrentApprover();
+                            _presenter.SaveOrUpdateLeaveRequest(_presenter.CurrentLeaveRequest);
+
+                            ClearForm();
+                            BindSearchLeaveRequestGrid();
+                            Master.ShowMessage(new AppMessage("Successfully did a Leave  Request, Reference No - <b>'" + _presenter.CurrentLeaveRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                            Log.Info(_presenter.CurrentUser().FullName + " has requested for a Leave Type of " + ddlLeaveType.SelectedValue);
+                        }
+                        else
+                        {
+                            Master.ShowMessage(new AppMessage("Please Attach Sick letter", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        }
+
+                    }
+
+                }
+                else if (ddlLeaveType.SelectedItem.Text == "Annual Leave" && Convert.ToDecimal(Session["Requesteddays"]) < (txtforward.Text != "" ? Convert.ToDecimal(txtforward.Text) : 0))
+                {
+                    GetCurrentApprover();
+                    _presenter.SaveOrUpdateLeaveRequest(_presenter.CurrentLeaveRequest);
+                    ClearForm();
+                    BindSearchLeaveRequestGrid();
+                    Master.ShowMessage(new AppMessage("Successfully did a Leave  Request, Reference No - <b>'" + _presenter.CurrentLeaveRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    Log.Info(_presenter.CurrentUser().FullName + " has requested for a Leave Type of " + ddlLeaveType.SelectedValue);
+                }
+                else
+                { Master.ShowMessage(new AppMessage("You don't have sufficient Annual Leave days", Chai.WorkflowManagment.Enums.RMessageType.Error)); }
+
             }
             else
             {
@@ -389,7 +415,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     txtbalance.Visible = true;
 
                 }
-                else if (_presenter.CurrentLeaveRequest.LeaveType.LeaveTypeName == "Compassionate")
+                else if (_presenter.CurrentLeaveRequest.LeaveType.LeaveTypeName == "Compassionate" || _presenter.CurrentLeaveRequest.LeaveType.LeaveTypeName == "Special")
                 {
                     txtCompReason.Visible = true;
                     lblCompReason.Visible = true;
@@ -399,7 +425,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     lblforward.Visible = false;
                     txtforward.Visible = false;
                     txtbalance.Visible = false;
-
+                    FileUpload1.Visible = false;
 
 
                 }
@@ -414,7 +440,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     lblforward.Visible = false;
                     txtforward.Visible = false;
                     txtbalance.Visible = false;
-
+                    FileUpload1.Visible = true;
 
                 }
                 else
@@ -428,6 +454,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     lblforward.Visible = false;
                     txtforward.Visible = false;
                     txtbalance.Visible = false;
+                    FileUpload1.Visible = false;
                 }
             }
         }
@@ -459,22 +486,21 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 lblforward.Visible = true;
                 txtforward.Visible = true;
                 txtbalance.Visible = true;
-                EmployeeLeave empleave = _presenter.GetEmployeeLeave();
-                if (empleave != null)
+
+                if (employee != null)
                 {
-                    txtforward.Text = CalculateLeave(empleave).ToString();
-                    lblOpeningBalance.Visible = true;
-                    lblOBValue.Visible = true;
-                    lblOBValue.Text = Convert.ToInt32(empleave.BeginingBalance).ToString();
+                    txtforward.Text = (employee.EmployeeLeaveBalance() - _presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value)).ToString();
+
                 }
                 else
                 {
+                    txtforward.Text = "0";
                     lblnoempleavesetting.Text = "Your Leave setting is not defined,Please contact HR Officer.";
                 }
 
 
             }
-            else if (ddlLeaveType.SelectedItem.Text.Contains("Compassionate"))
+            else if (ddlLeaveType.SelectedItem.Text.Contains("Compassionate") || ddlLeaveType.SelectedItem.Text.Contains("Special"))
             {
                 txtCompReason.Visible = true;
                 lblCompReason.Visible = true;
@@ -484,6 +510,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 lblforward.Visible = false;
                 txtforward.Visible = false;
                 txtbalance.Visible = false;
+                FileUpload1.Visible = false;
 
 
             }
@@ -499,7 +526,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 lblforward.Visible = false;
                 txtforward.Visible = false;
                 txtbalance.Visible = false;
-
+                FileUpload1.Visible = true;
 
             }
             else
@@ -514,6 +541,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 lblforward.Visible = false;
                 txtforward.Visible = false;
                 txtbalance.Visible = false;
+                FileUpload1.Visible = false;
             }
         }
         protected void btnDelete_Click(object sender, EventArgs e)
@@ -548,7 +576,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void txtDateFrom_TextChanged(object sender, EventArgs e)
         {
-           // CalculateRequestedDays();
+            // CalculateRequestedDays();
         }
         protected void txtDateTo_TextChanged(object sender, EventArgs e)
         {
@@ -565,11 +593,147 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void txtforward_TextChanged(object sender, EventArgs e)
         {
-            GetLeaveBalance();
+            // GetLeaveBalance();
         }
         protected void txtapplyfor_TextChanged(object sender, EventArgs e)
         {
-            GetLeaveBalance();
+            // GetLeaveBalance();
+        }
+
+        protected void FileUpload1_DataBinding(object sender, EventArgs e)
+        {
+            UploadFile();
+        }
+        private string UploadFile()
+        {
+            string fileName = Path.GetFileName(FileUpload1.PostedFile.FileName);
+
+            if (fileName != String.Empty)
+            {
+
+                FileUpload1.PostedFile.SaveAs(Server.MapPath("~/SickLeaveAttachment/") + fileName);
+                return "~/SickLeaveAttachment/" + fileName;
+            }
+            else
+            {
+                Master.ShowMessage(new AppMessage("Please select file ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                return "";
+            }
+        }
+
+        protected void ddltype_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DateTime Datefrom = Convert.ToDateTime(txtDateFrom.Text);
+            int days = GetLVWorkingDays(Convert.ToDateTime(txtDateFrom.Text), Convert.ToInt32(txtapplyfor.Text)) + Convert.ToInt32(txtapplyfor.Text);
+            if (ddlLeaveType.SelectedItem.Text.Contains("Annual Leave"))
+            {
+                if (txtDateFrom.Text != "")
+                {
+
+                    if (ddltype.SelectedValue == "Full Day")
+                    {
+
+                        txtDateTo.Text = Datefrom.AddDays(days).ToString();
+                        requesteddays = Convert.ToDecimal(txtapplyfor.Text);
+                        txtbalance.Text = (Convert.ToDecimal(txtforward.Text) - requesteddays).ToString();
+                    }
+                    else
+                    {
+                        if (txtapplyfor.Text == "1")
+                        {
+                            txtDateTo.Text = txtDateFrom.Text;
+                        }
+                        else
+                        {
+                            txtDateTo.Text = Datefrom.AddDays(days).ToString();
+                        }
+                        requesteddays = Convert.ToDecimal(txtapplyfor.Text) / 2;
+                        txtbalance.Text = (Convert.ToDecimal(txtforward.Text) - requesteddays).ToString();
+                    }
+                    Session["Requesteddays"] = requesteddays;
+                    lblrequesteddays.Visible = true;
+                    lblRdays.Visible = true;
+                    lblRdays.Text = requesteddays.ToString();
+                }
+            }
+            else if (ddlLeaveType.SelectedItem.Text.Contains("Maternity Leave"))
+            {
+                if (txtDateFrom.Text != "")
+                {
+                    //  DateTime Datefrom = Convert.ToDateTime(txtDateFrom.Text);
+                    if (ddltype.SelectedValue == "Full Day")
+                    {
+                        txtDateTo.Text = Datefrom.AddDays(Convert.ToInt32(txtapplyfor.Text)).ToString();
+                        requesteddays = Convert.ToDecimal(txtapplyfor.Text);
+                        // txtbalance.Text = (Convert.ToDecimal(txtforward.Text) - requesteddays).ToString();
+                    }
+
+
+                }
+                Session["Requesteddays"] = requesteddays;
+                lblrequesteddays.Visible = true;
+                lblRdays.Visible = true;
+                lblRdays.Text = requesteddays.ToString();
+
+            }
+            else
+            {
+                if (txtDateFrom.Text != "")
+                {
+                    //  DateTime Datefrom = Convert.ToDateTime(txtDateFrom.Text);
+                    if (ddltype.SelectedValue == "Full Day")
+                    {
+                        txtDateTo.Text = Datefrom.AddDays(days).ToString();
+                        requesteddays = Convert.ToDecimal(txtapplyfor.Text);
+                        // txtbalance.Text = (Convert.ToDecimal(txtforward.Text) - requesteddays).ToString();
+                    }
+                    else
+                    {
+                        if (txtapplyfor.Text == "1")
+                        {
+                            txtDateTo.Text = txtDateFrom.Text;
+                        }
+                        else
+                        {
+                            txtDateTo.Text = Datefrom.AddDays(Convert.ToInt32(txtapplyfor.Text)).ToString();
+                        }
+
+                        requesteddays = Convert.ToDecimal(txtapplyfor.Text) / 2;
+
+                        // txtbalance.Text = (Convert.ToDecimal(txtforward.Text) - requesteddays).ToString();
+                    }
+                    Session["Requesteddays"] = requesteddays;
+                    lblrequesteddays.Visible = true;
+                    lblRdays.Visible = true;
+                    lblRdays.Text = requesteddays.ToString();
+                }
+            }
+        }
+        public int GetLVWorkingDays(DateTime current, int days)
+        {
+            IList<Holiday> HolidayList = _presenter.GetHolidays();
+            List<DateTime> Holidays = new List<DateTime>();
+            foreach (Holiday h in HolidayList)
+            {
+                if (h.Date.DayOfWeek == DayOfWeek.Saturday)
+                    Holidays.Add(h.Date.AddDays(-1));
+                else if (h.Date.DayOfWeek == DayOfWeek.Sunday)
+                    Holidays.Add(h.Date.AddDays(1));
+            }
+            int count = 0;
+            DateTime date = current;
+            for (int i = 0; i <= days; i++)
+            {
+                if (current.DayOfWeek == DayOfWeek.Saturday || current.DayOfWeek == DayOfWeek.Sunday || Holidays.Exists(excludedDate => excludedDate.Date.Equals(current.Date)))
+                {
+                    count++;
+                }
+                current = current.AddDays(1);
+            }
+            if (date.AddDays(days + count).DayOfWeek == DayOfWeek.Saturday || current.AddDays(days + count).DayOfWeek == DayOfWeek.Sunday)
+                return count + 2;
+            else
+                return count;
         }
     }
 }

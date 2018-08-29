@@ -18,6 +18,8 @@ using Chai.WorkflowManagment.Shared.Navigation;
 
 using System.Data;
 using Chai.WorkflowManagment.CoreDomain.Setting;
+using Chai.WorkflowManagment.CoreDomain.HRM;
+using Chai.WorkflowManagment.CoreDomain.Request;
 
 namespace Chai.WorkflowManagment.Modules.Setting
 {
@@ -225,6 +227,22 @@ namespace Chai.WorkflowManagment.Modules.Setting
             filterExpression = "SELECT  *  FROM LeaveTypes Where Status = 'Active' ";
 
             return _workspace.SqlQuery<LeaveType>(filterExpression).ToList();
+
+        }
+        #endregion
+        #region Holiday
+
+        public Holiday GetHoliday(int HolidayId)
+        {
+            return _workspace.Single<Holiday>(x => x.Id == HolidayId);
+        }
+        public IList<Holiday> ListHolidays()
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM Holidays ";
+
+            return _workspace.SqlQuery<Holiday>(filterExpression).ToList();
 
         }
         #endregion
@@ -494,6 +512,33 @@ namespace Chai.WorkflowManagment.Modules.Setting
             filterExpression = "SELECT  *  FROM ExpenseTypes Where Status = 'Active'";
 
             return _workspace.SqlQuery<ExpenseType>(filterExpression).ToList();
+
+        }
+        #endregion
+        #region Employee Setting
+        public IList<Employee> GetEmployees()
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM Employees";
+            // return WorkspaceFactory.CreateReadOnly().Queryable<CashPaymentRequest>(filterExpression).ToList();
+            return _workspace.SqlQuery<Employee>(filterExpression).ToList();
+        }
+        public Employee GetEmployee(int empId)
+        {
+            return _workspace.Single<Employee>(x => x.Id == empId);
+        }
+        public decimal TotalleaveTaken(int EmpId, DateTime Leavedatesetting)
+        {
+             string filterExpression = "";
+
+            filterExpression = "SELECT *  FROM LeaveRequests Inner Join LeaveTypes on LeaveRequests.LeaveType_Id = LeaveTypes.Id "
+                               + " Where LeaveTypes.LeaveTypeName = 'Annual Leave' and LeaveRequests.CurrentStatus= 'Issued' and LeaveRequests.Requester = '" + EmpId+ "' and LeaveRequests.RequestedDate >= '" + Leavedatesetting+"'";
+            // return WorkspaceFactory.CreateReadOnly().Queryable<CashPaymentRequest>(filterExpression).ToList();
+           IList<LeaveRequest> EmpLeaverequest =  _workspace.SqlQuery<LeaveRequest>(filterExpression).ToList();
+           return EmpLeaverequest.Sum(x => x.RequestedDays);
+                            
+
 
         }
         #endregion

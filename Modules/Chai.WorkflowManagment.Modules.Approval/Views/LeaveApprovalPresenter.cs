@@ -7,6 +7,7 @@ using Chai.WorkflowManagment.CoreDomain.Request;
 using Chai.WorkflowManagment.CoreDomain.Users;
 using Chai.WorkflowManagment.Shared;
 using Chai.WorkflowManagment.CoreDomain.Setting;
+using Chai.WorkflowManagment.CoreDomain.HRM;
 
 namespace Chai.WorkflowManagment.Modules.Approval.Views
 {
@@ -88,7 +89,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
          {
              _controller.SaveOrUpdateEntity(EmployeeLeave);
          }
-         private void CalculateLeaveTaken()
+        public Employee GetEmployee(int empId)
+        {
+            return _controller.GetEmployee(empId);
+        }
+        public decimal EmpLeaveTaken(int empid, DateTime LeaveSettingDate)
+        {
+            return _settingcontroller.TotalleaveTaken(empid, LeaveSettingDate);
+        }
+        private void CalculateLeaveTaken()
          {
              if (CurrentLeaveRequest.LeaveType.LeaveTypeName.Contains("Annual"))
              {

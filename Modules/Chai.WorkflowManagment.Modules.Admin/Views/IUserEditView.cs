@@ -14,6 +14,7 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
         string GetFirstName { get; }
         string GetLastName { get; }
         string GetEmail { get; }
+        string GetPersonalEmail { get; }
         bool GetIsActive { get; }
         string GetPassword { get; }
         int Superviser { get; }
