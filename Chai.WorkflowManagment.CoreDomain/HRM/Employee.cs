@@ -276,7 +276,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             DateTime DateHired = GetEmployeeHiredDate();
            
             decimal leaveEnti = 0;
-            int Sumleave = 0;
+            decimal Sumleave = 0;
             TimeSpan workingdays = DateTime.Now - DateHired;
             decimal wd = workingdays.Days;
 
@@ -297,10 +297,14 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                 }
                 if (wd < 365)
                 {
-                    leaveEnti = leaveEnti + Math.Round(wd / 365);
+
+                   // leaveEnti = leaveEnti + Math.Round(wd / 365);
+                    Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365));
                 }
             }
-            else { leaveEnti = leaveEnti + Math.Round(wd / 365); }
+            else { //leaveEnti = leaveEnti + Math.Round(wd / 365);
+                   Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365));
+            }
 
             return Sumleave;
         }
@@ -309,7 +313,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             DateTime YE = new  DateTime(DateTime.Now.Year, 12, 31);
 
             decimal leaveEnti = 0;
-            int Sumleave = 0;
+            decimal Sumleave = 0;
             TimeSpan workingdays = YE - GetEmployeeHiredDate();
             decimal wd = workingdays.Days;
 
@@ -330,10 +334,10 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                 }
                 if (wd < 365)
                 {
-                    leaveEnti = leaveEnti + Math.Round(wd / 365);
+                    Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365));
                 }
             }
-            else { leaveEnti = leaveEnti + Math.Round(wd / 365); }
+            else { Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365)); }
 
             return Sumleave;
         }
@@ -342,7 +346,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             DateTime ced = CED;
 
             decimal leaveEnti = 0;
-            int Sumleave = 0;
+            decimal Sumleave = 0;
             TimeSpan workingdays =  ced - GetEmployeeHiredDate();
             decimal wd = workingdays.Days;
 
@@ -363,10 +367,10 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                 }
                 if (wd < 365)
                 {
-                    leaveEnti = leaveEnti + Math.Round(wd / 365);
+                    Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365));
                 }
             }
-            else { leaveEnti = leaveEnti + Math.Round(wd / 365); }
+            else { Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365)); }
 
             return Sumleave;
         }
@@ -374,7 +378,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public virtual decimal LeavefromhiredtoSettingDate()
         {
             decimal leaveEnti = 0;
-            int Sumleave = 0;
+            decimal Sumleave = 0;
             TimeSpan workingdays = LeaveSettingDate.Value - GetEmployeeHiredDate();
             decimal wd = workingdays.Days;
             int count = 1;
@@ -393,10 +397,10 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                 }
                 if (wd < 365)
                 {
-                    leaveEnti = leaveEnti + Math.Round(wd / 365);
+                    Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365));
                 }
             }
-            else { leaveEnti = leaveEnti + Math.Round(wd / 365); }
+            else { Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365)); }
 
             return Sumleave;
         }

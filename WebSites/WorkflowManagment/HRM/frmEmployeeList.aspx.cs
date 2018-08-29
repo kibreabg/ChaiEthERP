@@ -65,7 +65,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     {
 
                         decimal balanceCED = Convert.ToInt32(emp.EmployeeLeaveBalanceCED(Convert.ToDateTime(txtContractEndDate.Text))) - _presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value);
-                        e.Row.Cells[5].Text = balance.ToString();
+                        e.Row.Cells[5].Text = balanceCED.ToString();
                     }
         }
 
@@ -102,7 +102,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         protected void txtContractEndDate_TextChanged(object sender, EventArgs e)
         {
-
+            GRVEmployeeList.DataSource = _presenter.ListEmployees(txtSrchEmpNo.Text, txtSrchSrchFullName.Text, int.Parse(ddlSrchSrchProgram.SelectedValue));
+            GRVEmployeeList.DataBind();
         }
     }
 }

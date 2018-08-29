@@ -721,6 +721,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     Holidays.Add(h.Date.AddDays(1));
             }
             int count = 0;
+            DateTime date = current;
             for (int i = 0; i <= days; i++)
             {
                 if (current.DayOfWeek == DayOfWeek.Saturday || current.DayOfWeek == DayOfWeek.Sunday || Holidays.Exists(excludedDate => excludedDate.Date.Equals(current.Date)))
@@ -729,7 +730,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
                 current = current.AddDays(1);
             }
-            if (current.AddDays(days + count).DayOfWeek == DayOfWeek.Saturday || current.AddDays(days + count).DayOfWeek == DayOfWeek.Sunday)
+            if (date.AddDays(days + count).DayOfWeek == DayOfWeek.Saturday || current.AddDays(days + count).DayOfWeek == DayOfWeek.Sunday)
                 return count + 2;
             else
                 return count;
