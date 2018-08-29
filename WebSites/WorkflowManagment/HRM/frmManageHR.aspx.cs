@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using System.Web.UI.WebControls;
 using Microsoft.Office.Interop.Word;
-using Microsoft.Office.Core;
+//using Microsoft.Office.Core;
 using System.Reflection;
 using Word = Microsoft.Office.Interop;
 using System.IO;
@@ -29,7 +29,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 this._presenter.OnViewInitialized();
 
                 BindEmployee();
-                BindEmployeeInfo();
+              
                 BindEmployeeDetail();
 
                 BindTermination();
@@ -151,13 +151,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         }
 
 
-        private void BindEmployeeInfo()
-        {
-            lblEmployeeFullNameRes.Text = _presenter.CurrentEmployee.FirstName + _presenter.CurrentEmployee.LastName;
-            lblEmployeeIDResult.Text = _presenter.CurrentEmployee.PersonalEmail;
-
-
-        }
+       
 
 
 
@@ -234,7 +228,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             lblBaseCountryChange.Text = txtBaseCount.Text;
             lblBaseStateCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).BaseState.ToString();
             lblBaseStateChange.Text = txtBaseState.Text;
-            lblClassCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).ClassId.ToString();
+            lblClassCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).Class.ToString();
             lblClassChange.Text = txtClass.Text;
             lblCountryTeamCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).CountryTeam.ToString();
             lblCountryTeamChange.Text = txtCountryTeam.Text;
@@ -244,7 +238,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             lblEffectiveDateRes.Text = txtStartDate.Text;
             lblAnnualBaseSalaryCurr.Text = (12 * (_presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).Salary)).ToString();
             lblAnnualBaseSalaryChange.Text = (12 * Convert.ToDecimal(txtSalary.Text)).ToString();
-            lblEmpManCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).SupervisorId.ToString();
+            lblEmpManCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).Supervisor.ToString();
             lblEmpManChange.Text = ddlSuperVisor.Text;
            
         }
@@ -276,7 +270,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             lblEmailResultTer.Text = _presenter.CurrentEmployee.ChaiEMail;
             lblBasCountryResTer.Text = _presenter.CurrentEmployee.Country;
 
-            lblClassResTer.Text = _presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).ClassId.ToString();
+            lblClassResTer.Text = _presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).Class.ToString();
 
             
             // lblDurationOfCont.Text = Convert.ToDateTime((_presenter.CurrentEmployee.GetContract(_presenter.GetLastEmployeeDetailId()).ContractEndDate - _presenter.CurrentEmployee.GetContract(_presenter.GetLastEmployeeDetailId()).ContractEndDate)).Month.ToString()+"Month";
@@ -316,13 +310,17 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         private void BindEmployee()
         {
-            _presenter.CurrentEmployee.Id = 1;
+            
+                txtFirstName.Text = _presenter.CurrentEmployee.FirstName;
+                txtLastName.Text = _presenter.CurrentEmployee.LastName;
+                ddlGender.Text = _presenter.CurrentEmployee.Gender;
+                txtDOB.Text = Convert.ToDateTime(_presenter.CurrentEmployee.DateOfBirth).ToShortDateString();
 
 
+
+           
 
         }
-
-
 
 
 
@@ -345,11 +343,11 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     empdetail.BaseCountry = txtBaseCount.Text;
                     empdetail.BaseCity = txtBaseCity.Text;
                     empdetail.BaseState = txtBaseState.Text;
-                    empdetail.ClassId = Convert.ToInt32(txtClass.Text);
+                    empdetail.Class = Convert.ToInt32(txtClass.Text);
                     empdetail.CountryTeam = txtCountryTeam.Text;
-                    empdetail.EmploymentStatusId = Convert.ToInt32(txtEmployeeStatus.Text);
+                    empdetail.EmploymentStatus = Convert.ToInt32(txtEmployeeStatus.Text);
 
-                    empdetail.SupervisorId = Convert.ToInt32(ddlSuperVisor.Text);
+                    empdetail.Supervisor = Convert.ToInt32(ddlSuperVisor.Text);
                     empdetail.ReportsTo = Convert.ToInt32(ddlReportsTo.Text);
 
 
@@ -396,11 +394,11 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 empdetail.BaseCountry = txtBaseCount.Text;
                 empdetail.BaseCity = txtBaseCity.Text;
                 empdetail.BaseState = txtBaseState.Text;
-                empdetail.ClassId = Convert.ToInt32(txtClass.Text);
+                empdetail.Class = Convert.ToInt32(txtClass.Text);
                 empdetail.CountryTeam = txtCountryTeam.Text;
-                empdetail.EmploymentStatusId = Convert.ToInt32(txtEmployeeStatus.Text);
+                empdetail.EmploymentStatus = Convert.ToInt32(txtEmployeeStatus.Text);
 
-                empdetail.SupervisorId = Convert.ToInt32(ddlSuperVisor.Text);
+                empdetail.Supervisor = Convert.ToInt32(ddlSuperVisor.Text);
                 empdetail.ReportsTo = Convert.ToInt32(ddlReportsTo.Text);
 
                 _presenter.CurrentEmployee.EmployeeDetails.Add(empdetail);
@@ -654,10 +652,10 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             txtBaseCount.Text = empdetail.BaseCountry;
             txtBaseCity.Text = empdetail.BaseCity;
             txtBaseState.Text = empdetail.BaseState;
-            txtClass.Text = empdetail.ClassId.ToString();
+            txtClass.Text = empdetail.Class.ToString();
 
-            txtEmployeeStatus.Text = empdetail.EmploymentStatusId.ToString();
-            ddlSuperVisor.SelectedValue = empdetail.SupervisorId.ToString();
+            txtEmployeeStatus.Text = empdetail.EmploymentStatus.ToString();
+            ddlSuperVisor.SelectedValue = empdetail.Supervisor.ToString();
             ddlReportsTo.SelectedValue = empdetail.ReportsTo.ToString();
             btnAddChange.Text = "Update Change";
 

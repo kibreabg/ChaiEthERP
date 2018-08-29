@@ -108,6 +108,129 @@ namespace Chai.WorkflowManagment.Modules.HRM
 
         }
         #endregion
+        #region Contracts
+        public IList<Contract> GetContracts()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<Contract>(null).ToList();
+        }
+        public Contract GetContract(int id)
+        {
+            return _workspace.Single<Contract>(x => x.Id == id);
+        }
+        public IList<Contract> ListContracts()
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM dbo.Contracts ";
+
+            return _workspace.SqlQuery<Contract>(filterExpression).ToList();
+
+        }
+        public int GetLastContractId()
+        {
+            if (_workspace.Last<Contract>() != null)
+            {
+                return _workspace.Last<Contract>().Id;
+            }
+            else { return 0; }
+        }
+
+        #endregion
+        #region Change
+        public IList<EmployeeDetail> GetEmployeeDetails()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<EmployeeDetail>(null).ToList();
+        }
+        public EmployeeDetail GetEmployeeDetail(int id)
+        {
+            return _workspace.Single<EmployeeDetail>(x => x.Id == id);
+        }
+        public IList<EmployeeDetail> ListEmployeeDetails()
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM dbo.EmployeeDetails ";
+
+            return _workspace.SqlQuery<EmployeeDetail>(filterExpression).ToList();
+
+        }
+        public int GetLastEmployeeDetailId()
+        {
+            if (_workspace.Last<EmployeeDetail>() != null)
+            {
+                return _workspace.Last<EmployeeDetail>().Id;
+            }
+            else { return 0; }
+        }
+
+        #endregion
+        #region Warning
+        public IList<Warning> GetWarnings()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<Warning>(null).ToList();
+        }
+        public Warning GetWarning(int id)
+        {
+            return _workspace.Single<Warning>(x => x.Id == id);
+        }
+        public IList<Warning> ListWarnings()
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM dbo.Warnings ";
+
+            return _workspace.SqlQuery<Warning>(filterExpression).ToList();
+
+        }
+        public int GetLastWarningId()
+        {
+            if (_workspace.Last<Warning>() != null)
+            {
+                return _workspace.Last<Warning>().Id;
+            }
+            else { return 0; }
+        }
+
+        #endregion
+        #region Terminations
+        public IList<Termination> GetTerminations()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<Termination>(null).ToList();
+        }
+        public Termination GetTermination(int id)
+        {
+            return _workspace.Single<Termination>(x => x.Id == id);
+        }
+        public IList<Termination> ListTerminations()
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM dbo.Terminations ";
+
+            return _workspace.SqlQuery<Termination>(filterExpression).ToList();
+
+        }
+
+        public IList<TerminationReason> GetTerminationReason(int terminationId)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM dbo.TerminationReasons Where 1 = Case when '" + terminationId + "' =  0 Then 1 When TerminationReasons.TerminationId = '" + terminationId + "'  Then 1 END  ";
+
+            return _workspace.SqlQuery<TerminationReason>(filterExpression).ToList();
+
+        }
+        public int GetLastTerminationId()
+        {
+            if (_workspace.Last<Termination>() != null)
+            {
+                return _workspace.Last<Termination>().Id;
+            }
+            else { return 0; }
+        }
+
+        #endregion
+
         #region Entity Manipulation
         public void SaveOrUpdateEntity<T>(T item) where T : class
         {

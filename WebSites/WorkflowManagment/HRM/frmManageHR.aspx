@@ -29,20 +29,33 @@
                             <tr>
                                 <td style="width: 629px; height: 18px; padding-left: 20%;">
                                     <strong>
-                                        <asp:Label ID="lblEmployeeMainID" runat="server" Text="Employee ID:"></asp:Label>
+                                        <asp:Label ID="txtFirstNamelbl" runat="server" Text="First Name:"></asp:Label>
                                     </strong></td>
                                 <td style="width: 244px" class="inbox-data-from">
-                                    <asp:Label ID="lblEmployeeMainIDRes" runat="server"></asp:Label>
+                                    <asp:Label ID="txtFirstName" runat="server"></asp:Label>
                                 </td>
-
+                                  <td style="width: 629px; height: 18px; padding-left: 20%;">
+                                    <strong>
+                                        <asp:Label ID="txtLastNamelbl" runat="server" Text="First Name:"></asp:Label>
+                                    </strong></td>
+                                <td style="width: 244px" class="inbox-data-from">
+                                    <asp:Label ID="txtLastName" runat="server"></asp:Label>
+                                </td></tr>
+                            <tr>
                                 <td style="width: 629px; height: 18px; padding-left: 20%;">
                                     <strong>
-                                        <asp:Label ID="lblEmployeeFullName" runat="server" Text="Employee Full Name:"></asp:Label>
+                                        <asp:Label ID="lblGendere" runat="server" Text="Gender:"></asp:Label>
                                     </strong></td>
                                 <td style="width: 244px" class="inbox-data-from">
-                                    <asp:Label ID="lblEmployeeFullNameRes" runat="server"></asp:Label>
+                                    <asp:Label ID="ddlGender" runat="server"></asp:Label>
                                 </td>
-
+                               <td style="width: 629px; height: 18px; padding-left: 20%;">
+                                    <strong>
+                                        <asp:Label ID="lblDOBLbl" runat="server" Text="Date Of Birth:"></asp:Label>
+                                    </strong></td>
+                                <td style="width: 244px" class="inbox-data-from">
+                                    <asp:Label ID="txtDOB" runat="server"></asp:Label>
+                                </td>
                             </tr>
                         </table>
                     </fieldset>
@@ -231,7 +244,7 @@
                                 </div>
                             </fieldset>
                         </div>
-                        <div class="tab-pane active" id="tab-r2">
+                        <div class="tab-pane" id="tab-r2">
                             <fieldset>
 
                                 <div class="row">

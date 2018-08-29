@@ -12,7 +12,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public int Id { get; set; }
         public virtual Setting.JobTitle JobTitle { get; set; }
        
-        public virtual Setting.Position Position { get; set; }
+        public virtual Setting.EmployeePosition Position { get; set; }
 
         public virtual Setting.Program Program { get; set; }
 

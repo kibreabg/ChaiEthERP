@@ -31,7 +31,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         {
             if (View.GetId > 0)
             {
-                _controller.CurrentObject = _controller.GetEmployee(1);
+                _controller.CurrentObject = _controller.GetEmployee(View.GetId);
             }
             CurrentEmployee = _controller.CurrentObject as Employee;
         }
@@ -40,9 +40,9 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         {
             if (View.GetId == 0)
             {
-                int id = 1;
+                int id = View.GetId;
                 if (id > 0)
-                    _controller.CurrentObject = _controller.GetEmployee(1);
+                    _controller.CurrentObject = _controller.GetEmployee(View.GetId);
                 else
                     _controller.CurrentObject = new Employee();
             }
@@ -61,7 +61,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 {
                     int id = View.GetId;
                     if (id > 0)
-                        _employee = _controller.GetEmployee(1);
+                        _employee = _controller.GetEmployee(View.GetId);
                     else
                         _employee = new Employee();
                 }
