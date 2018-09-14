@@ -51,6 +51,7 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
         public DbSet<SupplierType> SupplierTypes { get; set; }
         public DbSet<CarRental> CarRentals { get; set; }
         public DbSet<Beneficiary> Beneficiaries { get; set; }
+        public DbSet<Holiday> Holidays { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<ApprovalSetting> ApprovalSettings { get; set; }
         public DbSet<ApprovalLevel> ApprovalLevels { get; set; }

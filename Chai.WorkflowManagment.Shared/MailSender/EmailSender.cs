@@ -14,7 +14,7 @@ namespace Chai.WorkflowManagment.Shared.MailSender
         public static bool Send(string to, string subject, string body)
         {
             string from = string.Empty;
-            string localIP = "http://zimops/ZWFM/UserLogin";
+            string localIP = "http://10.143.1.25/CHAIETERP/UserLogin.aspx";
             //string publicIp = "http://197.211.216.65/ZWFM/UserLogin.aspx";
         
 
