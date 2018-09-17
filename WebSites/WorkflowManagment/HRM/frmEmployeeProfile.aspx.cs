@@ -138,7 +138,16 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         public string GetPhoto
         {
-            get { return txtPhone.Text; }
+            get
+            {
+                string fileName = String.Empty;
+                if (fuProfilePic.HasFile)
+                {
+                    fileName = Path.GetFileName(fuProfilePic.PostedFile.FileName);
+                    fuProfilePic.PostedFile.SaveAs(Server.MapPath("~/ProfilePics/") + fileName);
+                }
+                return "~/ProfilePics/" + fileName;
+            }
         }
 
         #endregion
@@ -166,6 +175,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 txtCountry.Text = _presenter.CurrentAppUser.Employee.Country;
                 txtCity.Text = _presenter.CurrentAppUser.Employee.City;
                 txtAddress.Text = _presenter.CurrentAppUser.Employee.Address;
+                imgProfilePic.ImageUrl = _presenter.CurrentAppUser.Employee.Photo;
             }
 
 
@@ -253,7 +263,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         }
 
         protected void grvFamilyDetails_SelectedIndexChanged(object sender, EventArgs e)
-        {          
+        {
             famId = Convert.ToInt32(grvFamilyDetails.SelectedDataKey[0]);
             Session["famId"] = Convert.ToInt32(grvFamilyDetails.SelectedDataKey[0]);
             FamilyDetail familyDetail = _presenter.CurrentAppUser.Employee.GetFamilyDetail(famId);
@@ -394,6 +404,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             try
             {
                 _presenter.SaveOrUpdateEmployee();
+                BindEmployee();
                 Master.ShowMessage(new AppMessage("You've Successfully Updated Your Profile!", Chai.WorkflowManagment.Enums.RMessageType.Info));
                 Log.Info(_presenter.CurrentUser().FullName + " has updated his/her Profile");
             }
@@ -507,7 +518,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 education.GraduationYear = Convert.ToDateTime(txtEduGradYear.Text);
                 education.SpecialAward = txtEduSpecialAward.Text;
                 //Attached Certificates
-                
+
                 if (fuEduCertificate.HasFile)
                 {
                     string fileName = Path.GetFileName(fuEduCertificate.PostedFile.FileName);
@@ -583,7 +594,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             Response.WriteFile(certificatePath);
             Response.End();
         }
-        
+
         protected void btnFamDelete_Click(object sender, EventArgs e)
         {
             _presenter.CurrentAppUser.Employee.RemoveFamilyDetail(Convert.ToInt32(Session["famId"]));
@@ -593,7 +604,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
             Session["famId"] = null;
             //Clear the fields
-            clearFamilyDetails();  
+            clearFamilyDetails();
             BindFamilyDetails();
             btnFamDelete.Enabled = false;
             Master.ShowMessage(new AppMessage("Family Information Is Successfully Deleted!", RMessageType.Info));
@@ -609,7 +620,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
             Session["emergContId"] = null;
             //Clear the fields
-            clearEmergencyContacts();    
+            clearEmergencyContacts();
             BindEmergencyContacts();
             btnEmergDelete.Enabled = false;
             Master.ShowMessage(new AppMessage("Emergency Contact Information Is Successfully Deleted!", RMessageType.Info));
@@ -650,7 +661,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         protected void btnCancel_Click(object sender, EventArgs e)
         {
-            
+
         }
         protected void btnFamCancel_Click(object sender, EventArgs e)
         {
@@ -671,8 +682,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         {
             clearWorkExperiences();
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetowork();", true);
-        }     
-        
+        }
+
     }
 }
 

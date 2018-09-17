@@ -161,7 +161,17 @@
                                     <!-- wizard form starts here -->
                                     <fieldset>
                                         <div class="row">
-                                            <div class="col-sm-6">
+                                            <div style="padding-left: 13px; float: left; position: relative; width: 16.66666667%; height: 150px; border: 3px solid #fff;">
+                                                <asp:Image ID="imgProfilePic" Width="100%" Height="100%" runat="server" />
+                                                <div class="form-group">
+                                                    <div class="smart-form">
+                                                        <div class="input input-file">
+                                                            <asp:FileUpload ID="fuProfilePic" runat="server" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
@@ -177,9 +187,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
@@ -202,9 +210,7 @@
                                                         CssClass="validator" ValidationGroup="saveBasicInfo" ControlToValidate="txtDateOfBirth"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
@@ -228,7 +234,9 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-2">
+                                            </div>
+                                            <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
@@ -731,7 +739,7 @@
                                                 <div class="form-group">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
-                                                        <asp:TextBox ID="txtWorkStartDate" runat="server" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" placeholder="Start Date"></asp:TextBox>                                                        
+                                                        <asp:TextBox ID="txtWorkStartDate" runat="server" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" placeholder="Start Date"></asp:TextBox>
                                                     </div>
                                                     <asp:CompareValidator ID="cvtxtWorkStartDate" CssClass="validator" runat="server" ErrorMessage="Work Start Date must be less than Work End Date" ControlToCompare="txtWorkEndDate" ControlToValidate="txtWorkStartDate" ValidationGroup="workSave" Type="Date" Operator="LessThanEqual"></asp:CompareValidator>
                                                 </div>
@@ -756,7 +764,7 @@
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
-                                                    <div class="input-group">                                                        
+                                                    <div class="input-group">
                                                         <span class="input-group-addon"><i class="fa fa-building fa-fw"></i></span>
                                                         <asp:DropDownList ID="ddlWorkTypeOfEmp" runat="server" CssClass="form-control">
                                                             <asp:ListItem Value="" Text="Select Type of Employer"></asp:ListItem>
