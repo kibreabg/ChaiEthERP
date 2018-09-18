@@ -161,7 +161,17 @@
                                     <!-- wizard form starts here -->
                                     <fieldset>
                                         <div class="row">
-                                            <div class="col-sm-6">
+                                            <div style="padding-left: 13px; float: left; position: relative; width: 16.66666667%; height: 150px; border: 3px solid #fff;">
+                                                <asp:Image ID="imgProfilePic" Width="100%" Height="100%" runat="server" />
+                                                <div class="form-group">
+                                                    <div class="smart-form">
+                                                        <div class="input input-file">
+                                                            <asp:FileUpload ID="fuProfilePic" runat="server" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
@@ -177,9 +187,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
@@ -197,11 +205,12 @@
                                                         <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
                                                         <asp:TextBox ID="txtDateOfBirth" runat="server" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" placeholder="Date of Birth"></asp:TextBox>
                                                     </div>
+                                                    <asp:RequiredFieldValidator
+                                                        ID="rfvtxtDateOfBirth" runat="server" ErrorMessage="Date of Birth is required" Display="Dynamic"
+                                                        CssClass="validator" ValidationGroup="saveBasicInfo" ControlToValidate="txtDateOfBirth"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
@@ -225,7 +234,9 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-2">
+                                            </div>
+                                            <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
@@ -292,10 +303,8 @@
                                     <div class="form-actions">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <button class="btn btn-default" type="submit">
-                                                    Cancel
-                                                </button>
-                                                <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" CssClass="btn btn-primary"></asp:Button>
+                                                <asp:Button ID="btnCancel" runat="server" Text="Clear" OnClick="btnCancel_Click" CssClass="btn btn-default"></asp:Button>
+                                                <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" CausesValidation="true" ValidationGroup="saveBasicInfo" CssClass="btn btn-primary"></asp:Button>
                                             </div>
                                         </div>
                                     </div>
@@ -397,9 +406,7 @@
                                     <div class="form-actions">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <button class="btn btn-default" type="submit">
-                                                    Cancel
-                                                </button>
+                                                <asp:Button ID="btnFamCancel" runat="server" Text="Clear" OnClick="btnFamCancel_Click" CssClass="btn btn-default"></asp:Button>
                                                 <asp:Button ID="btnFamDelete" runat="server" Text="Delete" OnClick="btnFamDelete_Click" OnClientClick="javascript:return confirm('Are you sure you want to delete this family information?');" Enabled="false" CssClass="btn btn-primary"></asp:Button>
                                                 <asp:Button ID="btnFamSave" runat="server" Text="Save & Add New" OnClick="btnFamSave_Click" CssClass="btn btn-primary"></asp:Button>
                                             </div>
@@ -419,7 +426,6 @@
                                                     <Columns>
                                                         <asp:BoundField DataField="FirstName" HeaderText="First Name" SortExpression="FirstName" />
                                                         <asp:BoundField DataField="LastName" HeaderText="Last Name" SortExpression="LastName" />
-                                                        <asp:BoundField DataField="DateOfBirth" HeaderText="Date Of Birth" SortExpression="DateOfBirth" />
                                                         <asp:BoundField DataField="Gender" HeaderText="Gender" SortExpression="Gender" />
                                                         <asp:BoundField DataField="Relationship" HeaderText="Relationship" SortExpression="Relationship" />
                                                         <asp:TemplateField HeaderText="Certificate">
@@ -427,7 +433,7 @@
                                                                 <asp:LinkButton ID="lnkFamDownload" Text="Preview" CommandArgument='<%# Eval("Certificate") %>' runat="server" OnClientClick="newTab();" OnClick="lnkFamDownload_Clicked"></asp:LinkButton>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
-                                                        <asp:CommandField ShowSelectButton="True" />
+                                                        <asp:CommandField ShowSelectButton="True" SelectText="Edit" />
                                                     </Columns>
                                                     <FooterStyle CssClass="FooterStyle" />
                                                     <HeaderStyle CssClass="headerstyle" />
@@ -467,11 +473,12 @@
                                             </div>
                                         </div>
                                         <div class="row">
+
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><i class="fa fa-map-marker fa-fw"></i></span>
-                                                        <asp:TextBox ID="txtEmergWoreda" runat="server" CssClass="form-control" placeholder="Woreda"></asp:TextBox>
+                                                        <asp:TextBox ID="txtEmergSubCity" runat="server" CssClass="form-control" placeholder="Sub-City"></asp:TextBox>
                                                     </div>
                                                 </div>
                                             </div>
@@ -479,7 +486,7 @@
                                                 <div class="form-group">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><i class="fa fa-map-marker fa-fw"></i></span>
-                                                        <asp:TextBox ID="txtEmergSubCity" runat="server" CssClass="form-control" placeholder="Sub-City"></asp:TextBox>
+                                                        <asp:TextBox ID="txtEmergWoreda" runat="server" CssClass="form-control" placeholder="Woreda"></asp:TextBox>
                                                     </div>
                                                 </div>
                                             </div>
@@ -535,9 +542,7 @@
                                     <div class="form-actions">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <button class="btn btn-default" type="submit">
-                                                    Cancel
-                                                </button>
+                                                <asp:Button ID="btnEmergCancel" runat="server" Text="Clear" OnClick="btnEmergCancel_Click" CssClass="btn btn-default"></asp:Button>
                                                 <asp:Button ID="btnEmergDelete" runat="server" Text="Delete" OnClick="btnEmergDelete_Click" OnClientClick="javascript:return confirm('Are you sure you want to delete this emergency contact?');" Enabled="false" CssClass="btn btn-primary"></asp:Button>
                                                 <asp:Button ID="btnEmergSave" runat="server" Text="Save & Add New" OnClick="btnEmergSave_Click" CssClass="btn btn-primary"></asp:Button>
                                             </div>
@@ -561,7 +566,7 @@
                                                         <asp:BoundField DataField="HouseNo" HeaderText="House No." SortExpression="HouseNo" />
                                                         <asp:BoundField DataField="TelephoneHome" HeaderText="Telephone Home" SortExpression="TelephoneHome" />
                                                         <asp:BoundField DataField="TelephoneOffice" HeaderText="Telephone Office" SortExpression="TelephoneOffice" />
-                                                        <asp:CommandField ShowSelectButton="True" />
+                                                        <asp:CommandField ShowSelectButton="True" SelectText="Edit" />
                                                     </Columns>
                                                     <FooterStyle CssClass="FooterStyle" />
                                                     <HeaderStyle CssClass="headerstyle" />
@@ -637,6 +642,9 @@
                                                         <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
                                                         <asp:TextBox ID="txtEduGradYear" runat="server" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" placeholder="Graduation Year"></asp:TextBox>
                                                     </div>
+                                                    <asp:RequiredFieldValidator
+                                                        ID="rfvtxtEduGradYear" runat="server" ErrorMessage="Graduation year is required" Display="Dynamic"
+                                                        CssClass="validator" ValidationGroup="saveEdu" ControlToValidate="txtEduGradYear"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
                                         </div>
@@ -664,11 +672,9 @@
                                     <div class="form-actions">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <button class="btn btn-default" type="submit">
-                                                    Cancel
-                                                </button>
+                                                <asp:Button ID="btnEduCancel" runat="server" Text="Clear" OnClick="btnEduCancel_Click" CssClass="btn btn-default"></asp:Button>
                                                 <asp:Button ID="btnEduDelete" runat="server" Text="Delete" OnClick="btnEduDelete_Click" OnClientClick="javascript:return confirm('Are you sure you want to delete this education information?');" Enabled="false" CssClass="btn btn-primary"></asp:Button>
-                                                <asp:Button ID="btnEduSave" runat="server" Text="Save & Add New" OnClick="btnEduSave_Click" CssClass="btn btn-primary"></asp:Button>
+                                                <asp:Button ID="btnEduSave" runat="server" Text="Save & Add New" CausesValidation="true" ValidationGroup="saveEdu" OnClick="btnEduSave_Click" CssClass="btn btn-primary"></asp:Button>
                                             </div>
                                         </div>
                                     </div>
@@ -695,7 +701,7 @@
                                                                 <asp:LinkButton ID="lnkEduDownload" Text="Preview" CommandArgument='<%# Eval("Certificate") %>' runat="server" OnClientClick="newTab();" OnClick="lnkEduDownload_Clicked"></asp:LinkButton>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
-                                                        <asp:CommandField ShowSelectButton="True" />
+                                                        <asp:CommandField ShowSelectButton="True" SelectText="Edit" />
                                                     </Columns>
                                                     <FooterStyle CssClass="FooterStyle" />
                                                     <HeaderStyle CssClass="headerstyle" />
@@ -735,6 +741,7 @@
                                                         <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
                                                         <asp:TextBox ID="txtWorkStartDate" runat="server" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" placeholder="Start Date"></asp:TextBox>
                                                     </div>
+                                                    <asp:CompareValidator ID="cvtxtWorkStartDate" CssClass="validator" runat="server" ErrorMessage="Work Start Date must be less than Work End Date" ControlToCompare="txtWorkEndDate" ControlToValidate="txtWorkStartDate" ValidationGroup="workSave" Type="Date" Operator="LessThanEqual"></asp:CompareValidator>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
@@ -759,7 +766,12 @@
                                                 <div class="form-group">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><i class="fa fa-building fa-fw"></i></span>
-                                                        <asp:TextBox ID="txtWorkTypeOfEmp" runat="server" CssClass="form-control" placeholder="Type of Employer"></asp:TextBox>
+                                                        <asp:DropDownList ID="ddlWorkTypeOfEmp" runat="server" CssClass="form-control">
+                                                            <asp:ListItem Value="" Text="Select Type of Employer"></asp:ListItem>
+                                                            <asp:ListItem Value="NGO" Text="NGO"></asp:ListItem>
+                                                            <asp:ListItem Value="Private" Text="Private"></asp:ListItem>
+                                                            <asp:ListItem Value="Government" Text="Government"></asp:ListItem>
+                                                        </asp:DropDownList>
                                                     </div>
                                                 </div>
                                             </div>
@@ -768,11 +780,9 @@
                                     <div class="form-actions">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <button class="btn btn-default" type="submit">
-                                                    Cancel
-                                                </button>
+                                                <asp:Button ID="btnWorkCancel" runat="server" Text="Clear" OnClick="btnWorkCancel_Click" CssClass="btn btn-default"></asp:Button>
                                                 <asp:Button ID="btnWorkExpDelete" runat="server" Text="Delete" OnClick="btnWorkExpDelete_Click" OnClientClick="javascript:return confirm('Are you sure you want to delete this work experience?');" Enabled="false" CssClass="btn btn-primary"></asp:Button>
-                                                <asp:Button ID="btnWorkSave" runat="server" Text="Save & Add New" OnClick="btnWorkSave_Click" CssClass="btn btn-primary"></asp:Button>
+                                                <asp:Button ID="btnWorkSave" runat="server" Text="Save & Add New" OnClick="btnWorkSave_Click" CausesValidation="true" ValidationGroup="workSave" CssClass="btn btn-primary"></asp:Button>
                                             </div>
                                         </div>
                                     </div>
@@ -793,7 +803,7 @@
                                                         <asp:BoundField DataField="StartDate" HeaderText="Start Date" SortExpression="StartDate" />
                                                         <asp:BoundField DataField="EndDate" HeaderText="End Date" SortExpression="EndDate" />
                                                         <asp:BoundField DataField="JobTitle" HeaderText="Job Title" SortExpression="JobTitle" />
-                                                        <asp:CommandField ShowSelectButton="True" />
+                                                        <asp:CommandField ShowSelectButton="True" SelectText="Edit" />
                                                     </Columns>
                                                     <FooterStyle CssClass="FooterStyle" />
                                                     <HeaderStyle CssClass="headerstyle" />

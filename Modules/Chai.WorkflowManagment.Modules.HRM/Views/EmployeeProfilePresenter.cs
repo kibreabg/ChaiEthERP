@@ -95,6 +95,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             employee.ChaiEMail = View.GetChaiEmail;
             employee.SDLeaveBalance = 0;
             employee.LeaveSettingDate = DateTime.Now.Date;
+            employee.Photo = View.GetPhoto;
             CurrentAppUser.Employee = employee;
             CurrentAppUser.Employee.AppUser = CurrentAppUser;
 

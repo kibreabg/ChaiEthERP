@@ -138,7 +138,16 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         public string GetPhoto
         {
-            get { return txtPhone.Text; }
+            get
+            {
+                string fileName = String.Empty;
+                if (fuProfilePic.HasFile)
+                {
+                    fileName = Path.GetFileName(fuProfilePic.PostedFile.FileName);
+                    fuProfilePic.PostedFile.SaveAs(Server.MapPath("~/ProfilePics/") + fileName);
+                }
+                return "~/ProfilePics/" + fileName;
+            }
         }
 
         #endregion
@@ -166,6 +175,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 txtCountry.Text = _presenter.CurrentAppUser.Employee.Country;
                 txtCity.Text = _presenter.CurrentAppUser.Employee.City;
                 txtAddress.Text = _presenter.CurrentAppUser.Employee.Address;
+                imgProfilePic.ImageUrl = _presenter.CurrentAppUser.Employee.Photo;
             }
 
 
@@ -205,6 +215,46 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 grvWorkExperiences.DataBind();
             }
         }
+        private void clearFamilyDetails()
+        {
+            txtFamFirstName.Text = String.Empty;
+            txtFamLastName.Text = String.Empty;
+            txtFamCellPhone.Text = String.Empty;
+            txtFamDateOfBirth.Text = String.Empty;
+            txtFamDateOfMarriage.Text = String.Empty;
+            ddlFamGender.SelectedValue = "";
+            ddlFamRelationship.SelectedValue = "";
+        }
+        private void clearEmergencyContacts()
+        {
+            txtEmergCellPhone.Text = String.Empty;
+            txtEmergFullName.Text = String.Empty;
+            txtEmergHouseNo.Text = String.Empty;
+            txtEmergSubCity.Text = String.Empty;
+            txtEmergTelephoneHome.Text = String.Empty;
+            txtEmergTelephoneOffice.Text = String.Empty;
+            txtEmergWoreda.Text = String.Empty;
+            ddlEmergRelationship.SelectedValue = "";
+        }
+        private void clearEducations()
+        {
+            txtEduGradYear.Text = String.Empty;
+            txtEduInstLocation.Text = String.Empty;
+            txtEduInstName.Text = String.Empty;
+            txtEduMajor.Text = String.Empty;
+            txtEduSpecialAward.Text = String.Empty;
+            ddlEduInstType.SelectedValue = "";
+            ddlEduLevel.SelectedValue = "";
+        }
+        private void clearWorkExperiences()
+        {
+            txtWorkEndDate.Text = String.Empty;
+            txtWorkJobTitle.Text = String.Empty;
+            txtWorkOrgAddress.Text = String.Empty;
+            txtWorkOrgName.Text = String.Empty;
+            txtWorkStartDate.Text = String.Empty;
+            ddlWorkTypeOfEmp.SelectedValue = String.Empty;
+        }
 
         protected void grvFamilyDetails_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
@@ -226,6 +276,32 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             ddlFamRelationship.SelectedValue = familyDetail.Relationship;
 
             btnFamDelete.Enabled = true;
+
+            #region Relationship Logic
+            //Handle the Relationship logic Regarding Dates being visible or not
+            if (ddlFamRelationship.SelectedValue == "Spouse")
+            {
+                pnlFamDateOfMarriage.Visible = true;
+                pnlFamCertificate.Visible = true;
+                pnlFamDateOfBirth.Visible = false;
+                txtFamDateOfBirth.Text = String.Empty;
+            }
+            else if (ddlFamRelationship.SelectedValue == "Child")
+            {
+                pnlFamDateOfBirth.Visible = true;
+                pnlFamCertificate.Visible = true;
+                pnlFamDateOfMarriage.Visible = false;
+                txtFamDateOfMarriage.Text = String.Empty;
+            }
+            else if (ddlFamRelationship.SelectedValue == "Parent")
+            {
+                pnlFamDateOfMarriage.Visible = false;
+                pnlFamDateOfBirth.Visible = false;
+                pnlFamCertificate.Visible = false;
+                txtFamDateOfMarriage.Text = String.Empty;
+                txtFamDateOfBirth.Text = String.Empty;
+            }
+            #endregion
 
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetofamily();", true);
         }
@@ -289,7 +365,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             txtWorkStartDate.Text = Convert.ToDateTime(workExperience.StartDate).ToShortDateString();
             txtWorkEndDate.Text = Convert.ToDateTime(workExperience.EndDate).ToShortDateString();
             txtWorkJobTitle.Text = workExperience.JobTitle;
-            txtWorkTypeOfEmp.Text = workExperience.TypeOfEmployer;
+            ddlWorkTypeOfEmp.SelectedValue = workExperience.TypeOfEmployer;
 
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetowork();", true);
         }
@@ -328,6 +404,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             try
             {
                 _presenter.SaveOrUpdateEmployee();
+                BindEmployee();
                 Master.ShowMessage(new AppMessage("You've Successfully Updated Your Profile!", Chai.WorkflowManagment.Enums.RMessageType.Info));
                 Log.Info(_presenter.CurrentUser().FullName + " has updated his/her Profile");
             }
@@ -362,7 +439,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 else
                     familyDetail.DateOfMarriage = null;
                 //Attached Certificates
-                if (fuCertificate != null)
+                if (fuCertificate.HasFile)
                 {
                     string fileName = Path.GetFileName(fuCertificate.PostedFile.FileName);
                     familyDetail.Certificate = "~/Certificates/" + fileName;
@@ -373,6 +450,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     _presenter.CurrentAppUser.Employee.FamilyDetails.Add(familyDetail);
                 _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
                 BindFamilyDetails();
+                clearFamilyDetails();
                 Session["famId"] = null;
                 Master.ShowMessage(new AppMessage("You've Successfully Updated Your Family Information!", RMessageType.Info));
                 Log.Info(_presenter.CurrentUser().FullName + " has updated his/her Family Information");
@@ -409,6 +487,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     _presenter.CurrentAppUser.Employee.EmergencyContacts.Add(emergencyContact);
                 _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
                 BindEmergencyContacts();
+                clearEmergencyContacts();
                 Session["emergContId"] = null;
                 Master.ShowMessage(new AppMessage("You've Successfully Updated Your Emergency Contacts!", RMessageType.Info));
                 Log.Info(_presenter.CurrentUser().FullName + " has updated his/her Emergency Contacts");
@@ -439,9 +518,10 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 education.GraduationYear = Convert.ToDateTime(txtEduGradYear.Text);
                 education.SpecialAward = txtEduSpecialAward.Text;
                 //Attached Certificates
-                string fileName = Path.GetFileName(fuEduCertificate.PostedFile.FileName);
-                if (fileName != String.Empty)
+
+                if (fuEduCertificate.HasFile)
                 {
+                    string fileName = Path.GetFileName(fuEduCertificate.PostedFile.FileName);
                     education.Certificate = "~/Certificates/" + fileName;
                     fuEduCertificate.PostedFile.SaveAs(Server.MapPath("~/Certificates/") + fileName);
                 }
@@ -451,6 +531,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
                 Session["eduId"] = null;
                 BindEducations();
+                clearEducations();
                 Master.ShowMessage(new AppMessage("You've Successfully Updated Your Education Information!", RMessageType.Info));
                 Log.Info(_presenter.CurrentUser().FullName + " has updated his/her Education Information");
                 ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetoeducation();", true);
@@ -477,12 +558,13 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 workExperience.StartDate = Convert.ToDateTime(txtWorkStartDate.Text);
                 workExperience.EndDate = Convert.ToDateTime(txtWorkEndDate.Text);
                 workExperience.JobTitle = txtWorkJobTitle.Text;
-                workExperience.TypeOfEmployer = txtWorkTypeOfEmp.Text;
+                workExperience.TypeOfEmployer = ddlWorkTypeOfEmp.SelectedValue;
 
                 if (Session["workExpId"] == null)
                     _presenter.CurrentAppUser.Employee.WorkExperiences.Add(workExperience);
                 _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
                 BindWorkExperiences();
+                clearWorkExperiences();
                 Session["workExpId"] = null;
                 Master.ShowMessage(new AppMessage("You've Successfully Updated Your Work Experiences!", RMessageType.Info));
                 Log.Info(_presenter.CurrentUser().FullName + " has updated his/her Work Experiences");
@@ -512,7 +594,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             Response.WriteFile(certificatePath);
             Response.End();
         }
-        
+
         protected void btnFamDelete_Click(object sender, EventArgs e)
         {
             _presenter.CurrentAppUser.Employee.RemoveFamilyDetail(Convert.ToInt32(Session["famId"]));
@@ -522,14 +604,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
             Session["famId"] = null;
             //Clear the fields
-            txtFamFirstName.Text = String.Empty;
-            txtFamLastName.Text = String.Empty;
-            txtFamCellPhone.Text = String.Empty;
-            txtFamDateOfBirth.Text = String.Empty;
-            txtFamDateOfMarriage.Text = String.Empty;
-            ddlFamGender.SelectedValue = "";
-            ddlFamRelationship.SelectedValue = "";
-
+            clearFamilyDetails();
             BindFamilyDetails();
             btnFamDelete.Enabled = false;
             Master.ShowMessage(new AppMessage("Family Information Is Successfully Deleted!", RMessageType.Info));
@@ -545,15 +620,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
             Session["emergContId"] = null;
             //Clear the fields
-            txtEmergCellPhone.Text = String.Empty;
-            txtEmergFullName.Text = String.Empty;
-            txtEmergHouseNo.Text = String.Empty;
-            txtEmergSubCity.Text = String.Empty;
-            txtEmergTelephoneHome.Text = String.Empty;
-            txtEmergTelephoneOffice.Text = String.Empty;
-            txtEmergWoreda.Text = String.Empty;
-            ddlEmergRelationship.SelectedValue = "";
-
+            clearEmergencyContacts();
             BindEmergencyContacts();
             btnEmergDelete.Enabled = false;
             Master.ShowMessage(new AppMessage("Emergency Contact Information Is Successfully Deleted!", RMessageType.Info));
@@ -569,14 +636,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
             Session["eduId"] = null;
             //Clear the fields
-            txtEduGradYear.Text = String.Empty;
-            txtEduInstLocation.Text = String.Empty;
-            txtEduInstName.Text = String.Empty;
-            txtEduMajor.Text = String.Empty;
-            txtEduSpecialAward.Text = String.Empty;
-            ddlEduInstType.SelectedValue = "";
-            ddlEduLevel.SelectedValue = "";
-
+            clearEducations();
             BindEducations();
             btnEduDelete.Enabled = false;
             Master.ShowMessage(new AppMessage("Education Information Is Successfully Deleted!", RMessageType.Info));
@@ -592,16 +652,35 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
             Session["workExpId"] = null;
             //Clear the fields
-            txtWorkEndDate.Text = String.Empty;
-            txtWorkJobTitle.Text = String.Empty;
-            txtWorkOrgAddress.Text = String.Empty;
-            txtWorkOrgName.Text = String.Empty;
-            txtWorkStartDate.Text = String.Empty;
-            txtWorkTypeOfEmp.Text = String.Empty;
-
+            clearWorkExperiences();
             BindWorkExperiences();
             btnWorkExpDelete.Enabled = false;
             Master.ShowMessage(new AppMessage("Work Experience Is Successfully Deleted!", RMessageType.Info));
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetowork();", true);
+        }
+
+        protected void btnCancel_Click(object sender, EventArgs e)
+        {
+
+        }
+        protected void btnFamCancel_Click(object sender, EventArgs e)
+        {
+            clearFamilyDetails();
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetofamily();", true);
+        }
+        protected void btnEmergCancel_Click(object sender, EventArgs e)
+        {
+            clearEmergencyContacts();
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetoemergency();", true);
+        }
+        protected void btnEduCancel_Click(object sender, EventArgs e)
+        {
+            clearEducations();
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetoeducation();", true);
+        }
+        protected void btnWorkCancel_Click(object sender, EventArgs e)
+        {
+            clearWorkExperiences();
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetowork();", true);
         }
 
