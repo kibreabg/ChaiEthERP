@@ -290,6 +290,9 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                     if (count >= 6)
                         Sumleave = Sumleave + 30;
                     else
+                        if (count == 1)
+                        Sumleave = 20;
+                        else
                         Sumleave = Sumleave + (20 + Convert.ToInt32(leaveEnti));
 
                     count++;
@@ -327,6 +330,9 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                     if (count >= 6)
                         Sumleave = Sumleave + 30;
                     else
+                        if (count == 1)
+                        Sumleave = 20;
+                        else
                         Sumleave = Sumleave + (20 + Convert.ToInt32(leaveEnti));
 
                     count++;
@@ -360,6 +366,9 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                     if (count >= 6)
                         Sumleave = Sumleave + 30;
                     else
+                       if (count == 1)
+                        Sumleave = 20;
+                        else
                         Sumleave = Sumleave + (20 + Convert.ToInt32(leaveEnti));
 
                     count++;
@@ -390,6 +399,9 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                     if (count >= 6)
                         Sumleave = Sumleave + 30;
                     else
+                        if (count == 1)
+                        Sumleave = 20;
+                        else
                         Sumleave = Sumleave + (20 + Convert.ToInt32(leaveEnti));
 
                     count++;
