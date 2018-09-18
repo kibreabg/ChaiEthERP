@@ -94,7 +94,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             DropDownList ddlAction = row.FindControl("ddlAction1") as DropDownList;
             int index = GRVEmployeeList.SelectedIndex;
             if (ddlAction.SelectedItem.Text == "Manage HR")
-                Response.Redirect(String.Format("~/HRM/frmManageHR.aspx?{0}=6&Id={1}", AppConstants.TABID, GRVEmployeeList.DataKeys[row.RowIndex].Values[0]));
+                Response.Redirect(String.Format("~/HRM/frmManageHR.aspx?{0}=6&GetId={1}", AppConstants.TABID, GRVEmployeeList.DataKeys[row.RowIndex].Values[0]));
             else if (ddlAction.SelectedItem.Text == "Preview")
                 Response.Redirect(String.Format("~/HRM/frmEmployeeProfile.aspx?{0}=6&EmpId={1}", AppConstants.TABID, GRVEmployeeList.DataKeys[row.RowIndex].Values[0]));
                 
