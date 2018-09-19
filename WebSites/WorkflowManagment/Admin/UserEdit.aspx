@@ -31,7 +31,7 @@
                         </div>
                         <div class="row">
                             <section class="col col-6">
-                                <label class="label">First name</label>
+                                <label class="label">First Name</label>
                                 <label class="input">
 
                                     <asp:TextBox ID="txtFirstname" runat="server"></asp:TextBox></label>
@@ -39,14 +39,14 @@
                         </div>
                         <div class="row">
                             <section class="col col-6">
-                                <label class="label">Last name</label>
+                                <label class="label">Last Name</label>
                                 <label class="input">
                                     <asp:TextBox ID="txtLastname" runat="server"></asp:TextBox></label>
                             </section>
                         </div>
                         <div class="row">
                             <section class="col col-6">
-                                <label class="label">Employee No.</label>
+                                <label class="label">Employee ID.</label>
                                 <label class="input">
                                     <asp:TextBox ID="txtEmployeeNo" runat="server"></asp:TextBox></label>
                             </section>
@@ -69,10 +69,10 @@
                         </div>
                         <div class="row">
                             <section class="col col-6">
-                                <label class="label">Superviser</label>
+                                <label class="label">Supervisor</label>
                                 <label class="select">
                                     <asp:DropDownList ID="ddlSuperviser" runat="server" AppendDataBoundItems="True" DataTextField="FullName" DataValueField="Id">
-                                        <asp:ListItem Value="-1">Select Superviser</asp:ListItem>
+                                        <asp:ListItem Value="-1">Select Supervisor</asp:ListItem>
                                     </asp:DropDownList><i></i>
                                     <asp:RequiredFieldValidator ID="rfvSuperviser" runat="server" ControlToValidate="ddlSuperviser"
                                         Display="Dynamic" ErrorMessage="Superviser is required" CssClass="validator"
@@ -124,36 +124,8 @@
                             <section class="col col-6">
                                 <asp:CheckBox ID="chkActive" runat="server" Text="Is Active" Checked="True"></asp:CheckBox>
                             </section>
-                        </div>
-                        <div class="row">
-                            <section class="col col-6">
-                                <label class="label">Password</label>
-                                <label class="input">
-
-
-                                    <asp:TextBox ID="txtPassword1" type="password" runat="server" TextMode="Password"></asp:TextBox></label>
-                                <asp:RegularExpressionValidator ID="Regex2" runat="server" ControlToValidate="txtPassword1"
-                                    ValidationExpression="^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$"
-                                    ErrorMessage="Minimum 8 characters atleast 1 Alphabet, 1 Number and 1 Special Character" ForeColor="Red" />
-                            </section>
-                        </div>
-                        <div class="row">
-                            <section class="col col-6">
-                                <label class="label">Confirm password</label>
-                                <label class="input">
-
-
-
-                                    <asp:TextBox ID="txtPassword2" type="password" runat="server" TextMode="Password"></asp:TextBox>
-                                    <asp:CompareValidator ID="CompareValidator1" runat="server" ControlToCompare="txtPassword1"
-                                        ControlToValidate="txtPassword2" Display="Dynamic" ErrorMessage="The password you typed donot match. Please retype the password"
-                                        SetFocusOnError="True"></asp:CompareValidator>
-                                    <cc1:ValidatorCalloutExtender ID="CompareValidator1_ValidatorCalloutExtender" runat="server"
-                                        Enabled="True" TargetControlID="CompareValidator1" Width="300px">
-                                    </cc1:ValidatorCalloutExtender>
-                                </label>
-                            </section>
-                        </div>
+                        </div>                        
+                        
                     </fieldset>
                     <h4>Roles</h4>
                     <div class="table-responsive">
@@ -185,7 +157,7 @@
                         <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" class="btn btn-primary"></asp:Button>
                         <asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="False"
                             OnClick="btnCancel_Click" class="btn btn-primary"></asp:Button>
-                        <asp:Button ID="btnDelete" runat="server" Text="Delete" OnClick="btnDelete_Click" Visible="False" class="btn btn-primary"></asp:Button>
+                        <asp:Button ID="btnDelete" runat="server" Text="Deactivate" OnClick="btnDelete_Click" Visible="False" class="btn btn-danger"></asp:Button>
                     </footer>
                 </div>
             </div>

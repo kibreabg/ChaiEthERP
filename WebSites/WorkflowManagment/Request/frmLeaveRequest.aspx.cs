@@ -271,7 +271,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                         ClearForm();
                         BindSearchLeaveRequestGrid();
-                        Master.ShowMessage(new AppMessage("Successfully did a Leave  Request, Reference No - <b>'" + _presenter.CurrentLeaveRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                        Master.TransferMessage(new AppMessage("Successfully did a Leave  Request, Reference No - <b>'" + _presenter.CurrentLeaveRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                        _presenter.RedirectPage(String.Format("frmLeaveRequest.aspx?{0}=0", AppConstants.TABID));
+                       // Master.ShowMessage(new AppMessage("Successfully did a Leave  Request, Reference No - <b>'" + _presenter.CurrentLeaveRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
                         Log.Info(_presenter.CurrentUser().FullName + " has requested for a Leave Type of " + ddlLeaveType.SelectedValue);
                     }
                     else if (ddlLeaveType.SelectedItem.Text == "Sick Leave")
@@ -283,7 +285,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                             ClearForm();
                             BindSearchLeaveRequestGrid();
-                            Master.ShowMessage(new AppMessage("Successfully did a Leave  Request, Reference No - <b>'" + _presenter.CurrentLeaveRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                            Master.TransferMessage(new AppMessage("Successfully did a Leave  Request, Reference No - <b>'" + _presenter.CurrentLeaveRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                            _presenter.RedirectPage(String.Format("frmLeaveRequest.aspx?{0}=0", AppConstants.TABID));
                             Log.Info(_presenter.CurrentUser().FullName + " has requested for a Leave Type of " + ddlLeaveType.SelectedValue);
                         }
                         else
@@ -300,7 +303,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     _presenter.SaveOrUpdateLeaveRequest(_presenter.CurrentLeaveRequest);
                     ClearForm();
                     BindSearchLeaveRequestGrid();
-                    Master.ShowMessage(new AppMessage("Successfully did a Leave  Request, Reference No - <b>'" + _presenter.CurrentLeaveRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    Master.TransferMessage(new AppMessage("Successfully did a Leave  Request, Reference No - <b>'" + _presenter.CurrentLeaveRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    _presenter.RedirectPage(String.Format("frmLeaveRequest.aspx?{0}=0", AppConstants.TABID));
                     Log.Info(_presenter.CurrentUser().FullName + " has requested for a Leave Type of " + ddlLeaveType.SelectedValue);
                 }
                 else
@@ -327,10 +331,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             txtforward.Text = "";
 
         }
-        protected void btnCancel_Click(object sender, EventArgs e)
-        {
-            Response.Redirect("frmLeaveRequest.aspx");
-        }
+        
         protected void grvLeaveRequestList_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Session["ApprovalLevel"] = true;
@@ -489,7 +490,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                 if (employee != null)
                 {
-                    txtforward.Text = (employee.EmployeeLeaveBalance() - _presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value)).ToString();
+                    txtforward.Text = Math.Round((employee.EmployeeLeaveBalance() - _presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value))).ToString();
 
                 }
                 else

@@ -14,11 +14,11 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
 
         }
         public int Id { get; set; }
-        public int EmployeeId { get; set; }
+        public virtual HRM.Employee Employee { get; set; }
         public DateTime TerminationDate { get; set; }
         public DateTime LastDateOfEmployee { get; set; }
-        public string RecommendationforRehire { get; set; }
-        public string TerminationReasonId { get; set; }
+        public string ReccomendationForRehire { get; set; }
+        public string TerminationReason { get; set; }
 
         public virtual IList<TerminationReason> TerminationReasons { get; set; }
         #region TerminationReason

@@ -87,7 +87,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                         detail.SDLeaveBalance = Convert.ToInt32(txtOpeningLeavebalance.Text);
                         TextBox txtLeaveSettingDate = dgi.FindControl("txtOpeningLeavebalancedate") as TextBox;
                         detail.LeaveSettingDate = Convert.ToDateTime(txtLeaveSettingDate.Text);
-                        
+                        detail.AppUser = detail.AppUser;
                         _presenter.SaveOrUpdateEmpLeaveSetting(detail);
                     }
                     index++;

@@ -146,6 +146,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             _controller.Commit();
         }
+        public void RedirectPage(string url)
+        {
+            _controller.Navigate(url);
+
+        }
     }
 }
 

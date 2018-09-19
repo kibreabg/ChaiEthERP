@@ -20,6 +20,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             this.FamilyDetails = new List<FamilyDetail>();
             this.Terminations = new List<Termination>();
             this.WorkExperiences = new List<WorkExperience>();
+            this.Warnings = new List<Warning>();
            
         }
         public int Id { get; set; }
@@ -51,6 +52,8 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public virtual IList<Termination> Terminations { get; set; }
         public virtual IList<WorkExperience> WorkExperiences { get; set; }
 
+        public virtual IList<Warning> Warnings { get; set; }
+
 
         #region EmployeeDetail
         public virtual EmployeeDetail GetEmployeeDetails(int Id)
@@ -78,7 +81,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         }
         #endregion
         #region Contracts
-        public virtual Contract GetContracts(int Id)
+        public virtual Contract GetContract(int Id)
         {
 
             foreach (Contract CD in Contracts)
