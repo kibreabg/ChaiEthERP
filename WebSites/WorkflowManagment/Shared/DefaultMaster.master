@@ -40,7 +40,7 @@
     <link rel="icon" href="img/favicon/favicon.ico" type="image/x-icon">
 
     <!-- #GOOGLE FONT -->
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+    <%--<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">--%>
 
     <!-- #APP SCREEN / ICONS -->
     <!-- Specifying a Webpage Icon for Web Clip 
@@ -209,7 +209,7 @@
         <div class="page-footer">
             <div class="row">
                 <div class="col-xs-12 col-sm-6">
-                    <span class="txt-color-white">CHAI Zimbabwe</span>
+                    <span class="txt-color-white">CHAI Ethiopia ERP</span>
                 </div>
 
             </div>
@@ -408,7 +408,7 @@
     </script>
 
     <!-- Your GOOGLE ANALYTICS CODE Below -->
-    <script type="text/javascript">
+    <%--<script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
         _gaq.push(['_trackPageview']);
@@ -422,7 +422,7 @@
             s.parentNode.insertBefore(ga, s);
         })();
 
-    </script>
+    </script>--%>
     <script type="text/javascript">
         function showSearch() {
             $(document).ready(function () {

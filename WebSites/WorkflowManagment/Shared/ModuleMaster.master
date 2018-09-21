@@ -93,7 +93,7 @@
                             </li>
                             <li>
                                 <a href="<%=this.Page.ResolveUrl(string.Format("~/ChangePassword.aspx?{0}=0", Chai.WorkflowManagment.Shared.AppConstants.TABID)) %>">Change Password</a>
-                            </li>                            
+                            </li>
                             <li>
                                 <asp:LoginStatus runat="server" ID="LoginStatus1" LogoutAction="Redirect" LogoutPageUrl="UserLogin.aspx" />
                             </li>
@@ -349,8 +349,8 @@
     <!-- TIME PICKER PLUGIN-->
     <script type="text/javascript" src="../js/plugin/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
     <!-- WIZARD PLUGIN -->
-    <script type="text/javascript"  src="../js/plugin/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
-    <script type="text/javascript"  src="../js/plugin/fuelux/wizard/wizard.min.js"></script>
+    <script type="text/javascript" src="../js/plugin/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+    <script type="text/javascript" src="../js/plugin/fuelux/wizard/wizard.min.js"></script>
 
     <script type="text/javascript">
 
@@ -412,7 +412,7 @@
     </script>
 
     <!-- Your GOOGLE ANALYTICS CODE Below -->
-    <script type="text/javascript">
+    <%--<script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
         _gaq.push(['_trackPageview']);
@@ -426,7 +426,7 @@
             s.parentNode.insertBefore(ga, s);
         })();
 
-    </script>
+    </script>--%>
     <script type="text/javascript">
         function showSearch() {
             $(document).ready(function () {

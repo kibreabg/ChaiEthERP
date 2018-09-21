@@ -24,6 +24,25 @@
             });
         });
 
+        function previewImage(divId, source) {
+            var disp_setting = "toolbar=no, location=no, menubar=no,";
+            disp_setting += "scrollbars=no, width=170, height=170, left=400, top=400";
+            var content_value = document.getElementById(divId).innerHTML;
+            var docprint = window.open("", "_blank", disp_setting);
+            docprint.document.open();
+            docprint.document.write('<html><head><title>CHAI Ethiopia ERP</title>');
+            if (source == 'edu') {
+                docprint.document.write('</head><body onload="movetoeducation();">');
+            } else if (source == 'fam') {
+                docprint.document.write('</head><body onload="movetofamily();">');
+            }
+
+            docprint.document.write(content_value);
+            docprint.document.write('</body></html>');
+            docprint.document.close();
+            docprint.focus();
+        }
+
         function newTab() {
             document.forms[0].target = "_blank";
         }
@@ -403,6 +422,9 @@
                                             </div>
                                         </div>
                                     </fieldset>
+                                    <div id="certPreview" style="display: none;">
+                                        <asp:Image ID="imgCertPreview" Width="150" Height="150" runat="server" />
+                                    </div>
                                     <div class="form-actions">
                                         <div class="row">
                                             <div class="col-md-12">
@@ -430,7 +452,7 @@
                                                         <asp:BoundField DataField="Relationship" HeaderText="Relationship" SortExpression="Relationship" />
                                                         <asp:TemplateField HeaderText="Certificate">
                                                             <ItemTemplate>
-                                                                <asp:LinkButton ID="lnkFamDownload" Text="Preview" CommandArgument='<%# Eval("Certificate") %>' runat="server" OnClientClick="newTab();" OnClick="lnkFamDownload_Clicked"></asp:LinkButton>
+                                                                <asp:LinkButton ID="lnkFamDownload" Text="Preview" CommandArgument='<%# Eval("Certificate") %>' runat="server" OnClick="lnkFamDownload_Clicked"></asp:LinkButton>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
                                                         <asp:CommandField ShowSelectButton="True" SelectText="Edit" />
@@ -564,7 +586,7 @@
                                                         <asp:BoundField DataField="SubCity" HeaderText="Sub City" SortExpression="SubCity" />
                                                         <asp:BoundField DataField="Woreda" HeaderText="Woreda" SortExpression="Woreda" />
                                                         <asp:BoundField DataField="HouseNo" HeaderText="House No." SortExpression="HouseNo" />
-                                                        <asp:BoundField DataField="TelephoneHome" HeaderText="Telephone Home" SortExpression="TelephoneHome" />
+                                                        <asp:BoundField DataField="CellPhone" HeaderText="Cell Phone" SortExpression="CellPhone" />
                                                         <asp:BoundField DataField="TelephoneOffice" HeaderText="Telephone Office" SortExpression="TelephoneOffice" />
                                                         <asp:CommandField ShowSelectButton="True" SelectText="Edit" />
                                                     </Columns>
