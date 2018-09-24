@@ -13,7 +13,7 @@
 
             var docprint = window.open("", "", disp_setting);
             docprint.document.open();
-            docprint.document.write('<html><head><title>CHAI Zimbabwe</title>');
+            docprint.document.write('<html><head><title>CHAI Ethiopia ERP</title>');
             docprint.document.write('</head><body onLoad="self.print()"><center>');
             docprint.document.write(content_vlue);
             docprint.document.write('</center></body></html>');
@@ -214,7 +214,7 @@
                 <td style="width: 17%; text-align: left;">
                     <img src="../img/CHAI%20Logo.png" width="70" height="50" /></td>
                 <td style="font-size: large; text-align: center;">
-                    <strong>CHAI ZIMBABWE
+                    <strong>CHAI Ethiopia ERP
                             <br />
                         PURCHASE REQUEST FORM</strong></td>
             </tr>
