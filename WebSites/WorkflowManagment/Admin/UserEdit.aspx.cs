@@ -77,6 +77,7 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
             this.txtLastname.Text = _presenter.CurrentUser.LastName;
             this.txtEmployeeNo.Text = _presenter.CurrentUser.EmployeeNo;
             this.txtEmail.Text = _presenter.CurrentUser.Email;
+            this.txtPersonalEmail.Text = _presenter.CurrentUser.PersonalEmail;
             this.ddlEmployeePostion.SelectedValue = _presenter.CurrentUser.EmployeePosition != null ? _presenter.CurrentUser.EmployeePosition.Id.ToString():"0";
            
             this.ddlSuperviser.SelectedValue = _presenter.CurrentUser.Superviser.ToString();

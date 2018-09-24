@@ -179,7 +179,7 @@
                                                 <asp:Label ID="lblRejectedReason" runat="server" Text="Rejected Reason" Visible="false" CssClass="label"></asp:Label>
                                                 <label class="textarea">
                                                     <asp:TextBox ID="txtRejectedReason" runat="server" TextMode="MultiLine" Visible="false"></asp:TextBox>
-                                                    <asp:RequiredFieldValidator ID="rfvRejectedReason" runat="server" Enabled="false" CssClass="validator" ValidationGroup="save" ErrorMessage="Must Enter Rejection Reason" ControlToValidate="txtRejectedReason"></asp:RequiredFieldValidator>
+                                                    <asp:RequiredFieldValidator ID="rfvRejectedReason" runat="server" Enabled="false" CssClass="validator" ValidationGroup="Approve" ErrorMessage="Please Enter Rejection Reason" ControlToValidate="txtRejectedReason"></asp:RequiredFieldValidator>
                                                 </label>
                                             </section>
                                         </div>
