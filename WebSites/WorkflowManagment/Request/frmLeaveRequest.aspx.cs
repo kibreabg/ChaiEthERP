@@ -358,18 +358,19 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void grvLeaveRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            //LeaveRequest leaverequest = e.Row.DataItem as LeaveRequest;
-            //if (leaverequest != null)
-            //{
-            //    if (leaverequest.GetLeaveRequestStatusworkflowLevel(1).ApprovalStatus != null)
-            //    {
-            //        e.Row.Cells[5].Enabled = false;
-            //        e.Row.Cells[6].Enabled = false;
-            //    }
-
-            //}
+            LeaveRequest leaverequest = e.Row.DataItem as LeaveRequest;
+            
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
+                if (leaverequest != null)
+                {
+                    if (leaverequest.GetLeaveRequestStatusworkflowLevel(1).ApprovalStatus != null)
+                    {
+                        e.Row.Cells[5].Enabled = false;
+                       
+                    }
+
+                }
                 //LinkButton db = (LinkButton)e.Row.Cells[5].Controls[0];
                 //db.OnClientClick = "return confirm('Are you sure you want to delete this Recieve?');";
             }
@@ -598,6 +599,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void txtapplyfor_TextChanged(object sender, EventArgs e)
         {
+            ddltype_SelectedIndexChanged(sender, e);
             // GetLeaveBalance();
         }
 
@@ -731,8 +733,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
                 current = current.AddDays(1);
             }
-            if (date.AddDays(days + count).DayOfWeek == DayOfWeek.Saturday || current.AddDays(days + count).DayOfWeek == DayOfWeek.Sunday)
-                return count + 2;
+            if (date.AddDays(days + count).DayOfWeek == DayOfWeek.Saturday || date.AddDays(days + count).DayOfWeek == DayOfWeek.Sunday)
+                if (date.AddDays(days + count).DayOfWeek == DayOfWeek.Saturday)
+                {
+                    return count + 2;
+                }
+                else { return count + 1; }
             else
                 return count;
         }

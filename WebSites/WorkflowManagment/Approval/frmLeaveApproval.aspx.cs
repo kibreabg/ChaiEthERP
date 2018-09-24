@@ -337,7 +337,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 lblViewBalance.Visible = true;
                 lblViewBalRes.Visible = true;
                 Employee employee = _presenter.GetEmployee(_presenter.CurrentLeaveRequest.Requester);
-                lblEDS.Text = employee.GetEmployeeDutyStation();
+               // lblEDS.Text = employee.GetEmployeeDutyStation();
                 if (employee != null)
                 {
                     lblViewBalRes.Text = (employee.EmployeeLeaveBalance() - _presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value)).ToString();

@@ -119,7 +119,7 @@
                                     I wish to apply for
                                 </label>
                                 <label class="input">
-                                    <asp:TextBox ID="txtapplyfor" runat="server" Visible="true" placeholder="Days" TabIndex="6" AutoPostBack="False" OnTextChanged="txtapplyfor_TextChanged"></asp:TextBox>
+                                    <asp:TextBox ID="txtapplyfor" runat="server" Visible="true" placeholder="Days" TabIndex="6" AutoPostBack="True" OnTextChanged="txtapplyfor_TextChanged"></asp:TextBox>
                                      <cc1:FilteredTextBoxExtender ID="txtapplyfor_FilteredTextBoxExtender" runat="server" FilterType="Custom, Numbers" TargetControlID="txtapplyfor" ValidChars=".">
                                 </cc1:FilteredTextBoxExtender>
                                     <asp:RequiredFieldValidator ID="Rfvapplyfor" runat="server" CssClass="validator" ControlToValidate="txtapplyfor" ErrorMessage="I wish to apply for Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Save"></asp:RequiredFieldValidator>
@@ -132,7 +132,6 @@
                                     Type</label>
                                 <label class="select">
                                    <asp:DropDownList ID="ddltype" runat="server" AppendDataBoundItems="True" AutoPostBack="True" OnSelectedIndexChanged="ddltype_SelectedIndexChanged">
-                                       <asp:ListItem Value="">Select Type</asp:ListItem> 
                                        <asp:ListItem Value="Full Day">Full Day</asp:ListItem>
                                        <asp:ListItem Value="Half Day">Half Day</asp:ListItem>
                                     </asp:DropDownList><i></i>
@@ -141,7 +140,7 @@
                             </section>
                             <section class="col col-3">
                                 <label class="label">
-                                    Date To</label>
+                                    Report Date</label>
                                 <label class="input">
                                     <i class="icon-append fa fa-calendar"></i>
                                     <asp:TextBox ID="txtDateTo" runat="server" Visible="true" CssClass="form-control datepicker"
@@ -175,6 +174,7 @@
                          </ContentTemplate>
                                 <Triggers>
                                     <asp:AsyncPostBackTrigger ControlID="ddltype" EventName="SelectedIndexChanged" />
+                                    <asp:AsyncPostBackTrigger ControlID="txtapplyfor" EventName="TextChanged" />
                                 </Triggers>
                             </asp:UpdatePanel>
                     </fieldset>
