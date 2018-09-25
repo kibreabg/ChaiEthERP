@@ -119,7 +119,7 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
         public DbSet<TerminationReason> TerminationReasons { get; set; }
         public DbSet<WorkExperience> WorkExperiences { get; set; }
 
-        public DbSet<Holiday> Holidays { get; set; }
+       
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             //modelBuilder.Entity<AppUser>().HasMany(p => p.AppUserRoles).WithMany();

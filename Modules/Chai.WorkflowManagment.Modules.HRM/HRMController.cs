@@ -158,11 +158,12 @@ namespace Chai.WorkflowManagment.Modules.HRM
         {
             if (_workspace.Last<EmployeeDetail>() != null)
             {
-                return _workspace.Last<EmployeeDetail>().Id;
+                return (_workspace.Last<EmployeeDetail>().Id);
             }
             else { return 0; }
         }
 
+      
         #endregion
         #region Warning
         public IList<Warning> GetWarnings()
