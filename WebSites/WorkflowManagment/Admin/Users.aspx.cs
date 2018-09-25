@@ -60,7 +60,20 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                 HyperLink hpl = e.Row.FindControl("hplEdit") as HyperLink;
                 string url = string.Format("~/Admin/UserEdit.aspx?{0}=0&{1}={2}", AppConstants.TABID, AppConstants.USERID, user.Id);
                 hpl.NavigateUrl = this.ResolveUrl(url);
+
+                if (user.IsActive == true)
+                {
+                    e.Row.Cells[6].Text = "Active";
+                    e.Row.Cells[6].ForeColor = System.Drawing.Color.ForestGreen;
+                }
+                else
+                {
+                    e.Row.Cells[6].Text = "In-Active";
+                    e.Row.Cells[6].ForeColor = System.Drawing.Color.Red;
+                }
             }
+
+           
         }
 
         protected void grvUser_PageIndexChanging(object sender,  GridViewPageEventArgs e)

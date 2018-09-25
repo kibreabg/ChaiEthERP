@@ -185,11 +185,11 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                 CheckBox chkView = (CheckBox)ri.FindControl("chkViewAllowed");
                 if (chkView.Checked)
                 {
-                    if (!tab.Exists(Convert.ToInt32(ViewState[ri.ClientID])))
+                    if (!tab.Exists(Convert.ToInt32(ViewState[ri.UniqueID])))
                     {
                         TabRole np = new TabRole();
                         np.Tab = tab;
-                        np.Role = _presenter.GetRole((int)ViewState[ri.ClientID]);
+                        np.Role = _presenter.GetRole((int)ViewState[ri.UniqueID]);
                         np.ViewAllowed = chkView.Checked;
 
                         tab.TabRoles.Add(np);
@@ -207,7 +207,7 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                 if (_presenter.CurrentTab != null)
                     chkView.Checked = this._presenter.CurrentTab.ViewAllowed(role);
                 
-                this.ViewState[e.Item.ClientID] = role.Id;
+                this.ViewState[e.Item.UniqueID] = role.Id;
             }
 
         }

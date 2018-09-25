@@ -77,6 +77,7 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
             this.txtLastname.Text = _presenter.CurrentUser.LastName;
             this.txtEmployeeNo.Text = _presenter.CurrentUser.EmployeeNo;
             this.txtEmail.Text = _presenter.CurrentUser.Email;
+            this.txtPersonalEmail.Text = _presenter.CurrentUser.PersonalEmail;
             this.ddlEmployeePostion.SelectedValue = _presenter.CurrentUser.EmployeePosition != null ? _presenter.CurrentUser.EmployeePosition.Id.ToString():"0";
            
             this.ddlSuperviser.SelectedValue = _presenter.CurrentUser.Superviser.ToString();
@@ -144,8 +145,8 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
         {
             if (Page.IsValid)
             {
-                //try
-                //{
+                try
+                {
                     SetRoles();
                     if (_presenter.CurrentUser.Id == 0)
                     {
@@ -158,11 +159,12 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                         _presenter.SaveOrUpdateUser();
                         Master.ShowMessage(new AppMessage("User saved", Chai.WorkflowManagment.Enums.RMessageType.Info));
                     }
-                //}
-                //catch (Exception ex)
-                //{
-                //    Master.ShowMessage(new AppMessage("Error: " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
-                //}
+                }
+                catch (Exception ex)
+                {
+                    
+                    Master.ShowMessage(new AppMessage("Error: " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                }
             }
         }
 
@@ -211,7 +213,7 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
         {
             get 
             {
-                return this.txtPassword1.Text; 
+                return "chai123";
             }
         }
         public CoreDomain.Setting.EmployeePosition EmployeePosition
@@ -253,8 +255,9 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
         {
             try
             {
+                _presenter.CurrentUser.IsActive = false;
                 _presenter.DeleteUser();
-                Master.TransferMessage(new AppMessage("User was deleted", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.TransferMessage(new AppMessage("User was Deactivate", Chai.WorkflowManagment.Enums.RMessageType.Info));
                 _presenter.CancelPage();
             }
             catch (Exception ex)

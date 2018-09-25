@@ -324,6 +324,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             txtEmergTelephoneHome.Text = emergencyContact.TelephoneHome;
             txtEmergTelephoneOffice.Text = emergencyContact.TelephoneOffice;
 
+            btnEmergDelete.Enabled = true;
+
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetoemergency();", true);
         }
 
@@ -346,6 +348,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             txtEduGradYear.Text = Convert.ToDateTime(education.GraduationYear).ToShortDateString();
             txtEduSpecialAward.Text = education.SpecialAward;
 
+            btnEduDelete.Enabled = true;
+
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetoeducation();", true);
         }
 
@@ -366,6 +370,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             txtWorkEndDate.Text = Convert.ToDateTime(workExperience.EndDate).ToShortDateString();
             txtWorkJobTitle.Text = workExperience.JobTitle;
             ddlWorkTypeOfEmp.SelectedValue = workExperience.TypeOfEmployer;
+
+            btnWorkExpDelete.Enabled = true;
 
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetowork();", true);
         }
@@ -411,7 +417,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             catch (Exception ex)
             {
                 Master.ShowMessage(new AppMessage("Error: While Updating Employee Profile!", RMessageType.Error));
-                ExceptionUtility.LogException(ex, "frmEmployeeProfile.aspx");
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex);
             }
         }
 
@@ -459,7 +466,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             catch (Exception ex)
             {
                 Master.ShowMessage(new AppMessage("Error: While Updating Family Information!", RMessageType.Error));
-                ExceptionUtility.LogException(ex, "frmEmployeeProfile.aspx");
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex);
             }
         }
 
@@ -496,7 +504,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             catch (Exception ex)
             {
                 Master.ShowMessage(new AppMessage("Error: While Updating Emergency Contact Information!", RMessageType.Error));
-                ExceptionUtility.LogException(ex, "frmEmployeeProfile.aspx");
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex);
             }
         }
 
@@ -539,7 +548,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             catch (Exception ex)
             {
                 Master.ShowMessage(new AppMessage("Error: While Updating Education Information!", RMessageType.Error));
-                ExceptionUtility.LogException(ex, "frmEmployeeProfile.aspx");
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex);
             }
         }
 
@@ -573,90 +583,125 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             catch (Exception ex)
             {
                 Master.ShowMessage(new AppMessage("Error: While Updating Work Experience!", RMessageType.Error));
-                ExceptionUtility.LogException(ex, "frmEmployeeProfile.aspx");
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex);
             }
         }
 
         protected void lnkEduDownload_Clicked(object sender, EventArgs e)
         {
             string certificatePath = (sender as LinkButton).CommandArgument;
-            Response.AppendHeader("Content-Type", "application/pdf");
-            Response.AppendHeader("Content-Disposition", "inline; filename=" + Path.GetFileName(certificatePath));
-            Response.WriteFile(certificatePath);
-            Response.End();
+            imgCertPreview.ImageUrl = certificatePath;
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetoeducation();previewImage('certPreview','edu');", true);
         }
 
         protected void lnkFamDownload_Clicked(object sender, EventArgs e)
-        {
+        {         
             string certificatePath = (sender as LinkButton).CommandArgument;
-            Response.AppendHeader("Content-Type", "application/pdf");
-            Response.AppendHeader("Content-Disposition", "inline; filename=" + Path.GetFileName(certificatePath));
-            Response.WriteFile(certificatePath);
-            Response.End();
+            imgCertPreview.ImageUrl = certificatePath;
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "previewImage('certPreview','fam');movetofamily();", true);
+            
         }
 
         protected void btnFamDelete_Click(object sender, EventArgs e)
         {
-            _presenter.CurrentAppUser.Employee.RemoveFamilyDetail(Convert.ToInt32(Session["famId"]));
-            FamilyDetail delFamilyDetail = _presenter.GetFamilyDetail(Convert.ToInt32(Session["famId"]));
-            if (delFamilyDetail != null)
-                _presenter.DeleteFamilyDetail(delFamilyDetail);
-            _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
-            Session["famId"] = null;
-            //Clear the fields
-            clearFamilyDetails();
-            BindFamilyDetails();
-            btnFamDelete.Enabled = false;
-            Master.ShowMessage(new AppMessage("Family Information Is Successfully Deleted!", RMessageType.Info));
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetofamily();", true);
+            try
+            {
+                _presenter.CurrentAppUser.Employee.RemoveFamilyDetail(Convert.ToInt32(Session["famId"]));
+                FamilyDetail delFamilyDetail = _presenter.GetFamilyDetail(Convert.ToInt32(Session["famId"]));
+                if (delFamilyDetail != null)
+                    _presenter.DeleteFamilyDetail(delFamilyDetail);
+                _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
+                Session["famId"] = null;
+                //Clear the fields
+                clearFamilyDetails();
+                BindFamilyDetails();
+                btnFamDelete.Enabled = false;
+                Master.ShowMessage(new AppMessage("Family Information Is Successfully Deleted!", RMessageType.Info));
+                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetofamily();", true);
+            }
+            catch (Exception ex)
+            {
+                Master.ShowMessage(new AppMessage("Error: While Deleting Family Detail!", RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex);
+            }
+
         }
 
         protected void btnEmergDelete_Click(object sender, EventArgs e)
         {
-            _presenter.CurrentAppUser.Employee.RemoveEmergencyContact(Convert.ToInt32(Session["emergContId"]));
-            EmergencyContact delEmergContact = _presenter.GetEmergencyContact(Convert.ToInt32(Session["emergContId"]));
-            if (delEmergContact != null)
-                _presenter.DeleteEmergencyContact(delEmergContact);
-            _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
-            Session["emergContId"] = null;
-            //Clear the fields
-            clearEmergencyContacts();
-            BindEmergencyContacts();
-            btnEmergDelete.Enabled = false;
-            Master.ShowMessage(new AppMessage("Emergency Contact Information Is Successfully Deleted!", RMessageType.Info));
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetoemergency();", true);
+            try
+            {
+                _presenter.CurrentAppUser.Employee.RemoveEmergencyContact(Convert.ToInt32(Session["emergContId"]));
+                EmergencyContact delEmergContact = _presenter.GetEmergencyContact(Convert.ToInt32(Session["emergContId"]));
+                if (delEmergContact != null)
+                    _presenter.DeleteEmergencyContact(delEmergContact);
+                _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
+                Session["emergContId"] = null;
+                //Clear the fields
+                clearEmergencyContacts();
+                BindEmergencyContacts();
+                btnEmergDelete.Enabled = false;
+                Master.ShowMessage(new AppMessage("Emergency Contact Information Is Successfully Deleted!", RMessageType.Info));
+                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetoemergency();", true);
+            }
+            catch (Exception ex)
+            {
+                Master.ShowMessage(new AppMessage("Error: While Deleting Emergency Contact!", RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex);
+            }
         }
 
         protected void btnEduDelete_Click(object sender, EventArgs e)
         {
-            _presenter.CurrentAppUser.Employee.RemoveEducation(Convert.ToInt32(Session["eduId"]));
-            Education delEducation = _presenter.GetEducation(Convert.ToInt32(Session["eduId"]));
-            if (delEducation != null)
-                _presenter.DeleteEducation(delEducation);
-            _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
-            Session["eduId"] = null;
-            //Clear the fields
-            clearEducations();
-            BindEducations();
-            btnEduDelete.Enabled = false;
-            Master.ShowMessage(new AppMessage("Education Information Is Successfully Deleted!", RMessageType.Info));
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetoeducation();", true);
+            try
+            {
+                _presenter.CurrentAppUser.Employee.RemoveEducation(Convert.ToInt32(Session["eduId"]));
+                Education delEducation = _presenter.GetEducation(Convert.ToInt32(Session["eduId"]));
+                if (delEducation != null)
+                    _presenter.DeleteEducation(delEducation);
+                _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
+                Session["eduId"] = null;
+                //Clear the fields
+                clearEducations();
+                BindEducations();
+                btnEduDelete.Enabled = false;
+                Master.ShowMessage(new AppMessage("Education Information Is Successfully Deleted!", RMessageType.Info));
+                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetoeducation();", true);
+            }
+            catch (Exception ex)
+            {
+                Master.ShowMessage(new AppMessage("Error: While Deleting Education Information!", RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex);
+            }
         }
 
         protected void btnWorkExpDelete_Click(object sender, EventArgs e)
         {
-            _presenter.CurrentAppUser.Employee.RemoveWorkExperience(Convert.ToInt32(Session["workExpId"]));
-            WorkExperience delWorkExp = _presenter.GetWorkExperience(Convert.ToInt32(Session["workExpId"]));
-            if (delWorkExp != null)
-                _presenter.DeleteWorkExperience(delWorkExp);
-            _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
-            Session["workExpId"] = null;
-            //Clear the fields
-            clearWorkExperiences();
-            BindWorkExperiences();
-            btnWorkExpDelete.Enabled = false;
-            Master.ShowMessage(new AppMessage("Work Experience Is Successfully Deleted!", RMessageType.Info));
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetowork();", true);
+            try
+            {
+                _presenter.CurrentAppUser.Employee.RemoveWorkExperience(Convert.ToInt32(Session["workExpId"]));
+                WorkExperience delWorkExp = _presenter.GetWorkExperience(Convert.ToInt32(Session["workExpId"]));
+                if (delWorkExp != null)
+                    _presenter.DeleteWorkExperience(delWorkExp);
+                _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
+                Session["workExpId"] = null;
+                //Clear the fields
+                clearWorkExperiences();
+                BindWorkExperiences();
+                btnWorkExpDelete.Enabled = false;
+                Master.ShowMessage(new AppMessage("Work Experience Is Successfully Deleted!", RMessageType.Info));
+                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetowork();", true);
+            }
+            catch (Exception ex)
+            {
+                Master.ShowMessage(new AppMessage("Error: While Deleting Work Experience!", RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex);
+            }
         }
 
         protected void btnCancel_Click(object sender, EventArgs e)

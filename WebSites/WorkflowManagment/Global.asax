@@ -2,7 +2,7 @@
 <script RunAt="server">
 
     private static readonly string ERROR_PAGE_LOCATION = "~/Oopes.aspx";
-
+    
     void Application_Error(object sender, EventArgs e)
     {
         if (Context != null && Context.IsCustomErrorEnabled)
@@ -38,13 +38,12 @@
             "Default Page</a>\n");
 
         // Log the exception and notify system operators
-        Chai.WorkflowManagment.Shared.ExceptionUtility.LogException(exc, "DefaultPage");
+        Chai.WorkflowManagment.Shared.ExceptionUtility.LogException(exc, exc.Source);
         Chai.WorkflowManagment.Shared.ExceptionUtility.NotifySystemOps(exc);
 
         // Clear the error from the server
-
         Server.ClearError();
     }
-
-
+    
+    
 </script>

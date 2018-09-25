@@ -19,7 +19,7 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
     public class WorkflowManagmentDbContext : BaseDbContext
     {
         public WorkflowManagmentDbContext(bool disableProxy)
-            : base("WorkflowManagmentTest")
+            : base("CHAIWorkflow")
         {
             if (disableProxy)
                 ObjContext().ContextOptions.ProxyCreationEnabled = false;
@@ -51,7 +51,6 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
         public DbSet<SupplierType> SupplierTypes { get; set; }
         public DbSet<CarRental> CarRentals { get; set; }
         public DbSet<Beneficiary> Beneficiaries { get; set; }
-        public DbSet<Holiday> Holidays { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<ApprovalSetting> ApprovalSettings { get; set; }
         public DbSet<ApprovalLevel> ApprovalLevels { get; set; }
@@ -118,6 +117,7 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
         public DbSet<Termination> Terminations { get; set; }
         public DbSet<TerminationReason> TerminationReasons { get; set; }
         public DbSet<WorkExperience> WorkExperiences { get; set; }
+        public DbSet<Holiday> Holidays { get; set; }
 
        
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

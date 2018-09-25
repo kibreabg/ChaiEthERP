@@ -248,7 +248,7 @@ namespace Chai.WorkflowManagment.Modules.HRM
         {
             _workspace.Delete<T>(item);
             _workspace.CommitChanges();
-            _workspace.Refresh(item);
+            //_workspace.Refresh(item);
         }
 
         public void Commit()
