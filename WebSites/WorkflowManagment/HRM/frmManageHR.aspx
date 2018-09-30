@@ -45,10 +45,11 @@
             ×
         </button>
        <h3>
-
-        <strong>Employee Information</strong></h3>
+<span class="badge badge-info"></span>Employee Information<span class="chevron"></span></h3>
+       
         
           <div class="row"> 
+             
              <div style="padding-left: 13px; float: left; position: relative; width: 16.66666667%; height: 150px; border: 3px solid #fff;">
                                                 
                                                 <asp:Image ID="imgProfilePic" Width="100%" Height="100%" runat="server" />
@@ -59,7 +60,9 @@
                                                 </div>
                                               
                                             </div>
-                                                 <div class="col-sm-3">
+                 
+             
+                                                 <div class="widget-body no-padding">
                                                 <div class="form-group">
                                                     <div class="input-group">
                                                        
@@ -67,16 +70,15 @@
                                                       <asp:Label ID="txtFirstName" runat="server"></asp:Label>  
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                          
                                                 <div class="form-group">
                                                     <div class="input-group">
                                                         <strong>  <asp:Label ID="txtLastNamelbl" runat="server"  Text="Last Name:"></asp:Label></strong>
                                                        <asp:Label ID="txtLastName" runat="server"></asp:Label>
                                                     </div>
                                                 </div>
-                                            </div>
-                                           <div class="col-sm-3">
+                                          
+                                          
                                                 <div class="form-group">
                                                     <div class="input-group">
                                                        
@@ -432,8 +434,8 @@
                                         <button class="btn btn-default" type="submit">
                                             Cancel</button>
                                         <asp:Button ID="btnAddChange" runat="server" CssClass="btn btn-primary" Text="Add Change" ValidationGroup="Savedetail" OnClick="btnAddChange_Click" />
-                                        <asp:Button ID="btnPAFNew" runat="server" CssClass="btn btn-primary" Text="Generate PAF" OnClientClick="javascript:Clickheretoprint('divprint2')" Visible="False" OnClick="btnPAFNew_Click" />
-                                        <asp:Button ID="btnPAFChange" runat="server" CssClass="btn btn-primary" Text="Generate PAF" OnClientClick="javascript:Clickheretoprint('divprint')" Visible="False" OnClick="btnPAFChange_Click" />
+                                        <asp:Button ID="btnPAFNew" runat="server" CssClass="btn btn-primary" Text="Generate PAF New Hire" OnClientClick="javascript:Clickheretoprint('divprint2')" Visible="False" OnClick="btnPAFNew_Click" />
+                                        <asp:Button ID="btnPAFChange" runat="server" CssClass="btn btn-primary" Text="Generate PAF Change" OnClientClick="javascript:Clickheretoprint('divprint')" Visible="False" OnClick="btnPAFChange_Click" />
                                     </div>
                                 </div>
                             </div>
@@ -616,12 +618,12 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="width: 271px; height: 18px;">
+                                <td style="width: 629px; height: 18px;">
                                     <strong>
                                         <asp:Label ID="lblFirstName" runat="server" Text="First Name:"></asp:Label>
                                     </strong>
                                 </td>
-                                <td style="width: 271px; height: 18px;">
+                                <td style="width: 244px; height: 18px;">
                                     <strong>
                                         <asp:Label ID="lblFirstNameResult" runat="server"></asp:Label>
                                     </strong>

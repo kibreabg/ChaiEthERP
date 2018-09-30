@@ -64,9 +64,9 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             this._presenter.OnViewLoaded();
             BindContracts();
             BindEmployeeDetail();
-
             BindTermination();
-
+            btnPAFNew.Visible = false;
+            btnPAFNew.Visible = false;
         }
 
 
@@ -275,17 +275,14 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         public void BindEmployeeDetail()
         {
-            if (_presenter.CurrentEmployee.EmployeeDetails.Count != 0)
-            {
-                btnPAFChange.Visible = true;
-
-            }
-            else
+            if (_presenter.CurrentEmployee.GetContract(_presenter.GetLastContrcatId()).Reason == "New Hire")
             {
                 btnPAFNew.Visible = true;
-
             }
-            dgChange.DataSource = _presenter.CurrentEmployee.EmployeeDetails;
+            else{
+                btnPAFChange.Visible = true;
+            }
+                dgChange.DataSource = _presenter.CurrentEmployee.EmployeeDetails;
             dgChange.DataBind();
         }
 
@@ -298,51 +295,92 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         private void PrintTransaction()
         {
+            
+            GridViewRow row = dgChange.Rows[dgChange.Rows.Count - 1];
+            GridViewRow row1 = dgChange.Rows[dgChange.Rows.Count - 2];
+          
+            Int32 rowIndex = row.RowIndex;
+            int change = Convert.ToInt32(dgChange.DataKeys[rowIndex].Value);
+            Int32 rowIndex1 = row1.RowIndex;
+            int current = Convert.ToInt32(dgChange.DataKeys[rowIndex1].Value);
+            GridViewRow row2 = dgContractDetail.Rows[dgContractDetail.Rows.Count - 1];
+           
+             
             //lblEmployeeMainIDRes.Text=_presenter.CurrentEmployee.AppUser.EmployeeNo;
             lblFirstNameResult.Text = _presenter.CurrentEmployee.FirstName;
             lbliddleNameResult.Text = _presenter.CurrentEmployee.LastName;
             lblLastNameResult.Text = _presenter.CurrentEmployee.LastName;
             lblEmailResult.Text = _presenter.CurrentEmployee.ChaiEMail;
-            lblBaseCityCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).BaseCity.ToString();
-            
-            lblBaseCityChange.Text = txtBaseCity.Text;
-            lblBaseCountryCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).BaseCountry.ToString();
-            lblBaseCountryChange.Text = txtBaseCount.Text;
-            lblBaseStateCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).BaseState.ToString();
-            lblBaseStateChange.Text = txtBaseState.Text;
-            lblClassCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).Class.ToString();
-            lblClassChange.Text = txtClass.Text;
-            lblCountryTeamCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).CountryTeam.ToString();
-            lblCountryTeamChange.Text = txtCountryTeam.Text;
-            lblDescJobCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).DescriptiveJobTitle.ToString();
-            lblDescJobChange.Text = txtDescJT.Text;
+            lblBaseCityCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(current).BaseCity.ToString();
+            lblBaseCityChange.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).BaseCity.ToString();            
+            lblBaseCountryCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(current).BaseCountry.ToString();
+            lblBaseCountryChange.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).BaseCountry.ToString();
+            lblBaseStateCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).BaseState.ToString();
+            lblBaseStateChange.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).BaseState.ToString();
+            lblClassCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(current).Class.ToString();
+            lblClassChange.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).Class.ToString(); 
+            lblEmpStatCurr.Text= _presenter.CurrentEmployee.GetEmployeeDetails(current).EmploymentStatus.ToString();
+            lblEmpStatChange.Text= _presenter.CurrentEmployee.GetEmployeeDetails(change).EmploymentStatus.ToString();
+            lblCountryTeamCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(current).CountryTeam.ToString();
+            lblCountryTeamChange.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).CountryTeam.ToString();
+            lblOffJobCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(current).JobTitle.ToString();
+            lblOffJobChange.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).JobTitle.ToString();
+            lblDescJobCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(current).DescriptiveJobTitle.ToString();
+            lblDescJobChange.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).DescriptiveJobTitle.ToString();
+            lblProgramCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(current).Program.ProgramName.ToString();
+            lblProgramChange.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).Program.ProgramName.ToString();
+            if (row2.Cells[3].Text == "Active")
+            {
+                lblEffectiveDateRes.Text = _presenter.CurrentEmployee.GetContract(_presenter.GetLastContrcatId()).ContractStartDate.ToShortDateString();
+                lblReasonRes.Text = _presenter.CurrentEmployee.GetContract(_presenter.GetLastContrcatId()).Reason.ToString();
+            }
             // lblDurationOfCont.Text = Convert.ToDateTime((_presenter.CurrentEmployee.GetContract(_presenter.GetLastEmployeeDetailId()).ContractEndDate - _presenter.CurrentEmployee.GetContract(_presenter.GetLastEmployeeDetailId()).ContractEndDate)).Month.ToString()+"Month";
-            lblEffectiveDateRes.Text = txtStartDate.Text;
-            lblAnnualBaseSalaryCurr.Text = (12 * (_presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).Salary)).ToString();
-            lblAnnualBaseSalaryChange.Text = (12 * Convert.ToDecimal(txtSalary.Text)).ToString();
-            lblEmpManCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).Supervisor.ToString();
-            lblEmpManChange.Text = ddlSuperVisor.Text;
-            ClearEmpDetailFormFields();
+           
+            lblAnnualBaseSalaryCurr.Text = (12 * (_presenter.CurrentEmployee.GetEmployeeDetails(current).Salary)).ToString();
+            lblAnnualBaseSalaryChange.Text = (12 * (_presenter.CurrentEmployee.GetEmployeeDetails(change).Salary)).ToString();
+            lblEmpManCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(current).Supervisor.ToString();
+            lblEmpManCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).Supervisor.ToString();
+            lblReporttoCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(current).ReportsTo.ToString();
+            lblReporttoChange.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).ReportsTo.ToString();
+
 
         }
         private void PrintTransactionnew()
         {
+
+            GridViewRow row = dgChange.Rows[dgChange.Rows.Count - 1];
+           
+
+            Int32 rowIndex = row.RowIndex;
+            int change = Convert.ToInt32(dgChange.DataKeys[rowIndex].Value);
+           
+            GridViewRow row2 = dgContractDetail.Rows[dgContractDetail.Rows.Count - 1];
+
+
             //lblEmployeeMainIDRes.Text=_presenter.CurrentEmployee.AppUser.EmployeeNo;
-            lblFirstNameResultnew.Text = _presenter.CurrentEmployee.FirstName;
-            lbliddleNameResultnew.Text = _presenter.CurrentEmployee.LastName;
-            lblLastNameResultnew.Text = _presenter.CurrentEmployee.LastName;
-            lblEmailResultnew.Text = _presenter.CurrentEmployee.ChaiEMail;
-            lblBaseCitynew.Text = txtBaseCity.Text;
-            lblBasCountrynew.Text = txtBaseCount.Text;
-            lblBaseStatenew.Text = txtBaseState.Text;
-            lblClassnew.Text = txtClass.Text;
-            lblCountryTeamnew.Text = txtCountryTeam.Text;
-            lblDescJobnew.Text = txtDescJT.Text;
-            // lblDurationOfCont.Text = Convert.ToDateTime((_presenter.CurrentEmployee.GetContract(_presenter.GetLastEmployeeDetailId()).ContractEndDate - _presenter.CurrentEmployee.GetContract(_presenter.GetLastEmployeeDetailId()).ContractEndDate)).Month.ToString()+"Month";
-            lblEffectiveDateRes.Text = txtStartDate.Text;
-            lblAnnualBaseSalaryres.Text = (12 * Convert.ToDecimal(txtSalary.Text)).ToString();
-            lblEmpManres.Text = ddlSuperVisor.Text;
-            ClearEmpDetailFormFields();
+            lblFirstNameResult.Text = _presenter.CurrentEmployee.FirstName;
+            lbliddleNameResult.Text = _presenter.CurrentEmployee.LastName;
+            lblLastNameResult.Text = _presenter.CurrentEmployee.LastName;
+            lblEmailResult.Text = _presenter.CurrentEmployee.ChaiEMail;
+            lblBaseCityres.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).BaseCity.ToString();
+            lblBaseCountryres.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).BaseCountry.ToString();
+          
+            lblBaseStateres.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).BaseState.ToString();
+            lblClassres.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).Class.ToString();
+            lblEmpStatRes.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).EmploymentStatus.ToString();
+            lblCountryTeamres.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).CountryTeam.ToString();
+            lblOffJobres.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).JobTitle.ToString();
+            lblDescJobres.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).DescriptiveJobTitle.ToString();
+            lblProgramres.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).Program.ProgramName.ToString();
+            if (row2.Cells[3].Text == "Active")
+            {
+                lblEffectiveDateResnew.Text = _presenter.CurrentEmployee.GetContract(_presenter.GetLastContrcatId()).ContractStartDate.ToShortDateString();
+                lblReasonResnew.Text = _presenter.CurrentEmployee.GetContract(_presenter.GetLastContrcatId()).Reason.ToString();
+            }
+            // lblDurationOfCont.Text = Convert.ToDateTime((_presenter.CurrentEmployee.GetContract(_presenter.GetLastEmployeeDetailId()).ContractEndDate - _presenter.CurrentEmployee.GetContract(_presenter.GetLastEmployeeDetailId()).ContractEndDate)).Month.ToString()+"Month";    
+            lblAnnualBaseSalaryres.Text = (12 * (_presenter.CurrentEmployee.GetEmployeeDetails(change).Salary)).ToString();
+            lblEmpManres.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).Supervisor.ToString();
+            lblReporttores.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).ReportsTo.ToString();
 
         }
         private void PrintTransactionTermination()
@@ -426,7 +464,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     empdetail.BaseCountry = txtBaseCount.Text;
                     empdetail.BaseCity = txtBaseCity.Text;
                     empdetail.BaseState = txtBaseState.Text;
-                    empdetail.Class = Convert.ToInt32(txtClass.Text);
+                    empdetail.Class = txtClass.Text;
                     empdetail.CountryTeam = txtCountryTeam.Text;
                     empdetail.EmploymentStatus = Convert.ToInt32(txtEmployeeStatus.Text);
 
@@ -462,7 +500,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 empdetail.BaseCountry = txtBaseCount.Text;
                 empdetail.BaseCity = txtBaseCity.Text;
                 empdetail.BaseState = txtBaseState.Text;
-                empdetail.Class = Convert.ToInt32(txtClass.Text);
+                empdetail.Class = txtClass.Text;
                 empdetail.CountryTeam = txtCountryTeam.Text;
                 empdetail.EmploymentStatus = Convert.ToInt32(txtEmployeeStatus.Text);
 
@@ -474,7 +512,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
                 dgChange.DataSource = _presenter.CurrentEmployee.EmployeeDetails;
                 dgChange.DataBind();
-
+             
 
 
             }
