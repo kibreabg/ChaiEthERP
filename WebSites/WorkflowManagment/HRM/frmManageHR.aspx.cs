@@ -6,10 +6,10 @@ using Chai.WorkflowManagment.CoreDomain.HRM;
 using System.Collections.Generic;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using System.Web.UI.WebControls;
-//using Microsoft.Office.Interop.Word;
-//using Microsoft.Office.Core;
+using Microsoft.Office.Interop.Word;
+using Microsoft.Office.Core;
 using System.Reflection;
-//using Word = Microsoft.Office.Interop;
+using Word = Microsoft.Office.Interop;
 using System.IO;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
@@ -22,6 +22,28 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
     {
         private ManageHRPresenter _presenter;
 
+
+        private void FindAndReplace(Microsoft.Office.Interop.Word.Application wordApp, object findText, object replaceWithText)
+        {
+            object matchCase = true;
+            object matchWholeWord = true;
+            object matchWildCards = true;
+            object matchSoundLike = true;
+            object matchAllForms = true;
+            object forward = true;
+            object format = false;
+            object matchKashida = false;
+            object matchDiactities = false;
+            object matchAlefHamza = false;
+            object matchControl = false;
+            object read_only = false;
+            object visible = true;
+            object replace = 2;
+            object wrap = 1;
+
+            wordApp.Selection.Find.Execute(ref findText, ref matchCase, ref matchWholeWord, ref matchSoundLike, ref matchAllForms, ref forward, ref wrap, ref format, ref replaceWithText, ref replace, ref matchKashida, ref matchDiactities, ref matchAlefHamza, ref matchControl);
+
+        }
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!this.IsPostBack)
@@ -42,9 +64,9 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             this._presenter.OnViewLoaded();
             BindContracts();
             BindEmployeeDetail();
-
             BindTermination();
-
+            btnPAFNew.Visible = false;
+            btnPAFNew.Visible = false;
         }
 
 
@@ -99,7 +121,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         private void AddContracts()
         {
-            if (btnAddcontract.Text == "Update Contract")
+            if (btnAddcontract.Text == "Update Contracts")
             {
                 var id = Convert.ToInt32(dgContractDetail.SelectedDataKey[0]) != 0 ? Convert.ToInt32(dgContractDetail.SelectedDataKey[0]) : 0;
 
@@ -111,19 +133,21 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     Contract cont = _presenter.CurrentEmployee.GetContract(id);
 
 
-                    if (_presenter.CurrentEmployee.GetContract(_presenter.GetLastContrcatId()).ContractEndDate < Convert.ToDateTime(StartDate))
-                    {
+                   // if (_presenter.CurrentEmployee.GetContract(_presenter.GetLastContrcatId()).ContractEndDate < Convert.ToDateTime(StartDate))
+                   // {
                         cont.ContractStartDate = Convert.ToDateTime(StartDate);
                         cont.ContractEndDate = Convert.ToDateTime(EndDate);
-                        cont.Reason = ddlReason.Text;
-                        cont.Status = ddlStatus.Text;
-                        _presenter.CurrentEmployee.Contracts.Add(cont);
+                        cont.Reason = ddlReason.SelectedItem.Text;
+                        cont.Status = ddlStatus.SelectedItem.Text;
+                    _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
+                    
                         dgContractDetail.EditIndex = -1;
                         dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
                         dgContractDetail.DataBind();
-                    }
-                    else
-                        Master.ShowMessage(new AppMessage("Current Contract Date must not be less than previous Contract Date ", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                        ClearContractFormFields();
+                   // }
+                   // else
+                      //  Master.ShowMessage(new AppMessage("Current Contract Date must not be less than previous Contract Date ", Chai.WorkflowManagment.Enums.RMessageType.Info));
                 }
             }
             else if (btnAddcontract.Text == "Add Contract")
@@ -134,24 +158,31 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 var EndDate = txtEndDate.Text != "" ? txtEndDate.Text : " ";
                 Contract cont = new Contract();
 
-             
+                if (_presenter.CurrentEmployee.GetContract(_presenter.GetLastContrcatId()).ContractEndDate < Convert.ToDateTime(StartDate))
+                {
                     cont.ContractStartDate = Convert.ToDateTime(StartDate);
                     cont.ContractEndDate = Convert.ToDateTime(EndDate);
-                    cont.Reason = ddlReason.Text;
-                    cont.Status = ddlStatus.Text;
+                    cont.Reason = ddlReason.SelectedItem.Text;
+                    cont.Status = ddlStatus.SelectedItem.Text;
                     _presenter.CurrentEmployee.Contracts.Add(cont);
                     dgContractDetail.EditIndex = -1;
                     dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
                     dgContractDetail.DataBind();
-              
+                    ClearContractFormFields();
+                }
+                else
+                    Master.ShowMessage(new AppMessage("Current Contract Date must not be less than previous Contract Date ", Chai.WorkflowManagment.Enums.RMessageType.Info));
+
+
+
             }
 
 
 
 
 
-            }
-       
+        }
+
 
 
 
@@ -184,8 +215,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             txtStartDate.Text = string.Empty;
             txtEndDate.Text = string.Empty;
 
-            ddlReason.SelectedValue = string.Empty;
-            ddlStatus.SelectedValue = string.Empty;
+            ddlReason.SelectedValue = "0";
+            ddlStatus.SelectedValue = "0";
         }
 
         private void ClearTerminationFormFields()
@@ -217,37 +248,41 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             if (_presenter.CurrentEmployee.Contracts.Count != 0)
             {
 
-                if (_presenter.CurrentEmployee.GetContract(_presenter.GetLastContrcatId()).Reason == "New Hire")
+                if (_presenter.CurrentEmployee.GetContract(_presenter.GetLastContrcatId()).Reason == "New Hire" || _presenter.CurrentEmployee.GetContract(_presenter.GetLastContrcatId()).Reason == "Renewal" || _presenter.CurrentEmployee.GetContract(_presenter.GetLastContrcatId()).Reason == "Rehire")
+
                 {
                     ddlReason.Items.FindByValue("New Hire").Attributes.Add("Disabled", "Disabled");
+                    if (_presenter.CurrentEmployee.GetContract(_presenter.GetLastContrcatId()).Status == "In Active")
+                    {
+
+                        ddlReason.Items.FindByValue("Renewal").Text = "Rehire";
+                        
+                    }
                 }
                 
-                btnPAFChange.Visible = true;
+
             }
             else
             {
 
-                
-                btnPAFNew.Visible = true;
-            }
 
+              
+            }
             dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
             dgContractDetail.DataBind();
+           
         }
 
         public void BindEmployeeDetail()
         {
-            if (_presenter.CurrentEmployee.EmployeeDetails.Count != 0)
-            {
-                btnPAFChange.Visible = true;
-
-            }
-            else
+            if (_presenter.CurrentEmployee.GetContract(_presenter.GetLastContrcatId()).Reason == "New Hire")
             {
                 btnPAFNew.Visible = true;
-
             }
-            dgChange.DataSource = _presenter.CurrentEmployee.EmployeeDetails;
+            else{
+                btnPAFChange.Visible = true;
+            }
+                dgChange.DataSource = _presenter.CurrentEmployee.EmployeeDetails;
             dgChange.DataBind();
         }
 
@@ -260,48 +295,92 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         private void PrintTransaction()
         {
+            
+            GridViewRow row = dgChange.Rows[dgChange.Rows.Count - 1];
+            GridViewRow row1 = dgChange.Rows[dgChange.Rows.Count - 2];
+          
+            Int32 rowIndex = row.RowIndex;
+            int change = Convert.ToInt32(dgChange.DataKeys[rowIndex].Value);
+            Int32 rowIndex1 = row1.RowIndex;
+            int current = Convert.ToInt32(dgChange.DataKeys[rowIndex1].Value);
+            GridViewRow row2 = dgContractDetail.Rows[dgContractDetail.Rows.Count - 1];
+           
+             
             //lblEmployeeMainIDRes.Text=_presenter.CurrentEmployee.AppUser.EmployeeNo;
             lblFirstNameResult.Text = _presenter.CurrentEmployee.FirstName;
             lbliddleNameResult.Text = _presenter.CurrentEmployee.LastName;
             lblLastNameResult.Text = _presenter.CurrentEmployee.LastName;
             lblEmailResult.Text = _presenter.CurrentEmployee.ChaiEMail;
-            lblBaseCityCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).BaseCity.ToString();
-            lblBaseCityChange.Text = txtBaseCity.Text;
-            lblBaseCountryCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).BaseCountry.ToString();
-            lblBaseCountryChange.Text = txtBaseCount.Text;
-            lblBaseStateCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).BaseState.ToString();
-            lblBaseStateChange.Text = txtBaseState.Text;
-            lblClassCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).Class.ToString();
-            lblClassChange.Text = txtClass.Text;
-            lblCountryTeamCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).CountryTeam.ToString();
-            lblCountryTeamChange.Text = txtCountryTeam.Text;
-            lblDescJobCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).DescriptiveJobTitle.ToString();
-            lblDescJobChange.Text = txtDescJT.Text;
+            lblBaseCityCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(current).BaseCity.ToString();
+            lblBaseCityChange.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).BaseCity.ToString();            
+            lblBaseCountryCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(current).BaseCountry.ToString();
+            lblBaseCountryChange.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).BaseCountry.ToString();
+            lblBaseStateCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).BaseState.ToString();
+            lblBaseStateChange.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).BaseState.ToString();
+            lblClassCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(current).Class.ToString();
+            lblClassChange.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).Class.ToString(); 
+            lblEmpStatCurr.Text= _presenter.CurrentEmployee.GetEmployeeDetails(current).EmploymentStatus.ToString();
+            lblEmpStatChange.Text= _presenter.CurrentEmployee.GetEmployeeDetails(change).EmploymentStatus.ToString();
+            lblCountryTeamCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(current).CountryTeam.ToString();
+            lblCountryTeamChange.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).CountryTeam.ToString();
+            lblOffJobCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(current).JobTitle.ToString();
+            lblOffJobChange.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).JobTitle.ToString();
+            lblDescJobCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(current).DescriptiveJobTitle.ToString();
+            lblDescJobChange.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).DescriptiveJobTitle.ToString();
+            lblProgramCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(current).Program.ProgramName.ToString();
+            lblProgramChange.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).Program.ProgramName.ToString();
+            if (row2.Cells[3].Text == "Active")
+            {
+                lblEffectiveDateRes.Text = _presenter.CurrentEmployee.GetContract(_presenter.GetLastContrcatId()).ContractStartDate.ToShortDateString();
+                lblReasonRes.Text = _presenter.CurrentEmployee.GetContract(_presenter.GetLastContrcatId()).Reason.ToString();
+            }
             // lblDurationOfCont.Text = Convert.ToDateTime((_presenter.CurrentEmployee.GetContract(_presenter.GetLastEmployeeDetailId()).ContractEndDate - _presenter.CurrentEmployee.GetContract(_presenter.GetLastEmployeeDetailId()).ContractEndDate)).Month.ToString()+"Month";
-            lblEffectiveDateRes.Text = txtStartDate.Text;
-            lblAnnualBaseSalaryCurr.Text = (12 * (_presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).Salary)).ToString();
-            lblAnnualBaseSalaryChange.Text = (12 * Convert.ToDecimal(txtSalary.Text)).ToString();
-            lblEmpManCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).Supervisor.ToString();
-            lblEmpManChange.Text = ddlSuperVisor.Text;
+           
+            lblAnnualBaseSalaryCurr.Text = (12 * (_presenter.CurrentEmployee.GetEmployeeDetails(current).Salary)).ToString();
+            lblAnnualBaseSalaryChange.Text = (12 * (_presenter.CurrentEmployee.GetEmployeeDetails(change).Salary)).ToString();
+            lblEmpManCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(current).Supervisor.ToString();
+            lblEmpManCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).Supervisor.ToString();
+            lblReporttoCurr.Text = _presenter.CurrentEmployee.GetEmployeeDetails(current).ReportsTo.ToString();
+            lblReporttoChange.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).ReportsTo.ToString();
+
 
         }
         private void PrintTransactionnew()
         {
+
+            GridViewRow row = dgChange.Rows[dgChange.Rows.Count - 1];
+           
+
+            Int32 rowIndex = row.RowIndex;
+            int change = Convert.ToInt32(dgChange.DataKeys[rowIndex].Value);
+           
+            GridViewRow row2 = dgContractDetail.Rows[dgContractDetail.Rows.Count - 1];
+
+
             //lblEmployeeMainIDRes.Text=_presenter.CurrentEmployee.AppUser.EmployeeNo;
-            lblFirstNameResultnew.Text = _presenter.CurrentEmployee.FirstName;
-            lbliddleNameResultnew.Text = _presenter.CurrentEmployee.LastName;
-            lblLastNameResultnew.Text = _presenter.CurrentEmployee.LastName;
-            lblEmailResultnew.Text = _presenter.CurrentEmployee.ChaiEMail;
-            lblBaseCitynew.Text = txtBaseCity.Text;
-            lblBasCountrynew.Text = txtBaseCount.Text;
-            lblBaseStatenew.Text = txtBaseState.Text;
-            lblClassnew.Text = txtClass.Text;
-            lblCountryTeamnew.Text = txtCountryTeam.Text;
-            lblDescJobnew.Text = txtDescJT.Text;
-            // lblDurationOfCont.Text = Convert.ToDateTime((_presenter.CurrentEmployee.GetContract(_presenter.GetLastEmployeeDetailId()).ContractEndDate - _presenter.CurrentEmployee.GetContract(_presenter.GetLastEmployeeDetailId()).ContractEndDate)).Month.ToString()+"Month";
-            lblEffectiveDateRes.Text = txtStartDate.Text;
-            lblAnnualBaseSalaryres.Text = (12 * Convert.ToDecimal(txtSalary.Text)).ToString();
-            lblEmpManres.Text = ddlSuperVisor.Text;
+            lblFirstNameResult.Text = _presenter.CurrentEmployee.FirstName;
+            lbliddleNameResult.Text = _presenter.CurrentEmployee.LastName;
+            lblLastNameResult.Text = _presenter.CurrentEmployee.LastName;
+            lblEmailResult.Text = _presenter.CurrentEmployee.ChaiEMail;
+            lblBaseCityres.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).BaseCity.ToString();
+            lblBaseCountryres.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).BaseCountry.ToString();
+          
+            lblBaseStateres.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).BaseState.ToString();
+            lblClassres.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).Class.ToString();
+            lblEmpStatRes.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).EmploymentStatus.ToString();
+            lblCountryTeamres.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).CountryTeam.ToString();
+            lblOffJobres.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).JobTitle.ToString();
+            lblDescJobres.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).DescriptiveJobTitle.ToString();
+            lblProgramres.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).Program.ProgramName.ToString();
+            if (row2.Cells[3].Text == "Active")
+            {
+                lblEffectiveDateResnew.Text = _presenter.CurrentEmployee.GetContract(_presenter.GetLastContrcatId()).ContractStartDate.ToShortDateString();
+                lblReasonResnew.Text = _presenter.CurrentEmployee.GetContract(_presenter.GetLastContrcatId()).Reason.ToString();
+            }
+            // lblDurationOfCont.Text = Convert.ToDateTime((_presenter.CurrentEmployee.GetContract(_presenter.GetLastEmployeeDetailId()).ContractEndDate - _presenter.CurrentEmployee.GetContract(_presenter.GetLastEmployeeDetailId()).ContractEndDate)).Month.ToString()+"Month";    
+            lblAnnualBaseSalaryres.Text = (12 * (_presenter.CurrentEmployee.GetEmployeeDetails(change).Salary)).ToString();
+            lblEmpManres.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).Supervisor.ToString();
+            lblReporttores.Text = _presenter.CurrentEmployee.GetEmployeeDetails(change).ReportsTo.ToString();
 
         }
         private void PrintTransactionTermination()
@@ -315,7 +394,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
             lblClassResTer.Text = _presenter.CurrentEmployee.GetEmployeeDetails(_presenter.GetLastEmployeeDetailId()).Class.ToString();
 
-
+            ClearTerminationFormFields();
             // lblDurationOfCont.Text = Convert.ToDateTime((_presenter.CurrentEmployee.GetContract(_presenter.GetLastEmployeeDetailId()).ContractEndDate - _presenter.CurrentEmployee.GetContract(_presenter.GetLastEmployeeDetailId()).ContractEndDate)).Month.ToString()+"Month";
 
 
@@ -353,15 +432,11 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         private void BindEmployee()
         {
-
+            imgProfilePic.ImageUrl = _presenter.CurrentEmployee.AppUser.Employee.Photo;
             txtFirstName.Text = _presenter.CurrentEmployee.FirstName;
             txtLastName.Text = _presenter.CurrentEmployee.LastName;
-            ddlGender.Text = _presenter.CurrentEmployee.Gender;
-            txtDOB.Text = Convert.ToDateTime(_presenter.CurrentEmployee.DateOfBirth).ToShortDateString();
-            txtMarital.Text = _presenter.CurrentEmployee.MaritalStatus;
-            txtNation.Text = _presenter.CurrentEmployee.Nationality;
-            txtPerEmail.Text = _presenter.CurrentEmployee.PersonalEmail;
-            txtCellphone.Text = _presenter.CurrentEmployee.CellPhone;
+            txtempid.Text = _presenter.CurrentEmployee.AppUser.EmployeeNo;
+
 
 
 
@@ -389,7 +464,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     empdetail.BaseCountry = txtBaseCount.Text;
                     empdetail.BaseCity = txtBaseCity.Text;
                     empdetail.BaseState = txtBaseState.Text;
-                    empdetail.Class = Convert.ToInt32(txtClass.Text);
+                    empdetail.Class = txtClass.Text;
                     empdetail.CountryTeam = txtCountryTeam.Text;
                     empdetail.EmploymentStatus = Convert.ToInt32(txtEmployeeStatus.Text);
 
@@ -425,7 +500,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 empdetail.BaseCountry = txtBaseCount.Text;
                 empdetail.BaseCity = txtBaseCity.Text;
                 empdetail.BaseState = txtBaseState.Text;
-                empdetail.Class = Convert.ToInt32(txtClass.Text);
+                empdetail.Class = txtClass.Text;
                 empdetail.CountryTeam = txtCountryTeam.Text;
                 empdetail.EmploymentStatus = Convert.ToInt32(txtEmployeeStatus.Text);
 
@@ -437,14 +512,14 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
                 dgChange.DataSource = _presenter.CurrentEmployee.EmployeeDetails;
                 dgChange.DataBind();
-
+             
 
 
             }
         }
 
 
-      
+
 
 
 
@@ -462,6 +537,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     term.LastDateOfEmployee = Convert.ToDateTime(LastDate);
                     term.Employee = _presenter.CurrentEmployee;
                     term.ReccomendationForRehire = ddlRecommendation.Text;
+                    term.TerminationReason = txtTerminationReason.Text;
 
                     _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
                     dgTermination.EditIndex = -1;
@@ -484,7 +560,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 term.LastDateOfEmployee = Convert.ToDateTime(LastDate);
                 term.Employee = _presenter.CurrentEmployee;
                 term.ReccomendationForRehire = ddlRecommendation.Text;
-                term.Employee.GetContract(0).Status = "In Active";
+                term.TerminationReason = txtTerminationReason.Text;
+                term.Employee.GetContract(_presenter.GetLastContrcatId()).Status = "In Active";
                 _presenter.CurrentEmployee.AppUser.IsActive = false;
                 _presenter.CurrentEmployee.Terminations.Add(term);
 
@@ -492,7 +569,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 dgTermination.DataSource = _presenter.CurrentEmployee.Terminations;
                 dgTermination.DataBind();
             }
-            PrintTransactionTermination();
+            // PrintTransactionTermination();
             ClearTerminationFormFields();
         }
 
@@ -627,8 +704,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             txtStartDate.Text = cont.ContractStartDate.ToShortDateString();
             txtEndDate.Text = cont.ContractEndDate.ToShortDateString();
 
-            ddlReason.SelectedValue = cont.Reason;
-            ddlStatus.SelectedValue = cont.Status;
+            ddlReason.SelectedItem.Text = cont.Reason;
+            ddlStatus.SelectedItem.Text = cont.Status;
             btnAddcontract.Text = "Update Contracts";
 
 
@@ -752,7 +829,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         protected void dgContractDetail_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-           
+
         }
 
         protected void btnPAFNew_Click(object sender, EventArgs e)
@@ -774,6 +851,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
             dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
             dgContractDetail.DataBind();
+            Master.ShowMessage(new AppMessage("Contract Detail Is Successfully Deleted!", RMessageType.Info));
         }
 
 
@@ -784,6 +862,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
             dgChange.DataSource = _presenter.CurrentEmployee.EmployeeDetails;
             dgChange.DataBind();
+            Master.ShowMessage(new AppMessage("Employee Detail Is Successfully Deleted!", RMessageType.Info));
         }
 
         protected void dgTermination_RowDeleting(object sender, GridViewDeleteEventArgs e)
@@ -793,12 +872,20 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
             dgTermination.DataSource = _presenter.CurrentEmployee.Terminations;
             dgTermination.DataBind();
+            Master.ShowMessage(new AppMessage("Termination Is Successfully Deleted!", RMessageType.Info));
         }
+
+
+
+
+
+      
+
+
+
+
+      
     }
-
-
-
-
 
 }
 

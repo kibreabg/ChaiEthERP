@@ -173,6 +173,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         }
 
+     
         public void SaveOrUpdateEmployeeDetail(EmployeeDetail EmployeeDetail)
         {
             _controller.SaveOrUpdateEntity(EmployeeDetail);
