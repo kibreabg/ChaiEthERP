@@ -123,6 +123,10 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
         {
             _controller.MoveDownPanNode(panid);
         }
+        public void DeleteTaskPanNode(TaskPanNode pannode)
+        {
+            _controller.DeleteEntity(pannode);
+        }
     }
 }
 

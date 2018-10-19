@@ -65,7 +65,7 @@
    
     <asp:GridView ID="grvNodes" runat="server" AutoGenerateColumns="False" CellPadding="3" CssClass="table table-striped table-bordered table-hover"  PagerStyle-CssClass="paginate_button active" AlternatingRowStyle-CssClass=""
         GridLines="Horizontal"  OnRowDataBound="grvNodes_RowDataBound"
-        PageSize="10" onrowcommand="grvNodes_RowCommand">
+        PageSize="10" onrowcommand="grvNodes_RowCommand" OnRowDeleting="grvNodes_RowDeleting">
         
         <Columns>
             <asp:TemplateField HeaderText="Node Title" ItemStyle-Width="300px">

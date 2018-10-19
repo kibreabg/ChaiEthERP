@@ -219,9 +219,14 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
 
                     if (pm != null)
                     {
+                        
+                    
+                        if (pm.Id > 0)
+                        {
+                            _presenter.DeleteTaskPanNode(pm);
+                        }
                         _presenter.CurrentTaskpan.TaskPanNodes.Remove(pm);
-
-                        _presenter.SaveOrUpdateTab();
+                       // _presenter.SaveOrUpdateTab();
                         PopNodesToDdl();
                         BindTaskpanNodes();
                         Master.ShowMessage(new AppMessage("Task pan node was removed successfully.", RMessageType.Info));
@@ -233,6 +238,11 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                 }
             }
         }
-}
+
+        protected void grvNodes_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+
+        }
+    }
 }
 
