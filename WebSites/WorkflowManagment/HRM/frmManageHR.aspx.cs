@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using System.Web.UI.WebControls;
 using Microsoft.Office.Interop.Word;
-using Microsoft.Office.Core;
 using System.Reflection;
 using Word = Microsoft.Office.Interop;
 using System.IO;

@@ -91,6 +91,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             // txtEmployeeNo.Text = employee.EmpId;
             //txtEmployeeNo.Text = CurrentUser.EmployeeNo;
             txtDutystation.Text = employee.GetEmployeeDutyStation();
+            txtEmployeeNo.Text = CurrentUser.EmployeeNo;
             if (_presenter.CurrentLeaveRequest.Id <= 0)
             {
 

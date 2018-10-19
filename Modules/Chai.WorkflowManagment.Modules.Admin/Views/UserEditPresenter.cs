@@ -95,7 +95,7 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                 throw new Exception("Password is required");
             //Send Email on their personal email the first time they're registered.
             if (user.Id <= 0)
-                EmailSender.Send(user.PersonalEmail, "Welcome to the CHAI ERP System", "Hello " + (user.FullName).ToUpper() + "You can access the ERP system using your username " + user.UserName + " and your password chai123 by clicking the following link");
+                EmailSender.Send(user.PersonalEmail, "Welcome to CHAI ERP System", "Hello " + (user.FullName).ToUpper() + " You can access the ERP system using your username " + user.UserName + " and your password chai123 by clicking the following link");
 
             _controller.SaveOrUpdateUser(user);
         }
