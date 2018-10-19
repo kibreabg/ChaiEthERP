@@ -27,7 +27,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         public override void OnViewLoaded()
         {
             // TODO: Implement code that will be executed every time the view loads
-            if (CurrentUser().Id> 0)
+            if (View.GetEmployeeId > 0)
             {
                 _controller.CurrentObject = _adminController.GetUser(View.GetEmployeeId);
             }
@@ -39,9 +39,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             // TODO: Implement code that will be executed the first time the view loads
             if (_appUser == null)
             {
-                int id = CurrentUser().Id;
-                if (id > 0)
-                    _controller.CurrentObject = _adminController.GetUser(id);
+                if (View.GetEmployeeId > 0)
+                    _controller.CurrentObject = _adminController.GetUser(View.GetEmployeeId);
                 else
                     _controller.CurrentObject = new AppUser();
             }

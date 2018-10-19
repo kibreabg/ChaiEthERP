@@ -182,6 +182,7 @@
                                         <div class="row">
                                             <div style="padding-left: 13px; float: left; position: relative; width: 16.66666667%; height: 150px; border: 3px solid #fff;">
                                                 <asp:Image ID="imgProfilePic" Width="100%" Height="100%" runat="server" />
+                                                <asp:HiddenField ID="hfProfilePic" runat="server" />
                                                 <div class="form-group">
                                                     <div class="smart-form">
                                                         <div class="input input-file">
@@ -651,9 +652,13 @@
                                                         <span class="input-group-addon"><i class="fa fa-graduation-cap fa-fw"></i></span>
                                                         <asp:DropDownList ID="ddlEduLevel" CssClass="form-control" runat="server">
                                                             <asp:ListItem Value="" Text="Select Educational Level"></asp:ListItem>
-                                                            <asp:ListItem Value="Bachelor" Text="Bachelor"></asp:ListItem>
-                                                            <asp:ListItem Value="Masters" Text="Masters"></asp:ListItem>
                                                             <asp:ListItem Value="PHD" Text="PHD"></asp:ListItem>
+                                                            <asp:ListItem Value="Masters" Text="Masters"></asp:ListItem>
+                                                            <asp:ListItem Value="Post-Graduate Diploma" Text="Post-Graduate Diploma"></asp:ListItem>
+                                                            <asp:ListItem Value="Bachelor" Text="Bachelor"></asp:ListItem>
+                                                            <asp:ListItem Value="Diploma" Text="Diploma"></asp:ListItem>
+                                                            <asp:ListItem Value="Certificate" Text="Certificate"></asp:ListItem>
+                                                            <asp:ListItem Value="High-School Graduate" Text="High-School Graduate"></asp:ListItem>                                                            
                                                         </asp:DropDownList>
                                                     </div>
                                                 </div>
@@ -837,12 +842,12 @@
                                     </fieldset>
                                 </div>
                                 <div class="step-pane" id="step6">
-                                    <h3><strong>Step 5 </strong>- Finished!</h3>
+                                    <h3><strong>Step 5 </strong>- Almost Done!</h3>
                                     <br>
                                     <br>
-                                    <h1 class="text-center text-success"><i class="fa fa-check"></i>Congratulations!
+                                    <h1 class="text-center text-success"><i class="fa fa-check"></i>You have completed updating your profile! Please submit all required certificates to HR!
 													<br>
-                                        <small>Click finish to end wizard</small></h1>
+                                        <small>Click Finish to end updating your profile!</small></h1>
                                     <br>
                                     <br>
                                     <br>
