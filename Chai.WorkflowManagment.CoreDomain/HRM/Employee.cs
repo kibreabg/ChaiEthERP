@@ -260,15 +260,15 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         #region Leave calculation Methods
         public virtual DateTime GetEmployeeHiredDate()
         {
-            if (Contracts.Count != 0)
+            if (AppUser.ReHiredDate != null)
             {
-                foreach (Contract cn in Contracts)
-                {
-                    if (cn.Reason == "ReHired")
-                        return cn.ContractStartDate;
-                }
-                return Contracts[0].ContractStartDate;
+                return AppUser.ReHiredDate.Value;
             }
+            else if (AppUser.HiredDate != null)
+            {
+                return AppUser.HiredDate.Value;
+            }
+            
             else
                 return new DateTime();
             

@@ -29,7 +29,10 @@ namespace Chai.WorkflowManagment.Modules.Admin
         {
             _workspace = ZadsServices.Workspace;
         }
-
+        public AppUser CurrentUser()
+        {
+            return GetCurrentUser();
+        }
         #region Security And Administration
         public IList<Role> GetRoles
         {

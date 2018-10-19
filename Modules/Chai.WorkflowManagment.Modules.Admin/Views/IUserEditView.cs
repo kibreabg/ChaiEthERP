@@ -19,6 +19,8 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
         string GetPassword { get; }
         int Superviser { get; }
         string GetEmployeeNo { get; }
+        DateTime GetHiredDate { get;}
+        string GetReHiredDate { get; }
         EmployeePosition EmployeePosition { get; }
        
        

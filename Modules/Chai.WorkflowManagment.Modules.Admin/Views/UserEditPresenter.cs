@@ -73,6 +73,12 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
             user.DateModified = DateTime.Now;
             user.EmployeePosition = View.EmployeePosition;
             user.Superviser = View.Superviser;
+            user.HiredDate = View.GetHiredDate;
+            if (!string.IsNullOrEmpty(View.GetReHiredDate.ToString()))
+            {
+                user.ReHiredDate = Convert.ToDateTime(View.GetReHiredDate);
+            }
+            
             if (View.GetPassword.Length > 0)
             {
                 try
@@ -144,6 +150,10 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
         public Project GetProject(int ProjectId)
         {
             return _controller.GetProject(ProjectId);
+        }
+        public AppUser GetCurrentUser()
+        {
+            return _controller.GetCurrentUser();
         }
     }
 }

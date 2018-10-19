@@ -48,7 +48,26 @@
                             <section class="col col-6">
                                 <label class="label">Employee ID.</label>
                                 <label class="input">
+                                     
                                     <asp:TextBox ID="txtEmployeeNo" runat="server"></asp:TextBox></label>
+                            </section>
+                        </div>
+                        <div class="row">
+                            <section class="col col-6">
+                                <label class="label">Hired Date</label>
+                                <label class="input">
+                                    <asp:TextBox ID="txtHiredDate" runat="server" CssClass="form-control datepicker"
+                                        data-dateformat="mm/dd/yy"></asp:TextBox></label>
+                                <asp:RequiredFieldValidator ID="RfvHiredDate" runat="server" ControlToValidate="txtHiredDate" Display="Dynamic" CssClass="validator" ErrorMessage="Hired Date Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Save"></asp:RequiredFieldValidator>
+                            </section>
+                        </div>
+                              <div class="row">
+                            <section class="col col-6">
+                                <label class="label">Re-Hired Date</label>
+                                <label class="input">
+                                    <asp:TextBox ID="txtReHiredDate" runat="server" CssClass="form-control datepicker"
+                                        data-dateformat="mm/dd/yy"></asp:TextBox></label>
+                                
                             </section>
                         </div>
                         <div class="row">

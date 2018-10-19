@@ -39,7 +39,9 @@ namespace Chai.WorkflowManagment.CoreDomain.Users
         public string LastIp { get; set; }
         public System.DateTime DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
-        public Nullable<System.DateTime> TerminationDate { get; set; }        
+        public Nullable<System.DateTime> TerminationDate { get; set; }
+        public Nullable<System.DateTime> HiredDate { get; set; }
+        public Nullable<System.DateTime> ReHiredDate { get; set; }
         public virtual IList<AppUserRole> AppUserRoles
         {
             get { return _appUserRole; }
