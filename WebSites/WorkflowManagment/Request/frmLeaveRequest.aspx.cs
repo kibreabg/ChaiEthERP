@@ -141,7 +141,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 _presenter.CurrentLeaveRequest.Balance = txtbalance.Text != "" ? Convert.ToDecimal(txtbalance.Text) : 0;
                 _presenter.CurrentLeaveRequest.Forward = txtforward.Text != "" ? Convert.ToDecimal(txtforward.Text) : 0;
                 _presenter.CurrentLeaveRequest.Type = ddltype.SelectedValue;
-                _presenter.CurrentLeaveRequest.FilePath = UploadFile();
+                if(ddlLeaveType.SelectedItem.Text == "Sick Leave")
+                    _presenter.CurrentLeaveRequest.FilePath = UploadFile();
                 SaveLeaveRequestStatus();
 
             }
