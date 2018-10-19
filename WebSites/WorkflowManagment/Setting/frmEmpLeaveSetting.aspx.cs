@@ -84,7 +84,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                     if (detail != null)
                     {
                         TextBox txtOpeningLeavebalance = dgi.FindControl("txtOpeningLeavebalance") as TextBox;
-                        detail.SDLeaveBalance = Convert.ToInt32(txtOpeningLeavebalance.Text);
+                        detail.SDLeaveBalance = Convert.ToDecimal(txtOpeningLeavebalance.Text);
                         TextBox txtLeaveSettingDate = dgi.FindControl("txtOpeningLeavebalancedate") as TextBox;
                         detail.LeaveSettingDate = Convert.ToDateTime(txtLeaveSettingDate.Text);
                         detail.AppUser = detail.AppUser;
@@ -124,7 +124,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 detail = _presenter.GetEmployee(id);
                 if (detail != null)
                 {
-                    decimal balance = Convert.ToInt32(detail.EmployeeLeaveBalanceYE()) - _presenter.EmpLeaveTaken(detail.Id, detail.LeaveSettingDate.Value);
+                    decimal balance = Convert.ToDecimal(detail.EmployeeLeaveBalanceYE()) - _presenter.EmpLeaveTaken(detail.Id, detail.LeaveSettingDate.Value);
                     if (balance > 20)
                         detail.SDLeaveBalance = 20;
                     else
