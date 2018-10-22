@@ -118,32 +118,24 @@
         <br />
 
     </div>
-    <asp:Panel ID="pnlApproval"  runat="server">
+    <asp:Panel ID="pnlApproval" runat="server">
+        
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        &times;</button>
-
-                </div>
+             
                 <div class="modal-body no-padding">
                     <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
                         <header>
-                            <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                            
                             <h2>Process Request</h2>
                         </header>
                         <div>
-                            <div class="jarviswidget-editbox"></div>
+                           
                             <div class="widget-body no-padding">
                                 <div class="smart-form">
                                     <fieldset>
                                         <div class="row">
                                              <section class="col col-3">
-                                                <asp:Label ID="lblDS" runat="server" Text="Employee Duty Station" CssClass="label" Visible="false"></asp:Label>
-
-                                                <asp:Label ID="lblEDS" runat="server" Text="" CssClass="label" Visible="false" ></asp:Label>
-                                            </section>
-                                            <section class="col col-3">
                                                 <asp:Label ID="lblLeaveType" runat="server" Text="Leave Type" CssClass="label"></asp:Label>
 
                                                 <asp:Label ID="lblLeaveTyperes" runat="server" Text=" " CssClass="label"></asp:Label>
@@ -153,7 +145,7 @@
 
                                                 <asp:Label ID="lblrequesteddaysres" runat="server" Text="" CssClass="label"></asp:Label>
                                             </section>
-                                             <section class="col col-3">
+                                             <section class="col col-6">
                                                 <asp:Label ID="lblViewBalance" runat="server" Text="Employee Leave Balance as of Today" CssClass="label" Visible="false"></asp:Label>
 
                                                 <asp:Label ID="lblViewBalRes" runat="server" Text="" CssClass="label" Visible="false" ></asp:Label>
@@ -203,7 +195,7 @@
             </div>
         </div>
         <!-- /.modal-content -->
-
+        
     </asp:Panel>
      <asp:ModalPopupExtender runat="server" BackgroundCssClass="modalBackground"
         Enabled="True" TargetControlID="btnPop" PopupControlID="pnlApproval" CancelControlID="btnCancelPopup"
