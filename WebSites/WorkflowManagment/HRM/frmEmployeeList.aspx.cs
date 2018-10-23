@@ -55,8 +55,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 {
 
                     Employee emp = e.Row.DataItem as Employee;
-                    e.Row.Cells[2].Text = emp.GetEmployeeProgram();
-                    e.Row.Cells[3].Text = emp.GetEmployeePosition();
+               ////     e.Row.Cells[2].Text = emp.GetEmployeeProgram();
+               ////     e.Row.Cells[3].Text = emp.GetEmployeePosition();
                     decimal balance = Convert.ToInt32(emp.EmployeeLeaveBalance()) - _presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value);
                     e.Row.Cells[4].Text = balance.ToString();
                     decimal balanceYE = Convert.ToInt32(emp.EmployeeLeaveBalanceYE() - _presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value));
