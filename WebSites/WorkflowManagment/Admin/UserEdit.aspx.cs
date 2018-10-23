@@ -65,6 +65,8 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                 this.lblUsername.Text = _presenter.CurrentUser.UserName;
                 this.lblUsername.Visible = true;
                 this.rfvUsername.Enabled = false;
+                this.txtHiredDate.Text = _presenter.CurrentUser.HiredDate != null ?_presenter.CurrentUser.HiredDate.Value.ToString() : "";
+                this.txtReHiredDate.Text = _presenter.CurrentUser.ReHiredDate != null ? _presenter.CurrentUser.ReHiredDate.Value.ToString(): "";
             }
             else
             {
@@ -78,6 +80,7 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
             this.txtEmployeeNo.Text = _presenter.CurrentUser.EmployeeNo;
             this.txtEmail.Text = _presenter.CurrentUser.Email;
             this.txtPersonalEmail.Text = _presenter.CurrentUser.PersonalEmail;
+           
             this.ddlEmployeePostion.SelectedValue = _presenter.CurrentUser.EmployeePosition != null ? _presenter.CurrentUser.EmployeePosition.Id.ToString():"0";
            
             this.ddlSuperviser.SelectedValue = _presenter.CurrentUser.Superviser.ToString();
@@ -201,7 +204,14 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
         {
             get { return this.txtPersonalEmail.Text; }
         }
-
+        public DateTime GetHiredDate
+        {
+            get { return Convert.ToDateTime(this.txtHiredDate.Text); }
+        }
+        public string GetReHiredDate
+        {
+            get{return this.txtReHiredDate.Text;}
+        }
         public bool GetIsActive
         {
             get { 
@@ -235,13 +245,33 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
         protected void rptRoles_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             Role role = e.Item.DataItem as Role;
+            CheckBox chkView = (CheckBox)e.Item.FindControl("chkRole");
             if (role != null)
             {
-                CheckBox chkView = (CheckBox)e.Item.FindControl("chkRole");
+               
                 chkView.Checked = this._presenter.CurrentUser.IsInRole(role);
 
                 // Add RoleId to the ViewState with the ClientID of the repeateritem as key.
                 this.ViewState[e.Item.UniqueID] = role.Id;
+            
+            foreach (AppUserRole userroles in _presenter.GetCurrentUser().AppUserRoles)
+            {
+                if (userroles.Role.Name.Contains("Administrator"))
+                {
+                    if (role.Name == "Administrator" && (_presenter.GetCurrentUser().EmployeePosition.PositionName.Contains("HR")))
+                    {
+                        e.Item.Visible = false;
+                        chkView.Visible = false;
+                        break;
+                    }
+                    else
+                    {
+                            e.Item.Visible = true;
+                            chkView.Visible = true;
+                    }
+                }
+
+                }
             }
         }
                 
@@ -267,7 +297,7 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
         }
 
 
-        
+      
     }
 }
 

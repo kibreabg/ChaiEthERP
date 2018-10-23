@@ -58,14 +58,15 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                ////     e.Row.Cells[2].Text = emp.GetEmployeeProgram();
                ////     e.Row.Cells[3].Text = emp.GetEmployeePosition();
                     decimal balance = Convert.ToInt32(emp.EmployeeLeaveBalance()) - _presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value);
-                    e.Row.Cells[4].Text = balance.ToString();
+                    e.Row.Cells[4].Text = emp.AppUser.HiredDate.ToString();
+                    e.Row.Cells[5].Text = balance.ToString();
                     decimal balanceYE = Convert.ToInt32(emp.EmployeeLeaveBalanceYE() - _presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value));
-                    e.Row.Cells[6].Text = balanceYE.ToString();
+                    e.Row.Cells[7].Text = balanceYE.ToString();
                     if (txtContractEndDate.Text != "")
                     {
 
                         decimal balanceCED = Convert.ToInt32(emp.EmployeeLeaveBalanceCED(Convert.ToDateTime(txtContractEndDate.Text))) - _presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value);
-                        e.Row.Cells[5].Text = balanceCED.ToString();
+                        e.Row.Cells[6].Text = balanceCED.ToString();
                     }
         }
 

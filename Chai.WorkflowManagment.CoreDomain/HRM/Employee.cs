@@ -16,7 +16,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             this.Contracts = new List<Contract>();
             this.Educations = new List<Education>();
             this.EmergencyContacts = new List<EmergencyContact>();
-            
+            this.EmployeeDetails = new List<EmployeeDetail>();
             this.FamilyDetails = new List<FamilyDetail>();
             this.Terminations = new List<Termination>();
             this.WorkExperiences = new List<WorkExperience>();
@@ -261,7 +261,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         }
         #endregion
         #region Employee detail
-     /*   public virtual string GetEmployeeDutyStation()
+        public virtual string GetEmployeeDutyStation()
         {
             if (EmployeeDetails.Count != 0)
 
@@ -284,13 +284,13 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                 return EmployeeDetails.Last().Position.PositionName;
             else
                 return "";
-        }*/
+        }
         #endregion
 
         #region Leave calculation Methods
         public virtual DateTime GetEmployeeHiredDate()
         {
-            if (Contracts.Count != 0)
+            if (AppUser.ReHiredDate != null)
             {
                 foreach (Contract cn in Contracts)
                 {

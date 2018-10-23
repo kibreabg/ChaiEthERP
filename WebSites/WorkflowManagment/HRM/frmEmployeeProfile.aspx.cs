@@ -23,14 +23,17 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         {
             if (!this.IsPostBack)
             {
-                this._presenter.OnViewInitialized();
+                this._presenter.OnViewInitialized();                
+            }
+            this._presenter.OnViewLoaded();
+            if(!this.IsPostBack)
+            {
                 BindEmployee();
                 BindFamilyDetails();
                 BindEmergencyContacts();
                 BindEducations();
                 BindWorkExperiences();
             }
-            this._presenter.OnViewLoaded();
         }
 
         [CreateNew]
@@ -144,8 +147,13 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 if (fuProfilePic.HasFile)
                 {
                     fileName = Path.GetFileName(fuProfilePic.PostedFile.FileName);
-                    fuProfilePic.PostedFile.SaveAs(Server.MapPath("~/ProfilePics/") + fileName);
+                    fuProfilePic.PostedFile.SaveAs(Server.MapPath("~/ProfilePics/") + fileName);                    
                 }
+                else if(!String.IsNullOrEmpty(hfProfilePic.Value))
+                {
+                    return  hfProfilePic.Value;
+                }
+
                 return "~/ProfilePics/" + fileName;
             }
         }
@@ -176,6 +184,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 txtCity.Text = _presenter.CurrentAppUser.Employee.City;
                 txtAddress.Text = _presenter.CurrentAppUser.Employee.Address;
                 imgProfilePic.ImageUrl = _presenter.CurrentAppUser.Employee.Photo;
+                hfProfilePic.Value = _presenter.CurrentAppUser.Employee.Photo;
             }
 
 

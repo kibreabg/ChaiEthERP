@@ -73,6 +73,12 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
             user.DateModified = DateTime.Now;
             user.EmployeePosition = View.EmployeePosition;
             user.Superviser = View.Superviser;
+            user.HiredDate = View.GetHiredDate;
+            if (!string.IsNullOrEmpty(View.GetReHiredDate.ToString()))
+            {
+                user.ReHiredDate = Convert.ToDateTime(View.GetReHiredDate);
+            }
+            
             if (View.GetPassword.Length > 0)
             {
                 try
@@ -89,7 +95,7 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                 throw new Exception("Password is required");
             //Send Email on their personal email the first time they're registered.
             if (user.Id <= 0)
-                EmailSender.Send(user.PersonalEmail, "Welcome to the CHAI ERP System", "Hello " + (user.FullName).ToUpper() + "You can access the ERP system using your username " + user.UserName + " and your password chai123 by clicking the following link");
+                EmailSender.Send(user.PersonalEmail, "Welcome to CHAI ERP System", "Hello " + (user.FullName).ToUpper() + " You can access the ERP system using your username " + user.UserName + " and your password chai123 by clicking the following link");
 
             _controller.SaveOrUpdateUser(user);
         }
@@ -144,6 +150,10 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
         public Project GetProject(int ProjectId)
         {
             return _controller.GetProject(ProjectId);
+        }
+        public AppUser GetCurrentUser()
+        {
+            return _controller.GetCurrentUser();
         }
     }
 }
