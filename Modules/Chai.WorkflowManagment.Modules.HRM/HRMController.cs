@@ -126,6 +126,11 @@ namespace Chai.WorkflowManagment.Modules.HRM
             return _workspace.SqlQuery<Contract>(filterExpression).ToList();
 
         }
+
+        public Contract GetEmpContract(int EmpId)
+        {
+            return _workspace.Single<Contract>(x => x.Id == EmpId, y =>y.Status=="Active");
+        }
         public int GetLastContractId()
         {
             if (_workspace.Last<Contract>() != null)

@@ -10,7 +10,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
     public partial class EmployeeDetail : IEntity
     {
         public int Id { get; set; }
-        public virtual Setting.JobTitle JobTitle { get; set; }
+  
        
         public virtual Setting.EmployeePosition Position { get; set; }
 
@@ -30,7 +30,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public string DescriptiveJobTitle { get; set; }
         public int Supervisor { get; set; }
         public int ReportsTo { get; set; }
-        public virtual HRM.Employee Employee { get; set; }
+        public virtual HRM.Contract Contract { get; set; }
     
     }
 }

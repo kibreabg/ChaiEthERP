@@ -97,10 +97,9 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         }
 
-        public JobTitle  GetJobTitle(int id)
+        public Contract GetEmpContract(int id)
         {
-          return  _settingController.GetJobTitle(id);
-
+            return _controller.GetEmpContract(id);
         }
 
         public EmployeePosition GetEmployeePosition(int id)
@@ -120,11 +119,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             return _settingController.GetPrograms();
 
         }
-        public IList<JobTitle> GetJobTitle()
-        {
-            return _settingController.GetJobTitles();
-
-        }
+        
         public IList<EmployeePosition> GetEmployeePositions()
         {
             return _settingController.GetEmployeePositions();

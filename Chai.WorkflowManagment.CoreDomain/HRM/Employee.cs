@@ -16,7 +16,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             this.Contracts = new List<Contract>();
             this.Educations = new List<Education>();
             this.EmergencyContacts = new List<EmergencyContact>();
-            this.EmployeeDetails = new List<EmployeeDetail>();
+            
             this.FamilyDetails = new List<FamilyDetail>();
             this.Terminations = new List<Termination>();
             this.WorkExperiences = new List<WorkExperience>();
@@ -47,7 +47,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public virtual IList<Contract> Contracts { get; set; }
         public virtual IList<Education> Educations { get; set; }
         public virtual IList<EmergencyContact> EmergencyContacts { get; set; }
-        public virtual IList<EmployeeDetail> EmployeeDetails { get; set; }
+       // public virtual IList<EmployeeDetail> EmployeeDetails { get; set; }
         public virtual IList<FamilyDetail> FamilyDetails { get; set; }
         public virtual IList<Termination> Terminations { get; set; }
         public virtual IList<WorkExperience> WorkExperiences { get; set; }
@@ -55,7 +55,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public virtual IList<Warning> Warnings { get; set; }
 
 
-        #region EmployeeDetail
+       /* #region EmployeeDetail
         public virtual EmployeeDetail GetEmployeeDetails(int Id)
         {
 
@@ -79,7 +79,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                 }
             }
         }
-        #endregion
+        #endregion*/
         #region Contracts
         public virtual Contract GetContract(int Id)
         {
@@ -91,8 +91,38 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             }
             return null;
         }
+        public virtual Contract GetPreviousContract()
+        {
+            if (Contracts.Count > 1)
+            {
+                return Contracts[Contracts.Count - 2];
+            }
+            
+            return null;
+        }
+        public virtual Contract GetEmpContract(int Id)
+        {
 
-
+            foreach (Contract CD in Contracts)
+            {
+                if (CD.Employee.Id == Id)
+                    return CD;
+            }
+            return null;
+        }
+        public bool GetInActiveContract()
+        {
+            Contract con = Contracts.Last();
+            if (con.Status == "In Active")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
+        }
         public virtual void RemoveContract(int Id)
         {
             foreach (Contract CD in Contracts)
@@ -231,7 +261,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         }
         #endregion
         #region Employee detail
-        public virtual string GetEmployeeDutyStation()
+     /*   public virtual string GetEmployeeDutyStation()
         {
             if (EmployeeDetails.Count != 0)
 
@@ -254,7 +284,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                 return EmployeeDetails.Last().Position.PositionName;
             else
                 return "";
-        }
+        }*/
         #endregion
 
         #region Leave calculation Methods

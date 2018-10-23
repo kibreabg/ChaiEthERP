@@ -2,6 +2,7 @@
     Title="Manage HR" MasterPageFile="~/Shared/ModuleMaster.master" %>
 
 <%@ MasterType TypeName="Chai.WorkflowManagment.Modules.Shell.BaseMaster" %>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 
 <asp:Content ID="content" ContentPlaceHolderID="DefaultContent" runat="Server">
     <script src="../js/libs/jquery-2.0.2.min.js"></script>
@@ -49,8 +50,8 @@
        
         
           <div class="row"> 
-             
-             <div style="padding-left: 13px; float: left; position: relative; width: 16.66666667%; height: 150px; border: 3px solid #fff;">
+            <div class="form-group">
+             <div  style="padding-left: 13px; float: left; position: relative; width: 16.66666667%; height: 150px; border: 3px solid #fff;">
                                                 
                                                 <asp:Image ID="imgProfilePic" Width="100%" Height="100%" runat="server" />
                                                 <div class="form-group">
@@ -60,9 +61,9 @@
                                                 </div>
                                               
                                             </div>
-                 
+                 </div>
              
-                                                 <div class="widget-body no-padding">
+                                                 <div style= "padding-left: 50px; position: center;">
                                                 <div class="form-group">
                                                     <div class="input-group">
                                                        
@@ -120,12 +121,10 @@
                         <li class="active">
                             <a href="#tab-r1" data-toggle="tab"><span class="badge bg-color-blue txt-color-white"></span> Contract </a>
                         </li>
-                        <li class="">
-                            <a href="#tab-r2" data-toggle="tab"><span class="badge bg-color-blueDark txt-color-white"></span> Employment Detail / History </a>
-                        </li>
+                      
 
                         <li class="">
-                            <a href="#tab-r3" data-toggle="tab"><span class="badge bg-color-greenLight txt-color-white"></span> Exit Management</a>
+                            <a href="#tab-r2" data-toggle="tab"><span class="badge bg-color-greenLight txt-color-white"></span> Exit Management</a>
                         </li>
                         <li class=""></li>
                         <li class=""></li>
@@ -171,12 +170,13 @@
                                         <div class="select">
                                             
                                             <asp:DropDownList ID="ddlReason" runat="server" CssClass="form-control" placeholder="Status" AppendDataBoundItems="True">
-                                                <asp:ListItem Value="0">Select Contract Type</asp:ListItem>
+                                                <asp:ListItem Value=" ">Select Contract Type</asp:ListItem>
                                                 <asp:ListItem Value="New Hire">New Hire</asp:ListItem>
                                                 <asp:ListItem Value="Renewal">Renewal</asp:ListItem>
+                                                <asp:ListItem Value="Rehire">Rehire</asp:ListItem>
                                             </asp:DropDownList>
                                              
-<%--                                            <asp:RequiredFieldValidator ID="RequiredFieldValidatorContType" runat="server" Display="Dynamic" ValidationGroup="Savecont" ErrorMessage="Contract Type Required" InitialValue="0" ControlToValidate="ddlReason" ForeColor="Red"></asp:RequiredFieldValidator>--%>
+                                          <asp:RequiredFieldValidator ID="RequiredFieldValidatorContType" runat="server" Display="Dynamic" ValidationGroup="Savecont" ErrorMessage="Contract Type Required" InitialValue="0" ControlToValidate="ddlReason" ForeColor="Red"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
                                 </div>
@@ -189,7 +189,7 @@
                                                 <asp:ListItem Value="Active">Active</asp:ListItem>
                                                 <asp:ListItem Value="In Active">In Active</asp:ListItem>
                                             </asp:DropDownList>
-<%--                                         <asp:RequiredFieldValidator ID="RequiredFieldValidatorStatus" Display="Dynamic" runat="server" ValidationGroup="Savecont" ErrorMessage="Status Required" InitialValue="0" ControlToValidate="ddlStatus" ForeColor="Red"></asp:RequiredFieldValidator>--%>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidatorStatus" Display="Dynamic" runat="server" ValidationGroup="Savecont" ErrorMessage="Status Required" InitialValue="0" ControlToValidate="ddlStatus" ForeColor="Red"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
                                 </div>
@@ -212,12 +212,12 @@
                                 <div class="col-sm-12">
                                     <h1>Employee Contracts</h1>
                                     <fieldset>
-                                        <asp:GridView ID="dgContractDetail" runat="server" AutoGenerateColumns="False" CellPadding="3"
+                                        <asp:GridView ID="dgContractDetail" OnRowCommand="dgContractDetail_RowCommand1" runat="server" AutoGenerateColumns="False" CellPadding="3"
                                             DataKeyNames="Id" ForeColor="#333333"
                                             GridLines="Horizontal" CssClass="table table-striped table-bordered table-hover"
                                             PagerStyle-CssClass="paginate_button active" AlternatingRowStyle-CssClass=""
                                             Width="100%" Style="text-align: left"
-                                            AllowPaging="True" PageSize="20" OnSelectedIndexChanged="dgContractDetail_SelectedIndexChanged" OnRowDeleting="dgContractDetail_RowDeleting">
+                                            AllowPaging="True" PageSize="20" OnSelectedIndexChanged="dgContractDetail_SelectedIndexChanged" OnRowDeleting="dgContractDetail_RowDeleting" OnRowDataBound="dgContractDetail_RowDataBound">
                                             <Columns>
                                                 <asp:BoundField DataField="ContractStartDate" HeaderText="Contract Start Date" />
                                                 <asp:BoundField DataField="ContractEndDate" HeaderText="Contract End Date" />
@@ -230,12 +230,17 @@
                                                 <asp:CommandField SelectText="Edit" ShowSelectButton="True" >
                                                 <ItemStyle Font-Underline="True" ForeColor="#000099" />
                                                 </asp:CommandField>
-                                                <asp:TemplateField ShowHeader="False">
-                                                    <ItemTemplate>
-                                                        <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="False" OnClientClick="javascript:return confirm('Are you sure you want to delete this entry?');" CommandName="Delete" Text="Delete"></asp:LinkButton>
-                                                    </ItemTemplate>
-                                                    <ItemStyle Font-Underline="True" ForeColor="#000099" />
-                                                </asp:TemplateField>
+                                                 
+                                                <asp:CommandField ShowDeleteButton="True" >
+                                                 
+                                                <ItemStyle ForeColor="#000099" />
+                                                </asp:CommandField>
+                                                 
+                                                <asp:ButtonField CommandName="History" Text="History" >
+                                                 
+                                                <ItemStyle ForeColor="#0000CC" />
+                                                </asp:ButtonField>
+                                                 
                                             </Columns>
                                             <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
                                         </asp:GridView>
@@ -245,248 +250,8 @@
                             </div>
                         </fieldset>
                     </div>
+                    
                     <div class="tab-pane" id="tab-r2">
-                        <fieldset>
-
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"></span>
-                                            <asp:DropDownList ID="ddlJobTitle" runat="server" CssClass="form-control" placeholder="Job Title" AppendDataBoundItems="True" DataTextField="JobTitleName" DataValueField="Id"></asp:DropDownList>
-                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorJob" runat="server" Display="Dynamic" ValidationGroup="Savedetail" ErrorMessage="Job Title Required" InitialValue="0" ControlToValidate="ddlJobTitle" ForeColor="Red"></asp:RequiredFieldValidator>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"></span>
-                                            <asp:DropDownList ID="ddlPosition" runat="server" CssClass="form-control" placeholder="Position" AppendDataBoundItems="True"></asp:DropDownList>
-                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorPosition" runat="server" Display="Dynamic" ValidationGroup="Savedetail" ErrorMessage="Position Required" InitialValue="0" ControlToValidate="ddlPosition" ForeColor="Red"></asp:RequiredFieldValidator>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"></span>
-                                            <asp:DropDownList ID="ddlProgram" runat="server" CssClass="form-control" placeholder="Program" AppendDataBoundItems="True"></asp:DropDownList>
-                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorProgram" runat="server" Display="Dynamic" ValidationGroup="Savedetail" ErrorMessage="Program Required" InitialValue="0" ControlToValidate="ddlProgram" ForeColor="Red"></asp:RequiredFieldValidator>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"></span>
-                                            <asp:DropDownList ID="ddlDutyStation" runat="server" CssClass="form-control" placeholder="Duty Station" AppendDataBoundItems="True">
-                                                <asp:ListItem Value="0">Select Duty Station</asp:ListItem>
-                                                <asp:ListItem Value="Addis Ababa">Addis Ababa</asp:ListItem>
-                                                <asp:ListItem Value="SNNPR">SNNPR</asp:ListItem>
-                                                <asp:ListItem Value="Tigray">Tigray</asp:ListItem>
-                                                <asp:ListItem Value="Oromia">Oromia</asp:ListItem>
-                                                <asp:ListItem Value="Amhara">Amhara</asp:ListItem>
-                                                <asp:ListItem Value="Afar">Afar</asp:ListItem>
-                                                <asp:ListItem Value="Benshangul Gumuz">Benshangul Gumuz</asp:ListItem>
-                                                <asp:ListItem Value="Somali">Somali</asp:ListItem>
-                                                <asp:ListItem Value="Harari">Harari</asp:ListItem>
-                                                <asp:ListItem Value="Dire Dawa">Dire Dawa</asp:ListItem>
-                                            </asp:DropDownList>
-                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorDuty" runat="server" Display="Dynamic" ValidationGroup="Savedetail" ErrorMessage="Duty Station Required" InitialValue="0" ControlToValidate="ddlDutyStation" ForeColor="Red"></asp:RequiredFieldValidator>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"></span>
-                                            <asp:TextBox ID="txtSalary" runat="server" CssClass="form-control" placeholder="Salary"></asp:TextBox>
-                                             <asp:RequiredFieldValidator ID="rfvtSal" runat="server" ControlToValidate="txtSalary" CssClass="validator" Display="Dynamic" ErrorMessage="Salary is required" SetFocusOnError="true" ValidationGroup="Savedetail" ForeColor="Red"></asp:RequiredFieldValidator>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"></span>
-                                            <asp:DropDownList ID="txtEmployeeStatus" runat="server" CssClass="form-control" placeholder="Employement Status">
-                                                <asp:ListItem Value="0">Select Employement Status</asp:ListItem>
-                                                <asp:ListItem Value="1">Fulltime</asp:ListItem>
-                                                <asp:ListItem Value="2">Temporary</asp:ListItem>
-                                                <asp:ListItem Value="3">Volunteer</asp:ListItem>
-                                                <asp:ListItem Value="4">Intern</asp:ListItem>
-                                            </asp:DropDownList>
-                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorEmpSta" runat="server" Display="Dynamic" ValidationGroup="Savedetail" ErrorMessage="Employement Status Required" InitialValue="0" ControlToValidate="txtEmployeeStatus" ForeColor="Red"></asp:RequiredFieldValidator>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"></span>
-
-                                            <asp:DropDownList ID="txtClass" runat="server" CssClass="form-control" placeholder="Class">
-                                                <asp:ListItem Value="0">Select Class</asp:ListItem>
-                                                <asp:ListItem Value="1">Local National</asp:ListItem>
-                                                <asp:ListItem Value="2">Expat</asp:ListItem>
-                                            </asp:DropDownList>
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidatorClass" runat="server" Display="Dynamic" ValidationGroup="Savedetail" ErrorMessage="Class Required" InitialValue="0" ControlToValidate="txtClass" ForeColor="Red"></asp:RequiredFieldValidator>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"></span>
-                                            <asp:TextBox ID="txtHoursPerWeek" runat="server" CssClass="form-control" placeholder="Hours Per Week"></asp:TextBox>
-                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorhour" runat="server" ControlToValidate="txtHoursPerWeek" CssClass="validator" Display="Dynamic" ErrorMessage="Hours Per Week is required" SetFocusOnError="true" ValidationGroup="Savedetail" ForeColor="Red"></asp:RequiredFieldValidator>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"></span>
-                                            <asp:TextBox ID="txtBaseCount" runat="server" CssClass="form-control" placeholder="Base Country"></asp:TextBox>
-                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorbasecount" runat="server" ControlToValidate="txtBaseCount" CssClass="validator" Display="Dynamic" ErrorMessage="Base Country is required" SetFocusOnError="true" ValidationGroup="Savedetail" ForeColor="Red"></asp:RequiredFieldValidator>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"></span>
-                                            <asp:TextBox ID="txtBaseCity" runat="server" CssClass="form-control" placeholder="Base City"></asp:TextBox>
-                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorcity" runat="server" ControlToValidate="txtBaseCity" CssClass="validator" Display="Dynamic" ErrorMessage="Base City is required" SetFocusOnError="true" ValidationGroup="Savedetail" ForeColor="Red"></asp:RequiredFieldValidator>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"></span>
-                                            <asp:TextBox ID="txtBaseState" runat="server" CssClass="form-control" placeholder="Base State"></asp:TextBox>
-                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorstate" runat="server" ControlToValidate="txtBaseState" CssClass="validator" Display="Dynamic" ErrorMessage="Base State is required" SetFocusOnError="true" ValidationGroup="Savedetail" ForeColor="Red"></asp:RequiredFieldValidator>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"></span>
-                                            <asp:TextBox ID="txtCountryTeam" runat="server" CssClass="form-control" placeholder="Country Team"></asp:TextBox>
-                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorcounteam" runat="server" ControlToValidate="txtCountryTeam" CssClass="validator" Display="Dynamic" ErrorMessage="Country Team is required" SetFocusOnError="true" ValidationGroup="Savedetail" ForeColor="Red"></asp:RequiredFieldValidator>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"></span>
-                                            <asp:TextBox ID="txtDescJT" runat="server" CssClass="form-control" placeholder="Descriptive Job Title"></asp:TextBox>
-                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorjt" runat="server" ControlToValidate="txtDescJT" CssClass="validator" Display="Dynamic" ErrorMessage="Descriptive Job Title is required" SetFocusOnError="true" ValidationGroup="Savedetail" ForeColor="Red"></asp:RequiredFieldValidator>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"></span>
-                                            <asp:DropDownList ID="ddlSuperVisor" runat="server" CssClass="form-control" placeholder="Supervisor" AppendDataBoundItems="True"></asp:DropDownList>
-                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorsup" runat="server" Display="Dynamic" ValidationGroup="Savedetail" ErrorMessage="Supervisor Required" InitialValue="0" ControlToValidate="ddlSuperVisor" ForeColor="Red"></asp:RequiredFieldValidator>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"></span>
-                                            <asp:DropDownList ID="ddlReportsTo" runat="server" CssClass="form-control" placeholder="Reports To" AppendDataBoundItems="True"></asp:DropDownList>
-                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorRepto" runat="server" Display="Dynamic" ValidationGroup="Savedetail" ErrorMessage="Reports To Required" InitialValue="0" ControlToValidate="ddlReportsTo" ForeColor="Red"></asp:RequiredFieldValidator>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="form-actions">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <button class="btn btn-default" type="submit">
-                                            Cancel</button>
-                                        <asp:Button ID="btnAddChange" runat="server" CssClass="btn btn-primary" Text="Add Change" ValidationGroup="Savedetail" OnClick="btnAddChange_Click" />
-                                        <asp:Button ID="btnPAFNew" runat="server" CssClass="btn btn-primary" Text="Generate PAF New Hire" OnClientClick="javascript:Clickheretoprint('divprint2')" Visible="False" OnClick="btnPAFNew_Click" />
-                                        <asp:Button ID="btnPAFChange" runat="server" CssClass="btn btn-primary" Text="Generate PAF Change" OnClientClick="javascript:Clickheretoprint('divprint')" Visible="False" OnClick="btnPAFChange_Click" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <h1>Employee History Detail</h1>
-
-
-                                    <asp:GridView ID="dgChange" runat="server" AutoGenerateColumns="False" CellPadding="3"
-                                        DataKeyNames="Id" ForeColor="#333333"
-                                        GridLines="Horizontal" CssClass="table table-striped table-bordered table-hover"
-                                        PagerStyle-CssClass="paginate_button active" AlternatingRowStyle-CssClass=""
-                                        Width="100%" Style="text-align: left"
-                                        AllowPaging="True" PageSize="20" OnSelectedIndexChanged="dgChange_SelectedIndexChanged1" OnRowDeleting="dgChange_RowDeleting">
-                                        <Columns>
-                                            <asp:BoundField DataField="JobTitle.JobTitleName" HeaderText="Job Title" />
-                                            <asp:BoundField DataField="Position.PositionName" HeaderText="Position" />
-                                            <asp:BoundField DataField="Program.ProgramName" HeaderText="Program" />
-                                            <asp:BoundField DataField="DutyStation" HeaderText="DutyStation" />
-                                            <asp:BoundField DataField="Salary" HeaderText="Salary" />
-
-
-                                            <asp:TemplateField ShowHeader="False">
-                                                <ItemTemplate>
-                                                    <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="False" CommandName="Select" Text="Edit"></asp:LinkButton>
-                                                </ItemTemplate>
-                                                <ItemStyle Font-Underline="True" ForeColor="#000099" />
-                                            </asp:TemplateField>
-
-
-                                            <asp:TemplateField ShowHeader="False">
-                                                <ItemTemplate>
-                                                    <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Delete" OnClientClick="javascript:return confirm('Are you sure you want to delete this entry?');" Text="Delete"></asp:LinkButton>
-                                                </ItemTemplate>
-                                                <ItemStyle Font-Underline="True" ForeColor="#000099" />
-                                            </asp:TemplateField>
-                                        </Columns>
-                                        <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
-                                    </asp:GridView>
-
-
-
-
-
-                                </div>
-                            </div>
-                        </fieldset>
-
-                    </div>
-                    <div class="tab-pane" id="tab-r3">
                         <fieldset>
 
                             <div class="row">
@@ -583,7 +348,271 @@
                             </div>
                         </fieldset>
                     </div>
+                    
+                    <asp:Panel ID="pnlEMPHIST" Visible="true"  runat="server" style = "min-height:300px">
+                      
+                      
+        <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false" style="overflow: auto;max-height:400px; width: 80%;" >
+            <header>
+                <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                <h2>Employee History</h2>
+            </header>
+                       
+
+                            <div class="row">
+                                 <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"></span>
+                                            <asp:DropDownList ID="ddlPosition" runat="server" CssClass="form-control" placeholder="Position" AppendDataBoundItems="True"></asp:DropDownList>
+                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorPosition" runat="server" Display="Dynamic" ValidationGroup="Savedetail" ErrorMessage="Position Required" InitialValue="0" ControlToValidate="ddlPosition" ForeColor="Red"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"></span>
+                                            <asp:DropDownList ID="ddlProgram" runat="server" CssClass="form-control" placeholder="Program" AppendDataBoundItems="True"></asp:DropDownList>
+                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorProgram" runat="server" Display="Dynamic" ValidationGroup="Savedetail" ErrorMessage="Program Required" InitialValue="0" ControlToValidate="ddlProgram" ForeColor="Red"></asp:RequiredFieldValidator>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"></span>
+                                            <asp:DropDownList ID="ddlDutyStation" runat="server" CssClass="form-control" placeholder="Duty Station" AppendDataBoundItems="True">
+                                                <asp:ListItem Value="0">Select Duty Station</asp:ListItem>
+                                                <asp:ListItem Value="Addis Ababa">Addis Ababa</asp:ListItem>
+                                                <asp:ListItem Value="SNNPR">SNNPR</asp:ListItem>
+                                                <asp:ListItem Value="Tigray">Tigray</asp:ListItem>
+                                                <asp:ListItem Value="Oromia">Oromia</asp:ListItem>
+                                                <asp:ListItem Value="Amhara">Amhara</asp:ListItem>
+                                                <asp:ListItem Value="Afar">Afar</asp:ListItem>
+                                                <asp:ListItem Value="Benshangul Gumuz">Benshangul Gumuz</asp:ListItem>
+                                                <asp:ListItem Value="Somali">Somali</asp:ListItem>
+                                                <asp:ListItem Value="Harari">Harari</asp:ListItem>
+                                                <asp:ListItem Value="Dire Dawa">Dire Dawa</asp:ListItem>
+                                            </asp:DropDownList>
+                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorDuty" runat="server" Display="Dynamic" ValidationGroup="Savedetail" ErrorMessage="Duty Station Required" InitialValue="0" ControlToValidate="ddlDutyStation" ForeColor="Red"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                          
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"></span>
+                                            <asp:TextBox ID="txtSalary" runat="server" CssClass="form-control" placeholder="Salary"></asp:TextBox>
+                                             <asp:RequiredFieldValidator ID="rfvtSal" runat="server" ControlToValidate="txtSalary" CssClass="validator" Display="Dynamic" ErrorMessage="Salary is required" SetFocusOnError="true" ValidationGroup="Savedetail" ForeColor="Red"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                              <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"></span>
+                                            <asp:DropDownList ID="txtEmployeeStatus" runat="server" CssClass="form-control" placeholder="Employement Status">
+                                                <asp:ListItem Value="0">Select Employement Status</asp:ListItem>
+                                                <asp:ListItem Value="1">Fulltime</asp:ListItem>
+                                                <asp:ListItem Value="2">Temporary</asp:ListItem>
+                                                <asp:ListItem Value="3">Volunteer</asp:ListItem>
+                                                <asp:ListItem Value="4">Intern</asp:ListItem>
+                                            </asp:DropDownList>
+                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorEmpSta" runat="server" Display="Dynamic" ValidationGroup="Savedetail" ErrorMessage="Employement Status Required" InitialValue="0" ControlToValidate="txtEmployeeStatus" ForeColor="Red"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                          
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"></span>
+
+                                            <asp:DropDownList ID="txtClass" runat="server" CssClass="form-control" placeholder="Class">
+                                                <asp:ListItem Value="0">Select Class</asp:ListItem>
+                                                <asp:ListItem Value="1">Local National</asp:ListItem>
+                                                <asp:ListItem Value="2">Expat</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidatorClass" runat="server" Display="Dynamic" ValidationGroup="Savedetail" ErrorMessage="Class Required" InitialValue="0" ControlToValidate="txtClass" ForeColor="Red"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                </div></div>
+                              <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"></span>
+                                            <asp:TextBox ID="txtHoursPerWeek" runat="server" CssClass="form-control" placeholder="Hours Per Week"></asp:TextBox>
+                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorhour" runat="server" ControlToValidate="txtHoursPerWeek" CssClass="validator" Display="Dynamic" ErrorMessage="Hours Per Week is required" SetFocusOnError="true" ValidationGroup="Savedetail" ForeColor="Red"></asp:RequiredFieldValidator>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                          
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"></span>
+                                            <asp:TextBox ID="txtBaseCount" runat="server" CssClass="form-control" placeholder="Base Country"></asp:TextBox>
+                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorbasecount" runat="server" ControlToValidate="txtBaseCount" CssClass="validator" Display="Dynamic" ErrorMessage="Base Country is required" SetFocusOnError="true" ValidationGroup="Savedetail" ForeColor="Red"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                </div></div>
+                              <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"></span>
+                                            <asp:TextBox ID="txtBaseCity" runat="server" CssClass="form-control" placeholder="Base City"></asp:TextBox>
+                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorcity" runat="server" ControlToValidate="txtBaseCity" CssClass="validator" Display="Dynamic" ErrorMessage="Base City is required" SetFocusOnError="true" ValidationGroup="Savedetail" ForeColor="Red"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"></span>
+                                            <asp:TextBox ID="txtBaseState" runat="server" CssClass="form-control" placeholder="Base State"></asp:TextBox>
+                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorstate" runat="server" ControlToValidate="txtBaseState" CssClass="validator" Display="Dynamic" ErrorMessage="Base State is required" SetFocusOnError="true" ValidationGroup="Savedetail" ForeColor="Red"></asp:RequiredFieldValidator>
+
+                                        </div>
+                                    </div>
+                                </div></div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"></span>
+                                            <asp:TextBox ID="txtCountryTeam" runat="server" CssClass="form-control" placeholder="Country Team"></asp:TextBox>
+                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorcounteam" runat="server" ControlToValidate="txtCountryTeam" CssClass="validator" Display="Dynamic" ErrorMessage="Country Team is required" SetFocusOnError="true" ValidationGroup="Savedetail" ForeColor="Red"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"></span>
+                                            <asp:TextBox ID="txtDescJT" runat="server" CssClass="form-control" placeholder="Descriptive Job Title"></asp:TextBox>
+                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorjt" runat="server" ControlToValidate="txtDescJT" CssClass="validator" Display="Dynamic" ErrorMessage="Descriptive Job Title is required" SetFocusOnError="true" ValidationGroup="Savedetail" ForeColor="Red"></asp:RequiredFieldValidator>
+
+                                        </div>
+                                    </div>
+                                </div></div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"></span>
+                                            <asp:DropDownList ID="ddlSuperVisor" runat="server" CssClass="form-control" placeholder="Supervisor" AppendDataBoundItems="True"></asp:DropDownList>
+                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorsup" runat="server" Display="Dynamic" ValidationGroup="Savedetail" ErrorMessage="Supervisor Required" InitialValue="0" ControlToValidate="ddlSuperVisor" ForeColor="Red"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+               
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"></span>
+                                            <asp:DropDownList ID="ddlReportsTo" runat="server" CssClass="form-control" placeholder="Reports To" AppendDataBoundItems="True"></asp:DropDownList>
+                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorRepto" runat="server" Display="Dynamic" ValidationGroup="Savedetail" ErrorMessage="Reports To Required" InitialValue="0" ControlToValidate="ddlReportsTo" ForeColor="Red"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-actions">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button class="btn btn-default" type="submit">
+                                            Cancel</button>
+                                        <asp:Button ID="btnAddChange" runat="server" CssClass="btn btn-primary" Text="Add Change" ValidationGroup="Savedetail" OnClick="btnAddChange_Click" />
+                                        <asp:Button ID="btnPAFNew" runat="server" CssClass="btn btn-primary" Text="Generate PAF New Hire" OnClientClick="javascript:Clickheretoprint('divprint2')" Visible="False" OnClick="btnPAFNew_Click" />
+                                        <asp:Button ID="btnPAFChange" runat="server" CssClass="btn btn-primary" Text="Generate PAF Change" OnClientClick="javascript:Clickheretoprint('divprint')" Visible="False" OnClick="btnPAFChange_Click" />
+                                    </div>
+                                </div>
+                            </div>
+
+                          
+                       
+          
+            <div>
+                  <div class="row">
+                                <div class="col-sm-12">
+                                    <h1>Employee History Detail</h1>
+                                                                  
+
+
+
+
+
+                                </div>
+                            </div>
+                <div class="jarviswidget-editbox"></div>
+                <div class="widget-body no-padding">
+                    <div class="smart-form">
+                        <asp:GridView ID="dgChange" runat="server" AutoGenerateColumns="False" CellPadding="3"
+                                        DataKeyNames="Id" ForeColor="#333333"
+                                        GridLines="Horizontal" CssClass="table table-striped table-bordered table-hover"
+                                        PagerStyle-CssClass="paginate_button active" AlternatingRowStyle-CssClass=""
+                                        Width="100%" Style="text-align: left"
+                                        AllowPaging="True" PageSize="20" OnSelectedIndexChanged="dgChange_SelectedIndexChanged1" OnRowDeleting="dgChange_RowDeleting" OnRowCommand="dgChange_RowCommand" OnRowDataBound="dgChange_RowDataBound">
+                                        <Columns>
+                                            
+                                            <asp:BoundField DataField="Position.PositionName" HeaderText="Position" />
+                                            <asp:BoundField DataField="Program.ProgramName" HeaderText="Program" />
+                                            <asp:BoundField DataField="DutyStation" HeaderText="DutyStation" />
+                                            <asp:BoundField DataField="Salary" HeaderText="Salary" />
+
+
+                                            <asp:CommandField SelectText="Edit" ShowSelectButton="True" >
+
+
+                                            <ItemStyle ForeColor="#000099" />
+                                            </asp:CommandField>
+                                            <asp:CommandField ShowDeleteButton="True">
+                                            <ItemStyle ForeColor="#0000CC" />
+                                            </asp:CommandField>
+                                        </Columns>
+                                        <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
+                                    </asp:GridView>
+                        <footer>
+                            <asp:Button ID="btnCancelCost" runat="server" Text="Close" class="btn btn-primary"></asp:Button>
+                            <asp:Button ID="btnHiddenPopupp" runat="server" />
+                        <asp:HiddenField ID="hfDetailId" runat="server" />
+                        </footer>
+                    </div>
                 </div>
+            </div>
+                            
+        </div>    
+    </asp:Panel>
+
+                </div>
+
+                
+                <cc1:modalpopupextender runat="server" enabled="True" cancelcontrolid="btnCancelCost"
+                    id="pnlEMPHIST_ModalPopupExtender" targetcontrolid="btnHiddenPopupp" backgroundcssclass="PopupPageBackground" RepositionMode="RepositionOnWindowResize"   popupcontrolid="pnlEMPHIST">
+    </cc1:modalpopupextender>
+
+
 
                 <!-- end widget content -->
                 <div id="divprint" style="display: none;">
