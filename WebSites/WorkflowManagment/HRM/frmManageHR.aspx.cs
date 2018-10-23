@@ -210,9 +210,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             txtBaseCount.Text = string.Empty;
             txtBaseCity.Text = string.Empty;
             txtBaseState.Text = string.Empty;
-            txtClass.Text = string.Empty;
-
-            txtEmployeeStatus.Text = string.Empty;
+            txtClass.SelectedValue = string.Empty;
+            txtEmployeeStatus.SelectedValue = string.Empty;
             ddlSuperVisor.SelectedValue = "0";
             ddlReportsTo.SelectedValue = "0";
         }
@@ -467,9 +466,9 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     empdetail.BaseCountry = txtBaseCount.Text;
                     empdetail.BaseCity = txtBaseCity.Text;
                     empdetail.BaseState = txtBaseState.Text;
-                    empdetail.Class = txtClass.Text;
+                    empdetail.Class = txtClass.SelectedItem.Text;
                     empdetail.CountryTeam = txtCountryTeam.Text;
-                    empdetail.EmploymentStatus = Convert.ToInt32(txtEmployeeStatus.Text);
+                    empdetail.EmploymentStatus = txtEmployeeStatus.SelectedItem.Text;
 
                     empdetail.Supervisor = Convert.ToInt32(ddlSuperVisor.Text);
                     empdetail.ReportsTo = Convert.ToInt32(ddlReportsTo.Text);
@@ -508,7 +507,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 empdetail.BaseState = txtBaseState.Text;
                 empdetail.Class = txtClass.Text;
                 empdetail.CountryTeam = txtCountryTeam.Text;
-                empdetail.EmploymentStatus = Convert.ToInt32(txtEmployeeStatus.Text);
+                empdetail.EmploymentStatus = txtEmployeeStatus.Text;
 
                 empdetail.Supervisor = Convert.ToInt32(ddlSuperVisor.Text);
                 empdetail.ReportsTo = Convert.ToInt32(ddlReportsTo.Text);
@@ -971,7 +970,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             if (e.CommandName == "Select")
             {
 
-
+                pnlEMPHIST_ModalPopupExtender.Show();
                 int Row = Convert.ToInt32(e.CommandArgument);
                 chan = Session["chan"] as Contract;
                 int TEMPChid = Convert.ToInt32(dgChange.DataKeys[Row].Value);
@@ -981,8 +980,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 if (TEMPChid > 0)
                 {
                     EmployeeDetail empdetail = chan.GetEmployeeDetails(TEMPChid);
-                    ddlPosition.SelectedItem.Text = empdetail.Position.ToString();
-                    ddlProgram.SelectedItem.Text = empdetail.Program.ToString();
+                    ddlPosition.SelectedValue = empdetail.Position.Id.ToString();
+                    ddlProgram.SelectedValue = Convert.ToInt32(empdetail.Program.Id).ToString();
                     ddlDutyStation.SelectedValue = empdetail.DutyStation.ToString();
                     txtDescJT.Text = empdetail.DescriptiveJobTitle;
                     txtSalary.Text = Convert.ToDecimal(empdetail.Salary).ToString();
@@ -990,9 +989,9 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     txtBaseCount.Text = empdetail.BaseCountry;
                     txtBaseCity.Text = empdetail.BaseCity;
                     txtBaseState.Text = empdetail.BaseState;
-                    txtClass.Text = empdetail.Class;
+                    txtClass.SelectedValue = empdetail.Class;
                     txtCountryTeam.Text = empdetail.CountryTeam;
-                    txtEmployeeStatus.Text = empdetail.EmploymentStatus.ToString();
+                    txtEmployeeStatus.SelectedValue = empdetail.EmploymentStatus;
                     ddlSuperVisor.SelectedValue = Convert.ToInt32(empdetail.Supervisor).ToString();
                     ddlReportsTo.SelectedValue = Convert.ToInt32(empdetail.ReportsTo).ToString();
 

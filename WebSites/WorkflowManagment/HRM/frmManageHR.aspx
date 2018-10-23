@@ -25,6 +25,7 @@
             });
         });
     </script>
+   
     <script type="text/javascript" language="javascript">
         function Clickheretoprint(theid) {
             var disp_setting = "toolbar=yes,location=no,directories=yes,menubar=yes,";
@@ -41,6 +42,13 @@
             docprint.focus();
         }
     </script>
+     <script type="text/javascript" language="javascript">
+     function onshowing()
+    {
+         $find('pnlEMPHIST_ModalPopupExtender').set_X(document.documentElement.clientWidth / 2);
+         $find('pnlEMPHIST_ModalPopupExtender').set_Y(document.documentElement.clientHeight / 2);
+     }
+           </script>
     <div class="alert alert-info fade in">
         <button class="close" data-dismiss="alert">
             ×
@@ -349,15 +357,15 @@
                         </fieldset>
                     </div>
                     
-                    <asp:Panel ID="pnlEMPHIST" Visible="true"  runat="server" style = "min-height:300px">
+                    <asp:Panel ID="pnlEMPHIST" Visible="true"  runat="server" style = "min-height:400px">
                       
                       
-        <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false" style="overflow: auto;max-height:400px; width: 80%;" >
+        <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false" style="overflow: auto;max-height:500px; width: 90%;" >
             <header>
                 <span class="widget-icon"><i class="fa fa-edit"></i></span>
                 <h2>Employee History</h2>
             </header>
-                       
+                       <div style="text-align:center; height: auto; width: 100%">
 
                             <div class="row">
                                  <div class="col-sm-6">
@@ -422,11 +430,11 @@
                                         <div class="input-group">
                                             <span class="input-group-addon"></span>
                                             <asp:DropDownList ID="txtEmployeeStatus" runat="server" CssClass="form-control" placeholder="Employement Status">
-                                                <asp:ListItem Value="0">Select Employement Status</asp:ListItem>
-                                                <asp:ListItem Value="1">Fulltime</asp:ListItem>
-                                                <asp:ListItem Value="2">Temporary</asp:ListItem>
-                                                <asp:ListItem Value="3">Volunteer</asp:ListItem>
-                                                <asp:ListItem Value="4">Intern</asp:ListItem>
+                                                <asp:ListItem Value="Select Employement Status">Select Employement Status</asp:ListItem>
+                                                <asp:ListItem Value="Fulltime">Fulltime</asp:ListItem>
+                                                <asp:ListItem Value="Temporary">Temporary</asp:ListItem>
+                                                <asp:ListItem Value="Volunteer">Volunteer</asp:ListItem>
+                                                <asp:ListItem Value="Intern">Intern</asp:ListItem>
                                             </asp:DropDownList>
                                              <asp:RequiredFieldValidator ID="RequiredFieldValidatorEmpSta" runat="server" Display="Dynamic" ValidationGroup="Savedetail" ErrorMessage="Employement Status Required" InitialValue="0" ControlToValidate="txtEmployeeStatus" ForeColor="Red"></asp:RequiredFieldValidator>
                                         </div>
@@ -440,9 +448,13 @@
                                             <span class="input-group-addon"></span>
 
                                             <asp:DropDownList ID="txtClass" runat="server" CssClass="form-control" placeholder="Class">
-                                                <asp:ListItem Value="0">Select Class</asp:ListItem>
-                                                <asp:ListItem Value="1">Local National</asp:ListItem>
-                                                <asp:ListItem Value="2">Expat</asp:ListItem>
+                                                <asp:ListItem Value="Select Class">Select Class</asp:ListItem>
+                                                <asp:ListItem Value="Local National">Local National</asp:ListItem>
+                                                <asp:ListItem Value="Expat">Expat</asp:ListItem>
+                                                 <asp:ListItem Value="Seconedee">Seconedee</asp:ListItem>
+                                                 <asp:ListItem Value="Volunteer">Volunteer</asp:ListItem>
+                                                 <asp:ListItem Value="Independent Contractor">Independent Contractor</asp:ListItem>
+                                                 
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorClass" runat="server" Display="Dynamic" ValidationGroup="Savedetail" ErrorMessage="Class Required" InitialValue="0" ControlToValidate="txtClass" ForeColor="Red"></asp:RequiredFieldValidator>
                                         </div>
@@ -603,13 +615,14 @@
             </div>
                             
         </div>    
-    </asp:Panel>
-
+                    </asp:Panel>
+</div>
                 </div>
 
                 
                 <cc1:modalpopupextender runat="server" enabled="True" cancelcontrolid="btnCancelCost"
-                    id="pnlEMPHIST_ModalPopupExtender" targetcontrolid="btnHiddenPopupp" backgroundcssclass="PopupPageBackground" RepositionMode="RepositionOnWindowResize"   popupcontrolid="pnlEMPHIST">
+                    id="pnlEMPHIST_ModalPopupExtender" targetcontrolid="btnHiddenPopupp"  X="300" Y="50"  backgroundcssclass="modalBackground" popupcontrolid="pnlEMPHIST"
+                    Drag="true" PopupDragHandleControlID="dragHandle" RepositionMode="RepositionOnWindowResizeAndScroll">
     </cc1:modalpopupextender>
 
 
@@ -1325,5 +1338,5 @@
 
             <!-- end widget div -->
         </div>
-    </div>
+   
 </asp:Content>

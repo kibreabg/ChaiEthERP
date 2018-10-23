@@ -16,7 +16,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             this.Contracts = new List<Contract>();
             this.Educations = new List<Education>();
             this.EmergencyContacts = new List<EmergencyContact>();
-            this.EmployeeDetails = new List<EmployeeDetail>();
+            
             this.FamilyDetails = new List<FamilyDetail>();
             this.Terminations = new List<Termination>();
             this.WorkExperiences = new List<WorkExperience>();
@@ -55,31 +55,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public virtual IList<Warning> Warnings { get; set; }
 
 
-       /* #region EmployeeDetail
-        public virtual EmployeeDetail GetEmployeeDetails(int Id)
-        {
-
-            foreach (EmployeeDetail ED in EmployeeDetails)
-            {
-                if (ED.Id == Id)
-                    return ED;
-            }
-            return null;
-        }
-
-     
-        public virtual void RemoveEmployeeDetail(int Id)
-        {
-            foreach (EmployeeDetail ED in EmployeeDetails)
-            {
-                if (ED.Id == Id)
-                {
-                    EmployeeDetails.Remove(ED);
-                    break;
-                }
-            }
-        }
-        #endregion*/
+      
         #region Contracts
         public virtual Contract GetContract(int Id)
         {
@@ -135,6 +111,9 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             }
         }
         #endregion
+        
+
+
         #region Education
         public virtual Education GetEducation(int Id)
         {
@@ -263,27 +242,44 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         #region Employee detail
         public virtual string GetEmployeeDutyStation()
         {
-            if (EmployeeDetails.Count != 0)
+            foreach (Contract CD in Contracts)
+            {
+                if (CD.EmployeeDetails.Count != 0)
+                
+                    return CD.EmployeeDetails.Last().DutyStation;
+                
+            }
 
-                return EmployeeDetails.Last().DutyStation;
-            else
-                return "";
+
+            return null;        
+                
+           
+            
         }
         public virtual string GetEmployeeProgram()
         {
-            if (EmployeeDetails.Count != 0)
+            foreach (Contract CD in Contracts)
+            {
+                if (CD.EmployeeDetails.Count != 0)
+                
+                    return CD.EmployeeDetails.Last().Program.ProgramName;
+                
+            }
 
-                return EmployeeDetails.Last().Program.ProgramName;
-            else
-                return "";
+            return null;
         }
         public virtual string GetEmployeePosition()
         {
-            if (EmployeeDetails.Count != 0)
+            foreach (Contract CD in Contracts)
+            {
+                if (CD.EmployeeDetails.Count != 0)
+                
+                    return CD.EmployeeDetails.Last().Position.PositionName;
+                
+            }
 
-                return EmployeeDetails.Last().Position.PositionName;
-            else
-                return "";
+            return null;   
+            
         }
         #endregion
 

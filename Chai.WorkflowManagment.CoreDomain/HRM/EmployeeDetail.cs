@@ -20,7 +20,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
 
         public decimal Salary { get;  set;}
 
-        public int EmploymentStatus { get; set; }
+        public string EmploymentStatus { get; set; }
         public string Class { get; set; }
         public string HoursPerWeek { get; set; }
         public string BaseCountry { get; set; }
