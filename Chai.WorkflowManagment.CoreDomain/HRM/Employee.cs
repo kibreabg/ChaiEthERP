@@ -300,15 +300,11 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         {
             if (AppUser.ReHiredDate != null)
             {
-                foreach (Contract cn in Contracts)
-                {
-                    if (cn.Reason == "ReHired")
-                        return cn.ContractStartDate;
-                }
-                return Contracts[0].ContractStartDate;
+                return AppUser.ReHiredDate.Value;
             }
+
             else
-                return new DateTime();
+                return AppUser.HiredDate.Value;
             
         }
 
