@@ -99,6 +99,18 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             }
             
         }
+        public virtual Contract GetActiveContract()
+        {
+            if (Contracts.Count > 0)
+            {
+                Contract con = Contracts.Last();
+                return con;
+            }
+            else
+                return null;
+            
+
+        }
         public virtual void RemoveContract(int Id)
         {
             foreach (Contract CD in Contracts)
