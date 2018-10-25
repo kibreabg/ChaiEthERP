@@ -556,8 +556,10 @@
                                         <button class="btn btn-default" type="submit">
                                             Cancel</button>
                                         <asp:Button ID="btnAddChange" runat="server" CssClass="btn btn-primary" Text="Add Change" ValidationGroup="Savedetail" OnClick="btnAddChange_Click" />
+                                        <asp:FileUpload ID="fuPAF" runat="server" />
+                                        <asp:TextBox ID="tFileName" runat="server"></asp:TextBox>
                                         <asp:Button ID="btnPAFNew" runat="server" CssClass="btn btn-primary" Text="Generate PAF New Hire" OnClientClick="javascript:Clickheretoprint('divprint2')" Visible="False" OnClick="btnPAFNew_Click" />
-                                        <asp:Button ID="btnPAFChange" runat="server" CssClass="btn btn-primary" Text="Generate PAF Change" OnClientClick="javascript:Clickheretoprint('divprint')" Visible="False" OnClick="btnPAFChange_Click" />
+                                        <asp:Button ID="btnPAFChange" runat="server" CssClass="btn btn-primary" Text="Generate PAF Change" OnClientClick="javascript:Clickheretoprint('divprint')" OnClick="btnPAFChange_Click" />
                                     </div>
                                 </div>
                             </div>
