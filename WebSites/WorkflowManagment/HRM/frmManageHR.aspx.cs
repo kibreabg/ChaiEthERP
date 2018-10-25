@@ -32,7 +32,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 this._presenter.OnViewInitialized();
 
                 BindEmployee();
-                BindContracts();
+               
 
                 //BindEmployeeDetail();
                 BindTermination();
@@ -44,7 +44,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
             }
             this._presenter.OnViewLoaded();
-            
+            BindContracts();
         }
 
 
