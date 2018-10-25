@@ -69,9 +69,7 @@
                     <asp:BoundField  HeaderText="Program" />
                     <asp:BoundField  HeaderText="Position" />
                     <asp:BoundField HeaderText="Hired Date" />
-                    <asp:BoundField HeaderText="Leave Balance as of Today" />
-                    <asp:BoundField HeaderText="Leave Balance as of contarct End Date" />
-                    <asp:BoundField HeaderText="Leave Balance as of year End Date" />
+                    <asp:BoundField HeaderText="Status" />  
                     <asp:TemplateField HeaderText="Action">
                                 <ItemTemplate>
                                     <div class="btn-group open">
