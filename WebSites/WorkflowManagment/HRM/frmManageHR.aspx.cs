@@ -705,10 +705,10 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 term.Employee = _presenter.CurrentEmployee;
                 term.ReccomendationForRehire = ddlRecommendation.Text;
                 term.TerminationReason = txtTerminationReason.Text;
-                term.Employee.GetContract(_presenter.GetLastContrcatId()).Status = "In Active";
+                _presenter.CurrentEmployee.GetActiveContract().Status = "In Active";
                 _presenter.CurrentEmployee.AppUser.IsActive = false;
                 _presenter.CurrentEmployee.Terminations.Add(term);
-
+                _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
                 dgTermination.EditIndex = -1;
                 dgTermination.DataSource = _presenter.CurrentEmployee.Terminations;
                 dgTermination.DataBind();
