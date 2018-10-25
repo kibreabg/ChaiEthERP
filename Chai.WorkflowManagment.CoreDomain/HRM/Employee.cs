@@ -99,6 +99,18 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             }
             
         }
+        public virtual Contract GetActiveContract()
+        {
+            if (Contracts.Count > 0)
+            {
+                Contract con = Contracts.Last();
+                return con;
+            }
+            else
+                return null;
+            
+
+        }
         public virtual void RemoveContract(int Id)
         {
             foreach (Contract CD in Contracts)
@@ -288,15 +300,11 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         {
             if (AppUser.ReHiredDate != null)
             {
-                foreach (Contract cn in Contracts)
-                {
-                    if (cn.Reason == "ReHired")
-                        return cn.ContractStartDate;
-                }
-                return Contracts[0].ContractStartDate;
+                return AppUser.ReHiredDate.Value;
             }
+
             else
-                return new DateTime();
+                return AppUser.HiredDate.Value;
             
         }
 
