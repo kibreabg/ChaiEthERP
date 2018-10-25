@@ -207,25 +207,15 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
            //tLastname.Enabled = state;
            //btnLogo.Enabled = state;
        }
-       protected void btnLoad_Click(object sender, EventArgs e)
-       {
-           
-            if (fuPAF.HasFile)
-            {
-                string fileName = Path.GetFileName(fuPAF.PostedFile.FileName);
-                tFileName.Text = "~/PAFs/" + fileName;
-                fuPAF.PostedFile.SaveAs(Server.MapPath("~/PAFs/") + fileName);
-            }
-        }
+      
 
        protected void btnSubmit_Click(object sender, EventArgs e)
        {
-            if (fuPAF.HasFile)
-            {
+            
                 CreateWordDocument(Path.GetFullPath("C: \\Users\\Boston IT\\Documents\\CHAIETHERP\\ChaiEthERP\\WebSites\\WorkflowManagment\\PAFCHANGE.docx"),null, pathImage);
                tEnabled(false);
                //printDocument1.DocumentName = SaveDoc.FileName;
-           }
+          
        }
 
         private void AddContracts()
