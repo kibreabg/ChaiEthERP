@@ -270,7 +270,14 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                         cont.Status = ddlStatus.SelectedItem.Text;
                         if (_presenter.CurrentEmployee.Contracts.Count > 1)
                         {
+                            
                             _presenter.CurrentEmployee.GetPreviousContract().Status = "In Active";
+                        }
+
+                        else if(_presenter.CurrentEmployee.Contracts.Count == 1)
+                        {
+
+                            _presenter.CurrentEmployee.GetActiveContract().Status = "In Active";
                         }
 
                         _presenter.CurrentEmployee.Contracts.Add(cont);
