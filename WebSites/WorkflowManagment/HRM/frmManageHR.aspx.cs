@@ -44,7 +44,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
             }
             this._presenter.OnViewLoaded();
-
+            
         }
 
 
@@ -95,7 +95,128 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             }
         }
 
+          private void FindAndReplace(Microsoft.Office.Interop.Word.Application wordApp, object findText, object replaceWithText)
+       {
+           object matchCase = true;
+           object matchWholeWord = true;
+           object matchWildCards = true;
+           object matchSoundLike = true;
+           object matchAllForms = true;
+           object forward = true;
+           object format = false;
+           object matchKashida = false;
+           object matchDiactities = false;
+           object matchAlefHamza = false;
+           object matchControl = false;
+           object read_only = false;
+           object visible = true;
+           object replace = 2;
+           object wrap = 1;
 
+           wordApp.Selection.Find.Execute(ref findText, ref matchCase, ref matchWholeWord, ref matchSoundLike, ref matchAllForms, ref forward, ref wrap, ref format, ref replaceWithText, ref replace, ref matchKashida, ref matchDiactities, ref matchAlefHamza, ref matchControl);
+
+       }
+       //-----------------------------------------
+        private void CreateWordDocument(object filename, object saveAs, object imagePath)
+       {
+           object missing = Missing.Value;
+           string tempPath = null;
+
+           Word.Word.Application wordApp = new Word.Word.Application();
+           Word.Word.Document aDoc = null;
+           if (File.Exists((string)filename)) {
+               DateTime today = DateTime.Now;
+               object readOnly = false;
+               object isVisible = true;
+               wordApp.Visible = true;
+               aDoc = wordApp.Documents.Open(ref filename, ref missing, ref readOnly
+                   , ref missing, ref missing, ref missing
+                   , ref missing, ref missing, ref missing
+                   , ref missing, ref missing, ref missing
+                   , ref missing, ref missing, ref missing, ref missing);
+               aDoc.Activate();
+
+               //Find and replace:
+               this.FindAndReplace(wordApp, "$$EmployeeID$$", _presenter.CurrentEmployee.AppUser.EmployeeNo);
+               this.FindAndReplace(wordApp, "$$FirstName$$", _presenter.CurrentEmployee.FirstName);
+               this.FindAndReplace(wordApp, "$$LastName$$", _presenter.CurrentEmployee.LastName);
+               this.FindAndReplace(wordApp, "$$EmailAddress$$", _presenter.CurrentEmployee.ChaiEMail);
+
+
+               //insert the picture:
+            
+
+               Object oMissed = aDoc.Paragraphs[1].Range; //the position you want to insert
+               Object oLinkToFile = false;  //default
+               Object oSaveWithDocument = true;//default
+               aDoc.InlineShapes.AddPicture(tempPath, ref oLinkToFile, ref oSaveWithDocument, ref oMissed);
+
+               #region Print Document :
+               #endregion
+
+           }
+          
+
+       }
+
+       public List<int> getRunningProcesses()
+       {
+           List<int> ProcessIDs = new List<int>();
+           //here we're going to get a list of all running processes on
+           //the computer
+           foreach (Process clsProcess in Process.GetProcesses())
+           {
+               if (Process.GetCurrentProcess().Id == clsProcess.Id)
+                   continue;
+               if (clsProcess.ProcessName.Contains("WINWORD"))
+               {
+                   ProcessIDs.Add(clsProcess.Id);
+               }
+           }
+           return ProcessIDs;
+       }
+
+
+       private void killProcesses(List<int> processesbeforegen, List<int> processesaftergen)
+       {
+           foreach (int pidafter in processesaftergen)
+           {
+               bool processfound = false;
+               foreach (int pidbefore in processesbeforegen)
+               {
+                   if (pidafter == pidbefore)
+                   {
+                       processfound = true;
+                   }
+               }
+
+               if (processfound == false)
+               {
+                   Process clsProcess = Process.GetProcessById(pidafter);
+                   clsProcess.Kill();
+               }
+           }
+       }
+
+
+       private void tEnabled(bool state)
+       {
+           //tCompany.Enabled = state;
+           //tFirstname.Enabled = state;
+           //tPhone.Enabled = state;
+           //tLastname.Enabled = state;
+           //btnLogo.Enabled = state;
+       }
+      
+
+       protected void btnSubmit_Click(object sender, EventArgs e)
+       {
+            
+                CreateWordDocument(Path.GetFullPath("C: \\Users\\Boston IT\\Documents\\CHAIETHERP\\ChaiEthERP\\WebSites\\WorkflowManagment\\PAFCHANGE.docx"),null, pathImage);
+               tEnabled(false);
+               //printDocument1.DocumentName = SaveDoc.FileName;
+          
+       }
 
         private void AddContracts()
         {
@@ -165,18 +286,18 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 }
                 else
                 {
-
-
-                    cont.ContractStartDate = Convert.ToDateTime(StartDate);
-                    cont.ContractEndDate = Convert.ToDateTime(EndDate);
-                    cont.Reason = ddlReason.SelectedItem.Text;
-                    cont.Status = ddlStatus.SelectedItem.Text;
-                    _presenter.CurrentEmployee.GetContract(_presenter.GetLastContrcatId()).Status = "In Active";
-                    _presenter.CurrentEmployee.Contracts.Add(cont);
-                    dgContractDetail.EditIndex = -1;
-                    dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
-                    dgContractDetail.DataBind();
-                    ClearContractFormFields();
+                    
+                   
+                            cont.ContractStartDate = Convert.ToDateTime(StartDate);
+                            cont.ContractEndDate = Convert.ToDateTime(EndDate);
+                            cont.Reason = ddlReason.SelectedItem.Text;
+                            cont.Status = ddlStatus.SelectedItem.Text;
+                           
+                            _presenter.CurrentEmployee.Contracts.Add(cont);
+                            dgContractDetail.EditIndex = -1;
+                            dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
+                            dgContractDetail.DataBind();
+                            ClearContractFormFields();
 
 
 
@@ -240,9 +361,10 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
             if (_presenter.CurrentEmployee.Contracts.Count != 0)
             {
-
-
-                ddlReason.Items.FindByValue("New Hire").Attributes.Add("Disabled", "Disabled");
+                         
+                       
+                    ddlReason.Items.FindByValue("New Hire").Attributes.Add("Disabled", "Disabled");
+                    ddlStatus.Items.FindByValue("In Active").Attributes.Add("Disabled", "Disabled");
 
 
                 if (_presenter.CurrentEmployee.GetInActiveContract() == true)
@@ -251,6 +373,12 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     ddlReason.Items.FindByValue("Renewal").Attributes.Add("Disabled", "Disabled");
 
                 }
+
+                else if (_presenter.CurrentEmployee.GetInActiveContract() == true && _presenter.CurrentEmployee.GetTerminations(_presenter.CurrentEmployee.Id).ReccomendationForRehire == "No")
+                {
+                    ddlReason.Items.FindByValue("Rehire").Attributes.Add("Disabled", "Disabled");
+                }
+
                 else if (_presenter.CurrentEmployee.GetInActiveContract() == false)
                 {
                     ddlReason.Items.FindByValue("Rehire").Attributes.Add("Disabled", "Disabled");
@@ -261,7 +389,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             }
             else
             {
-
+                ddlStatus.Items.FindByValue("In Active").Attributes.Add("Disabled", "Disabled");
                 dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
                 dgContractDetail.DataBind();
 
@@ -776,7 +904,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 int index = gvrow.RowIndex;
                 int id = Convert.ToInt32(dgChange.SelectedDataKey[0]);
                 //int id = Convert.ToInt32(dgChange.SelectedDataKey[index]);
-                //////  _presenter.CurrentEmployee.RemoveEmployeeDetail(id);
+              //////  _presenter.CurrentEmployee.RemoveEmployeeDetail(id);
                 _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
 
 
@@ -824,7 +952,9 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         protected void btnPAFChange_Click(object sender, EventArgs e)
         {
-            PrintTransaction();
+            CreateWordDocument(Path.GetFullPath("C: \\Users\\Boston IT\\Documents\\CHAIETHERP\\ChaiEthERP\\WebSites\\WorkflowManagment\\PAFCHANGE.docx"), null, pathImage);
+            tEnabled(false);
+           // PrintTransaction();
             ClearEmpDetailFormFields();
         }
 
