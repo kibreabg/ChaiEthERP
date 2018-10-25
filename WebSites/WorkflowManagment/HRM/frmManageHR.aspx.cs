@@ -649,6 +649,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     _presenter.CurrentEmployee.GetContract(Convert.ToInt32(hfDetailId.Value)).EmployeeDetails.Add(empdetail);
                 else
                     _presenter.CurrentEmployee.Contracts[Convert.ToInt32(hfDetailId.Value)].EmployeeDetails.Add(empdetail);
+                _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
                 BindEmpDetail(empdetail.Contract);
 
                 ClearEmpDetailFormFields();
@@ -845,26 +846,16 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         }
 
-        protected void dgChange_EditCommand(object source, DataGridCommandEventArgs e)
-        {
+       
 
-        }
-
-        protected void dgChange_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
+       
 
         protected void lnkEdit_Click(object sender, EventArgs e)
         {
 
         }
 
-        protected void dgChange_SelectedIndexChanged1(object sender, EventArgs e)
-        {
-
-
-        }
+       
 
 
 

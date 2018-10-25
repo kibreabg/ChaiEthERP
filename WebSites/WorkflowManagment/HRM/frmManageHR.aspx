@@ -373,7 +373,7 @@
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                                         ×
                                     </button>
-                                    <h4 class="modal-title" id="myLeaveModalLabel">Leave Approval Progress</h4>
+                                    <h4 class="modal-title" id="myLeaveModalLabel">Employee Change History</h4>
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
@@ -576,7 +576,7 @@
                                                 GridLines="Horizontal" CssClass="table table-striped table-bordered table-hover"
                                                 PagerStyle-CssClass="paginate_button active" AlternatingRowStyle-CssClass=""
                                                 Width="100%" Style="text-align: left"
-                                                AllowPaging="True" PageSize="20" OnSelectedIndexChanged="dgChange_SelectedIndexChanged1" OnRowDeleting="dgChange_RowDeleting" OnRowCommand="dgChange_RowCommand" OnRowDataBound="dgChange_RowDataBound">
+                                                AllowPaging="True" PageSize="20"  OnRowDeleting="dgChange_RowDeleting" OnRowCommand="dgChange_RowCommand" OnRowDataBound="dgChange_RowDataBound">
                                                 <Columns>
 
                                                     <asp:BoundField DataField="Position.PositionName" HeaderText="Position" />
