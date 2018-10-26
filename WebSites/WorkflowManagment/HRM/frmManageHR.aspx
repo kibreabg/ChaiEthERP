@@ -546,14 +546,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon"></span>
-                                                    <asp:DropDownList ID="ddlReportsTo" runat="server" CssClass="form-control" placeholder="Reports To" AppendDataBoundItems="True" Enabled="False"></asp:DropDownList>
-                                                      </div>
-                                            </div>
-                                        </div>
+                                        
                                     </div>
 
                                    
@@ -584,6 +577,7 @@
                                                     <asp:BoundField DataField="Program.ProgramName" HeaderText="Program" />
                                                     <asp:BoundField DataField="DutyStation" HeaderText="DutyStation" />
                                                     <asp:BoundField DataField="Salary" HeaderText="Salary" />
+                                                    <asp:BoundField DataField="EffectiveDateOfChange" HeaderText="EffectiveDateOfChange" />
                                                     <asp:CommandField SelectText="Edit" ShowSelectButton="True">
                                                         <ItemStyle ForeColor="#000099" />
                                                     </asp:CommandField>
