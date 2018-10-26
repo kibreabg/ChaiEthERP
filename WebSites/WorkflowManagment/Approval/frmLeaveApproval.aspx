@@ -364,6 +364,22 @@
             <PagerStyle CssClass="PagerStyle" />
             <RowStyle CssClass="rowstyle" />
         </asp:GridView>
+                  <table style="width: 100%;">
+                <tr>
+                    <td></td>
+                    <td>Signature</td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: right; padding-right: 12%;">Recieved By </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>___________________</td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: right;">___________________</td>
+                </tr>
+            </table>
             </fieldset>
     </div>
 </asp:Content>
