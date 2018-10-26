@@ -36,16 +36,7 @@
                                 </label>
                             </section>
                         </div>
-                        <div class="row">
-                            <section class="col col-4">
-                                <asp:Label ID="Label1" runat="server" Text="Contract End Date" CssClass="label"></asp:Label>
-                                <label class="input">
-                                    <i class="icon-append fa fa-calendar"></i>
-                                    <asp:TextBox ID="txtContractEndDate" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" AutoPostBack="true" runat="server" Visible="true" OnTextChanged="txtContractEndDate_TextChanged"></asp:TextBox>
-                                </label>
-                            </section>
-                           
-                        </div>
+                        
                     </fieldset>
                     <footer>
                         <asp:Button ID="btnFind" runat="server" Text="Find" CssClass="btn btn-primary" OnClick="btnFind_Click"></asp:Button>
