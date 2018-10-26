@@ -256,9 +256,12 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         {
             foreach (Contract CD in Contracts)
             {
-                if (CD.EmployeeDetails.Count != 0)
-                
-                    return CD.EmployeeDetails.Last().DutyStation;
+                if (CD.Status == "Active")
+                {
+                    if (CD.EmployeeDetails.Count != 0)
+
+                        return CD.EmployeeDetails.Last().DutyStation;
+                }
                 
             }
 
@@ -272,9 +275,12 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         {
             foreach (Contract CD in Contracts)
             {
-                if (CD.EmployeeDetails.Count != 0)
-                
-                    return CD.EmployeeDetails.Last().Program.ProgramName;
+                if (CD.Status == "Active")
+                {
+                    if (CD.EmployeeDetails.Count != 0)
+
+                        return CD.EmployeeDetails.Last().Program.ProgramName;
+                }
                 
             }
 
@@ -284,9 +290,12 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         {
             foreach (Contract CD in Contracts)
             {
-                if (CD.EmployeeDetails.Count != 0)
-                
-                    return CD.EmployeeDetails.Last().Position.PositionName;
+                if (CD.Status == "Active")
+                {
+                    if (CD.EmployeeDetails.Count != 0)
+
+                        return CD.EmployeeDetails.Last().Position.PositionName;
+                }
                 
             }
 
