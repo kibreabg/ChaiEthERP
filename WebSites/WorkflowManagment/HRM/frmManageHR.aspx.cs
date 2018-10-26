@@ -257,13 +257,14 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
 
 
-                var StartDate = txtStartDate.Text != "" ? txtStartDate.Text : "";
+                var StartDate = txtStartDate.Text != "" ? txtStartDate.Text: "";
                 var EndDate = txtEndDate.Text != "" ? txtEndDate.Text : " ";
                 Contract cont = new Contract();
                 if (_presenter.CurrentEmployee.Contracts.Count != 0)
                 {
                     if (_presenter.CurrentEmployee.GetEmpContract(GetId).ContractEndDate < Convert.ToDateTime(StartDate))
                     {
+                        
                         cont.ContractStartDate = Convert.ToDateTime(StartDate);
                         cont.ContractEndDate = Convert.ToDateTime(EndDate);
                         cont.Reason = ddlReason.SelectedItem.Text;
@@ -324,15 +325,15 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             ddlPosition.SelectedValue = "0";
             ddlProgram.SelectedValue = "0";
             ddlDutyStation.SelectedValue = string.Empty;
-            txtDescJT.Text = string.Empty;
+            txtEffectDate.Text = string.Empty;
             txtSalary.Text = string.Empty;
             txtHoursPerWeek.Text = string.Empty;
             txtCountryTeam.Text = string.Empty;
             txtBaseCount.Text = string.Empty;
             txtBaseCity.Text = string.Empty;
             txtBaseState.Text = string.Empty;
-            txtClass.SelectedValue = string.Empty;
-            txtEmployeeStatus.SelectedValue = string.Empty;
+            txtClass.Text = string.Empty;
+            txtEmployeeStatus.Text = string.Empty;
             ddlSuperVisor.SelectedValue = "0";
             ddlReportsTo.SelectedValue = "0";
         }
@@ -577,6 +578,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         {
             if (btnAddChange.Text == "Update Change")
             {
+                var EffectDate = txtEffectDate.Text != "" ? txtEffectDate.Text : "";
                 EmployeeDetail empdetail;
                 var id = Convert.ToInt32(dgChange.SelectedDataKey[0]) != 0 ? Convert.ToInt32(dgChange.SelectedDataKey[0]) : 0;
                 int TEMPChid = Convert.ToInt32(dgChange.DataKeys[dgChange.SelectedRow.RowIndex].Value);
@@ -592,7 +594,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     empdetail.Program = _presenter.GetProgram(Convert.ToInt32(ddlProgram.Text));
 
                     empdetail.DutyStation = ddlDutyStation.Text;
-                    empdetail.DescriptiveJobTitle = txtDescJT.Text;
+                    empdetail.DescriptiveJobTitle = empdetail.Position.ToString();
                     empdetail.Salary = Convert.ToDecimal(txtSalary.Text);
                     empdetail.HoursPerWeek = txtHoursPerWeek.Text;
                     empdetail.BaseCountry = txtBaseCount.Text;
@@ -603,9 +605,9 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     empdetail.EmploymentStatus = txtEmployeeStatus.SelectedItem.Text;
 
                     empdetail.Supervisor = Convert.ToInt32(ddlSuperVisor.Text);
-                    empdetail.ReportsTo = Convert.ToInt32(ddlReportsTo.Text);
-
-
+                    empdetail.ReportsTo = empdetail.Supervisor;
+                    empdetail.EffectiveDateOfChange = Convert.ToDateTime(txtEffectDate.Text);
+                   
                     _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
 
                     BindEmpDetail(empdetail.Contract);
@@ -622,7 +624,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             else if (btnAddChange.Text == "Add Change")
             {
 
-
+                var EffectDate = txtEffectDate.Text != "" ? txtEffectDate.Text : "";
                 chan = Session["chan"] as Contract;
                 EmployeeDetail empdetail = new EmployeeDetail();
                 empdetail.Contract = chan;
@@ -631,7 +633,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 empdetail.Program = _presenter.GetProgram(Convert.ToInt32(ddlProgram.Text));
 
                 empdetail.DutyStation = ddlDutyStation.Text;
-                empdetail.DescriptiveJobTitle = txtDescJT.Text;
+                empdetail.DescriptiveJobTitle = empdetail.Position.ToString();
                 empdetail.Salary = Convert.ToDecimal(txtSalary.Text);
                 empdetail.HoursPerWeek = txtHoursPerWeek.Text;
                 empdetail.BaseCountry = txtBaseCount.Text;
@@ -642,7 +644,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 empdetail.EmploymentStatus = txtEmployeeStatus.Text;
 
                 empdetail.Supervisor = Convert.ToInt32(ddlSuperVisor.Text);
-                empdetail.ReportsTo = Convert.ToInt32(ddlReportsTo.Text);
+                empdetail.ReportsTo = empdetail.Supervisor;
+                empdetail.EffectiveDateOfChange = Convert.ToDateTime(txtEffectDate.Text);
 
 
                 if (_presenter.CurrentEmployee.Id > 0)
@@ -1108,7 +1111,6 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     ddlPosition.SelectedValue = empdetail.Position.Id.ToString();
                     ddlProgram.SelectedValue = Convert.ToInt32(empdetail.Program.Id).ToString();
                     ddlDutyStation.SelectedValue = empdetail.DutyStation.ToString();
-                    txtDescJT.Text = empdetail.DescriptiveJobTitle;
                     txtSalary.Text = Convert.ToDecimal(empdetail.Salary).ToString();
                     txtHoursPerWeek.Text = empdetail.HoursPerWeek;
                     txtBaseCount.Text = empdetail.BaseCountry;
@@ -1119,7 +1121,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     txtEmployeeStatus.SelectedValue = empdetail.EmploymentStatus;
                     ddlSuperVisor.SelectedValue = Convert.ToInt32(empdetail.Supervisor).ToString();
                     ddlReportsTo.SelectedValue = Convert.ToInt32(empdetail.ReportsTo).ToString();
-
+                    txtEffectDate.Text = empdetail.EffectiveDateOfChange.ToShortDateString();
 
                     btnAddChange.Text = "Update Change";
 

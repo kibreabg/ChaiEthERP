@@ -167,7 +167,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             return _controller.GetLastEmployeeDetailId();
 
         }
-
+        
      
         public void SaveOrUpdateEmployeeDetail(EmployeeDetail EmployeeDetail)
         {
