@@ -366,14 +366,15 @@
                         </fieldset>
                     </div>
 
-                    <asp:Panel ID="pnlEMPHIST" Visible="true" runat="server" Style="min-height: 400px">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
+                    <asp:Panel ID="pnlEMPHIST" Visible="true" runat="server" Style="min-height: 400px" >
+                        <div style="max-height: 600px; overflow: auto;">
+                        <div class="modal-dialog" >
+                            <div class="modal-content"overflow: auto;>
+                                <div class="modal-header" >
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                                         ×
                                     </button>
-                                    <h4 class="modal-title" id="myLeaveModalLabel">Leave Approval Progress</h4>
+                                    <h4 class="modal-title" id="myLeaveModalLabel">Employee Change History</h4>
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
@@ -526,16 +527,14 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon"></span>
-                                                    <asp:TextBox ID="txtDescJT" runat="server" CssClass="form-control" placeholder="Descriptive Job Title"></asp:TextBox>
-                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidatorjt" runat="server" ControlToValidate="txtDescJT" CssClass="validator" Display="Dynamic" ErrorMessage="Descriptive Job Title is required" SetFocusOnError="true" ValidationGroup="Savedetail" ForeColor="Red"></asp:RequiredFieldValidator>
-
-                                                </div>
-                                            </div>
+                                         <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="icon-append fa fa-calendar"></i></span>
+                                            <asp:TextBox ID="txtEffectDate" runat="server" CssClass="form-control datepicker" placeholder="Change Effective Date" data-dateformat="mm/dd/yy"></asp:TextBox>
                                         </div>
+                                    </div>
+                                </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-6">
@@ -551,12 +550,13 @@
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"></span>
-                                                    <asp:DropDownList ID="ddlReportsTo" runat="server" CssClass="form-control" placeholder="Reports To" AppendDataBoundItems="True"></asp:DropDownList>
-                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidatorRepto" runat="server" Display="Dynamic" ValidationGroup="Savedetail" ErrorMessage="Reports To Required" InitialValue="0" ControlToValidate="ddlReportsTo" ForeColor="Red"></asp:RequiredFieldValidator>
-                                                </div>
+                                                    <asp:DropDownList ID="ddlReportsTo" runat="server" CssClass="form-control" placeholder="Reports To" AppendDataBoundItems="True" Enabled="False"></asp:DropDownList>
+                                                      </div>
                                             </div>
                                         </div>
                                     </div>
+
+                                   
                                     <div class="form-actions">
                                         <div class="row">
                                             <div class="col-md-12">
@@ -567,6 +567,7 @@
                                                 <asp:HiddenField ID="btnHiddenPopupp" runat="server" />
                                                 <asp:HiddenField ID="hfDetailId" runat="server" />
                                             </div>
+
                                         </div>
                                     </div>
                                     <div class="widget-body no-padding">
@@ -576,7 +577,7 @@
                                                 GridLines="Horizontal" CssClass="table table-striped table-bordered table-hover"
                                                 PagerStyle-CssClass="paginate_button active" AlternatingRowStyle-CssClass=""
                                                 Width="100%" Style="text-align: left"
-                                                AllowPaging="True" PageSize="20" OnSelectedIndexChanged="dgChange_SelectedIndexChanged1" OnRowDeleting="dgChange_RowDeleting" OnRowCommand="dgChange_RowCommand" OnRowDataBound="dgChange_RowDataBound">
+                                                AllowPaging="True" PageSize="20"  OnRowDeleting="dgChange_RowDeleting" OnRowCommand="dgChange_RowCommand" OnRowDataBound="dgChange_RowDataBound">
                                                 <Columns>
 
                                                     <asp:BoundField DataField="Position.PositionName" HeaderText="Position" />
@@ -597,6 +598,7 @@
                                 </div>
                             </div>
                         </div>
+                            </div>
                     </asp:Panel>
                 </div>
             </div>

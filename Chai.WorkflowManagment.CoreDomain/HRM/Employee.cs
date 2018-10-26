@@ -69,7 +69,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         }
         public virtual Contract GetPreviousContract()
         {
-            if (Contracts.Count > 1)
+            if (Contracts.Count >1)
             {
                 return Contracts[Contracts.Count - 2];
             }
