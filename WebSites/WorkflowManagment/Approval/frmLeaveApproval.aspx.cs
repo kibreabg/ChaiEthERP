@@ -173,7 +173,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             if (_presenter.CurrentLeaveRequest.CurrentLevel == _presenter.CurrentLeaveRequest.LeaveRequestStatuses.Count && _presenter.CurrentLeaveRequest.ProgressStatus == ProgressStatus.Completed.ToString())
             {
                 btnPrint.Enabled = true;
-                SendEmailToRequester();
+               
 
             }
 
@@ -276,6 +276,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     _presenter.SaveOrUpdateLeaveRequest(_presenter.CurrentLeaveRequest);
                     CalculateLeavetaken();
                     ShowPrint();
+                    SendEmailToRequester();
                     if (ddlApprovalStatus.SelectedValue != "Rejected")
                     {
                         Master.ShowMessage(new AppMessage("Leave Approval Processed ", Chai.WorkflowManagment.Enums.RMessageType.Info));

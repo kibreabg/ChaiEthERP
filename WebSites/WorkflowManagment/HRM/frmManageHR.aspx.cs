@@ -566,9 +566,9 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             txtEmail.Text = _presenter.CurrentEmployee.ChaiEMail;
             lnkEmail.HRef = _presenter.CurrentEmployee.ChaiEMail;
             txtPhoneNo.Text = _presenter.CurrentEmployee.Phone;
-            txtLeaveAsOfCalEndDate.Text = Math.Round(_presenter.CurrentEmployee.EmployeeLeaveBalanceYE()).ToString();
-            txtLeaveAsOfContractEndDate.Text = _presenter.CurrentEmployee.GetActiveContract() != null ? Math.Round(_presenter.CurrentEmployee.EmployeeLeaveBalanceCED(_presenter.CurrentEmployee.GetActiveContract().ContractEndDate)).ToString() : "";
-            txtLeaveAsOfToday.Text = Math.Round(_presenter.CurrentEmployee.EmployeeLeaveBalance()).ToString();
+            txtLeaveAsOfCalEndDate.Text = Math.Round(_presenter.CurrentEmployee.EmployeeLeaveBalanceYE() - _presenter.EmpLeaveTaken(_presenter.CurrentEmployee.Id, _presenter.CurrentEmployee.LeaveSettingDate.Value)).ToString();
+            txtLeaveAsOfContractEndDate.Text = _presenter.CurrentEmployee.GetActiveContract() != null ? Math.Round(_presenter.CurrentEmployee.EmployeeLeaveBalanceCED(_presenter.CurrentEmployee.GetActiveContract().ContractEndDate) - _presenter.EmpLeaveTaken(_presenter.CurrentEmployee.Id, _presenter.CurrentEmployee.LeaveSettingDate.Value)).ToString() : "";
+            txtLeaveAsOfToday.Text = Math.Round(_presenter.CurrentEmployee.EmployeeLeaveBalance() - _presenter.EmpLeaveTaken(_presenter.CurrentEmployee.Id, _presenter.CurrentEmployee.LeaveSettingDate.Value)).ToString();
 
         }
 
