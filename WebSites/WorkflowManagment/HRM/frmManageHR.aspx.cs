@@ -38,7 +38,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 BindTermination();
                 BindPosition();
                 BindProgram();
-                BindReportsTo();
+                
                 BindSupervisor();
 
 
@@ -335,7 +335,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             txtClass.Text = string.Empty;
             txtEmployeeStatus.Text = string.Empty;
             ddlSuperVisor.SelectedValue = "0";
-            ddlReportsTo.SelectedValue = "0";
+           
         }
         private void ClearContractFormFields()
         {
@@ -782,24 +782,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             ddlSuperVisor.DataTextField = "FullName";
             ddlSuperVisor.DataBind();
         }
-        private void BindReportsTo()
-
-        {
-            ddlReportsTo.Items.Clear();
-
-            ListItem lst = new ListItem();
-            lst.Text = "Select Reports To";
-            lst.Value = "0";
-            ddlReportsTo.Items.Add(lst);
-            ddlReportsTo.AppendDataBoundItems = true;
-
-
-
-            ddlReportsTo.DataSource = _presenter.GetEmployees();
-            ddlReportsTo.DataValueField = "Id";
-            ddlReportsTo.DataTextField = "FullName";
-            ddlReportsTo.DataBind();
-        }
+      
 
 
         protected void btnAddTerm_Click(object sender, EventArgs e)
@@ -1120,7 +1103,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     txtCountryTeam.Text = empdetail.CountryTeam;
                     txtEmployeeStatus.SelectedValue = empdetail.EmploymentStatus;
                     ddlSuperVisor.SelectedValue = Convert.ToInt32(empdetail.Supervisor).ToString();
-                    ddlReportsTo.SelectedValue = Convert.ToInt32(empdetail.ReportsTo).ToString();
+                  
                     txtEffectDate.Text = empdetail.EffectiveDateOfChange.ToShortDateString();
 
                     btnAddChange.Text = "Update Change";
