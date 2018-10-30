@@ -204,7 +204,7 @@
              <table style="width: 100%;">
                 <tr>
                     <td style="width: 17%; text-align:left;">
-                        <img src="../img/CHAI%20Logo.png" width="70" height="50" /></td>
+                        <img src="../img/CHAI%20Logo.png" width="100" height="50" /></td>
                     <td style="font-size: large; text-align: center;">
                         <strong>CHAI Ethiopia ERP
                             <br />
@@ -296,7 +296,7 @@
                 </td>
                 <td style="width: 334px; height: 18px;">
                     <strong>
-                        <asp:Label ID="lblDateTo" runat="server" Text="Date To"></asp:Label>
+                        <asp:Label ID="lblDateTo" runat="server" Text="Reported Date"></asp:Label>
                         :</strong></td>
                 <td style="width: 335px; height: 18px;">
                     <asp:Label ID="lblDatetores" runat="server"></asp:Label>
@@ -364,6 +364,22 @@
             <PagerStyle CssClass="PagerStyle" />
             <RowStyle CssClass="rowstyle" />
         </asp:GridView>
+                  <table style="width: 100%;">
+                <tr>
+                    <td></td>
+                    <td>Requester Signature</td>
+                    <td></td>
+                    <td></td>
+                    
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>___________________</td>
+                    <td></td>
+                    <td></td>
+                   
+                </tr>
+            </table>
             </fieldset>
     </div>
 </asp:Content>
