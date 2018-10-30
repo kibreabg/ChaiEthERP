@@ -200,12 +200,12 @@
                                         <div class="select">
 
                                             <asp:DropDownList ID="ddlReason" runat="server" CssClass="form-control" placeholder="Status" AppendDataBoundItems="True">
-                                                <asp:ListItem Value=" ">Select Contract Type</asp:ListItem>
+                                                <asp:ListItem Value="">Select Contract Type</asp:ListItem>
                                                 <asp:ListItem Value="New Hire">New Hire</asp:ListItem>
                                                 <asp:ListItem Value="Renewal">Renewal</asp:ListItem>
                                                 <asp:ListItem Value="Rehire">Rehire</asp:ListItem>
                                             </asp:DropDownList>
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidatorContType" runat="server" Display="Dynamic" ValidationGroup="Savecont" ErrorMessage="Contract Type Required" InitialValue="0" ControlToValidate="ddlReason" ForeColor="Red"></asp:RequiredFieldValidator>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidatorContType" runat="server" Display="Dynamic" ValidationGroup="Savecont" ErrorMessage="Contract Type Required" InitialValue="" ControlToValidate="ddlReason" ForeColor="Red"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
                                 </div>
@@ -214,11 +214,11 @@
                                         <div class="select">
 
                                             <asp:DropDownList ID="ddlStatus" runat="server" CssClass="form-control" placeholder="Status" AppendDataBoundItems="True">
-                                                <asp:ListItem Value="0">Select Status</asp:ListItem>
+                                                <asp:ListItem Value="">Select Status</asp:ListItem>
                                                 <asp:ListItem Value="Active">Active</asp:ListItem>
                                                 <asp:ListItem Value="In Active">In Active</asp:ListItem>
                                             </asp:DropDownList>
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidatorStatus" Display="Dynamic" runat="server" ValidationGroup="Savecont" ErrorMessage="Status Required" InitialValue="0" ControlToValidate="ddlStatus" ForeColor="Red"></asp:RequiredFieldValidator>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidatorStatus" Display="Dynamic" runat="server" ValidationGroup="Savecont" ErrorMessage="Status Required" InitialValue="" ControlToValidate="ddlStatus" ForeColor="Red"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
                                 </div>
@@ -244,7 +244,7 @@
                                             GridLines="Horizontal" CssClass="table table-striped table-bordered table-hover"
                                             PagerStyle-CssClass="paginate_button active" AlternatingRowStyle-CssClass=""
                                             Width="100%" Style="text-align: left"
-                                            AllowPaging="True" PageSize="20" OnSelectedIndexChanged="dgContractDetail_SelectedIndexChanged" OnRowDeleting="dgContractDetail_RowDeleting" OnRowDataBound="dgContractDetail_RowDataBound">
+                                            AllowPaging="True" PageSize="20" OnSelectedIndexChanged="dgContractDetail_SelectedIndexChanged" OnRowDataBound="dgContractDetail_RowDataBound" OnRowDeleting="dgContractDetail_RowDeleting1">
                                             <Columns>
                                                 <asp:BoundField DataField="ContractStartDate" HeaderText="Contract Start Date" />
                                                 <asp:BoundField DataField="ContractEndDate" HeaderText="Contract End Date" />
@@ -272,7 +272,7 @@
                         </fieldset>
                     </div>
 
-                    <div class="tab-pane" id="tab-r2">
+                    <div class="tab-pane " id="tab-r2">
                         <fieldset>
 
                             <div class="row">
@@ -340,21 +340,18 @@
                                             GridLines="Horizontal" CssClass="table table-striped table-bordered table-hover"
                                             PagerStyle-CssClass="paginate_button active" AlternatingRowStyle-CssClass=""
                                             Width="100%" Style="text-align: left"
-                                            AllowPaging="True" PageSize="20" OnSelectedIndexChanged="dgTermination_SelectedIndexChanged" OnRowDeleting="dgTermination_RowDeleting">
+                                            AllowPaging="True" PageSize="20" OnSelectedIndexChanged="dgTermination_SelectedIndexChanged" OnRowDeleting="dgTermination_RowDeleting1" OnRowCommand="dgTermination_RowCommand">
                                             <Columns>
                                                 <asp:BoundField DataField="TerminationDate" HeaderText="Termination Date" />
                                                 <asp:BoundField DataField="LastDateofEmployee" HeaderText="Last Date of Employee at Office" />
                                                 <asp:BoundField DataField="ReccomendationForRehire" HeaderText="Reccomendation For Rehire" />
                                                 <asp:BoundField DataField="TerminationReason" HeaderText="Termination Reason" />
                                                 <asp:CommandField SelectText="Edit" ShowSelectButton="True">
-                                                    <ItemStyle Font-Underline="True" ForeColor="#000099" />
+                                                    <ItemStyle Font-Underline="True" ForeColor="#3333FF" />
                                                 </asp:CommandField>
-                                                <asp:TemplateField ShowHeader="False">
-                                                    <ItemTemplate>
-                                                        <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="False" CommandName="Delete" OnClientClick="javascript:return confirm('Are you sure you want to delete this entry?');" Font-Underline="True" ForeColor="#000099" Text="Delete"></asp:LinkButton>
-                                                    </ItemTemplate>
-                                                    <ItemStyle Font-Underline="True" ForeColor="#000099" />
-                                                </asp:TemplateField>
+                                                <asp:CommandField ShowDeleteButton="True">
+                                                <ItemStyle ForeColor="Blue" />
+                                                </asp:CommandField>
 
                                             </Columns>
 
@@ -406,7 +403,7 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon"></span>
                                                     <asp:DropDownList ID="ddlDutyStation" runat="server" CssClass="form-control" placeholder="Duty Station" AppendDataBoundItems="True">
-                                                        <asp:ListItem Value="0">Select Duty Station</asp:ListItem>
+                                                        <asp:ListItem Value="">Select Duty Station</asp:ListItem>
                                                         <asp:ListItem Value="Addis Ababa">Addis Ababa</asp:ListItem>
                                                         <asp:ListItem Value="SNNPR">SNNPR</asp:ListItem>
                                                         <asp:ListItem Value="Tigray">Tigray</asp:ListItem>
@@ -440,7 +437,7 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon"></span>
                                                     <asp:DropDownList ID="txtEmployeeStatus" runat="server" CssClass="form-control" placeholder="Employement Status">
-                                                        <asp:ListItem Value="Select Employement Status">Select Employement Status</asp:ListItem>
+                                                        <asp:ListItem Value="">Select Employement Status</asp:ListItem>
                                                         <asp:ListItem Value="Fulltime">Fulltime</asp:ListItem>
                                                         <asp:ListItem Value="Temporary">Temporary</asp:ListItem>
                                                         <asp:ListItem Value="Volunteer">Volunteer</asp:ListItem>
@@ -458,7 +455,7 @@
                                                     <span class="input-group-addon"></span>
 
                                                     <asp:DropDownList ID="txtClass" runat="server" CssClass="form-control" placeholder="Class">
-                                                        <asp:ListItem Value="Select Class">Select Class</asp:ListItem>
+                                                        <asp:ListItem Value="">Select Class</asp:ListItem>
                                                         <asp:ListItem Value="Local National">Local National</asp:ListItem>
                                                         <asp:ListItem Value="Expat">Expat</asp:ListItem>
                                                         <asp:ListItem Value="Seconedee">Seconedee</asp:ListItem>
@@ -535,6 +532,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                        
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-6">
@@ -556,7 +554,7 @@
                                                 <asp:Button ID="btnCancelHist" runat="server" Text="Close" class="btn btn-default"></asp:Button>
                                                 <asp:Button ID="btnAddChange" runat="server" CssClass="btn btn-primary" Text="Add Change" ValidationGroup="Savedetail" OnClick="btnAddChange_Click" />
                                                 <asp:Button ID="btnPAFNew" runat="server" CssClass="btn btn-primary" Text="Generate PAF New Hire" OnClientClick="javascript:Clickheretoprint('divprint2')" Visible="False" OnClick="btnPAFNew_Click" />
-                                                <asp:Button ID="btnPAFChange" runat="server" CssClass="btn btn-primary" Text="Generate PAF Change" OnClientClick="javascript:Clickheretoprint('divprint')" Visible="False" OnClick="btnPAFChange_Click" />
+                                                <asp:Button ID="btnPAFChange" runat="server" CssClass="btn btn-primary" Text="Generate PAF Change" OnClientClick="javascript:Clickheretoprint('divprint')" Visible="True" OnClick="btnPAFChange_Click" />
                                                 <asp:HiddenField ID="btnHiddenPopupp" runat="server" />
                                                 <asp:HiddenField ID="hfDetailId" runat="server" />
                                             </div>
@@ -570,7 +568,7 @@
                                                 GridLines="Horizontal" CssClass="table table-striped table-bordered table-hover"
                                                 PagerStyle-CssClass="paginate_button active" AlternatingRowStyle-CssClass=""
                                                 Width="100%" Style="text-align: left"
-                                                AllowPaging="True" PageSize="20"  OnRowDeleting="dgChange_RowDeleting" OnRowCommand="dgChange_RowCommand" OnRowDataBound="dgChange_RowDataBound">
+                                                AllowPaging="True" PageSize="20" OnRowCommand="dgChange_RowCommand" OnRowDataBound="dgChange_RowDataBound" OnRowDeleting="dgChange_RowDeleting1">
                                                 <Columns>
 
                                                     <asp:BoundField DataField="Position.PositionName" HeaderText="Position" />
@@ -581,7 +579,7 @@
                                                     <asp:CommandField SelectText="Edit" ShowSelectButton="True">
                                                         <ItemStyle ForeColor="#000099" />
                                                     </asp:CommandField>
-                                                    <asp:CommandField ShowDeleteButton="True">
+                                                    <asp:CommandField ShowDeleteButton="True" >
                                                         <ItemStyle ForeColor="#0000CC" />
                                                     </asp:CommandField>
                                                 </Columns>
