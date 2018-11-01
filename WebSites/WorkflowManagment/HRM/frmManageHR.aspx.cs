@@ -212,8 +212,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
        protected void btnSubmit_Click(object sender, EventArgs e)
        {
             
-                CreateWordDocument(Path.GetFullPath("C: \\Users\\Boston IT\\Documents\\CHAIETHERP\\ChaiEthERP\\WebSites\\WorkflowManagment\\PAFCHANGE.docx"),null, pathImage);
-               tEnabled(false);
+                CreateWordDocument(Path.GetFullPath("D: \\PAFCHANGE.docx"),null, pathImage);
+               tEnabled(true);
                //printDocument1.DocumentName = SaveDoc.FileName;
           
        }
@@ -237,15 +237,16 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     {
                         cont.ContractStartDate = Convert.ToDateTime(StartDate);
                         cont.ContractEndDate = Convert.ToDateTime(EndDate);
-                        cont.Reason = ddlReason.SelectedItem.Text;
-                        cont.Status = ddlStatus.SelectedItem.Text;
+                        cont.Reason = ddlReason.SelectedValue;
+                        cont.Status = ddlStatus.SelectedValue;
 
                         _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
 
                         dgContractDetail.EditIndex = -1;
+                        ClearContractFormFields();
                         dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
                         dgContractDetail.DataBind();
-                        ClearContractFormFields();
+                       
 
                     }
                     else
@@ -276,9 +277,10 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
                         _presenter.CurrentEmployee.Contracts.Add(cont);
                         dgContractDetail.EditIndex = -1;
+                        ClearContractFormFields();
                         dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
                         dgContractDetail.DataBind();
-                        ClearContractFormFields();
+                       
 
                     }
 
@@ -296,10 +298,10 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                            
                             _presenter.CurrentEmployee.Contracts.Add(cont);
                             dgContractDetail.EditIndex = -1;
-                            dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
+                    ClearContractFormFields();
+                    dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
                             dgContractDetail.DataBind();
-                            ClearContractFormFields();
-
+                            
 
 
                 }
@@ -342,8 +344,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             txtStartDate.Text = string.Empty;
             txtEndDate.Text = string.Empty;
 
-            ddlReason.SelectedValue = "0";
-            ddlStatus.SelectedValue = "0";
+            ddlReason.SelectedValue = "";
+            ddlStatus.SelectedValue = "";
         }
 
         private void ClearTerminationFormFields()
@@ -690,7 +692,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     dgTermination.EditIndex = -1;
                     dgTermination.DataSource = _presenter.CurrentEmployee.Terminations;
                     dgTermination.DataBind();
-                    _presenter.CurrentEmployee.GetContract(id).Status = "In Active";
+                    _presenter.CurrentEmployee.GetActiveContract().Status = "In Active";
                     _presenter.CurrentEmployee.AppUser.IsActive = false;
 
                 }
@@ -929,7 +931,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         protected void btnPAFChange_Click(object sender, EventArgs e)
         {
-            CreateWordDocument(Path.GetFullPath("C: \\Users\\Boston IT\\Documents\\CHAIETHERP\\ChaiEthERP\\WebSites\\WorkflowManagment\\PAFCHANGE.docx"), null, pathImage);
+            CreateWordDocument(Path.GetFullPath("D: \\PAFCHANGE.docx"), null, pathImage);
             tEnabled(false);
            // PrintTransaction();
             ClearEmpDetailFormFields();
@@ -937,34 +939,19 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         protected void dgContractDetail_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
-            int id = (int)dgContractDetail.DataKeys[e.RowIndex].Value;
-            _presenter.CurrentEmployee.RemoveContract(id);
-            _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
-            dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
-            dgContractDetail.DataBind();
-            Master.ShowMessage(new AppMessage("Contract Detail Is Successfully Deleted!", RMessageType.Info));
+           
         }
 
 
         protected void dgChange_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
-            int id = (int)dgChange.DataKeys[e.RowIndex].Value;
-            /////   _presenter.CurrentEmployee.RemoveEmployeeDetail(id);
-            _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
-            ////  dgChange.DataSource = _presenter.CurrentEmployee.EmployeeDetails;
-            dgChange.DataBind();
-            Master.ShowMessage(new AppMessage("Employee Detail Is Successfully Deleted!", RMessageType.Info));
+          
         }
 
-        protected void dgTermination_RowDeleting(object sender, GridViewDeleteEventArgs e)
-        {
-            int id = (int)dgTermination.DataKeys[e.RowIndex].Value;
-            _presenter.CurrentEmployee.RemoveTermination(id);
-            _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
-            dgTermination.DataSource = _presenter.CurrentEmployee.Terminations;
-            dgTermination.DataBind();
-            Master.ShowMessage(new AppMessage("Termination Is Successfully Deleted!", RMessageType.Info));
-        }
+         protected void dgTermination_RowDeleting(object sender, GridViewDeleteEventArgs e)
+         {
+            
+         }
 
 
 
@@ -1037,7 +1024,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         }
 
-        protected void btnEMPhist_Click(object sender, EventArgs e)
+    protected void btnEMPhist_Click(object sender, EventArgs e)
         {
 
             /* int TEMPChid = Convert.ToInt32(dgChange.DataKeys[dgChange.SelectedRow.RowIndex].Value);
@@ -1156,7 +1143,11 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 }
                 catch (Exception ex)
                 {
-                    Master.ShowMessage(new AppMessage("Error: Unable to delete Employee History. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                   
+                    Master.ShowMessage(new AppMessage("Error: Unable to delete Employee History. ", RMessageType.Error));
+
+                    ExceptionUtility.LogException(ex, ex.Source);
+                    ExceptionUtility.NotifySystemOps(ex);
                 }
 
             }
@@ -1215,9 +1206,94 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 txtStartDate.Text = cont.ContractStartDate.ToShortDateString();
                 txtEndDate.Text = cont.ContractEndDate.ToShortDateString();
 
-                ddlReason.SelectedItem.Text = cont.Reason;
-                ddlStatus.SelectedItem.Text = cont.Status;
+                ddlReason.SelectedValue = cont.Reason;
+                ddlStatus.SelectedValue = cont.Status;
                 btnAddcontract.Text = "Update Contracts";
+
+
+
+            }
+
+            else if (e.CommandName == "Delete")
+            {
+               
+                  int Row = Convert.ToInt32(e.CommandArgument);
+
+                  int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row].Value);
+                try
+                {
+                    if (TEMPChid > 0)
+                    {
+                        _presenter.CurrentEmployee.RemoveContract(TEMPChid);
+                        _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
+                        _presenter.CurrentEmployee.GetLastInActiveContract().Status = "Active";
+                        dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
+                        dgContractDetail.DataBind();
+
+                        
+                        
+
+
+                        
+                       
+                        Master.ShowMessage(new AppMessage("Contract Detail Is Successfully Deleted!", RMessageType.Info));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Master.ShowMessage(new AppMessage("Error: Unable to Delete Contract. ",RMessageType.Error));
+                    
+                    ExceptionUtility.LogException(ex, ex.Source);
+                    ExceptionUtility.NotifySystemOps(ex);
+                }
+
+            }
+        }
+
+
+
+        protected void dgContractDetail_RowDeleting1(object sender, GridViewDeleteEventArgs e)
+        {
+           
+        }
+
+        protected void dgChange_RowDeleting1(object sender, GridViewDeleteEventArgs e)
+        {
+
+        }
+
+        protected void dgTermination_RowDeleting1(object sender, GridViewDeleteEventArgs e)
+        {
+
+        }
+
+        protected void dgTermination_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            
+             if (e.CommandName == "Select")
+            {
+
+
+                int Row = Convert.ToInt32(e.CommandArgument);
+
+                int TEMPChid = Convert.ToInt32(dgTermination.DataKeys[Row].Value);
+                //   int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[dgContractDetail.SelectedRow.RowIndex].Value.ToString());
+
+
+                if (TEMPChid > 0)
+                    Session["chan"] = _presenter.CurrentEmployee.GetTerminations(TEMPChid);
+                else
+                    Session["chan"] = _presenter.CurrentEmployee.Terminations[dgTermination.SelectedRow.DataItemIndex];
+
+
+
+
+                Termination term = _presenter.CurrentEmployee.GetTerminations(TEMPChid);
+                txtTerminationDate.Text = term.TerminationDate.ToShortDateString();
+                txtLastDate.Text = term.LastDateOfEmployee.ToShortDateString();
+                ddlRecommendation.SelectedItem.Text = term.ReccomendationForRehire;
+                txtTerminationReason.Text = term.TerminationReason;
+                btnAddTerm.Text= "Update Terminations";
 
 
 
@@ -1228,27 +1304,36 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
                 int Row = Convert.ToInt32(e.CommandArgument);
 
-                int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row].Value);
+                int TEMPChid = Convert.ToInt32(dgTermination.DataKeys[Row].Value);
                 try
                 {
                     if (TEMPChid > 0)
                     {
-                        _presenter.CurrentEmployee.RemoveContract(TEMPChid);
+                        _presenter.CurrentEmployee.RemoveTermination(TEMPChid);
                         _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
-                        dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
-                        dgContractDetail.DataBind();
-                        Master.ShowMessage(new AppMessage("Employee Detail Is Successfully Deleted!", RMessageType.Info));
+                       dgTermination.DataSource = _presenter.CurrentEmployee.Terminations;
+                        dgTermination.DataBind();
+
+
+
+
+
+
+
+
+                        Master.ShowMessage(new AppMessage("Termination  Is Successfully Deleted!", RMessageType.Info));
                     }
                 }
                 catch (Exception ex)
                 {
-                    Master.ShowMessage(new AppMessage("Error: Unable to delete Employee History. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Error: Unable to Delete Termination. ", RMessageType.Error));
+
+                    ExceptionUtility.LogException(ex, ex.Source);
+                    ExceptionUtility.NotifySystemOps(ex);
                 }
 
             }
         }
-
-
     }
 
 }
