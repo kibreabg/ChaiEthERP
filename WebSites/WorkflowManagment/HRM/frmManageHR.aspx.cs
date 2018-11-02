@@ -648,7 +648,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 empdetail.Supervisor = Convert.ToInt32(ddlSuperVisor.Text);
                 empdetail.ReportsTo = empdetail.Supervisor;
                 empdetail.EffectiveDateOfChange = Convert.ToDateTime(txtEffectDate.Text);
-                
+
 
                 if (_presenter.CurrentEmployee.Id > 0)
                     _presenter.CurrentEmployee.GetContract(Convert.ToInt32(hfDetailId.Value)).EmployeeDetails.Add(empdetail);
