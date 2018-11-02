@@ -363,10 +363,10 @@
                         </fieldset>
                     </div>
 
-                    <asp:Panel ID="pnlEMPHIST" Visible="true" runat="server" Style="min-height: 400px" >
-                        <div style="max-height: 600px; overflow: auto;">
-                        <div class="modal-dialog" >
-                            <div class="modal-content"overflow: auto;>
+                    <asp:Panel ID="pnlEMPHIST" Visible="true" runat="server">
+                        <div style="max-height: 600px;  overflow: auto;">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
                                 <div class="modal-header" >
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                                         ×
@@ -526,9 +526,10 @@
                                         </div>
                                          <div class="col-sm-6">
                                     <div class="form-group">
+                                         
                                         <div class="input-group">
-                                            <span class="input-group-addon"><i class="icon-append fa fa-calendar"></i></span>
-                                            <asp:TextBox ID="txtEffectDate" runat="server" CssClass="form-control datepicker" placeholder="Change Effective Date" data-dateformat="mm/dd/yy"></asp:TextBox>
+                                             <span class="input-group-addon"><i class="icon-append fa fa-calendar"></i></span>
+                                            <asp:TextBox ID="txtEffectDate" runat="server" CssClass="form-control datepicker panel-body" placeholder="Change Effective Date" data-dateformat="mm/dd/yy"></asp:TextBox>
                                         </div>
                                     </div>
                                 </div>
@@ -554,7 +555,7 @@
                                                 <asp:Button ID="btnCancelHist" runat="server" Text="Close" class="btn btn-default"></asp:Button>
                                                 <asp:Button ID="btnAddChange" runat="server" CssClass="btn btn-primary" Text="Add Change" ValidationGroup="Savedetail" OnClick="btnAddChange_Click" />
                                                 <asp:Button ID="btnPAFNew" runat="server" CssClass="btn btn-primary" Text="Generate PAF New Hire" OnClientClick="javascript:Clickheretoprint('divprint2')" Visible="False" OnClick="btnPAFNew_Click" />
-                                                <asp:Button ID="btnPAFChange" runat="server" CssClass="btn btn-primary" Text="Generate PAF Change" OnClientClick="javascript:Clickheretoprint('divprint')" Visible="True" OnClick="btnPAFChange_Click" />
+                                                <asp:Button ID="btnPAFChange" runat="server" CssClass="btn btn-primary" Text="Generate PAF Change" OnClientClick="javascript:Clickheretoprint('divprint')" Visible="False" OnClick="btnPAFChange_Click" />
                                                 <asp:HiddenField ID="btnHiddenPopupp" runat="server" />
                                                 <asp:HiddenField ID="hfDetailId" runat="server" />
                                             </div>
@@ -575,7 +576,7 @@
                                                     <asp:BoundField DataField="Program.ProgramName" HeaderText="Program" />
                                                     <asp:BoundField DataField="DutyStation" HeaderText="DutyStation" />
                                                     <asp:BoundField DataField="Salary" HeaderText="Salary" />
-                                                    <asp:BoundField DataField="EffectiveDateOfChange" HeaderText="EffectiveDateOfChange" />
+                                                    <asp:BoundField DataField="EffectiveDateOfChange" HeaderText="EffectiveDateOfChange"  />
                                                     <asp:CommandField SelectText="Edit" ShowSelectButton="True">
                                                         <ItemStyle ForeColor="#000099" />
                                                     </asp:CommandField>
