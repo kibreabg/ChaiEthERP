@@ -167,7 +167,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             return _controller.GetLastEmployeeDetailId();
 
         }
-
+        
      
         public void SaveOrUpdateEmployeeDetail(EmployeeDetail EmployeeDetail)
         {
@@ -258,6 +258,10 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
 
         #endregion
+        public decimal EmpLeaveTaken(int empid, DateTime LeaveSettingDate)
+        {
+            return _controller.TotalleaveTaken(empid, LeaveSettingDate);
+        }
         // TODO: Handle other view events and set state in the view
     }
 }

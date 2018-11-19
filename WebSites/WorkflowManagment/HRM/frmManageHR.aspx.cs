@@ -32,19 +32,19 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 this._presenter.OnViewInitialized();
 
                 BindEmployee();
-                BindContracts();
+               
 
                 //BindEmployeeDetail();
                 BindTermination();
                 BindPosition();
                 BindProgram();
-                BindReportsTo();
+                
                 BindSupervisor();
 
 
             }
             this._presenter.OnViewLoaded();
-
+            BindContracts();
         }
 
 
@@ -95,7 +95,128 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             }
         }
 
+          private void FindAndReplace(Microsoft.Office.Interop.Word.Application wordApp, object findText, object replaceWithText)
+       {
+           object matchCase = true;
+           object matchWholeWord = true;
+           object matchWildCards = true;
+           object matchSoundLike = true;
+           object matchAllForms = true;
+           object forward = true;
+           object format = false;
+           object matchKashida = false;
+           object matchDiactities = false;
+           object matchAlefHamza = false;
+           object matchControl = false;
+           object read_only = false;
+           object visible = true;
+           object replace = 2;
+           object wrap = 1;
 
+           wordApp.Selection.Find.Execute(ref findText, ref matchCase, ref matchWholeWord, ref matchSoundLike, ref matchAllForms, ref forward, ref wrap, ref format, ref replaceWithText, ref replace, ref matchKashida, ref matchDiactities, ref matchAlefHamza, ref matchControl);
+
+       }
+       //-----------------------------------------
+        private void CreateWordDocument(object filename, object saveAs, object imagePath)
+       {
+           object missing = Missing.Value;
+           string tempPath = null;
+
+           Word.Word.Application wordApp = new Word.Word.Application();
+           Word.Word.Document aDoc = null;
+           if (File.Exists((string)filename)) {
+               DateTime today = DateTime.Now;
+               object readOnly = false;
+               object isVisible = true;
+               wordApp.Visible = true;
+               aDoc = wordApp.Documents.Open(ref filename, ref missing, ref readOnly
+                   , ref missing, ref missing, ref missing
+                   , ref missing, ref missing, ref missing
+                   , ref missing, ref missing, ref missing
+                   , ref missing, ref missing, ref missing, ref missing);
+               aDoc.Activate();
+
+               //Find and replace:
+               this.FindAndReplace(wordApp, "$$EmployeeID$$", _presenter.CurrentEmployee.AppUser.EmployeeNo);
+               this.FindAndReplace(wordApp, "$$FirstName$$", _presenter.CurrentEmployee.FirstName);
+               this.FindAndReplace(wordApp, "$$LastName$$", _presenter.CurrentEmployee.LastName);
+               this.FindAndReplace(wordApp, "$$EmailAddress$$", _presenter.CurrentEmployee.ChaiEMail);
+
+
+               //insert the picture:
+            
+
+               Object oMissed = aDoc.Paragraphs[1].Range; //the position you want to insert
+               Object oLinkToFile = false;  //default
+               Object oSaveWithDocument = true;//default
+               aDoc.InlineShapes.AddPicture(tempPath, ref oLinkToFile, ref oSaveWithDocument, ref oMissed);
+
+               #region Print Document :
+               #endregion
+
+           }
+          
+
+       }
+
+       public List<int> getRunningProcesses()
+       {
+           List<int> ProcessIDs = new List<int>();
+           //here we're going to get a list of all running processes on
+           //the computer
+           foreach (Process clsProcess in Process.GetProcesses())
+           {
+               if (Process.GetCurrentProcess().Id == clsProcess.Id)
+                   continue;
+               if (clsProcess.ProcessName.Contains("WINWORD"))
+               {
+                   ProcessIDs.Add(clsProcess.Id);
+               }
+           }
+           return ProcessIDs;
+       }
+
+
+       private void killProcesses(List<int> processesbeforegen, List<int> processesaftergen)
+       {
+           foreach (int pidafter in processesaftergen)
+           {
+               bool processfound = false;
+               foreach (int pidbefore in processesbeforegen)
+               {
+                   if (pidafter == pidbefore)
+                   {
+                       processfound = true;
+                   }
+               }
+
+               if (processfound == false)
+               {
+                   Process clsProcess = Process.GetProcessById(pidafter);
+                   clsProcess.Kill();
+               }
+           }
+       }
+
+
+       private void tEnabled(bool state)
+       {
+           //tCompany.Enabled = state;
+           //tFirstname.Enabled = state;
+           //tPhone.Enabled = state;
+           //tLastname.Enabled = state;
+           //btnLogo.Enabled = state;
+       }
+      
+
+       protected void btnSubmit_Click(object sender, EventArgs e)
+       {
+            
+                CreateWordDocument(Path.GetFullPath("D: \\PAFCHANGE.docx"),null, pathImage);
+               tEnabled(true);
+               //printDocument1.DocumentName = SaveDoc.FileName;
+          
+       }
 
         private void AddContracts()
         {
@@ -116,15 +237,16 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     {
                         cont.ContractStartDate = Convert.ToDateTime(StartDate);
                         cont.ContractEndDate = Convert.ToDateTime(EndDate);
-                        cont.Reason = ddlReason.SelectedItem.Text;
-                        cont.Status = ddlStatus.SelectedItem.Text;
+                        cont.Reason = ddlReason.SelectedValue;
+                        cont.Status = ddlStatus.SelectedValue;
 
                         _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
 
                         dgContractDetail.EditIndex = -1;
+                        ClearContractFormFields();
                         dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
                         dgContractDetail.DataBind();
-                        ClearContractFormFields();
+                       
 
                     }
                     else
@@ -136,27 +258,29 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
 
 
-                var StartDate = txtStartDate.Text != "" ? txtStartDate.Text : "";
+                var StartDate = txtStartDate.Text != "" ? txtStartDate.Text: "";
                 var EndDate = txtEndDate.Text != "" ? txtEndDate.Text : " ";
                 Contract cont = new Contract();
                 if (_presenter.CurrentEmployee.Contracts.Count != 0)
                 {
                     if (_presenter.CurrentEmployee.GetEmpContract(GetId).ContractEndDate < Convert.ToDateTime(StartDate))
                     {
+                        
                         cont.ContractStartDate = Convert.ToDateTime(StartDate);
                         cont.ContractEndDate = Convert.ToDateTime(EndDate);
                         cont.Reason = ddlReason.SelectedItem.Text;
                         cont.Status = ddlStatus.SelectedItem.Text;
-                        if (_presenter.CurrentEmployee.Contracts.Count > 1)
-                        {
-                            _presenter.CurrentEmployee.GetPreviousContract().Status = "In Active";
-                        }
+                        
+
+                            _presenter.CurrentEmployee.GetActiveContract().Status = "In Active";
+                       
 
                         _presenter.CurrentEmployee.Contracts.Add(cont);
                         dgContractDetail.EditIndex = -1;
+                        ClearContractFormFields();
                         dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
                         dgContractDetail.DataBind();
-                        ClearContractFormFields();
+                       
 
                     }
 
@@ -165,19 +289,19 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 }
                 else
                 {
-
-
-                    cont.ContractStartDate = Convert.ToDateTime(StartDate);
-                    cont.ContractEndDate = Convert.ToDateTime(EndDate);
-                    cont.Reason = ddlReason.SelectedItem.Text;
-                    cont.Status = ddlStatus.SelectedItem.Text;
-                    _presenter.CurrentEmployee.GetContract(_presenter.GetLastContrcatId()).Status = "In Active";
-                    _presenter.CurrentEmployee.Contracts.Add(cont);
-                    dgContractDetail.EditIndex = -1;
-                    dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
-                    dgContractDetail.DataBind();
+                    
+                   
+                            cont.ContractStartDate = Convert.ToDateTime(StartDate);
+                            cont.ContractEndDate = Convert.ToDateTime(EndDate);
+                            cont.Reason = ddlReason.SelectedItem.Text;
+                            cont.Status = ddlStatus.SelectedItem.Text;
+                           
+                            _presenter.CurrentEmployee.Contracts.Add(cont);
+                            dgContractDetail.EditIndex = -1;
                     ClearContractFormFields();
-
+                    dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
+                            dgContractDetail.DataBind();
+                            
 
 
                 }
@@ -203,25 +327,25 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             ddlPosition.SelectedValue = "0";
             ddlProgram.SelectedValue = "0";
             ddlDutyStation.SelectedValue = string.Empty;
-            txtDescJT.Text = string.Empty;
+            txtEffectDate.Text = string.Empty;
             txtSalary.Text = string.Empty;
             txtHoursPerWeek.Text = string.Empty;
             txtCountryTeam.Text = string.Empty;
             txtBaseCount.Text = string.Empty;
             txtBaseCity.Text = string.Empty;
             txtBaseState.Text = string.Empty;
-            txtClass.SelectedValue = string.Empty;
-            txtEmployeeStatus.SelectedValue = string.Empty;
+            txtClass.Text = string.Empty;
+            txtEmployeeStatus.Text = string.Empty;
             ddlSuperVisor.SelectedValue = "0";
-            ddlReportsTo.SelectedValue = "0";
+           
         }
         private void ClearContractFormFields()
         {
             txtStartDate.Text = string.Empty;
             txtEndDate.Text = string.Empty;
 
-            ddlReason.SelectedValue = "0";
-            ddlStatus.SelectedValue = "0";
+            ddlReason.SelectedValue = "";
+            ddlStatus.SelectedValue = "";
         }
 
         private void ClearTerminationFormFields()
@@ -240,9 +364,10 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
             if (_presenter.CurrentEmployee.Contracts.Count != 0)
             {
-
-
-                ddlReason.Items.FindByValue("New Hire").Attributes.Add("Disabled", "Disabled");
+                         
+                       
+                    ddlReason.Items.FindByValue("New Hire").Attributes.Add("Disabled", "Disabled");
+                    ddlStatus.Items.FindByValue("In Active").Attributes.Add("Disabled", "Disabled");
 
 
                 if (_presenter.CurrentEmployee.GetInActiveContract() == true)
@@ -251,6 +376,12 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     ddlReason.Items.FindByValue("Renewal").Attributes.Add("Disabled", "Disabled");
 
                 }
+
+                else if (_presenter.CurrentEmployee.GetInActiveContract() == true && _presenter.CurrentEmployee.GetTerminations(_presenter.CurrentEmployee.Id).ReccomendationForRehire == "No")
+                {
+                    ddlReason.Items.FindByValue("Rehire").Attributes.Add("Disabled", "Disabled");
+                }
+
                 else if (_presenter.CurrentEmployee.GetInActiveContract() == false)
                 {
                     ddlReason.Items.FindByValue("Rehire").Attributes.Add("Disabled", "Disabled");
@@ -261,7 +392,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             }
             else
             {
-
+                ddlStatus.Items.FindByValue("In Active").Attributes.Add("Disabled", "Disabled");
                 dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
                 dgContractDetail.DataBind();
 
@@ -437,9 +568,9 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             txtEmail.Text = _presenter.CurrentEmployee.ChaiEMail;
             lnkEmail.HRef = _presenter.CurrentEmployee.ChaiEMail;
             txtPhoneNo.Text = _presenter.CurrentEmployee.Phone;
-            txtLeaveAsOfCalEndDate.Text = Math.Round(_presenter.CurrentEmployee.EmployeeLeaveBalanceYE()).ToString();
-            txtLeaveAsOfContractEndDate.Text = _presenter.CurrentEmployee.GetActiveContract() != null ? Math.Round(_presenter.CurrentEmployee.EmployeeLeaveBalanceCED(_presenter.CurrentEmployee.GetActiveContract().ContractEndDate)).ToString() : "";
-            txtLeaveAsOfToday.Text = Math.Round(_presenter.CurrentEmployee.EmployeeLeaveBalance()).ToString();
+            txtLeaveAsOfCalEndDate.Text = Math.Round(_presenter.CurrentEmployee.EmployeeLeaveBalanceYE() - _presenter.EmpLeaveTaken(_presenter.CurrentEmployee.Id, _presenter.CurrentEmployee.LeaveSettingDate.Value)).ToString();
+            txtLeaveAsOfContractEndDate.Text = _presenter.CurrentEmployee.GetActiveContract() != null ? Math.Round(_presenter.CurrentEmployee.EmployeeLeaveBalanceCED(_presenter.CurrentEmployee.GetActiveContract().ContractEndDate) - _presenter.EmpLeaveTaken(_presenter.CurrentEmployee.Id, _presenter.CurrentEmployee.LeaveSettingDate.Value)).ToString() : "";
+            txtLeaveAsOfToday.Text = Math.Round(_presenter.CurrentEmployee.EmployeeLeaveBalance() - _presenter.EmpLeaveTaken(_presenter.CurrentEmployee.Id, _presenter.CurrentEmployee.LeaveSettingDate.Value)).ToString();
 
         }
 
@@ -449,6 +580,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         {
             if (btnAddChange.Text == "Update Change")
             {
+                var EffectDate = txtEffectDate.Text != "" ? txtEffectDate.Text : "";
                 EmployeeDetail empdetail;
                 var id = Convert.ToInt32(dgChange.SelectedDataKey[0]) != 0 ? Convert.ToInt32(dgChange.SelectedDataKey[0]) : 0;
                 int TEMPChid = Convert.ToInt32(dgChange.DataKeys[dgChange.SelectedRow.RowIndex].Value);
@@ -464,7 +596,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     empdetail.Program = _presenter.GetProgram(Convert.ToInt32(ddlProgram.Text));
 
                     empdetail.DutyStation = ddlDutyStation.Text;
-                    empdetail.DescriptiveJobTitle = txtDescJT.Text;
+                    empdetail.DescriptiveJobTitle = empdetail.Position.ToString();
                     empdetail.Salary = Convert.ToDecimal(txtSalary.Text);
                     empdetail.HoursPerWeek = txtHoursPerWeek.Text;
                     empdetail.BaseCountry = txtBaseCount.Text;
@@ -475,9 +607,9 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     empdetail.EmploymentStatus = txtEmployeeStatus.SelectedItem.Text;
 
                     empdetail.Supervisor = Convert.ToInt32(ddlSuperVisor.Text);
-                    empdetail.ReportsTo = Convert.ToInt32(ddlReportsTo.Text);
-
-
+                    empdetail.ReportsTo = empdetail.Supervisor;
+                    empdetail.EffectiveDateOfChange = Convert.ToDateTime(txtEffectDate.Text);
+                   
                     _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
 
                     BindEmpDetail(empdetail.Contract);
@@ -494,7 +626,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             else if (btnAddChange.Text == "Add Change")
             {
 
-
+                var EffectDate = txtEffectDate.Text != "" ? txtEffectDate.Text : "";
                 chan = Session["chan"] as Contract;
                 EmployeeDetail empdetail = new EmployeeDetail();
                 empdetail.Contract = chan;
@@ -503,7 +635,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 empdetail.Program = _presenter.GetProgram(Convert.ToInt32(ddlProgram.Text));
 
                 empdetail.DutyStation = ddlDutyStation.Text;
-                empdetail.DescriptiveJobTitle = txtDescJT.Text;
+                empdetail.DescriptiveJobTitle = empdetail.Position.ToString();
                 empdetail.Salary = Convert.ToDecimal(txtSalary.Text);
                 empdetail.HoursPerWeek = txtHoursPerWeek.Text;
                 empdetail.BaseCountry = txtBaseCount.Text;
@@ -514,13 +646,15 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 empdetail.EmploymentStatus = txtEmployeeStatus.Text;
 
                 empdetail.Supervisor = Convert.ToInt32(ddlSuperVisor.Text);
-                empdetail.ReportsTo = Convert.ToInt32(ddlReportsTo.Text);
+                empdetail.ReportsTo = empdetail.Supervisor;
+                empdetail.EffectiveDateOfChange = Convert.ToDateTime(txtEffectDate.Text);
 
 
                 if (_presenter.CurrentEmployee.Id > 0)
                     _presenter.CurrentEmployee.GetContract(Convert.ToInt32(hfDetailId.Value)).EmployeeDetails.Add(empdetail);
                 else
                     _presenter.CurrentEmployee.Contracts[Convert.ToInt32(hfDetailId.Value)].EmployeeDetails.Add(empdetail);
+                _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
                 BindEmpDetail(empdetail.Contract);
 
                 ClearEmpDetailFormFields();
@@ -558,7 +692,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     dgTermination.EditIndex = -1;
                     dgTermination.DataSource = _presenter.CurrentEmployee.Terminations;
                     dgTermination.DataBind();
-                    _presenter.CurrentEmployee.GetContract(id).Status = "In Active";
+                    _presenter.CurrentEmployee.GetActiveContract().Status = "In Active";
                     _presenter.CurrentEmployee.AppUser.IsActive = false;
 
                 }
@@ -576,10 +710,10 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 term.Employee = _presenter.CurrentEmployee;
                 term.ReccomendationForRehire = ddlRecommendation.Text;
                 term.TerminationReason = txtTerminationReason.Text;
-                term.Employee.GetContract(_presenter.GetLastContrcatId()).Status = "In Active";
+                _presenter.CurrentEmployee.GetActiveContract().Status = "In Active";
                 _presenter.CurrentEmployee.AppUser.IsActive = false;
                 _presenter.CurrentEmployee.Terminations.Add(term);
-
+                _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
                 dgTermination.EditIndex = -1;
                 dgTermination.DataSource = _presenter.CurrentEmployee.Terminations;
                 dgTermination.DataBind();
@@ -650,24 +784,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             ddlSuperVisor.DataTextField = "FullName";
             ddlSuperVisor.DataBind();
         }
-        private void BindReportsTo()
-
-        {
-            ddlReportsTo.Items.Clear();
-
-            ListItem lst = new ListItem();
-            lst.Text = "Select Reports To";
-            lst.Value = "0";
-            ddlReportsTo.Items.Add(lst);
-            ddlReportsTo.AppendDataBoundItems = true;
-
-
-
-            ddlReportsTo.DataSource = _presenter.GetEmployees();
-            ddlReportsTo.DataValueField = "Id";
-            ddlReportsTo.DataTextField = "FullName";
-            ddlReportsTo.DataBind();
-        }
+      
 
 
         protected void btnAddTerm_Click(object sender, EventArgs e)
@@ -717,26 +834,16 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         }
 
-        protected void dgChange_EditCommand(object source, DataGridCommandEventArgs e)
-        {
+       
 
-        }
-
-        protected void dgChange_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
+       
 
         protected void lnkEdit_Click(object sender, EventArgs e)
         {
 
         }
 
-        protected void dgChange_SelectedIndexChanged1(object sender, EventArgs e)
-        {
-
-
-        }
+       
 
 
 
@@ -776,7 +883,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 int index = gvrow.RowIndex;
                 int id = Convert.ToInt32(dgChange.SelectedDataKey[0]);
                 //int id = Convert.ToInt32(dgChange.SelectedDataKey[index]);
-                //////  _presenter.CurrentEmployee.RemoveEmployeeDetail(id);
+              //////  _presenter.CurrentEmployee.RemoveEmployeeDetail(id);
                 _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
 
 
@@ -824,40 +931,27 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         protected void btnPAFChange_Click(object sender, EventArgs e)
         {
-            PrintTransaction();
+            CreateWordDocument(Path.GetFullPath("D: \\PAFCHANGE.docx"), null, pathImage);
+            tEnabled(false);
+           // PrintTransaction();
             ClearEmpDetailFormFields();
         }
 
         protected void dgContractDetail_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
-            int id = (int)dgContractDetail.DataKeys[e.RowIndex].Value;
-            _presenter.CurrentEmployee.RemoveContract(id);
-            _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
-            dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
-            dgContractDetail.DataBind();
-            Master.ShowMessage(new AppMessage("Contract Detail Is Successfully Deleted!", RMessageType.Info));
+           
         }
 
 
         protected void dgChange_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
-            int id = (int)dgChange.DataKeys[e.RowIndex].Value;
-            /////   _presenter.CurrentEmployee.RemoveEmployeeDetail(id);
-            _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
-            ////  dgChange.DataSource = _presenter.CurrentEmployee.EmployeeDetails;
-            dgChange.DataBind();
-            Master.ShowMessage(new AppMessage("Employee Detail Is Successfully Deleted!", RMessageType.Info));
+          
         }
 
-        protected void dgTermination_RowDeleting(object sender, GridViewDeleteEventArgs e)
-        {
-            int id = (int)dgTermination.DataKeys[e.RowIndex].Value;
-            _presenter.CurrentEmployee.RemoveTermination(id);
-            _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
-            dgTermination.DataSource = _presenter.CurrentEmployee.Terminations;
-            dgTermination.DataBind();
-            Master.ShowMessage(new AppMessage("Termination Is Successfully Deleted!", RMessageType.Info));
-        }
+         protected void dgTermination_RowDeleting(object sender, GridViewDeleteEventArgs e)
+         {
+            
+         }
 
 
 
@@ -930,7 +1024,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         }
 
-        protected void btnEMPhist_Click(object sender, EventArgs e)
+    protected void btnEMPhist_Click(object sender, EventArgs e)
         {
 
             /* int TEMPChid = Convert.ToInt32(dgChange.DataKeys[dgChange.SelectedRow.RowIndex].Value);
@@ -987,7 +1081,6 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     ddlPosition.SelectedValue = empdetail.Position.Id.ToString();
                     ddlProgram.SelectedValue = Convert.ToInt32(empdetail.Program.Id).ToString();
                     ddlDutyStation.SelectedValue = empdetail.DutyStation.ToString();
-                    txtDescJT.Text = empdetail.DescriptiveJobTitle;
                     txtSalary.Text = Convert.ToDecimal(empdetail.Salary).ToString();
                     txtHoursPerWeek.Text = empdetail.HoursPerWeek;
                     txtBaseCount.Text = empdetail.BaseCountry;
@@ -997,8 +1090,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     txtCountryTeam.Text = empdetail.CountryTeam;
                     txtEmployeeStatus.SelectedValue = empdetail.EmploymentStatus;
                     ddlSuperVisor.SelectedValue = Convert.ToInt32(empdetail.Supervisor).ToString();
-                    ddlReportsTo.SelectedValue = Convert.ToInt32(empdetail.ReportsTo).ToString();
-
+                  
+                    txtEffectDate.Text = empdetail.EffectiveDateOfChange.ToShortDateString();
 
                     btnAddChange.Text = "Update Change";
 
@@ -1050,7 +1143,11 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 }
                 catch (Exception ex)
                 {
-                    Master.ShowMessage(new AppMessage("Error: Unable to delete Employee History. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                   
+                    Master.ShowMessage(new AppMessage("Error: Unable to delete Employee History. ", RMessageType.Error));
+
+                    ExceptionUtility.LogException(ex, ex.Source);
+                    ExceptionUtility.NotifySystemOps(ex);
                 }
 
             }
@@ -1109,9 +1206,94 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 txtStartDate.Text = cont.ContractStartDate.ToShortDateString();
                 txtEndDate.Text = cont.ContractEndDate.ToShortDateString();
 
-                ddlReason.SelectedItem.Text = cont.Reason;
-                ddlStatus.SelectedItem.Text = cont.Status;
+                ddlReason.SelectedValue = cont.Reason;
+                ddlStatus.SelectedValue = cont.Status;
                 btnAddcontract.Text = "Update Contracts";
+
+
+
+            }
+
+            else if (e.CommandName == "Delete")
+            {
+               
+                  int Row = Convert.ToInt32(e.CommandArgument);
+
+                  int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row].Value);
+                try
+                {
+                    if (TEMPChid > 0)
+                    {
+                        _presenter.CurrentEmployee.RemoveContract(TEMPChid);
+                        _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
+                        _presenter.CurrentEmployee.GetLastInActiveContract().Status = "Active";
+                        dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
+                        dgContractDetail.DataBind();
+
+                        
+                        
+
+
+                        
+                       
+                        Master.ShowMessage(new AppMessage("Contract Detail Is Successfully Deleted!", RMessageType.Info));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Master.ShowMessage(new AppMessage("Error: Unable to Delete Contract. ",RMessageType.Error));
+                    
+                    ExceptionUtility.LogException(ex, ex.Source);
+                    ExceptionUtility.NotifySystemOps(ex);
+                }
+
+            }
+        }
+
+
+
+        protected void dgContractDetail_RowDeleting1(object sender, GridViewDeleteEventArgs e)
+        {
+           
+        }
+
+        protected void dgChange_RowDeleting1(object sender, GridViewDeleteEventArgs e)
+        {
+
+        }
+
+        protected void dgTermination_RowDeleting1(object sender, GridViewDeleteEventArgs e)
+        {
+
+        }
+
+        protected void dgTermination_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            
+             if (e.CommandName == "Select")
+            {
+
+
+                int Row = Convert.ToInt32(e.CommandArgument);
+
+                int TEMPChid = Convert.ToInt32(dgTermination.DataKeys[Row].Value);
+                //   int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[dgContractDetail.SelectedRow.RowIndex].Value.ToString());
+
+
+                if (TEMPChid > 0)
+                    Session["chan"] = _presenter.CurrentEmployee.GetTerminations(TEMPChid);
+                else
+                    Session["chan"] = _presenter.CurrentEmployee.Terminations[dgTermination.SelectedRow.DataItemIndex];
+
+
+
+
+                Termination term = _presenter.CurrentEmployee.GetTerminations(TEMPChid);
+                txtTerminationDate.Text = term.TerminationDate.ToShortDateString();
+                txtLastDate.Text = term.LastDateOfEmployee.ToShortDateString();
+                ddlRecommendation.SelectedItem.Text = term.ReccomendationForRehire;
+                txtTerminationReason.Text = term.TerminationReason;
+                btnAddTerm.Text= "Update Terminations";
 
 
 
@@ -1122,27 +1304,36 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
                 int Row = Convert.ToInt32(e.CommandArgument);
 
-                int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row].Value);
+                int TEMPChid = Convert.ToInt32(dgTermination.DataKeys[Row].Value);
                 try
                 {
                     if (TEMPChid > 0)
                     {
-                        _presenter.CurrentEmployee.RemoveContract(TEMPChid);
+                        _presenter.CurrentEmployee.RemoveTermination(TEMPChid);
                         _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
-                        dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
-                        dgContractDetail.DataBind();
-                        Master.ShowMessage(new AppMessage("Employee Detail Is Successfully Deleted!", RMessageType.Info));
+                       dgTermination.DataSource = _presenter.CurrentEmployee.Terminations;
+                        dgTermination.DataBind();
+
+
+
+
+
+
+
+
+                        Master.ShowMessage(new AppMessage("Termination  Is Successfully Deleted!", RMessageType.Info));
                     }
                 }
                 catch (Exception ex)
                 {
-                    Master.ShowMessage(new AppMessage("Error: Unable to delete Employee History. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Error: Unable to Delete Termination. ", RMessageType.Error));
+
+                    ExceptionUtility.LogException(ex, ex.Source);
+                    ExceptionUtility.NotifySystemOps(ex);
                 }
 
             }
         }
-
-
     }
 
 }

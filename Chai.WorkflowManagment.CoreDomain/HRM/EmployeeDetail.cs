@@ -27,6 +27,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public string BaseCity { get; set; }
         public string BaseState { get; set; }
         public string CountryTeam { get; set; }
+        public DateTime EffectiveDateOfChange { get; set; }
         public string DescriptiveJobTitle { get; set; }
         public int Supervisor { get; set; }
         public int ReportsTo { get; set; }

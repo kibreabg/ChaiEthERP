@@ -69,7 +69,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         }
         public virtual Contract GetPreviousContract()
         {
-            if (Contracts.Count > 1)
+            if (Contracts.Count >1)
             {
                 return Contracts[Contracts.Count - 2];
             }
@@ -98,6 +98,20 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                 return false;
             }
             
+        }
+
+        public virtual Contract GetLastInActiveContract()
+        {
+            Contract con = Contracts.Last();
+            if (con != null)
+            {
+                return con;
+            }
+            else
+            {
+                return null;
+            }
+
         }
         public virtual Contract GetActiveContract()
         {
@@ -256,9 +270,12 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         {
             foreach (Contract CD in Contracts)
             {
-                if (CD.EmployeeDetails.Count != 0)
-                
-                    return CD.EmployeeDetails.Last().DutyStation;
+                if (CD.Status == "Active")
+                {
+                    if (CD.EmployeeDetails.Count != 0)
+
+                        return CD.EmployeeDetails.Last().DutyStation;
+                }
                 
             }
 
@@ -272,9 +289,12 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         {
             foreach (Contract CD in Contracts)
             {
-                if (CD.EmployeeDetails.Count != 0)
-                
-                    return CD.EmployeeDetails.Last().Program.ProgramName;
+                if (CD.Status == "Active")
+                {
+                    if (CD.EmployeeDetails.Count != 0)
+
+                        return CD.EmployeeDetails.Last().Program.ProgramName;
+                }
                 
             }
 
@@ -284,9 +304,12 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         {
             foreach (Contract CD in Contracts)
             {
-                if (CD.EmployeeDetails.Count != 0)
-                
-                    return CD.EmployeeDetails.Last().Position.PositionName;
+                if (CD.Status == "Active")
+                {
+                    if (CD.EmployeeDetails.Count != 0)
+
+                        return CD.EmployeeDetails.Last().Position.PositionName;
+                }
                 
             }
 
@@ -300,15 +323,11 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         {
             if (AppUser.ReHiredDate != null)
             {
-                foreach (Contract cn in Contracts)
-                {
-                    if (cn.Reason == "ReHired")
-                        return cn.ContractStartDate;
-                }
-                return Contracts[0].ContractStartDate;
+                return AppUser.ReHiredDate.Value;
             }
+
             else
-                return new DateTime();
+                return AppUser.HiredDate.Value;
             
         }
 

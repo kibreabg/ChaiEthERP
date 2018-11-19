@@ -55,20 +55,13 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 {
 
                     Employee emp = e.Row.DataItem as Employee;
-               ////     e.Row.Cells[2].Text = emp.GetEmployeeProgram();
-               ////     e.Row.Cells[3].Text = emp.GetEmployeePosition();
-                    decimal balance = Convert.ToInt32(emp.EmployeeLeaveBalance()) - _presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value);
+                    e.Row.Cells[2].Text = emp.GetEmployeeProgram();
+                    e.Row.Cells[3].Text = emp.GetEmployeePosition();
                     e.Row.Cells[4].Text = emp.AppUser.HiredDate.ToString();
-                    e.Row.Cells[5].Text = balance.ToString();
-                    decimal balanceYE = Convert.ToInt32(emp.EmployeeLeaveBalanceYE() - _presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value));
-                    e.Row.Cells[7].Text = balanceYE.ToString();
-                    if (txtContractEndDate.Text != "")
-                    {
-
-                        decimal balanceCED = Convert.ToInt32(emp.EmployeeLeaveBalanceCED(Convert.ToDateTime(txtContractEndDate.Text))) - _presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value);
-                        e.Row.Cells[6].Text = balanceCED.ToString();
-                    }
-        }
+                    e.Row.Cells[5].Text = emp.AppUser.IsActive == true ? "Active" : "In-Active";
+                    e.Row.Cells[5].ForeColor = System.Drawing.Color.LawnGreen;
+                }    
+        
 
             }
         }
@@ -101,11 +94,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 
         }
 
-        protected void txtContractEndDate_TextChanged(object sender, EventArgs e)
-        {
-            GRVEmployeeList.DataSource = _presenter.ListEmployees(txtSrchEmpNo.Text, txtSrchSrchFullName.Text, int.Parse(ddlSrchSrchProgram.SelectedValue));
-            GRVEmployeeList.DataBind();
-        }
+      
     }
 }
 

@@ -167,6 +167,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 txtFirstName.Text = _presenter.CurrentUser().FirstName;
                 txtLastName.Text = _presenter.CurrentUser().LastName;
                 txtChaiEmail.Text = _presenter.CurrentUser().Email;
+                txtPersonalEmail.Text = _presenter.CurrentUser().PersonalEmail;
             }
             if (_presenter.CurrentAppUser.Employee != null)
             {

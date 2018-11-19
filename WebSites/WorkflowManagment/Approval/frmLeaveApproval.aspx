@@ -140,7 +140,7 @@
 
                                                 <asp:Label ID="lblLeaveTyperes" runat="server" Text=" " CssClass="label"></asp:Label>
                                             </section>
-                                            <section class="col col-3">
+                                             <section class="col col-3">
                                                 <asp:Label ID="lblRequestedDays" runat="server" Text="Requested Days" CssClass="label"></asp:Label>
 
                                                 <asp:Label ID="lblrequesteddaysres" runat="server" Text="" CssClass="label"></asp:Label>
@@ -149,8 +149,7 @@
                                                 <asp:Label ID="lblViewBalance" runat="server" Text="Employee Leave Balance as of Today" CssClass="label" Visible="false"></asp:Label>
 
                                                 <asp:Label ID="lblViewBalRes" runat="server" Text="" CssClass="label" Visible="false" ></asp:Label>
-                                            </section>
-                                           
+                                            </section>                                           
                                              <section class="col col-3">
                                                  <asp:LinkButton ID="lnkEduDownload" runat="server" OnClientClick="newTab();" OnClick="lnkEduDownload_Clicked">View Sick Leave Attachment</asp:LinkButton>
                                             </section>
@@ -180,7 +179,6 @@
                                         <asp:Button ID="btnApprove" runat="server" Text="Save" OnClick="btnApprove_Click" Enabled="false" CssClass="btn btn-primary" ValidationGroup="Approve"></asp:Button>
                                         <asp:Button ID="btnCancelPopup" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" OnClick="btnCancelPopup_Click"></asp:Button>
                                         <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-primary" OnClientClick="javascript:Clickheretoprint('divprint')" Enabled="False"></asp:Button>
-
                                     </footer>
                                 </div>
                             </div>
@@ -206,7 +204,7 @@
              <table style="width: 100%;">
                 <tr>
                     <td style="width: 17%; text-align:left;">
-                        <img src="../img/CHAI%20Logo.png" width="70" height="50" /></td>
+                        <img src="../img/CHAI%20Logo.png" width="100" height="50" /></td>
                     <td style="font-size: large; text-align: center;">
                         <strong>CHAI Ethiopia ERP
                             <br />
@@ -298,7 +296,7 @@
                 </td>
                 <td style="width: 334px; height: 18px;">
                     <strong>
-                        <asp:Label ID="lblDateTo" runat="server" Text="Date To"></asp:Label>
+                        <asp:Label ID="lblDateTo" runat="server" Text="Reported Date"></asp:Label>
                         :</strong></td>
                 <td style="width: 335px; height: 18px;">
                     <asp:Label ID="lblDatetores" runat="server"></asp:Label>
@@ -366,6 +364,22 @@
             <PagerStyle CssClass="PagerStyle" />
             <RowStyle CssClass="rowstyle" />
         </asp:GridView>
+                  <table style="width: 100%;">
+                <tr>
+                    <td></td>
+                    <td>Requester Signature</td>
+                    <td></td>
+                    <td></td>
+                    
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>___________________</td>
+                    <td></td>
+                    <td></td>
+                   
+                </tr>
+            </table>
             </fieldset>
     </div>
 </asp:Content>
