@@ -146,7 +146,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 string fileName = String.Empty;
                 if (fuProfilePic.HasFile)
                 {
-                    fileName = Path.GetFileName(fuProfilePic.PostedFile.FileName);
+                    fileName = _presenter.CurrentAppUser.UserName + Path.GetExtension(fuProfilePic.PostedFile.FileName);                    
                     fuProfilePic.PostedFile.SaveAs(Server.MapPath("~/ProfilePics/") + fileName);                    
                 }
                 else if(!String.IsNullOrEmpty(hfProfilePic.Value))
