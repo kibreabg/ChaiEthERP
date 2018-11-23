@@ -678,8 +678,10 @@
                                                             <asp:ListItem Value="" Text="Select Educational Level"></asp:ListItem>
                                                             <asp:ListItem Value="PHD" Text="PHD"></asp:ListItem>
                                                             <asp:ListItem Value="Masters" Text="Masters"></asp:ListItem>
-                                                            <asp:ListItem Value="Post-Graduate Diploma" Text="Post-Graduate Diploma"></asp:ListItem>
+                                                            <asp:ListItem Value="Doctor of Medicine" Text="Doctor of Medicine"></asp:ListItem>
+                                                            <asp:ListItem Value="Post-Graduate Diploma" Text="Post-Graduate Diploma"></asp:ListItem>                                                            
                                                             <asp:ListItem Value="Bachelor" Text="Bachelor"></asp:ListItem>
+                                                            <asp:ListItem Value="Advanced Diploma" Text="Advanced Diploma"></asp:ListItem>
                                                             <asp:ListItem Value="Diploma" Text="Diploma"></asp:ListItem>
                                                             <asp:ListItem Value="Certificate" Text="Certificate"></asp:ListItem>
                                                             <asp:ListItem Value="High-School Graduate" Text="High-School Graduate"></asp:ListItem>

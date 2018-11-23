@@ -1147,7 +1147,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     Master.ShowMessage(new AppMessage("Error: Unable to delete Employee History. ", RMessageType.Error));
 
                     ExceptionUtility.LogException(ex, ex.Source);
-                    ExceptionUtility.NotifySystemOps(ex);
+                    ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentEmployee.AppUser.FullName);
                 }
 
             }
@@ -1244,7 +1244,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     Master.ShowMessage(new AppMessage("Error: Unable to Delete Contract. ",RMessageType.Error));
                     
                     ExceptionUtility.LogException(ex, ex.Source);
-                    ExceptionUtility.NotifySystemOps(ex);
+                    ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentEmployee.AppUser.FullName);
                 }
 
             }
@@ -1329,7 +1329,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     Master.ShowMessage(new AppMessage("Error: Unable to Delete Termination. ", RMessageType.Error));
 
                     ExceptionUtility.LogException(ex, ex.Source);
-                    ExceptionUtility.NotifySystemOps(ex);
+                    ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentEmployee.AppUser.FullName);
                 }
 
             }

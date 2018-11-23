@@ -428,7 +428,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 Master.ShowMessage(new AppMessage("Error: While Updating Employee Profile!", RMessageType.Error));
                 ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
 
@@ -477,7 +477,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 Master.ShowMessage(new AppMessage("Error: While Updating Family Information!", RMessageType.Error));
                 ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
 
@@ -515,7 +515,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 Master.ShowMessage(new AppMessage("Error: While Updating Emergency Contact Information!", RMessageType.Error));
                 ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
 
@@ -559,7 +559,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 Master.ShowMessage(new AppMessage("Error: While Updating Education Information!", RMessageType.Error));
                 ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
 
@@ -594,7 +594,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 Master.ShowMessage(new AppMessage("Error: While Updating Work Experience!", RMessageType.Error));
                 ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
 
@@ -634,7 +634,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 Master.ShowMessage(new AppMessage("Error: While Deleting Family Detail!", RMessageType.Error));
                 ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
 
         }
@@ -660,7 +660,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 Master.ShowMessage(new AppMessage("Error: While Deleting Emergency Contact!", RMessageType.Error));
                 ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
 
@@ -685,7 +685,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 Master.ShowMessage(new AppMessage("Error: While Deleting Education Information!", RMessageType.Error));
                 ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
 
@@ -710,7 +710,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 Master.ShowMessage(new AppMessage("Error: While Deleting Work Experience!", RMessageType.Error));
                 ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
 
