@@ -797,6 +797,9 @@
                                                         <asp:TextBox ID="txtWorkStartDate" runat="server" CssClass="form-control " data-dateformat="mm/dd/yy" placeholder="Start Date"></asp:TextBox>
                                                         <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
                                                     </div>
+                                                    <asp:RequiredFieldValidator
+                                                        ID="rfvWorkStartDate" runat="server" ErrorMessage="Start Date is required" Display="Dynamic"
+                                                        CssClass="validator" ValidationGroup="workSave" ControlToValidate="txtWorkStartDate"></asp:RequiredFieldValidator>
                                                     <asp:CompareValidator ID="cvtxtWorkStartDate" CssClass="validator" runat="server" ErrorMessage="Work Start Date must be less than Work End Date" ControlToCompare="txtWorkEndDate" ControlToValidate="txtWorkStartDate" ValidationGroup="workSave" Type="Date" Operator="LessThanEqual"></asp:CompareValidator>
                                                 </div>
                                             </div>
@@ -807,6 +810,9 @@
                                                         <asp:TextBox ID="txtWorkEndDate" runat="server" CssClass="form-control" data-dateformat="mm/dd/yy" placeholder="End Date"></asp:TextBox>
                                                         <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
                                                     </div>
+                                                    <asp:RequiredFieldValidator
+                                                        ID="rfvWorkEndDate" runat="server" ErrorMessage="End Date is required" Display="Dynamic"
+                                                        CssClass="validator" ValidationGroup="workSave" ControlToValidate="txtWorkEndDate"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
                                         </div>
