@@ -458,7 +458,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 //Attached Certificates
                 if (fuCertificate.HasFile)
                 {
-                    string fileName = Path.GetFileName(fuCertificate.PostedFile.FileName);
+                    string fileName = "Fam" + _presenter.CurrentAppUser.UserName + Path.GetFileName(fuCertificate.PostedFile.FileName);
                     familyDetail.Certificate = "~/Certificates/" + fileName;
                     fuCertificate.PostedFile.SaveAs(Server.MapPath("~/Certificates/") + fileName);
                 }
@@ -540,7 +540,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
                 if (fuEduCertificate.HasFile)
                 {
-                    string fileName = Path.GetFileName(fuEduCertificate.PostedFile.FileName);
+                    string fileName = "Edu" + _presenter.CurrentAppUser.UserName + Path.GetFileName(fuEduCertificate.PostedFile.FileName);
                     education.Certificate = "~/Certificates/" + fileName;
                     fuEduCertificate.PostedFile.SaveAs(Server.MapPath("~/Certificates/") + fileName);
                 }
