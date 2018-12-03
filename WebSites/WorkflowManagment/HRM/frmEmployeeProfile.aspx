@@ -513,6 +513,7 @@
                                                             <asp:ListItem Value="Child" Text="Child"></asp:ListItem>
                                                             <asp:ListItem Value="Spouse" Text="Spouse"></asp:ListItem>
                                                             <asp:ListItem Value="Parent" Text="Parent"></asp:ListItem>
+                                                            <asp:ListItem Value="Other" Text="Other"></asp:ListItem>
                                                         </asp:DropDownList>
                                                     </div>
                                                 </div>
