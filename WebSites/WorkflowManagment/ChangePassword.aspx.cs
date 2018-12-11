@@ -29,14 +29,14 @@ public partial class ChangePassword : POCBasePage
         {
             if (Encryptedcurrentuser == user.Password)
             {
-                user.Password = Chai.WorkflowManagment.CoreDomain.Users.AppUser.HashPassword(NewPassword.Text);
+                 user.Password = Chai.WorkflowManagment.CoreDomain.Users.AppUser.HashPassword(NewPassword.Text);
                 _workspace.Update(user);
                 _workspace.CommitChanges();
-                Master.ShowMessage(new AppMessage("Password successfully Changed", Chai.WorkflowManagment.Enums.RMessageType.Info));
-              
-               
-               
-                
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('Password successfully Changed');window.location ='UserLogin.aspx';", true);
+                //Response.Redirect(String.Format("~/UserLogin.aspx", true));
+                //HttpContext.Current.ApplicationInstance.CompleteRequest();
+                //Master.TransferMessage(new AppMessage("Password successfully Changed", Chai.WorkflowManagment.Enums.RMessageType.Info));
+
             }
             else
             {
@@ -49,14 +49,16 @@ public partial class ChangePassword : POCBasePage
         catch (Exception ex)
         {
             //this.panMessage.Attributes.Add("class", "response-msg error ui-corner-all");
-            Master.ShowMessage(new AppMessage("Error: '"+ ex.Message + "'", Chai.WorkflowManagment.Enums.RMessageType.Error));
-            
-           
+            Master.TransferMessage(new AppMessage("Error: '"+ ex.Message + "'", Chai.WorkflowManagment.Enums.RMessageType.Error));
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('Password successfully Changed');window.location ='UserLogin.aspx';", true);
+            //Response.Redirect(String.Format("~/UserLogin.aspx", false));
+            //HttpContext.Current.ApplicationInstance.CompleteRequest();
         }
     }
     
     protected void CancelPushButton0_Click1(object sender, EventArgs e)
     {
-        Response.Redirect("~/UserLogIn.aspx");
+        Response.Redirect("~/UserLogin.aspx", false);
+        HttpContext.Current.ApplicationInstance.CompleteRequest();
     }
 }

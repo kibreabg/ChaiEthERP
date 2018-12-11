@@ -77,18 +77,21 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 foreach (DataGridItem dgi in dgItemDetail.Items)
                 {
                     int id = (int)dgItemDetail.DataKeys[dgi.ItemIndex];
-
+                    CheckBox chkselect = dgi.FindControl("chkselect") as CheckBox;
                     Employee detail;
 
                     detail = _presenter.GetEmployee(id);
                     if (detail != null)
                     {
-                        TextBox txtOpeningLeavebalance = dgi.FindControl("txtOpeningLeavebalance") as TextBox;
-                        detail.SDLeaveBalance = Convert.ToDecimal(txtOpeningLeavebalance.Text);
-                        TextBox txtLeaveSettingDate = dgi.FindControl("txtOpeningLeavebalancedate") as TextBox;
-                        detail.LeaveSettingDate = Convert.ToDateTime(txtLeaveSettingDate.Text);
-                        detail.AppUser = detail.AppUser;
-                        _presenter.SaveOrUpdateEmpLeaveSetting(detail);
+                        if (chkselect.Checked)
+                        {
+                            TextBox txtOpeningLeavebalance = dgi.FindControl("txtOpeningLeavebalance") as TextBox;
+                            detail.SDLeaveBalance = Convert.ToDecimal(txtOpeningLeavebalance.Text);
+                            TextBox txtLeaveSettingDate = dgi.FindControl("txtOpeningLeavebalancedate") as TextBox;
+                            detail.LeaveSettingDate = Convert.ToDateTime(txtLeaveSettingDate.Text);
+                            detail.AppUser = detail.AppUser;
+                            _presenter.SaveOrUpdateEmpLeaveSetting(detail);
+                        }
                     }
                     index++;
 
@@ -108,7 +111,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 }
                 throw;
             }
-            Master.ShowMessage(new AppMessage("Employee Opening Balance successfully saved", Chai.WorkflowManagment.Enums.RMessageType.Info));
+            Master.ShowMessage(new AppMessage("Employee opening balance successfully saved", Chai.WorkflowManagment.Enums.RMessageType.Info));
         }
 
         private void SetEmployeeEndingBalance()
@@ -118,25 +121,28 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
             foreach (DataGridItem dgi in dgItemDetail.Items)
             {
                 int id = (int)dgItemDetail.DataKeys[dgi.ItemIndex];
-
+                CheckBox chkselect = dgi.FindControl("chkselect") as CheckBox;
                 Employee detail;
 
                 detail = _presenter.GetEmployee(id);
                 if (detail != null)
                 {
-                    decimal balance = Convert.ToDecimal(detail.EmployeeLeaveBalanceYE()) - _presenter.EmpLeaveTaken(detail.Id, detail.LeaveSettingDate.Value);
-                    if (balance > 20)
-                        detail.SDLeaveBalance = 20;
-                    else
-                        detail.SDLeaveBalance = balance;
-                    detail.LeaveSettingDate = new DateTime(DateTime.Now.Year, 12, 31); ;
-                    _presenter.SaveOrUpdateEmpLeaveSetting(detail);
+                    if (chkselect.Checked)
+                    {
+                        decimal balance = Convert.ToDecimal(detail.EmployeeLeaveBalanceYE()) - _presenter.EmpLeaveTaken(detail.Id, detail.LeaveSettingDate.Value);
+                        if (balance > 20)
+                            detail.SDLeaveBalance = 20;
+                        else
+                            detail.SDLeaveBalance = balance;
+                        detail.LeaveSettingDate = new DateTime(DateTime.Now.Year, 12, 31); ;
+                        _presenter.SaveOrUpdateEmpLeaveSetting(detail);
+                    }
                 }
                 index++;
 
             }
 
-            Master.ShowMessage(new AppMessage("Employee Ending Balance successfully saved", Chai.WorkflowManagment.Enums.RMessageType.Info));
+            Master.ShowMessage(new AppMessage("Employee ending balance successfully saved", Chai.WorkflowManagment.Enums.RMessageType.Info));
         }
 
         protected void dgItemDetail_ItemDataBound(object sender, DataGridItemEventArgs e)
@@ -146,8 +152,12 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
 
                 if (_presenter.GetEmployees() != null)
                 {
+                    Employee emp = e.Item.DataItem as Employee;
                     TextBox txtOpeningLeaveBalanceDate = e.Item.FindControl("txtOpeningLeavebalancedate") as TextBox;
-                    txtOpeningLeaveBalanceDate.Text = DateTime.Now.Date.ToShortDateString();
+                    if (emp.LeaveSettingDate != null)
+                        txtOpeningLeaveBalanceDate.Text = emp.LeaveSettingDate.Value.ToShortDateString();
+                    else
+                        txtOpeningLeaveBalanceDate.Text = DateTime.Now.Date.ToShortDateString();
                 }
             }
         }
@@ -160,6 +170,68 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         protected void btnOpen_Click(object sender, EventArgs e)
         {
             SetEmployeeOpeningBalance();
+        }
+        protected void chkCheackAll_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox chkCheackAll = (CheckBox)sender;
+
+            foreach (DataGridItem row in dgItemDetail.Items)
+            {
+                CheckBox chkrow = (CheckBox)row.FindControl("chkselect");
+                if (chkCheackAll.Checked == true)
+                {
+                    chkrow.Checked = true;
+                }
+                else
+
+                {
+                    chkrow.Checked = true;
+                }
+            }
+        }
+
+        //Added by wwp **add 'Select All' Tick box
+        protected void chkItems_CheckedChanged(object sender, EventArgs e)
+        {
+            SelectAllgrvWorkSheet();
+        }
+        private void SelectAllgrvWorkSheet()
+        {
+            try
+            {
+                if (chkItems.Checked)
+                {
+                    if (dgItemDetail.Items.Count > 0)
+                    {
+                        foreach (DataGridItem items in dgItemDetail.Items)
+                        {
+                            CheckBox chkselect = items.FindControl("chkselect") as CheckBox;
+                            chkselect.Checked = true;
+                        }
+                    }
+                }
+                else
+                {
+                    if (dgItemDetail.Items.Count > 0)
+                    {
+                        foreach (DataGridItem items in dgItemDetail.Items)
+                        {
+                            CheckBox chkselect = items.FindControl("chkselect") as CheckBox;
+                            chkselect.Checked = false;
+                        }
+                    }
+                }
+
+            }
+            catch
+            {
+
+            }
+        }
+
+        protected void dgItemDetail_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
