@@ -63,7 +63,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         private void BindCostSharing()
         {
 
-            dgItemDetail.DataSource = _presenter.GetEmployees();
+            dgItemDetail.DataSource = _presenter.GetEmployees(txtSrchSrchFullName.Text);
             dgItemDetail.DataBind();
         }
 
@@ -150,7 +150,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
 
-                if (_presenter.GetEmployees() != null)
+                if (_presenter.GetEmployees(txtSrchSrchFullName.Text) != null)
                 {
                     Employee emp = e.Item.DataItem as Employee;
                     TextBox txtOpeningLeaveBalanceDate = e.Item.FindControl("txtOpeningLeavebalancedate") as TextBox;
@@ -232,6 +232,11 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         protected void dgItemDetail_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        protected void btnFind_Click(object sender, EventArgs e)
+        {
+            BindCostSharing();
         }
     }
 }

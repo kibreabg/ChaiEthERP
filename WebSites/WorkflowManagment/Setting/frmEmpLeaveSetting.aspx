@@ -15,14 +15,27 @@
             <div class="widget-body no-padding">
                 <div class="smart-form">
                     <fieldset>
+                        <div class="row">
+                                <section class="col col-4">
+                                <asp:Label ID="lblSrchFullName" runat="server" Text="Full Name" CssClass="label"></asp:Label>
+                                <label class="input">
+                                    <asp:TextBox ID="txtSrchSrchFullName" runat="server" Visible="true"></asp:TextBox>
+                                </label>
+                            </section>
+                        </div>
                      </fieldset>
                     <footer>
+                        <asp:Button ID="btnFind" runat="server" Text="Find" CssClass="btn btn-primary" OnClick="btnFind_Click"></asp:Button>
                        <asp:Button ID="btnEnd" runat="server" CssClass="btn btn-default" Text="Set Ending Balance" ValidationGroup="Savedetail" OnClick="btnEnd_Click"   />
                        <asp:Button ID="btnOpen" runat="server" CssClass="btn btn-primary" Text="Set Opening Balance" ValidationGroup="Savedetail" OnClick="btnOpen_Click"  />
-                                                <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" PostBackUrl="../Default.aspx"></asp:Button>
-                    
-                        <asp:CheckBox ID="chkItems" runat="server" AutoPostBack="True" OnCheckedChanged="chkItems_CheckedChanged" Text="Select All" />
-                    
+                       <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" PostBackUrl="../Default.aspx"></asp:Button>
+                    <div class="smart-form">
+                                <div class="inline-group">
+                                      <label class="checkbox">
+                                    <asp:CheckBox ID="chkItems" runat="server" AutoPostBack="True" OnCheckedChanged="chkItems_CheckedChanged"/>
+                                    <i></i>Select All</label>
+                                                    </div>
+                                                </div>
                     </footer>
                 </div>
             </div>

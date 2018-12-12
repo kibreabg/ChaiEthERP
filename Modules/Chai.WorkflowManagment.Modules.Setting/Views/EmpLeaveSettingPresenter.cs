@@ -31,9 +31,9 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         {
 
         }
-        public IList<Employee> GetEmployees()
+        public IList<Employee> GetEmployees(string fullname)
         {
-            return _controller.GetEmployees();
+            return _controller.GetEmployees(fullname);
         }
         public Employee GetEmployee(int empId)
         {
