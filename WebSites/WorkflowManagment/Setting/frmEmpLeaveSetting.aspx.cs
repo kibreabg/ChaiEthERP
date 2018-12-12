@@ -73,13 +73,13 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
             try
             {
                 int index = 0;
-
+                bool isupdate = false;
                 foreach (DataGridItem dgi in dgItemDetail.Items)
                 {
                     int id = (int)dgItemDetail.DataKeys[dgi.ItemIndex];
                     CheckBox chkselect = dgi.FindControl("chkselect") as CheckBox;
                     Employee detail;
-
+              
                     detail = _presenter.GetEmployee(id);
                     if (detail != null)
                     {
@@ -91,11 +91,16 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                             detail.LeaveSettingDate = Convert.ToDateTime(txtLeaveSettingDate.Text);
                             detail.AppUser = detail.AppUser;
                             _presenter.SaveOrUpdateEmpLeaveSetting(detail);
+                            isupdate = true;
                         }
                     }
                     index++;
 
                 }
+                if (isupdate==true)
+                    Master.ShowMessage(new AppMessage("Employee opening balance successfully saved", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                else
+                    Master.ShowMessage(new AppMessage("Please select at least one employee to set opening balance ", Chai.WorkflowManagment.Enums.RMessageType.Info));
             }
             catch (DbEntityValidationException e)
             {
@@ -111,13 +116,13 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 }
                 throw;
             }
-            Master.ShowMessage(new AppMessage("Employee opening balance successfully saved", Chai.WorkflowManagment.Enums.RMessageType.Info));
+            
         }
 
         private void SetEmployeeEndingBalance()
         {
             int index = 0;
-
+            bool isupdate = false;
             foreach (DataGridItem dgi in dgItemDetail.Items)
             {
                 int id = (int)dgItemDetail.DataKeys[dgi.ItemIndex];
@@ -141,8 +146,11 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 index++;
 
             }
-
-            Master.ShowMessage(new AppMessage("Employee ending balance successfully saved", Chai.WorkflowManagment.Enums.RMessageType.Info));
+            if (isupdate == true)
+                Master.ShowMessage(new AppMessage("Employee ending balance successfully saved", Chai.WorkflowManagment.Enums.RMessageType.Info));
+            else
+                Master.ShowMessage(new AppMessage("Please select at least one employee to set ending balance ", Chai.WorkflowManagment.Enums.RMessageType.Info));
+            
         }
 
         protected void dgItemDetail_ItemDataBound(object sender, DataGridItemEventArgs e)
