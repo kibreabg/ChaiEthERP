@@ -1,0 +1,20 @@
+function GetTestTrends() {
+            var labels = [], data = [], standard = [], standardmax = [];
+            $.ajax({
+                type: "GET",
+                url: "frmSummery.aspx/BindTestTrends",
+                datatype: "Json",
+                async: false,
+                data: JSON.stringify({ json: json_string }),
+                success: function (info) {
+                    $.each(info, function (index, value) {
+                        labels.push(value.ageOfChild);
+                        data.push(parseFloat(value.weightOFChildinKG));
+                        standard.push(parseFloat(value.whoGrowthStandardMIN));
+                        standardmax.push(parseFloat(value.whoGrowthStandardMAX));
+                    });
+
+                },
+
+            });
+        }

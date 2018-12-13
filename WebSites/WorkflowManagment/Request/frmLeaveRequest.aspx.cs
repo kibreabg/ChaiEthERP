@@ -293,7 +293,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         }
                         else
                         {
-                            Master.ShowMessage(new AppMessage("Please Attach Sick letter", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                            Master.ShowMessage(new AppMessage("Please Attach Sick leave letter", Chai.WorkflowManagment.Enums.RMessageType.Error));
                         }
 
                     }
@@ -621,7 +621,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
             else
             {
-                Master.ShowMessage(new AppMessage("Please select file ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+               // Master.ShowMessage(new AppMessage("Please select file ", Chai.WorkflowManagment.Enums.RMessageType.Error));
                 return "";
             }
         }
