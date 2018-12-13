@@ -21,6 +21,7 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
             base.CheckTransferdMessage();
             base.Presenter.OnViewLoaded();
             UserApprover();
+            txtFrom.Text = CurrentUser.Email;
         }
 
         protected override void OnInit(EventArgs e)
