@@ -19,6 +19,8 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string AssignedBy { get; set; }
         public int WorkflowLevel { get; set; }
         public virtual VehicleRequest VehicleRequest { get; set; }
+
+      
         
     }
 }

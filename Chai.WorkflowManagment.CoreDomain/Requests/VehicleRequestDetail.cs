@@ -16,6 +16,9 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string FuelCardNumber { get; set; }
         public virtual CarRental CarRental { get; set; }
         public virtual AppUser AppUser { get; set; }
+        public virtual CarModel CarModel { get; set; }
+        public decimal Rate { get; set; }
+       public string CarHiredLocation { get; set; }
         public virtual VehicleRequest VehicleRequest { get; set; }
     }
 }

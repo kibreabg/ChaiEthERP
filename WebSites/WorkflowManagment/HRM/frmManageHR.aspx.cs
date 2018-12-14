@@ -393,6 +393,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             else
             {
                 ddlStatus.Items.FindByValue("In Active").Attributes.Add("Disabled", "Disabled");
+                ddlReason.Items.FindByValue("Rehire").Attributes.Add("Disabled", "Disabled");
+                ddlReason.Items.FindByValue("Renewal").Attributes.Add("Disabled", "Disabled");
                 dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
                 dgContractDetail.DataBind();
 
