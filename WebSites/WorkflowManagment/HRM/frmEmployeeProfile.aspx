@@ -45,7 +45,7 @@
 
         function previewImage(divId, source) {
             var disp_setting = "toolbar=no, location=no, menubar=no,";
-            disp_setting += "scrollbars=no, width=170, height=170, left=400, top=400";
+            disp_setting += "scrollbars=no, left=400, top=400";
             var content_value = document.getElementById(divId).innerHTML;
             var docprint = window.open("", "_blank", disp_setting);
             docprint.document.open();
@@ -242,10 +242,10 @@
 
                                             <div class="col-sm-6">
                                                 <div class="form-group">
-                                                    <div class="input-group date"  id='datetimepicker1'>
-                                                        
+                                                    <div class="input-group date" id='datetimepicker1'>
+
                                                         <asp:TextBox ID="txtDateOfBirth" runat="server" CssClass="form-control" data-dateformat="mm/dd/yy" placeholder="Date of Birth"></asp:TextBox>
-                                                    <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+                                                        <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
                                                     </div>
                                                     <asp:RequiredFieldValidator
                                                         ID="rfvtxtDateOfBirth" runat="server" ErrorMessage="Date of Birth is required" Display="Dynamic"
@@ -362,6 +362,9 @@
                                                         <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
                                                         <asp:TextBox ID="txtFamFirstName" runat="server" CssClass="form-control" placeholder="First Name"></asp:TextBox>
                                                     </div>
+                                                    <asp:RequiredFieldValidator
+                                                        ID="rfvFamFirstName" runat="server" ErrorMessage="First Name is Required" Display="Dynamic"
+                                                        CssClass="validator" ValidationGroup="saveFam" ControlToValidate="txtFamFirstName"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
@@ -370,6 +373,9 @@
                                                         <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
                                                         <asp:TextBox ID="txtFamLastName" runat="server" CssClass="form-control" placeholder="Last Name"></asp:TextBox>
                                                     </div>
+                                                    <asp:RequiredFieldValidator
+                                                        ID="rfvFamLastName" runat="server" ErrorMessage="Last Name is Required" Display="Dynamic"
+                                                        CssClass="validator" ValidationGroup="saveFam" ControlToValidate="txtFamLastName"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
                                         </div>
@@ -384,6 +390,9 @@
                                                             <asp:ListItem Value="Female" Text="Female"></asp:ListItem>
                                                         </asp:DropDownList>
                                                     </div>
+                                                    <asp:RequiredFieldValidator
+                                                        ID="rfvFamGender" runat="server" ErrorMessage="Gender is Required" Display="Dynamic"
+                                                        CssClass="validator" ValidationGroup="saveFam" ControlToValidate="ddlFamGender"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
@@ -397,6 +406,9 @@
                                                             <asp:ListItem Value="Parent" Text="Parent"></asp:ListItem>
                                                         </asp:DropDownList>
                                                     </div>
+                                                    <asp:RequiredFieldValidator
+                                                        ID="rfvFamRelationship" runat="server" ErrorMessage="Relationship is Required" Display="Dynamic"
+                                                        CssClass="validator" ValidationGroup="saveFam" ControlToValidate="ddlFamRelationship"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
                                         </div>
@@ -404,12 +416,13 @@
                                             <div class="col-sm-6">
                                                 <asp:Panel ID="pnlFamDateOfBirth" Visible="false" runat="server">
                                                     <div class="form-group">
-                                                        
-                                                            <div class="input-group date"  id='datetimepicker2'>                                                            
+
+                                                        <div class="input-group date" id='datetimepicker2'>
                                                             <asp:TextBox ID="txtFamDateOfBirth" runat="server" CssClass="form-control" data-dateformat="mm/dd/yy" placeholder="Date of Birth"></asp:TextBox>
-                                                            <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span></div>
+                                                            <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
                                                         </div>
-                                                    
+                                                    </div>
+
                                                 </asp:Panel>
                                             </div>
                                             <asp:Panel ID="pnlFamCertificate" Visible="false" runat="server">
@@ -430,7 +443,7 @@
                                                 <asp:Panel ID="pnlFamDateOfMarriage" Visible="false" runat="server">
                                                     <div class="form-group">
                                                         <div class="input-group date" id="datetimepicker6">
-                                                            
+
                                                             <asp:TextBox ID="txtFamDateOfMarriage" runat="server" CssClass="form-control" data-dateformat="mm/dd/yy" placeholder="Date of Marriage"></asp:TextBox>
                                                             <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
                                                         </div>
@@ -448,14 +461,14 @@
                                         </div>
                                     </fieldset>
                                     <div id="certPreview" style="display: none;">
-                                        <asp:Image ID="imgCertPreview" Width="150" Height="150" runat="server" />
+                                        <asp:Image ID="imgCertPreview" Width="100%" Height="100%" runat="server" />
                                     </div>
                                     <div class="form-actions">
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <asp:Button ID="btnFamCancel" runat="server" Text="Clear" OnClick="btnFamCancel_Click" CssClass="btn btn-default"></asp:Button>
                                                 <asp:Button ID="btnFamDelete" runat="server" Text="Delete" OnClick="btnFamDelete_Click" OnClientClick="javascript:return confirm('Are you sure you want to delete this family information?');" Enabled="false" CssClass="btn btn-primary"></asp:Button>
-                                                <asp:Button ID="btnFamSave" runat="server" Text="Save & Add New" OnClick="btnFamSave_Click" CssClass="btn btn-primary"></asp:Button>
+                                                <asp:Button ID="btnFamSave" runat="server" Text="Save & Add New" CausesValidation="true" ValidationGroup="saveFam" OnClick="btnFamSave_Click" CssClass="btn btn-primary"></asp:Button>
                                             </div>
                                         </div>
                                     </div>
@@ -502,6 +515,9 @@
                                                         <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
                                                         <asp:TextBox ID="txtEmergFullName" runat="server" CssClass="form-control" placeholder="Full Name"></asp:TextBox>
                                                     </div>
+                                                    <asp:RequiredFieldValidator
+                                                        ID="rfvEmergFullName" runat="server" ErrorMessage="Full Name is Required" Display="Dynamic"
+                                                        CssClass="validator" ValidationGroup="saveEmerg" ControlToValidate="txtEmergFullName"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
@@ -516,12 +532,14 @@
                                                             <asp:ListItem Value="Other" Text="Other"></asp:ListItem>
                                                         </asp:DropDownList>
                                                     </div>
+                                                    <asp:RequiredFieldValidator
+                                                        ID="rfvEmergRelationship" runat="server" ErrorMessage="Relationship is Required" Display="Dynamic"
+                                                        CssClass="validator" ValidationGroup="saveEmerg" ControlToValidate="ddlEmergRelationship"></asp:RequiredFieldValidator>
                                                 </div>
 
                                             </div>
                                         </div>
                                         <div class="row">
-
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <div class="input-group">
@@ -554,6 +572,9 @@
                                                         <span class="input-group-addon"><i class="fa fa-mobile fa-fw"></i></span>
                                                         <asp:TextBox ID="txtEmergCellPhone" runat="server" CssClass="form-control" data-mask="+(999) 999-99-99-99" data-mask-placeholder="X" placeholder="Cell Phone"></asp:TextBox>
                                                     </div>
+                                                    <asp:RequiredFieldValidator
+                                                        ID="rfvEmergCellPhone" runat="server" ErrorMessage="Cellphone is Required" Display="Dynamic"
+                                                        CssClass="validator" ValidationGroup="saveEmerg" ControlToValidate="txtEmergCellPhone"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
                                         </div>
@@ -592,7 +613,7 @@
                                             <div class="col-md-12">
                                                 <asp:Button ID="btnEmergCancel" runat="server" Text="Clear" OnClick="btnEmergCancel_Click" CssClass="btn btn-default"></asp:Button>
                                                 <asp:Button ID="btnEmergDelete" runat="server" Text="Delete" OnClick="btnEmergDelete_Click" OnClientClick="javascript:return confirm('Are you sure you want to delete this emergency contact?');" Enabled="false" CssClass="btn btn-primary"></asp:Button>
-                                                <asp:Button ID="btnEmergSave" runat="server" Text="Save & Add New" OnClick="btnEmergSave_Click" CssClass="btn btn-primary"></asp:Button>
+                                                <asp:Button ID="btnEmergSave" runat="server" Text="Save & Add New" CausesValidation="true" ValidationGroup="saveEmerg" OnClick="btnEmergSave_Click" CssClass="btn btn-primary"></asp:Button>
                                             </div>
                                         </div>
                                     </div>
@@ -649,6 +670,9 @@
                                                         <span class="input-group-addon"><i class="fa fa-institution fa-fw"></i></span>
                                                         <asp:TextBox ID="txtEduInstName" runat="server" CssClass="form-control" placeholder="Institution Name"></asp:TextBox>
                                                     </div>
+                                                    <asp:RequiredFieldValidator
+                                                        ID="rfvEduInstName" runat="server" ErrorMessage="Institution name is Required" Display="Dynamic"
+                                                        CssClass="validator" ValidationGroup="saveEdu" ControlToValidate="txtEduInstName"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
                                         </div>
@@ -667,6 +691,9 @@
                                                         <span class="input-group-addon"><i class="fa fa-pencil-square-o fa-fw"></i></span>
                                                         <asp:TextBox ID="txtEduMajor" runat="server" CssClass="form-control" placeholder="Major"></asp:TextBox>
                                                     </div>
+                                                    <asp:RequiredFieldValidator
+                                                        ID="rfvEduMajor" runat="server" ErrorMessage="Major is Required" Display="Dynamic"
+                                                        CssClass="validator" ValidationGroup="saveEdu" ControlToValidate="txtEduMajor"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
                                         </div>
@@ -680,7 +707,7 @@
                                                             <asp:ListItem Value="PHD" Text="PHD"></asp:ListItem>
                                                             <asp:ListItem Value="Masters" Text="Masters"></asp:ListItem>
                                                             <asp:ListItem Value="Doctor of Medicine" Text="Doctor of Medicine"></asp:ListItem>
-                                                            <asp:ListItem Value="Post-Graduate Diploma" Text="Post-Graduate Diploma"></asp:ListItem>                                                            
+                                                            <asp:ListItem Value="Post-Graduate Diploma" Text="Post-Graduate Diploma"></asp:ListItem>
                                                             <asp:ListItem Value="Bachelor" Text="Bachelor"></asp:ListItem>
                                                             <asp:ListItem Value="Advanced Diploma" Text="Advanced Diploma"></asp:ListItem>
                                                             <asp:ListItem Value="Diploma" Text="Diploma"></asp:ListItem>
@@ -688,20 +715,21 @@
                                                             <asp:ListItem Value="High-School Graduate" Text="High-School Graduate"></asp:ListItem>
                                                         </asp:DropDownList>
                                                     </div>
+                                                    <asp:RequiredFieldValidator
+                                                        ID="rfvEduLevel" runat="server" ErrorMessage="Educational level is required" Display="Dynamic"
+                                                        CssClass="validator" ValidationGroup="saveEdu" ControlToValidate="ddlEduLevel"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
-                                                    
-                                                         <div class="input-group date"  id='datetimepicker3'>                                                          
+                                                    <div class="input-group date" id='datetimepicker3'>
                                                         <asp:TextBox ID="txtEduGradYear" runat="server" CssClass="form-control" data-dateformat="mm/dd/yy" placeholder="Graduation Year"></asp:TextBox>
-                                                             <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
-                                                         </div>
+                                                        <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
                                                     </div>
                                                     <asp:RequiredFieldValidator
                                                         ID="rfvtxtEduGradYear" runat="server" ErrorMessage="Graduation year is required" Display="Dynamic"
                                                         CssClass="validator" ValidationGroup="saveEdu" ControlToValidate="txtEduGradYear"></asp:RequiredFieldValidator>
-                                               
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -793,8 +821,8 @@
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="form-group">
-                                                    <div class="input-group date"  id='datetimepicker4'>
-                                                        
+                                                    <div class="input-group date" id='datetimepicker4'>
+
                                                         <asp:TextBox ID="txtWorkStartDate" runat="server" CssClass="form-control " data-dateformat="mm/dd/yy" placeholder="Start Date"></asp:TextBox>
                                                         <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
                                                     </div>
@@ -806,8 +834,8 @@
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
-                                                    <div class="input-group date"  id='datetimepicker5'>
-                                                        
+                                                    <div class="input-group date" id='datetimepicker5'>
+
                                                         <asp:TextBox ID="txtWorkEndDate" runat="server" CssClass="form-control" data-dateformat="mm/dd/yy" placeholder="End Date"></asp:TextBox>
                                                         <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
                                                     </div>
