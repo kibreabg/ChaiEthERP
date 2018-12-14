@@ -30,8 +30,8 @@
                             <section class="col col-4">
                                 <asp:Label ID="lblSrchProgram" runat="server" Text="Project" CssClass="label"></asp:Label>
                                 <label class="select">
-                                    <asp:DropDownList ID="ddlSrchSrchProgram" runat="server">
-                                        <asp:ListItem Value="0">Select Project</asp:ListItem>
+                                    <asp:DropDownList ID="ddlSrchSrchProgram" runat="server" AppendDataBoundItems="True" DataTextField="ProgramName" DataValueField="Id">
+                                        <asp:ListItem Value="0">Select Program</asp:ListItem>
                                     </asp:DropDownList><i></i>
                                 </label>
                             </section>

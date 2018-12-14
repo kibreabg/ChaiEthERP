@@ -146,7 +146,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 string fileName = String.Empty;
                 if (fuProfilePic.HasFile)
                 {
-                    fileName = Path.GetFileName(fuProfilePic.PostedFile.FileName);
+                    fileName = _presenter.CurrentAppUser.UserName + Path.GetExtension(fuProfilePic.PostedFile.FileName);                    
                     fuProfilePic.PostedFile.SaveAs(Server.MapPath("~/ProfilePics/") + fileName);                    
                 }
                 else if(!String.IsNullOrEmpty(hfProfilePic.Value))
@@ -284,7 +284,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             txtFamDateOfMarriage.Text = Convert.ToDateTime(familyDetail.DateOfMarriage).ToShortDateString();
             ddlFamGender.SelectedValue = familyDetail.Gender;
             ddlFamRelationship.SelectedValue = familyDetail.Relationship;
-
+            btnFamSave.Text = "Update";
             btnFamDelete.Enabled = true;
 
             #region Relationship Logic
@@ -333,9 +333,11 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             txtEmergHouseNo.Text = emergencyContact.HouseNo;
             txtEmergTelephoneHome.Text = emergencyContact.TelephoneHome;
             txtEmergTelephoneOffice.Text = emergencyContact.TelephoneOffice;
-
+            ddlEmergRelationship.SelectedValue = emergencyContact.Relationship;
+            txtEmergCellPhone.Text = emergencyContact.CellPhone;
+            ckIsPrimary.Checked = emergencyContact.IsPrimaryContact.Value;
             btnEmergDelete.Enabled = true;
-
+            btnEmergSave.Text = "Update";
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetoemergency();", true);
         }
 
@@ -357,7 +359,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             ddlEduLevel.SelectedValue = education.EducationalLevel;
             txtEduGradYear.Text = Convert.ToDateTime(education.GraduationYear).ToShortDateString();
             txtEduSpecialAward.Text = education.SpecialAward;
-
+            btnEduSave.Text = "Update";
             btnEduDelete.Enabled = true;
 
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetoeducation();", true);
@@ -380,7 +382,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             txtWorkEndDate.Text = Convert.ToDateTime(workExperience.EndDate).ToShortDateString();
             txtWorkJobTitle.Text = workExperience.JobTitle;
             ddlWorkTypeOfEmp.SelectedValue = workExperience.TypeOfEmployer;
-
+            btnWorkSave.Text = "Update";
             btnWorkExpDelete.Enabled = true;
 
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetowork();", true);
@@ -428,7 +430,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 Master.ShowMessage(new AppMessage("Error: While Updating Employee Profile!", RMessageType.Error));
                 ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
 
@@ -458,7 +460,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 //Attached Certificates
                 if (fuCertificate.HasFile)
                 {
-                    string fileName = Path.GetFileName(fuCertificate.PostedFile.FileName);
+                    string fileName = "Fam" + _presenter.CurrentAppUser.UserName + Path.GetFileName(fuCertificate.PostedFile.FileName);
                     familyDetail.Certificate = "~/Certificates/" + fileName;
                     fuCertificate.PostedFile.SaveAs(Server.MapPath("~/Certificates/") + fileName);
                 }
@@ -469,6 +471,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 BindFamilyDetails();
                 clearFamilyDetails();
                 Session["famId"] = null;
+                btnFamSave.Text = "Save & Add New";
                 Master.ShowMessage(new AppMessage("You've Successfully Updated Your Family Information!", RMessageType.Info));
                 Log.Info(_presenter.CurrentUser().FullName + " has updated his/her Family Information");
                 ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetofamily();", true);
@@ -477,7 +480,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 Master.ShowMessage(new AppMessage("Error: While Updating Family Information!", RMessageType.Error));
                 ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
 
@@ -504,6 +507,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 if (Session["emergContId"] == null)
                     _presenter.CurrentAppUser.Employee.EmergencyContacts.Add(emergencyContact);
                 _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
+                btnEmergSave.Text = "Save & Add New";
                 BindEmergencyContacts();
                 clearEmergencyContacts();
                 Session["emergContId"] = null;
@@ -515,7 +519,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 Master.ShowMessage(new AppMessage("Error: While Updating Emergency Contact Information!", RMessageType.Error));
                 ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
 
@@ -540,7 +544,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
                 if (fuEduCertificate.HasFile)
                 {
-                    string fileName = Path.GetFileName(fuEduCertificate.PostedFile.FileName);
+                    string fileName = "Edu" + _presenter.CurrentAppUser.UserName + Path.GetFileName(fuEduCertificate.PostedFile.FileName);
                     education.Certificate = "~/Certificates/" + fileName;
                     fuEduCertificate.PostedFile.SaveAs(Server.MapPath("~/Certificates/") + fileName);
                 }
@@ -551,6 +555,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 Session["eduId"] = null;
                 BindEducations();
                 clearEducations();
+                btnEduSave.Text = "Save & Add New";
                 Master.ShowMessage(new AppMessage("You've Successfully Updated Your Education Information!", RMessageType.Info));
                 Log.Info(_presenter.CurrentUser().FullName + " has updated his/her Education Information");
                 ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetoeducation();", true);
@@ -559,7 +564,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 Master.ShowMessage(new AppMessage("Error: While Updating Education Information!", RMessageType.Error));
                 ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
 
@@ -586,6 +591,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 BindWorkExperiences();
                 clearWorkExperiences();
                 Session["workExpId"] = null;
+                btnWorkSave.Text = "Save & Add New";
                 Master.ShowMessage(new AppMessage("You've Successfully Updated Your Work Experiences!", RMessageType.Info));
                 Log.Info(_presenter.CurrentUser().FullName + " has updated his/her Work Experiences");
                 ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetowork();", true);
@@ -594,7 +600,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 Master.ShowMessage(new AppMessage("Error: While Updating Work Experience!", RMessageType.Error));
                 ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
 
@@ -634,7 +640,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 Master.ShowMessage(new AppMessage("Error: While Deleting Family Detail!", RMessageType.Error));
                 ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
 
         }
@@ -660,7 +666,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 Master.ShowMessage(new AppMessage("Error: While Deleting Emergency Contact!", RMessageType.Error));
                 ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
 
@@ -685,7 +691,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 Master.ShowMessage(new AppMessage("Error: While Deleting Education Information!", RMessageType.Error));
                 ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
 
@@ -710,7 +716,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 Master.ShowMessage(new AppMessage("Error: While Deleting Work Experience!", RMessageType.Error));
                 ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
 

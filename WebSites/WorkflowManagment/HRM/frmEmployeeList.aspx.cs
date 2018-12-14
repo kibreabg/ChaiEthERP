@@ -15,8 +15,10 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 			if (!this.IsPostBack)
 			{
 				this._presenter.OnViewInitialized();
+            BindProgram();
             GRVEmployeeList.DataSource = _presenter.ListEmployees(txtSrchEmpNo.Text, txtSrchSrchFullName.Text, int.Parse(ddlSrchSrchProgram.SelectedValue));
             GRVEmployeeList.DataBind();
+
         }
             this._presenter.OnViewLoaded();
 
@@ -46,7 +48,11 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             }
         }
 
-
+        public void BindProgram()
+        {
+            ddlSrchSrchProgram.DataSource = _presenter.GetPrograms();
+            ddlSrchSrchProgram.DataBind();
+        } 
         protected void GRVEmployeeList_RowDataBound(object sender, System.Web.UI.WebControls.GridViewRowEventArgs e)
         {
             if (_presenter.ListEmployees(txtSrchEmpNo.Text, txtSrchSrchFullName.Text, int.Parse(ddlSrchSrchProgram.SelectedValue))!= null)

@@ -16,7 +16,7 @@ namespace Chai.WorkflowManagment.Shared
         { }
 
         // Log an Exception 
-        public static void LogException(Exception exc, string source)
+        public static void LogException(Exception exc, string source) 
         {
             XmlConfigurator.Configure();
             // Include enterprise logic for logging exceptions 
@@ -48,12 +48,12 @@ namespace Chai.WorkflowManagment.Shared
         }
 
         // Notify System Operators about an exception 
-        public static void NotifySystemOps(Exception exc)
+        public static void NotifySystemOps(Exception exc, string sourceUser)
         {
             StringBuilder body = new StringBuilder();
-            body.AppendLine("<b>Inner Exception</b> " + exc.InnerException + System.Environment.NewLine + "<b>Stacktrace</b> " + exc.StackTrace + System.Environment.NewLine + "<b>Source</b> " + exc.Source + System.Environment.NewLine + "  <b>Target Site</b>  " + exc.TargetSite);
+            body.AppendLine("<b>Error generated from</b>" + sourceUser + System.Environment.NewLine + "<b>Inner Exception</b> " + exc.InnerException + System.Environment.NewLine + "<b>Stacktrace</b> " + exc.StackTrace + System.Environment.NewLine + "<b>Source</b> " + exc.Source + System.Environment.NewLine + "  <b>Target Site</b>  " + exc.TargetSite);
             //EmailSender.SendEmails("Exception Detail", "supportwfms@clintonhealthaccess.org", "Exception Raised", exc.StackTrace);
-            EmailSender.SendException("kgizatu@clintonhealthaccess.org,dhaddis@clintonhealthaccess.org,ygossaye@clintonhealthaccess.org", exc.Message, body.ToString());
+            EmailSender.SendException("kgizatu@clintonhealthaccess.org,dhaddis@clintonhealthaccess.org,ygossaye@clintonhealthaccess.org,gbirega@clintonhealthaccess.org,bseifu@clintonhealthaccess.org", exc.Message, body.ToString());
         }
     }
 }

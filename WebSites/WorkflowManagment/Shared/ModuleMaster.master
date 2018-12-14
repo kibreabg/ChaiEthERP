@@ -22,7 +22,7 @@
     <!-- SmartAdmin Styles : Please note (smartadmin-production.css) was created using LESS variables -->
     <link rel="stylesheet" type="text/css" media="screen" href="../css/smartadmin-production.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="../css/smartadmin-skins.min.css">
-
+    <link rel="stylesheet" type="text/css" href="../Content/bootstrap-datetimepicker.css" />
     <!-- SmartAdmin RTL Support is under construction
 			 This RTL CSS will be released in version 1.5
 		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-rtl.min.css"> -->
@@ -235,7 +235,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="lblTo">To</label>
-                                    <asp:TextBox ID="txtTo" CssClass="form-control" ToolTip="To" runat="server" Text="supportwfms@clintonhealthaccess.org"></asp:TextBox>
+                                    <asp:TextBox ID="txtTo" CssClass="form-control" ToolTip="To" runat="server" Text="ethioerp@clintonhealthaccess.org"></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="RfvTo" ControlToValidate="txtTo" CssClass="validator" InitialValue="" Text="*" runat="server" ErrorMessage="To Required" ValidationGroup="Send"></asp:RequiredFieldValidator>
                                 </div>
                             </div>
@@ -290,7 +290,7 @@
             document.write('<script src="../js/libs/jquery-ui-1.10.3.min.js"><\/script>');
         }
     </script>
-
+    <script type="text/javascript" src="../scripts/moment.min.js"></script>
     <!-- IMPORTANT: APP CONFIG -->
     <script type="text/javascript" src="../js/app.config.js"></script>
 
@@ -299,6 +299,9 @@
 
     <!-- BOOTSTRAP JS -->
     <script type="text/javascript" src="../js/bootstrap/bootstrap.min.js"></script>
+
+    <!-- DATE PICKER JS -->
+    <script type="text/javascript" src="../scripts/bootstrap-datetimepicker.js"></script>
 
     <!-- CUSTOM NOTIFICATION -->
     <script type="text/javascript" src="../js/notification/SmartNotification.min.js"></script>

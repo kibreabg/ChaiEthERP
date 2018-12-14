@@ -516,11 +516,11 @@ namespace Chai.WorkflowManagment.Modules.Setting
         }
         #endregion
         #region Employee Setting
-        public IList<Employee> GetEmployees()
+        public IList<Employee> GetEmployees(string FullName)
         {
             string filterExpression = "";
 
-            filterExpression = "SELECT * FROM Employees";
+            filterExpression = "SELECT * FROM Employees Where 1 = Case when '" + FullName + "' = '' Then 1 When (Employees.FirstName + ' ' + Employees.lastName) like '%" + FullName + "%' Then 1 END order by FirstName";
             // return WorkspaceFactory.CreateReadOnly().Queryable<CashPaymentRequest>(filterExpression).ToList();
             return _workspace.SqlQuery<Employee>(filterExpression).ToList();
         }

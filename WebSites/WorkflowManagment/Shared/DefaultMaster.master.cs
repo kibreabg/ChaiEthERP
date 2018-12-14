@@ -20,6 +20,7 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
             base.Presenter.OnViewLoaded();
             UserRole();
             UserApprover();
+            txtFrom.Text = CurrentUser.Email;
 
         }
         protected void LoginStatus1_LoggedOut(object sender, EventArgs e)

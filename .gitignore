@@ -329,3 +329,5 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
 /azure-pipelines.yml
+/Chai.WorkflowManagment.CoreDomain/DataAccess/WorkflowManagmentDbContext.cs
+/WebSites/WorkflowManagment/Web.config

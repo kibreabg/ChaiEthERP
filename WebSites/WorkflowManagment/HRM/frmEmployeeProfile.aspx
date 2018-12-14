@@ -22,6 +22,25 @@
                 });
 
             });
+
+            $('#datetimepicker1').datetimepicker({
+                format: 'MM/DD/YYYY'
+            });
+            $('#datetimepicker2').datetimepicker({
+                format: 'MM/DD/YYYY'
+            });
+            $('#datetimepicker3').datetimepicker({
+                format: 'MM/DD/YYYY'
+            });
+            $('#datetimepicker4').datetimepicker({
+                format: 'MM/DD/YYYY'
+            });
+            $('#datetimepicker5').datetimepicker({
+                format: 'MM/DD/YYYY'
+            });
+            $('#datetimepicker6').datetimepicker({
+                format: 'MM/DD/YYYY'
+            });
         });
 
         function previewImage(divId, source) {
@@ -88,6 +107,7 @@
         }
 
     </script>
+
     <section id="widget-grid" class="">
 
         <!-- row -->
@@ -219,11 +239,13 @@
                                                     </div>
                                                 </div>
                                             </div>
+
                                             <div class="col-sm-6">
                                                 <div class="form-group">
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
-                                                        <asp:TextBox ID="txtDateOfBirth" runat="server" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" placeholder="Date of Birth"></asp:TextBox>
+                                                    <div class="input-group date"  id='datetimepicker1'>
+                                                        
+                                                        <asp:TextBox ID="txtDateOfBirth" runat="server" CssClass="form-control" data-dateformat="mm/dd/yy" placeholder="Date of Birth"></asp:TextBox>
+                                                    <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
                                                     </div>
                                                     <asp:RequiredFieldValidator
                                                         ID="rfvtxtDateOfBirth" runat="server" ErrorMessage="Date of Birth is required" Display="Dynamic"
@@ -382,11 +404,12 @@
                                             <div class="col-sm-6">
                                                 <asp:Panel ID="pnlFamDateOfBirth" Visible="false" runat="server">
                                                     <div class="form-group">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
-                                                            <asp:TextBox ID="txtFamDateOfBirth" runat="server" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" placeholder="Date of Birth"></asp:TextBox>
+                                                        
+                                                            <div class="input-group date"  id='datetimepicker2'>                                                            
+                                                            <asp:TextBox ID="txtFamDateOfBirth" runat="server" CssClass="form-control" data-dateformat="mm/dd/yy" placeholder="Date of Birth"></asp:TextBox>
+                                                            <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span></div>
                                                         </div>
-                                                    </div>
+                                                    
                                                 </asp:Panel>
                                             </div>
                                             <asp:Panel ID="pnlFamCertificate" Visible="false" runat="server">
@@ -406,9 +429,10 @@
                                             <div class="col-sm-6">
                                                 <asp:Panel ID="pnlFamDateOfMarriage" Visible="false" runat="server">
                                                     <div class="form-group">
-                                                        <div class="input-group">
+                                                        <div class="input-group date" id="datetimepicker6">
+                                                            
+                                                            <asp:TextBox ID="txtFamDateOfMarriage" runat="server" CssClass="form-control" data-dateformat="mm/dd/yy" placeholder="Date of Marriage"></asp:TextBox>
                                                             <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
-                                                            <asp:TextBox ID="txtFamDateOfMarriage" runat="server" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" placeholder="Date of Marriage"></asp:TextBox>
                                                         </div>
                                                     </div>
                                                 </asp:Panel>
@@ -489,6 +513,7 @@
                                                             <asp:ListItem Value="Child" Text="Child"></asp:ListItem>
                                                             <asp:ListItem Value="Spouse" Text="Spouse"></asp:ListItem>
                                                             <asp:ListItem Value="Parent" Text="Parent"></asp:ListItem>
+                                                            <asp:ListItem Value="Other" Text="Other"></asp:ListItem>
                                                         </asp:DropDownList>
                                                     </div>
                                                 </div>
@@ -654,25 +679,29 @@
                                                             <asp:ListItem Value="" Text="Select Educational Level"></asp:ListItem>
                                                             <asp:ListItem Value="PHD" Text="PHD"></asp:ListItem>
                                                             <asp:ListItem Value="Masters" Text="Masters"></asp:ListItem>
-                                                            <asp:ListItem Value="Post-Graduate Diploma" Text="Post-Graduate Diploma"></asp:ListItem>
+                                                            <asp:ListItem Value="Doctor of Medicine" Text="Doctor of Medicine"></asp:ListItem>
+                                                            <asp:ListItem Value="Post-Graduate Diploma" Text="Post-Graduate Diploma"></asp:ListItem>                                                            
                                                             <asp:ListItem Value="Bachelor" Text="Bachelor"></asp:ListItem>
+                                                            <asp:ListItem Value="Advanced Diploma" Text="Advanced Diploma"></asp:ListItem>
                                                             <asp:ListItem Value="Diploma" Text="Diploma"></asp:ListItem>
                                                             <asp:ListItem Value="Certificate" Text="Certificate"></asp:ListItem>
-                                                            <asp:ListItem Value="High-School Graduate" Text="High-School Graduate"></asp:ListItem>                                                            
+                                                            <asp:ListItem Value="High-School Graduate" Text="High-School Graduate"></asp:ListItem>
                                                         </asp:DropDownList>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
-                                                        <asp:TextBox ID="txtEduGradYear" runat="server" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" placeholder="Graduation Year"></asp:TextBox>
+                                                    
+                                                         <div class="input-group date"  id='datetimepicker3'>                                                          
+                                                        <asp:TextBox ID="txtEduGradYear" runat="server" CssClass="form-control" data-dateformat="mm/dd/yy" placeholder="Graduation Year"></asp:TextBox>
+                                                             <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+                                                         </div>
                                                     </div>
                                                     <asp:RequiredFieldValidator
                                                         ID="rfvtxtEduGradYear" runat="server" ErrorMessage="Graduation year is required" Display="Dynamic"
                                                         CssClass="validator" ValidationGroup="saveEdu" ControlToValidate="txtEduGradYear"></asp:RequiredFieldValidator>
-                                                </div>
+                                               
                                             </div>
                                         </div>
                                         <div class="row">
@@ -764,19 +793,27 @@
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="form-group">
-                                                    <div class="input-group">
+                                                    <div class="input-group date"  id='datetimepicker4'>
+                                                        
+                                                        <asp:TextBox ID="txtWorkStartDate" runat="server" CssClass="form-control " data-dateformat="mm/dd/yy" placeholder="Start Date"></asp:TextBox>
                                                         <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
-                                                        <asp:TextBox ID="txtWorkStartDate" runat="server" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" placeholder="Start Date"></asp:TextBox>
                                                     </div>
+                                                    <asp:RequiredFieldValidator
+                                                        ID="rfvWorkStartDate" runat="server" ErrorMessage="Start Date is required" Display="Dynamic"
+                                                        CssClass="validator" ValidationGroup="workSave" ControlToValidate="txtWorkStartDate"></asp:RequiredFieldValidator>
                                                     <asp:CompareValidator ID="cvtxtWorkStartDate" CssClass="validator" runat="server" ErrorMessage="Work Start Date must be less than Work End Date" ControlToCompare="txtWorkEndDate" ControlToValidate="txtWorkStartDate" ValidationGroup="workSave" Type="Date" Operator="LessThanEqual"></asp:CompareValidator>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
-                                                    <div class="input-group">
+                                                    <div class="input-group date"  id='datetimepicker5'>
+                                                        
+                                                        <asp:TextBox ID="txtWorkEndDate" runat="server" CssClass="form-control" data-dateformat="mm/dd/yy" placeholder="End Date"></asp:TextBox>
                                                         <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
-                                                        <asp:TextBox ID="txtWorkEndDate" runat="server" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" placeholder="End Date"></asp:TextBox>
                                                     </div>
+                                                    <asp:RequiredFieldValidator
+                                                        ID="rfvWorkEndDate" runat="server" ErrorMessage="End Date is required" Display="Dynamic"
+                                                        CssClass="validator" ValidationGroup="workSave" ControlToValidate="txtWorkEndDate"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
                                         </div>
