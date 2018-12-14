@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Chai.WorkflowManagment.CoreDomain.Requests;
+using System.ComponentModel.DataAnnotations;
 
 namespace Chai.WorkflowManagment.CoreDomain.TravelLogs
 {
@@ -16,7 +17,12 @@ namespace Chai.WorkflowManagment.CoreDomain.TravelLogs
         public DateTime ArrivalTime { get; set; }
         public decimal StartKmReading { get; set; }
         public decimal EndKmReading { get; set; }
-        public int FuelPrice { get; set; }
+        public decimal FuelPrice { get; set; }
+        public decimal FuelLitre { get; set; }
+
+        [Required]
+     
+
         public virtual VehicleRequest VehicleRequest { get; set; }
     }
 }

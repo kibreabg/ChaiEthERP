@@ -363,7 +363,7 @@
                         </fieldset>
                     </div>
 
-                    <asp:Panel ID="pnlEMPHIST" Visible="true" runat="server" Style="min-height: 400px" >
+                    <asp:Panel ID="pnlEMPHIST" Visible="true" runat="server" Style="min-height: 400px " >
                         <div style="max-height: 600px; overflow: auto;">
                         <div class="modal-dialog" >
                             <div class="modal-content"overflow: auto;>

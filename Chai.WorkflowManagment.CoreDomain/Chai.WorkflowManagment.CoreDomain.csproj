@@ -98,6 +98,7 @@
     <Compile Include="HRM\WorkExperience.cs" />
     <Compile Include="Setting\Holiday.cs" />
     <Compile Include="Setting\JobTitle.cs" />
+    <Compile Include="Setting\CarModel.cs" />
     <Compile Include="Setting\Program.cs" />
     <Compile Include="Setting\Position.cs" />
     <Compile Include="HRM\EmployeeDetail.cs" />

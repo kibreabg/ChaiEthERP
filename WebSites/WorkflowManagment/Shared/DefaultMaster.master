@@ -235,7 +235,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="lblTo">To</label>
-                                    <asp:TextBox ID="txtTo" CssClass="form-control" ToolTip="To" runat="server" Text="supportwfms@clintonhealthaccess.org"></asp:TextBox>
+                                    <asp:TextBox ID="txtTo" CssClass="form-control" ToolTip="To" runat="server" Text="ethioerp@clintonhealthaccess.org"></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="RfvTo" ControlToValidate="txtTo" CssClass="validator" InitialValue="" Text="*" runat="server" ErrorMessage="To Required" ValidationGroup="Send"></asp:RequiredFieldValidator>
                                 </div>
                             </div>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Chai.WorkflowManagment.CoreDomain.Setting;
 using Chai.WorkflowManagment.CoreDomain.Users;
+using Chai.WorkflowManagment.CoreDomain.TravelLogs;
 
 namespace Chai.WorkflowManagment.CoreDomain.Requests
 {
@@ -28,11 +29,14 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public Nullable<DateTime> DepartureDate { get; set; }
         public Nullable<DateTime> ReturningDate { get; set; }
 
+        public string TravelLogStatus { get; set; }
       
         public string DepartureTime { get; set; }
         public virtual AppUser AppUser { get; set; }
         public virtual Project Project { get; set; }
         public virtual Grant Grant { get; set; }
+
+        public virtual TravelLog TravelLog { get; set; }
         public virtual IList<VehicleRequestStatus> VehicleRequestStatuses { get; set; }
         public virtual IList<VehicleRequestDetail> VehicleRequestDetails { get; set; }
 
