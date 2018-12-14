@@ -250,7 +250,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
                     }
                     else
-                        Master.ShowMessage(new AppMessage("Current Contract Date must not be less than previous Contract Date ", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                        Master.ShowMessage(new AppMessage("Current Contract Date must not be less than previous Contract Date ", Chai.WorkflowManagment.Enums.RMessageType.Error));
                 }
 
             }
@@ -392,6 +392,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             }
             else
             {
+                ddlReason.Items.FindByValue("Rehire").Attributes.Add("Disabled", "Disabled");
+                ddlReason.Items.FindByValue("Renewal").Attributes.Add("Disabled", "Disabled");
                 ddlStatus.Items.FindByValue("In Active").Attributes.Add("Disabled", "Disabled");
                 dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
                 dgContractDetail.DataBind();
@@ -1226,7 +1228,10 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     {
                         _presenter.CurrentEmployee.RemoveContract(TEMPChid);
                         _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
-                        _presenter.CurrentEmployee.GetLastInActiveContract().Status = "Active";
+                        if (_presenter.CurrentEmployee.Contracts.Count > 1)
+                        {
+                            _presenter.CurrentEmployee.GetLastInActiveContract().Status = "Active";
+                        }
                         dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
                         dgContractDetail.DataBind();
 
