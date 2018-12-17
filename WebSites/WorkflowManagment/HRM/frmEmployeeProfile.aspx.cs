@@ -234,6 +234,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             txtFamDateOfMarriage.Text = String.Empty;
             ddlFamGender.SelectedValue = "";
             ddlFamRelationship.SelectedValue = "";
+            btnFamDelete.Enabled = false;
+            btnFamSave.Text = "Save & Add New";
         }
         private void clearEmergencyContacts()
         {
@@ -245,6 +247,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             txtEmergTelephoneOffice.Text = String.Empty;
             txtEmergWoreda.Text = String.Empty;
             ddlEmergRelationship.SelectedValue = "";
+            btnEmergDelete.Enabled = false;
+            btnEmergSave.Text = "Save & Add New";
         }
         private void clearEducations()
         {
@@ -255,6 +259,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             txtEduSpecialAward.Text = String.Empty;
             ddlEduInstType.SelectedValue = "";
             ddlEduLevel.SelectedValue = "";
+            btnEduDelete.Enabled = false;
+            btnEduSave.Text = "Save & Add New";
         }
         private void clearWorkExperiences()
         {
@@ -264,6 +270,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             txtWorkOrgName.Text = String.Empty;
             txtWorkStartDate.Text = String.Empty;
             ddlWorkTypeOfEmp.SelectedValue = String.Empty;
+            btnWorkExpDelete.Enabled = false;
+            btnWorkSave.Text = "Save & Add New";
         }
 
         protected void grvFamilyDetails_PageIndexChanging(object sender, GridViewPageEventArgs e)
