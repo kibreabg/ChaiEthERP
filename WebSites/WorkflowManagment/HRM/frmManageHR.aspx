@@ -363,7 +363,7 @@
                         </fieldset>
                     </div>
 
-                    <asp:Panel ID="pnlEMPHIST" Visible="true" runat="server" Style="min-height: 400px " >
+                    <asp:Panel ID="pnlEMPHIST" Visible="true" runat="server" Style="min-height: 400px" >
                         <div style="max-height: 600px; overflow: auto;">
                         <div class="modal-dialog" >
                             <div class="modal-content"overflow: auto;>
@@ -425,7 +425,7 @@
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"></span>
-                                                    <asp:TextBox ID="txtSalary" runat="server" CssClass="form-control" placeholder="Salary"></asp:TextBox>
+                                                    <asp:TextBox ID="txtSalary" runat="server" data-mask="99999" CssClass="form-control" placeholder="Salary"></asp:TextBox>
                                                     <asp:RequiredFieldValidator ID="rfvtSal" runat="server" ControlToValidate="txtSalary" CssClass="validator" Display="Dynamic" ErrorMessage="Salary is required" SetFocusOnError="true" ValidationGroup="Savedetail" ForeColor="Red"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
@@ -473,7 +473,7 @@
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"></span>
-                                                    <asp:TextBox ID="txtHoursPerWeek" runat="server" CssClass="form-control" placeholder="Hours Per Week"></asp:TextBox>
+                                                    <asp:TextBox ID="txtHoursPerWeek" runat="server" CssClass="form-control" data-mask="99" placeholder="Hours Per Week"></asp:TextBox>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidatorhour" runat="server" ControlToValidate="txtHoursPerWeek" CssClass="validator" Display="Dynamic" ErrorMessage="Hours Per Week is required" SetFocusOnError="true" ValidationGroup="Savedetail" ForeColor="Red"></asp:RequiredFieldValidator>
 
                                                 </div>
@@ -573,9 +573,9 @@
 
                                                     <asp:BoundField DataField="Position.PositionName" HeaderText="Position" />
                                                     <asp:BoundField DataField="Program.ProgramName" HeaderText="Program" />
-                                                    <asp:BoundField DataField="DutyStation" HeaderText="DutyStation" />
+                                                    <asp:BoundField DataField="DutyStation" HeaderText="Duty Station" />
                                                     <asp:BoundField DataField="Salary" HeaderText="Salary" />
-                                                    <asp:BoundField DataField="EffectiveDateOfChange" HeaderText="EffectiveDateOfChange" />
+                                                    <asp:BoundField DataField="EffectiveDateOfChange" HeaderText="Effective Date of Change" />
                                                     <asp:CommandField SelectText="Edit" ShowSelectButton="True">
                                                         <ItemStyle ForeColor="#000099" />
                                                     </asp:CommandField>

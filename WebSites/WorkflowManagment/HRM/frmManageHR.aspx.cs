@@ -231,10 +231,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     var StartDate = txtStartDate.Text != "" ? txtStartDate.Text : "";
                     var EndDate = txtEndDate.Text != "" ? txtEndDate.Text : " ";
                     Contract cont = _presenter.CurrentEmployee.GetContract(id);
-
-
-                    if (_presenter.CurrentEmployee.GetEmpContract(GetId).ContractEndDate < Convert.ToDateTime(StartDate))
-                    {
+                    
                         cont.ContractStartDate = Convert.ToDateTime(StartDate);
                         cont.ContractEndDate = Convert.ToDateTime(EndDate);
                         cont.Reason = ddlReason.SelectedValue;
@@ -248,9 +245,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                         dgContractDetail.DataBind();
                        
 
-                    }
-                    else
-                        Master.ShowMessage(new AppMessage("Current Contract Date must not be less than previous Contract Date ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    
+                    
                 }
 
             }
@@ -364,39 +360,17 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
             if (_presenter.CurrentEmployee.Contracts.Count != 0)
             {
-                         
-                       
-                    ddlReason.Items.FindByValue("New Hire").Attributes.Add("Disabled", "Disabled");
-                    ddlStatus.Items.FindByValue("In Active").Attributes.Add("Disabled", "Disabled");
 
+                    ddlStatus.Items.FindByValue("In Active").Enabled = false;
+       
 
-                if (_presenter.CurrentEmployee.GetInActiveContract() == true)
-                {
-
-                    ddlReason.Items.FindByValue("Renewal").Attributes.Add("Disabled", "Disabled");
-
-                }
-
-                else if (_presenter.CurrentEmployee.GetInActiveContract() == true && _presenter.CurrentEmployee.GetTerminations(_presenter.CurrentEmployee.Id).ReccomendationForRehire == "No")
-                {
-                    ddlReason.Items.FindByValue("Rehire").Attributes.Add("Disabled", "Disabled");
-                }
-
-                else if (_presenter.CurrentEmployee.GetInActiveContract() == false)
-                {
-                    ddlReason.Items.FindByValue("Rehire").Attributes.Add("Disabled", "Disabled");
-                }
+         
 
                 dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
                 dgContractDetail.DataBind();
             }
             else
             {
-                ddlReason.Items.FindByValue("Rehire").Attributes.Add("Disabled", "Disabled");
-                ddlReason.Items.FindByValue("Renewal").Attributes.Add("Disabled", "Disabled");
-                ddlStatus.Items.FindByValue("In Active").Attributes.Add("Disabled", "Disabled");
-                ddlReason.Items.FindByValue("Rehire").Attributes.Add("Disabled", "Disabled");
-                ddlReason.Items.FindByValue("Renewal").Attributes.Add("Disabled", "Disabled");
                 dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
                 dgContractDetail.DataBind();
 
@@ -412,12 +386,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             dgChange.DataSource = chan.EmployeeDetails;
             dgChange.DataBind();
         }
-
-
-
-
-
-
+        
         protected void dgContractDetail_ItemCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
         {
 
@@ -816,42 +785,14 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         protected void dgContractDetail_SelectedIndexChanged(object sender, EventArgs e)
         {
 
-            /*   int id = Convert.ToInt32(dgContractDetail.SelectedDataKey[0]);
-
-                Contract cont = _presenter.CurrentEmployee.GetContract(id);
-                txtStartDate.Text = cont.ContractStartDate.ToShortDateString();
-                txtEndDate.Text = cont.ContractEndDate.ToShortDateString();
-
-                ddlReason.SelectedItem.Text = cont.Reason;
-                ddlStatus.SelectedItem.Text = cont.Status;
-                btnAddcontract.Text = "Update Contracts";
-
-
-              */
-
-
-
-
-
-
-
-
         }
-
-       
-
-       
 
         protected void lnkEdit_Click(object sender, EventArgs e)
         {
 
         }
 
-       
-
-
-
-
+      
 
         protected void dgTermination_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -868,26 +809,16 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         }
 
 
-
-
-
-
-
-
-
         protected void lnkDeleteemp_Click(object sender, EventArgs e)
         {
             try
             {
 
-                //   int id = Convert.ToInt32(dgChange.SelectedDataKey[0]);
-                //int id = Convert.ToInt32(dgChange.SelectedRow.Cells[0].ID);
+                
                 LinkButton lnkDeleteemp = sender as LinkButton;
                 GridViewRow gvrow = lnkDeleteemp.NamingContainer as GridViewRow;
                 int index = gvrow.RowIndex;
                 int id = Convert.ToInt32(dgChange.SelectedDataKey[0]);
-                //int id = Convert.ToInt32(dgChange.SelectedDataKey[index]);
-              //////  _presenter.CurrentEmployee.RemoveEmployeeDetail(id);
                 _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
 
 
@@ -918,10 +849,6 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             }
         }
 
-
-
-
-
         protected void dgContractDetail_RowCommand(object sender, GridViewCommandEventArgs e)
         {
 
@@ -946,7 +873,6 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
            
         }
 
-
         protected void dgChange_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
           
@@ -956,17 +882,6 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
          {
             
          }
-
-
-
-
-
-
-
-
-
-
-
 
         protected void dgContractDetail_RowDataBound(object sender, GridViewRowEventArgs e)
         {
@@ -993,66 +908,11 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     }
                 }
             }
-
-
-
-            /*    int contid = _presenter.GetLastContrcatId();
-                foreach (Contract cn in _presenter.GetContracts())
-                {
-                    cn.Status = "In Active";
-
-                }
-
-                _presenter.CurrentEmployee.GetContract(contid).Status = "Active";
-
-                foreach (GridViewRow item in dgContractDetail.Rows)
-                {
-                    if (e.Row.RowType == DataControlRowType.DataRow)
-                    {
-
-
-
-
-
-                        if (item.Cells[3].Text == "In Active")//orderstatus index
-                        {
-
-
-                            e.Row.Enabled = false;
-                        }
-
-
-
-                    }
-                }*/
-
         }
 
     protected void btnEMPhist_Click(object sender, EventArgs e)
         {
 
-            /* int TEMPChid = Convert.ToInt32(dgChange.DataKeys[dgChange.SelectedRow.RowIndex].Value);
-             int Id = dgChange.SelectedRow.RowIndex;
-
-
-             if (TEMPChid > 0)
-                 Session["chan"] = _presenter.CurrentEmployee.GetContract(TEMPChid);
-             else
-                 Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.RowIndex];
-
-
-             int recordId = (int)dgChange.SelectedRow.RowIndex;
-             if (_presenter.CurrentEmployee.Id > 0)
-             {
-                 hfDetailId.Value = TEMPChid.ToString();
-             }
-             else
-             {
-                 hfDetailId.Value = dgChange.SelectedIndex.ToString();
-             }
-             BindEmpDetail(chan);
-
-             pnlEMPHIST_ModalPopupExtender.Show();*/
 
         }
 
