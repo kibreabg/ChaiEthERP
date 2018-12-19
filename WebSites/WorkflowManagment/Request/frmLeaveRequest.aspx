@@ -5,9 +5,17 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="DefaultContent" runat="Server">
     <script src="../js/libs/jquery-2.0.2.min.js"></script>
     <script type="text/javascript">
+        $(document).ready(function () {
+                $('#datetimepicker1').datetimepicker({
+                format: 'MM/DD/YYYY'
+            });
+        });
         function showSearch() {
             $(document).ready(function () {
                 $('#searchModal').modal('show');
+                $('#datetimepicker1').datetimepicker({
+                    format: 'MM/DD/YYYY'
+                });
             });
         }
     </script>
@@ -107,11 +115,12 @@
                                 <label class="label">
                                     Date From</label>
                                 <label class="input">
-                                    <i class="icon-append fa fa-calendar"></i>
-                                    <asp:TextBox ID="txtDateFrom" runat="server" Visible="true" CssClass="form-control datepicker"
+                                     <div class="input-group date" id='datetimepicker1'>
+                                    <asp:TextBox ID="txtDateFrom" runat="server" Visible="true" CssClass="form-control"
                                         data-dateformat="mm/dd/yy" TabIndex="3" OnTextChanged="txtDateFrom_TextChanged"></asp:TextBox>
+                                         <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+                                                    </div>
                                     <asp:RequiredFieldValidator ID="RfvDateFrom" runat="server" ControlToValidate="txtDateFrom" CssClass="validator" ErrorMessage="Date From Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Save"></asp:RequiredFieldValidator>
-                                    <asp:CompareValidator ID="CompareValidator1" runat="server" ErrorMessage="Date From must be less than Date To" ControlToCompare="txtDateTo" ControlToValidate="txtDateFrom" ValidationGroup="Save" Type="Date" Operator="LessThanEqual"></asp:CompareValidator>
                                 </label>
                             </section>
                             <section class="col col-3">
@@ -120,7 +129,7 @@
                                 </label>
                                 <label class="input">
                                     <asp:TextBox ID="txtapplyfor" runat="server" Visible="true" placeholder="Days" TabIndex="6" AutoPostBack="True" OnTextChanged="txtapplyfor_TextChanged"></asp:TextBox>
-                                     <cc1:FilteredTextBoxExtender ID="txtapplyfor_FilteredTextBoxExtender" runat="server" FilterType="Custom, Numbers" TargetControlID="txtapplyfor" ValidChars=".">
+                                  <cc1:FilteredTextBoxExtender ID="txtapplyfor_FilteredTextBoxExtender" runat="server" FilterType="Numbers" TargetControlID="txtapplyfor" ValidChars="">
                                 </cc1:FilteredTextBoxExtender>
                                     <asp:RequiredFieldValidator ID="Rfvapplyfor" runat="server" CssClass="validator" ControlToValidate="txtapplyfor" ErrorMessage="I wish to apply for Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Save"></asp:RequiredFieldValidator>
                                 </label>

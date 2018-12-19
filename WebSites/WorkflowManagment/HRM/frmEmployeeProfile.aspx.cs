@@ -34,6 +34,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 BindEducations();
                 BindWorkExperiences();
             }
+           
         }
 
         [CreateNew]

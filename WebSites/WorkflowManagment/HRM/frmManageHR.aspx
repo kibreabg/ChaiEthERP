@@ -6,7 +6,33 @@
 
 <asp:Content ID="content" ContentPlaceHolderID="DefaultContent" runat="Server">
     <script src="../js/libs/jquery-2.0.2.min.js"></script>
+
+    
     <script type="text/javascript">
+        $(document).ready(function () {
+            vv();
+        });
+        function vv() {
+            //for bootstrap 3 use 'shown.bs.tab' instead of 'shown' in the next line
+            
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function () {
+                    //save the latest tab; use cookies if you like 'em better:
+                    localStorage.setItem('lastTab', $(this).attr('href'));
+                });
+
+                //go to the latest tab, if it exists:
+                var lastTab = localStorage.getItem('lastTab');
+                if (lastTab) {
+                    $('a[href=' + lastTab + ']').tab('show');
+                }
+                else {
+                    // Set the first tab if cookie do not exist
+                    $('a[data-toggle="tab"]:first').tab('show');
+                }
+            
+        }
+       
+   
         $(document).ready(function () {
             // fuelux wizard
             var wizard = $('.wizard').wizard();
@@ -26,7 +52,7 @@
         });
     </script>
 
-    <script type="text/javascript" language="javascript">
+    <script type="text/javascript" lang="javascript">
         function Clickheretoprint(theid) {
             var disp_setting = "toolbar=yes,location=no,directories=yes,menubar=yes,";
             disp_setting += "scrollbars=yes,width=750, height=600, left=100, top=25";
@@ -152,12 +178,11 @@
                 <div class="tabs-left">
                     <ul class="nav nav-tabs tabs-left" id="demo-pill-nav">
                         <li class="active">
-                            <a href="#tab-r1" data-toggle="tab"><span class="badge bg-color-blue txt-color-white"></span>Contract </a>
+                            <a href="#tab-r1" runat="server" data-toggle="tab"><span class="badge bg-color-blue txt-color-white"></span>Contract </a>
                         </li>
-
-
+                        
                         <li class="">
-                            <a href="#tab-r2" data-toggle="tab"><span class="badge bg-color-greenLight txt-color-white"></span>Exit Management</a>
+                            <a href="#tab-r2" runat="server" data-toggle="tab"><span class="badge bg-color-greenLight txt-color-white"></span>Exit Management</a>
                         </li>
                         <li class=""></li>
                         <li class=""></li>
@@ -171,7 +196,7 @@
                     </ul>
                 </div>
                 <div class="tab-content">
-                    <div class="tab-pane active" id="tab-r1">
+                    <div class="tab-pane active"id="tab-r1">
                         <fieldset>
                             <div class="row">
                                 <div class="col-sm-6">
@@ -272,7 +297,7 @@
                         </fieldset>
                     </div>
 
-                    <div class="tab-pane " id="tab-r2">
+                    <div class="tab-pane"  id="tab-r2">
                         <fieldset>
 
                             <div class="row">
@@ -281,6 +306,7 @@
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="icon-append fa fa-calendar"></i></span>
                                             <asp:TextBox ID="txtTerminationDate" runat="server" CssClass="form-control datepicker" placeholder="Termination Confirmation Date" data-dateformat="mm/dd/yy"></asp:TextBox>
+                                            <asp:RequiredFieldValidator ID="RfvTerminationDate" runat="server" ControlToValidate="txtTerminationDate" CssClass="validator" ErrorMessage="Termination Date Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Saveterm"></asp:RequiredFieldValidator>
 
                                         </div>
                                     </div>
@@ -290,6 +316,7 @@
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="icon-append fa fa-calendar"></i></span>
                                             <asp:TextBox ID="txtLastDate" runat="server" CssClass="form-control datepicker" placeholder="Last Date at Work" data-dateformat="mm/dd/yy"></asp:TextBox>
+                                            <asp:RequiredFieldValidator ID="rfvLastDate" runat="server" ControlToValidate="txtLastDate" CssClass="validator" ErrorMessage="Last Date Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Saveterm"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
                                 </div>
@@ -313,7 +340,7 @@
                                         <div class="input-group">
                                             <span class="input-group-addon"></span>
                                             <asp:TextBox ID="txtTerminationReason" runat="server" CssClass="form-control" placeholder="Termination Reason"></asp:TextBox>
-
+                                            <asp:RequiredFieldValidator ID="RfvTermReason" runat="server" ControlToValidate="txtTerminationReason" CssClass="validator" ErrorMessage="Termination reason Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Saveterm"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
                                 </div>
@@ -425,7 +452,9 @@
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"></span>
-                                                    <asp:TextBox ID="txtSalary" runat="server" data-mask="99999" CssClass="form-control" placeholder="Salary"></asp:TextBox>
+                                                    <asp:TextBox ID="txtSalary" runat="server" CssClass="form-control" placeholder="Salary"></asp:TextBox>
+                                                    <cc1:FilteredTextBoxExtender ID="txtSalary_FilteredTextBoxExtender" runat="server" FilterType="Custom,Numbers" TargetControlID="txtSalary" ValidChars=".">
+                                                    </cc1:FilteredTextBoxExtender>
                                                     <asp:RequiredFieldValidator ID="rfvtSal" runat="server" ControlToValidate="txtSalary" CssClass="validator" Display="Dynamic" ErrorMessage="Salary is required" SetFocusOnError="true" ValidationGroup="Savedetail" ForeColor="Red"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
@@ -473,7 +502,9 @@
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"></span>
-                                                    <asp:TextBox ID="txtHoursPerWeek" runat="server" CssClass="form-control" data-mask="99" placeholder="Hours Per Week"></asp:TextBox>
+                                                    <asp:TextBox ID="txtHoursPerWeek" runat="server" CssClass="form-control" placeholder="Hours Per Week"></asp:TextBox>
+                                                    <cc1:FilteredTextBoxExtender ID="txtHoursPerWeek_FilteredTextBoxExtender" runat="server" FilterType="Numbers" TargetControlID="txtHoursPerWeek" ValidChars="">
+                                                    </cc1:FilteredTextBoxExtender>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidatorhour" runat="server" ControlToValidate="txtHoursPerWeek" CssClass="validator" Display="Dynamic" ErrorMessage="Hours Per Week is required" SetFocusOnError="true" ValidationGroup="Savedetail" ForeColor="Red"></asp:RequiredFieldValidator>
 
                                                 </div>
@@ -1312,5 +1343,5 @@
 
         <!-- end widget div -->
     </div>
-
+   
 </asp:Content>

@@ -630,6 +630,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             DateTime Datefrom = Convert.ToDateTime(txtDateFrom.Text);
             int days = GetLVWorkingDays(Convert.ToDateTime(txtDateFrom.Text), Convert.ToInt32(txtapplyfor.Text)) + Convert.ToInt32(txtapplyfor.Text);
+            IList<Holiday> HolidayList = _presenter.GetHolidays();
+            foreach (Holiday h in HolidayList)
+            {
+                
+                 if (!(h.Date.DayOfWeek == DayOfWeek.Saturday) || !(h.Date.DayOfWeek == DayOfWeek.Sunday))
+                {
+                    days = days + 1;
+                }
+
+            }
             if (ddlLeaveType.SelectedItem.Text.Contains("Annual Leave"))
             {
                 if (txtDateFrom.Text != "")
@@ -724,6 +734,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     Holidays.Add(h.Date.AddDays(-1));
                 else if (h.Date.DayOfWeek == DayOfWeek.Sunday)
                     Holidays.Add(h.Date.AddDays(1));
+                else if (!(h.Date.DayOfWeek == DayOfWeek.Saturday) || !(h.Date.DayOfWeek == DayOfWeek.Sunday))
+                {
+                    days = days + 1;
+                }
+                   
             }
             int count = 0;
             DateTime date = current;

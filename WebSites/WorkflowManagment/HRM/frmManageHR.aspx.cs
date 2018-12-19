@@ -45,6 +45,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             }
             this._presenter.OnViewLoaded();
             BindContracts();
+          
         }
 
 
@@ -693,6 +694,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             }
 
             ClearTerminationFormFields();
+       
         }
 
 
