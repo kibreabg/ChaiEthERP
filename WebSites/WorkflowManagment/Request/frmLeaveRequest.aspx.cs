@@ -36,10 +36,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 XmlConfigurator.Configure();
                 PopLeaveType();
                 BindSearchLeaveRequestGrid();
+                           
 
             }
             this._presenter.OnViewLoaded();
             employee = _presenter.GetEmployee(_presenter.CurrentUser().Id);
+            txtLeaveAsOfCalEndDate.Text = (Math.Round((employee.EmployeeLeaveBalanceYE() - _presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value)) * 2, MidpointRounding.AwayFromZero) / 2).ToString();
+            txtLeaveAsOfToday.Text = (Math.Round((employee.EmployeeLeaveBalance() - _presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value)) * 2, MidpointRounding.AwayFromZero) / 2).ToString();
             if (employee != null)
                 BindInitialValues();
 

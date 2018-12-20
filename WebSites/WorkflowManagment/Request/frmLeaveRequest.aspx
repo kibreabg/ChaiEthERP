@@ -32,6 +32,28 @@
             });
         }
     </script>
+    <div class="row">
+					<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+						<h1 >  <span></span></h1>
+					</div>
+					<div class="col-xs-12 col-sm-5 col-md-5 col-lg-8">
+						<ul id="sparks" class="">
+                             <li class="sparks-info">
+								<h5 style="margin:5px 0 0 0"> Your Annual <span class="txt-color-blue"><asp:Label ID="Label1" runat="server"><br/></asp:Label></span></h5>
+								
+							</li>
+							<li class="sparks-info">
+								<h5 style="margin:5px 0 0 0"> Leave Balance as of Today <span class="txt-color-blue"><asp:Label ID="txtLeaveAsOfToday" runat="server"></asp:Label></span></h5>
+								
+							</li>
+							<li class="sparks-info">
+								<h5 style="margin:5px 0 0 0"> Leave Balance as of Calendar End Date<span class="txt-color-purple"><asp:Label ID="txtLeaveAsOfCalEndDate" runat="server"></asp:Label></span></h5>
+								
+							</li>
+						
+						</ul>
+					</div>
+				</div>
     <asp:ValidationSummary ID="VSLeaveRequest" runat="server"
         CssClass="alert alert-danger fade in" DisplayMode="SingleParagraph"
         ValidationGroup="Save" ForeColor="" />
