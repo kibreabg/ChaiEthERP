@@ -200,6 +200,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void GetCurrentApprover()
         {
+            txtbalance.Text = txtbalance.Text != "" ? txtbalance.Text : "0";
             if (!(ddlLeaveType.SelectedItem.Text == "Annual Leave" && Convert.ToDecimal(txtbalance.Text) <= 0))
             {
                 foreach (LeaveRequestStatus LRS in _presenter.CurrentLeaveRequest.LeaveRequestStatuses)
