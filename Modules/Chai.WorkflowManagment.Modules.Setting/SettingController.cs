@@ -533,7 +533,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
              string filterExpression = "";
 
             filterExpression = "SELECT *  FROM LeaveRequests Inner Join LeaveTypes on LeaveRequests.LeaveType_Id = LeaveTypes.Id "
-                               + " Where LeaveTypes.LeaveTypeName = 'Annual Leave' and LeaveRequests.CurrentStatus= 'Issued' and LeaveRequests.Requester = '" + EmpId+ "' and LeaveRequests.RequestedDate >= '" + Leavedatesetting+"'";
+                               + " Where LeaveTypes.LeaveTypeName = 'Annual Leave' and LeaveRequests.CurrentStatus= 'Issued' and LeaveRequests.Requester = '" + EmpId + "'";// and LeaveRequests.RequestedDate >= '" + Leavedatesetting+"'";
             // return WorkspaceFactory.CreateReadOnly().Queryable<CashPaymentRequest>(filterExpression).ToList();
            IList<LeaveRequest> EmpLeaverequest =  _workspace.SqlQuery<LeaveRequest>(filterExpression).ToList();
            return EmpLeaverequest.Sum(x => x.RequestedDays);
