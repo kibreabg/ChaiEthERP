@@ -493,7 +493,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                 if (employee != null)
                 {
-                    txtforward.Text = Math.Round((employee.EmployeeLeaveBalance() - _presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value))).ToString();
+                    txtforward.Text = (Math.Round((employee.EmployeeLeaveBalance() - _presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value)) * 2,MidpointRounding.AwayFromZero)/2).ToString();
 
                 }
                 else
