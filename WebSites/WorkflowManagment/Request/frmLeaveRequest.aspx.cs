@@ -629,17 +629,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         protected void ddltype_SelectedIndexChanged(object sender, EventArgs e)
         {
             DateTime Datefrom = Convert.ToDateTime(txtDateFrom.Text);
-            int days = GetLVWorkingDays(Convert.ToDateTime(txtDateFrom.Text), Convert.ToInt32(txtapplyfor.Text)) + Convert.ToInt32(txtapplyfor.Text);
-            IList<Holiday> HolidayList = _presenter.GetHolidays();
-            foreach (Holiday h in HolidayList)
-            {
-                
-                 if (!(h.Date.DayOfWeek == DayOfWeek.Saturday) || !(h.Date.DayOfWeek == DayOfWeek.Sunday))
-                {
-                    days = days + 1;
-                }
-
-            }
+            //int days = GetLVWorkingDays(Convert.ToDateTime(txtDateFrom.Text), Convert.ToInt32(txtapplyfor.Text));
+                        
             if (ddlLeaveType.SelectedItem.Text.Contains("Annual Leave"))
             {
                 if (txtDateFrom.Text != "")
@@ -648,7 +639,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     if (ddltype.SelectedValue == "Full Day")
                     {
 
-                        txtDateTo.Text = Datefrom.AddDays(days).ToString();
+                       // txtDateTo.Text = Datefrom.AddDays(days).ToString();
                         requesteddays = Convert.ToDecimal(txtapplyfor.Text);
                         txtbalance.Text = (Convert.ToDecimal(txtforward.Text) - requesteddays).ToString();
                     }
@@ -656,11 +647,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     {
                         if (txtapplyfor.Text == "1")
                         {
-                            txtDateTo.Text = txtDateFrom.Text;
+                            //txtDateTo.Text = txtDateFrom.Text;
                         }
                         else
                         {
-                            txtDateTo.Text = Datefrom.AddDays(days).ToString();
+                           // txtDateTo.Text = Datefrom.AddDays(days).ToString();
                         }
                         requesteddays = Convert.ToDecimal(txtapplyfor.Text) / 2;
                         txtbalance.Text = (Convert.ToDecimal(txtforward.Text) - requesteddays).ToString();
@@ -678,7 +669,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     //  DateTime Datefrom = Convert.ToDateTime(txtDateFrom.Text);
                     if (ddltype.SelectedValue == "Full Day")
                     {
-                        txtDateTo.Text = Datefrom.AddDays(Convert.ToInt32(txtapplyfor.Text)).ToString();
+                        //txtDateTo.Text = Datefrom.AddDays(Convert.ToInt32(txtapplyfor.Text)).ToString();
                         requesteddays = Convert.ToDecimal(txtapplyfor.Text);
                         // txtbalance.Text = (Convert.ToDecimal(txtforward.Text) - requesteddays).ToString();
                     }
@@ -698,7 +689,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     //  DateTime Datefrom = Convert.ToDateTime(txtDateFrom.Text);
                     if (ddltype.SelectedValue == "Full Day")
                     {
-                        txtDateTo.Text = Datefrom.AddDays(days).ToString();
+                       // txtDateTo.Text = Datefrom.AddDays(days).ToString();
                         requesteddays = Convert.ToDecimal(txtapplyfor.Text);
                         // txtbalance.Text = (Convert.ToDecimal(txtforward.Text) - requesteddays).ToString();
                     }
@@ -706,11 +697,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     {
                         if (txtapplyfor.Text == "1")
                         {
-                            txtDateTo.Text = txtDateFrom.Text;
+                           // txtDateTo.Text = txtDateFrom.Text;
                         }
                         else
                         {
-                            txtDateTo.Text = Datefrom.AddDays(Convert.ToInt32(txtapplyfor.Text)).ToString();
+                           // txtDateTo.Text = Datefrom.AddDays(Convert.ToInt32(txtapplyfor.Text)).ToString();
                         }
 
                         requesteddays = Convert.ToDecimal(txtapplyfor.Text) / 2;
@@ -724,40 +715,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
             }
         }
-        public int GetLVWorkingDays(DateTime current, int days)
-        {
-            IList<Holiday> HolidayList = _presenter.GetHolidays();
-            List<DateTime> Holidays = new List<DateTime>();
-            foreach (Holiday h in HolidayList)
-            {
-                if (h.Date.DayOfWeek == DayOfWeek.Saturday)
-                    Holidays.Add(h.Date.AddDays(-1));
-                else if (h.Date.DayOfWeek == DayOfWeek.Sunday)
-                    Holidays.Add(h.Date.AddDays(1));
-                else if (!(h.Date.DayOfWeek == DayOfWeek.Saturday) || !(h.Date.DayOfWeek == DayOfWeek.Sunday))
-                {
-                    days = days + 1;
-                }
-                   
-            }
-            int count = 0;
-            DateTime date = current;
-            for (int i = 0; i <= days; i++)
-            {
-                if (current.DayOfWeek == DayOfWeek.Saturday || current.DayOfWeek == DayOfWeek.Sunday || Holidays.Exists(excludedDate => excludedDate.Date.Equals(current.Date)))
-                {
-                    count++;
-                }
-                current = current.AddDays(1);
-            }
-            if (date.AddDays(days + count).DayOfWeek == DayOfWeek.Saturday || date.AddDays(days + count).DayOfWeek == DayOfWeek.Sunday)
-                if (date.AddDays(days + count).DayOfWeek == DayOfWeek.Saturday)
-                {
-                    return count + 2;
-                }
-                else { return count + 1; }
-            else
-                return count;
-        }
+
     }
 }

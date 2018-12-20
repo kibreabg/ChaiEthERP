@@ -6,10 +6,23 @@
     <script src="../js/libs/jquery-2.0.2.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+            
                 $('#datetimepicker1').datetimepicker({
                 format: 'MM/DD/YYYY'
-            });
+                });
+                $('#datetimepicker2').datetimepicker({
+                    format: 'MM/DD/YYYY'
+                });
         });
+        function pageLoad() {
+
+            $('#datetimepicker1').datetimepicker({
+                format: 'MM/DD/YYYY'
+            });
+            $('#datetimepicker2').datetimepicker({
+                format: 'MM/DD/YYYY'
+            });
+        }
         function showSearch() {
             $(document).ready(function () {
                 $('#searchModal').modal('show');
@@ -151,15 +164,18 @@
                                 <label class="label">
                                     Report Date</label>
                                 <label class="input">
-                                    <i class="icon-append fa fa-calendar"></i>
-                                    <asp:TextBox ID="txtDateTo" runat="server" Visible="true" CssClass="form-control datepicker"
-                                        data-dateformat="mm/dd/yy" TabIndex="4" OnTextChanged="txtDateTo_TextChanged" Enabled="false"></asp:TextBox>
-                                    <asp:RequiredFieldValidator ID="RfvDateTo" runat="server" ControlToValidate="txtDateTo" CssClass="validator" ErrorMessage="Date To Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Save"></asp:RequiredFieldValidator>
+                                    <div class="input-group date" id='datetimepicker2'>
+                                    <asp:TextBox ID="txtDateTo" runat="server" Visible="true" CssClass="form-control"
+                                        data-dateformat="mm/dd/yy" TabIndex="4" OnTextChanged="txtDateTo_TextChanged" Enabled="true"></asp:TextBox>
+                                        <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+                                    </div>
+                                    <asp:RequiredFieldValidator ID="RfvDateTo" runat="server" ControlToValidate="txtDateTo" CssClass="validator" ErrorMessage="Reporting To Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Save"></asp:RequiredFieldValidator>
+                                        
                                 </label>
                             </section>
                                     
                         </div>
-                        <div class="row">
+                        <div class="row">   
                             
                             <section class="col col-4">
                                 <asp:Label runat="server" ID="lblforward" class="label">
