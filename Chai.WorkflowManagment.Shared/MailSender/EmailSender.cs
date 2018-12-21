@@ -43,7 +43,7 @@ namespace Chai.WorkflowManagment.Shared.MailSender
                     client.Timeout = 2000000;
                     
                     client.Credentials = new System.Net.NetworkCredential(section.Network.UserName, section.Network.Password);
-                    client.SendAsync(mail,"");
+                    client.Send(mail);
                     client.Dispose();
                 }
 

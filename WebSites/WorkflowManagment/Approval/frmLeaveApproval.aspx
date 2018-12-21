@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Shared/ModuleMaster.master" AutoEventWireup="true" Async="true" CodeFile="frmLeaveApproval.aspx.cs" Inherits="Chai.WorkflowManagment.Modules.Approval.Views.frmLeaveApproval" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Shared/ModuleMaster.master" AutoEventWireup="true" CodeFile="frmLeaveApproval.aspx.cs" Inherits="Chai.WorkflowManagment.Modules.Approval.Views.frmLeaveApproval" %>
 
 <%@ MasterType TypeName="Chai.WorkflowManagment.Modules.Shell.BaseMaster" %>
 <%@ Register TagPrefix="asp" Namespace="AjaxControlToolkit" Assembly="AjaxControlToolkit" %>

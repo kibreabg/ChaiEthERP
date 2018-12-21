@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="frmManageHR.aspx.cs" Async="true" Inherits="Chai.WorkflowManagment.Modules.HRM.Views.frmManageHR"
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="frmManageHR.aspx.cs" Inherits="Chai.WorkflowManagment.Modules.HRM.Views.frmManageHR"
     Title="Manage HR" MasterPageFile="~/Shared/ModuleMaster.master" %>
 
 <%@ MasterType TypeName="Chai.WorkflowManagment.Modules.Shell.BaseMaster" %>
