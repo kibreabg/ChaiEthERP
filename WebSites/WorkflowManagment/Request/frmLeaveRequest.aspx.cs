@@ -646,7 +646,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     {
 
                        // txtDateTo.Text = Datefrom.AddDays(days).ToString();
-                        requesteddays = txtapplyfor.Text != "" ? Convert.ToDecimal(txtapplyfor.Text) / 2 : Convert.ToDecimal("0");
+                        requesteddays = txtapplyfor.Text != "" ? Convert.ToDecimal(txtapplyfor.Text) : Convert.ToDecimal("0");
                         txtbalance.Text = (Convert.ToDecimal(txtforward.Text) - requesteddays).ToString();
                     }
                     else
@@ -696,7 +696,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     if (ddltype.SelectedValue == "Full Day")
                     {
                        // txtDateTo.Text = Datefrom.AddDays(days).ToString();
-                        requesteddays = txtapplyfor.Text != "" ? Convert.ToDecimal(txtapplyfor.Text) / 2 : Convert.ToDecimal("0");
+                        requesteddays = txtapplyfor.Text != "" ? Convert.ToDecimal(txtapplyfor.Text) : Convert.ToDecimal("0");
                         // txtbalance.Text = (Convert.ToDecimal(txtforward.Text) - requesteddays).ToString();
                     }
                     else
