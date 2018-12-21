@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Shared/ModuleMaster.master" AutoEventWireup="true" CodeFile="frmLeaveRequest.aspx.cs" Inherits="Chai.WorkflowManagment.Modules.Request.Views.frmLeaveRequest" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Shared/ModuleMaster.master" AutoEventWireup="true" Async="true" CodeFile="frmLeaveRequest.aspx.cs" Inherits="Chai.WorkflowManagment.Modules.Request.Views.frmLeaveRequest" %>
 
 <%@ MasterType TypeName="Chai.WorkflowManagment.Modules.Shell.BaseMaster" %>
 <%@ Register assembly="AjaxControlToolkit" namespace="AjaxControlToolkit" tagprefix="cc1" %>
@@ -205,7 +205,7 @@
                                 <label class="input">
                                     <asp:TextBox ID="txtforward" runat="server" ReadOnly="true" Visible="true" OnTextChanged="txtforward_TextChanged" placeholder="Days" TabIndex="5" AutoPostBack="False"></asp:TextBox>
                                     <asp:Label ID="lblnoempleavesetting" runat="server" Text="" ForeColor="Red" Visible="true"></asp:Label>
-                                    <asp:Label ID="lblrequesteddays" runat="server" Text="Requested Days:-" ForeColor="Green" Visible="false"></asp:Label><asp:Label ID="lblRdays" runat="server" Text="" ForeColor="Green" Visible="false"></asp:Label>
+                                    <asp:Label ID="lblrequesteddays" runat="server" Text="Requested Days: " ForeColor="Green" Visible="false"></asp:Label><asp:Label ID="lblRdays" runat="server" Text="" ForeColor="Green" Visible="false"></asp:Label>
                                     <%--<asp:RequiredFieldValidator ID="RfvForward" runat="server" ControlToValidate="txtforward" ErrorMessage="Leave day's brought forward Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Save">*</asp:RequiredFieldValidator>--%>
                                 </label>
                             </section>

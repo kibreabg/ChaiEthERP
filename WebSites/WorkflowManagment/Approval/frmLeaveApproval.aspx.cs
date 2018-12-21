@@ -274,7 +274,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     SaveLeaveRequestStatus();
                     _presenter.SaveOrUpdateLeaveRequest(_presenter.CurrentLeaveRequest);
-                    CalculateLeavetaken();
+                    //CalculateLeavetaken();
                     ShowPrint();
                     SendEmailToRequester();
                     if (ddlApprovalStatus.SelectedValue != "Rejected")
@@ -294,7 +294,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
             catch (Exception ex)
             {
-
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
 
 

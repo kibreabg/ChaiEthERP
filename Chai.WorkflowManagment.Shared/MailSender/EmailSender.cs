@@ -41,8 +41,9 @@ namespace Chai.WorkflowManagment.Shared.MailSender
                 {
                     client.EnableSsl = section.Network.EnableSsl;
                     client.Timeout = 2000000;
+                    
                     client.Credentials = new System.Net.NetworkCredential(section.Network.UserName, section.Network.Password);
-                    client.Send(mail);
+                    client.SendAsync(mail,"");
                     client.Dispose();
                 }
 

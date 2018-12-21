@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="UserEdit.aspx.cs" Inherits="Chai.WorkflowManagment.Modules.Admin.Views.UserEdit"
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="UserEdit.aspx.cs" Async="true" Inherits="Chai.WorkflowManagment.Modules.Admin.Views.UserEdit"
     Title="UserEdit" MasterPageFile="~/Shared/AdminMaster.master" %>
 
 <%@ MasterType TypeName="Chai.WorkflowManagment.Modules.Shell.BaseMaster" %>

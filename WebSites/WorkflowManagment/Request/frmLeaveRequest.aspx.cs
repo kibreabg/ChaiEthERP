@@ -159,7 +159,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         //AutoNumber();
                     }
                 }
-
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
 
         }
@@ -207,10 +208,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (LRS.ApprovalStatus == null)
                     {
-                        SendEmail(LRS);
+                     
                         _presenter.CurrentLeaveRequest.CurrentApprover = LRS.Approver;
                         _presenter.CurrentLeaveRequest.CurrentLevel = LRS.WorkflowLevel;
                         _presenter.CurrentLeaveRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
+                        SendEmail(LRS);
                         break;
 
                     }
@@ -303,7 +305,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     }
 
                 }
-                else if (ddlLeaveType.SelectedItem.Text == "Annual Leave" && Convert.ToDecimal(Session["Requesteddays"]) < (txtforward.Text != "" ? Convert.ToDecimal(txtforward.Text) : 0))
+                else if (ddlLeaveType.SelectedItem.Text == "Annual Leave" && Convert.ToDecimal(Session["Requesteddays"]) <= Convert.ToDecimal(txtforward.Text))
                 {
                     GetCurrentApprover();
                     _presenter.SaveOrUpdateLeaveRequest(_presenter.CurrentLeaveRequest);
@@ -644,7 +646,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     {
 
                        // txtDateTo.Text = Datefrom.AddDays(days).ToString();
-                        requesteddays = Convert.ToDecimal(txtapplyfor.Text);
+                        requesteddays = txtapplyfor.Text != "" ? Convert.ToDecimal(txtapplyfor.Text) / 2 : Convert.ToDecimal("0");
                         txtbalance.Text = (Convert.ToDecimal(txtforward.Text) - requesteddays).ToString();
                     }
                     else
@@ -657,7 +659,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         {
                            // txtDateTo.Text = Datefrom.AddDays(days).ToString();
                         }
-                        requesteddays = Convert.ToDecimal(txtapplyfor.Text) / 2;
+                        requesteddays = txtapplyfor.Text != "" ? Convert.ToDecimal(txtapplyfor.Text) / 2 : Convert.ToDecimal("0");
                         txtbalance.Text = (Convert.ToDecimal(txtforward.Text) - requesteddays).ToString();
                     }
                     Session["Requesteddays"] = requesteddays;
@@ -694,7 +696,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     if (ddltype.SelectedValue == "Full Day")
                     {
                        // txtDateTo.Text = Datefrom.AddDays(days).ToString();
-                        requesteddays = Convert.ToDecimal(txtapplyfor.Text);
+                        requesteddays = txtapplyfor.Text != "" ? Convert.ToDecimal(txtapplyfor.Text) / 2 : Convert.ToDecimal("0");
                         // txtbalance.Text = (Convert.ToDecimal(txtforward.Text) - requesteddays).ToString();
                     }
                     else
@@ -708,7 +710,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                            // txtDateTo.Text = Datefrom.AddDays(Convert.ToInt32(txtapplyfor.Text)).ToString();
                         }
 
-                        requesteddays = Convert.ToDecimal(txtapplyfor.Text) / 2;
+                        requesteddays = txtapplyfor.Text != "" ? Convert.ToDecimal(txtapplyfor.Text) / 2 : Convert.ToDecimal("0");
 
                         // txtbalance.Text = (Convert.ToDecimal(txtforward.Text) - requesteddays).ToString();
                     }

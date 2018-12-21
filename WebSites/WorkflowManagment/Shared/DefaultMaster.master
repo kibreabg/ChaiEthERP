@@ -1,5 +1,4 @@
-<%@ Master Language="C#" AutoEventWireup="true" CodeFile="DefaultMaster.master.cs"
-    Inherits="Chai.WorkflowManagment.Modules.Shell.MasterPages.DefaultMaster" %>
+<%@ Master Language="C#" AutoEventWireup="true" CodeFile="DefaultMaster.master.cs"  Inherits="Chai.WorkflowManagment.Modules.Shell.MasterPages.DefaultMaster" %>
 
 <%@ Register Src="~/Shared/Controls/ModuleNavigation.ascx" TagName="ModuleNavigation" TagPrefix="RAMCS" %>
 <%@ Register Src="~/Shared/Controls/NodeNavigation.ascx" TagName="NodeNavigation" TagPrefix="RAMCS" %>
