@@ -83,7 +83,8 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
             {
                 try
                 {
-                    user.Password = AppUser.HashPassword(View.GetPassword);
+                    if (user.Id <= 0)
+                         user.Password = AppUser.HashPassword(View.GetPassword);
                 }
                 catch (Exception ex)
                 {
