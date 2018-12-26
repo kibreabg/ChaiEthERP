@@ -19,6 +19,8 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public virtual CarModel CarModel { get; set; }
         public decimal Rate { get; set; }
        public string CarHiredLocation { get; set; }
+
+  
         public virtual VehicleRequest VehicleRequest { get; set; }
     }
 }

@@ -28,9 +28,13 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string ProgressStatus { get; set; }
         public Nullable<DateTime> DepartureDate { get; set; }
         public Nullable<DateTime> ReturningDate { get; set; }
-
+        public string DeparturePlace { get; set; }
         public string TravelLogStatus { get; set; }
-      
+        public bool IsExtension { get; set; }
+        public int ExtRefRequest_Id { get; set; }
+        public string TravelLogAttachment { get; set; }
+        public int ActualDaysTravelled { get; set; }
+
         public string DepartureTime { get; set; }
         public virtual AppUser AppUser { get; set; }
         public virtual Project Project { get; set; }
