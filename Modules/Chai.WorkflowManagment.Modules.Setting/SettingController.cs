@@ -191,6 +191,25 @@ namespace Chai.WorkflowManagment.Modules.Setting
 
         }
         #endregion
+        #region CarModel
+        public IList<CarModel> GetCarModels()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<CarModel>(null).OrderBy(x => x.ModelName).ToList();
+        }
+        public CarModel GetCarModel(int CarModelId)
+        {
+            return _workspace.Single<CarModel>(x => x.Id == CarModelId);
+        }
+        public IList<CarModel> ListCarModels(string CarModelName)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM CarModels Where  1 = Case when '" + CarModelName + "' = '' Then 1 When CarModels.ModelName LIKE '%" + CarModelName + "%'  Then 1 END  ";
+
+            return _workspace.SqlQuery<CarModel>(filterExpression).ToList();
+
+        }
+        #endregion
         #region Vehicle
         public IList<Vehicle> GetVehicles()
         {

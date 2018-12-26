@@ -80,7 +80,9 @@
     <Compile Include="SettingModuleInitializer.cs" />
     <Compile Include="Views\BankAccountPresenter.cs" />
     <Compile Include="Views\BeneficiaryPresenter.cs" />
+    <Compile Include="Views\CarModelPresenter.cs" />
     <Compile Include="Views\EmpLeaveSettingPresenter.cs" />
+    <Compile Include="Views\ICarModellView.cs" />
     <Compile Include="Views\IEmpLeaveSettingView.cs" />
     <Compile Include="Views\IExpenseTypeView.cs" />
     <Compile Include="Views\ExpenseTypePresenter.cs" />
