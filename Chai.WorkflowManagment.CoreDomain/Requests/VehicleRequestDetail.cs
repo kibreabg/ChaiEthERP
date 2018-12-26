@@ -13,7 +13,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string PlateNo { get; set; }
         public string AssignedVehicle { get; set; }
 
-        public string FuelCardNumber { get; set; }
+      
         public virtual CarRental CarRental { get; set; }
         public virtual AppUser AppUser { get; set; }
         public virtual CarModel CarModel { get; set; }
