@@ -139,6 +139,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             ddlCarRental.DataValueField = "ID";
             ddlCarRental.DataBind();
         }
+        private void PopCarModels(DropDownList ddlCarModel)
+        {
+            ddlCarModel.DataSource = _presenter.GetCarModels();
+            ddlCarModel.DataTextField = "ModelName" + "ManufacturedYear";
+            ddlCarModel.DataValueField = "ID";
+            ddlCarModel.DataBind();
+        }
         private void PopVehicles(DropDownList ddlVehicles)
         {
             ddlVehicles.DataSource = _presenter.GetVehicles();
@@ -322,6 +329,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             txtRejectedReason.Visible = false;
             rfvRejectedReason.Enabled = false;
             pnlApproval_ModalPopupExtender.Show();
+            if (_presenter.CurrentVehicleRequest.CurrentLevel == _presenter.CurrentVehicleRequest.VehicleRequestStatuses.Count)
+                pnlApproverview.Visible = true;
+
 
         }
         protected void grvVehicleRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -413,10 +423,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     Vehicle.AssignedVehicle = ddlAssignedVehicle.SelectedValue;
                     DropDownList ddlFPlateNo = e.Item.FindControl("ddlFPlateNo") as DropDownList;
                     Vehicle.PlateNo = ddlFPlateNo.SelectedItem.Text;
-                    TextBox txtFuelCard = e.Item.FindControl("txtFFuelCard") as TextBox;
-                    Vehicle.FuelCardNumber = txtFuelCard.Text;
+                    TextBox txtRate = e.Item.FindControl("txtFRate") as TextBox;
+                    Vehicle.Rate = Convert.ToDecimal(txtRate.Text);
                     DropDownList ddlCarRental = e.Item.FindControl("ddlCarRental") as DropDownList;
                     Vehicle.CarRental = _presenter.GetCarRental(Convert.ToInt32(ddlCarRental.SelectedValue));
+                    DropDownList ddlCarModel = e.Item.FindControl("ddlCarModel") as DropDownList;
+                    Vehicle.CarModel = _presenter.GetCarModel(Convert.ToInt32(ddlCarModel.SelectedValue));
                     DropDownList ddlDriver = e.Item.FindControl("ddlDriver") as DropDownList;
                     Vehicle.AppUser = _presenter.GetUser(Convert.ToInt32(ddlDriver.SelectedValue));
 
@@ -449,11 +461,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 DropDownList ddlCarRental = e.Item.FindControl("ddlCarRental") as DropDownList;
                 PopCarRentals(ddlCarRental);
+                DropDownList ddlCarModel = e.Item.FindControl("ddlCarModel") as DropDownList;
+                PopCarRentals(ddlCarModel);
                 DropDownList ddlDriver = e.Item.FindControl("ddlDriver") as DropDownList;
                 PopDrivers(ddlDriver);
                 DropDownList ddlVehicle = e.Item.FindControl("ddlFPlateNo") as DropDownList;
                 PopVehicles(ddlVehicle);
-                TextBox txtFFuelCard = e.Item.FindControl("txtFFuelCard") as TextBox;
+         
 
             }
             else
@@ -481,6 +495,17 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                                 liI.Selected = true;
                         }
                     }
+                    DropDownList ddlEdtCarModel = e.Item.FindControl("ddlEdtCarModel") as DropDownList;
+                    if (ddlEdtCarModel != null)
+                    {
+                        PopCarModels(ddlEdtCarModel);
+                        if (_presenter.CurrentVehicleRequest.VehicleRequestDetails[e.Item.DataSetIndex].CarModel != null)
+                        {
+                            ListItem liI = ddlEdtCarModel.Items.FindByValue(_presenter.CurrentVehicleRequest.VehicleRequestDetails[e.Item.DataSetIndex].CarModel.Id.ToString());
+                            if (liI != null)
+                                liI.Selected = true;
+                        }
+                    }
                     DropDownList ddlEdtDriver = e.Item.FindControl("ddlEdtDriver") as DropDownList;
                     if (ddlEdtDriver != null)
                     {
@@ -501,16 +526,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                             ListItem liI = ddlEdtPlateNo.Items.FindByText(_presenter.CurrentVehicleRequest.VehicleRequestDetails[e.Item.DataSetIndex].PlateNo);
                             if (liI != null)
                                 liI.Selected = true;
-                        }
-                    }
-
-                    TextBox txtFFuelCard = e.Item.FindControl("txtFuelCard") as TextBox;
-                    if (txtFFuelCard != null)
-                    {
-
-                        if (_presenter.CurrentVehicleRequest.VehicleRequestDetails[e.Item.DataSetIndex].FuelCardNumber != null)
-                        {
-                            txtFFuelCard.Text = _presenter.CurrentVehicleRequest.VehicleRequestDetails[e.Item.DataSetIndex].FuelCardNumber;
                         }
                     }
                 }
@@ -535,10 +550,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 DropDownList ddlPlateNo = e.Item.FindControl("ddlEdtPlateNo") as DropDownList;
                 vehicle.PlateNo = ddlPlateNo.SelectedItem.Text;
 
-                TextBox txtEdtFuelCard = e.Item.FindControl("txtFuelCard") as TextBox;
-                vehicle.FuelCardNumber = txtEdtFuelCard.Text;
+                TextBox txtEdtRate = e.Item.FindControl("txtEdtRate") as TextBox;
+                vehicle.Rate = Convert.ToDecimal(txtEdtRate.Text);
                 DropDownList ddlEdtCarRental = e.Item.FindControl("ddlEdtCarRental") as DropDownList;
                 vehicle.CarRental = _presenter.GetCarRental(Convert.ToInt32(ddlEdtCarRental.SelectedValue));
+                DropDownList ddlEdtCarModel = e.Item.FindControl("ddlEdtCarModel") as DropDownList;
+                vehicle.CarModel = _presenter.GetCarModel(Convert.ToInt32(ddlEdtCarModel.SelectedValue));
                 DropDownList ddlEdtDriver = e.Item.FindControl("ddlEdtDriver") as DropDownList;
                 vehicle.AppUser = _presenter.GetUser(Convert.ToInt32(ddlEdtDriver.SelectedValue));
 
@@ -570,6 +587,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     SaveVehicleRequestStatus();
                     _presenter.SaveOrUpdateVehicleRequest(_presenter.CurrentVehicleRequest);
                     ShowPrint();
+                    btnPrintTravellog.Visible = true;
+                    BindVehicleRequest();
                     Master.ShowMessage(new AppMessage("Vehicle Request Approval Processed ", Chai.WorkflowManagment.Enums.RMessageType.Info));
                     btnApprove.Enabled = false;
 
@@ -643,7 +662,23 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             Response.Redirect("../Default.aspx");
         }
 
+        private void BindVehicleRequest()
+        {
+            VehicleRequest VR = _presenter.CurrentVehicleRequest;
+
+            lblRequestedDateResult.Text = VR.RequestDate.ToString();
+            lblRequestNoResult.Text = VR.RequestNo.ToString();
+            lblRequesterResult.Text = VR.AppUser.FullName;// _presenter.GetUser(VR.AppUser.Id).FullName;
+        }
 
 
+        protected void btnPrintTravellog_Click(object sender, EventArgs e)
+        {
+            foreach (VehicleRequestDetail detail in _presenter.CurrentVehicleRequest.VehicleRequestDetails)
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "client click", "javascript:Clickheretoprint('divprintlog')", true);
+            }
+           
+        }
     }
 }

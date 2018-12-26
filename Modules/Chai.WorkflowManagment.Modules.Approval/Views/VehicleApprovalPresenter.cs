@@ -77,9 +77,17 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _settingController.GetCarRentals();
         }
+        public IList<CarModel> GetCarModels()
+        {
+            return new List<CarModel>();
+        }
         public CarRental GetCarRental(int Id)
         {
             return _settingController.GetCarRental(Id);
+        }
+        public CarModel GetCarModel(int Id)
+        {
+            return null;
         }
         public IList<Vehicle> GetVehicles()
         {
