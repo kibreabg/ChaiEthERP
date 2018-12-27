@@ -308,7 +308,7 @@
                                 <asp:Button ID="btnApprove" runat="server" ValidationGroup="approve" Text="Save" OnClick="btnApprove_Click" Enabled="false" CssClass="btn btn-primary"></asp:Button>
                                 <asp:Button ID="btnCancelPopup" runat="server" Text="Close" CssClass="btn btn-primary" OnClick="btnCancelPopup_Click"></asp:Button>
                                 <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-primary" Enabled="false" OnClientClick="javascript:Clickheretoprint('divprint')"></asp:Button>
-                                <asp:Button ID="btnPrintTravellog" runat="server" Text="Print Travel log" CssClass="btn btn-primary" Enabled="false"  OnClick="btnPrintTravellog_Click"></asp:Button>
+                                <asp:Button ID="btnPrintTravellog" runat="server" Text="Print Travel log" CssClass="btn btn-primary" Visible="false"  OnClick="btnPrintTravellog_Click"></asp:Button>
                             </footer>
                         </div>
                     </div>
@@ -470,7 +470,7 @@
                <%-- <asp:BoundField DataField="AssignedVehicle" HeaderText="Assigned Vehicle" SortExpression="AssignedVehicle" />--%>
                <asp:BoundField DataField="AppUser.FullName" HeaderText="Allocated Driver" SortExpression="AppUser.FullName" />
                 <asp:BoundField DataField="CarRental.Name" HeaderText="Hired Car" SortExpression="CarRental.Name" />
-                <asp:BoundField DataField="FuelCardNumber" HeaderText="Fuel Card No" SortExpression="FuelCardNumber" />
+               
             </Columns>
             <FooterStyle CssClass="FooterStyle" />
             <HeaderStyle CssClass="headerstyle" />
@@ -500,145 +500,5 @@
             <RowStyle CssClass="rowstyle" />
         </asp:GridView>
     </div>
-    <div id="divprintlog" style="display:none">
-
-        <table border="2" cellspacing="4" style="width: 100%; border-style: solid;">
-            <tr>
-                <td>
-                    <strong>
-                        <asp:Label ID="lbllogRequestNo" runat="server" Text="Request No:"></asp:Label>
-                    </strong></td>
-                <td colspan="6">
-                    <asp:Label ID="lbllogRequestNoRes" runat="server"></asp:Label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <strong>
-                        <asp:Label ID="lbllogRequestedDate" runat="server" Text="Requested Date:"></asp:Label>
-                    </strong></td>
-                <td colspan="6">
-                    <asp:Label ID="lbllogRequestedDateRes" runat="server"></asp:Label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <strong>
-                        <asp:Label ID="lbllogRequester" runat="server" Text="Requester:"></asp:Label>
-                    </strong></td>
-                <td colspan="6">
-                    <asp:Label ID="lbllogRequesterRes" runat="server"></asp:Label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <strong>
-                        <asp:Label ID="lblCarTypelog" runat="server" Text="Car Type:"></asp:Label>
-                    </strong></td>
-                <td colspan="6">
-                    <asp:Label ID="lblCarTypelogres" runat="server"></asp:Label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <strong>
-                        <asp:Label ID="lbllogPlateNo" runat="server" Text="Plate No:"></asp:Label>
-                    </strong></td>
-                <td colspan="6">
-                    <asp:Label ID="lbllogPlateNoRes" runat="server"></asp:Label>
-                </td>
-            </tr>
-            <tr style="font-weight: bold; border-style: solid;">
-                <td>Departure Place</td>
-                <td>Arrival Place</td>
-                <td>Departure Time</td>
-                <td>Arrival Time</td>
-                <td>Start Km Reading</td>
-                <td>End Km Reading</td>
-                <td>Fuel Price</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-        </table>
-
-    </div>
+    
 </asp:Content>

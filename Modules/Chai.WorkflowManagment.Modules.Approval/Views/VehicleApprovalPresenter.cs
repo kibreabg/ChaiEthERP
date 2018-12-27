@@ -79,7 +79,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         public IList<CarModel> GetCarModels()
         {
-            return new List<CarModel>();
+            return _settingController.GetCarModels();
         }
         public CarRental GetCarRental(int Id)
         {
@@ -87,7 +87,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         public CarModel GetCarModel(int Id)
         {
-            return null;
+            return _settingController.GetCarModel(Id);
         }
         public IList<Vehicle> GetVehicles()
         {
