@@ -59,8 +59,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get
             {
-                if (!String.IsNullOrEmpty(Request.QueryString["requestId"]))
-                    return Convert.ToInt32(Request.QueryString["requestId"]);
+                if (!String.IsNullOrEmpty(Request.QueryString["VehicleRequestId"]))
+                    return Convert.ToInt32(Request.QueryString["VehicleRequestId"]);
                 else
                     return 0;
             }
@@ -208,13 +208,20 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 Master.ShowMessage(new AppMessage("Error: Unable to Update Travel Log. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
             }
         }
+        
         private void BindVehicleRequest()
         {
             VehicleRequest VR = _presenter.GetVehicleRequest(GetRequestId);
-
+            ddlvehicle.DataSource = VR.GetVehiclebypaltes();
+            ddlvehicle.DataBind();
             lblRequestedDateResult.Text = VR.RequestDate.ToString();
             lblRequestNoResult.Text = VR.RequestNo.ToString();
-            lblRequesterResult.Text = VR.AppUser.FullName;// _presenter.GetUser(VR.AppUser.Id).FullName;
+            lblRequesterResult.Text = VR.AppUser.FullName;
+            if (VR.GetVehiclebypalte(ddlvehicle.SelectedValue) != null)
+            {
+                lblCarTypeRes.Text = VR.GetVehiclebypalte(ddlvehicle.SelectedValue).AssignedVehicle == "driver" ? "CHAI Car" : "Hired Car";
+                lblPlateRes.Text = ddlvehicle.SelectedValue;
+            }
         }
         protected void btnBack_Click(object sender, EventArgs e)
         {

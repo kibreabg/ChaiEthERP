@@ -89,7 +89,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
             CarModel CarModel = _presenter.GetCarModelById(id);
             try
             {
-               
+                CarModel.Status = "InActive";
                 _presenter.SaveOrUpdateCarModel(CarModel);
                 
                 BindCarModels();
@@ -115,6 +115,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                     CarModel.ManufacturedYear = Convert.ToInt32(txtYear.Text);
                     TextBox txtDescription = e.Item.FindControl("txtDescription") as TextBox;
                     CarModel.Description = txtDescription.Text;
+                    CarModel.Status = "Active";
                     SaveCarModel(CarModel);
                     dgCarRental.EditItemIndex = -1;
                     BindCarModels();
@@ -171,6 +172,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 CarModel.ManufacturedYear = Convert.ToInt32(txtYear.Text);
                 TextBox txtDescription = e.Item.FindControl("txtEdtDescription") as TextBox;
                 CarModel.Description = txtDescription.Text;
+                CarModel.Status = "Active";
                 SaveCarModel(CarModel);
                 dgCarRental.EditItemIndex = -1;
                 BindCarModels();

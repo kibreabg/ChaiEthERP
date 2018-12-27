@@ -100,6 +100,25 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
             }
             return null;
         }
+        public virtual VehicleRequestDetail GetVehiclebypalte(string plateno)
+        {
+            foreach (VehicleRequestDetail V in VehicleRequestDetails)
+            {
+                if (V.PlateNo == plateno)
+                    return V;
+            }
+            return null;
+        }
+        public virtual IList<VehicleRequestDetail> GetVehiclebypaltes()
+        {
+            IList<VehicleRequestDetail> detail = new List<VehicleRequestDetail>();
+            foreach (VehicleRequestDetail V in VehicleRequestDetails)
+            {
+                    detail.Add(V);
+                   
+            }
+            return detail;
+        }
         public virtual void RemoveVehicle(int Id)
         {
 

@@ -88,7 +88,7 @@
                                             </ItemTemplate>
                                             </asp:TemplateField>
                 <asp:BoundField DataField="Destination" HeaderText="Destination" SortExpression="Destination" />
-                
+                <asp:BoundField DataField="NoOfPassengers" HeaderText="No. Of Passengers" SortExpression="NoOfPassengers" />
                 <asp:BoundField DataField="PurposeOfTravel" HeaderText="Purpose Of Travel" SortExpression="PurposeOfTravel" />
                 <asp:BoundField DataField="Comment" HeaderText="Comment" SortExpression="Comment" />
                 <asp:CommandField ButtonType="Button" SelectText="Process Request" ShowSelectButton="True" />
@@ -124,6 +124,7 @@
                     <div class="widget-body no-padding">
                         <div class="smart-form">
                             <fieldset>
+                                <asp:Panel ID="pnlApproverview" runat="server" Visible="false">
                                 <div class="row">
                                     <section class="col col-sm-12">
                                         <asp:DataGrid ID="dgVehicles" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
@@ -212,24 +213,41 @@
                                                         <asp:RequiredFieldValidator ID="rfvddlFPlateNo" runat="server" ControlToValidate="ddlFPlateNo" CssClass="validator" Display="Dynamic" ErrorMessage="Plate No. must be selected" InitialValue=" " SetFocusOnError="true" ValidationGroup="save"></asp:RequiredFieldValidator>
                                                     </FooterTemplate>
                                                 </asp:TemplateColumn>
-                                                 <asp:TemplateColumn HeaderText="Fuel Card Number">
+                                                        <asp:TemplateColumn HeaderText="Car Model">
                                                     <ItemTemplate>
-                                                        <%# DataBinder.Eval(Container.DataItem, "FuelCardNumber")%>
+                                                        <%# DataBinder.Eval(Container.DataItem, "CarModel.ModelName")%>
+                                                    </ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <asp:DropDownList ID="ddlEdtCarModel" CssClass="form-control" AppendDataBoundItems="true" runat="server">
+                                                            <asp:ListItem Value="0">Select Model</asp:ListItem>
+                                                        </asp:DropDownList>
+                                                        <asp:RequiredFieldValidator ID="RFVEdtCarModel" runat="server" ControlToValidate="ddlEdtCarModel" CssClass="validator" Display="Dynamic" ErrorMessage="Car Model Rquired" InitialValue="0" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                                    </EditItemTemplate>
+                                                    <FooterTemplate>
+                                                        <asp:DropDownList ID="ddlFCarModel" CssClass="form-control" AppendDataBoundItems="true" runat="server">
+                                                            <asp:ListItem Value="0">Select Model</asp:ListItem>
+                                                        </asp:DropDownList>
+                                                        <asp:RequiredFieldValidator ID="RFVFCarModel" runat="server" ControlToValidate="ddlFCarModel" CssClass="validator" Display="Dynamic" ErrorMessage="Car Model Rquired" InitialValue="0" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                                    </FooterTemplate>
+                                                </asp:TemplateColumn>
+                                                 <asp:TemplateColumn HeaderText="Rate">
+                                                    <ItemTemplate>
+                                                        <%# DataBinder.Eval(Container.DataItem, "Rate")%>
                                                     </ItemTemplate>
                                                     <EditItemTemplate>
                                                         
                                                        
                                                         <label class="input">
-                                                        <asp:TextBox ID="txtFuelCard" runat="server" Width="100%"></asp:TextBox>
+                                                        <asp:TextBox ID="txtEdtRate" runat="server" Width="100%"></asp:TextBox>
                                         </label>
-                                                        <asp:RequiredFieldValidator ID="rfvddlFuelCardNo" runat="server" ControlToValidate="txtFuelCard" CssClass="validator" Display="Dynamic" ErrorMessage="Fuel Card Number Rquired" InitialValue=" " SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                                        <asp:RequiredFieldValidator ID="RFVRate" runat="server" ControlToValidate="txtEdtRate" CssClass="validator" Display="Dynamic" ErrorMessage="Rate Rquired" InitialValue=" " SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
                                                     </EditItemTemplate>
                                                     <FooterTemplate>
                                                         
                                                        <label class="input">
-                                                        <asp:TextBox ID="txtFFuelCard" runat="server" Width="100%"></asp:TextBox>
+                                                        <asp:TextBox ID="txtFRate" runat="server" Width="100%"></asp:TextBox>
                                         </label>
-                                                        <asp:RequiredFieldValidator ID="rfvddlFuelCardNo" runat="server" ControlToValidate="txtFFuelCard" CssClass="validator" Display="Dynamic" ErrorMessage="Fuel Card Number Rquired" InitialValue=" " SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                                        <asp:RequiredFieldValidator ID="RFVFRate" runat="server" ControlToValidate="txtFRate" CssClass="validator" Display="Dynamic" ErrorMessage="Rate Rquired" InitialValue=" " SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
                                                                                                             </FooterTemplate>
                                                 </asp:TemplateColumn>
                                                 <asp:TemplateColumn HeaderText="Actions">
@@ -257,7 +275,8 @@
                                             <asp:TextBox ID="txtComment" runat="server" Width="100%"></asp:TextBox>
                                         </label>
                                     </section></div>
-                                      <div class="row">
+                                </asp:Panel>
+                                <div class="row">
                                      <section class="col col-6">
                                         <asp:Label ID="lblProjectIDD" Font-Bold="true" runat="server" Text="Project ID"  CssClass="label"></asp:Label>
                                         <asp:Label ID="lblProjectIDDResult" Font-Bold="true" runat="server" Text="Project ID" CssClass="label"></asp:Label>
@@ -289,6 +308,7 @@
                                 <asp:Button ID="btnApprove" runat="server" ValidationGroup="approve" Text="Save" OnClick="btnApprove_Click" Enabled="false" CssClass="btn btn-primary"></asp:Button>
                                 <asp:Button ID="btnCancelPopup" runat="server" Text="Close" CssClass="btn btn-primary" OnClick="btnCancelPopup_Click"></asp:Button>
                                 <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-primary" Enabled="false" OnClientClick="javascript:Clickheretoprint('divprint')"></asp:Button>
+                                <asp:Button ID="btnPrintTravellog" runat="server" Text="Print Travel log" CssClass="btn btn-primary" Visible="false"  OnClick="btnPrintTravellog_Click"></asp:Button>
                             </footer>
                         </div>
                     </div>
@@ -450,7 +470,7 @@
                <%-- <asp:BoundField DataField="AssignedVehicle" HeaderText="Assigned Vehicle" SortExpression="AssignedVehicle" />--%>
                <asp:BoundField DataField="AppUser.FullName" HeaderText="Allocated Driver" SortExpression="AppUser.FullName" />
                 <asp:BoundField DataField="CarRental.Name" HeaderText="Hired Car" SortExpression="CarRental.Name" />
-                <asp:BoundField DataField="FuelCardNumber" HeaderText="Fuel Card No" SortExpression="FuelCardNumber" />
+               
             </Columns>
             <FooterStyle CssClass="FooterStyle" />
             <HeaderStyle CssClass="headerstyle" />
@@ -480,5 +500,5 @@
             <RowStyle CssClass="rowstyle" />
         </asp:GridView>
     </div>
-
+    
 </asp:Content>

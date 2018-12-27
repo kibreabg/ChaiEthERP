@@ -390,5 +390,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
            
         }
+
+        protected void btnPrintPurchaseForm_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
