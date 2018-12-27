@@ -110,6 +110,13 @@ namespace Chai.WorkflowManagment.Modules.Request
         {
             return _workspace.Single<VehicleRequestDetail>(x => x.Id == id);
         }
+        public IList<VehicleRequest> GetExtVehicleRequest()
+        {
+
+            int currentUserId = GetCurrentUser().Id;
+            return WorkspaceFactory.CreateReadOnly().Query<VehicleRequest>(x=> x.AppUser.Id== currentUserId).ToList();
+        }
+        
         #endregion
         #region Cash Payment
         public CashPaymentRequest GetCashPaymentRequest(int RequestId)

@@ -130,22 +130,27 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             VehicleRequest.DepartureDate = View.GetDepartureDate;
             VehicleRequest.ReturningDate = View.GetReturningDate;
             VehicleRequest.DepartureTime = View.GetDepartureTime;
-         
+            VehicleRequest.DeparturePlace = View.GetDeparturePlace;
             VehicleRequest.PurposeOfTravel = View.GetPurposeOfTravel;
             VehicleRequest.Destination = View.GetDestination;
             VehicleRequest.Comment = View.GetComment;
             VehicleRequest.NoOfPassengers = View.GetNoOfPassengers;
             VehicleRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
+            VehicleRequest.TravelLogStatus = "Pending";
+            VehicleRequest.IsExtension = View.GetIsExtension;
+            VehicleRequest.TravelLogAttachment = View.GetTravelLogAttachment;
+            VehicleRequest.ActualDaysTravelled = View.GetActualDaysTravelled;
+
             if (View.GetProjectId != 0)
                 VehicleRequest.Project = _settingController.GetProject(View.GetProjectId);
             if (View.GetGrantId != 0)
                 VehicleRequest.Grant = _settingController.GetGrant(View.GetGrantId);
             VehicleRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
-
+            VehicleRequest.ExtRefRequest_Id = View.GetExtRefRequest;
             if (CurrentVehicleRequest.VehicleRequestStatuses.Count == 0)
                 SaveVehicleRequestStatus();
             GetCurrentApprover();
-
+            
             _controller.SaveOrUpdateEntity(VehicleRequest);
             _controller.CurrentObject = null;
         }
@@ -209,6 +214,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public IList<Grant> GetGrantbyprojectId(int projectId)
         {
             return _settingController.GetProjectGrantsByprojectId(projectId);
+        }
+        public IList<VehicleRequest> GetExtVehicleRequest()
+        {
+            return _controller.GetExtVehicleRequest();
         }
         public ApprovalSetting GetApprovalSetting(string RequestType, int value)
         {

@@ -16,6 +16,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Setting
         public int ManufacturedYear { get; set; }
 
         public string Description { get; set; }
-      
+        public string Status { get; set; }
+
     }
 }

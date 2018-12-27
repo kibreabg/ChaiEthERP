@@ -79,6 +79,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
             }
         }
+
+        
         public string GetRequestNo
         {
             get { return AutoNumber(); }
@@ -90,6 +92,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public DateTime GetReturningDate
         {
             get { return Convert.ToDateTime(txtReturningDate.Text); }
+        }
+        public string GetDeparturePlace
+        {
+            get { return txtDeparturePlace.Text; }
         }
         public string GetDepartureTime
         {
@@ -120,6 +126,31 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return Convert.ToInt32(ddlGrant.SelectedValue); }
         }
+
+        public string GetTravelLogStatus
+        {
+            get { return null; }
+        }
+        public bool GetIsExtension
+        {
+            get { return ckIsExtension.Checked; }
+        }
+
+        public int GetExtRefRequest
+        {
+            
+            get { return Convert.ToInt32(ddlRequestNo.SelectedValue); }
+        }
+        public string GetTravelLogAttachment
+        {
+            get { return null; }
+        }
+        public int GetActualDaysTravelled
+        {
+            
+            get { return Convert.ToInt32(txtActualDate.Text); }
+        }
+
         private void PopRequestPersonnels()
         {
             txtRequestingPersonnel.Text = _presenter.CurrentUser().FirstName + " " + _presenter.CurrentUser().LastName;
@@ -138,7 +169,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         #endregion
         private string AutoNumber()
         {
-            return "VR-" + (_presenter.GetLastVehicleRequestId() + 1).ToString();
+            if (_presenter.CurrentVehicleRequest.Id > 0)
+            {
+                return "VR-" + (_presenter.GetLastVehicleRequestId()).ToString();
+            }
+            else
+            {
+                return "VR-" + (_presenter.GetLastVehicleRequestId() + 1).ToString();
+            }
         }
         private void CheckApprovalSettings()
         {
@@ -154,6 +192,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
             ddlProject.Items.Insert(0, new ListItem("---Select Project---", "0"));
             ddlProject.SelectedIndex = 0;
+        }
+        private void PopExtRequest()
+        {
+            ddlRequestNo.DataSource = _presenter.GetExtVehicleRequest();
+            ddlRequestNo.DataBind();
+
+            ddlRequestNo.Items.Insert(0, new ListItem("---Select Request---", "0"));
+            ddlRequestNo.SelectedIndex = 0;
         }
         private void PopGrants(int ProjectId)
         {
@@ -172,6 +218,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             txtNoOfPassangers.Text = String.Empty;
             txtDestination.Text = String.Empty;
             txtComment.Text = String.Empty;
+            txtActualDate.Text = String.Empty;
+            ckIsExtension.Checked = false;
+            
         }
         private void BindVehicleRequests()
         {
@@ -183,7 +232,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             _presenter.OnViewLoaded();
             if (_presenter.CurrentVehicleRequest != null)
             {
-                //txtRequestNo.Text = _presenter.CurrentVehicleRequest.RequestNo.ToString();
+                txtDeparturePlace.Text = _presenter.CurrentVehicleRequest.DeparturePlace.ToString();
                 txtDepartureDate.Text = _presenter.CurrentVehicleRequest.DepartureDate.Value.ToShortDateString();
                 txtReturningDate.Text = _presenter.CurrentVehicleRequest.ReturningDate.Value.ToShortDateString();
                 timepicker.Text = _presenter.CurrentVehicleRequest.DepartureTime;
@@ -194,7 +243,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 txtNoOfPassangers.Text = _presenter.CurrentVehicleRequest.NoOfPassengers.ToString();
                 ddlProject.SelectedValue = _presenter.CurrentVehicleRequest.Project.Id.ToString();
                 PopGrants(Convert.ToInt32(ddlProject.SelectedValue));
+                
+                PopExtRequest();
+                ddlRequestNo.SelectedValue = _presenter.CurrentVehicleRequest.Id.ToString();
                 ddlGrant.SelectedValue = _presenter.CurrentVehicleRequest.Grant.Id.ToString();
+                txtActualDate.Text = _presenter.CurrentVehicleRequest.ActualDaysTravelled.ToString();
+
                 BindVehicleRequests();
             }
         }
@@ -232,13 +286,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             try
             {
+              
                 _presenter.SaveOrUpdateVehicleRequest();
                 if (_presenter.CurrentVehicleRequest.VehicleRequestStatuses.Count != 0)
                 {
                     BindVehicleRequests();
+                    
                     Master.ShowMessage(new AppMessage("Successfully did a Vehicle  Request, Reference No - <b>'" + _presenter.CurrentVehicleRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
                     Log.Info(_presenter.CurrentUser().FullName + " has requested a Vehicle");
                     btnSave.Visible = false;
+                   
                 }
                 else
                 {
@@ -290,6 +347,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
 
 
-      
+
+
+        protected void ckIsExtension_CheckedChanged(object sender, EventArgs e)
+        {
+            ddlRequestNo.Visible = true;
+            PopExtRequest();
+            Label1.Visible = true;
+        }
     }
 }
