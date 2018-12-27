@@ -68,8 +68,19 @@ namespace Chai.WorkflowManagment.Modules.Approval
             return _workspace.SqlQuery<VehicleRequest>(filterExpression).ToList();
         }
         #endregion
+        #region Travel Log Attach
+        public IList<VehicleRequest> ListPendingVehicleRequests(string RequestNo, string RequestDate)
+        {
+            string filterExpression = "";
+
+            filterExpression = " SELECT  *  FROM VehicleRequests INNER JOIN AppUsers on AppUsers.Id=VehicleRequests.CurrentApprover Left JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id  AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When VehicleRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When VehicleRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND VehicleRequests.ProgressStatus='Completed' AND VehicleRequests.TravelLogStatus='Pending' " +
+                                   " AND  ((VehicleRequests.CurrentApprover = '" + CurrentUser().Id + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) order by VehicleRequests.Id Desc";
+
+            return _workspace.SqlQuery<VehicleRequest>(filterExpression).ToList();
+        }
+        #endregion
         #region Cash Payment Approval
-        
+
         public IList<CashPaymentRequest> ListCashPaymentRequests(string RequestNo, string RequestDate, string ProgressStatus)
         {
             string filterExpression = "";
