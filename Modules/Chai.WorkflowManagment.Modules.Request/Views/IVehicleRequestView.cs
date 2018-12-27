@@ -9,7 +9,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
     {
         IList<VehicleRequest> VehicleRequests { get; set; }
         int GetVehicleRequestId { get; }
-        string GetRequestNo { get; }        
+        string GetRequestNo { get; }    
+        
+        string GetDeparturePlace { get; }    
         DateTime GetDepartureDate { get; }
         DateTime GetReturningDate { get; }
         string GetDepartureTime { get; }
@@ -20,7 +22,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         int GetNoOfPassengers { get; }
         int GetProjectId { get; }
         int GetGrantId { get; }
+
+        string GetTravelLogStatus { get; }
+
+        bool GetIsExtension { get; }
+
+        int GetExtRefRequest { get; }
+
+        string GetTravelLogAttachment { get; }
      
+        int GetActualDaysTravelled { get; }
     }
 }
 
