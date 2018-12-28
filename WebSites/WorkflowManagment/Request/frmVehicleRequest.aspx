@@ -39,8 +39,9 @@
                             <section class="col col-6">
                                 <label class="label"> <asp:Label ID="Label1" runat="server" Text="Request No" Visible="False"></asp:Label></label>
                                 <label class="select">
-                                    <asp:DropDownList ID="ddlRequestNo" runat="server" DataValueField="Id" DataTextField="RequestNo" Visible="False">
-                                    </asp:DropDownList><i></i>
+                                    <asp:DropDownList ID="ddlRequestNo" runat="server" DataValueField="Id" DataTextField="RequestNo" Visible="False" AppendDataBoundItems="True">
+                                        <asp:ListItem Value="0">Select Request</asp:ListItem>
+                                    </asp:DropDownList><i id="i" runat="server"></i>
                                    
                                 </label>
                             </section>
@@ -161,23 +162,16 @@
 
                                 
                             </section>
-                            <section class="col col-6">
-
-                                <label class="label">Actual Days Travelled</label>
-                                <label class="input">
-                                    <asp:TextBox ID="txtActualDate" runat="server"></asp:TextBox>
-                                </label>
-                              </section>
-                        </div>
-                        
-                        <div class="row">
-                         <section class="col col-6">
+                           <section class="col col-6">
                         <label class="label">Comment </label>
                                 <label style="color: green;">(Please add additional info about your travel)</label>
                                 <label class="input">
                                     <asp:TextBox ID="txtComment" TextMode="MultiLine" Rows="5" Width="100%" runat="server"></asp:TextBox>
                                 </label>
-                            </section></div>
+                            </section>
+                        </div>
+                        
+                     
                     </fieldset>
 
                     <footer>
