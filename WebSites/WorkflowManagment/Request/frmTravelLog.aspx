@@ -218,7 +218,7 @@
 
     <div id="divprint" style="display:none">
 
-        <table border="2" cellspacing="4" style="width: 100%; border-style: solid;">
+        <table border="1" cellspacing="0" style="width: 100%; border-style: solid;">
             <tr>
                 <td>
                     <strong>
