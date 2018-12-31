@@ -217,6 +217,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             lblRequestedDateResult.Text = VR.RequestDate.ToString();
             lblRequestNoResult.Text = VR.RequestNo.ToString();
             lblRequesterResult.Text = VR.AppUser.FullName;
+            LblApprovedByResult.Text = VR.CurrentApprover.ToString(); //To get approver name
             if (VR.GetVehiclebypalte(ddlvehicle.SelectedValue) != null)
             {
                 lblCarTypeRes.Text = VR.GetVehiclebypalte(ddlvehicle.SelectedValue).AssignedVehicle == "driver" ? "CHAI Car" : "Hired Car";

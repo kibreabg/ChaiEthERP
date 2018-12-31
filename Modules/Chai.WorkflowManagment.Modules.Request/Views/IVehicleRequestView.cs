@@ -31,7 +31,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
         string GetTravelLogAttachment { get; }
      
-        int GetActualDaysTravelled { get; }
+       
     }
 }
 

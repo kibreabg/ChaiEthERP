@@ -139,14 +139,21 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             VehicleRequest.TravelLogStatus = "Pending";
             VehicleRequest.IsExtension = View.GetIsExtension;
             VehicleRequest.TravelLogAttachment = View.GetTravelLogAttachment;
-            VehicleRequest.ActualDaysTravelled = View.GetActualDaysTravelled;
+           
 
             if (View.GetProjectId != 0)
                 VehicleRequest.Project = _settingController.GetProject(View.GetProjectId);
             if (View.GetGrantId != 0)
                 VehicleRequest.Grant = _settingController.GetGrant(View.GetGrantId);
             VehicleRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
-            VehicleRequest.ExtRefRequest_Id = View.GetExtRefRequest;
+            if (View.GetExtRefRequest !=0)
+            {
+                VehicleRequest.ExtRefRequest_Id = Convert.ToInt32(View.GetExtRefRequest);
+            }
+            else
+            {
+                VehicleRequest.ExtRefRequest_Id = 0;
+            }
             if (CurrentVehicleRequest.VehicleRequestStatuses.Count == 0)
                 SaveVehicleRequestStatus();
             GetCurrentApprover();

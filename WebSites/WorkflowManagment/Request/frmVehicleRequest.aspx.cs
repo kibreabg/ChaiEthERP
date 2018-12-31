@@ -37,6 +37,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
             }
             txtRequestDate.Text = DateTime.Today.Date.ToShortDateString();
+            ddlRequestNo.Visible = false;
+            Label1.Visible = false;
+            i.Visible = false;
             this._presenter.OnViewLoaded();
 
         }
@@ -145,11 +148,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return null; }
         }
-        public int GetActualDaysTravelled
-        {
-            
-            get { return Convert.ToInt32(txtActualDate.Text); }
-        }
+       
 
         private void PopRequestPersonnels()
         {
@@ -198,8 +197,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ddlRequestNo.DataSource = _presenter.GetExtVehicleRequest();
             ddlRequestNo.DataBind();
 
-            ddlRequestNo.Items.Insert(0, new ListItem("---Select Request---", "0"));
-            ddlRequestNo.SelectedIndex = 0;
+       
         }
         private void PopGrants(int ProjectId)
         {
@@ -218,7 +216,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             txtNoOfPassangers.Text = String.Empty;
             txtDestination.Text = String.Empty;
             txtComment.Text = String.Empty;
-            txtActualDate.Text = String.Empty;
+           
             ckIsExtension.Checked = false;
             
         }
@@ -247,7 +245,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 PopExtRequest();
                 ddlRequestNo.SelectedValue = _presenter.CurrentVehicleRequest.Id.ToString();
                 ddlGrant.SelectedValue = _presenter.CurrentVehicleRequest.Grant.Id.ToString();
-                txtActualDate.Text = _presenter.CurrentVehicleRequest.ActualDaysTravelled.ToString();
+              
 
                 BindVehicleRequests();
             }
@@ -351,9 +349,19 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
         protected void ckIsExtension_CheckedChanged(object sender, EventArgs e)
         {
-            ddlRequestNo.Visible = true;
-            PopExtRequest();
-            Label1.Visible = true;
+            if (ckIsExtension.Checked == true)
+            {
+                ddlRequestNo.Visible = true;
+                PopExtRequest();
+                Label1.Visible = true;
+                i.Visible = true;
+            }
+            else if(ckIsExtension.Checked == false)
+            {
+                ddlRequestNo.Visible = false;
+                Label1.Visible = false;
+                i.Visible = false;
+            }
         }
     }
 }
