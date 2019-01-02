@@ -255,12 +255,19 @@
                 </td>
             </tr>
              <tr>
-                <td>
+                <td >
                     <strong>
                         <asp:Label ID="lblCarType" runat="server" Text="Car Type:"></asp:Label>
                     </strong></td>
-                <td colspan="7">
-                    <asp:Label ID="lblCarTypeRes" runat="server"></asp:Label>
+                <td colspan="2">
+                    <asp:Label ID="lblCarTypeRes" Text="Hired Car" runat="server"></asp:Label>
+                </td>
+                 <td >
+                    <strong>
+                        <asp:Label ID="lblDrivername" runat="server" Text="Driver Name:"></asp:Label>
+                    </strong></td>
+                <td colspan="4">
+                    <asp:Label ID="lblDrivernameres" runat="server"></asp:Label>
                 </td>
             </tr>
                   <tr>

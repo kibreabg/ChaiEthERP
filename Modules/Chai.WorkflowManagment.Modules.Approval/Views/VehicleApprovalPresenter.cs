@@ -97,6 +97,26 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _settingController.GetVehicle(Id);
         }
+        public IList<Project> GetProjects()
+        {
+            return _settingController.GetProjects();
+        }
+        public IList<Grant> GetGrants()
+        {
+            return _settingController.GetGrants();
+        }
+        public Project GetProject(int projectId)
+        {
+            return _settingController.GetProject(projectId);
+        }
+        public Grant GetGrant(int Grant)
+        {
+            return _settingController.GetGrant(Grant);
+        }
+        public IList<Grant> GetGrantbyprojectId(int projectId)
+        {
+            return _settingController.GetProjectGrantsByprojectId(projectId);
+        }
         public AppUser GetUser(int UserId)
         {
             return _adminController.GetUser(UserId);

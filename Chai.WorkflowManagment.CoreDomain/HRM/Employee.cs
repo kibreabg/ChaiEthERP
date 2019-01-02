@@ -40,6 +40,8 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public string ChaiEMail { get; set; }
         public string Photo { get; set; }
         public Nullable<decimal> SDLeaveBalance { get; set; }
+        public Nullable<decimal> ExpiredLeave { get; set; }
+        
         public DateTime? LeaveSettingDate { get; set; }
         public Nullable<Boolean> Status { get; set; }
         [Required]

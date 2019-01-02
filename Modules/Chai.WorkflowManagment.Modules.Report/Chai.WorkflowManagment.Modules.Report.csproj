@@ -85,6 +85,7 @@
     <Compile Include="Views\frmLiquidationReportPresenter.cs" />
     <Compile Include="Views\frmTravelAdvanceReportPresenter.cs" />
     <Compile Include="Views\ExportPresenter.cs" />
+    <Compile Include="Views\frmEmployeebirthPresenter.cs" />
     <Compile Include="Views\frmVehicleReportPresenter.cs" />
     <Compile Include="Views\frmPurchaseReportPresenter.cs" />
     <Compile Include="Views\frmLeaveReportPresenter.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Views\IfrmTravelAdvanceReportView.cs" />
     <Compile Include="Views\IfrmLiquidationReportView.cs" />
     <Compile Include="Views\IExportView.cs" />
+    <Compile Include="Views\IfrmEmployeebirthView.cs" />
     <Compile Include="Views\IfrmVehicleReportView.cs" />
     <Compile Include="Views\IfrmpurchaseReportView.cs" />
     <Compile Include="Views\IfrmLeaveReportView.cs" />

@@ -136,9 +136,14 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                     {
                         decimal balance = Convert.ToDecimal(detail.EmployeeLeaveBalanceYE()) - _presenter.EmpLeaveTaken(detail.Id, detail.LeaveSettingDate.Value);
                         if (balance > 20)
+                        {
                             detail.SDLeaveBalance = 20;
+                            detail.ExpiredLeave = balance - 20;
+                        }
                         else
+                        {
                             detail.SDLeaveBalance = balance;
+                        }
                         detail.LeaveSettingDate = new DateTime(DateTime.Now.Year, 12, 31); ;
                         _presenter.SaveOrUpdateEmpLeaveSetting(detail);
                     }
