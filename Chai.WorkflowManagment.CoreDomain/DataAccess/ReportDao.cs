@@ -262,5 +262,23 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
                 return ds;
             }
         }
+        public DataSet EmployeeBirthReport(string month)
+        {
+            string connstring = ConfigurationManager.ConnectionStrings["WorkflowManagmentReportConnectionString"].ToString();
+            using (SqlConnection cn = new SqlConnection(connstring))
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = cn;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "SPEmployeebirthdate";
+                cmd.Parameters.AddWithValue("@month", month);
+                var da = new SqlDataAdapter(cmd);
+                var ds = new DataSet();
+                da.Fill(ds);
+                cn.Close();
+                return ds;
+            }
+        }
     }
 }

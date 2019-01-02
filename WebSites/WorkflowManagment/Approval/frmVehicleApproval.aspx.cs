@@ -32,6 +32,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 XmlConfigurator.Configure();
                 PopProgressStatus();
                 BindVehicles();
+                PopProjects();
 
             }
             this._presenter.OnViewLoaded();
@@ -153,7 +154,22 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             ddlVehicles.DataValueField = "ID";
             ddlVehicles.DataBind();
         }
+        private void PopProjects()
+        {
+            ddlProject.DataSource = _presenter.GetProjects();
+            ddlProject.DataBind();
 
+            ddlProject.Items.Insert(0, new ListItem("---Select Project---", "0"));
+            ddlProject.SelectedIndex = 0;
+        }
+        private void PopGrants(int ProjectId)
+        {
+            ddlGrant.DataSource = _presenter.GetGrantbyprojectId(ProjectId);
+            ddlGrant.DataBind();
+
+            ddlGrant.Items.Insert(0, new ListItem("---Select Grant---", "0"));
+            ddlGrant.SelectedIndex = 0;
+        }
         private void BindSearchVehicleRequestGrid()
         {
             grvVehicleRequestList.DataSource = _presenter.ListVehicleRequests(txtSrchRequestNo.Text, txtSrchRequestDate.Text, ddlSrchProgressStatus.SelectedValue);
@@ -182,7 +198,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void ShowPrint()
         {
-            if (_presenter.CurrentVehicleRequest.CurrentLevel == _presenter.CurrentVehicleRequest.VehicleRequestStatuses.Count)
+            if (_presenter.CurrentVehicleRequest.ProgressStatus == ProgressStatus.Completed.ToString())
             {
                 btnPrint.Enabled = true;
                 btnPrintTravellog.Visible = true;
@@ -311,9 +327,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             PopApprovalStatus();
             BindVehicleRequestStatus();
             BindVehicles();
-            lblProjectIDDResult.Text = _presenter.CurrentVehicleRequest.Project.ProjectCode;
+            ddlProject.SelectedValue = _presenter.CurrentVehicleRequest.Project.Id.ToString();
+            ddlProject_SelectedIndexChanged(sender, e);
             if (_presenter.CurrentVehicleRequest.Grant != null)
-                lblGrantIDResult.Text = _presenter.CurrentVehicleRequest.Grant.GrantCode;
+                ddlGrant.SelectedValue = _presenter.CurrentVehicleRequest.Grant.Id.ToString();
             if (_presenter.CurrentVehicleRequest.ProgressStatus == ProgressStatus.Completed.ToString())
             {
                 btnApprove.Enabled = false;
@@ -322,10 +339,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             txtRejectedReason.Visible = false;
             rfvRejectedReason.Enabled = false;
             pnlApproval_ModalPopupExtender.Show();
-            if (_presenter.CurrentVehicleRequest.CurrentLevel == _presenter.CurrentVehicleRequest.VehicleRequestStatuses.Count)
-            {
-                
+            if(_presenter.CurrentVehicleRequest.CurrentLevel == _presenter.CurrentVehicleRequest.VehicleRequestStatuses.Count)
                 pnlApproverview.Visible = true;
+            if (_presenter.CurrentVehicleRequest.ProgressStatus == ProgressStatus.Completed.ToString())
+            {                
+               
                 btnPrintTravellog.Visible = true;
             }
 
@@ -398,8 +416,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
                 else { _presenter.CurrentVehicleRequest.VehicleRequestDetails.Remove(vehicle); }
                 BindVehicles();
-                lblProjectIDDResult.Text = _presenter.CurrentVehicleRequest.Project.ProjectCode;
-                lblGrantIDResult.Text = _presenter.CurrentVehicleRequest.Grant.GrantCode;
+                ddlProject.SelectedValue = _presenter.CurrentVehicleRequest.Project.Id.ToString();
+                if (_presenter.CurrentVehicleRequest.Grant != null)
+                    ddlGrant.SelectedValue = _presenter.CurrentVehicleRequest.Grant.Id.ToString();
                 pnlApproval_ModalPopupExtender.Show();
 
                 Master.ShowMessage(new AppMessage("Vehicle Information was Removed Successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
@@ -433,8 +452,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
                     dgVehicles.EditItemIndex = -1;
                     BindVehicles();
-                    lblProjectIDDResult.Text = _presenter.CurrentVehicleRequest.Project.ProjectCode;
-                    lblGrantIDResult.Text = _presenter.CurrentVehicleRequest.Grant.GrantCode;
+                    ddlProject.SelectedValue = _presenter.CurrentVehicleRequest.Project.Id.ToString();
+                    if (_presenter.CurrentVehicleRequest.Grant != null)
+                        ddlGrant.SelectedValue = _presenter.CurrentVehicleRequest.Grant.Id.ToString();
                     pnlApproval_ModalPopupExtender.Show();
                     Master.ShowMessage(new AppMessage("Vehicle Information Successfully Added", Chai.WorkflowManagment.Enums.RMessageType.Info));
                 }
@@ -448,8 +468,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             this.dgVehicles.EditItemIndex = e.Item.ItemIndex;
             BindVehicles();
-            lblProjectIDDResult.Text = _presenter.CurrentVehicleRequest.Project.ProjectCode;
-            lblGrantIDResult.Text = _presenter.CurrentVehicleRequest.Grant.GrantCode;
+            ddlProject.SelectedValue = _presenter.CurrentVehicleRequest.Project.Id.ToString();
+            if (_presenter.CurrentVehicleRequest.Grant != null)
+                ddlGrant.SelectedValue = _presenter.CurrentVehicleRequest.Grant.Id.ToString();
             pnlApproval_ModalPopupExtender.Show();
         }
         protected void dgVehicles_ItemDataBound(object sender, DataGridItemEventArgs e)
@@ -578,6 +599,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                    
                     SaveVehicleRequestStatus();
+                  
+                        _presenter.CurrentVehicleRequest.Project = _presenter.GetProject(Convert.ToInt32(ddlProject.SelectedValue));
+                        _presenter.CurrentVehicleRequest.Grant = _presenter.GetGrant(Convert.ToInt32(ddlGrant.SelectedValue));
                     _presenter.SaveOrUpdateVehicleRequest(_presenter.CurrentVehicleRequest);
                     ShowPrint();
                     
@@ -601,7 +625,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (e.Row.RowType == DataControlRowType.DataRow)
                 {
-                    e.Row.Cells[1].Text = _presenter.GetUser(_presenter.CurrentVehicleRequest.VehicleRequestStatuses[e.Row.RowIndex].Approver).FullName;
+                   // e.Row.Cells[1].Text = _presenter.GetUser(_presenter.CurrentVehicleRequest.VehicleRequestStatuses[e.Row.RowIndex].Approver).FullName;
                 }
             }
         }
@@ -620,6 +644,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 txtRejectedReason.Visible = false;
                 pnlApproval_ModalPopupExtender.Show();
             }
+        }
+        protected void ddlProject_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PopGrants(Convert.ToInt32(ddlProject.SelectedValue));
         }
         protected void btnCancelPopup_Click(object sender, EventArgs e)
         {

@@ -40,6 +40,8 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public string ChaiEMail { get; set; }
         public string Photo { get; set; }
         public Nullable<decimal> SDLeaveBalance { get; set; }
+        public Nullable<decimal> ExpiredLeave { get; set; }
+        
         public DateTime? LeaveSettingDate { get; set; }
         public Nullable<Boolean> Status { get; set; }
         [Required]
@@ -317,7 +319,6 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             
         }
         #endregion
-
         #region Leave calculation Methods
         public virtual DateTime GetEmployeeHiredDate()
         {
@@ -373,8 +374,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         }
         public virtual decimal LeavefromhiredtoYE()
         {
-            DateTime YE = new  DateTime(DateTime.Now.Year, 12, 31);
-
+            DateTime YE = new DateTime(DateTime.Today.Year, 01, 01);
             decimal leaveEnti = 0;
             decimal Sumleave = 0;
             TimeSpan workingdays = YE - GetEmployeeHiredDate();

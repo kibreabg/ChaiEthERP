@@ -15,6 +15,7 @@ namespace Chai.WorkflowManagment.Modules.Request
         public override void Load(CompositionContainer container)
         {
             base.Load(container);
+            
 
             AddGlobalServices(container.Parent.Services);
             AddModuleServices(container.Services);
