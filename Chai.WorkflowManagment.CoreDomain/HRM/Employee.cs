@@ -374,7 +374,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         }
         public virtual decimal LeavefromhiredtoYE()
         {
-            DateTime YE = new DateTime(DateTime.Today.Year, 01, 01);
+            DateTime YE = new DateTime(DateTime.Today.Year, 12, 31);
             decimal leaveEnti = 0;
             decimal Sumleave = 0;
             TimeSpan workingdays = YE - GetEmployeeHiredDate();
