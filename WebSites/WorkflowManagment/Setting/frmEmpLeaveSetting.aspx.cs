@@ -144,7 +144,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                         {
                             detail.SDLeaveBalance = balance;
                         }
-                        detail.LeaveSettingDate = new DateTime(2018, 12, 31); 
+                        detail.LeaveSettingDate = new DateTime(DateTime.Today.Year, 01, 01); 
                         _presenter.SaveOrUpdateEmpLeaveSetting(detail);
                     }
                 }

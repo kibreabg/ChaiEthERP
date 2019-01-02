@@ -319,7 +319,6 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             
         }
         #endregion
-
         #region Leave calculation Methods
         public virtual DateTime GetEmployeeHiredDate()
         {
@@ -375,8 +374,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         }
         public virtual decimal LeavefromhiredtoYE()
         {
-            DateTime YE = new  DateTime(2018, 12, 31);
-
+            DateTime YE = new DateTime(DateTime.Today.Year, 01, 01);
             decimal leaveEnti = 0;
             decimal Sumleave = 0;
             TimeSpan workingdays = YE - GetEmployeeHiredDate();

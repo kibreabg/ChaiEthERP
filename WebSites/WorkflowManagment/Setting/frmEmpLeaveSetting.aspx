@@ -26,7 +26,7 @@
                      </fieldset>
                     <footer>
                         <asp:Button ID="btnFind" runat="server" Text="Find" CssClass="btn btn-primary" OnClick="btnFind_Click"></asp:Button>
-                       <asp:Button ID="btnEnd" runat="server" CssClass="btn btn-default" Text="Set Ending Balance" ValidationGroup="Savedetail" OnClick="btnEnd_Click"   />
+                       <asp:Button ID="btnEnd" runat="server" CssClass="btn btn-default" Text="Set Ending Balance" ValidationGroup="Savedetail" OnClick="btnEnd_Click" Enabled="False"   />
                        <asp:Button ID="btnOpen" runat="server" CssClass="btn btn-primary" Text="Set Opening Balance" ValidationGroup="Savedetail" OnClick="btnOpen_Click"  />
                        <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" PostBackUrl="../Default.aspx"></asp:Button>
                    
