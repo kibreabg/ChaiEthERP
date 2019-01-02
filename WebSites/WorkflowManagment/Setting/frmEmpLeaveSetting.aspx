@@ -60,7 +60,7 @@
                                            
                                             <asp:TemplateColumn HeaderText="Opening Leave Balance">
                                                 <ItemTemplate>
-                                                    <asp:TextBox ID="txtOpeningLeavebalance" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem,"SDLeaveBalance")%>' Height="20px" Width="104px"></asp:TextBox>
+                                                    <asp:TextBox ID="txtOpeningLeavebalance" runat="server" CssClass="form-control" Text=' <%# String.Format("{0:F2}",DataBinder.Eval(Container.DataItem,"SDLeaveBalance"))%>' Height="20px" Width="104px"></asp:TextBox>
                                                     <asp:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtOpeningLeavebalance" ID="txtOpeningLeavebalance_FilteredTextBoxExtender" FilterType="Numbers,Custom" ValidChars="."></asp:FilteredTextBoxExtender>
                                                     <asp:RequiredFieldValidator ID="RfvOpeningLeavebalance" runat="server" CssClass="validator" ControlToValidate="txtOpeningLeavebalance" ErrorMessage="Opening Leave balance Required" ValidationGroup="Savedetail" InitialValue="">*</asp:RequiredFieldValidator>
                                                 </ItemTemplate>
