@@ -375,7 +375,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         }
         public virtual decimal LeavefromhiredtoYE()
         {
-            DateTime YE = new  DateTime(DateTime.Now.Year, 12, 31);
+            DateTime YE = new  DateTime(2018, 12, 31);
 
             decimal leaveEnti = 0;
             decimal Sumleave = 0;
