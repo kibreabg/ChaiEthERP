@@ -443,7 +443,6 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
 
             return Sumleave;
         }
-
         public virtual decimal LeavefromhiredtoSettingDate()
         {
             decimal leaveEnti = 0;
@@ -476,7 +475,6 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
 
             return Sumleave;
         }
-
         public virtual decimal EmployeeLeaveBalance()
         {
             return (Leavefromhiredtonow() - LeavefromhiredtoSettingDate()) + SDLeaveBalance.Value;
