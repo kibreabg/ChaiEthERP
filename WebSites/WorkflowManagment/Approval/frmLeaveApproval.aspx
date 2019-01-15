@@ -340,7 +340,23 @@
                 </td>
                 <td style="height: 18px">&nbsp;</td>
             </tr>
-            
+            <tr>
+                <td style="width: 682px; height: 18px;">
+                    <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <asp:Label ID="lbltotleavetaken" runat="server" Text="Total Leave Taken"></asp:Label>
+                    </strong>
+                </td>
+                <td style="width: 390px; height: 18px;">
+                    <asp:Label ID="lbltottakenres" runat="server"></asp:Label>
+                </td>
+                <td style="width: 334px; height: 18px;">
+                  
+                </td>
+                <td style="width: 335px; height: 18px;">
+                    
+                </td>
+                <td style="height: 18px">&nbsp;</td>
+            </tr>
         </table>
             <br />
          <br />

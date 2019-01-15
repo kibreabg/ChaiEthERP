@@ -44,7 +44,7 @@
         </div>
     </div>
     <asp:Panel ID="Panel1" runat="server" BackColor="White" Visible="false">
-        <rsweb:ReportViewer ID="ReportViewer1" runat="server"></rsweb:ReportViewer>
+        <rsweb:ReportViewer ID="ReportViewer1" runat="server" Width="100%"></rsweb:ReportViewer>
     </asp:Panel>
     <asp:ObjectDataSource ID="ObjectDataSource1" runat="server" SelectMethod="GetLeaveReport" TypeName="Chai.WorkflowManagment.Modules.Report.ReportController">
         <SelectParameters>

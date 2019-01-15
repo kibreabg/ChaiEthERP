@@ -546,7 +546,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             txtLeaveAsOfCalEndDate.Text = (Math.Round((_presenter.CurrentEmployee.EmployeeLeaveBalanceYE() - _presenter.EmpLeaveTaken(_presenter.CurrentEmployee.Id, _presenter.CurrentEmployee.LeaveSettingDate.Value))* 2, MidpointRounding.AwayFromZero) / 2).ToString();
             txtLeaveAsOfContractEndDate.Text = _presenter.CurrentEmployee.GetActiveContract() != null ? (Math.Round((_presenter.CurrentEmployee.EmployeeLeaveBalanceCED(_presenter.CurrentEmployee.GetActiveContract().ContractEndDate) - _presenter.EmpLeaveTaken(_presenter.CurrentEmployee.Id, _presenter.CurrentEmployee.LeaveSettingDate.Value) )* 2, MidpointRounding.AwayFromZero) / 2).ToString() : "";
             txtLeaveAsOfToday.Text = (Math.Round((_presenter.CurrentEmployee.EmployeeLeaveBalance() - _presenter.EmpLeaveTaken(_presenter.CurrentEmployee.Id, _presenter.CurrentEmployee.LeaveSettingDate.Value)) * 2, MidpointRounding.AwayFromZero) / 2).ToString();
-            
+            txttoalleavetaken.Text = _presenter.EmpLeaveTaken(_presenter.CurrentEmployee.Id, _presenter.CurrentEmployee.LeaveSettingDate.Value).ToString();
         }
 
 
@@ -913,7 +913,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             }
         }
 
-    protected void btnEMPhist_Click(object sender, EventArgs e)
+        protected void btnEMPhist_Click(object sender, EventArgs e)
         {
 
 
