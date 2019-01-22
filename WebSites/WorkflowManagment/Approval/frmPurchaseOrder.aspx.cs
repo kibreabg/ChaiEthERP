@@ -378,6 +378,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 grvStatuses.DataBind();
            
         }
+        
         protected void grvStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
         {
            
@@ -389,11 +390,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
             }
            
-        }
-
-        protected void btnPrintPurchaseForm_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }
