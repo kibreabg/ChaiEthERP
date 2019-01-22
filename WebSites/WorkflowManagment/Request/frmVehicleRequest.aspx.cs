@@ -290,7 +290,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     BindVehicleRequests();
                     
-                    Master.ShowMessage(new AppMessage("Successfully did a Vehicle  Request, Reference No - <b>'" + _presenter.CurrentVehicleRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    Master.ShowMessage(new AppMessage("Successfully did a Vehicle Request, Reference No - <b>'" + _presenter.CurrentVehicleRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
                     Log.Info(_presenter.CurrentUser().FullName + " has requested a Vehicle");
                     btnSave.Visible = false;
                    

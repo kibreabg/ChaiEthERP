@@ -217,11 +217,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             lblRequestedDateResult.Text = VR.RequestDate.ToString();
             lblRequestNoResult.Text = VR.RequestNo.ToString();
             lblRequesterResult.Text = VR.AppUser.FullName;
+            if (_presenter.GetUser(VR.VehicleRequestStatuses[0].Approver) != null)
+            {
+                LblApprovedByResult.Text = _presenter.GetUser(VR.VehicleRequestStatuses[0].Approver).FullName;
+            }
             if (VR.GetVehiclebypalte(ddlvehicle.SelectedValue) != null)
             {
                 lblCarTypeRes.Text = VR.GetVehiclebypalte(ddlvehicle.SelectedValue).AssignedVehicle == "driver" ? "CHAI Car" : "Hired Car";
+                lblDrivernameres.Text = VR.GetVehiclebypalte(ddlvehicle.SelectedValue).AppUser.FullName;
                 lblPlateRes.Text = ddlvehicle.SelectedValue;
             }
+            
         }
         protected void btnBack_Click(object sender, EventArgs e)
         {

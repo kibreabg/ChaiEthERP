@@ -209,6 +209,11 @@ namespace Chai.WorkflowManagment.Modules.Report
         {
             return _workspace.Single<OperationalControlRequest>(x => x.RequestNo == RequestId);
         }
+        public DataSet EmployeeBirthReport(string month)
+        {
+            ReportDao re = new ReportDao();
+            return re.EmployeeBirthReport(month);
+        }
         #region Entity Manipulation
         public void SaveOrUpdateEntity<T>(T item) where T : class
         {

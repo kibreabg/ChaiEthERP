@@ -26,7 +26,7 @@
                      </fieldset>
                     <footer>
                         <asp:Button ID="btnFind" runat="server" Text="Find" CssClass="btn btn-primary" OnClick="btnFind_Click"></asp:Button>
-                       <asp:Button ID="btnEnd" runat="server" CssClass="btn btn-default" Text="Set Ending Balance" ValidationGroup="Savedetail" OnClick="btnEnd_Click"   />
+                       <asp:Button ID="btnEnd" runat="server" CssClass="btn btn-default" Text="Set Ending Balance" ValidationGroup="Savedetail" OnClick="btnEnd_Click" Enabled="False"   />
                        <asp:Button ID="btnOpen" runat="server" CssClass="btn btn-primary" Text="Set Opening Balance" ValidationGroup="Savedetail" OnClick="btnOpen_Click"  />
                        <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" PostBackUrl="../Default.aspx"></asp:Button>
                    
@@ -60,7 +60,7 @@
                                            
                                             <asp:TemplateColumn HeaderText="Opening Leave Balance">
                                                 <ItemTemplate>
-                                                    <asp:TextBox ID="txtOpeningLeavebalance" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem,"SDLeaveBalance")%>' Height="20px" Width="104px"></asp:TextBox>
+                                                    <asp:TextBox ID="txtOpeningLeavebalance" runat="server" CssClass="form-control" Text=' <%# String.Format("{0:F2}",DataBinder.Eval(Container.DataItem,"SDLeaveBalance"))%>' Height="20px" Width="104px"></asp:TextBox>
                                                     <asp:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtOpeningLeavebalance" ID="txtOpeningLeavebalance_FilteredTextBoxExtender" FilterType="Numbers,Custom" ValidChars="."></asp:FilteredTextBoxExtender>
                                                     <asp:RequiredFieldValidator ID="RfvOpeningLeavebalance" runat="server" CssClass="validator" ControlToValidate="txtOpeningLeavebalance" ErrorMessage="Opening Leave balance Required" ValidationGroup="Savedetail" InitialValue="">*</asp:RequiredFieldValidator>
                                                 </ItemTemplate>

@@ -10,10 +10,11 @@
              var disp_setting = "toolbar=yes,location=no,directories=yes,menubar=yes,";
              disp_setting += "scrollbars=yes,width=750, height=600, left=100, top=25";
              var content_vlue = document.getElementById(theid).innerHTML;
-
              var docprint = window.open("", "", disp_setting);
              docprint.document.open();
+             docprint.document.write('<style type="text/css" media="print"> @page {size: landscape; margin: 1cm;}'); /* To set auto landscape orentation for the printed log */
              docprint.document.write('<html><head><title>CHAI Ethiopia ERP</title>');
+             docprint.document.write('</style>'); /* Closing landscape style */
              docprint.document.write('</head><body onLoad="self.print()"><center>');
              docprint.document.write(content_vlue);
              docprint.document.write('</center></body></html>');
@@ -218,13 +219,13 @@
 
     <div id="divprint" style="display:none">
 
-        <table border="2" cellspacing="4" style="width: 100%; border-style: solid;">
+        <table border="1" cellspacing="0" style="width: 100%; border-style: solid;">
             <tr>
-                <td>
+                <td style="width:25;">
                     <strong>
                         <asp:Label ID="lblRequestNo" runat="server" Text="Request No:"></asp:Label>
                     </strong></td>
-                <td colspan="6">
+                <td colspan="7">
                     <asp:Label ID="lblRequestNoResult" runat="server"></asp:Label>
                 </td>
             </tr>
@@ -233,7 +234,7 @@
                     <strong>
                         <asp:Label ID="lblRequestedDate" runat="server" Text="Requested Date:"></asp:Label>
                     </strong></td>
-                <td colspan="6">
+                <td colspan="7">
                     <asp:Label ID="lblRequestedDateResult" runat="server"></asp:Label>
                 </td>
             </tr>
@@ -242,17 +243,31 @@
                     <strong>
                         <asp:Label ID="lblRequester" runat="server" Text="Requester:"></asp:Label>
                     </strong></td>
-                <td colspan="6">
+                <td colspan="2">
                     <asp:Label ID="lblRequesterResult" runat="server"></asp:Label>
+                </td>
+                <td>
+                    <strong>
+                        <asp:Label ID="LblApprovedBy" runat="server" Text="Approver:"></asp:Label>
+                    </strong></td>
+                <td colspan="4">
+                    <asp:Label ID="LblApprovedByResult" runat="server"></asp:Label>
                 </td>
             </tr>
              <tr>
-                <td>
+                <td >
                     <strong>
                         <asp:Label ID="lblCarType" runat="server" Text="Car Type:"></asp:Label>
                     </strong></td>
-                <td colspan="6">
-                    <asp:Label ID="lblCarTypeRes" runat="server"></asp:Label>
+                <td colspan="2">
+                    <asp:Label ID="lblCarTypeRes" Text="Hired Car" runat="server"></asp:Label>
+                </td>
+                 <td >
+                    <strong>
+                        <asp:Label ID="lblDrivername" runat="server" Text="Driver Name:"></asp:Label>
+                    </strong></td>
+                <td colspan="4">
+                    <asp:Label ID="lblDrivernameres" runat="server"></asp:Label>
                 </td>
             </tr>
                   <tr>
@@ -260,11 +275,11 @@
                     <strong>
                         <asp:Label ID="lblPalteNo" runat="server" Text="Plate No.:"></asp:Label>
                     </strong></td>
-                <td colspan="6">
+                <td colspan="7">
                     <asp:Label ID="lblPlateRes" runat="server"></asp:Label>
                 </td>
             </tr>
-            <tr style="font-weight: bold; border-style: solid;">
+            <tr style="font-weight: bold; border-style: solid; text-align:center;">
                 <td>Departure Place</td>
                 <td>Arrival Place</td>
                 <td>Departure Time</td>

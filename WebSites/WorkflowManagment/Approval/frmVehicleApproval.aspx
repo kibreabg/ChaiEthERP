@@ -202,6 +202,7 @@
                                                         
                                                         <asp:DropDownList ID="ddlEdtPlateNo" runat="server" CssClass="form-control" AppendDataBoundItems="True">
                                                             <asp:ListItem Value=" ">Select Plate No.</asp:ListItem>
+                                                            <asp:ListItem Value="Hired Car">Hired Car</asp:ListItem>
                                                         </asp:DropDownList>
                                                         <asp:RequiredFieldValidator ID="rfvddlPlateNo" runat="server" ControlToValidate="ddlEdtPlateNo" CssClass="validator" Display="Dynamic" ErrorMessage="Plate No. must be selected" InitialValue=" " SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
                                                     </EditItemTemplate>
@@ -209,6 +210,7 @@
                                                         
                                                         <asp:DropDownList ID="ddlFPlateNo" runat="server" CssClass="form-control" AppendDataBoundItems="True">
                                                             <asp:ListItem Value=" ">Select Plate No.</asp:ListItem>
+                                                              <asp:ListItem Value="Hired Car">Hired Car</asp:ListItem>
                                                         </asp:DropDownList>
                                                         <asp:RequiredFieldValidator ID="rfvddlFPlateNo" runat="server" ControlToValidate="ddlFPlateNo" CssClass="validator" Display="Dynamic" ErrorMessage="Plate No. must be selected" InitialValue=" " SetFocusOnError="true" ValidationGroup="save"></asp:RequiredFieldValidator>
                                                     </FooterTemplate>
@@ -277,15 +279,30 @@
                                     </section></div>
                                 </asp:Panel>
                                 <div class="row">
-                                     <section class="col col-6">
-                                        <asp:Label ID="lblProjectIDD" Font-Bold="true" runat="server" Text="Project ID"  CssClass="label"></asp:Label>
-                                        <asp:Label ID="lblProjectIDDResult" Font-Bold="true" runat="server" Text="Project ID" CssClass="label"></asp:Label>
-                                    </section>
-                                       <section class="col col-6">
-                                        <asp:Label ID="lblGrantID" runat="server" Font-Bold="true" Text="Grant ID"  CssClass="label"></asp:Label>
-                                        <asp:Label ID="lblGrantIDResult" Font-Bold="true" runat="server"   CssClass="label"></asp:Label>
-                                    </section>
-                                </div>
+
+                            <section class="col col-6">
+                                <label class="label">Project</label>
+                                <label class="select">
+                                    <asp:DropDownList ID="ddlProject" AutoPostBack="true" runat="server" DataValueField="Id" DataTextField="ProjectCode" OnSelectedIndexChanged="ddlProject_SelectedIndexChanged">
+                                    </asp:DropDownList><i></i>
+                                    <asp:RequiredFieldValidator
+                                        ID="rfvddlProject" runat="server" ErrorMessage="Project is required" Display="Dynamic"
+                                        CssClass="validator" ValidationGroup="saveMain" InitialValue="0"
+                                        SetFocusOnError="true" ControlToValidate="ddlProject"></asp:RequiredFieldValidator>
+                                </label>
+                            </section>
+                            <section class="col col-6">
+                                <label class="label">Grant</label>
+                                <label class="select">
+                                    <asp:DropDownList ID="ddlGrant" runat="server" DataValueField="Id" DataTextField="GrantCode">
+                                    </asp:DropDownList><i></i>
+                                    <asp:RequiredFieldValidator
+                                        ID="rfvGrant" runat="server" ErrorMessage="Grant is required" Display="Dynamic"
+                                        CssClass="validator" ValidationGroup="saveMain" InitialValue="0"
+                                        SetFocusOnError="true" ControlToValidate="ddlGrant"></asp:RequiredFieldValidator>
+                                </label>
+                            </section>
+                        </div>
                                 <div class="row">
                                     <section class="col col-6">
                                         <asp:Label ID="lblApprovalStatus" runat="server" Text="Approval Status" CssClass="label"></asp:Label>

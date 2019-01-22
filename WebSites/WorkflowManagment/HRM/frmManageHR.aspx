@@ -144,6 +144,12 @@
                                         <asp:Label ID="txtLeaveAsOfContractEndDate" runat="server"></asp:Label></span>
                                 </p>
                             </li>
+                            <li>
+                                <p class="text-muted">
+                                    <span class="txt-color-darken">Total Leave Taken this Year</span> <span class="badge bg-color-green">
+                                        <asp:Label ID="txttoalleavetaken" runat="server"></asp:Label></span>
+                                </p>
+                            </li>
                         </ul>
                     </div>
 

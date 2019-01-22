@@ -438,6 +438,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             if (_presenter.CurrentLeaveRequest.Id > 0)
             {
+                Employee employee = _presenter.GetEmployee(_presenter.CurrentUser().Id);
                 lblRequestNoresult.Text = _presenter.CurrentLeaveRequest.RequestNo;
                 lblRequestedDateresult.Text = _presenter.CurrentLeaveRequest.RequestedDate.ToShortDateString();
                 lblleavetyperesp.Text = _presenter.CurrentLeaveRequest.LeaveType != null ? _presenter.CurrentLeaveRequest.LeaveType.LeaveTypeName.ToString() : "0";
@@ -448,7 +449,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 lblapprovalstatusres.Text = _presenter.CurrentLeaveRequest.CurrentStatus;
                 lblRequesterres.Text = _presenter.GetUser(_presenter.CurrentLeaveRequest.Requester).FullName;
                 lblEmpNoRes.Text = _presenter.GetUser(_presenter.CurrentLeaveRequest.Requester).EmployeeNo;
-
+                lbltottakenres.Text = _presenter.EmpLeaveTaken(_presenter.CurrentLeaveRequest.Requester, employee.LeaveSettingDate.Value).ToString();
                 grvStatuses.DataSource = _presenter.CurrentLeaveRequest.LeaveRequestStatuses;
                 grvStatuses.DataBind();
             }

@@ -40,6 +40,8 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public string ChaiEMail { get; set; }
         public string Photo { get; set; }
         public Nullable<decimal> SDLeaveBalance { get; set; }
+        public Nullable<decimal> ExpiredLeave { get; set; }
+        
         public DateTime? LeaveSettingDate { get; set; }
         public Nullable<Boolean> Status { get; set; }
         [Required]
@@ -317,7 +319,6 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             
         }
         #endregion
-
         #region Leave calculation Methods
         public virtual DateTime GetEmployeeHiredDate()
         {
@@ -346,7 +347,8 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             {
                 while (wd > 365)
                 {
-                    leaveEnti = leaveEnti + 2;
+                    if (count > 1)
+                        leaveEnti = leaveEnti + 2;
                     if (count >= 6)
                         Sumleave = Sumleave + 30;
                     else
@@ -371,14 +373,13 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
 
             return Sumleave;
         }
-        public virtual decimal LeavefromhiredtoYE()
+        public virtual int LeavefromhiredtoYE()
         {
-            DateTime YE = new  DateTime(DateTime.Now.Year, 12, 31);
-
-            decimal leaveEnti = 0;
-            decimal Sumleave = 0;
+            DateTime YE = new DateTime(DateTime.Today.Year, 12, 31);
+            int leaveEnti = 0;
+            int Sumleave = 0;
             TimeSpan workingdays = YE - GetEmployeeHiredDate();
-            decimal wd = workingdays.Days;
+            int wd = workingdays.Days;
 
 
             int count = 1;
@@ -386,7 +387,8 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             {
                 while (wd > 365)
                 {
-                    leaveEnti = leaveEnti + 2;
+                    if (count > 1)
+                        leaveEnti = leaveEnti + 2;
                     if (count >= 6)
                         Sumleave = Sumleave + 30;
                     else
@@ -400,10 +402,10 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                 }
                 if (wd < 365)
                 {
-                    Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365));
+                    Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti))) / 365);
                 }
             }
-            else { Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365)); }
+            else { Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti))) / 365); }
 
             return Sumleave;
         }
@@ -436,26 +438,26 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                 }
                 if (wd < 365)
                 {
-                    Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365));
+                    Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti))) / 365);
                 }
             }
-            else { Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365)); }
+            else { Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti))) / 365); }
 
             return Sumleave;
         }
-
-        public virtual decimal LeavefromhiredtoSettingDate()
+        public virtual int LeavefromhiredtoSettingDate()
         {
-            decimal leaveEnti = 0;
-            decimal Sumleave = 0;
+            int leaveEnti = 0;
+            int Sumleave = 0;
             TimeSpan workingdays = LeaveSettingDate.Value - GetEmployeeHiredDate();
-            decimal wd = workingdays.Days;
+            int wd = workingdays.Days;
             int count = 1;
             if (wd > 365)
             {
                 while (wd > 365)
-                {
-                    leaveEnti = leaveEnti + 2;
+                 {
+                    if (count > 1)
+                        leaveEnti = leaveEnti + 2;
                     if (count >= 6)
                         Sumleave = Sumleave + 30;
                     else
@@ -469,14 +471,15 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                 }
                 if (wd < 365)
                 {
-                    Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365));
+                    Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti))) / 365);
                 }
             }
-            else { Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365)); }
+            else { Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti))) / 365); }
 
             return Sumleave;
         }
 
+       
         public virtual decimal EmployeeLeaveBalance()
         {
             return (Leavefromhiredtonow() - LeavefromhiredtoSettingDate()) + SDLeaveBalance.Value;
@@ -487,7 +490,12 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         }
         public virtual decimal EmployeeLeaveBalanceYE()
         {
-            return (LeavefromhiredtoYE() - LeavefromhiredtoSettingDate()) + SDLeaveBalance.Value;
+             if ((LeavefromhiredtoYE() - LeavefromhiredtoSettingDate()) + SDLeaveBalance.Value > 50)
+            {
+                return 50;
+            }
+             else
+                { return (LeavefromhiredtoYE() - LeavefromhiredtoSettingDate()) + SDLeaveBalance.Value; }
         }
         #endregion
 
