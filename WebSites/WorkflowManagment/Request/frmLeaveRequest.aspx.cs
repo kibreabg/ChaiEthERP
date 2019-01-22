@@ -202,7 +202,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         private void GetCurrentApprover()
         {
             txtbalance.Text = txtbalance.Text != "" ? txtbalance.Text : "0";
-            if (!(ddlLeaveType.SelectedItem.Text == "Annual Leave" && Convert.ToDecimal(txtbalance.Text) <= 0))
+            if (!(ddlLeaveType.SelectedItem.Text == "Annual Leave" && Convert.ToDecimal(txtbalance.Text) < 0))
             {
                 foreach (LeaveRequestStatus LRS in _presenter.CurrentLeaveRequest.LeaveRequestStatuses)
                 {
@@ -553,6 +553,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 txtbalance.Visible = false;
                 FileUpload1.Visible = false;
             }
+            GetLeaveBalance();
         }
         protected void btnDelete_Click(object sender, EventArgs e)
         {
@@ -578,10 +579,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     else
                         txtbalance.Text = bal.ToString();
                 }
-                else
-                {
-                    Master.ShowMessage(new AppMessage("Please Insert Leave day's brought forward OR I wish to apply for ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-                }
+                //else
+                //{
+                //    Master.ShowMessage(new AppMessage("Please Insert Leave day's brought forward OR I wish to apply for ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                //}
             }
         }
         protected void txtDateFrom_TextChanged(object sender, EventArgs e)
