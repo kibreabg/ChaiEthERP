@@ -2,6 +2,7 @@
 
 <%@ MasterType TypeName="Chai.WorkflowManagment.Modules.Shell.BaseMaster" %>
 
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 
 <%@ Register TagPrefix="asp" Namespace="AjaxControlToolkit" Assembly="AjaxControlToolkit" %>
 <asp:Content ID="Content2" ContentPlaceHolderID="DefaultContent" runat="Server">
@@ -123,6 +124,7 @@
                                         <asp:Label ID="lblActDaysTrav" runat="server" Text="Actual Days Travelled" CssClass="label"></asp:Label>
                                         <label class="input">
                                             <asp:TextBox ID="txtActualDaysTrav" runat="server" Width="100%"></asp:TextBox>
+                                            <cc1:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtActualDaysTrav" ID="txtActualDaysTrav_FilteredTextBoxExtender" FilterType="Numbers"></cc1:FilteredTextBoxExtender>
                                         </label>
                                         <asp:RequiredFieldValidator
                                             ID="rfvActualDaysTrav" runat="server" ErrorMessage="Please enter actual days travelled" Display="Dynamic"
