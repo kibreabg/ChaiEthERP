@@ -112,9 +112,8 @@ namespace Chai.WorkflowManagment.Modules.Request
         }
         public IList<VehicleRequest> GetExtVehicleRequest()
         {
-
             int currentUserId = GetCurrentUser().Id;
-            return WorkspaceFactory.CreateReadOnly().Query<VehicleRequest>(x=> x.AppUser.Id== currentUserId).ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<VehicleRequest>(x=> x.AppUser.Id== currentUserId && x.CurrentStatus != "Rejected").ToList();
         }
         
         #endregion
