@@ -572,7 +572,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 if (txtforward.Text != "" && txtapplyfor.Text != "")
                 {
-                    int bal = (Convert.ToInt32(txtforward.Text) - Convert.ToInt32(txtapplyfor.Text));
+                    decimal bal = (Convert.ToDecimal(txtforward.Text) - Convert.ToDecimal(txtapplyfor.Text));
                     if (bal < 0)
 
                         txtbalance.Text = Convert.ToString(0);

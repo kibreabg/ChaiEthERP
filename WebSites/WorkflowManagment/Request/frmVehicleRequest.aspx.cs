@@ -30,6 +30,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 PopRequestPersonnels();
                 PopProjects();
                 BindVehicleRequests();
+                PopExtRequest();
                 if (_presenter.CurrentVehicleRequest.Id <= 0)
                 {
                     AutoNumber();
@@ -242,7 +243,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 ddlProject.SelectedValue = _presenter.CurrentVehicleRequest.Project.Id.ToString();
                 PopGrants(Convert.ToInt32(ddlProject.SelectedValue));
                 
-                PopExtRequest();
+                
                 ddlRequestNo.SelectedValue = _presenter.CurrentVehicleRequest.Id.ToString();
                 ddlGrant.SelectedValue = _presenter.CurrentVehicleRequest.Grant.Id.ToString();
               
@@ -352,7 +353,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (ckIsExtension.Checked == true)
             {
                 ddlRequestNo.Visible = true;
-                PopExtRequest();
+                //PopExtRequest();
                 Label1.Visible = true;
                 i.Visible = true;
             }

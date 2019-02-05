@@ -144,7 +144,6 @@
                                                             <asp:ListItem Value=" ">Select Type</asp:ListItem>
                                                             <asp:ListItem Value="carRental">Car Rental</asp:ListItem>
                                                             <asp:ListItem Value="driver">Internal Driver</asp:ListItem>
-                                                            <asp:ListItem Value="personal">Personal Vehicle</asp:ListItem>
                                                         </asp:DropDownList>
                                                         <asp:RequiredFieldValidator ID="rfvddlVehicleType" runat="server" ControlToValidate="ddlEdtAssignedVehicle" CssClass="validator" Display="Dynamic" ErrorMessage="Vehicle Type must be selected" InitialValue=" " SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
                                                         <i></i>
@@ -154,7 +153,7 @@
                                                             <asp:ListItem Value=" ">Select Type</asp:ListItem>
                                                             <asp:ListItem Value="carRental">Car Rental</asp:ListItem>
                                                             <asp:ListItem Value="driver">Internal Vehicle</asp:ListItem>
-                                                            <asp:ListItem Value="personal">Personal Vehicle</asp:ListItem>
+                                                
                                                         </asp:DropDownList>
                                                         <asp:RequiredFieldValidator ID="rfvddlFVehicleType" runat="server" ControlToValidate="ddlAssignedVehicle" CssClass="validator" Display="Dynamic" ErrorMessage="Vehicle Type must be selected" InitialValue=" " SetFocusOnError="true" ValidationGroup="save"></asp:RequiredFieldValidator>
                                                         <i></i>
