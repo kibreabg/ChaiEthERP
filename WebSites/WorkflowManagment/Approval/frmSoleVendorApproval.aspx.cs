@@ -165,13 +165,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 if (_presenter.CurrentSoleVendorRequest.CurrentLevel == _presenter.CurrentSoleVendorRequest.SoleVendorRequestStatuses.Count && SVRS.ApprovalStatus != null)
                 {
                     btnPrint.Enabled = true;
-                    //btnPurchaseOrder.Enabled = true;
+                    btnPurchaseOrder.Enabled = true;
                     btnApprove.Enabled = false;
                 }
                 else
                 {
                     btnPrint.Enabled = false;
-                    //btnPurchaseOrder.Enabled = false;
+                    btnPurchaseOrder.Enabled = false;
                     btnApprove.Enabled = true;
                 }
 
@@ -182,7 +182,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             if (_presenter.CurrentSoleVendorRequest.CurrentLevel == _presenter.CurrentSoleVendorRequest.SoleVendorRequestStatuses.Count && _presenter.CurrentSoleVendorRequest.ProgressStatus == ProgressStatus.Completed.ToString())
             {
                 btnPrint.Enabled = true;
-                //btnPurchaseOrder.Enabled = true;
+                btnPurchaseOrder.Enabled = true;
                 SendEmailToRequester();
 
             }
@@ -447,11 +447,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             pnlDetail.Visible = false;
         }
-        //protected void btnPurchaseOrder_Click(object sender, EventArgs e)
-        //{
-        //    int purchaseID = _presenter.CurrentSoleVendorRequest.PurchaseRequest.Id;
-        //    Response.Redirect(String.Format("frmPurchaseOrderSoleVendor.aspx?SoleVendorRequestId={0}", purchaseID));
-        //}
+       protected void btnPurchaseOrder_Click(object sender, EventArgs e)
+       {
+           int purchaseID = _presenter.CurrentSoleVendorRequest.PurchaseRequest.Id;
+           Response.Redirect(String.Format("frmPurchaseOrderSoleVendor.aspx?SoleVendorRequestId={0}", purchaseID));
+       }
 
         protected void grvSoleVendorRequestList_RowCommand(object sender, GridViewCommandEventArgs e)
         {

@@ -283,7 +283,7 @@
                                         <asp:Button ID="btnApprove" runat="server" Text="Save" OnClick="btnApprove_Click" Enabled="true" CssClass="btn btn-primary" ValidationGroup="Save"></asp:Button>
                                         <asp:Button ID="btnCancelPopup" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" OnClick="btnCancelPopup_Click"></asp:Button>
                                         <asp:Button ID="btnPrint0" runat="server" Text="Print" CssClass="btn btn-primary" OnClientClick="javascript:Clickheretoprint('divprint')" Enabled="False"></asp:Button>
-                                        <asp:Button ID="btnPurchaseOrder" runat="server" CssClass="btn btn-primary" Enabled="false" OnClick="btnPurchaseOrder_Click" Text="Purchase Order" Visible="False" />
+                                        <asp:Button ID="btnPurchaseOrder" runat="server" CssClass="btn btn-primary" Enabled="false" OnClick="btnPurchaseOrder_Click" Text="Purchase Order" Visible="True" />
                                     </footer>
                                 </div>
                             </div>
@@ -301,7 +301,7 @@
                     <td style="width: 17%; text-align: left;">
                         <img src="../img/CHAI%20Logo.png" width="70" height="50" /></td>
                     <td style="font-size: large; text-align: center;">
-                        <strong>CHAI ZIMBABWE
+                        <strong>CHAI ETHIOPIA
                             <br />
                             BID ANALYSIS REQUEST FORM</strong></td>
                 </tr>

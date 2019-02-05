@@ -250,7 +250,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             lblRequestedDateResult.Text = _presenter.CurrentPurchaseRequest.RequestedDate.ToShortDateString();
             lblRequesterResult.Text = _presenter.GetUser(_presenter.CurrentPurchaseRequest.Requester).FullName;
             lblSuggestedSupplierResult.Text = _presenter.CurrentPurchaseRequest.SuggestedSupplier.ToString();
-            lblSpecialNeedResult.Text = _presenter.CurrentPurchaseRequest.SpecialNeed;
+
+            lblRemarkResult.Text = _presenter.CurrentPurchaseRequest.Comment;
             lblDelivertoResult.Text = _presenter.CurrentPurchaseRequest.DeliverTo;
             lblReqDateResult.Text = _presenter.CurrentPurchaseRequest.Requireddateofdelivery.ToShortDateString();
             grvDetails.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails;
@@ -277,7 +278,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     Master.ShowMessage(new AppMessage("Purchase Approval Processed", Chai.WorkflowManagment.Enums.RMessageType.Info));
                     btnApprove.Enabled = false;
                     BindSearchPurchaseRequestGrid();
-                    if (_presenter.CurrentUser().EmployeePosition.PositionName == "Admin/HR Assisitance (Driver)" && _presenter.CurrentPurchaseRequest.CurrentStatus != ApprovalStatus.Rejected.ToString() && _presenter.CurrentPurchaseRequest.ProgressStatus == ProgressStatus.Completed.ToString() && _presenter.CurrentPurchaseRequest.BidAnalysisRequest == null && _presenter.CurrentPurchaseRequest.SoleVendorRequest == null)
+                    if (_presenter.CurrentUser().EmployeePosition.PositionName == "Procurement Officer" && _presenter.CurrentPurchaseRequest.CurrentStatus != ApprovalStatus.Rejected.ToString() && _presenter.CurrentPurchaseRequest.ProgressStatus == ProgressStatus.Completed.ToString() && _presenter.CurrentPurchaseRequest.BidAnalysisRequest == null && _presenter.CurrentPurchaseRequest.SoleVendorRequest == null)
                     {
                         lnkBidRequest.Visible = true;
                         lnkSoleVendor.Visible = true;

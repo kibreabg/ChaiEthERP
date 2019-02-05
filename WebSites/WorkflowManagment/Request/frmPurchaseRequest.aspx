@@ -100,31 +100,13 @@
                             </section>
                             <section class="col col-4">
                                 <label id="lblapplyfor" runat="server" class="label" visible="true">
-                                    Specifications</label>
+                                    Remark</label>
                                 <label class="input">
                                     <asp:TextBox ID="txtComment" runat="server" Visible="true"></asp:TextBox>
                                 </label>
                             </section>
-                            <section class="col col-4">
-                                <label class="label">
-                                    Special Need</label>
-                                <label class="input">
-                                    <asp:TextBox ID="txtSpecialNeed" runat="server" Visible="true"></asp:TextBox>
-                                </label>
-                            </section>
-                        </div>
-                        <div class="row">
-                            <section class="col col-4">
-                                <label class="label">Total Purchase </label>
-                                <label class="input">
-                                    <asp:TextBox ID="txtTotal" ReadOnly="true" runat="server"></asp:TextBox>
-                                </label>
-                            </section>
-                            <div class="row">
-                                <section class="col col-4">
-                                    <asp:CheckBox ID="chkBudgeted" runat="server" Text="Budgeted" /><i></i>
-                                </section>
-                            </div>
+                          
+                      
                         </div>
                         <asp:DataGrid ID="dgPurchaseRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
                             CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
@@ -198,27 +180,7 @@
                                     </FooterTemplate>
                                 </asp:TemplateColumn>
 
-                                <asp:TemplateColumn HeaderText="Price per unit">
-                                    <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "Priceperunit")%>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <asp:TextBox ID="txtPriceperunit" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "Priceperunit")%>' Width="81px"></asp:TextBox>
-                                        <asp:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtPriceperunit" ID="txtPriceperunit_FilteredTextBoxExtender" FilterType="Numbers, Custom" ValidChars="."></asp:FilteredTextBoxExtender>
-                                        <asp:RequiredFieldValidator ID="RfvtxtPriceperunit" CssClass="validator" runat="server" ControlToValidate="txtPriceperunit" ErrorMessage="Price per unit Required" ValidationGroup="proedit"></asp:RequiredFieldValidator>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:TextBox ID="txtFPriceperunit" runat="server" CssClass="form-control" Width="66px"></asp:TextBox>
-                                        <asp:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtFPriceperunit" ID="txtFPriceperunit_FilteredTextBoxExtender" FilterType="Numbers, Custom" ValidChars="."></asp:FilteredTextBoxExtender>
-                                        <asp:RequiredFieldValidator ID="RfvFPriceperunit" CssClass="validator" runat="server" ControlToValidate="txtFPriceperunit" ErrorMessage="Price per unit Required" ValidationGroup="proadd"></asp:RequiredFieldValidator>
-                                    </FooterTemplate>
-                                </asp:TemplateColumn>
-                                <asp:TemplateColumn HeaderText="Estimated Cost">
-                                    <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "EstimatedCost")%>
-                                    </ItemTemplate>
-
-                                </asp:TemplateColumn>
+                               
                                 <asp:TemplateColumn HeaderText="Project ID">
                                     <EditItemTemplate>
                                         <asp:DropDownList ID="ddlProject" runat="server" CssClass="form-control"
@@ -378,7 +340,7 @@
 
                                 <asp:BoundField DataField="DeliverTo" HeaderText="Deliver To" SortExpression="DeliverTo" />
                                 <asp:BoundField DataField="SuggestedSupplier" HeaderText="Suggested Supplier" SortExpression="SuggestedSupplier" />
-                                <asp:BoundField DataField="TotalPrice" HeaderText="Total Price" SortExpression="TotalPrice" />
+                               
                                 <asp:CommandField ShowSelectButton="True" />
                                 <%-- <asp:CommandField ShowDeleteButton="True" />--%>
                             </Columns>

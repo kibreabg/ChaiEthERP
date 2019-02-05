@@ -190,7 +190,7 @@
                     <td style="width: 17%; text-align: left;">
                         <img src="../img/CHAI%20Logo.png" width="70" height="50" /></td>
                     <td style="font-size: large; text-align: center;">
-                        <strong>CHAI ZIMBABWE
+                        <strong>CHAI ETHIOPIA
                             <br />
                             PURCHASE ORDER FORM</strong></td>
                 </tr>
@@ -369,7 +369,7 @@
                         <td style="width: 17%; text-align: left;">
                             <img src="../img/CHAI%20Logo.png" width="70" height="50" /></td>
                         <td style="font-size: large; text-align: center;">
-                            <strong>CHAI ZIMBABWE
+                            <strong>CHAI ETHIOPIA
                             <br />
                                 PURCHASE REQUEST FORM</strong></td>
                     </tr>

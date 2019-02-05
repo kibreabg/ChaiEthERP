@@ -88,6 +88,8 @@
     <Compile Include="Views\ExpenseTypePresenter.cs" />
     <Compile Include="Views\IHolidayView.cs" />
     <Compile Include="Views\HolidayPresenter.cs" />
+    <Compile Include="Views\ISoleVendorSupplierView.cs" />
+    <Compile Include="Views\SoleVendorSupplierPresenter.cs" />
     <Compile Include="Views\VehiclePresenter.cs" />
     <Compile Include="Views\CostSharingSettingPresenter.cs" />
     <Compile Include="Views\EmployeeLeavePresenter.cs" />

@@ -170,9 +170,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             _controller.SaveOrUpdateEntity(SoleVendorRequest);
         }
-        public IList<Supplier> GetSuppliers()
+        public IList<SoleVendorSupplier> GetSoleVendorSuppliers()
         {
-            return _settingController.GetSuppliers();
+            return _settingController.GetSoleVendorSuppliers();
         }
         public void CancelPage()
         {

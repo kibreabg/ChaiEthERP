@@ -13,7 +13,7 @@
 
             var docprint = window.open("", "", disp_setting);
             docprint.document.open();
-            docprint.document.write('<html><head><title>CHAI Zimbabwe</title>');
+            docprint.document.write('<html><head><title>CHAI Ethiopia</title>');
             docprint.document.write('</head><body onLoad="self.print()"><center>');
             docprint.document.write(content_vlue);
             docprint.document.write('</center></body></html>');
@@ -85,7 +85,7 @@
                 </asp:TemplateField>
               
                 <asp:BoundField DataField="SuggestedSupplier" HeaderText="Suggested Supplier" SortExpression="PurposeOfTravel" />
-                <asp:BoundField DataField="TotalPrice" HeaderText="Total Price" SortExpression="TotalPurchase" />
+              
 
                 <asp:ButtonField ButtonType="Button" CommandName="ViewItem" Text="View Item Detail" />
                 <asp:CommandField ButtonType="Button" SelectText="Process Request" ShowSelectButton="True" />
@@ -184,10 +184,8 @@
                                 CssClass="table table-striped table-bordered table-hover">
                                 <RowStyle CssClass="rowstyle" />
                                 <Columns>
-                                    <asp:BoundField DataField="Item" HeaderText="Item" SortExpression="Item" />
-                                    <asp:BoundField DataField="Priceperunit" HeaderText="Price Per Unit" SortExpression="Priceperunit" />
-                                    <asp:BoundField DataField="Qty" HeaderText="Qty" SortExpression="Qty" />
-                                    <asp:BoundField DataField="EstimatedCost" HeaderText="Estimated Cost" SortExpression="EstimatedCost" />
+                                    <asp:BoundField DataField="Item" HeaderText="Item" SortExpression="Item" />                                    
+                                    <asp:BoundField DataField="Qty" HeaderText="Qty" SortExpression="Qty" />                                  
                                     <asp:BoundField DataField="Project.ProjectCode" HeaderText="Project Code" />
                                     <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant Code" />
                                 </Columns>
@@ -215,7 +213,7 @@
                 <td style="width: 17%; text-align: left;">
                     <img src="../img/CHAI%20Logo.png" width="70" height="50" /></td>
                 <td style="font-size: large; text-align: center;">
-                    <strong>CHAI ZIMBABWE
+                    <strong>CHAI ETHIOPIA
                             <br />
                         PURCHASE REQUEST FORM</strong></td>
             </tr>
@@ -264,10 +262,10 @@
             <tr>
                 <td style="width: 576px; height: 18px; padding-left: 15%;">
                     <strong>
-                        <asp:Label ID="lblSpecialNeed" runat="server" Text="Special Need:"></asp:Label>
+                        <asp:Label ID="lblSpecialNeed" runat="server" Text="Remark:"></asp:Label>
                     </strong></td>
                 <td style="width: 490px" class="modal-sm">
-                    <asp:Label ID="lblSpecialNeedResult" runat="server"></asp:Label>
+                    <asp:Label ID="lblRemarkResult" runat="server"></asp:Label>
                 </td>
                 <td style="width: 280px" class="modal-sm">
                     <strong>
@@ -338,8 +336,7 @@
                     <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="AccountName" SortExpression="ItemAccount.AccountName" />
                     <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
                     <asp:BoundField DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
-                    <asp:BoundField DataField="Priceperunit" HeaderText="Price Per Unit" SortExpression="Priceperunit" />
-                    <asp:BoundField DataField="EstimatedCost" HeaderText="Estimated Cost" SortExpression="EstimatedCost" />
+                   
                     <asp:BoundField DataField="Project.ProjectCode" HeaderText="Project Code" />
                     <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant Code" />
                 </Columns>

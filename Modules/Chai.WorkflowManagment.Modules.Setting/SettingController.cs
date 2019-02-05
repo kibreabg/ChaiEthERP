@@ -47,7 +47,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
         #region User
         public IList<AppUser> GetProgramManagers()
         {
-            return WorkspaceFactory.CreateReadOnly().Query<AppUser>(x => x.EmployeePosition.PositionName == "Program Manager" || x.EmployeePosition.PositionName == "Operational Manager" || x.EmployeePosition.PositionName == "Country Director" || x.EmployeePosition.PositionName == "Deputy Country Director").ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<AppUser>(x => x.EmployeePosition.PositionName.Contains("Program Manager") || x.EmployeePosition.PositionName == "Vice President & Country Director, Ethiopia" || x.EmployeePosition.PositionName == "Finance Manager" || x.EmployeePosition.PositionName == "Senior Deputy Country Director" || x.EmployeePosition.PositionName== "Coordinator, Program Operations" || x.EmployeePosition.PositionName == "M&E Manager" || x.EmployeePosition.PositionName == "Head, Administration & HR").ToList();
         }
         public IList<AppUser> GetEmployeeList()
         {
@@ -149,6 +149,29 @@ namespace Chai.WorkflowManagment.Modules.Setting
             filterExpression = "SELECT  *  FROM Suppliers Where Status = 'Active' AND 1 = Case when '" + SupplierName + "' = '' Then 1 When Suppliers.SupplierName = '" + SupplierName + "'  Then 1 END  ";
 
             return _workspace.SqlQuery<Supplier>(filterExpression).ToList();
+
+        }
+        #endregion
+        #region SoleVendorSupplier
+        public IList<SoleVendorSupplier> GetSoleVendorSuppliers()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<SoleVendorSupplier>(x => x.Status == "Active").OrderBy(x => x.SupplierName).ToList();
+        }
+        public IList<SoleVendorSupplier> GetSoleVendorSuppliers(int SupplierTypeId)
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<SoleVendorSupplier>(x => x.SupplierType.Id == SupplierTypeId && x.Status == "Active").ToList();
+        }
+        public SoleVendorSupplier GetSoleVendorSupplier(int SupplierId)
+        {
+            return _workspace.Single<SoleVendorSupplier>(x => x.Id == SupplierId);
+        }
+        public IList<SoleVendorSupplier> ListSoleVendorSuppliers(string SupplierName)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM SoleVendorSuppliers Where Status = 'Active' AND 1 = Case when '" + SupplierName + "' = '' Then 1 When SoleVendorSuppliers.SupplierName = '" + SupplierName + "'  Then 1 END  ";
+
+            return _workspace.SqlQuery<SoleVendorSupplier>(filterExpression).ToList();
 
         }
         #endregion

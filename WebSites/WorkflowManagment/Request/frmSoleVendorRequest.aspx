@@ -21,7 +21,7 @@
 
             var docprint = window.open("", "", disp_setting);
             docprint.document.open();
-            docprint.document.write('<html><head><title>CHAI Zimbabwe</title>');
+            docprint.document.write('<html><head><title>CHAI Ethiopia</title>');
             docprint.document.write('</head><body onLoad="self.print()"><center>');
             docprint.document.write(content_vlue);
             docprint.document.write('</center></body></html>');
@@ -183,6 +183,8 @@
                                     </ul>
                                     <div class="tab-content padding-10">
                                         <div class="tab-pane active" id="iss1">
+                                             <fieldset>
+                            <div class="row">
                                             <asp:DataGrid ID="dgSoleVenderDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
                                                 CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
                                                 GridLines="None" OnItemDataBound="dgSoleVenderDetail_ItemDataBound" ShowFooter="True" OnDeleteCommand="dgSoleVenderDetail_DeleteCommand"
@@ -278,6 +280,8 @@
                                                 </Columns>
                                                 <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
                                             </asp:DataGrid>
+                                </div>
+                                                 </fieldset>
                                         </div>
 
                                         <div class="tab-pane" id="iss2">
@@ -422,7 +426,7 @@
                     <td style="width: 17%; text-align: left;">
                         <img src="../img/CHAI%20Logo.png" width="70" height="50" /></td>
                     <td style="font-size: large; text-align: center;">
-                        <strong>CHAI ZIMBABWE
+                        <strong>CHAI ETHIOPIA
                             <br />
                             SOLE VENDOR REQUEST FORM</strong></td>
                 </tr>

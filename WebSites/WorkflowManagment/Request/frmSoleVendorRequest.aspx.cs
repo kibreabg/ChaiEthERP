@@ -33,6 +33,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 PopProjects();
                 BindSoleVendorRequests();
                 PopSoleVendorRequesters();
+                BindSoleVendorRequestDetails();
                 PopSupplier();
                 if (_presenter.CurrentSoleVendorRequest.Id <= 0)
                 {
@@ -182,7 +183,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             lst.Text = " Select Supplier ";
             lst.Value = "";
             ddlSupplier.Items.Add(lst);
-            ddlSupplier.DataSource = _presenter.GetSuppliers();
+            ddlSupplier.DataSource = _presenter.GetSoleVendorSuppliers();
             ddlSupplier.DataBind();
         }
         private void ClearFormFields()
@@ -454,7 +455,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     detail.TotalCost = Convert.ToDecimal(txtTotalCost.Text);
                     _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails.Add(detail);
                     dgSoleVenderDetail.EditItemIndex = -1;
-                    BindSoleVendorRequests();
+                   // BindSoleVendorRequests();
+                    BindSoleVendorRequestDetails();
 
                 }
                 catch (Exception ex)

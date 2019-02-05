@@ -207,10 +207,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     }
 
                 }
-                //if (_presenter.CurrentBidAnalysisRequest.CurrentLevel == _presenter.CurrentBidAnalysisRequest.BidAnalysisRequestStatuses.Count && (PRS.ApprovalStatus != null) && _presenter.CurrentBidAnalysisRequest.ProgressStatus == ProgressStatus.Completed.ToString())
-                //{
-                //    btnPurchaseOrder.Enabled = true;
-                //}
+                if (_presenter.CurrentBidAnalysisRequest.CurrentLevel == _presenter.CurrentBidAnalysisRequest.BidAnalysisRequestStatuses.Count && (PRS.ApprovalStatus != null) && _presenter.CurrentBidAnalysisRequest.ProgressStatus == ProgressStatus.Completed.ToString())
+                {
+                    btnPurchaseOrder.Enabled = true;
+                }
             }
         }
         private void ShowPrint()
@@ -303,12 +303,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (_presenter.CurrentBidAnalysisRequest.ProgressStatus == ProgressStatus.Completed.ToString())
                 {
-                    // btnPurchaseOrder.Enabled = true;
+                     btnPurchaseOrder.Enabled = true;
                     // SendEmailToRequester();
                     btnPrint0.Enabled = true;
                 }
                 else
                 {
+                    btnPurchaseOrder.Enabled = false;
                     btnPrint0.Enabled = false;
                 }
             }
