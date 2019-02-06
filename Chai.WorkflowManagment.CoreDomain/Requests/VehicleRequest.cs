@@ -34,8 +34,8 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public int ExtRefRequest_Id { get; set; }
         public string TravelLogAttachment { get; set; }
         public int ActualDaysTravelled { get; set; }
-
         public string DepartureTime { get; set; }
+        public string PassengerDetails { get; set; }
         public virtual AppUser AppUser { get; set; }
         public virtual Project Project { get; set; }
         public virtual Grant Grant { get; set; }

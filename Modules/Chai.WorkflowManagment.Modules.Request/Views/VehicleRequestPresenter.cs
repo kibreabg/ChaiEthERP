@@ -133,6 +133,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             VehicleRequest.DeparturePlace = View.GetDeparturePlace;
             VehicleRequest.PurposeOfTravel = View.GetPurposeOfTravel;
             VehicleRequest.Destination = View.GetDestination;
+            VehicleRequest.PassengerDetails = View.GetPassengerDetails;
             VehicleRequest.Comment = View.GetComment;
             VehicleRequest.NoOfPassengers = View.GetNoOfPassengers;
             VehicleRequest.ProgressStatus = ProgressStatus.InProgress.ToString();

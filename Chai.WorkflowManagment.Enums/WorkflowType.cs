@@ -38,6 +38,7 @@ namespace Chai.WorkflowManagment.Enums
         Completed,
         Issued,
         Bank_Payment,
+        Canceled,
         Rejected
 
 

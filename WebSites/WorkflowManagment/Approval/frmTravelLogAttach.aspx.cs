@@ -100,7 +100,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             if (_presenter.CurrentVehicleRequest.CurrentLevel == _presenter.CurrentVehicleRequest.VehicleRequestStatuses.Count)
             {
                 btnPrint.Enabled = true;
-                SendEmailToRequester();
             }
         }
         private void SendEmail(VehicleRequestStatus VRS)
@@ -144,6 +143,17 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             //grvVehicleRequestList.SelectedDataKey.Value            
             _presenter.OnViewLoaded();
             BindVehicleRequestStatus();
+            if (_presenter.GetExtVehicleRequest(_presenter.CurrentVehicleRequest.Id) != null)
+            {
+                pnlExtVehicleReq.Visible = true;
+                IList<VehicleRequest> extendedVehicleRequest = new List<VehicleRequest>();
+                extendedVehicleRequest.Add(_presenter.GetExtVehicleRequest(_presenter.CurrentVehicleRequest.Id));
+                grvExtVehicleReq.DataSource = extendedVehicleRequest;
+                grvExtVehicleReq.DataBind();
+            }
+            else
+                pnlExtVehicleReq.Visible = false;
+
             if (_presenter.CurrentVehicleRequest.TravelLogStatus == ProgressStatus.Completed.ToString())
             {
                 btnSave.Enabled = false;
@@ -211,15 +221,24 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 _presenter.CurrentVehicleRequest.ActualDaysTravelled = Convert.ToInt32(txtActualDaysTrav.Text);
                 _presenter.CurrentVehicleRequest.TravelLogStatus = ProgressStatus.Completed.ToString();
                 _presenter.SaveOrUpdateVehicleRequest(_presenter.CurrentVehicleRequest);
-                ShowPrint();
-                Master.ShowMessage(new AppMessage("Travel Log Successfully Attached ", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                //If there is an extension or reduction requested on this vehicle request update the extension or reduction
+                VehicleRequest extendedVehicleReq = _presenter.GetExtVehicleRequest(_presenter.CurrentVehicleRequest.Id);
+                if (extendedVehicleReq != null)
+                {
+                    extendedVehicleReq.ActualDaysTravelled = 0;
+                    extendedVehicleReq.TravelLogStatus = ProgressStatus.Completed.ToString();
+                    _presenter.SaveOrUpdateVehicleRequest(extendedVehicleReq);
+                }
+                Master.ShowMessage(new AppMessage("Travel Log Successfully Attached ", RMessageType.Info));
                 btnSave.Enabled = false;
                 BindSearchVehicleRequestGrid();
                 pnlApproval_ModalPopupExtender.Show();
             }
             catch (Exception ex)
             {
-
+                Master.ShowMessage(new AppMessage("Error! Travel log not attached, due to " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         protected void grvStatuses_RowDataBound(object sender, GridViewRowEventArgs e)

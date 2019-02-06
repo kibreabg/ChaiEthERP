@@ -58,61 +58,65 @@
                         <asp:Button ID="btnpop" runat="server" />
                         <asp:Button ID="btnFind" runat="server" Text="Find" CssClass="btn btn-primary" OnClick="btnFind_Click"></asp:Button>
                         <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" PostBackUrl="../Default.aspx"></asp:Button>
-                    
+
                     </footer>
                 </div>
             </div>
         </div>
-        <asp:GridView ID="grvVehicleRequestList"
-            runat="server" AutoGenerateColumns="False" DataKeyNames="Id" OnRowCommand="grvVehicleRequestList_RowCommand"
-            OnRowDataBound="grvVehicleRequestList_RowDataBound" OnSelectedIndexChanged="grvVehicleRequestList_SelectedIndexChanged" AllowPaging="True" OnPageIndexChanging="grvVehicleRequestList_PageIndexChanging"
-            CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" PageSize="30">
-            <RowStyle CssClass="rowstyle" />
-            <Columns>
-                <asp:BoundField DataField="RequestNo" HeaderText="Request No" SortExpression="RequestNo" />
-                <asp:BoundField DataField="AppUser.FullName" HeaderText="Requester" SortExpression="AppUser.FullName" />
-                <asp:TemplateField HeaderText="Request Date">
-                                            <ItemTemplate>
-                                              <asp:Label ID="lblRequestDate" runat="server" Text='<%# Eval("RequestDate", "{0:dd/MM/yyyy}")%>' ></asp:Label>
-                                            </ItemTemplate>
-                                            </asp:TemplateField>
-                 <asp:TemplateField HeaderText="Departure Date">
-                                            <ItemTemplate>
-                                              <asp:Label ID="lblReportedDate" runat="server" Text='<%# Eval("DepartureDate", "{0:dd/MM/yyyy}")%>' ></asp:Label>
-                                            </ItemTemplate>
-                                            </asp:TemplateField>
-                <asp:BoundField DataField="DepartureTime" HeaderText="Departure Time" SortExpression="DepartureTime" />
-                <asp:TemplateField HeaderText="Returning Date">
-                                            <ItemTemplate>
-                                              <asp:Label ID="lblReturningDate" runat="server" Text='<%# Eval("ReturningDate", "{0:dd/MM/yyyy}")%>' ></asp:Label>
-                                            </ItemTemplate>
-                                            </asp:TemplateField>
-                <asp:BoundField DataField="Destination" HeaderText="Destination" SortExpression="Destination" />
-                <asp:BoundField DataField="NoOfPassengers" HeaderText="No. Of Passengers" SortExpression="NoOfPassengers" />
-                <asp:BoundField DataField="PurposeOfTravel" HeaderText="Purpose Of Travel" SortExpression="PurposeOfTravel" />
-                <asp:BoundField DataField="Comment" HeaderText="Comment" SortExpression="Comment" />
-                <asp:CommandField ButtonType="Button" SelectText="Process Request" ShowSelectButton="True" />
-                <asp:TemplateField>
+        <div class="table-responsive">
+            <asp:GridView ID="grvVehicleRequestList" Width="100%"
+                runat="server" AutoGenerateColumns="False" DataKeyNames="Id" OnRowCommand="grvVehicleRequestList_RowCommand"
+                OnRowDataBound="grvVehicleRequestList_RowDataBound" OnSelectedIndexChanged="grvVehicleRequestList_SelectedIndexChanged" AllowPaging="True" OnPageIndexChanging="grvVehicleRequestList_PageIndexChanging"
+                CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" PageSize="30">
+                <RowStyle CssClass="rowstyle" />
+                <Columns>
+                    <asp:BoundField DataField="RequestNo" HeaderText="Request No" SortExpression="RequestNo" />
+                    <asp:BoundField DataField="AppUser.FullName" HeaderText="Requester" SortExpression="AppUser.FullName" />
+                    <asp:TemplateField HeaderText="Request Date">
                         <ItemTemplate>
-                        <asp:Button runat="server" ID="btnStatus" Text="" BorderStyle="None" />
+                            <asp:Label ID="lblRequestDate" runat="server" Text='<%# Eval("RequestDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
                         </ItemTemplate>
-                        </asp:TemplateField>
-                <%--<asp:ButtonField ButtonType="Button" Text="Travel Log" CommandName="TravelLog" />--%>
-            </Columns>
-            <FooterStyle CssClass="FooterStyle" />
-            <HeaderStyle CssClass="headerstyle" />
-            <PagerStyle CssClass="PagerStyle" />
-            <RowStyle CssClass="rowstyle" />
-        </asp:GridView>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Departure Date">
+                        <ItemTemplate>
+                            <asp:Label ID="lblReportedDate" runat="server" Text='<%# Eval("DepartureDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:BoundField DataField="DepartureTime" HeaderText="Departure Time" SortExpression="DepartureTime" />
+                    <asp:TemplateField HeaderText="Returning Date">
+                        <ItemTemplate>
+                            <asp:Label ID="lblReturningDate" runat="server" Text='<%# Eval("ReturningDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:BoundField DataField="Destination" HeaderText="Destination" SortExpression="Destination" />
+                    <asp:BoundField DataField="NoOfPassengers" HeaderText="No. Of Passengers" SortExpression="NoOfPassengers" />
+                    <asp:BoundField DataField="PurposeOfTravel" HeaderText="Purpose Of Travel" SortExpression="PurposeOfTravel" />
+                    <asp:BoundField DataField="Comment" HeaderText="Comment" SortExpression="Comment" />
+                    <asp:CommandField ButtonType="Button" SelectText="Process Request" ShowSelectButton="True" />
+                    <asp:TemplateField>
+                        <ItemTemplate>
+                            <asp:Button runat="server" ID="btnStatus" Text="" BorderStyle="None" />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <%--<asp:ButtonField ButtonType="Button" Text="Travel Log" CommandName="TravelLog" />--%>
+                </Columns>
+                <FooterStyle CssClass="FooterStyle" />
+                <HeaderStyle CssClass="headerstyle" />
+                <PagerStyle CssClass="PagerStyle" />
+                <RowStyle CssClass="rowstyle" />
+            </asp:GridView>
+        </div>
         <div>
-            <asp:Button runat="server" ID="btnInProgress" Text="" BorderStyle="None"  BackColor="#FFFF6C"/>  <B>In Progress</B><br />
-            <asp:Button runat="server" ID="btnComplete" Text="" BorderStyle="None" BackColor="#FF7251"/>  <B>Completed</B>
+            <asp:Button runat="server" ID="btnInProgress" Text="" BorderStyle="None" BackColor="#FFFF6C" />
+            <b>In Progress</b><br />
+            <asp:Button runat="server" ID="btnComplete" Text="" BorderStyle="None" BackColor="#FF7251" />
+            <b>Completed</b>
 
         </div>
         <br />
     </div>
     <asp:Panel ID="pnlApproval" Style="position: absolute; top: 10%; left: 20%;" runat="server">
-        <div class="modal-dialog">
+        <div class="modal-dialog" style="width: 800px;">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -125,190 +129,216 @@
                         <div class="smart-form">
                             <fieldset>
                                 <asp:Panel ID="pnlApproverview" runat="server" Visible="false">
-                                <div class="row">
-                                    <section class="col col-sm-12">
-                                        <asp:DataGrid ID="dgVehicles" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
-                                            CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
-                                            GridLines="None"
-                                            OnCancelCommand="dgVehicles_CancelCommand" OnDeleteCommand="dgVehicles_DeleteCommand" OnEditCommand="dgVehicles_EditCommand"
-                                            OnItemCommand="dgVehicles_ItemCommand" OnItemDataBound="dgVehicles_ItemDataBound" OnUpdateCommand="dgVehicles_UpdateCommand"
-                                            ShowFooter="True">
+                                    <div class="row">
+                                        <section class="col col-sm-12">
+                                            <asp:DataGrid ID="dgVehicles" runat="server" Width="100%" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
+                                                CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
+                                                GridLines="None"
+                                                OnCancelCommand="dgVehicles_CancelCommand" OnDeleteCommand="dgVehicles_DeleteCommand" OnEditCommand="dgVehicles_EditCommand"
+                                                OnItemCommand="dgVehicles_ItemCommand" OnItemDataBound="dgVehicles_ItemDataBound" OnUpdateCommand="dgVehicles_UpdateCommand"
+                                                ShowFooter="True">
 
-                                            <Columns>
-                                                <asp:TemplateColumn HeaderText="Assigned Vehicle Type">
-                                                    <ItemTemplate>
-                                                        <%# DataBinder.Eval(Container.DataItem, "AssignedVehicle")%>
-                                                    </ItemTemplate>
-                                                    <EditItemTemplate>
-                                                        <asp:DropDownList ID="ddlEdtAssignedVehicle" runat="server" CssClass="form-control">
-                                                            <asp:ListItem Value=" ">Select Type</asp:ListItem>
-                                                            <asp:ListItem Value="carRental">Car Rental</asp:ListItem>
-                                                            <asp:ListItem Value="driver">Internal Driver</asp:ListItem>
-                                                        </asp:DropDownList>
-                                                        <asp:RequiredFieldValidator ID="rfvddlVehicleType" runat="server" ControlToValidate="ddlEdtAssignedVehicle" CssClass="validator" Display="Dynamic" ErrorMessage="Vehicle Type must be selected" InitialValue=" " SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
-                                                        <i></i>
-                                                    </EditItemTemplate>
-                                                    <FooterTemplate>
-                                                        <asp:DropDownList ID="ddlAssignedVehicle" runat="server" CssClass="form-control">
-                                                            <asp:ListItem Value=" ">Select Type</asp:ListItem>
-                                                            <asp:ListItem Value="carRental">Car Rental</asp:ListItem>
-                                                            <asp:ListItem Value="driver">Internal Vehicle</asp:ListItem>
-                                                
-                                                        </asp:DropDownList>
-                                                        <asp:RequiredFieldValidator ID="rfvddlFVehicleType" runat="server" ControlToValidate="ddlAssignedVehicle" CssClass="validator" Display="Dynamic" ErrorMessage="Vehicle Type must be selected" InitialValue=" " SetFocusOnError="true" ValidationGroup="save"></asp:RequiredFieldValidator>
-                                                        <i></i>
-                                                    </FooterTemplate>
-                                                </asp:TemplateColumn>
-                                                <asp:TemplateColumn HeaderText="Allocated Driver">
-                                                    <ItemTemplate>
-                                                        <%# DataBinder.Eval(Container.DataItem, "AppUser.FullName")%>
-                                                    </ItemTemplate>
-                                                    <EditItemTemplate>
-                                                        <asp:DropDownList ID="ddlEdtDriver" CssClass="form-control" AppendDataBoundItems="true" runat="server">
-                                                            <asp:ListItem Value="-1">Select Driver</asp:ListItem>
-                                                            <asp:ListItem Value="0">Hired Driver</asp:ListItem>
-                                                        </asp:DropDownList>
-                                                        <asp:RequiredFieldValidator ID="rfvddlEdtDriver" runat="server" ControlToValidate="ddlEdtDriver" CssClass="validator" Display="Dynamic" ErrorMessage="Driver must be selected" InitialValue="-1" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
-                                                    </EditItemTemplate>
-                                                    <FooterTemplate>
-                                                        <asp:DropDownList ID="ddlDriver" CssClass="form-control" AppendDataBoundItems="true" runat="server">
-                                                            <asp:ListItem Value="-1">Select Driver</asp:ListItem>
-                                                            <asp:ListItem Value="0">Hired Driver</asp:ListItem>
-                                                        </asp:DropDownList>
-                                                        <asp:RequiredFieldValidator ID="rfvddlDriver" runat="server" ControlToValidate="ddlDriver" CssClass="validator" Display="Dynamic" ErrorMessage="Driver must be selected" InitialValue="-1" SetFocusOnError="true" ValidationGroup="save"></asp:RequiredFieldValidator>
-                                                    </FooterTemplate>
-                                                </asp:TemplateColumn>
-                                                <asp:TemplateColumn HeaderText="Car Rental">
-                                                    <ItemTemplate>
-                                                        <%# DataBinder.Eval(Container.DataItem, "CarRental.Name")%>
-                                                    </ItemTemplate>
-                                                    <EditItemTemplate>
-                                                        <asp:DropDownList ID="ddlEdtCarRental" CssClass="form-control" AppendDataBoundItems="true" runat="server">
-                                                            <asp:ListItem Value="0">None</asp:ListItem>
-                                                        </asp:DropDownList>
-                                                    </EditItemTemplate>
-                                                    <FooterTemplate>
-                                                        <asp:DropDownList ID="ddlCarRental" CssClass="form-control" AppendDataBoundItems="true" runat="server">
-                                                            <asp:ListItem Value="0">None</asp:ListItem>
-                                                        </asp:DropDownList>
-                                                    </FooterTemplate>
-                                                </asp:TemplateColumn>
-                                                <asp:TemplateColumn HeaderText="Plate No">
-                                                    <ItemTemplate>
-                                                        <%# DataBinder.Eval(Container.DataItem, "PlateNo")%>
-                                                    </ItemTemplate>
-                                                    <EditItemTemplate>
-                                                        
-                                                        <asp:DropDownList ID="ddlEdtPlateNo" runat="server" CssClass="form-control" AppendDataBoundItems="True">
-                                                            <asp:ListItem Value=" ">Select Plate No.</asp:ListItem>
-                                                            <asp:ListItem Value="Hired Car">Hired Car</asp:ListItem>
-                                                        </asp:DropDownList>
-                                                        <asp:RequiredFieldValidator ID="rfvddlPlateNo" runat="server" ControlToValidate="ddlEdtPlateNo" CssClass="validator" Display="Dynamic" ErrorMessage="Plate No. must be selected" InitialValue=" " SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
-                                                    </EditItemTemplate>
-                                                    <FooterTemplate>
-                                                        
-                                                        <asp:DropDownList ID="ddlFPlateNo" runat="server" CssClass="form-control" AppendDataBoundItems="True">
-                                                            <asp:ListItem Value=" ">Select Plate No.</asp:ListItem>
-                                                              <asp:ListItem Value="Hired Car">Hired Car</asp:ListItem>
-                                                        </asp:DropDownList>
-                                                        <asp:RequiredFieldValidator ID="rfvddlFPlateNo" runat="server" ControlToValidate="ddlFPlateNo" CssClass="validator" Display="Dynamic" ErrorMessage="Plate No. must be selected" InitialValue=" " SetFocusOnError="true" ValidationGroup="save"></asp:RequiredFieldValidator>
-                                                    </FooterTemplate>
-                                                </asp:TemplateColumn>
-                                                        <asp:TemplateColumn HeaderText="Car Model">
-                                                    <ItemTemplate>
-                                                        <%# DataBinder.Eval(Container.DataItem, "CarModel.ModelName")%>
-                                                    </ItemTemplate>
-                                                    <EditItemTemplate>
-                                                        <asp:DropDownList ID="ddlEdtCarModel" CssClass="form-control" AppendDataBoundItems="true" runat="server">
-                                                            <asp:ListItem Value="0">Select Model</asp:ListItem>
-                                                        </asp:DropDownList>
-                                                        <asp:RequiredFieldValidator ID="RFVEdtCarModel" runat="server" ControlToValidate="ddlEdtCarModel" CssClass="validator" Display="Dynamic" ErrorMessage="Car Model Rquired" InitialValue="0" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
-                                                    </EditItemTemplate>
-                                                    <FooterTemplate>
-                                                        <asp:DropDownList ID="ddlFCarModel" CssClass="form-control" AppendDataBoundItems="true" runat="server">
-                                                            <asp:ListItem Value="0">Select Model</asp:ListItem>
-                                                        </asp:DropDownList>
-                                                        <asp:RequiredFieldValidator ID="RFVFCarModel" runat="server" ControlToValidate="ddlFCarModel" CssClass="validator" Display="Dynamic" ErrorMessage="Car Model Rquired" InitialValue="0" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
-                                                    </FooterTemplate>
-                                                </asp:TemplateColumn>
-                                                 <asp:TemplateColumn HeaderText="Rate">
-                                                    <ItemTemplate>
-                                                        <%# DataBinder.Eval(Container.DataItem, "Rate")%>
-                                                    </ItemTemplate>
-                                                    <EditItemTemplate>
-                                                        
-                                                       
-                                                        <label class="input">
-                                                        <asp:TextBox ID="txtEdtRate" runat="server" Width="100%"></asp:TextBox>
-                                        </label>
-                                                        <asp:RequiredFieldValidator ID="RFVRate" runat="server" ControlToValidate="txtEdtRate" CssClass="validator" Display="Dynamic" ErrorMessage="Rate Rquired" InitialValue=" " SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
-                                                    </EditItemTemplate>
-                                                    <FooterTemplate>
-                                                        
-                                                       <label class="input">
-                                                        <asp:TextBox ID="txtFRate" runat="server" Width="100%"></asp:TextBox>
-                                        </label>
-                                                        <asp:RequiredFieldValidator ID="RFVFRate" runat="server" ControlToValidate="txtFRate" CssClass="validator" Display="Dynamic" ErrorMessage="Rate Rquired" InitialValue=" " SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
-                                                                                                            </FooterTemplate>
-                                                </asp:TemplateColumn>
-                                                <asp:TemplateColumn HeaderText="Actions">
-                                                    <ItemTemplate>
-                                                        <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
-                                                        <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default" OnClientClick="javascript:return confirm('Are you sure you want to delete this entry?');"><i class="fa fa-times"></i></asp:LinkButton>
-                                                    </ItemTemplate>
-                                                    <EditItemTemplate>
-                                                        <asp:LinkButton ID="lnkUpdate" runat="server" CommandName="Update" ValidationGroup="edit" CssClass="btn btn-xs btn-default"><i class="fa fa-save"></i></asp:LinkButton>
-                                                        <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default"><i class="fa fa-times"></i></asp:LinkButton>
-                                                    </EditItemTemplate>
-                                                    <FooterTemplate>
-                                                        <asp:LinkButton ID="lnkAddNew" runat="server" CommandName="AddNew" ValidationGroup="save" CssClass="btn btn-sm btn-success"><i class="fa fa-save"></i></asp:LinkButton>
-                                                    </FooterTemplate>                                                    
-                                                </asp:TemplateColumn>
-                                            </Columns>
-                                            <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
-                                        </asp:DataGrid>
-                                    </section>
-                                </div>
-                                <div class="row">
-                                    <section class="col col-6">
-                                        <asp:Label ID="lblComment" runat="server" Text="Comment" CssClass="label"></asp:Label>
-                                        <label class="input">
-                                            <asp:TextBox ID="txtComment" runat="server" Width="100%"></asp:TextBox>
-                                        </label>
-                                    </section></div>
+                                                <Columns>
+                                                    <asp:TemplateColumn HeaderText="Assigned Vehicle Type" HeaderStyle-CssClass="visible-lg" ItemStyle-CssClass="visible-lg">
+                                                        <ItemTemplate>
+                                                            <%# DataBinder.Eval(Container.DataItem, "AssignedVehicle")%>
+                                                        </ItemTemplate>
+                                                        <EditItemTemplate>
+                                                            <asp:DropDownList ID="ddlEdtAssignedVehicle" runat="server" CssClass="form-control">
+                                                                <asp:ListItem Value=" ">Select Type</asp:ListItem>
+                                                                <asp:ListItem Value="carRental">Car Rental</asp:ListItem>
+                                                                <asp:ListItem Value="driver">Internal Driver</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                            <asp:RequiredFieldValidator ID="rfvddlVehicleType" runat="server" ControlToValidate="ddlEdtAssignedVehicle" CssClass="validator" Display="Dynamic" ErrorMessage="Vehicle Type must be selected" InitialValue=" " SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                                            <i></i>
+                                                        </EditItemTemplate>
+                                                        <FooterTemplate>
+                                                            <asp:DropDownList ID="ddlAssignedVehicle" runat="server" CssClass="form-control">
+                                                                <asp:ListItem Value=" ">Select Type</asp:ListItem>
+                                                                <asp:ListItem Value="carRental">Car Rental</asp:ListItem>
+                                                                <asp:ListItem Value="driver">Internal Vehicle</asp:ListItem>
+
+                                                            </asp:DropDownList>
+                                                            <asp:RequiredFieldValidator ID="rfvddlFVehicleType" runat="server" ControlToValidate="ddlAssignedVehicle" CssClass="validator" Display="Dynamic" ErrorMessage="Vehicle Type must be selected" InitialValue=" " SetFocusOnError="true" ValidationGroup="save"></asp:RequiredFieldValidator>
+                                                            <i></i>
+                                                        </FooterTemplate>
+                                                    </asp:TemplateColumn>
+                                                    <asp:TemplateColumn HeaderText="Allocated Driver">
+                                                        <ItemTemplate>
+                                                            <%# DataBinder.Eval(Container.DataItem, "AppUser.FullName")%>
+                                                        </ItemTemplate>
+                                                        <EditItemTemplate>
+                                                            <asp:DropDownList ID="ddlEdtDriver" CssClass="form-control" AppendDataBoundItems="true" runat="server">
+                                                                <asp:ListItem Value="-1">Select Driver</asp:ListItem>
+                                                                <asp:ListItem Value="0">Hired Driver</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                            <asp:RequiredFieldValidator ID="rfvddlEdtDriver" runat="server" ControlToValidate="ddlEdtDriver" CssClass="validator" Display="Dynamic" ErrorMessage="Driver must be selected" InitialValue="-1" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                                        </EditItemTemplate>
+                                                        <FooterTemplate>
+                                                            <asp:DropDownList ID="ddlDriver" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlDriver_SelectedIndexChanged" AppendDataBoundItems="true" runat="server">
+                                                                <asp:ListItem Value="-1">Select Driver</asp:ListItem>
+                                                                <asp:ListItem Value="0">Hired Driver</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                            <asp:RequiredFieldValidator ID="rfvddlDriver" runat="server" ControlToValidate="ddlDriver" CssClass="validator" Display="Dynamic" ErrorMessage="Driver must be selected" InitialValue="-1" SetFocusOnError="true" ValidationGroup="save"></asp:RequiredFieldValidator>
+                                                        </FooterTemplate>
+                                                    </asp:TemplateColumn>
+                                                    <asp:TemplateColumn HeaderText="Car Rental">
+                                                        <ItemTemplate>
+                                                            <%# DataBinder.Eval(Container.DataItem, "CarRental.Name")%>
+                                                        </ItemTemplate>
+                                                        <EditItemTemplate>
+                                                            <asp:DropDownList ID="ddlEdtCarRental" CssClass="form-control" AppendDataBoundItems="true" runat="server">
+                                                                <asp:ListItem Value="0">None</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                        </EditItemTemplate>
+                                                        <FooterTemplate>
+                                                            <asp:DropDownList ID="ddlCarRental" CssClass="form-control" AppendDataBoundItems="true" runat="server">
+                                                                <asp:ListItem Value="0">None</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                        </FooterTemplate>
+                                                    </asp:TemplateColumn>
+                                                    <asp:TemplateColumn HeaderText="Rental Driver Phone No.">
+                                                        <ItemTemplate>
+                                                            <%# DataBinder.Eval(Container.DataItem, "DriverPhoneNo")%>
+                                                        </ItemTemplate>
+                                                        <EditItemTemplate>
+                                                            <label class="input">
+                                                                <asp:TextBox ID="txtEdtDriverPhoneNo" runat="server" Width="100%"></asp:TextBox>
+                                                            </label>
+                                                        </EditItemTemplate>
+                                                        <FooterTemplate>
+                                                            <label class="input">
+                                                                <asp:TextBox ID="txtFDriverPhoneNo" runat="server" Width="100%"></asp:TextBox>
+                                                            </label>
+                                                        </FooterTemplate>
+                                                    </asp:TemplateColumn>
+                                                    <asp:TemplateColumn HeaderText="Rental Driver Name">
+                                                        <ItemTemplate>
+                                                            <%# DataBinder.Eval(Container.DataItem, "RentalDriverName")%>
+                                                        </ItemTemplate>
+                                                        <EditItemTemplate>
+                                                            <label class="input">
+                                                                <asp:TextBox ID="txtEdtRentalDrName" runat="server" Width="100%"></asp:TextBox>
+                                                            </label>
+                                                        </EditItemTemplate>
+                                                        <FooterTemplate>
+                                                            <label class="input">
+                                                                <asp:TextBox ID="txtFRentalDrName" runat="server" Width="100%"></asp:TextBox>
+                                                            </label>
+                                                        </FooterTemplate>
+                                                    </asp:TemplateColumn>
+                                                    <asp:TemplateColumn HeaderText="Plate No">
+                                                        <ItemTemplate>
+                                                            <%# DataBinder.Eval(Container.DataItem, "PlateNo")%>
+                                                        </ItemTemplate>
+                                                        <EditItemTemplate>
+                                                            <asp:DropDownList ID="ddlEdtPlateNo" runat="server" CssClass="form-control" AppendDataBoundItems="True">
+                                                                <asp:ListItem Value=" ">Select Plate No.</asp:ListItem>
+                                                                <asp:ListItem Value="Hired Car">Hired Car</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                            <asp:RequiredFieldValidator ID="rfvddlPlateNo" runat="server" ControlToValidate="ddlEdtPlateNo" CssClass="validator" Display="Dynamic" ErrorMessage="Plate No. must be selected" InitialValue=" " SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                                        </EditItemTemplate>
+                                                        <FooterTemplate>
+                                                            <asp:DropDownList ID="ddlFPlateNo" runat="server" CssClass="form-control" AppendDataBoundItems="True">
+                                                                <asp:ListItem Value=" ">Select Plate No.</asp:ListItem>
+                                                                <asp:ListItem Value="Hired Car">Hired Car</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                            <asp:RequiredFieldValidator ID="rfvddlFPlateNo" runat="server" ControlToValidate="ddlFPlateNo" CssClass="validator" Display="Dynamic" ErrorMessage="Plate No. must be selected" InitialValue=" " SetFocusOnError="true" ValidationGroup="save"></asp:RequiredFieldValidator>
+                                                        </FooterTemplate>
+                                                    </asp:TemplateColumn>
+                                                    <asp:TemplateColumn HeaderText="Car Model">
+                                                        <ItemTemplate>
+                                                            <%# DataBinder.Eval(Container.DataItem, "CarModel.ModelName")%>
+                                                        </ItemTemplate>
+                                                        <EditItemTemplate>
+                                                            <asp:DropDownList ID="ddlEdtCarModel" CssClass="form-control" AppendDataBoundItems="true" runat="server">
+                                                                <asp:ListItem Value="0">Select Model</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                            <asp:RequiredFieldValidator ID="RFVEdtCarModel" runat="server" ControlToValidate="ddlEdtCarModel" CssClass="validator" Display="Dynamic" ErrorMessage="Car Model Rquired" InitialValue="0" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                                        </EditItemTemplate>
+                                                        <FooterTemplate>
+                                                            <asp:DropDownList ID="ddlFCarModel" CssClass="form-control" AppendDataBoundItems="true" runat="server">
+                                                                <asp:ListItem Value="0">Select Model</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                            <asp:RequiredFieldValidator ID="RFVFCarModel" runat="server" ControlToValidate="ddlFCarModel" CssClass="validator" Display="Dynamic" ErrorMessage="Car Model Rquired" InitialValue="0" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                                        </FooterTemplate>
+                                                    </asp:TemplateColumn>
+                                                    <asp:TemplateColumn HeaderText="Rate">
+                                                        <ItemTemplate>
+                                                            <%# DataBinder.Eval(Container.DataItem, "Rate")%>
+                                                        </ItemTemplate>
+                                                        <EditItemTemplate>
+                                                            <label class="input">
+                                                                <asp:TextBox ID="txtEdtRate" runat="server" Width="100%"></asp:TextBox>
+                                                            </label>
+                                                            <asp:RequiredFieldValidator ID="RFVRate" runat="server" ControlToValidate="txtEdtRate" CssClass="validator" Display="Dynamic" ErrorMessage="Rate Rquired" InitialValue=" " SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                                        </EditItemTemplate>
+                                                        <FooterTemplate>
+                                                            <label class="input">
+                                                                <asp:TextBox ID="txtFRate" runat="server" Width="100%"></asp:TextBox>
+                                                            </label>
+                                                            <asp:RequiredFieldValidator ID="RFVFRate" runat="server" ControlToValidate="txtFRate" CssClass="validator" Display="Dynamic" ErrorMessage="Rate Rquired" InitialValue=" " SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                                        </FooterTemplate>
+                                                    </asp:TemplateColumn>
+                                                    <asp:TemplateColumn HeaderText="Actions">
+                                                        <ItemTemplate>
+                                                            <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
+                                                            <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default" OnClientClick="javascript:return confirm('Are you sure you want to delete this entry?');"><i class="fa fa-times"></i></asp:LinkButton>
+                                                        </ItemTemplate>
+                                                        <EditItemTemplate>
+                                                            <asp:LinkButton ID="lnkUpdate" runat="server" CommandName="Update" ValidationGroup="edit" CssClass="btn btn-xs btn-default"><i class="fa fa-save"></i></asp:LinkButton>
+                                                            <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default"><i class="fa fa-times"></i></asp:LinkButton>
+                                                        </EditItemTemplate>
+                                                        <FooterTemplate>
+                                                            <asp:LinkButton ID="lnkAddNew" runat="server" CommandName="AddNew" ValidationGroup="save" CssClass="btn btn-sm btn-success"><i class="fa fa-save"></i></asp:LinkButton>
+                                                        </FooterTemplate>
+                                                    </asp:TemplateColumn>
+                                                </Columns>
+                                                <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
+                                            </asp:DataGrid>
+                                        </section>
+                                    </div>
+                                    <div class="row">
+                                        <section class="col col-6">
+                                            <asp:Label ID="lblComment" runat="server" Text="Comment" CssClass="label"></asp:Label>
+                                            <label class="input">
+                                                <asp:TextBox ID="txtComment" runat="server" Width="100%"></asp:TextBox>
+                                            </label>
+                                        </section>
+                                    </div>
                                 </asp:Panel>
                                 <div class="row">
 
-                            <section class="col col-6">
-                                <label class="label">Project</label>
-                                <label class="select">
-                                    <asp:DropDownList ID="ddlProject" AutoPostBack="true" runat="server" DataValueField="Id" DataTextField="ProjectCode" OnSelectedIndexChanged="ddlProject_SelectedIndexChanged">
-                                    </asp:DropDownList><i></i>
-                                    <asp:RequiredFieldValidator
-                                        ID="rfvddlProject" runat="server" ErrorMessage="Project is required" Display="Dynamic"
-                                        CssClass="validator" ValidationGroup="saveMain" InitialValue="0"
-                                        SetFocusOnError="true" ControlToValidate="ddlProject"></asp:RequiredFieldValidator>
-                                </label>
-                            </section>
-                            <section class="col col-6">
-                                <label class="label">Grant</label>
-                                <label class="select">
-                                    <asp:DropDownList ID="ddlGrant" runat="server" DataValueField="Id" DataTextField="GrantCode">
-                                    </asp:DropDownList><i></i>
-                                    <asp:RequiredFieldValidator
-                                        ID="rfvGrant" runat="server" ErrorMessage="Grant is required" Display="Dynamic"
-                                        CssClass="validator" ValidationGroup="saveMain" InitialValue="0"
-                                        SetFocusOnError="true" ControlToValidate="ddlGrant"></asp:RequiredFieldValidator>
-                                </label>
-                            </section>
-                        </div>
+                                    <section class="col col-6">
+                                        <label class="label">Project</label>
+                                        <label class="select">
+                                            <asp:DropDownList ID="ddlProject" AutoPostBack="true" runat="server" DataValueField="Id" DataTextField="ProjectCode" OnSelectedIndexChanged="ddlProject_SelectedIndexChanged">
+                                            </asp:DropDownList><i></i>
+                                            <asp:RequiredFieldValidator
+                                                ID="rfvddlProject" runat="server" ErrorMessage="Project is required" Display="Dynamic"
+                                                CssClass="validator" ValidationGroup="saveMain" InitialValue="0"
+                                                SetFocusOnError="true" ControlToValidate="ddlProject"></asp:RequiredFieldValidator>
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="label">Grant</label>
+                                        <label class="select">
+                                            <asp:DropDownList ID="ddlGrant" runat="server" DataValueField="Id" DataTextField="GrantCode">
+                                            </asp:DropDownList><i></i>
+                                            <asp:RequiredFieldValidator
+                                                ID="rfvGrant" runat="server" ErrorMessage="Grant is required" Display="Dynamic"
+                                                CssClass="validator" ValidationGroup="saveMain" InitialValue="0"
+                                                SetFocusOnError="true" ControlToValidate="ddlGrant"></asp:RequiredFieldValidator>
+                                        </label>
+                                    </section>
+                                </div>
                                 <div class="row">
                                     <section class="col col-6">
                                         <asp:Label ID="lblApprovalStatus" runat="server" Text="Approval Status" CssClass="label"></asp:Label>
                                         <label class="select">
                                             <asp:DropDownList ID="ddlApprovalStatus" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlApprovalStatus_SelectedIndexChanged">
                                             </asp:DropDownList><i></i>
-                                            <asp:RequiredFieldValidator ID="RfvApprovalStatus" runat="server" CssClass="validator" ValidationGroup="approve"  ErrorMessage="Approval Status Required" InitialValue="0" ControlToValidate="ddlApprovalStatus"></asp:RequiredFieldValidator>
+                                            <asp:RequiredFieldValidator ID="RfvApprovalStatus" runat="server" CssClass="validator" ValidationGroup="approve" ErrorMessage="Approval Status Required" InitialValue="0" ControlToValidate="ddlApprovalStatus"></asp:RequiredFieldValidator>
                                         </label>
                                     </section>
                                     <section class="col col-6">
@@ -322,9 +352,10 @@
                             </fieldset>
                             <footer>
                                 <asp:Button ID="btnApprove" runat="server" ValidationGroup="approve" Text="Save" OnClick="btnApprove_Click" Enabled="false" CssClass="btn btn-primary"></asp:Button>
+                                <asp:Button ID="btnCancel" runat="server" CausesValidation="False" CssClass="btn btn-primary" Text="Cancel Request" OnClientClick="javascript:return confirm('Are you sure you want to cancel this vehicle request?');" OnClick="btnCancel_Click"></asp:Button>
                                 <asp:Button ID="btnCancelPopup" runat="server" Text="Close" CssClass="btn btn-primary" OnClick="btnCancelPopup_Click"></asp:Button>
                                 <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-primary" Enabled="false" OnClientClick="javascript:Clickheretoprint('divprint')"></asp:Button>
-                                <asp:Button ID="btnPrintTravellog" runat="server" Text="Print Travel log" CssClass="btn btn-primary" Visible="false"  OnClick="btnPrintTravellog_Click"></asp:Button>
+                                <asp:Button ID="btnPrintTravellog" runat="server" Text="Print Travel log" CssClass="btn btn-primary" Visible="false" OnClick="btnPrintTravellog_Click"></asp:Button>
                             </footer>
                         </div>
                     </div>
@@ -337,18 +368,18 @@
         TargetControlID="btnPop" CancelControlID="btnCancelPopup" ID="pnlApproval_ModalPopupExtender">
     </asp:ModalPopupExtender>
     <div id="divprint" style="display: none;">
-           <table style="width: 100%;">
-                <tr>
-                    <td style="width: 17%; text-align:left;">
-                        <img src="../img/CHAI%20Logo.png" width="70" height="50" /></td>
-                    <td style="font-size: large; text-align: center;">
-                        <strong>CHAI Ethiopia ERP
-                            <br />
-                            VEHICLE REQUEST FORM</strong></td>
-                </tr>
-            </table>
         <table style="width: 100%;">
-         
+            <tr>
+                <td style="width: 17%; text-align: left;">
+                    <img src="../img/CHAI%20Logo.png" width="70" height="50" /></td>
+                <td style="font-size: large; text-align: center;">
+                    <strong>CHAI Ethiopia ERP
+                            <br />
+                        VEHICLE REQUEST FORM</strong></td>
+            </tr>
+        </table>
+        <table style="width: 100%;">
+
             <tr>
                 <td align="right" style="width: 576px">&nbsp;</td>
                 <td align="right" style="width: 490px" class="modal-sm">&nbsp;</td>
@@ -391,12 +422,12 @@
                 </td>
                 <td>&nbsp;</td>
             </tr>
-             <tr>
-                <td style="width: 576px; height: 18px;padding-left: 15%; ">
+            <tr>
+                <td style="width: 576px; height: 18px; padding-left: 15%;">
                     <strong>
                         <asp:Label ID="lblProjectId" runat="server" Text="ProjectID:"></asp:Label>
                     </strong></td>
-                <td style="width: 490px" padding-left: 20%;>
+                <td style="width: 490px; padding-left: 20%;">
                     <asp:Label ID="lblProjectIdResult" runat="server"></asp:Label>
                 </td>
                 <td style="width: 280px" class="modal-sm">
@@ -438,7 +469,7 @@
                 </td>
                 <td style="height: 18px">&nbsp;</td>
             </tr>
-             <tr>
+            <tr>
                 <td style="width: 576px; height: 18px; padding-left: 15%;">
                     <strong>
                         <asp:Label ID="lblDestination" runat="server" Text="Destination:"></asp:Label>
@@ -450,27 +481,22 @@
                     <strong>
                         <asp:Label ID="lblNoOfPassengers" runat="server" Text="No of Passengers:"></asp:Label>
                     </strong>
-                 </td>
+                </td>
                 <td style="width: 389px">
                     <asp:Label ID="lblNoOfPassengersResult" runat="server"></asp:Label>
-                 </td>
+                </td>
                 <td>&nbsp;</td>
             </tr>
             <tr>
                 <td style="width: 576px; height: 18px; padding-left: 15%;">&nbsp;</td>
-                <td style="width: 490px; height: 18px;">
-                    &nbsp;</td>
-                <td style="width: 280px; height: 18px;">
-                    &nbsp;</td>
-                <td style="width: 389px; height: 18px;">
-                    &nbsp;</td>
+                <td style="width: 490px; height: 18px;">&nbsp;</td>
+                <td style="width: 280px; height: 18px;">&nbsp;</td>
+                <td style="width: 389px; height: 18px;">&nbsp;</td>
                 <td style="height: 18px"></td>
             </tr>
             <tr>
-                <td style="width: 576px; height: 18px; padding-left: 15%;">
-                    &nbsp;</td>
-                <td style="width: 490px; height: 18px;">
-                    &nbsp;</td>
+                <td style="width: 576px; height: 18px; padding-left: 15%;">&nbsp;</td>
+                <td style="width: 490px; height: 18px;">&nbsp;</td>
                 <td style="height: 18px; width: 280px;">&nbsp;</td>
                 <td></td>
                 <td></td>
@@ -478,15 +504,15 @@
         </table>
         <br />
         <asp:GridView ID="grvVehcles" CellPadding="5" CellSpacing="3"
-            runat="server" AutoGenerateColumns="False" DataKeyNames="Id" 
+            runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
             CssClass="table table-striped table-bordered table-hover">
             <RowStyle CssClass="rowstyle" />
             <Columns>
                 <asp:BoundField DataField="PlateNo" HeaderText="PlateNo" SortExpression="PlateNo" />
-               <%-- <asp:BoundField DataField="AssignedVehicle" HeaderText="Assigned Vehicle" SortExpression="AssignedVehicle" />--%>
-               <asp:BoundField DataField="AppUser.FullName" HeaderText="Allocated Driver" SortExpression="AppUser.FullName" />
+                <%-- <asp:BoundField DataField="AssignedVehicle" HeaderText="Assigned Vehicle" SortExpression="AssignedVehicle" />--%>
+                <asp:BoundField DataField="AppUser.FullName" HeaderText="Allocated Driver" SortExpression="AppUser.FullName" />
                 <asp:BoundField DataField="CarRental.Name" HeaderText="Hired Car" SortExpression="CarRental.Name" />
-               
+
             </Columns>
             <FooterStyle CssClass="FooterStyle" />
             <HeaderStyle CssClass="headerstyle" />
@@ -498,16 +524,16 @@
             runat="server" AutoGenerateColumns="False" DataKeyNames="Id" OnRowDataBound="grvStatuses_RowDataBound"
             CssClass="table table-striped table-bordered table-hover">
             <RowStyle CssClass="rowstyle" />
-          <Columns>
-                    <asp:TemplateField HeaderText="Date">
-                                            <ItemTemplate>
-                                              <asp:Label ID="lblDate" runat="server" Text='<%# Eval("Date", "{0:dd/MM/yyyy}")%>' ></asp:Label>
-                                            </ItemTemplate>
-                                            </asp:TemplateField>
-                
+            <Columns>
+                <asp:TemplateField HeaderText="Date">
+                    <ItemTemplate>
+                        <asp:Label ID="lblDate" runat="server" Text='<%# Eval("Date", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                    </ItemTemplate>
+                </asp:TemplateField>
+
                 <asp:BoundField HeaderText="Approver" />
                 <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
-                 <asp:BoundField DataField="ApprovalStatus" HeaderText="Approval Status" SortExpression="ApprovalStatus" />
+                <asp:BoundField DataField="ApprovalStatus" HeaderText="Approval Status" SortExpression="ApprovalStatus" />
                 <asp:BoundField DataField="Comment" HeaderText="Comment" SortExpression="Comment" />
             </Columns>
             <FooterStyle CssClass="FooterStyle" />
@@ -516,5 +542,5 @@
             <RowStyle CssClass="rowstyle" />
         </asp:GridView>
     </div>
-    
+
 </asp:Content>

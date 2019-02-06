@@ -82,9 +82,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     return 0;
                 }
             }
-        }
-
-        
+        }        
         public string GetRequestNo
         {
             get { return AutoNumber(); }
@@ -104,8 +102,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public string GetDepartureTime
         {
             get { return timepicker.Text; }
-        }
-     
+        }     
         public string GetPurposeOfTravel
         {
             get { return txtPurposeOfTravel.Text; }
@@ -113,6 +110,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public string GetDestination
         {
             get { return txtDestination.Text; }
+        }
+        public string GetPassengerDetails
+        {
+            get { return txtPassengerDetail.Text; }
         }
         public string GetComment
         {
@@ -130,7 +131,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return Convert.ToInt32(ddlGrant.SelectedValue); }
         }
-
         public string GetTravelLogStatus
         {
             get { return null; }
@@ -139,7 +139,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return ckIsExtension.Checked; }
         }
-
         public int GetExtRefRequest
         {
             
@@ -148,9 +147,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public string GetTravelLogAttachment
         {
             get { return null; }
-        }
-       
-
+        }    
         private void PopRequestPersonnels()
         {
             txtRequestingPersonnel.Text = _presenter.CurrentUser().FirstName + " " + _presenter.CurrentUser().LastName;
@@ -284,8 +281,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         protected void btnSave_Click(object sender, EventArgs e)
         {
             try
-            {
-              
+            {              
                 _presenter.SaveOrUpdateVehicleRequest();
                 if (_presenter.CurrentVehicleRequest.VehicleRequestStatuses.Count != 0)
                 {
@@ -298,7 +294,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
                 else
                 {
-                    Master.ShowMessage(new AppMessage("There was an error constructing the approval process", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("There was an error constructing the approval process", RMessageType.Error));
                 }
             }
             catch (Exception ex)
@@ -307,10 +303,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (ex.InnerException.InnerException.Message.Contains("Violation of UNIQUE KEY"))
                     {
-                        Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", RMessageType.Error));
                         //AutoNumber();
                     }
                 }
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         protected void btnDelete_Click(object sender, EventArgs e)
@@ -344,10 +342,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             PopGrants(Convert.ToInt32(ddlProject.SelectedValue));
         }
-
-
-
-
         protected void ckIsExtension_CheckedChanged(object sender, EventArgs e)
         {
             if (ckIsExtension.Checked == true)
