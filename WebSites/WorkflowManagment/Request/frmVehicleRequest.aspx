@@ -23,26 +23,24 @@
             <div class="widget-body no-padding">
                 <div class="smart-form">
                     <fieldset>
-                         <div class="row">
-                                             <section class="col col-6">
-                                                <div class="smart-form">
-                                                    <div class="inline-group">
-                                                        <label class="checkbox">
-                                                            <asp:CheckBox ID="ckIsExtension" runat="server" OnCheckedChanged="ckIsExtension_CheckedChanged" AutoPostBack="True" />
-                                                            <i></i>Is Extension?</label>
-                                                    </div>
-                                                </div>
-                                               </section>
-                      
-                                                                              
-                                       
+                        <div class="row">
                             <section class="col col-6">
-                                <label class="label"> <asp:Label ID="Label1" runat="server" Text="Request No" Visible="False"></asp:Label></label>
+                                <div class="smart-form">
+                                    <div class="inline-group">
+                                        <label class="checkbox">
+                                            <asp:CheckBox ID="ckIsExtension" runat="server" OnCheckedChanged="ckIsExtension_CheckedChanged" AutoPostBack="True" />
+                                            <i></i>Is Extension?</label>
+                                    </div>
+                                </div>
+                            </section>
+                            <section class="col col-6">
+                                <label class="label">
+                                    <asp:Label ID="Label1" runat="server" Text="Request No" Visible="False"></asp:Label></label>
                                 <label class="select">
                                     <asp:DropDownList ID="ddlRequestNo" runat="server" DataValueField="Id" DataTextField="RequestNo" Visible="False" AppendDataBoundItems="True">
                                         <asp:ListItem Value="0">Select Request</asp:ListItem>
                                     </asp:DropDownList><i id="i" runat="server"></i>
-                                   
+
                                 </label>
                             </section>
                         </div>
@@ -125,7 +123,6 @@
                             </section>
                         </div>
                         <div class="row">
-
                             <section class="col col-6">
                                 <label class="label">Project</label>
                                 <label class="select">
@@ -149,29 +146,30 @@
                                 </label>
                             </section>
                         </div>
-                          
-
                         <div class="row">
                             <section class="col col-6">
                                 <label class="label">Destination</label>
                                 <label class="input">
                                     <asp:TextBox ID="txtDestination" runat="server"></asp:TextBox>
                                 </label>
-
-
-
-                                
-                            </section>
-                           <section class="col col-6">
-                        <label class="label">Comment </label>
+                            </section>                            
+                        </div>
+                        <div class="row">                            
+                            <section class="col col-6">
+                                <label class="label">Comment </label>
                                 <label style="color: green;">(Please add additional info about your travel)</label>
                                 <label class="input">
                                     <asp:TextBox ID="txtComment" TextMode="MultiLine" Rows="5" Width="100%" runat="server"></asp:TextBox>
                                 </label>
                             </section>
+                            <section class="col col-6">
+                                <label class="label">Passenger Details</label>
+                                <label style="color: green;">(Please specify phone numbers and names of other passengers if available)</label>
+                                <label class="input">
+                                    <asp:TextBox ID="txtPassengerDetail" TextMode="MultiLine" Rows="5" Width="100%" runat="server"></asp:TextBox>
+                                </label>
+                            </section>
                         </div>
-                        
-                     
                     </fieldset>
 
                     <footer>

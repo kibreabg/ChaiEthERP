@@ -118,6 +118,28 @@
                     <div class="jarviswidget-editbox"></div>
                     <div class="widget-body no-padding">
                         <div class="smart-form">
+                            <asp:Panel ID="pnlExtVehicleReq" runat="server" Visible="false">
+                                <p class="alert alert-info" style="border-left-width: 5px !important;">
+                                    <i class="fa fa-info"></i>This Vehicle Request has an extension (shown below) that is already approved!
+                                </p>
+                                <asp:GridView ID="grvExtVehicleReq" CellPadding="5" CellSpacing="3"
+                                    runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                                    CssClass="table table-striped table-bordered table-hover">
+                                    <RowStyle CssClass="rowstyle" />
+                                    <Columns>
+                                        <asp:BoundField DataField="RequestNo" HeaderText="Request No." SortExpression="ReqestNo" />
+                                        <asp:BoundField DataField="AppUser.FullName" HeaderText="Requester" SortExpression="AppUser.FullName" />
+                                        <asp:BoundField DataField="DepartureDate" HeaderText="Departure Date" SortExpression="DepartureDate" />
+                                        <asp:BoundField DataField="ReturningDate" HeaderText="Returning Date" SortExpression="ReturningDate" />
+                                    </Columns>
+                                    <FooterStyle CssClass="FooterStyle" />
+                                    <HeaderStyle CssClass="headerstyle" />
+                                    <PagerStyle CssClass="PagerStyle" />
+                                    <RowStyle CssClass="rowstyle" />
+                                </asp:GridView>
+                            </asp:Panel>
+
+                            <hr />
                             <fieldset>
                                 <div class="row">
                                     <section class="col col-6">
@@ -139,8 +161,8 @@
                                                 </div>
                                             </div>
                                             <asp:RequiredFieldValidator
-                                            ID="rfvTravelLog" runat="server" ErrorMessage="Please attach Travel Log" Display="Dynamic"
-                                            CssClass="validator" ValidationGroup="approve" ControlToValidate="fuTravelLog"></asp:RequiredFieldValidator>
+                                                ID="rfvTravelLog" runat="server" ErrorMessage="Please attach Travel Log" Display="Dynamic"
+                                                CssClass="validator" ValidationGroup="approve" ControlToValidate="fuTravelLog"></asp:RequiredFieldValidator>
                                         </div>
                                     </section>
                                 </div>

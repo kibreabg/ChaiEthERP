@@ -225,33 +225,46 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             foreach (VehicleRequestDetail assignedVehicle in _presenter.CurrentVehicleRequest.VehicleRequestDetails)
             {
-
-
-
                 EmailSender.Send(_presenter.GetUser(_presenter.CurrentVehicleRequest.AppUser.Id).Email, "Vehicle Request ", "Your Vehicle Request has been proccessed by " + (_presenter.GetUser(VRS.Approver).FullName).ToUpper() + " and Your assigned Driver is " + (assignedVehicle.AppUser.FullName).ToUpper() + ". The Car's Plate Number is " + (assignedVehicle.PlateNo).ToUpper());
 
                 Log.Info(_presenter.GetUser(VRS.Approver).FullName + " has approved a Vehicle Request made by " + (_presenter.CurrentVehicleRequest.AppUser.FullName).ToUpper() + " and assigned a Car Rental company named " + (_presenter.GetCarRental(assignedVehicle.CarRental.Id).Name).ToUpper());
 
             }
         }
-
         private void SendEmailToRequester()
         {
             foreach (VehicleRequestDetail assignedVehicle in _presenter.CurrentVehicleRequest.VehicleRequestDetails)
             {
-                EmailSender.Send(_presenter.GetUser(_presenter.CurrentVehicleRequest.AppUser.Id).Email, "Vehicle Request Completion", " Your Vehicle Request was Completed.  and Your assigned Driver is " + (assignedVehicle.AppUser.FullName).ToUpper() + ". The Car's Plate Number is " + (assignedVehicle.PlateNo).ToUpper());
+                string assignedDriver = "";
+                if (assignedVehicle.AppUser != null)
+                    assignedDriver = (assignedVehicle.AppUser.FullName).ToUpper();
+                else
+                    assignedDriver = assignedVehicle.RentalDriverName;
+                EmailSender.Send(_presenter.GetUser(_presenter.CurrentVehicleRequest.AppUser.Id).Email, "Vehicle Request Completion", " Your Vehicle Request was Completed. And your assigned driver is " + assignedDriver + ". The driver's phone number is " + assignedVehicle.DriverPhoneNo);
+            }
+        }
+        private void SendCanceledEmail()
+        {
+            VehicleRequest thisRequest = _presenter.CurrentVehicleRequest;
+            //To the requester
+            EmailSender.Send(_presenter.GetUser(thisRequest.AppUser.Id).Email, "Vehicle Request Canceled", " Your Vehicle Request with Request No. " + thisRequest.RequestNo + " was Canceled!");
+            //To the approvers
+            foreach (VehicleRequestStatus statuses in thisRequest.VehicleRequestStatuses)
+            {
+                EmailSender.Send(_presenter.GetUser(statuses.Approver).Email, "Vehicle Request Canceled", " The Vehicle Request with Request No. " + thisRequest.RequestNo + " has been Canceled!");
             }
         }
         private void SendEmailDriver(VehicleRequestStatus VRS)
         {
             foreach (VehicleRequestDetail assignedVehicle in _presenter.CurrentVehicleRequest.VehicleRequestDetails)
             {
-                EmailSender.Send(_presenter.GetUser(assignedVehicle.AppUser.Id).Email, "Vehicle Request ", "You are assigned to give a drive to " + (_presenter.CurrentVehicleRequest.AppUser.FullName).ToUpper() + " and your assigned Car Plate Number is " + (assignedVehicle.PlateNo).ToUpper());
-                Log.Info(_presenter.GetUser(VRS.Approver).FullName + " has approved a Vehicle Request made by " + _presenter.CurrentVehicleRequest.AppUser.FullName);
-
+                if (assignedVehicle.AppUser != null)
+                {
+                    EmailSender.Send(_presenter.GetUser(assignedVehicle.AppUser.Id).Email, "Vehicle Request ", "You are assigned to give a drive to " + (_presenter.CurrentVehicleRequest.AppUser.FullName).ToUpper() + " and your assigned Car Plate Number is " + (assignedVehicle.PlateNo).ToUpper());
+                    Log.Info(_presenter.GetUser(VRS.Approver).FullName + " has approved a Vehicle Request made by " + _presenter.CurrentVehicleRequest.AppUser.FullName);
+                }
             }
         }
-
         private void GetNextApprover()
         {
             foreach (VehicleRequestStatus VRS in _presenter.CurrentVehicleRequest.VehicleRequestStatuses)
@@ -278,34 +291,24 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     VRS.RejectedReason = txtRejectedReason.Text;
                     VRS.AssignedBy = _presenter.GetAssignedJobbycurrentuser(VRS.Approver) != null ? _presenter.GetAssignedJobbycurrentuser(VRS.Approver).AppUser.FullName : "";
                     VRS.Comment = txtComment.Text;
-
-
                     if (VRS.ApprovalStatus != ApprovalStatus.Rejected.ToString())
                     {
-                       
-                           
-                            if (_presenter.CurrentVehicleRequest.CurrentLevel == _presenter.CurrentVehicleRequest.VehicleRequestStatuses.Count)
-                            {
-
-                                _presenter.CurrentVehicleRequest.ProgressStatus = ProgressStatus.Completed.ToString();
-                                _presenter.CurrentVehicleRequest.CurrentStatus = VRS.ApprovalStatus;
-                                VRS.Approver = _presenter.CurrentUser().Id;
-                                _presenter.CurrentVehicleRequest.CurrentLevel = VRS.WorkflowLevel;
-                                SendEmailDriver(VRS);
-                                //  SendCompletedEmail(VRS);
-
-                                break;
-                            }
-                        
+                        if (_presenter.CurrentVehicleRequest.CurrentLevel == _presenter.CurrentVehicleRequest.VehicleRequestStatuses.Count)
+                        {
+                            _presenter.CurrentVehicleRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                            _presenter.CurrentVehicleRequest.CurrentStatus = VRS.ApprovalStatus;
+                            VRS.Approver = _presenter.CurrentUser().Id;
+                            _presenter.CurrentVehicleRequest.CurrentLevel = VRS.WorkflowLevel;
+                            SendEmailDriver(VRS);
+                            //  SendCompletedEmail(VRS);
+                            break;
+                        }
                         else
                         {
                             GetNextApprover();
-
                         }
-
-                       // _presenter.CurrentVehicleRequest.CurrentStatus = VRS.ApprovalStatus;
+                        // _presenter.CurrentVehicleRequest.CurrentStatus = VRS.ApprovalStatus;
                         //GetNextApprover();
-
                     }
                     else
                     {
@@ -314,10 +317,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         VRS.Approver = _presenter.CurrentUser().Id;
                         SendEmailRejected(VRS);
                     }
-
                     break;
                 }
-
             }
         }
         protected void grvVehicleRequestList_SelectedIndexChanged(object sender, EventArgs e)
@@ -339,11 +340,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             txtRejectedReason.Visible = false;
             rfvRejectedReason.Enabled = false;
             pnlApproval_ModalPopupExtender.Show();
-            if(_presenter.CurrentVehicleRequest.CurrentLevel == _presenter.CurrentVehicleRequest.VehicleRequestStatuses.Count)
+            if (_presenter.CurrentVehicleRequest.CurrentLevel == _presenter.CurrentVehicleRequest.VehicleRequestStatuses.Count)
                 pnlApproverview.Visible = true;
             if (_presenter.CurrentVehicleRequest.ProgressStatus == ProgressStatus.Completed.ToString())
-            {                
-               
+            {
+
                 btnPrintTravellog.Visible = true;
             }
 
@@ -443,6 +444,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     Vehicle.Rate = Convert.ToDecimal(txtRate.Text);
                     DropDownList ddlCarRental = e.Item.FindControl("ddlCarRental") as DropDownList;
                     Vehicle.CarRental = _presenter.GetCarRental(Convert.ToInt32(ddlCarRental.SelectedValue));
+                    TextBox txtFDriverPhoneNo = e.Item.FindControl("txtFDriverPhoneNo") as TextBox;
+                    Vehicle.DriverPhoneNo = txtFDriverPhoneNo.Text;
+                    TextBox txtFRentalDrName = e.Item.FindControl("txtFRentalDrName") as TextBox;
+                    Vehicle.RentalDriverName = txtFRentalDrName.Text;
                     DropDownList ddlCarModel = e.Item.FindControl("ddlFCarModel") as DropDownList;
                     Vehicle.CarModel = _presenter.GetCarModel(Convert.ToInt32(ddlCarModel.SelectedValue));
                     DropDownList ddlDriver = e.Item.FindControl("ddlDriver") as DropDownList;
@@ -456,11 +461,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     if (_presenter.CurrentVehicleRequest.Grant != null)
                         ddlGrant.SelectedValue = _presenter.CurrentVehicleRequest.Grant.Id.ToString();
                     pnlApproval_ModalPopupExtender.Show();
-                    Master.ShowMessage(new AppMessage("Vehicle Information Successfully Added", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    Master.ShowMessage(new AppMessage("Vehicle Information Successfully Added", RMessageType.Info));
                 }
                 catch (Exception ex)
                 {
-                    Master.ShowMessage(new AppMessage("Error: Unable to Add Vehicle Information " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Error: Unable to Add Vehicle Information " + ex.Message, RMessageType.Error));
                 }
             }
         }
@@ -485,7 +490,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 PopDrivers(ddlDriver);
                 DropDownList ddlVehicle = e.Item.FindControl("ddlFPlateNo") as DropDownList;
                 PopVehicles(ddlVehicle);
-         
+
 
             }
             else
@@ -564,12 +569,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 vehicle.VehicleRequest = _presenter.CurrentVehicleRequest;
                 DropDownList ddlEdtAssignedVehicle = e.Item.FindControl("ddlEdtAssignedVehicle") as DropDownList;
                 vehicle.AssignedVehicle = ddlEdtAssignedVehicle.SelectedValue;
-
                 DropDownList ddlPlateNo = e.Item.FindControl("ddlEdtPlateNo") as DropDownList;
                 vehicle.PlateNo = ddlPlateNo.SelectedItem.Text;
-
                 TextBox txtEdtRate = e.Item.FindControl("txtEdtRate") as TextBox;
                 vehicle.Rate = Convert.ToDecimal(txtEdtRate.Text);
+                TextBox txtEdtDriverPhoneNo = e.Item.FindControl("txtEdtDriverPhoneNo") as TextBox;
+                vehicle.DriverPhoneNo = txtEdtDriverPhoneNo.Text;
+                TextBox txtEdtRentalDrName = e.Item.FindControl("txtEdtRentalDrName") as TextBox;
+                vehicle.RentalDriverName = txtEdtRentalDrName.Text;
                 DropDownList ddlEdtCarRental = e.Item.FindControl("ddlEdtCarRental") as DropDownList;
                 vehicle.CarRental = _presenter.GetCarRental(Convert.ToInt32(ddlEdtCarRental.SelectedValue));
                 DropDownList ddlEdtCarModel = e.Item.FindControl("ddlEdtCarModel") as DropDownList;
@@ -597,26 +604,24 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (_presenter.CurrentVehicleRequest.ProgressStatus != ProgressStatus.Completed.ToString())
                 {
-                   
                     SaveVehicleRequestStatus();
-                  
-                        _presenter.CurrentVehicleRequest.Project = _presenter.GetProject(Convert.ToInt32(ddlProject.SelectedValue));
-                        _presenter.CurrentVehicleRequest.Grant = _presenter.GetGrant(Convert.ToInt32(ddlGrant.SelectedValue));
+                    _presenter.CurrentVehicleRequest.Project = _presenter.GetProject(Convert.ToInt32(ddlProject.SelectedValue));
+                    _presenter.CurrentVehicleRequest.Grant = _presenter.GetGrant(Convert.ToInt32(ddlGrant.SelectedValue));
                     _presenter.SaveOrUpdateVehicleRequest(_presenter.CurrentVehicleRequest);
                     ShowPrint();
-                    
-                    
-                    Master.ShowMessage(new AppMessage("Vehicle Request Approval Processed ", Chai.WorkflowManagment.Enums.RMessageType.Info));
+
+                    Master.ShowMessage(new AppMessage("Vehicle Request Approval Processed ", RMessageType.Info));
                     btnApprove.Enabled = false;
                     BindSearchVehicleRequestGrid();
                     pnlApproval_ModalPopupExtender.Show();
-
                 }
                 PrintTransaction();
             }
             catch (Exception ex)
             {
-
+                Master.ShowMessage(new AppMessage("Error! Vehicle Approval not processed due to " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         protected void grvStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -625,7 +630,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (e.Row.RowType == DataControlRowType.DataRow)
                 {
-                   // e.Row.Cells[1].Text = _presenter.GetUser(_presenter.CurrentVehicleRequest.VehicleRequestStatuses[e.Row.RowIndex].Approver).FullName;
+                    // e.Row.Cells[1].Text = _presenter.GetUser(_presenter.CurrentVehicleRequest.VehicleRequestStatuses[e.Row.RowIndex].Approver).FullName;
                 }
             }
         }
@@ -648,6 +653,16 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         protected void ddlProject_SelectedIndexChanged(object sender, EventArgs e)
         {
             PopGrants(Convert.ToInt32(ddlProject.SelectedValue));
+        }
+        protected void ddlDriver_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DropDownList ddlDriver = (DropDownList)sender;
+            TextBox txtPhoneNo = ddlDriver.FindControl("txtFDriverPhoneNo") as TextBox;
+            if (_presenter.GetAssignDriver(Convert.ToInt32(ddlDriver.SelectedIndex)) != null)
+                txtPhoneNo.Text = _presenter.GetAssignDriver(Convert.ToInt32(ddlDriver.SelectedIndex)).Employee.Phone;
+            else
+                txtPhoneNo.Text = String.Empty;
+            pnlApproval_ModalPopupExtender.Show();
         }
         protected void btnCancelPopup_Click(object sender, EventArgs e)
         {
@@ -677,9 +692,20 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void btnCancel_Click(object sender, EventArgs e)
         {
-            Response.Redirect("../Default.aspx");
+            try
+            {
+                _presenter.CurrentVehicleRequest.CurrentStatus = ApprovalStatus.Canceled.ToString();
+                _presenter.SaveOrUpdateVehicleRequest(_presenter.CurrentVehicleRequest);
+                SendCanceledEmail();
+                Master.ShowMessage(new AppMessage("Vehicle Request Successfully Canceled! ", RMessageType.Info));
+            }
+            catch (Exception ex)
+            {
+                Master.ShowMessage(new AppMessage("Error! Vehicle request not canceled due to " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
+            }
         }
-
         protected void btnPrintTravellog_Click(object sender, EventArgs e)
         {
             Response.Redirect(String.Format("../Request/frmTravelLog.aspx?VehicleRequestId={0}", _presenter.CurrentVehicleRequest.Id));

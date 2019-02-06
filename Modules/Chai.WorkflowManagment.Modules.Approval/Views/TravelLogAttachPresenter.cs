@@ -110,6 +110,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _controller.ListPendingVehicleRequests(RequestNo, RequestDate);
         }
+        public VehicleRequest GetExtVehicleRequest(int vehicleReqId)
+        {
+            return _controller.GetExtVehicleRequest(vehicleReqId);
+        }
         public AppUser CurrentUser()
         {
             return _controller.GetCurrentUser();

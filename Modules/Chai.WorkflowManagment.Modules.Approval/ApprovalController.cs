@@ -73,10 +73,14 @@ namespace Chai.WorkflowManagment.Modules.Approval
         {
             string filterExpression = "";
 
-            filterExpression = " SELECT * FROM VehicleRequests Where 1 = Case when '" + RequestNo + "' = '' Then 1 When VehicleRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When VehicleRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND VehicleRequests.ProgressStatus='Completed' AND VehicleRequests.TravelLogStatus='Pending' " +
+            filterExpression = " SELECT * FROM VehicleRequests Where 1 = Case when '" + RequestNo + "' = '' Then 1 When VehicleRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When VehicleRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND VehicleRequests.ProgressStatus='Completed' AND VehicleRequests.TravelLogStatus='Pending' AND VehicleRequests.IsExtension='FALSE' " +
                                    " ORDER BY VehicleRequests.Id Desc";
 
             return _workspace.SqlQuery<VehicleRequest>(filterExpression).ToList();
+        }
+        public VehicleRequest GetExtVehicleRequest(int requestId)
+        {
+            return _workspace.Single<VehicleRequest>(x => x.ExtRefRequest_Id == requestId && x.IsExtension == true);
         }
         #endregion
         #region Cash Payment Approval
