@@ -625,13 +625,21 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void btnDelete_Click(object sender, EventArgs e)
         {
+            
+           
+
+
+
             try
             {
                 if (_presenter.CurrentPurchaseRequest.CurrentStatus == null)
                 {
                     _presenter.DeletePurchaseRequest(_presenter.CurrentPurchaseRequest);
+                    ClearForm();
                     Master.ShowMessage(new AppMessage("Purchase Request Deleted ", Chai.WorkflowManagment.Enums.RMessageType.Info));
                     BindSearchPurchaseRequestGrid();
+                    BindPurchaseRequestDetails();
+                    btnDelete.Visible = false;
                 }
                 else
                     Master.ShowMessage(new AppMessage("Warning: Unable to Delete Purchase Request ", Chai.WorkflowManagment.Enums.RMessageType.Error));
