@@ -33,6 +33,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 PopProjects();
                 BindSoleVendorRequests();
                 PopSoleVendorRequesters();
+                PopPurchaseRequest();
+
                 BindSoleVendorRequestDetails();
                 PopSupplier();
                 if (_presenter.CurrentSoleVendorRequest.Id <= 0)
@@ -532,6 +534,18 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             this.dgSoleVenderDetail.EditItemIndex = e.Item.ItemIndex;
             BindSoleVendorRequestDetails();
+        }
+
+        private void PopPurchaseRequest()
+        {
+            lblPurRequestNoResult.Text = _presenter.CurrentSoleVendorRequest.PurchaseRequest.RequestNo.ToString();
+            lblpurreqdateres.Text = _presenter.CurrentSoleVendorRequest.PurchaseRequest.RequestedDate.ToShortDateString();
+            lblPurrequesterres.Text = _presenter.GetUser(_presenter.CurrentSoleVendorRequest.PurchaseRequest.Requester).FullName;
+
+            grvDetails.DataSource = _presenter.CurrentSoleVendorRequest.PurchaseRequest.PurchaseRequestDetails;
+            grvDetails.DataBind();
+
+
         }
 
         protected void grvSoleVendorRequestList_PageIndexChanging(object sender, GridViewPageEventArgs e)

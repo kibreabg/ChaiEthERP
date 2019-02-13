@@ -295,13 +295,23 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void grvPurchaseRequestList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Session["ApprovalLevel"] = true;
+            Session["PurchaseRequest"] = true;
             // ClearForm();
             //BindLeaveRequest();
             _leaverequestId = Convert.ToInt32(grvPurchaseRequestList.SelectedDataKey[0]);
             _presenter.OnViewLoaded();
             BindPurchaseRequest();
             BindPurchaseRequestDetails();
+            if (_presenter.CurrentPurchaseRequest.CurrentLevel>1)
+            {
+                btnRequest.Visible = false;
+                btnDelete.Visible = false;
+            }
+            else
+            {
+                btnRequest.Visible = true;
+                btnDelete.Visible = true;
+            }
         }
         protected void grvPurchaseRequestList_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
