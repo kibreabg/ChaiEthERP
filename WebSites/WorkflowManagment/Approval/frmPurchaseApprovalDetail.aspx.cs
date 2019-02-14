@@ -218,10 +218,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     {
                         _presenter.CurrentPurchaseRequest.ProgressStatus = ProgressStatus.Completed.ToString();
                         GetNextApprover();
+                        SendEmail(PRRS);
                     }
                     else
                     {
                         _presenter.CurrentPurchaseRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                        SendEmailRejected(PRRS);
                     }
                     break;
                 }
@@ -311,6 +313,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             //grvAttachments.DataSource = _presenter.CurrentPaymentReimbursementRequest.CPRAttachments;
             //grvAttachments.DataBind();
             BindPurchaseRequestStatus();
+            if (_presenter.CurrentPurchaseRequest.ProgressStatus == ProgressStatus.Completed.ToString())
+            {
+                btnApprove.Enabled = false;
+                PrintTransaction();
+            }
             txtRejectedReason.Visible = false;
             rfvRejectedReason.Enabled = false;
             pnlApproval_ModalPopupExtender.Show();
