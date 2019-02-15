@@ -266,7 +266,31 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void btnCancel_Click(object sender, EventArgs e)
         {
-            Response.Redirect("../Default.aspx");
+            try
+            {
+                _presenter.CurrentPurchaseRequest.CurrentStatus = ApprovalStatus.Canceled.ToString();
+                _presenter.SaveOrUpdatePurchaseRequest(_presenter.CurrentPurchaseRequest);
+                SendCanceledEmail();
+                Master.ShowMessage(new AppMessage("Bid Analysis Request Successfully Canceled! ", RMessageType.Info));
+            }
+            catch (Exception ex)
+            {
+                Master.ShowMessage(new AppMessage("Error! Bid Analysis request not canceled due to " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
+            }
+        }
+
+        private void SendCanceledEmail()
+        {
+            PurchaseRequest thisRequest = _presenter.CurrentPurchaseRequest;
+            //To the requester
+            EmailSender.Send(_presenter.GetUser(thisRequest.Requester).Email, "Purchase Request Canceled", " Your Purchase Request with Request No. " + thisRequest.RequestNo + " was Canceled!");
+            //To the approvers
+            foreach (PurchaseRequestStatus statuses in thisRequest.PurchaseRequestStatuses)
+            {
+                EmailSender.Send(_presenter.GetUser(statuses.Approver).Email, "Purchase  Request Canceled", " The Purchase  Request with Request No. " + thisRequest.RequestNo + " has been Canceled!");
+            }
         }
         protected void btnApprove_Click(object sender, EventArgs e)
         {
@@ -316,9 +340,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             if (_presenter.CurrentPurchaseRequest.ProgressStatus == ProgressStatus.Completed.ToString())
             {
                 btnApprove.Enabled = false;
+                btnCancel.Enabled = true;
                 PrintTransaction();
             }
-            txtRejectedReason.Visible = false;
+            if (_presenter.CurrentPurchaseRequest.CurrentStatus == ApprovalStatus.Canceled.ToString())
+            {
+                btnCancel.Enabled = false;
+            }
+                txtRejectedReason.Visible = false;
             rfvRejectedReason.Enabled = false;
             pnlApproval_ModalPopupExtender.Show();
         }

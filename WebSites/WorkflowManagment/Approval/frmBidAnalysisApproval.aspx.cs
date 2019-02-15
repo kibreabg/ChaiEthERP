@@ -652,21 +652,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
         }
 
-        protected void btnCancel_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                _presenter.CurrentBidAnalysisRequest.CurrentStatus = ApprovalStatus.Canceled.ToString();
-                _presenter.SaveOrUpdateBidAnalysisRequest(_presenter.CurrentBidAnalysisRequest);
-                SendCanceledEmail();
-                Master.ShowMessage(new AppMessage("Bid Analysis Request Successfully Canceled! ", RMessageType.Info));
-            }
-            catch (Exception ex)
-            {
-                Master.ShowMessage(new AppMessage("Error! Bid Analysis request not canceled due to " + ex.Message, RMessageType.Error));
-                ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
-            }
-        }
+  
     }
 }
