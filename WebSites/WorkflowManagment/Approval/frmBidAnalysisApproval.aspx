@@ -246,7 +246,7 @@
                                                 </label>
                                             </section>
                                             <section class="col col-6">
-                                                <asp:Label ID="lblRejectedReason" runat="server" Text="Rejected Reason" Visible="false" CssClass="label"></asp:Label>
+                                                <asp:Label ID="lblRejectedReason" runat="server" Text="Rejected/Cancelled Reason" Visible="false" CssClass="label"></asp:Label>
 
                                                 <label class="textarea">
                                                     <asp:TextBox ID="txtRejectedReason" runat="server" Visible="false" TextMode="MultiLine"></asp:TextBox>
@@ -283,6 +283,7 @@
                                         <asp:Button ID="btnApprove" runat="server" Text="Save" OnClick="btnApprove_Click" Enabled="true" CssClass="btn btn-primary" ValidationGroup="Save"></asp:Button>
                                         <asp:Button ID="btnCancelPopup" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" OnClick="btnCancelPopup_Click"></asp:Button>
                                         <asp:Button ID="btnPrint0" runat="server" Text="Print" CssClass="btn btn-primary" OnClientClick="javascript:Clickheretoprint('divprint')" Enabled="False"></asp:Button>
+                                        <asp:Button ID="btnCancel" runat="server" CausesValidation="False" CssClass="btn btn-primary" Text="Cancel Request" OnClientClick="javascript:return confirm('Are you sure you want to cancel this vehicle request?');" OnClick="btnCancel_Click"></asp:Button>
                                         <asp:Button ID="btnPurchaseOrder" runat="server" CssClass="btn btn-primary" Enabled="false" OnClick="btnPurchaseOrder_Click" Text="Purchase Order" Visible="True" />
                                     </footer>
                                 </div>

@@ -290,19 +290,7 @@
                 <td style="width: 389px"></td>
                 <td>&nbsp;</td>
             </tr>
-            
-            <tr>
-                <td style="width: 576px; height: 18px; padding-left: 15%;">
-                    <strong>
-                        <asp:Label ID="lblItem" runat="server" Text="Conditions Of Order:"></asp:Label>
-                    </strong></td>
-                <td style="width: 490px" class="modal-sm">
-                    <asp:Label ID="lblItemResult" runat="server"></asp:Label>
-                </td>
-
-
-            </tr>
-            <tr>
+              <tr>
                 <td style="width: 576px; height: 18px; padding-left: 15%;">&nbsp;</td>
                 <td style="width: 490px; height: 18px;">&nbsp;</td>
                 <td style="width: 280px; height: 18px;">&nbsp;</td>
