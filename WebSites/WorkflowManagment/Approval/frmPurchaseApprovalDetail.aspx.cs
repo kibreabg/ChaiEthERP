@@ -146,7 +146,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     btnApprove.Enabled = true;
                 }
             }
-            if (_presenter.CurrentUser().EmployeePosition.PositionName == "Admin/HR Assisitance (Driver)" && _presenter.CurrentPurchaseRequest.CurrentStatus != ApprovalStatus.Rejected.ToString() && _presenter.CurrentPurchaseRequest.ProgressStatus == ProgressStatus.Completed.ToString() && _presenter.CurrentPurchaseRequest.BidAnalysisRequest == null && _presenter.CurrentPurchaseRequest.SoleVendorRequest == null)
+            if (_presenter.CurrentUser().EmployeePosition.PositionName == "Admin/HR Assisitance (Driver)" && _presenter.CurrentPurchaseRequest.CurrentStatus != ApprovalStatus.Rejected.ToString() && _presenter.CurrentPurchaseRequest.ProgressStatus == ProgressStatus.Completed.ToString() && _presenter.CurrentPurchaseRequest.BidAnalysisRequest == null && _presenter.CurrentPurchaseRequest.SoleVendorRequests == null)
             {
                 lnkBidRequest.Visible = true;
                 lnkSoleVendor.Visible = true;
@@ -278,7 +278,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     Master.ShowMessage(new AppMessage("Purchase Approval Processed", Chai.WorkflowManagment.Enums.RMessageType.Info));
                     btnApprove.Enabled = false;
                     BindSearchPurchaseRequestGrid();
-                    if (_presenter.CurrentUser().EmployeePosition.PositionName == "Procurement Officer" && _presenter.CurrentPurchaseRequest.CurrentStatus != ApprovalStatus.Rejected.ToString() && _presenter.CurrentPurchaseRequest.ProgressStatus == ProgressStatus.Completed.ToString() && _presenter.CurrentPurchaseRequest.BidAnalysisRequest == null && _presenter.CurrentPurchaseRequest.SoleVendorRequest == null)
+                    if (_presenter.CurrentUser().EmployeePosition.PositionName == "Procurement Officer" && _presenter.CurrentPurchaseRequest.CurrentStatus != ApprovalStatus.Rejected.ToString() && _presenter.CurrentPurchaseRequest.ProgressStatus == ProgressStatus.Completed.ToString() && _presenter.CurrentPurchaseRequest.BidAnalysisRequest == null && _presenter.CurrentPurchaseRequest.SoleVendorRequests == null)
                     {
                         lnkBidRequest.Visible = true;
                         lnkSoleVendor.Visible = true;

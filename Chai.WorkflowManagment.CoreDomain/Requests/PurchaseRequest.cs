@@ -35,7 +35,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string CurrentStatus { get; set; }
         public string ProgressStatus { get; set; }
         public virtual BidAnalysisRequest BidAnalysisRequest { get; set; }
-        public virtual SoleVendorRequest SoleVendorRequest { get; set; }
+        public virtual IList<SoleVendorRequest> SoleVendorRequests { get; set; }
         public virtual IList<PurchaseRequestStatus> PurchaseRequestStatuses { get; set; }
         public virtual IList<PurchaseRequestDetail> PurchaseRequestDetails { get; set; }
         // public virtual PurchaseOrder PurchaseOrders { get; set; }
@@ -116,6 +116,41 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
             {
                 if (PRS.Id == Id)
                     PurchaseRequestDetails.Remove(PRS);
+                break;
+            }
+
+        }
+        #endregion
+        #region SoleVendorRequest
+        public virtual SoleVendorRequest GetSoleVendorRequest(int Id)
+        {
+
+            foreach (SoleVendorRequest SVR in SoleVendorRequests)
+            {
+                if (SVR.Id == Id)
+                    return SVR;
+
+            }
+            return null;
+        }
+        public virtual IList<SoleVendorRequest> GetSoleVendorRequestByPurchaseId(int PurchaseId)
+        {
+            IList<SoleVendorRequest> LSVR = new List<SoleVendorRequest>();
+            foreach (SoleVendorRequest SVR in SoleVendorRequests)
+            {
+                if (SVR.PurchaseRequest.Id == PurchaseId)
+                    LSVR.Add(SVR);
+
+            }
+            return LSVR;
+        }
+        public virtual void RemoveSoleVendorRequest(int Id)
+        {
+
+            foreach (SoleVendorRequest SVR in SoleVendorRequests)
+            {
+                if (SVR.Id == Id)
+                    SoleVendorRequests.Remove(SVR);
                 break;
             }
 
