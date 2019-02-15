@@ -11,7 +11,7 @@
 
             var docprint = window.open("", "", disp_setting);
             docprint.document.open();
-            docprint.document.write('<html><head><title>CHAI Zimbabwe</title>');
+            docprint.document.write('<html><head><title>CHAI Ethiopia</title>');
             docprint.document.write('</head><body onLoad="self.print()"><center>');
             docprint.document.write(content_vlue);
             docprint.document.write('</center></body></html>');
@@ -246,7 +246,7 @@
                                                 </label>
                                             </section>
                                             <section class="col col-6">
-                                                <asp:Label ID="lblRejectedReason" runat="server" Text="Rejected Reason" Visible="false" CssClass="label"></asp:Label>
+                                                <asp:Label ID="lblRejectedReason" runat="server" Text="Rejected/Cancelled Reason" Visible="false" CssClass="label"></asp:Label>
 
                                                 <label class="textarea">
                                                     <asp:TextBox ID="txtRejectedReason" runat="server" Visible="false" TextMode="MultiLine"></asp:TextBox>
