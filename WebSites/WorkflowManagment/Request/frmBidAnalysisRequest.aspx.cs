@@ -43,7 +43,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                
                 
                 PopBidAnalysisRequesters();
-
+                PopPurchaseRequest();
 
 
                 if (_presenter.CurrentBidAnalysisRequest.Id <= 0)
@@ -58,6 +58,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 if (_presenter.CurrentBidAnalysisRequest.Id != 0)
                 {
+                   
                     PrintTransaction();
                     btnPrintworksheet.Enabled = true;
                 }
@@ -404,6 +405,18 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                  }
              }*/
         #endregion
+
+        private void PopPurchaseRequest()
+        {
+            lblPurRequestNoResult.Text = _presenter.CurrentBidAnalysisRequest.PurchaseRequest.RequestNo.ToString();
+            lblRequestedDateResult.Text = _presenter.CurrentBidAnalysisRequest.PurchaseRequest.RequestedDate.ToShortDateString();
+            lblPurrequesterres.Text = _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.PurchaseRequest.Requester).FullName;
+
+            grvDetails.DataSource = _presenter.CurrentBidAnalysisRequest.PurchaseRequest.PurchaseRequestDetails;
+            grvDetails.DataBind();
+
+
+        }
         private void BindBidAnalysisRequestsList()
         {
             grvBidAnalysisRequestList.DataSource = _presenter.ListBidAnalysisRequests(txtSrchRequestNo.Text, txtSrchRequestDate.Text);

@@ -83,9 +83,9 @@
                         <asp:Label ID="lblDateDelivery" runat="server" Text='<%# Eval("Requireddateofdelivery", "{0:dd/MM/yyyy}")%>'></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
-              
+
                 <asp:BoundField DataField="SuggestedSupplier" HeaderText="Suggested Supplier" SortExpression="PurposeOfTravel" />
-              
+
 
                 <asp:ButtonField ButtonType="Button" CommandName="ViewItem" Text="View Item Detail" />
                 <asp:CommandField ButtonType="Button" SelectText="Process Request" ShowSelectButton="True" />
@@ -153,6 +153,7 @@
                                     </fieldset>
                                     <footer>
                                         <asp:Button ID="btnApprove" runat="server" ValidationGroup="save" Text="Save" OnClick="btnApprove_Click" Enabled="false" CssClass="btn btn-primary"></asp:Button>
+                                        <asp:Button ID="btnCancel" runat="server" CausesValidation="False" CssClass="btn btn-primary" Text="Cancel Request" OnClientClick="javascript:return confirm('Are you sure you want to cancel this Purchase request?');" OnClick="btnCancel_Click"  Enabled="false"></asp:Button>
                                         <asp:Button ID="btnCancelPopup" runat="server" Text="Close" CssClass="btn btn-primary" OnClick="btnCancelPopup_Click"></asp:Button>
                                         <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-primary" Enabled="false" OnClientClick="javascript:Clickheretoprint('divprint')"></asp:Button>
                                     </footer>
@@ -184,8 +185,8 @@
                                 CssClass="table table-striped table-bordered table-hover">
                                 <RowStyle CssClass="rowstyle" />
                                 <Columns>
-                                    <asp:BoundField DataField="Item" HeaderText="Item" SortExpression="Item" />                                    
-                                    <asp:BoundField DataField="Qty" HeaderText="Qty" SortExpression="Qty" />                                  
+                                    <asp:BoundField DataField="Item" HeaderText="Item" SortExpression="Item" />
+                                    <asp:BoundField DataField="Qty" HeaderText="Qty" SortExpression="Qty" />
                                     <asp:BoundField DataField="Project.ProjectCode" HeaderText="Project Code" />
                                     <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant Code" />
                                 </Columns>
@@ -291,28 +292,6 @@
                 <td>&nbsp;</td>
             </tr>
             <tr>
-                <td style="width: 576px; height: 18px; padding-left: 15%;">
-                    <strong>
-                        <asp:Label ID="lblReqDate" runat="server" Text="Required Date Of Delivery:"></asp:Label>
-                    </strong>
-                </td>
-                <td style="width: 490px; height: 18px;">
-                    <asp:Label ID="lblReqDateResult" runat="server"></asp:Label>
-                </td>
-
-            </tr>
-            <tr>
-                <td style="width: 576px; height: 18px; padding-left: 15%;">
-                    <strong>
-                        <asp:Label ID="lblItem" runat="server" Text="Conditions Of Order:"></asp:Label>
-                    </strong></td>
-                <td style="width: 490px" class="modal-sm">
-                    <asp:Label ID="lblItemResult" runat="server"></asp:Label>
-                </td>
-
-
-            </tr>
-            <tr>
                 <td style="width: 576px; height: 18px; padding-left: 15%;">&nbsp;</td>
                 <td style="width: 490px; height: 18px;">&nbsp;</td>
                 <td style="width: 280px; height: 18px;">&nbsp;</td>
@@ -329,23 +308,23 @@
         </table>
         <br />
         <asp:GridView ID="grvDetails"
-                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                CssClass="table table-striped table-bordered table-hover">
-                <RowStyle CssClass="rowstyle" />
-                <Columns>
-                    <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="AccountName" SortExpression="ItemAccount.AccountName" />
-                    <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
-                    <asp:BoundField DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
-                   
-                    <asp:BoundField DataField="Project.ProjectCode" HeaderText="Project Code" />
-                    <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant Code" />
-                </Columns>
-                <FooterStyle CssClass="FooterStyle" />
-                <HeaderStyle CssClass="headerstyle" />
-                <PagerStyle CssClass="PagerStyle" />
-                <RowStyle CssClass="rowstyle" />
-            </asp:GridView>
-            <br />
+            runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+            CssClass="table table-striped table-bordered table-hover">
+            <RowStyle CssClass="rowstyle" />
+            <Columns>
+                <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="AccountName" SortExpression="ItemAccount.AccountName" />
+                <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
+                <asp:BoundField DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
+
+                <asp:BoundField DataField="Project.ProjectCode" HeaderText="Project Code" />
+                <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant Code" />
+            </Columns>
+            <FooterStyle CssClass="FooterStyle" />
+            <HeaderStyle CssClass="headerstyle" />
+            <PagerStyle CssClass="PagerStyle" />
+            <RowStyle CssClass="rowstyle" />
+        </asp:GridView>
+        <br />
         <br />
         <asp:GridView ID="grvStatuses" CellPadding="5" CellSpacing="3"
             runat="server" AutoGenerateColumns="False" DataKeyNames="Id"

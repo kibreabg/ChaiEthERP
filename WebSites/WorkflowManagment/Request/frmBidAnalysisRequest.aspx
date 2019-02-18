@@ -45,8 +45,54 @@
             <span class="widget-icon"><i class="fa fa-edit"></i></span>
             <h2>BID ANALYSIS WORKSHEET</h2>
         </header>
+        <div class="smart-form">
+                    <fieldset>
+         <table style="width: 100%;">
 
+            
+            <tr>
+                <td style="width: 576px; height: 18px; ">
+                    <strong>
+                        <asp:Label ID="lblPurRequestNo" runat="server" Text="Pucrchase Request No:"></asp:Label>
+                    </strong></td>
+                <td style="width: 490px" class="modal-sm">
+                    <asp:Label ID="lblPurRequestNoResult" runat="server"></asp:Label>
+                </td>
 
+               <td style="width: 576px; height: 18px; ">
+                    <strong>
+                        <asp:Label ID="lblpurRequester" runat="server" Text="Requested By:"></asp:Label>
+                    </strong></td>
+                <td style="width: 490px" class="modal-sm">
+                    <asp:Label ID="lblPurrequesterres" runat="server"></asp:Label>
+                </td>
+          
+                <td style="width: 576px; height: 18px; ">
+                    <strong>
+                        <asp:Label ID="lblRequestedDate" runat="server" Text="Requested Date:"></asp:Label>
+                    </strong></td>
+                <td style="width: 490px" class="modal-sm">
+                    <asp:Label ID="lblRequestedDateResult" runat="server"></asp:Label>
+                </td>
+               
+            </tr></table> </fieldset></div>
+             <asp:GridView ID="grvDetails"
+                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                CssClass="table table-striped table-bordered table-hover">
+                <RowStyle CssClass="rowstyle" />
+                <Columns>
+                    <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="AccountName" SortExpression="ItemAccount.AccountName" />
+                    <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
+                    <asp:BoundField DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
+                   
+                    <asp:BoundField DataField="Project.ProjectCode" HeaderText="Project Code" />
+                    <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant Code" />
+                </Columns>
+                <FooterStyle CssClass="FooterStyle" />
+                <HeaderStyle CssClass="headerstyle" />
+                <PagerStyle CssClass="PagerStyle" />
+                <RowStyle CssClass="rowstyle" />
+              </asp:GridView>
         <!-- widget div-->
         <div>
 

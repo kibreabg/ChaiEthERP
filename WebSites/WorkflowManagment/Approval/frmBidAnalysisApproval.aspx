@@ -246,7 +246,7 @@
                                                 </label>
                                             </section>
                                             <section class="col col-6">
-                                                <asp:Label ID="lblRejectedReason" runat="server" Text="Rejected Reason" Visible="false" CssClass="label"></asp:Label>
+                                                <asp:Label ID="lblRejectedReason" runat="server" Text="Rejected/Cancelled Reason" Visible="false" CssClass="label"></asp:Label>
 
                                                 <label class="textarea">
                                                     <asp:TextBox ID="txtRejectedReason" runat="server" Visible="false" TextMode="MultiLine"></asp:TextBox>

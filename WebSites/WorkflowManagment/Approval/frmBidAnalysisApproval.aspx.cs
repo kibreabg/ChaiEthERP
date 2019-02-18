@@ -258,13 +258,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void SendEmailRejected(BidAnalysisRequestStatus PRS)
         {
-            EmailSender.Send(_presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).Email, "Bid Analysis Request Rejection", "Your Purchase Request with Request No. - '" + _presenter.CurrentBidAnalysisRequest.RequestNo + "' was Rejected for this reason - '" + PRS.RejectedReason + "'");
+            EmailSender.Send(_presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).Email, "Bid Analysis Request Rejection", "Your Bid Analysis Request with Request No. - '" + _presenter.CurrentBidAnalysisRequest.RequestNo + "' was Rejected for this reason - '" + PRS.RejectedReason + "'");
 
             if (PRS.WorkflowLevel > 1)
             {
                 for (int i = 0; i + 1 < PRS.WorkflowLevel; i++)
                 {
-                    EmailSender.Send(_presenter.GetUser(_presenter.CurrentBidAnalysisRequest.BidAnalysisRequestStatuses[i].Approver).Email, "Purchase Request Rejection", "Purchase Request with Request No. - '" + _presenter.CurrentBidAnalysisRequest.RequestNo + "' made by " + _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName + " was Rejected for this reason - '" + PRS.RejectedReason + "'");
+                    EmailSender.Send(_presenter.GetUser(_presenter.CurrentBidAnalysisRequest.BidAnalysisRequestStatuses[i].Approver).Email, "Bid Analysis Request Rejection", "Bid Analysis Request with Request No. - '" + _presenter.CurrentBidAnalysisRequest.RequestNo + "' made by " + _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName + " was Rejected for this reason - '" + PRS.RejectedReason + "'");
                 }
             }
         }
@@ -288,14 +288,27 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             if (_presenter.GetUser(PRS.Approver).IsAssignedJob != true)
             {
-                EmailSender.Send(_presenter.GetUser(PRS.Approver).Email, "Purchase Request", (_presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName).ToUpper() + " Requests for Purchase with Purchase No. - '" + (_presenter.CurrentBidAnalysisRequest.RequestNo).ToUpper() + "'");
+                EmailSender.Send(_presenter.GetUser(PRS.Approver).Email, "Bid Analysis Request", (_presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName).ToUpper() + " Requests for Bid Analysis with Purchase No. - '" + (_presenter.CurrentBidAnalysisRequest.RequestNo).ToUpper() + "'");
             }
             else
             {
-                EmailSender.Send(_presenter.GetUser(_presenter.GetAssignedJobbycurrentuser(PRS.Approver).AssignedTo).Email, "Purchase Request", (_presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName).ToUpper() + " Requests for Purchase with Purchase No '" + (_presenter.CurrentBidAnalysisRequest.RequestNo).ToUpper() + "'");
+                EmailSender.Send(_presenter.GetUser(_presenter.GetAssignedJobbycurrentuser(PRS.Approver).AssignedTo).Email, "Bid Analysis Request", (_presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName).ToUpper() + " Requests for Bid Analysis with Purchase No '" + (_presenter.CurrentBidAnalysisRequest.RequestNo).ToUpper() + "'");
             }
         }
 
+       
+
+        private void SendCanceledEmail()
+        {
+            BidAnalysisRequest thisRequest = _presenter.CurrentBidAnalysisRequest;
+            //To the requester
+            EmailSender.Send(_presenter.GetUser(thisRequest.AppUser.Id).Email, "Bid Analysis Request Canceled", " Your Bid Analysis Request with Request No. " + thisRequest.RequestNo + " was Canceled!");
+            //To the approvers
+            foreach (BidAnalysisRequestStatus statuses in thisRequest.BidAnalysisRequestStatuses)
+            {
+                EmailSender.Send(_presenter.GetUser(statuses.Approver).Email, "Bid Analysis  Request Canceled", " The Bid Analysis  Request with Request No. " + thisRequest.RequestNo + " has been Canceled!");
+            }
+        }
 
         private void EnableControls()
         {
@@ -494,12 +507,21 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void ddlApprovalStatus_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ddlApprovalStatus.SelectedValue == "Rejected")
+            if (ddlApprovalStatus.SelectedValue == "Rejected" || ddlApprovalStatus.SelectedValue == "Cancelled")
             {
+                lblRejectedReason.Visible = true;
                 txtRejectedReason.Visible = true;
+                pnlApproval_ModalPopupExtender.Show();
 
             }
-            pnlApproval_ModalPopupExtender.Show();
+        
+            else
+            {
+                lblRejectedReason.Visible = false;
+                txtRejectedReason.Visible = false;
+                pnlApproval_ModalPopupExtender.Show();
+            }
+   
         }
    /*    
         protected void btnPrint_Click(object sender, EventArgs e)
@@ -629,5 +651,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
             }
         }
-}
+
+  
+    }
 }
