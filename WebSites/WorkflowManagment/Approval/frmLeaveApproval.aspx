@@ -3,7 +3,7 @@
 <%@ MasterType TypeName="Chai.WorkflowManagment.Modules.Shell.BaseMaster" %>
 <%@ Register TagPrefix="asp" Namespace="AjaxControlToolkit" Assembly="AjaxControlToolkit" %>
 <asp:Content ID="Content2" ContentPlaceHolderID="DefaultContent" runat="Server">
-    <script type="text/javascript" language="javascript">
+    <script type="text/javascript" lang="javascript">
         function Clickheretoprint(theid) {
             var disp_setting = "toolbar=yes,location=no,directories=yes,menubar=yes,";
             disp_setting += "scrollbars=yes,width=750, height=600, left=100, top=25";
@@ -18,7 +18,9 @@
             docprint.document.close();
             docprint.focus();
         }
+ 
     </script>
+
     <script type="text/javascript">
         function newTab() {
             document.forms[0].target = "_blank";
@@ -117,6 +119,9 @@
         </div>
         <br />
 
+    </div>
+    <div id="certPreview" style="display: none;">
+       <asp:Image ID="imgCertPreview" Width="100%" Height="100%" runat="server" />
     </div>
     <asp:Panel ID="pnlApproval" runat="server">
         
@@ -380,7 +385,7 @@
             <PagerStyle CssClass="PagerStyle" />
             <RowStyle CssClass="rowstyle" />
         </asp:GridView>
-                  <table style="width: 100%;">
+        <table style="width: 100%;">
                 <tr>
                     <td></td>
                     <td>Requester Signature</td>

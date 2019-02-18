@@ -104,6 +104,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             }
             ddlApprovalStatus.Items.Add(new ListItem(ApprovalStatus.Rejected.ToString().Replace('_', ' '), ApprovalStatus.Rejected.ToString().Replace('_', ' ')));
+            if (_presenter.CurrentVehicleRequest.ProgressStatus == ProgressStatus.Completed.ToString())
+            {
+                ddlApprovalStatus.Items.Add(new ListItem(ApprovalStatus.Canceled.ToString().Replace('_', ' '), ApprovalStatus.Canceled.ToString().Replace('_', ' ')));
+            }
 
         }
         private string GetWillStatus()
@@ -200,8 +204,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             if (_presenter.CurrentVehicleRequest.ProgressStatus == ProgressStatus.Completed.ToString())
             {
-                btnPrint.Enabled = true;
-                btnPrintTravellog.Visible = true;
+                if (_presenter.CurrentVehicleRequest.CurrentStatus != "Rejected")
+                {
+                    btnPrint.Enabled = true;
+                    btnPrintTravellog.Visible = true;
+                                     
+                }
                 SendEmailToRequester();
             }
         }
@@ -309,6 +317,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         }
                         // _presenter.CurrentVehicleRequest.CurrentStatus = VRS.ApprovalStatus;
                         //GetNextApprover();
+                    }
+                    else if(VRS.ApprovalStatus == ApprovalStatus.Canceled.ToString())
+                     {
+                        _presenter.CurrentVehicleRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                        _presenter.CurrentVehicleRequest.CurrentStatus = VRS.ApprovalStatus;
+                        VRS.Approver = _presenter.CurrentUser().Id;
+                        SendCanceledEmail();
                     }
                     else
                     {
@@ -604,16 +619,24 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (_presenter.CurrentVehicleRequest.ProgressStatus != ProgressStatus.Completed.ToString())
                 {
-                    SaveVehicleRequestStatus();
-                    _presenter.CurrentVehicleRequest.Project = _presenter.GetProject(Convert.ToInt32(ddlProject.SelectedValue));
-                    _presenter.CurrentVehicleRequest.Grant = _presenter.GetGrant(Convert.ToInt32(ddlGrant.SelectedValue));
-                    _presenter.SaveOrUpdateVehicleRequest(_presenter.CurrentVehicleRequest);
-                    ShowPrint();
+                    if (ddlApprovalStatus.SelectedValue == "Rejected" && txtRejectedReason.Text == "")
+                    {
+                        Master.ShowMessage(new AppMessage("Please Insert Rejected/Canceled Reason ", RMessageType.Error));
+                        
+                    }
+                    else
+                    {
+                        SaveVehicleRequestStatus();
+                        _presenter.CurrentVehicleRequest.Project = _presenter.GetProject(Convert.ToInt32(ddlProject.SelectedValue));
+                        _presenter.CurrentVehicleRequest.Grant = _presenter.GetGrant(Convert.ToInt32(ddlGrant.SelectedValue));
+                        _presenter.SaveOrUpdateVehicleRequest(_presenter.CurrentVehicleRequest);
+                        ShowPrint();
 
-                    Master.ShowMessage(new AppMessage("Vehicle Request Approval Processed ", RMessageType.Info));
-                    btnApprove.Enabled = false;
-                    BindSearchVehicleRequestGrid();
-                    pnlApproval_ModalPopupExtender.Show();
+                        Master.ShowMessage(new AppMessage("Vehicle Request Approval Processed ", RMessageType.Info));
+                        btnApprove.Enabled = false;
+                        BindSearchVehicleRequestGrid();
+                        pnlApproval_ModalPopupExtender.Show();
+                    }
                 }
                 PrintTransaction();
             }
@@ -636,7 +659,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void ddlApprovalStatus_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ddlApprovalStatus.SelectedValue == "Rejected")
+            if (ddlApprovalStatus.SelectedValue == "Rejected" || ddlApprovalStatus.SelectedValue == "Canceled")
             {
                 lblRejectedReason.Visible = true;
                 txtRejectedReason.Visible = true;
