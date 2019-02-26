@@ -32,9 +32,9 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         {
             // TODO: Implement code that will be executed the first time the view loads
         }
-        public IList<Employee> ListEmployees(string EmpNo, string FullName, int project)
+        public IList<Employee> ListEmployees(string EmpNo, string FullName, int project,string empstatus)
         {
-            return _controller.ListEmployees(EmpNo, FullName, project);
+            return _controller.ListEmployees(EmpNo, FullName, project, empstatus);
         }
         public decimal EmpLeaveTaken(int empid, DateTime LeaveSettingDate)
         {

@@ -91,6 +91,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             employee.Phone = View.GetPhone;
             employee.CellPhone = View.GetCellPhone;
             employee.PersonalEmail = View.GetPersonalEmail;
+            employee.Status = true;
             employee.ChaiEMail = View.GetChaiEmail;
             if (employee.Id <= 0)
             {
