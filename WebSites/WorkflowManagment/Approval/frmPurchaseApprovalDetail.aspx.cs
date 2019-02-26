@@ -220,6 +220,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         GetNextApprover();
                         SendEmail(PRRS);
                     }
+                    else if (PRRS.ApprovalStatus == ApprovalStatus.Canceled.ToString())
+                    {
+                        _presenter.CurrentPurchaseRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                        _presenter.CurrentPurchaseRequest.CurrentStatus = PRRS.ApprovalStatus;
+                        PRRS.Approver = _presenter.CurrentUser().Id;
+                        SendCanceledEmail();
+                    }
                     else
                     {
                         _presenter.CurrentPurchaseRequest.ProgressStatus = ProgressStatus.Completed.ToString();
@@ -264,23 +271,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
 
         }
-        protected void btnCancel_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                _presenter.CurrentPurchaseRequest.CurrentStatus = ApprovalStatus.Canceled.ToString();
-                _presenter.SaveOrUpdatePurchaseRequest(_presenter.CurrentPurchaseRequest);
-                SendCanceledEmail();
-                Master.ShowMessage(new AppMessage("Bid Analysis Request Successfully Canceled! ", RMessageType.Info));
-            }
-            catch (Exception ex)
-            {
-                Master.ShowMessage(new AppMessage("Error! Bid Analysis request not canceled due to " + ex.Message, RMessageType.Error));
-                ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
-            }
-        }
-
         private void SendCanceledEmail()
         {
             PurchaseRequest thisRequest = _presenter.CurrentPurchaseRequest;
@@ -340,12 +330,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             if (_presenter.CurrentPurchaseRequest.ProgressStatus == ProgressStatus.Completed.ToString())
             {
                 btnApprove.Enabled = false;
-                btnCancel.Enabled = true;
                 PrintTransaction();
-            }
-            if (_presenter.CurrentPurchaseRequest.CurrentStatus == ApprovalStatus.Canceled.ToString())
-            {
-                btnCancel.Enabled = false;
             }
             txtRejectedReason.Visible = false;
             rfvRejectedReason.Enabled = false;
@@ -367,6 +352,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             }
             ddlApprovalStatus.Items.Add(new ListItem(ApprovalStatus.Rejected.ToString().Replace('_', ' '), ApprovalStatus.Rejected.ToString().Replace('_', ' ')));
+            if (_presenter.CurrentPurchaseRequest.ProgressStatus == ProgressStatus.Completed.ToString())
+            {
+                ddlApprovalStatus.Items.Add(new ListItem(ApprovalStatus.Canceled.ToString().Replace('_', ' '), ApprovalStatus.Canceled.ToString().Replace('_', ' ')));
+            }
 
         }
         protected void grvPurchaseRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -391,7 +380,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void ddlApprovalStatus_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ddlApprovalStatus.SelectedValue == "Rejected")
+            if (ddlApprovalStatus.SelectedValue == "Rejected" || ddlApprovalStatus.SelectedValue == "Canceled")
             {
                 lblRejectedReason.Visible = true;
                 txtRejectedReason.Visible = true;

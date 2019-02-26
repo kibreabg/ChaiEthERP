@@ -713,22 +713,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
 
         }
-        protected void btnCancel_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                _presenter.CurrentVehicleRequest.CurrentStatus = ApprovalStatus.Canceled.ToString();
-                _presenter.SaveOrUpdateVehicleRequest(_presenter.CurrentVehicleRequest);
-                SendCanceledEmail();
-                Master.ShowMessage(new AppMessage("Vehicle Request Successfully Canceled! ", RMessageType.Info));
-            }
-            catch (Exception ex)
-            {
-                Master.ShowMessage(new AppMessage("Error! Vehicle request not canceled due to " + ex.Message, RMessageType.Error));
-                ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
-            }
-        }
         protected void btnPrintTravellog_Click(object sender, EventArgs e)
         {
             Response.Redirect(String.Format("../Request/frmTravelLog.aspx?VehicleRequestId={0}", _presenter.CurrentVehicleRequest.Id));
