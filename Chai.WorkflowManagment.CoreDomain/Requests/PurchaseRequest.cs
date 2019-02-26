@@ -34,7 +34,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public int CurrentLevel { get; set; }
         public string CurrentStatus { get; set; }
         public string ProgressStatus { get; set; }
-        public virtual BidAnalysisRequest BidAnalysisRequest { get; set; }
+        public virtual IList<BidAnalysisRequest> BidAnalysisRequests { get; set; }
         public virtual IList<SoleVendorRequest> SoleVendorRequests { get; set; }
         public virtual IList<PurchaseRequestStatus> PurchaseRequestStatuses { get; set; }
         public virtual IList<PurchaseRequestDetail> PurchaseRequestDetails { get; set; }
@@ -116,6 +116,41 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
             {
                 if (PRS.Id == Id)
                     PurchaseRequestDetails.Remove(PRS);
+                break;
+            }
+
+        }
+        #endregion
+        #region BidAnalysisRequest
+        public virtual BidAnalysisRequest GetBidAnalysisRequest(int Id)
+        {
+
+            foreach (BidAnalysisRequest BAR in BidAnalysisRequests)
+            {
+                if (BAR.Id == Id)
+                    return BAR;
+
+            }
+            return null;
+        }
+        public virtual IList<BidAnalysisRequest> GetBidAnalysisRequestByPurchaseId(int PurchaseId)
+        {
+            IList<BidAnalysisRequest> LBAR = new List<BidAnalysisRequest>();
+            foreach (BidAnalysisRequest BAR in BidAnalysisRequests)
+            {
+                if (BAR.PurchaseRequest.Id == PurchaseId)
+                    LBAR.Add(BAR);
+
+            }
+            return LBAR;
+        }
+        public virtual void RemoveBidAnalysisRequest(int Id)
+        {
+
+            foreach (BidAnalysisRequest BAR in BidAnalysisRequests)
+            {
+                if (BAR.Id == Id)
+                    BidAnalysisRequests.Remove(BAR);
                 break;
             }
 
