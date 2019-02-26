@@ -138,6 +138,11 @@ namespace Chai.WorkflowManagment.Modules.Report
             ReportDao re = new ReportDao();
             return re.LeaveReport(EmployeeName, LeaveType);
         }
+        public DataSet LeaveApproverProgressReport()
+        {
+            ReportDao re = new ReportDao();
+            return re.LeaveApproverProgressReport();
+        }
         public DataSet GetPurchaseReport(string datefrom, string dateto)
         {
             ReportDao re = new ReportDao();

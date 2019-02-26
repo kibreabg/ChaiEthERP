@@ -30,6 +30,24 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
                 return ds;
             }
         }
+        public DataSet LeaveApproverProgressReport()
+        {
+            string connstring = ConfigurationManager.ConnectionStrings["WorkflowManagmentReportConnectionString"].ToString();
+            using (SqlConnection cn = new SqlConnection(connstring))
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = cn;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "SPLeaveApproverProgressReport";
+              
+                var da = new SqlDataAdapter(cmd);
+                var ds = new DataSet();
+                da.Fill(ds);
+                cn.Close();
+                return ds;
+            }
+        }
         public DataSet PurchaseReport(string datefrom, string dateto)
         {
             string connstring = ConfigurationManager.ConnectionStrings["WorkflowManagmentReportConnectionString"].ToString();
