@@ -197,7 +197,7 @@
                                                             </asp:DropDownList>
                                                         </FooterTemplate>
                                                     </asp:TemplateColumn>
-                                                    <asp:TemplateColumn HeaderText="Rental Driver Phone No.">
+                                                    <asp:TemplateColumn HeaderText="Driver Phone No.">
                                                         <ItemTemplate>
                                                             <%# DataBinder.Eval(Container.DataItem, "DriverPhoneNo")%>
                                                         </ItemTemplate>

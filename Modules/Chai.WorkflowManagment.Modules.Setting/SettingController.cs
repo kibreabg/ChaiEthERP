@@ -115,9 +115,13 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             return WorkspaceFactory.CreateReadOnly().Query<Grant>(x => x.Status == "Active").ToList();
         }
-        public Grant GetGrant(int GrantId)
+        public Grant GetGrant(int id)
         {
-            return _workspace.Single<Grant>(x => x.Id == GrantId);
+            return _workspace.Single<Grant>(x => x.Id == id);
+        }
+        public Grant GetGrantByCode(string grantCode)
+        {
+            return _workspace.Single<Grant>(x => x.GrantCode == grantCode);
         }
         public IList<Grant> ListGrants(string GrantName, string GrantCode)
         {

@@ -121,6 +121,20 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
             return will;
         }
+        private void BindAccount(DropDownList ddlItemAccount)
+        {
+            ddlItemAccount.DataSource = _presenter.GetItemAccounts();
+            ddlItemAccount.DataBind();
+        }
+        private void BindProject(DropDownList ddlProject)
+        {
+            ddlProject.DataSource = _presenter.GetProjects();
+            ddlProject.DataBind();
+        }
+        private void BindGrant(TextBox txtGrant, int projectId)
+        {
+            txtGrant.Text = _presenter.GetGrantbyprojectId(projectId).First().GrantCode;            
+        }
         private void BindSearchPurchaseRequestGrid()
         {
             grvPurchaseRequestList.DataSource = _presenter.ListPurchaseRequests(txtSrchRequestNo.Text, txtSrchRequestDate.Text, ddlSrchProgressStatus.SelectedValue);
@@ -152,12 +166,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 lnkSoleVendor.Visible = true;
             }
         }
-        private void BindPurchaseRequestDetails()
-        {
-            grvPurchaseRequestDetails.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails;
-            grvPurchaseRequestDetails.DataBind();
-
-        }
         private void ShowPrint()
         {
             if (_presenter.CurrentPurchaseRequest.CurrentLevel == _presenter.CurrentPurchaseRequest.PurchaseRequestStatuses.Count)
@@ -176,7 +184,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 EmailSender.Send(_presenter.GetUser(_presenter.GetAssignedJobbycurrentuser(PRS.Approver).AssignedTo).Email, "Purchase Request", _presenter.GetUser(_presenter.CurrentPurchaseRequest.Requester).FullName + "Requests for Purchase with Request No." + (_presenter.CurrentPurchaseRequest.RequestNo).ToUpper());
             }
         }
-
         private void SendEmailRejected(PurchaseRequestStatus PRS)
         {
             EmailSender.Send(_presenter.GetUser(_presenter.CurrentPurchaseRequest.Requester).Email, "Purchase Request Rejection", "Your Purchase Request with Request No. - '" + (_presenter.CurrentPurchaseRequest.RequestNo.ToString()).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (PRS.RejectedReason).ToUpper() + "'");
@@ -189,7 +196,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
             }
         }
-
         private void GetNextApprover()
         {
             foreach (PurchaseRequestStatus PRS in _presenter.CurrentPurchaseRequest.PurchaseRequestStatuses)
@@ -244,6 +250,20 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         protected void lnkSoleVendor_Click(object sender, EventArgs e)
         {
             Response.Redirect(String.Format("../Request/frmSoleVendorRequest.aspx?PurchaseRequestId={0}", _presenter.CurrentPurchaseRequest.Id));
+        }
+        protected void ddlProject_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DropDownList ddl = (DropDownList)sender;
+            TextBox txtGrant = ddl.FindControl("txtGrant") as TextBox;
+            BindGrant(txtGrant, Convert.ToInt32(ddl.SelectedValue));
+            pnlDetail_ModalPopupExtender.Show();
+        }
+        protected void ddlAccount_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DropDownList ddl = (DropDownList)sender;
+            TextBox txtAccountCode = ddl.FindControl("txtAccountCode") as TextBox;
+            txtAccountCode.Text = _presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)).AccountCode;
+            pnlDetail_ModalPopupExtender.Show();
         }
         protected void btnFind_Click(object sender, EventArgs e)
         {
@@ -312,10 +332,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             if (e.CommandName == "ViewItem")
             {
                 reqID = (int)grvPurchaseRequestList.DataKeys[Convert.ToInt32(e.CommandArgument)].Value;
+                Session["purchaseReqId"] = reqID;
                 _presenter.CurrentPurchaseRequest = _presenter.GetPurchaseRequestById(reqID);
                 //_presenter.OnViewLoaded();
-                grvPurchaseRequestDetails.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails;
-                grvPurchaseRequestDetails.DataBind();
+                dgPurchaseRequestDetail.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails;
+                dgPurchaseRequestDetail.DataBind();
                 pnlDetail_ModalPopupExtender.Show();
             }
         }
@@ -409,22 +430,111 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
             }
         }
-        /*protected void grvPurchaseRequestDetails_RowDataBound(object sender, GridViewRowEventArgs e)
+
+        #region PurchaseRequestDetail
+        private void BindPurchaseRequestDetails()
+        {
+            _presenter.CurrentPurchaseRequest = _presenter.GetPurchaseRequestById((int)Session["purchaseReqId"]);
+            dgPurchaseRequestDetail.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails;
+            dgPurchaseRequestDetail.DataBind();
+
+        }
+        protected void dgPurchaseRequestDetail_CancelCommand(object source, DataGridCommandEventArgs e)
+        {
+            this.dgPurchaseRequestDetail.EditItemIndex = -1;
+            BindPurchaseRequestDetails();
+        }
+        protected void dgPurchaseRequestDetail_EditCommand(object source, DataGridCommandEventArgs e)
+        {
+            this.dgPurchaseRequestDetail.EditItemIndex = e.Item.ItemIndex;
+            BindPurchaseRequestDetails();
+            pnlDetail_ModalPopupExtender.Show();
+        }
+        protected void dgPurchaseRequestDetail_ItemDataBound(object sender, DataGridItemEventArgs e)
         {
             if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails != null)
             {
-                if (e.Row.RowType == DataControlRowType.DataRow)
-                {
-                    if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Row.RowIndex].Id != 0)
-                    {
-                        e.Row.Cells[3].Text = _presenter.CurrentPurchaseRequest.TotalPrice.ToString();
-                        e.Row.Cells[4].Text = _presenter.CurrentPurchaseRequest.ConditionsofOrder;
 
+                DropDownList ddlItemAccount = e.Item.FindControl("ddlAccount") as DropDownList;
+                if (ddlItemAccount != null)
+                {
+                    BindAccount(ddlItemAccount);
+                    if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].ItemAccount != null)
+                    {
+                        ListItem liI = ddlItemAccount.Items.FindByValue(_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].ItemAccount.Id.ToString());
+                        if (liI != null)
+                            liI.Selected = true;
                     }
-                        
-                    
+                }
+                DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
+
+                if (ddlProject != null)
+                {
+                    BindProject(ddlProject);
+
+                    if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].Project != null)
+                    {
+                        ListItem li = ddlProject.Items.FindByValue(_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].Project.Id.ToString());
+                        if (li != null)
+                            li.Selected = true;
+                    }
+                }
+                DropDownList ddlUnitOfMeasurment = e.Item.FindControl("ddlUnitOfMeasurment") as DropDownList;
+                if(ddlUnitOfMeasurment != null)
+                {
+                    ListItem liI = ddlUnitOfMeasurment.Items.FindByValue(_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].UnitOfMeasurment);
+                    if (liI != null)
+                        liI.Selected = true;
+                }
+                DropDownList ddlPurposeOfPurchase = e.Item.FindControl("ddlPurposeOfPurchase") as DropDownList;
+                if (ddlPurposeOfPurchase != null)
+                {
+                    ListItem liI = ddlPurposeOfPurchase.Items.FindByValue(_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].PurposeOfPurchase);
+                    if (liI != null)
+                        liI.Selected = true;
                 }
             }
-        }*/
+
+        }
+        protected void dgPurchaseRequestDetail_UpdateCommand(object source, DataGridCommandEventArgs e)
+        {
+            int id = (int)dgPurchaseRequestDetail.DataKeys[e.Item.ItemIndex];
+            _presenter.CurrentPurchaseRequest = _presenter.GetPurchaseRequestById((int)Session["purchaseReqId"]);
+            PurchaseRequestDetail Detail;
+            if (id > 0)
+                Detail = _presenter.CurrentPurchaseRequest.GetPurchaseRequestDetail(id);
+            else
+                Detail = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.ItemIndex];
+
+            try
+            {
+                DropDownList ddlAccount = e.Item.FindControl("ddlAccount") as DropDownList;
+                Detail.ItemAccount = _presenter.GetItemAccount(int.Parse(ddlAccount.SelectedValue));
+                TextBox txtAccountCode = e.Item.FindControl("txtAccountCode") as TextBox;
+                Detail.AccountCode = txtAccountCode.Text;
+                TextBox txtItem = e.Item.FindControl("txtItem") as TextBox;
+                Detail.Item = txtItem.Text;
+                TextBox txtApprovedQuantity = e.Item.FindControl("txtApprovedQuantity") as TextBox;
+                Detail.ApprovedQuantity = Convert.ToInt32(txtApprovedQuantity.Text);
+                DropDownList ddlPurposeOfPurchase = e.Item.FindControl("ddlPurposeOfPurchase") as DropDownList;
+                Detail.PurposeOfPurchase = ddlPurposeOfPurchase.SelectedValue;
+                DropDownList ddlUnitOfMeasurment = e.Item.FindControl("ddlUnitOfMeasurment") as DropDownList;
+                Detail.UnitOfMeasurment = ddlUnitOfMeasurment.SelectedValue;
+                DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
+                Detail.Project = _presenter.GetProject(int.Parse(ddlProject.SelectedValue));
+                TextBox txtGrant = e.Item.FindControl("txtGrant") as TextBox;
+                Detail.Grant = _presenter.GetGrantByCode(txtGrant.Text);
+                Detail.PurchaseRequest = _presenter.CurrentPurchaseRequest;
+                Master.ShowMessage(new AppMessage("Purchase Request Detail  Updated successfully.", RMessageType.Info));
+                dgPurchaseRequestDetail.EditItemIndex = -1;
+                BindPurchaseRequestDetails();
+                pnlDetail_ModalPopupExtender.Show();
+            }
+            catch (Exception ex)
+            {
+                Master.ShowMessage(new AppMessage("Error: Unable to Update Purchase Request Detail. " + ex.Message, RMessageType.Error));
+            }
+        }
+        #endregion
     }
 }

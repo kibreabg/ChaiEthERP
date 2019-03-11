@@ -17,6 +17,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public Nullable<DateTime> GraduationYear { get; set; }
         public string SpecialAward { get; set; }
         public string Certificate { get; set; }
+        public bool Reviewed { get; set; }
         public virtual Employee Employee { get; set; }
     }
 }

@@ -23,10 +23,10 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         {
             if (!this.IsPostBack)
             {
-                this._presenter.OnViewInitialized();                
+                this._presenter.OnViewInitialized();
             }
             this._presenter.OnViewLoaded();
-            if(!this.IsPostBack)
+            if (!this.IsPostBack)
             {
                 BindEmployee();
                 BindFamilyDetails();
@@ -34,7 +34,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 BindEducations();
                 BindWorkExperiences();
             }
-           
+
         }
 
         [CreateNew]
@@ -147,12 +147,12 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 string fileName = String.Empty;
                 if (fuProfilePic.HasFile)
                 {
-                    fileName = _presenter.CurrentAppUser.UserName + Path.GetExtension(fuProfilePic.PostedFile.FileName);                    
-                    fuProfilePic.PostedFile.SaveAs(Server.MapPath("~/ProfilePics/") + fileName);                    
+                    fileName = _presenter.CurrentAppUser.UserName + Path.GetExtension(fuProfilePic.PostedFile.FileName);
+                    fuProfilePic.PostedFile.SaveAs(Server.MapPath("~/ProfilePics/") + fileName);
                 }
-                else if(!String.IsNullOrEmpty(hfProfilePic.Value))
+                else if (!String.IsNullOrEmpty(hfProfilePic.Value))
                 {
-                    return  hfProfilePic.Value;
+                    return hfProfilePic.Value;
                 }
 
                 return "~/ProfilePics/" + fileName;
@@ -199,7 +199,6 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 grvFamilyDetails.DataBind();
             }
         }
-
         private void BindEmergencyContacts()
         {
             if (_presenter.CurrentAppUser.Employee != null)
@@ -208,7 +207,6 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 grvEmergContacts.DataBind();
             }
         }
-
         private void BindEducations()
         {
             if (_presenter.CurrentAppUser.Employee != null)
@@ -217,7 +215,6 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 grvEducations.DataBind();
             }
         }
-
         private void BindWorkExperiences()
         {
             if (_presenter.CurrentAppUser.Employee != null)
@@ -432,7 +429,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 _presenter.SaveOrUpdateEmployee();
                 BindEmployee();
-                Master.ShowMessage(new AppMessage("You've Successfully Updated Your Profile!", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("You've Successfully Updated Your Profile!", RMessageType.Info));
                 Log.Info(_presenter.CurrentUser().FullName + " has updated his/her Profile");
             }
             catch (Exception ex)
@@ -442,7 +439,6 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
-
         protected void btnFamSave_Click(object sender, EventArgs e)
         {
             try
@@ -492,7 +488,6 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
-
         protected void btnEmergSave_Click(object sender, EventArgs e)
         {
             try
@@ -531,7 +526,6 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
-
         protected void btnEduSave_Click(object sender, EventArgs e)
         {
             try
@@ -576,7 +570,6 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
-
         protected void btnWorkSave_Click(object sender, EventArgs e)
         {
             try
@@ -612,22 +605,19 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
-
         protected void lnkEduDownload_Clicked(object sender, EventArgs e)
         {
             string certificatePath = (sender as LinkButton).CommandArgument;
             imgCertPreview.ImageUrl = certificatePath;
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetoeducation();previewImage('certPreview','edu');", true);
         }
-
         protected void lnkFamDownload_Clicked(object sender, EventArgs e)
-        {         
+        {
             string certificatePath = (sender as LinkButton).CommandArgument;
             imgCertPreview.ImageUrl = certificatePath;
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "previewImage('certPreview','fam');movetofamily();", true);
-            
-        }
 
+        }
         protected void btnFamDelete_Click(object sender, EventArgs e)
         {
             try
@@ -653,7 +643,6 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             }
 
         }
-
         protected void btnEmergDelete_Click(object sender, EventArgs e)
         {
             try
@@ -678,7 +667,6 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
-
         protected void btnEduDelete_Click(object sender, EventArgs e)
         {
             try
@@ -703,7 +691,6 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
-
         protected void btnWorkExpDelete_Click(object sender, EventArgs e)
         {
             try
@@ -728,7 +715,6 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
-
         protected void btnCancel_Click(object sender, EventArgs e)
         {
 
@@ -752,6 +738,48 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         {
             clearWorkExperiences();
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetowork();", true);
+        }
+        protected void ckFamCertReview_Check(object sender, EventArgs e)
+        {
+            try
+            {
+                CheckBox ckBox = (CheckBox)sender;
+                int rowIndex = Convert.ToInt32(ckBox.Attributes["RowIndex"]);
+                HiddenField hfFamilyId = grvFamilyDetails.Rows[rowIndex].FindControl("hfFamId") as HiddenField;
+                FamilyDetail familyDetail = _presenter.CurrentAppUser.Employee.GetFamilyDetail(Convert.ToInt32(hfFamilyId.Value));
+                familyDetail.Reviewed = true;
+                _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
+                Master.ShowMessage(new AppMessage("You've Successfully Reviewed this Certificate!", RMessageType.Info));
+                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetofamily();", true);
+            }
+            catch (Exception ex)
+            {
+                Master.ShowMessage(new AppMessage("Error: While Reviewing Certificate!", RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
+            }
+
+        }
+        protected void ckEduCertReview_Check(object sender, EventArgs e)
+        {
+            try
+            {
+                CheckBox ckBox = (CheckBox)sender;
+                int rowIndex = Convert.ToInt32(ckBox.Attributes["RowIndex"]);
+                HiddenField hfEducationId = grvEducations.Rows[rowIndex].FindControl("hfEduId") as HiddenField;
+                Education education = _presenter.CurrentAppUser.Employee.GetEducation(Convert.ToInt32(hfEducationId.Value));
+                education.Reviewed = true;
+                _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
+                Master.ShowMessage(new AppMessage("You've Successfully Reviewed this Certificate!", RMessageType.Info));
+                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetoeducation();", true);
+            }
+            catch (Exception ex)
+            {
+                Master.ShowMessage(new AppMessage("Error: While Reviewing Certificate!", RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
+            }
+
         }
 
     }

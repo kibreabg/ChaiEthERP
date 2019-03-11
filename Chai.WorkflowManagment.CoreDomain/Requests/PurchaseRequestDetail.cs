@@ -12,7 +12,10 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
     {
         public int Id { get; set; }
         public string Item { get; set; }
+        public string PurposeOfPurchase { get; set; }
         public int Qty { get; set; }
+        public int ApprovedQuantity { get; set; }
+        public string UnitOfMeasurment { get; set; }
         public decimal Priceperunit { get; set; }
         public decimal EstimatedCost { get; set; }
         public virtual ItemAccount ItemAccount { get; set; }

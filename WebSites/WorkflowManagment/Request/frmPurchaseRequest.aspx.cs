@@ -361,236 +361,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         protected void btnCancelPopup_Click(object sender, EventArgs e)
         {
             _presenter.CancelPage();
-        }
-
-        #region PurchaseRequestDetail
-        private void BindPurchaseRequestDetails()
-        {
-            dgPurchaseRequestDetail.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails;
-            dgPurchaseRequestDetail.DataBind();
-        }
-        protected void dgPurchaseRequestDetail_CancelCommand(object source, DataGridCommandEventArgs e)
-        {
-            this.dgPurchaseRequestDetail.EditItemIndex = -1;
-            BindPurchaseRequestDetails();
-        }
-        protected void dgPurchaseRequestDetail_DeleteCommand(object source, DataGridCommandEventArgs e)
-        {
-            int id = (int)dgPurchaseRequestDetail.DataKeys[e.Item.ItemIndex];
-            int PRDId = (int)dgPurchaseRequestDetail.DataKeys[e.Item.ItemIndex];
-            PurchaseRequestDetail prd;
-
-            if (PRDId > 0)
-                prd = _presenter.CurrentPurchaseRequest.GetPurchaseRequestDetail(PRDId);
-            else
-                prd = (PurchaseRequestDetail)_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.ItemIndex];
-            try
-            {
-                if (PRDId > 0)
-                {
-                    _presenter.CurrentPurchaseRequest.RemovePurchaseRequestDetail(id);
-                    _presenter.DeletePurchaseRequestDetail(_presenter.GetPurchaseRequestDetail(id));
-                  //  _presenter.CurrentPurchaseRequest.TotalPrice = _presenter.CurrentPurchaseRequest.TotalPrice - prd.EstimatedCost;
-                  //  txtTotal.Text = (_presenter.CurrentPurchaseRequest.TotalPrice).ToString();
-                    _presenter.SaveOrUpdateLeavePurchase(_presenter.CurrentPurchaseRequest);
-                }
-                else
-                {
-                    _presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Remove(prd);
-                  //  _presenter.CurrentPurchaseRequest.TotalPrice = _presenter.CurrentPurchaseRequest.TotalPrice - prd.EstimatedCost;
-                  //  txtTotal.Text = (_presenter.CurrentPurchaseRequest.TotalPrice).ToString();
-                }
-                BindPurchaseRequestDetails();
-
-                Master.ShowMessage(new AppMessage("Purchase Request Detail was Removed Successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
-            }
-            catch (Exception ex)
-            {
-                Master.ShowMessage(new AppMessage("Error: Unable to delete Purchase Request Detail. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
-            }
-
-
-        }
-        protected void dgPurchaseRequestDetail_EditCommand(object source, DataGridCommandEventArgs e)
-        {
-            this.dgPurchaseRequestDetail.EditItemIndex = e.Item.ItemIndex;
-
-            BindPurchaseRequestDetails();
-        }
-        protected void dgPurchaseRequestDetail_ItemCommand(object source, DataGridCommandEventArgs e)
-        {
-            if (e.CommandName == "AddNew")
-            {
-                try
-                {
-                    PurchaseRequestDetail Detail = new PurchaseRequestDetail();
-                    DropDownList ddlFAccount = e.Item.FindControl("ddlFAccount") as DropDownList;
-                    Detail.ItemAccount = _presenter.GetItemAccount(int.Parse(ddlFAccount.SelectedValue));
-                    TextBox txtFAccountCode = e.Item.FindControl("txtFAccountCode") as TextBox;
-                    Detail.AccountCode = txtFAccountCode.Text;
-                    TextBox txtFItem = e.Item.FindControl("txtFItem") as TextBox;
-                    Detail.Item = txtFItem.Text;
-                    TextBox txtFQty = e.Item.FindControl("txtFQty") as TextBox;
-                    Detail.Qty = Convert.ToInt32(txtFQty.Text);
-
-                   // TextBox txtFPriceperunit = e.Item.FindControl("txtFPriceperunit") as TextBox;
-                   // Detail.Priceperunit = Convert.ToDecimal(txtFPriceperunit.Text);
-                    //Detail.EstimatedCost = Convert.ToInt32(txtFQty.Text) * Convert.ToDecimal(txtFPriceperunit.Text);
-                    //Determine total cost
-                  /*  decimal cost = 0;
-                    if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Count > 0)
-                    {
-
-                        foreach (PurchaseRequestDetail detail in _presenter.CurrentPurchaseRequest.PurchaseRequestDetails)
-                        {
-                            cost = cost + detail.EstimatedCost;
-                        }
-                    }*/
-                  //  _presenter.CurrentPurchaseRequest.TotalPrice = cost;
-                    //Determine total cost end
-                  //  _presenter.CurrentPurchaseRequest.TotalPrice = _presenter.CurrentPurchaseRequest.TotalPrice + Detail.EstimatedCost;
-                   // txtTotal.Text = (_presenter.CurrentPurchaseRequest.TotalPrice).ToString();
-                    DropDownList ddlFProject = e.Item.FindControl("ddlFProject") as DropDownList;
-                    Detail.Project = _presenter.GetProject(int.Parse(ddlFProject.SelectedValue));
-                    DropDownList ddlFGrant = e.Item.FindControl("ddlFGrant") as DropDownList;
-                    Detail.Grant = _presenter.GetGrant(int.Parse(ddlFGrant.SelectedValue));
-                    Detail.PurchaseRequest = _presenter.CurrentPurchaseRequest;
-                    _presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Add(Detail);
-                    Master.ShowMessage(new AppMessage("Purchase Request Detail added successfully.", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                    dgPurchaseRequestDetail.EditItemIndex = -1;
-                    BindPurchaseRequestDetails();
-                }
-                catch (Exception ex)
-                {
-                    Master.ShowMessage(new AppMessage("Error: Unable to Add Purchase Request Detail. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
-                }
-            }
-        }
-        protected void dgPurchaseRequestDetail_ItemDataBound(object sender, DataGridItemEventArgs e)
-        {
-
-
-            if (e.Item.ItemType == ListItemType.Footer)
-            {
-                DropDownList ddlFItemAccount = e.Item.FindControl("ddlFAccount") as DropDownList;
-                BindAccount(ddlFItemAccount);
-                DropDownList ddlFProject = e.Item.FindControl("ddlFProject") as DropDownList;
-                BindProject(ddlFProject);
-                DropDownList ddlFGrant = e.Item.FindControl("ddlFGrant") as DropDownList;
-                BindGrant(ddlFGrant, Convert.ToInt32(ddlFProject.SelectedValue));
-
-
-            }
-            else
-            {
-
-
-                if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails != null)
-                {
-
-                    DropDownList ddlItemAccount = e.Item.FindControl("ddlAccount") as DropDownList;
-                    if (ddlItemAccount != null)
-                    {
-                        BindAccount(ddlItemAccount);
-                        if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].ItemAccount.Id != null)
-                        {
-                            ListItem liI = ddlItemAccount.Items.FindByValue(_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].ItemAccount.Id.ToString());
-                            if (liI != null)
-                                liI.Selected = true;
-                        }
-
-                    }
-
-
-                    DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
-
-                    if (ddlProject != null)
-                    {
-                        BindProject(ddlProject);
-
-                        if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].Project != null)
-                        {
-                            ListItem li = ddlProject.Items.FindByValue(_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].Project.Id.ToString());
-                            if (li != null)
-                                li.Selected = true;
-                        }
-                    }
-                    DropDownList ddlGrant = e.Item.FindControl("ddlGrant") as DropDownList;
-                    if (ddlGrant != null)
-                    {
-                        BindGrant(ddlGrant, Convert.ToInt32(ddlProject.SelectedValue));
-                        if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].Grant.Id != null)
-                        {
-                            ListItem liI = ddlGrant.Items.FindByValue(_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].Grant.Id.ToString());
-                            if (liI != null)
-                                liI.Selected = true;
-                        }
-
-                    }
-                }
-
-            }
-
-
-        }
-        protected void dgPurchaseRequestDetail_UpdateCommand(object source, DataGridCommandEventArgs e)
-        {
-            int id = (int)dgPurchaseRequestDetail.DataKeys[e.Item.ItemIndex];
-            PurchaseRequestDetail Detail;
-            if (id > 0)
-                Detail = _presenter.CurrentPurchaseRequest.GetPurchaseRequestDetail(id);
-            else
-                Detail = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.ItemIndex];
-
-            try
-            {
-                DropDownList ddlAccount = e.Item.FindControl("ddlAccount") as DropDownList;
-                Detail.ItemAccount = _presenter.GetItemAccount(int.Parse(ddlAccount.SelectedValue));
-                TextBox txtAccountCode = e.Item.FindControl("txtAccountCode") as TextBox;
-                Detail.AccountCode = txtAccountCode.Text;
-                TextBox txtItem = e.Item.FindControl("txtItem") as TextBox;
-                Detail.Item = txtItem.Text;
-                TextBox txtQty = e.Item.FindControl("txtQty") as TextBox;
-                Detail.Qty = Convert.ToInt32(txtQty.Text);
-
-           //     TextBox txtPriceperunit = e.Item.FindControl("txtPriceperunit") as TextBox;
-             //   Detail.Priceperunit = Convert.ToDecimal(txtPriceperunit.Text);
-
-                //TextBox txtEstimatedCost = e.Item.FindControl("txtEstimatedCost") as TextBox;
-            //    Detail.EstimatedCost = Convert.ToInt32(txtQty.Text) * Convert.ToDecimal(txtPriceperunit.Text);
-                //Determine total cost
-            /*    decimal cost = 0;
-                if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Count > 0)
-                {
-
-                    foreach (PurchaseRequestDetail detail in _presenter.CurrentPurchaseRequest.PurchaseRequestDetails)
-                    {
-                        cost = cost + detail.EstimatedCost;
-                    }
-                }
-                _presenter.CurrentPurchaseRequest.TotalPrice = cost;*/
-                //Determine total cost end
-                //_presenter.CurrentPurchaseRequest.TotalPrice = _presenter.CurrentPurchaseRequest.TotalPrice + Detail.EstimatedCost;
-              //  txtTotal.Text = (_presenter.CurrentPurchaseRequest.TotalPrice).ToString();
-                DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
-                Detail.Project = _presenter.GetProject(int.Parse(ddlProject.SelectedValue));
-                DropDownList ddlGrant = e.Item.FindControl("ddlGrant") as DropDownList;
-                Detail.Grant = _presenter.GetGrant(int.Parse(ddlGrant.SelectedValue));
-                Detail.PurchaseRequest = _presenter.CurrentPurchaseRequest;
-                Master.ShowMessage(new AppMessage("Purchase Request Detail  Updated successfully.", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                dgPurchaseRequestDetail.EditItemIndex = -1;
-                BindPurchaseRequestDetails();
-            }
-            catch (Exception ex)
-            {
-                Master.ShowMessage(new AppMessage("Error: Unable to Update Purchase Request Detail. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
-            }
-
-
-
-
-        }
-        #endregion
+        }       
         protected void ddlFProject_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
@@ -666,5 +437,224 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             TextBox txtAccountCode = ddl.FindControl("txtFAccountCode") as TextBox;
             txtAccountCode.Text = _presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)).AccountCode;
         }
+        #region PurchaseRequestDetail
+        private void BindPurchaseRequestDetails()
+        {
+            dgPurchaseRequestDetail.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails;
+            dgPurchaseRequestDetail.DataBind();
+        }
+        protected void dgPurchaseRequestDetail_CancelCommand(object source, DataGridCommandEventArgs e)
+        {
+            this.dgPurchaseRequestDetail.EditItemIndex = -1;
+            BindPurchaseRequestDetails();
+        }
+        protected void dgPurchaseRequestDetail_DeleteCommand(object source, DataGridCommandEventArgs e)
+        {
+            int id = (int)dgPurchaseRequestDetail.DataKeys[e.Item.ItemIndex];
+            int PRDId = (int)dgPurchaseRequestDetail.DataKeys[e.Item.ItemIndex];
+            PurchaseRequestDetail prd;
+
+            if (PRDId > 0)
+                prd = _presenter.CurrentPurchaseRequest.GetPurchaseRequestDetail(PRDId);
+            else
+                prd = (PurchaseRequestDetail)_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.ItemIndex];
+            try
+            {
+                if (PRDId > 0)
+                {
+                    _presenter.CurrentPurchaseRequest.RemovePurchaseRequestDetail(id);
+                    _presenter.DeletePurchaseRequestDetail(_presenter.GetPurchaseRequestDetail(id));
+                    //  _presenter.CurrentPurchaseRequest.TotalPrice = _presenter.CurrentPurchaseRequest.TotalPrice - prd.EstimatedCost;
+                    //  txtTotal.Text = (_presenter.CurrentPurchaseRequest.TotalPrice).ToString();
+                    _presenter.SaveOrUpdateLeavePurchase(_presenter.CurrentPurchaseRequest);
+                }
+                else
+                {
+                    _presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Remove(prd);
+                    //  _presenter.CurrentPurchaseRequest.TotalPrice = _presenter.CurrentPurchaseRequest.TotalPrice - prd.EstimatedCost;
+                    //  txtTotal.Text = (_presenter.CurrentPurchaseRequest.TotalPrice).ToString();
+                }
+                BindPurchaseRequestDetails();
+
+                Master.ShowMessage(new AppMessage("Purchase Request Detail was Removed Successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
+            }
+            catch (Exception ex)
+            {
+                Master.ShowMessage(new AppMessage("Error: Unable to delete Purchase Request Detail. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+            }
+        }
+        protected void dgPurchaseRequestDetail_EditCommand(object source, DataGridCommandEventArgs e)
+        {
+            this.dgPurchaseRequestDetail.EditItemIndex = e.Item.ItemIndex;
+            BindPurchaseRequestDetails();
+        }
+        protected void dgPurchaseRequestDetail_ItemCommand(object source, DataGridCommandEventArgs e)
+        {
+            if (e.CommandName == "AddNew")
+            {
+                try
+                {
+                    PurchaseRequestDetail Detail = new PurchaseRequestDetail();
+                    DropDownList ddlFAccount = e.Item.FindControl("ddlFAccount") as DropDownList;
+                    Detail.ItemAccount = _presenter.GetItemAccount(int.Parse(ddlFAccount.SelectedValue));
+                    TextBox txtFAccountCode = e.Item.FindControl("txtFAccountCode") as TextBox;
+                    Detail.AccountCode = txtFAccountCode.Text;
+                    TextBox txtFItem = e.Item.FindControl("txtFItem") as TextBox;
+                    Detail.Item = txtFItem.Text;
+                    TextBox txtFQty = e.Item.FindControl("txtFQty") as TextBox;
+                    Detail.Qty = Convert.ToInt32(txtFQty.Text);
+                    DropDownList ddlFPurposeOfPurchase = e.Item.FindControl("ddlFPurposeOfPurchase") as DropDownList;
+                    Detail.PurposeOfPurchase = ddlFPurposeOfPurchase.SelectedValue;
+                    DropDownList ddlFUnitOfMeasurment = e.Item.FindControl("ddlFUnitOfMeasurment") as DropDownList;
+                    Detail.UnitOfMeasurment = ddlFUnitOfMeasurment.SelectedValue;
+                    // TextBox txtFPriceperunit = e.Item.FindControl("txtFPriceperunit") as TextBox;
+                    // Detail.Priceperunit = Convert.ToDecimal(txtFPriceperunit.Text);
+                    //Detail.EstimatedCost = Convert.ToInt32(txtFQty.Text) * Convert.ToDecimal(txtFPriceperunit.Text);
+                    //Determine total cost
+                    /*  decimal cost = 0;
+                      if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Count > 0)
+                      {
+
+                          foreach (PurchaseRequestDetail detail in _presenter.CurrentPurchaseRequest.PurchaseRequestDetails)
+                          {
+                              cost = cost + detail.EstimatedCost;
+                          }
+                      }*/
+                    //  _presenter.CurrentPurchaseRequest.TotalPrice = cost;
+                    //Determine total cost end
+                    //  _presenter.CurrentPurchaseRequest.TotalPrice = _presenter.CurrentPurchaseRequest.TotalPrice + Detail.EstimatedCost;
+                    // txtTotal.Text = (_presenter.CurrentPurchaseRequest.TotalPrice).ToString();
+                    DropDownList ddlFProject = e.Item.FindControl("ddlFProject") as DropDownList;
+                    Detail.Project = _presenter.GetProject(int.Parse(ddlFProject.SelectedValue));
+                    DropDownList ddlFGrant = e.Item.FindControl("ddlFGrant") as DropDownList;
+                    Detail.Grant = _presenter.GetGrant(int.Parse(ddlFGrant.SelectedValue));
+                    Detail.PurchaseRequest = _presenter.CurrentPurchaseRequest;
+                    _presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Add(Detail);
+                    Master.ShowMessage(new AppMessage("Purchase Request Detail added successfully.", RMessageType.Info));
+                    dgPurchaseRequestDetail.EditItemIndex = -1;
+                    BindPurchaseRequestDetails();
+                }
+                catch (Exception ex)
+                {
+                    Master.ShowMessage(new AppMessage("Error: Unable to Add Purchase Request Detail. " + ex.Message, RMessageType.Error));
+                }
+            }
+        }
+        protected void dgPurchaseRequestDetail_ItemDataBound(object sender, DataGridItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Footer)
+            {
+                DropDownList ddlFItemAccount = e.Item.FindControl("ddlFAccount") as DropDownList;
+                BindAccount(ddlFItemAccount);
+                DropDownList ddlFProject = e.Item.FindControl("ddlFProject") as DropDownList;
+                BindProject(ddlFProject);
+                DropDownList ddlFGrant = e.Item.FindControl("ddlFGrant") as DropDownList;
+                BindGrant(ddlFGrant, Convert.ToInt32(ddlFProject.SelectedValue));
+            }
+            else
+            {
+                if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails != null)
+                {
+
+                    DropDownList ddlItemAccount = e.Item.FindControl("ddlAccount") as DropDownList;
+                    if (ddlItemAccount != null)
+                    {
+                        BindAccount(ddlItemAccount);
+                        if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].ItemAccount.Id != null)
+                        {
+                            ListItem liI = ddlItemAccount.Items.FindByValue(_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].ItemAccount.Id.ToString());
+                            if (liI != null)
+                                liI.Selected = true;
+                        }
+                    }
+                    DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
+
+                    if (ddlProject != null)
+                    {
+                        BindProject(ddlProject);
+
+                        if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].Project != null)
+                        {
+                            ListItem li = ddlProject.Items.FindByValue(_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].Project.Id.ToString());
+                            if (li != null)
+                                li.Selected = true;
+                        }
+                    }
+                    DropDownList ddlGrant = e.Item.FindControl("ddlGrant") as DropDownList;
+                    if (ddlGrant != null)
+                    {
+                        BindGrant(ddlGrant, Convert.ToInt32(ddlProject.SelectedValue));
+                        if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].Grant.Id != null)
+                        {
+                            ListItem liI = ddlGrant.Items.FindByValue(_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].Grant.Id.ToString());
+                            if (liI != null)
+                                liI.Selected = true;
+                        }
+                    }
+                }
+            }
+        }
+        protected void dgPurchaseRequestDetail_UpdateCommand(object source, DataGridCommandEventArgs e)
+        {
+            int id = (int)dgPurchaseRequestDetail.DataKeys[e.Item.ItemIndex];
+            PurchaseRequestDetail Detail;
+            if (id > 0)
+                Detail = _presenter.CurrentPurchaseRequest.GetPurchaseRequestDetail(id);
+            else
+                Detail = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.ItemIndex];
+
+            try
+            {
+                DropDownList ddlAccount = e.Item.FindControl("ddlAccount") as DropDownList;
+                Detail.ItemAccount = _presenter.GetItemAccount(int.Parse(ddlAccount.SelectedValue));
+                TextBox txtAccountCode = e.Item.FindControl("txtAccountCode") as TextBox;
+                Detail.AccountCode = txtAccountCode.Text;
+                TextBox txtItem = e.Item.FindControl("txtItem") as TextBox;
+                Detail.Item = txtItem.Text;
+                TextBox txtQty = e.Item.FindControl("txtQty") as TextBox;
+                Detail.Qty = Convert.ToInt32(txtQty.Text);
+                DropDownList ddlPurposeOfPurchase = e.Item.FindControl("ddlPurposeOfPurchase") as DropDownList;
+                Detail.PurposeOfPurchase = ddlPurposeOfPurchase.SelectedValue;
+                DropDownList ddlUnitOfMeasurment = e.Item.FindControl("ddlUnitOfMeasurment") as DropDownList;
+                Detail.UnitOfMeasurment = ddlUnitOfMeasurment.SelectedValue;
+
+                //     TextBox txtPriceperunit = e.Item.FindControl("txtPriceperunit") as TextBox;
+                //   Detail.Priceperunit = Convert.ToDecimal(txtPriceperunit.Text);
+
+                //TextBox txtEstimatedCost = e.Item.FindControl("txtEstimatedCost") as TextBox;
+                //    Detail.EstimatedCost = Convert.ToInt32(txtQty.Text) * Convert.ToDecimal(txtPriceperunit.Text);
+                //Determine total cost
+                /*    decimal cost = 0;
+                    if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Count > 0)
+                    {
+
+                        foreach (PurchaseRequestDetail detail in _presenter.CurrentPurchaseRequest.PurchaseRequestDetails)
+                        {
+                            cost = cost + detail.EstimatedCost;
+                        }
+                    }
+                    _presenter.CurrentPurchaseRequest.TotalPrice = cost;*/
+                //Determine total cost end
+                //_presenter.CurrentPurchaseRequest.TotalPrice = _presenter.CurrentPurchaseRequest.TotalPrice + Detail.EstimatedCost;
+                //  txtTotal.Text = (_presenter.CurrentPurchaseRequest.TotalPrice).ToString();
+                DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
+                Detail.Project = _presenter.GetProject(int.Parse(ddlProject.SelectedValue));
+                DropDownList ddlGrant = e.Item.FindControl("ddlGrant") as DropDownList;
+                Detail.Grant = _presenter.GetGrant(int.Parse(ddlGrant.SelectedValue));
+                Detail.PurchaseRequest = _presenter.CurrentPurchaseRequest;
+                Master.ShowMessage(new AppMessage("Purchase Request Detail  Updated successfully.", RMessageType.Info));
+                dgPurchaseRequestDetail.EditItemIndex = -1;
+                BindPurchaseRequestDetails();
+            }
+            catch (Exception ex)
+            {
+                Master.ShowMessage(new AppMessage("Error: Unable to Update Purchase Request Detail. " + ex.Message, RMessageType.Error));
+            }
+
+
+
+
+        }
+        #endregion
     }
 }

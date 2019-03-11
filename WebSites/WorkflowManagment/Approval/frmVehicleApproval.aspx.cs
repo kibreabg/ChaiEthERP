@@ -676,13 +676,19 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         protected void ddlProject_SelectedIndexChanged(object sender, EventArgs e)
         {
             PopGrants(Convert.ToInt32(ddlProject.SelectedValue));
+            pnlApproval_ModalPopupExtender.Show();
         }
         protected void ddlDriver_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddlDriver = (DropDownList)sender;
             TextBox txtPhoneNo = ddlDriver.FindControl("txtFDriverPhoneNo") as TextBox;
-            if (_presenter.GetAssignDriver(Convert.ToInt32(ddlDriver.SelectedIndex)) != null)
-                txtPhoneNo.Text = _presenter.GetAssignDriver(Convert.ToInt32(ddlDriver.SelectedIndex)).Employee.Phone;
+            if (_presenter.GetAssignDriver(Convert.ToInt32(ddlDriver.SelectedValue)) != null)
+            {
+                if(_presenter.GetAssignDriver(Convert.ToInt32(ddlDriver.SelectedValue)).Employee != null)
+                {
+                    txtPhoneNo.Text = _presenter.GetAssignDriver(Convert.ToInt32(ddlDriver.SelectedValue)).Employee.CellPhone;
+                }
+            }                
             else
                 txtPhoneNo.Text = String.Empty;
             pnlApproval_ModalPopupExtender.Show();
