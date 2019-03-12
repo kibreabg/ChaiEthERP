@@ -197,6 +197,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 grvFamilyDetails.DataSource = _presenter.CurrentAppUser.Employee.FamilyDetails;
                 grvFamilyDetails.DataBind();
+                if (grvFamilyDetails.Columns.Count > 0 && !_presenter.CurrentUser().EmployeePosition.PositionName.Equals("Head, Administration & HR"))
+                    grvFamilyDetails.Columns[6].Visible = false;
             }
         }
         private void BindEmergencyContacts()
@@ -213,6 +215,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 grvEducations.DataSource = _presenter.CurrentAppUser.Employee.Educations;
                 grvEducations.DataBind();
+                if (grvEducations.Columns.Count > 0 && !_presenter.CurrentUser().EmployeePosition.PositionName.Equals("Head, Administration & HR"))
+                    grvEducations.Columns[8].Visible = false;
             }
         }
         private void BindWorkExperiences()
