@@ -484,6 +484,11 @@
                                                     CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
                                                     <RowStyle CssClass="rowstyle" />
                                                     <Columns>
+                                                        <asp:TemplateField>
+                                                            <ItemTemplate>
+                                                                <asp:HiddenField ID="hfFamId" Value='<%# Eval("Id") %>' runat="server" />
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
                                                         <asp:BoundField DataField="FirstName" HeaderText="First Name" SortExpression="FirstName" />
                                                         <asp:BoundField DataField="LastName" HeaderText="Last Name" SortExpression="LastName" />
                                                         <asp:BoundField DataField="Gender" HeaderText="Gender" SortExpression="Gender" />
@@ -491,6 +496,11 @@
                                                         <asp:TemplateField HeaderText="Certificate">
                                                             <ItemTemplate>
                                                                 <asp:LinkButton ID="lnkFamDownload" Text="Preview" CommandArgument='<%# Eval("Certificate") %>' runat="server" OnClick="lnkFamDownload_Clicked"></asp:LinkButton>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="Reviewed">
+                                                            <ItemTemplate>
+                                                                <asp:CheckBox ID="ckFamCertReview" runat="server" AutoPostBack="true" OnCheckedChanged="ckFamCertReview_Check"></asp:CheckBox>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
                                                         <asp:CommandField ShowSelectButton="True" SelectText="Edit" />
@@ -774,6 +784,11 @@
                                                     CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
                                                     <RowStyle CssClass="rowstyle" />
                                                     <Columns>
+                                                        <asp:TemplateField>
+                                                            <ItemTemplate>
+                                                                <asp:HiddenField ID="hfEduId" Value='<%# Eval("Id") %>' runat="server" />
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
                                                         <asp:BoundField DataField="InstitutionType" HeaderText="Institution Type" SortExpression="InstitutionType" />
                                                         <asp:BoundField DataField="InstitutionName" HeaderText="Institution Name" SortExpression="InstitutionName" />
                                                         <asp:BoundField DataField="InstitutionLocation" HeaderText="Institution Location" SortExpression="InstitutionLocation" />
@@ -783,6 +798,11 @@
                                                         <asp:TemplateField HeaderText="Certificate">
                                                             <ItemTemplate>
                                                                 <asp:LinkButton ID="lnkEduDownload" Text="Preview" CommandArgument='<%# Eval("Certificate") %>' runat="server" OnClientClick="newTab();" OnClick="lnkEduDownload_Clicked"></asp:LinkButton>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="Reviewed">
+                                                            <ItemTemplate>
+                                                                <asp:CheckBox ID="ckEduCertReview" runat="server" AutoPostBack="true" OnCheckedChanged="ckEduCertReview_Check"></asp:CheckBox>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
                                                         <asp:CommandField ShowSelectButton="True" SelectText="Edit" />

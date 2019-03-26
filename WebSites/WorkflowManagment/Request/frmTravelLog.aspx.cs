@@ -208,7 +208,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 Master.ShowMessage(new AppMessage("Error: Unable to Update Travel Log. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
             }
         }
-        
+
         private void BindVehicleRequest()
         {
             VehicleRequest VR = _presenter.GetVehicleRequest(GetRequestId);
@@ -224,10 +224,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (VR.GetVehiclebypalte(ddlvehicle.SelectedValue) != null)
             {
                 lblCarTypeRes.Text = VR.GetVehiclebypalte(ddlvehicle.SelectedValue).AssignedVehicle == "driver" ? "CHAI Car" : "Hired Car";
-                lblDrivernameres.Text = VR.GetVehiclebypalte(ddlvehicle.SelectedValue).AppUser.FullName;
+                if (VR.GetVehiclebypalte(ddlvehicle.SelectedValue).AppUser != null)
+                    lblDrivernameres.Text = VR.GetVehiclebypalte(ddlvehicle.SelectedValue).AppUser.FullName;
                 lblPlateRes.Text = ddlvehicle.SelectedValue;
             }
-            
+
         }
         protected void btnBack_Click(object sender, EventArgs e)
         {

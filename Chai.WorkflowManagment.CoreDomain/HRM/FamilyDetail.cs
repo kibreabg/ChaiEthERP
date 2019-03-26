@@ -17,6 +17,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public string Relationship { get; set; }
         public string CellPhone { get; set; }
         public Nullable<DateTime> DateOfMarriage { get; set; }
+        public bool Reviewed { get; set; }
         public virtual Employee Employee { get; set; }
     }
 }
