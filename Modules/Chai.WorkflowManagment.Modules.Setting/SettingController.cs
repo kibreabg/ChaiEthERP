@@ -208,7 +208,8 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             string filterExpression = "";
 
-            filterExpression = "SELECT * FROM CarRentals Where Status = 'Active' AND 1 = Case when '" + CarRentalName + "' = '' Then 1 When CarRentals.Name LIKE '%" + CarRentalName + "%'  Then 1 END  ";
+            //filterExpression = "SELECT * FROM CarRentals Where Status = 'Active' AND 1 = Case when '" + CarRentalName + "' = '' Then 1 When CarRentals.Name LIKE '%" + CarRentalName + "%'  Then 1 END  ";
+            filterExpression = "SELECT * FROM CarRentals Where 1 = Case when '" + CarRentalName + "' = '' Then 1 When CarRentals.Name LIKE '%" + CarRentalName + "%'  Then 1 END  ";
 
             return _workspace.SqlQuery<CarRental>(filterExpression).ToList();
 

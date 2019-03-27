@@ -196,6 +196,7 @@
                                 <label class="input">
                                     <asp:TextBox ID="txtselectionfor" runat="server" Visible="true"></asp:TextBox>
                                 </label>
+                                 <asp:RequiredFieldValidator ID="Rfvreasons" runat="server" CssClass="validator" ControlToValidate="txtselectionfor" ErrorMessage="Reason For Selection Required" ValidationGroup="Save">*</asp:RequiredFieldValidator>
                             </section>
                         </div>
                        <div class="row">
@@ -243,7 +244,7 @@
                                     <asp:DropDownList ID="ddlFSupplierType" runat="server" CssClass="form-control"
                                         AppendDataBoundItems="True" DataTextField="SupplierTypeName" DataValueField="Id"
                                         EnableViewState="true" AutoPostBack="True" OnSelectedIndexChanged="ddlFSupplierType_SelectedIndexChanged">
-                                        <asp:ListItem Value="0">Select Supplier</asp:ListItem>
+                                        <asp:ListItem Value="0">Select Supplier Type</asp:ListItem>
                                     </asp:DropDownList>
                                     <asp:RequiredFieldValidator ID="RfvFSupplierType" runat="server" CssClass="validator"
                                         ControlToValidate="ddlFSupplierType" Display="Dynamic"

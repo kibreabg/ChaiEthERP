@@ -71,8 +71,10 @@
             CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" OnRowCommand="grvPurchaseRequestList_RowCommand" PageSize="30">
             <RowStyle CssClass="rowstyle" />
             <Columns>
+                
+                
                 <asp:BoundField DataField="RequestNo" HeaderText="Request No" SortExpression="RequestNo" />
-                <asp:BoundField HeaderText="Requester" />
+                <asp:BoundField HeaderText="Bid Analysis Requester" />
                 <asp:TemplateField HeaderText="Request Date">
                     <ItemTemplate>
                         <asp:Label ID="lblDate" runat="server" Text='<%# Eval("RequestDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
@@ -82,6 +84,19 @@
                 <asp:BoundField DataField="SpecialNeed" HeaderText="Suggested Supplier" SortExpression="SuggestedSupplier" />
                 
                 <asp:BoundField DataField="TotalPrice" HeaderText="Total Price" SortExpression="TotalPrice" />
+
+                 <asp:TemplateField HeaderText="Purchase Requested By">
+                   
+                </asp:TemplateField>
+               
+                 <asp:TemplateField HeaderText="Supervisor For Requester">
+                   
+                </asp:TemplateField>
+                 <asp:TemplateField HeaderText="Purchase Requested No">
+                    <ItemTemplate>
+                     <%# DataBinder.Eval(Container.DataItem, "PurchaseRequest.RequestNo")%>
+                                                </ItemTemplate>
+                </asp:TemplateField>
                
                 <asp:ButtonField ButtonType="Button" CommandName="ViewItem" Text="View Item Detail" />
                 <asp:CommandField ButtonType="Button" SelectText="Process Request" ShowSelectButton="True" />
@@ -141,6 +156,13 @@
 
 
                                                 <ItemTemplate>
+                                                    <%# DataBinder.Eval(Container.DataItem, "ItemDescription")%>
+                                                </ItemTemplate>
+                                            </asp:TemplateColumn>
+                                             <asp:TemplateColumn HeaderText="Item">
+
+
+                                                <ItemTemplate>
                                                     <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountName")%>
                                                 </ItemTemplate>
                                             </asp:TemplateColumn>
@@ -151,7 +173,8 @@
                                            </asp:TemplateColumn>
                                               <asp:TemplateColumn HeaderText="Reason For Selection">
                                                 <ItemTemplate>
-                                                    <%# DataBinder.Eval(Container.DataItem, "Bidder.BidAnalysisRequest.ReasonforSelection")%>
+                                                     <asp:Label id="lblReason" runat="server" Text= '<%# DataBinder.Eval(Container.DataItem, "Bidder.GetSelectionReason")%>'></asp:Label>
+                                                  
                                                 </ItemTemplate>
                                            </asp:TemplateColumn>
                                             <asp:TemplateColumn HeaderText="Qty">

@@ -84,6 +84,36 @@
                         <asp:TextBox ID="txtContactAddress" runat="server" CssClass="form-control"></asp:TextBox>
                     </FooterTemplate>
                 </asp:TemplateColumn>
+                  <asp:TemplateColumn HeaderText="Status">
+                                        <EditItemTemplate>
+                                            <asp:DropDownList ID="ddlStatus" runat="server" Width="90px" CssClass="form-control"
+                                                AppendDataBoundItems="True"
+                                                ValidationGroup="3">
+                                                <asp:ListItem Value="">Select Status</asp:ListItem>
+                                                <asp:ListItem Value="Active">Active</asp:ListItem>
+                                                <asp:ListItem Value="InActive">InActive</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RfvStatus" runat="server"
+                                                ControlToValidate="ddlStatus" ErrorMessage="Status Required"
+                                                InitialValue="" SetFocusOnError="True" ValidationGroup="proedit">*</asp:RequiredFieldValidator>
+                                        </EditItemTemplate>
+                                        <FooterTemplate>
+                                            <asp:DropDownList ID="ddlFStatus" runat="server" Width="90px" CssClass="form-control"
+                                                AppendDataBoundItems="True" EnableViewState="true" ValidationGroup="proadd">
+                                                <asp:ListItem Value="">Select Status</asp:ListItem>
+                                                <asp:ListItem Value="Active">Active</asp:ListItem>
+                                                <asp:ListItem Value="InActive">InActive</asp:ListItem>
+
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RfvFStatus" runat="server"
+                                                ControlToValidate="ddlFStatus" Display="Dynamic"
+                                                ErrorMessage="Status Required" InitialValue="" SetFocusOnError="True"
+                                                ValidationGroup="proadd">*</asp:RequiredFieldValidator>
+                                        </FooterTemplate>
+                                        <ItemTemplate>
+                                            <%# DataBinder.Eval(Container.DataItem, "Status")%>
+                                        </ItemTemplate>
+                                    </asp:TemplateColumn>
                 <asp:TemplateColumn HeaderText="Actions">
                     <EditItemTemplate>
                         <asp:LinkButton ID="lnkUpdate" runat="server" CommandName="Update" ValidationGroup="1" CssClass="btn btn-xs btn-default"><i class="fa fa-save"></i></asp:LinkButton>
