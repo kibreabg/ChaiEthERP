@@ -238,11 +238,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     if (LRS.ApprovalStatus != ApprovalStatus.Rejected.ToString())
                     {
 
-                        if (_presenter.CurrentLeaveRequest.CurrentLevel == _presenter.CurrentLeaveRequest.LeaveRequestStatuses.Count)
-                        {
+                        
                             _presenter.CurrentLeaveRequest.CurrentApprover = LRS.Approver;
                             _presenter.CurrentLeaveRequest.CurrentLevel = LRS.WorkflowLevel;
                             _presenter.CurrentLeaveRequest.CurrentStatus = LRS.ApprovalStatus;
+                        if (_presenter.CurrentLeaveRequest.CurrentLevel == _presenter.CurrentLeaveRequest.LeaveRequestStatuses.Count)
+                        {
                             _presenter.CurrentLeaveRequest.ProgressStatus = ProgressStatus.Completed.ToString();
                         }
                         GetNextApprover();
@@ -438,7 +439,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             if (_presenter.CurrentLeaveRequest.Id > 0)
             {
-                Employee employee = _presenter.GetEmployee(_presenter.CurrentUser().Id);
+                Employee employee = _presenter.GetEmployee(_presenter.CurrentLeaveRequest.Requester);
                 lblRequestNoresult.Text = _presenter.CurrentLeaveRequest.RequestNo;
                 lblRequestedDateresult.Text = _presenter.CurrentLeaveRequest.RequestedDate.ToShortDateString();
                 lblleavetyperesp.Text = _presenter.CurrentLeaveRequest.LeaveType != null ? _presenter.CurrentLeaveRequest.LeaveType.LeaveTypeName.ToString() : "0";
@@ -456,9 +457,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void lnkEduDownload_Clicked(object sender, EventArgs e)
         {
+            
             string certificatePath = (sender as LinkButton).CommandArgument;
-            Response.AppendHeader("Content-Type", "application/pdf");
-            Response.AppendHeader("Content-Disposition", "inline; filename=" + Path.GetFileName(_presenter.CurrentLeaveRequest.FilePath));
+            Response.AppendHeader("Content-Type", "application/octet-stream");
+            Response.AppendHeader("Content-Disposition", "attachment; filename=" + Path.GetFileName(_presenter.CurrentLeaveRequest.FilePath));
             Response.WriteFile(_presenter.CurrentLeaveRequest.FilePath);
             Response.End();
         }

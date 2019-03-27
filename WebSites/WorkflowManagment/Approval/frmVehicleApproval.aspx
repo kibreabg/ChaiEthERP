@@ -197,7 +197,7 @@
                                                             </asp:DropDownList>
                                                         </FooterTemplate>
                                                     </asp:TemplateColumn>
-                                                    <asp:TemplateColumn HeaderText="Rental Driver Phone No.">
+                                                    <asp:TemplateColumn HeaderText="Driver Phone No.">
                                                         <ItemTemplate>
                                                             <%# DataBinder.Eval(Container.DataItem, "DriverPhoneNo")%>
                                                         </ItemTemplate>
@@ -342,7 +342,7 @@
                                         </label>
                                     </section>
                                     <section class="col col-6">
-                                        <asp:Label ID="lblRejectedReason" runat="server" Text="Rejected Reason" Visible="false" CssClass="label"></asp:Label>
+                                        <asp:Label ID="lblRejectedReason" runat="server" Text="Rejected/Canceled Reason" Visible="False" CssClass="label"></asp:Label>
                                         <label class="input">
                                             <asp:TextBox ID="txtRejectedReason" Visible="false" runat="server"></asp:TextBox>
                                             <asp:RequiredFieldValidator ID="rfvRejectedReason" runat="server" Enabled="false" CssClass="validator" ValidationGroup="save" ErrorMessage="Must Enter Rejection Reason" ControlToValidate="txtRejectedReason"></asp:RequiredFieldValidator>
@@ -352,7 +352,6 @@
                             </fieldset>
                             <footer>
                                 <asp:Button ID="btnApprove" runat="server" ValidationGroup="approve" Text="Save" OnClick="btnApprove_Click" Enabled="false" CssClass="btn btn-primary"></asp:Button>
-                                <asp:Button ID="btnCancel" runat="server" CausesValidation="False" CssClass="btn btn-primary" Text="Cancel Request" OnClientClick="javascript:return confirm('Are you sure you want to cancel this vehicle request?');" OnClick="btnCancel_Click"></asp:Button>
                                 <asp:Button ID="btnCancelPopup" runat="server" Text="Close" CssClass="btn btn-primary" OnClick="btnCancelPopup_Click"></asp:Button>
                                 <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-primary" Enabled="false" OnClientClick="javascript:Clickheretoprint('divprint')"></asp:Button>
                                 <asp:Button ID="btnPrintTravellog" runat="server" Text="Print Travel log" CssClass="btn btn-primary" Visible="false" OnClick="btnPrintTravellog_Click"></asp:Button>

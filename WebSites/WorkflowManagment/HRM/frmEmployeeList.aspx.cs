@@ -16,7 +16,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 			{
 				this._presenter.OnViewInitialized();
             BindProgram();
-            GRVEmployeeList.DataSource = _presenter.ListEmployees(txtSrchEmpNo.Text, txtSrchSrchFullName.Text, int.Parse(ddlSrchSrchProgram.SelectedValue));
+            GRVEmployeeList.DataSource = _presenter.ListEmployees(txtSrchEmpNo.Text, txtSrchSrchFullName.Text, int.Parse(ddlSrchSrchProgram.SelectedValue),ddlEmpStatus.SelectedValue);
             GRVEmployeeList.DataBind();
 
         }
@@ -55,7 +55,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         } 
         protected void GRVEmployeeList_RowDataBound(object sender, System.Web.UI.WebControls.GridViewRowEventArgs e)
         {
-            if (_presenter.ListEmployees(txtSrchEmpNo.Text, txtSrchSrchFullName.Text, int.Parse(ddlSrchSrchProgram.SelectedValue))!= null)
+            if (_presenter.ListEmployees(txtSrchEmpNo.Text, txtSrchSrchFullName.Text, int.Parse(ddlSrchSrchProgram.SelectedValue), ddlEmpStatus.SelectedValue) != null)
             {
                 if (e.Row.RowType == DataControlRowType.DataRow)
                 {
@@ -75,13 +75,13 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         protected void GRVEmployeeList_PageIndexChanging(object sender, System.Web.UI.WebControls.GridViewPageEventArgs e)
         {
             GRVEmployeeList.PageIndex = e.NewPageIndex;
-            GRVEmployeeList.DataSource = _presenter.ListEmployees(txtSrchEmpNo.Text, txtSrchSrchFullName.Text, int.Parse(ddlSrchSrchProgram.SelectedValue)); ;
+            GRVEmployeeList.DataSource = _presenter.ListEmployees(txtSrchEmpNo.Text, txtSrchSrchFullName.Text, int.Parse(ddlSrchSrchProgram.SelectedValue), ddlEmpStatus.SelectedValue); ;
             GRVEmployeeList.DataBind();
         }
 
         protected void btnFind_Click(object sender, EventArgs e)
         {
-            GRVEmployeeList.DataSource = _presenter.ListEmployees(txtSrchEmpNo.Text, txtSrchSrchFullName.Text, int.Parse(ddlSrchSrchProgram.SelectedValue));
+            GRVEmployeeList.DataSource = _presenter.ListEmployees(txtSrchEmpNo.Text, txtSrchSrchFullName.Text, int.Parse(ddlSrchSrchProgram.SelectedValue), ddlEmpStatus.SelectedValue);
             GRVEmployeeList.DataBind();
         }
 

@@ -15,23 +15,32 @@
                 <div class="smart-form">
                     <fieldset>
                         <div class="row">
-                            <section class="col col-4">
+                            <section class="col col-3">
                                 <asp:Label ID="lblSrchEmpNo" runat="server" Text="Employee No" CssClass="label"></asp:Label>
                                 <label class="input">
                                     <asp:TextBox ID="txtSrchEmpNo" runat="server" Visible="true"></asp:TextBox>
                                 </label>
                             </section>
-                            <section class="col col-4">
+                            <section class="col col-3">
                                 <asp:Label ID="lblSrchFullName" runat="server" Text="Full Name" CssClass="label"></asp:Label>
                                 <label class="input">
                                     <asp:TextBox ID="txtSrchSrchFullName" runat="server" Visible="true"></asp:TextBox>
                                 </label>
                             </section>
-                            <section class="col col-4">
+                            <section class="col col-3">
                                 <asp:Label ID="lblSrchProgram" runat="server" Text="Project" CssClass="label"></asp:Label>
                                 <label class="select">
                                     <asp:DropDownList ID="ddlSrchSrchProgram" runat="server" AppendDataBoundItems="True" DataTextField="ProgramName" DataValueField="Id">
                                         <asp:ListItem Value="0">Select Program</asp:ListItem>
+                                    </asp:DropDownList><i></i>
+                                </label>
+                            </section>
+                            <section class="col col-3">
+                                <asp:Label ID="lblEmpStatus" runat="server" Text="Employee Status" CssClass="label"></asp:Label>
+                                <label class="select">
+                                    <asp:DropDownList ID="ddlEmpStatus" runat="server" AppendDataBoundItems="True">
+                                        <asp:ListItem Value="True">Active</asp:ListItem>
+                                        <asp:ListItem Value="False">In Active</asp:ListItem>
                                     </asp:DropDownList><i></i>
                                 </label>
                             </section>
@@ -51,7 +60,7 @@
                 CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active"
                 AlternatingRowStyle-CssClass="" OnRowDataBound="GRVEmployeeList_RowDataBound" Width="100%"
                 Style="text-align: left" AllowPaging="True" OnPageIndexChanging="GRVEmployeeList_PageIndexChanging"
-                Visible="True">
+                Visible="True" PageSize="20">
                 <%--    <FooterStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
                 <RowStyle BackColor="#F7F6F3" ForeColor="#333333" />--%>
                 <Columns>

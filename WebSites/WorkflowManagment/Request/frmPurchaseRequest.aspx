@@ -105,8 +105,8 @@
                                     <asp:TextBox ID="txtComment" runat="server" Visible="true"></asp:TextBox>
                                 </label>
                             </section>
-                          
-                      
+
+
                         </div>
                         <asp:DataGrid ID="dgPurchaseRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
                             CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
@@ -164,7 +164,7 @@
                                         <asp:TextBox ID="txtFItem" runat="server" CssClass="form-control"></asp:TextBox>
                                     </FooterTemplate>
                                 </asp:TemplateColumn>
-                                <asp:TemplateColumn HeaderText="Qty">
+                                <asp:TemplateColumn HeaderText="Requested Quantity">
                                     <ItemTemplate>
                                         <%# DataBinder.Eval(Container.DataItem, "Qty")%>
                                     </ItemTemplate>
@@ -179,8 +179,86 @@
                                         <asp:RequiredFieldValidator ID="RfvFQty" CssClass="validator" runat="server" ControlToValidate="txtFQty" ErrorMessage="Qty Required" ValidationGroup="proadd"></asp:RequiredFieldValidator>
                                     </FooterTemplate>
                                 </asp:TemplateColumn>
-
-                               
+                                <asp:TemplateColumn HeaderText="Unit of Measurment">
+                                    <EditItemTemplate>
+                                        <asp:DropDownList ID="ddlUnitOfMeasurment" runat="server" CssClass="form-control"
+                                            AppendDataBoundItems="True"
+                                            ValidationGroup="proedit">
+                                            <asp:ListItem Value="0">Select Unit</asp:ListItem>
+                                            <asp:ListItem Value="Pieces (Pcs)">Pieces (Pcs)</asp:ListItem>
+                                            <asp:ListItem Value="Ream">Ream</asp:ListItem>
+                                            <asp:ListItem Value="Grams (g)">Grams (g)</asp:ListItem>
+                                            <asp:ListItem Value="Kilogram (kg)">Kilogram (kg)</asp:ListItem>
+                                            <asp:ListItem Value="Tons (ton)">Tons (ton)</asp:ListItem>
+                                            <asp:ListItem Value="Meter (m)">Meter (m)</asp:ListItem>
+                                            <asp:ListItem Value="Square Meter (m2)">Square Meter (m2)</asp:ListItem>
+                                            <asp:ListItem Value="Cubic meter (m3)">Cubic meter (m3)</asp:ListItem>
+                                            <asp:ListItem Value="Liter (L)">Liter (L)</asp:ListItem>
+                                            <asp:ListItem Value="Day (D)">Day (D)</asp:ListItem>
+                                            <asp:ListItem Value="Hour (Hr)">Hour (Hr)</asp:ListItem>
+                                            <asp:ListItem Value="Other">Other</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <asp:RequiredFieldValidator ID="RfvUoM" runat="server" CssClass="validator"
+                                            ControlToValidate="ddlUnitOfMeasurment" ErrorMessage="Unit of Measurement is Required"
+                                            InitialValue="0" SetFocusOnError="True" ValidationGroup="proedit"></asp:RequiredFieldValidator>
+                                    </EditItemTemplate>
+                                    <FooterTemplate>
+                                        <asp:DropDownList ID="ddlFUnitOfMeasurment" runat="server" CssClass="form-control"
+                                            AppendDataBoundItems="True" DataTextField="AccountName" DataValueField="Id"
+                                            EnableViewState="true" ValidationGroup="proadd">
+                                            <asp:ListItem Value="0">Select Unit</asp:ListItem>
+                                            <asp:ListItem Value="Pieces (Pcs)">Pieces (Pcs)</asp:ListItem>
+                                            <asp:ListItem Value="Ream">Ream</asp:ListItem>
+                                            <asp:ListItem Value="Grams (g)">Grams (g)</asp:ListItem>
+                                            <asp:ListItem Value="Kilogram (kg)">Kilogram (kg)</asp:ListItem>
+                                            <asp:ListItem Value="Tons (ton)">Tons (ton)</asp:ListItem>
+                                            <asp:ListItem Value="Meter (m)">Meter (m)</asp:ListItem>
+                                            <asp:ListItem Value="Square Meter (m2)">Square Meter (m2)</asp:ListItem>
+                                            <asp:ListItem Value="Cubic meter (m3)">Cubic meter (m3)</asp:ListItem>
+                                            <asp:ListItem Value="Liter (L)">Liter (L)</asp:ListItem>
+                                            <asp:ListItem Value="Day (D)">Day (D)</asp:ListItem>
+                                            <asp:ListItem Value="Hour (Hr)">Hour (Hr)</asp:ListItem>
+                                            <asp:ListItem Value="Other">Other</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <asp:RequiredFieldValidator ID="RfvFUoM" runat="server" CssClass="validator"
+                                            ControlToValidate="ddlFUnitOfMeasurment" Display="Dynamic"
+                                            ErrorMessage="Unit of Measurement is Required" InitialValue="0" SetFocusOnError="True"
+                                            ValidationGroup="proadd"></asp:RequiredFieldValidator>
+                                    </FooterTemplate>
+                                    <ItemTemplate>
+                                        <%# DataBinder.Eval(Container.DataItem, "UnitOfMeasurment")%>
+                                    </ItemTemplate>
+                                </asp:TemplateColumn>
+                                <asp:TemplateColumn HeaderText="Purpose of Purchase">
+                                    <EditItemTemplate>
+                                        <asp:DropDownList ID="ddlPurposeOfPurchase" runat="server" CssClass="form-control"
+                                            AppendDataBoundItems="True" ValidationGroup="proedit">
+                                            <asp:ListItem Value="0">Select Purpose</asp:ListItem>
+                                            <asp:ListItem Value="Office Use">Office Use</asp:ListItem>
+                                            <asp:ListItem Value="Training">Training</asp:ListItem>
+                                            <asp:ListItem Value="Donation">Donation</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <asp:RequiredFieldValidator ID="RfvPoP" runat="server" CssClass="validator"
+                                            ControlToValidate="ddlPurposeOfPurchase" ErrorMessage="Purpose of Purchase is Required"
+                                            InitialValue="0" SetFocusOnError="True" ValidationGroup="proedit"></asp:RequiredFieldValidator>
+                                    </EditItemTemplate>
+                                    <FooterTemplate>
+                                        <asp:DropDownList ID="ddlFPurposeOfPurchase" runat="server" CssClass="form-control"
+                                            AppendDataBoundItems="True" EnableViewState="true" ValidationGroup="proadd">
+                                            <asp:ListItem Value="0">Select Purpose</asp:ListItem>
+                                            <asp:ListItem Value="Office Use">Office Use</asp:ListItem>
+                                            <asp:ListItem Value="Training">Training</asp:ListItem>
+                                            <asp:ListItem Value="Donation">Donation</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <asp:RequiredFieldValidator ID="RfvFPoP" runat="server" CssClass="validator"
+                                            ControlToValidate="ddlFPurposeOfPurchase" Display="Dynamic"
+                                            ErrorMessage="Purpose of Purchase is Required" InitialValue="0" SetFocusOnError="True"
+                                            ValidationGroup="proadd"></asp:RequiredFieldValidator>
+                                    </FooterTemplate>
+                                    <ItemTemplate>
+                                        <%# DataBinder.Eval(Container.DataItem, "PurposeOfPurchase")%>
+                                    </ItemTemplate>
+                                </asp:TemplateColumn>
                                 <asp:TemplateColumn HeaderText="Project ID">
                                     <EditItemTemplate>
                                         <asp:DropDownList ID="ddlProject" runat="server" CssClass="form-control"
@@ -340,7 +418,7 @@
 
                                 <asp:BoundField DataField="DeliverTo" HeaderText="Deliver To" SortExpression="DeliverTo" />
                                 <asp:BoundField DataField="SuggestedSupplier" HeaderText="Suggested Supplier" SortExpression="SuggestedSupplier" />
-                               
+
                                 <asp:CommandField ShowSelectButton="True" />
                                 <%-- <asp:CommandField ShowDeleteButton="True" />--%>
                             </Columns>
