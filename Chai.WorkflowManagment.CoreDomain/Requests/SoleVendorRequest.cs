@@ -19,9 +19,6 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
             this.SoleVendorRequestStatuses = new List<SoleVendorRequestStatus>();
             this.SVRAttachments = new List<SVRAttachment>();
         }
-
-
-
         public int Id { get; set; }
         public string RequestNo { get; set; }
         public Nullable<DateTime> RequestDate { get; set; }

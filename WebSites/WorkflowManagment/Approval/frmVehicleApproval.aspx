@@ -144,7 +144,7 @@
                                                             <%# DataBinder.Eval(Container.DataItem, "AssignedVehicle")%>
                                                         </ItemTemplate>
                                                         <EditItemTemplate>
-                                                            <asp:DropDownList ID="ddlEdtAssignedVehicle" runat="server" CssClass="form-control">
+                                                            <asp:DropDownList ID="ddlEdtAssignedVehicle" runat="server" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlEdtAssignedVehicle_SelectedIndexChanged">
                                                                 <asp:ListItem Value=" ">Select Type</asp:ListItem>
                                                                 <asp:ListItem Value="carRental">Car Rental</asp:ListItem>
                                                                 <asp:ListItem Value="driver">Internal Driver</asp:ListItem>
@@ -153,11 +153,10 @@
                                                             <i></i>
                                                         </EditItemTemplate>
                                                         <FooterTemplate>
-                                                            <asp:DropDownList ID="ddlAssignedVehicle" runat="server" CssClass="form-control">
+                                                            <asp:DropDownList ID="ddlAssignedVehicle" runat="server" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlAssignedVehicle_SelectedIndexChanged">
                                                                 <asp:ListItem Value=" ">Select Type</asp:ListItem>
                                                                 <asp:ListItem Value="carRental">Car Rental</asp:ListItem>
                                                                 <asp:ListItem Value="driver">Internal Vehicle</asp:ListItem>
-
                                                             </asp:DropDownList>
                                                             <asp:RequiredFieldValidator ID="rfvddlFVehicleType" runat="server" ControlToValidate="ddlAssignedVehicle" CssClass="validator" Display="Dynamic" ErrorMessage="Vehicle Type must be selected" InitialValue=" " SetFocusOnError="true" ValidationGroup="save"></asp:RequiredFieldValidator>
                                                             <i></i>
@@ -168,16 +167,14 @@
                                                             <%# DataBinder.Eval(Container.DataItem, "AppUser.FullName")%>
                                                         </ItemTemplate>
                                                         <EditItemTemplate>
-                                                            <asp:DropDownList ID="ddlEdtDriver" CssClass="form-control" AppendDataBoundItems="true" runat="server">
+                                                            <asp:DropDownList ID="ddlEdtDriver" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlEdtDriver_SelectedIndexChanged" runat="server">
                                                                 <asp:ListItem Value="-1">Select Driver</asp:ListItem>
-                                                                <asp:ListItem Value="0">Hired Driver</asp:ListItem>
                                                             </asp:DropDownList>
                                                             <asp:RequiredFieldValidator ID="rfvddlEdtDriver" runat="server" ControlToValidate="ddlEdtDriver" CssClass="validator" Display="Dynamic" ErrorMessage="Driver must be selected" InitialValue="-1" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
                                                         </EditItemTemplate>
                                                         <FooterTemplate>
-                                                            <asp:DropDownList ID="ddlDriver" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlDriver_SelectedIndexChanged" AppendDataBoundItems="true" runat="server">
-                                                                <asp:ListItem Value="-1">Select Driver</asp:ListItem>
-                                                                <asp:ListItem Value="0">Hired Driver</asp:ListItem>
+                                                            <asp:DropDownList ID="ddlDriver" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlDriver_SelectedIndexChanged" runat="server">
+                                                                <asp:ListItem Value="-1">Select Driver</asp:ListItem>                                                                
                                                             </asp:DropDownList>
                                                             <asp:RequiredFieldValidator ID="rfvddlDriver" runat="server" ControlToValidate="ddlDriver" CssClass="validator" Display="Dynamic" ErrorMessage="Driver must be selected" InitialValue="-1" SetFocusOnError="true" ValidationGroup="save"></asp:RequiredFieldValidator>
                                                         </FooterTemplate>

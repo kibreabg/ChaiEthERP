@@ -153,14 +153,16 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     btnPrint.Enabled = true;
                     btnApprove.Enabled = false;
+                    ddlApprovalStatus.Enabled = false;
                 }
                 else
                 {
                     btnPrint.Enabled = false;
                     btnApprove.Enabled = true;
+                    ddlApprovalStatus.Enabled = true;
                 }
             }
-            if (_presenter.CurrentUser().EmployeePosition.PositionName == "Procurement Officer" && _presenter.CurrentPurchaseRequest.CurrentStatus != ApprovalStatus.Rejected.ToString() && _presenter.CurrentPurchaseRequest.ProgressStatus == ProgressStatus.Completed.ToString() && _presenter.CurrentPurchaseRequest.BidAnalysisRequests == null && _presenter.CurrentPurchaseRequest.SoleVendorRequests == null)
+            if (_presenter.CurrentUser().EmployeePosition.PositionName == "Procurement Officer" && _presenter.CurrentPurchaseRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
             {
                 lnkBidRequest.Visible = true;
                 lnkSoleVendor.Visible = true;
@@ -222,7 +224,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     PRRS.ApprovalDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
                     if (PRRS.ApprovalStatus != ApprovalStatus.Rejected.ToString())
                     {
-                        _presenter.CurrentPurchaseRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                        //Completed is commented out because we're going to complete purchase request
+                        //when Bid or SoleVendor is completed. 
+
+                        //_presenter.CurrentPurchaseRequest.ProgressStatus = ProgressStatus.Completed.ToString();
                         GetNextApprover();
                         SendEmail(PRRS);
                     }
@@ -311,10 +316,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     SavePurchaseRequestStatus();
                     _presenter.SaveOrUpdatePurchaseRequest(_presenter.CurrentPurchaseRequest);
                     ShowPrint();
-                    Master.ShowMessage(new AppMessage("Purchase Approval Processed", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    Master.ShowMessage(new AppMessage("Purchase Approval Processed", RMessageType.Info));
                     btnApprove.Enabled = false;
                     BindSearchPurchaseRequestGrid();
-                    if (_presenter.CurrentUser().EmployeePosition.PositionName == "Procurement Officer" && _presenter.CurrentPurchaseRequest.CurrentStatus != ApprovalStatus.Rejected.ToString() && _presenter.CurrentPurchaseRequest.ProgressStatus == ProgressStatus.Completed.ToString() && _presenter.CurrentPurchaseRequest.BidAnalysisRequests == null && _presenter.CurrentPurchaseRequest.SoleVendorRequests == null)
+                    if (_presenter.CurrentUser().EmployeePosition.PositionName == "Procurement Officer" && _presenter.CurrentPurchaseRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
                     {
                         lnkBidRequest.Visible = true;
                         lnkSoleVendor.Visible = true;
@@ -324,7 +329,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
             catch (Exception ex)
             {
-
+                Master.ShowMessage(new AppMessage("Error: While Approving Purchase Request!", RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         protected void grvPurchaseRequestList_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -348,11 +355,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             //grvAttachments.DataSource = _presenter.CurrentPaymentReimbursementRequest.CPRAttachments;
             //grvAttachments.DataBind();
             BindPurchaseRequestStatus();
-            if (_presenter.CurrentPurchaseRequest.ProgressStatus == ProgressStatus.Completed.ToString())
-            {
-                btnApprove.Enabled = false;
-                PrintTransaction();
-            }
+            PrintTransaction();
             txtRejectedReason.Visible = false;
             rfvRejectedReason.Enabled = false;
             pnlApproval_ModalPopupExtender.Show();
@@ -411,6 +414,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 lblRejectedReason.Visible = false;
                 txtRejectedReason.Visible = false;
+                rfvRejectedReason.Enabled = false;
             }
             pnlApproval_ModalPopupExtender.Show();
         }

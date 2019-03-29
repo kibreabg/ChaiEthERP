@@ -250,6 +250,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                             _presenter.CurrentSoleVendorRequest.CurrentLevel = SVRS.WorkflowLevel;
                             _presenter.CurrentSoleVendorRequest.CurrentStatus = SVRS.ApprovalStatus;
                             _presenter.CurrentSoleVendorRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                            //At this point make the Purchase Request progress Completed as well
+                            _presenter.CurrentSoleVendorRequest.PurchaseRequest.ProgressStatus = ProgressStatus.Completed.ToString();
                         }
                         GetNextApprover();
                         SVRS.Approver = _presenter.CurrentUser().Id;
