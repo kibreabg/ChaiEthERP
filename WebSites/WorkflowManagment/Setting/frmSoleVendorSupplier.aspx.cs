@@ -167,20 +167,42 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         }
         protected void dgSupplier_ItemDataBound(object sender, DataGridItemEventArgs e)
         {
+
+
+
             if (e.Item.ItemType == ListItemType.Footer)
             {
+
                 DropDownList ddlSupplierType = e.Item.FindControl("ddlSupplierType") as DropDownList;
-                BindSupplierTypes(ddlSupplierType);
+                DropDownList ddlFStatus = e.Item.FindControl("ddlFStatus") as DropDownList;
             }
             else
             {
-               
-                    DropDownList ddlEdtSupplierType = e.Item.FindControl("ddlEdtSupplierType") as DropDownList;
-                    BindSupplierTypes(ddlEdtSupplierType);
-               
-                    
-                
+
+                DropDownList ddlEdtSupplierType = e.Item.FindControl("ddlEdtSupplierType") as DropDownList;
+                if (ddlEdtSupplierType != null)
+                {
+                    if (_SVendorSuppliers[e.Item.DataSetIndex].Status != null)
+                    {
+                        ListItem liI = ddlEdtSupplierType.Items.FindByValue(_SVendorSuppliers[e.Item.DataSetIndex].SupplierType.ToString());
+                        if (liI != null)
+                            liI.Selected = true;
+                    }
+                }
+
+
+                DropDownList ddlStatus = e.Item.FindControl("ddlStatus") as DropDownList;
+                if (ddlStatus != null)
+                {
+                    if (_SVendorSuppliers[e.Item.DataSetIndex].Status != null)
+                    {
+                        ListItem liI = ddlStatus.Items.FindByValue(_SVendorSuppliers[e.Item.DataSetIndex].Status.ToString());
+                        if (liI != null)
+                            liI.Selected = true;
+                    }
+                }
             }
+            
         }
         protected void dgSupplier_UpdateCommand(object source, DataGridCommandEventArgs e)
         {
@@ -190,7 +212,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
 
             try
             {
-                DropDownList ddlSuppliertype = e.Item.FindControl("ddledtSupplierType") as DropDownList;
+                DropDownList ddlSuppliertype = e.Item.FindControl("ddlEdtSupplierType") as DropDownList;
                 Supplier.SupplierType = _presenter.GetSupplierTypeById(Convert.ToInt32(ddlSuppliertype.SelectedValue));
                 TextBox txtName = e.Item.FindControl("txtSupplierName") as TextBox;
                 Supplier.SupplierName = txtName.Text;
@@ -208,7 +230,9 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 Supplier.EndDate = Convert.ToDateTime(txtEdtEndDate.Text);
                 DropDownList ddlStatus = e.Item.FindControl("ddlStatus") as DropDownList;
                 Supplier.Status = ddlStatus.SelectedValue;
-                SaveSoleVendorSupplier(Supplier);
+
+                _presenter.SaveOrUpdateSoleVendorSupplier(Supplier);
+                Master.ShowMessage(new AppMessage("Sole Vendor Supplier  Updated Successfully.", Chai.WorkflowManagment.Enums.RMessageType.Info));
                 dgSupplier.EditItemIndex = -1;
                 BindSoleVendorSupplier();
             }

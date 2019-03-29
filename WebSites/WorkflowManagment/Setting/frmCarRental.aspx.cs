@@ -115,6 +115,8 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                     CarRental.PhoneNo = txtPhone.Text;
                     TextBox txtContact = e.Item.FindControl("txtContactAddress") as TextBox;
                     CarRental.ContactAddress = txtContact.Text;
+                    DropDownList ddlStatus = e.Item.FindControl("ddlFStatus") as DropDownList;
+                    CarRental.Status = ddlStatus.SelectedValue;
                     SaveCarRental(CarRental);
                     dgCarRental.EditItemIndex = -1;
                     BindCarRentals();
@@ -153,9 +155,28 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
 
             BindCarRentals();
         }
-        protected void dgCarRental_ItemDataBound(object sender, DataGridItemEventArgs e)
+       protected void dgCarRental_ItemDataBound(object sender, DataGridItemEventArgs e)
         {
-
+            if (e.Item.ItemType == ListItemType.Footer)
+            {
+                
+                DropDownList ddlFStatus = e.Item.FindControl("ddlFStatus") as DropDownList;
+            }
+            else
+            {
+                
+                    DropDownList ddlStatus = e.Item.FindControl("ddlStatus") as DropDownList;
+                    if (ddlStatus != null)
+                    {
+                        if (_CarRentals[e.Item.DataSetIndex].Status != null)
+                        {
+                            ListItem liI = ddlStatus.Items.FindByValue(_CarRentals[e.Item.DataSetIndex].Status.ToString());
+                            if (liI != null)
+                                liI.Selected = true;
+                        }
+                    }
+                }
+            
         }
         protected void dgCarRental_UpdateCommand(object source, DataGridCommandEventArgs e)
         {
@@ -171,8 +192,10 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 CarRental.PhoneNo = txtPhone.Text;
                 TextBox txtContact = e.Item.FindControl("txtEdtContactAddress") as TextBox;
                 CarRental.ContactAddress = txtContact.Text;
-                CarRental.Status = "Active";
-                SaveCarRental(CarRental);
+                DropDownList ddlStatus = e.Item.FindControl("ddlStatus") as DropDownList;
+                CarRental.Status = ddlStatus.SelectedValue;
+                _presenter.SaveOrUpdateCarRental(CarRental);
+                Master.ShowMessage(new AppMessage("Car Rental Updated Successfully.", Chai.WorkflowManagment.Enums.RMessageType.Info));
                 dgCarRental.EditItemIndex = -1;
                 BindCarRentals();
             }

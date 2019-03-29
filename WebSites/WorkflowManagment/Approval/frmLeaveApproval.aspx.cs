@@ -238,11 +238,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     if (LRS.ApprovalStatus != ApprovalStatus.Rejected.ToString())
                     {
 
-                        if (_presenter.CurrentLeaveRequest.CurrentLevel == _presenter.CurrentLeaveRequest.LeaveRequestStatuses.Count)
-                        {
+                        
                             _presenter.CurrentLeaveRequest.CurrentApprover = LRS.Approver;
                             _presenter.CurrentLeaveRequest.CurrentLevel = LRS.WorkflowLevel;
                             _presenter.CurrentLeaveRequest.CurrentStatus = LRS.ApprovalStatus;
+                        if (_presenter.CurrentLeaveRequest.CurrentLevel == _presenter.CurrentLeaveRequest.LeaveRequestStatuses.Count)
+                        {
                             _presenter.CurrentLeaveRequest.ProgressStatus = ProgressStatus.Completed.ToString();
                         }
                         GetNextApprover();

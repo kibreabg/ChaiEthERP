@@ -652,57 +652,59 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 //try
                 //{
+                //  _presenter.SaveOrUpdateBidAnalysisRequest();
+                if (_presenter.CurrentBidAnalysisRequest.BAAttachments.Count != 0)
+                {
+
                     _presenter.SaveOrUpdateBidAnalysisRequest();
-                    if (_presenter.CurrentBidAnalysisRequest.BidAnalysisRequestStatuses.Count != 0 && _presenter.CurrentBidAnalysisRequest.BAAttachments.Count != 0)
-                    {
-                        BindBidAnalysisRequests();
-                        
-                        Master.ShowMessage(new AppMessage("Successfully did a Bid Analysis  Request, Reference No - <b>'" + _presenter.CurrentBidAnalysisRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                        Log.Info(_presenter.CurrentUser().FullName + " has requested a For a Sole Vendor");
+                    BindBidAnalysisRequests();
+
+                    Master.ShowMessage(new AppMessage("Successfully did a Bid Analysis  Request, Reference No - <b>'" + _presenter.CurrentBidAnalysisRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    Log.Info(_presenter.CurrentUser().FullName + " has requested a For a Bid Analyis");
                     //btnSave.Visible = false;
                     PrintTransaction();
                     btnPrintworksheet.Enabled = true;
-                    }
-                    else
-                    {
-                        Master.ShowMessage(new AppMessage("Please Attach Bid Analysis Quotation", Chai.WorkflowManagment.Enums.RMessageType.Error));
-                    }
-                    decimal price = 0;
-                    foreach (Bidder bider in _presenter.CurrentBidAnalysisRequest.Bidders)
-                    {
+                }
+                else
+                {
+                    Master.ShowMessage(new AppMessage("Please Attach Bid Analysis Quotation", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                }
+                decimal price = 0;
+                foreach (Bidder bider in _presenter.CurrentBidAnalysisRequest.Bidders)
+                {
 
 
-                        if (_presenter.CurrentBidAnalysisRequest.GetBidderbyRank().Rank == 1)
+                    if (_presenter.CurrentBidAnalysisRequest.GetBidderbyRank().Rank == 1)
+                    {
+
+                        foreach (BidderItemDetail biditemdet in bider.BidderItemDetails)
                         {
 
-                            foreach (BidderItemDetail biditemdet in bider.BidderItemDetails)
-                            {
-
-                                price = price + biditemdet.TotalCost;
-                            }
+                            price = price + biditemdet.TotalCost;
                         }
-                        txtTotal.Text = price.ToString();
-                        break;
+                    }
+                    txtTotal.Text = price.ToString();
+                    break;
+                }
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            {
+                Exception raise = dbEx;
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        string message = string.Format("{0}:{1}",
+                            validationErrors.Entry.Entity.ToString(),
+                            validationError.ErrorMessage);
+                        // raise a new exception nesting  
+                        // the current instance as InnerException  
+                        raise = new InvalidOperationException(message, raise);
                     }
                 }
-                catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)  
-                         {  
-                     Exception raise = dbEx;  
-             foreach (var validationErrors in dbEx.EntityValidationErrors)  
-                      {  
-                foreach (var validationError in validationErrors.ValidationErrors)  
-                          {  
-                string message = string.Format("{0}:{1}",  
-                    validationErrors.Entry.Entity.ToString(),  
-                    validationError.ErrorMessage);  
-                // raise a new exception nesting  
-                // the current instance as InnerException  
-                raise = new InvalidOperationException(message, raise);  
-                         }  
-                       }  
-        throw raise;  
-                  }  
+                throw raise;
             }
+        }
 
 
 
