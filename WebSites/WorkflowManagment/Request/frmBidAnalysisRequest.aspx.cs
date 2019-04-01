@@ -206,7 +206,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
             _presenter.CurrentBidAnalysisRequest.TotalPrice = cost;
             txtTotal.Text = _presenter.CurrentBidAnalysisRequest.TotalPrice.ToString();
-            PnlShowBidder.Visible = false;
+            pnlBidItem.Visible = false;
         }
         private void BindSupplier(DropDownList ddlSupplier, int SupplierTypeId)
         {
@@ -249,7 +249,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             // bidder = _presenter.CurrentPurchaseRequest.BidAnalysises.GetBidder(BidderId);
             Session["bidder"] = bidd;
             dgBidders.SelectedItemStyle.BackColor = System.Drawing.Color.BurlyWood;
-            PnlShowBidder.Visible = true;
+            pnlBidItem.Visible = true;
             BindItemDetails();
         }
         #endregion
@@ -747,7 +747,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             // bidder = _presenter.CurrentPurchaseRequest.BidAnalysises.GetBidder(BidderId);
             Session["bidder"] = bidd;
             dgBidders.SelectedItemStyle.BackColor = System.Drawing.Color.BurlyWood;
-            PnlShowBidder.Visible = true;
+            pnlBidItem.Visible = true;
             BindItemDetails();
         }
         protected void txtUnitCost_TextChanged(object sender, EventArgs e)
@@ -761,6 +761,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void dgItemDetail_ItemDataBound(object sender, DataGridItemEventArgs e)
         {
+            bidd = Session["bidd"] as Bidder;
             if (e.Item.ItemType == ListItemType.Footer)
             {
                 DropDownList ddlFItemAcc = e.Item.FindControl("ddlFItemAcc") as DropDownList;
@@ -775,6 +776,26 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                          liI.Selected = true;
                  }*/
 
+            }
+
+            else
+            {
+                if (bidd.BidderItemDetails != null)
+                {
+                    DropDownList ddlItemAcc = e.Item.FindControl("ddlItemAcc") as DropDownList;
+                    if (ddlItemAcc != null)
+                    {
+                        BindItems(ddlItemAcc);
+                        if (_presenter.CurrentBidAnalysisRequest.GetBidder(Convert.ToInt32(hfDetailId.Value)).BidderItemDetails[e.Item.DataSetIndex].ItemAccount.Id != 0)
+                        {
+                            ListItem liI = ddlItemAcc.Items.FindByValue(_presenter.CurrentBidAnalysisRequest.GetBidder(Convert.ToInt32(hfDetailId.Value)).BidderItemDetails[e.Item.DataSetIndex].ItemAccount.Id.ToString());
+                            if (liI != null)
+                                liI.Selected = true;
+                        }
+                    }
+
+
+                }
             }
         }
         private void BindItems(DropDownList ddlItems)
@@ -944,6 +965,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         protected void dgItemDetail_CancelCommand(object source, DataGridCommandEventArgs e)
         {
 
+        }
+
+        private void BindBidItem(Bidder Bidddet)
+        {
+            bidd = Session["bidd"] as Bidder;
+            dgItemDetail.DataSource = bidd.BidderItemDetails;
+            dgItemDetail.DataBind();
         }
         protected void dgItemDetail_ItemCommand(object source, DataGridCommandEventArgs e)
         {
@@ -1125,6 +1153,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         e.Row.Cells[1].Text = _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.BidAnalysisRequestStatuses[e.Row.RowIndex].Approver).FullName;
                 }
             }
+        }
+
+        protected void btncancelCost_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -16,6 +16,8 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         {
             this.PurchaseRequestStatuses = new List<PurchaseRequestStatus>();
             this.PurchaseRequestDetails = new List<PurchaseRequestDetail>();
+            this.BidAnalysisRequests = new List<BidAnalysisRequest>();
+            this.SoleVendorRequests = new List<SoleVendorRequest>();
             //this.PurchaseOrders = new List<PurchaseOrder>();
             //  this.BidAnalysises = new BidAnalysis();
         }

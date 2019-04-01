@@ -382,27 +382,47 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void btnRequest_Click(object sender, EventArgs e)
         {
-            SavePurchaseRequest();
-            if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Count != 0)
+            try
             {
-                if (_presenter.CurrentPurchaseRequest.PurchaseRequestStatuses.Count != 0)
+                SavePurchaseRequest();
+                if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Count != 0)
                 {
-                    _presenter.SaveOrUpdateLeavePurchase(_presenter.CurrentPurchaseRequest);
-                    ClearForm();
-                    BindSearchPurchaseRequestGrid();
-                    Master.ShowMessage(new AppMessage("Successfully did a Purchase Request, Reference No - <b>'" + _presenter.CurrentPurchaseRequest.RequestNo + "'</b> ", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                   // Log.Info(_presenter.CurrentUser().FullName + " has requested for a Purchase of Total Price " + _presenter.CurrentPurchaseRequest.TotalPrice);
+                    if (_presenter.CurrentPurchaseRequest.PurchaseRequestStatuses.Count != 0)
+                    {
+                        _presenter.SaveOrUpdateLeavePurchase(_presenter.CurrentPurchaseRequest);
+                        ClearForm();
+                        BindSearchPurchaseRequestGrid();
+                        Master.ShowMessage(new AppMessage("Successfully did a Purchase Request, Reference No - <b>'" + _presenter.CurrentPurchaseRequest.RequestNo + "'</b> ", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                        // Log.Info(_presenter.CurrentUser().FullName + " has requested for a Purchase of Total Price " + _presenter.CurrentPurchaseRequest.TotalPrice);
+                    }
+                    else
+                    {
+                        Master.ShowMessage(new AppMessage("There is an error constracting Approval Process", Chai.WorkflowManagment.Enums.RMessageType.Error));
+
+                    }
+
                 }
                 else
                 {
-                    Master.ShowMessage(new AppMessage("There is an error constracting Approval Process", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
+                    Master.ShowMessage(new AppMessage("You have to insert at least one purchase item detail", Chai.WorkflowManagment.Enums.RMessageType.Error));
                 }
-
             }
-            else
+            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
             {
-                Master.ShowMessage(new AppMessage("You have to insert at least one purchase item detail", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Exception raise = dbEx;
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        string message = string.Format("{0}:{1}",
+                            validationErrors.Entry.Entity.ToString(),
+                            validationError.ErrorMessage);
+                        // raise a new exception nesting  
+                        // the current instance as InnerException  
+                        raise = new InvalidOperationException(message, raise);
+                    }
+                }
+                throw raise;
             }
         }
         protected void btnDelete_Click(object sender, EventArgs e)
