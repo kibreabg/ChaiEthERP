@@ -30,7 +30,7 @@
         }
     </script>
     
-    <asp:ValidationSummary ID="VSBid" runat="server"
+  <%--  <asp:ValidationSummary ID="VSBid" runat="server"
         CssClass="alert alert-danger fade in" DisplayMode="SingleParagraph"
         ValidationGroup="Save" ForeColor="" />
     <asp:ValidationSummary ID="VSBidder" runat="server"
@@ -38,7 +38,7 @@
         ValidationGroup="proadd" ForeColor="" />
     <asp:ValidationSummary ID="VSBidderEdit" runat="server"
         CssClass="alert alert-danger fade in" DisplayMode="SingleParagraph"
-        ValidationGroup="proedit" ForeColor="" />
+        ValidationGroup="proedit" ForeColor="" />--%>
 
     <div id="wid-id-0" class="jarviswidget" data-widget-custombutton="false" data-widget-editbutton="false">
         <header>
@@ -404,6 +404,7 @@
                      <%--<asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary" Text="Search" />--%>
                             <a data-toggle="modal" runat="server" id="searchLink" href="#searchModal" class="btn btn-primary"><i class="fa fa-circle-arrow-up fa-lg"></i>Search</a>
                         <asp:Button ID="btnPrintworksheet" runat="server" CssClass="btn btn-primary" Text="Print WorkSheet" OnClientClick="javascript:Clickheretoprint('divprint')" Enabled="False" />
+                         <asp:Button ID="btnHiddenPopupp" runat="server" />
                            <asp:HiddenField ID="hfDetailId" runat="server" />
                     </footer>
 
