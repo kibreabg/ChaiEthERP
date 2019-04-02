@@ -424,7 +424,7 @@
                 <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="AccountName" SortExpression="ItemAccount.AccountName" />
                 <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
                 <asp:BoundField DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
-
+                <asp:BoundField DataField="Item" HeaderText="Item" SortExpression="Item" />
                 <asp:BoundField DataField="Project.ProjectCode" HeaderText="Project Code" />
                 <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant Code" />
             </Columns>

@@ -1,11 +1,5 @@
-﻿using Chai.WorkflowManagment.CoreDomain.Approval;
-using Chai.WorkflowManagment.CoreDomain.Setting;
-using Chai.WorkflowManagment.CoreDomain.Users;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
 
 namespace Chai.WorkflowManagment.CoreDomain.Requests
 {
@@ -18,8 +12,6 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
             this.PurchaseRequestDetails = new List<PurchaseRequestDetail>();
             this.BidAnalysisRequests = new List<BidAnalysisRequest>();
             this.SoleVendorRequests = new List<SoleVendorRequest>();
-            //this.PurchaseOrders = new List<PurchaseOrder>();
-            //  this.BidAnalysises = new BidAnalysis();
         }
         public int Id { get; set; }
         public string RequestNo { get; set; }

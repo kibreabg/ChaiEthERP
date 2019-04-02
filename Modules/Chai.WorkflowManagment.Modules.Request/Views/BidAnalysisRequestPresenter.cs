@@ -319,6 +319,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             _controller.DeleteEntity(BidderItemDetail);
         }
+        public BidderItemDetail GetBiderItemDet(int id)
+        {
+            return _controller.GetBiderItem(id);
+        }
         public void Commit()
         {
             _controller.Commit();

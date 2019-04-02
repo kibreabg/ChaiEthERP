@@ -353,7 +353,7 @@
                                         <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default" OnClientClick="javascript:return confirm('Are you sure you want to delete this entry?');"><i class="fa fa-times"></i></asp:LinkButton>
                                     </ItemTemplate>
                                 </asp:TemplateColumn>
-                            <asp:ButtonColumn CommandName="Select" Text="Bidder Item Detail"></asp:ButtonColumn>
+                            <asp:ButtonColumn ButtonType="PushButton" CommandName="Select" Text="Bidder Item Detail"></asp:ButtonColumn>
                         </Columns>
                         <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
                     </asp:DataGrid>
@@ -613,7 +613,7 @@
             </div>
         </div>
     </div>
-       <asp:Panel ID="pnlBidItem" Visible="true" runat="server">
+           <asp:Panel ID="pnlBidItem" Visible="true" runat="server">
         <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
             <header>
                 <span class="widget-icon"><i class="fa fa-edit"></i></span>
@@ -626,7 +626,7 @@
 
                                                            <asp:DataGrid ID="dgItemDetail" runat="server" AlternatingRowStyle-CssClass="" CellPadding="0"
                             CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id" AutoGenerateColumns="false"
-                            GridLines="None" OnItemDataBound="dgItemDetail_ItemDataBound" ShowFooter="True" OnCancelCommand="dgItemDetail_CancelCommand" OnDeleteCommand="dgItemDetail_DeleteCommand" OnItemCommand="dgItemDetail_ItemCommand" OnUpdateCommand="dgItemDetail_UpdateCommand" OnEditCommand="dgItemDetail_EditCommand">
+                            GridLines="None"  ShowFooter="True" OnCancelCommand="dgItemDetail_CancelCommand" OnDeleteCommand="dgItemDetail_DeleteCommand" OnItemCommand="dgItemDetail_ItemCommand" OnUpdateCommand="dgItemDetail_UpdateCommand" OnEditCommand="dgItemDetail_EditCommand1" OnItemDataBound="dgItemDetail_ItemDataBound1">
 
                             <Columns>
                                 <asp:TemplateColumn HeaderText="Requested Items">
@@ -726,7 +726,7 @@
 
 
                                     <footer>
-                                        <asp:Button ID="btncancelCost" runat="server" CssClass="btn btn-primary" Text="Close" OnClick="btncancelCost_Click" />
+                                        <asp:Button ID="btncancelCost" runat="server" CssClass="btn btn-primary" Text="Save" OnClick="btncancelCost_Click" />
                                     </footer>
 
 

@@ -136,6 +136,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             ddlDriver.DataTextField = "FullName";
             ddlDriver.DataValueField = "ID";
             ddlDriver.DataBind();
+
+            ddlDriver.Items.Insert(0, new ListItem("Select Driver", "0"));
+            ddlDriver.SelectedIndex = 0;
         }
         private void PopCarRentals(DropDownList ddlCarRental)
         {
@@ -208,7 +211,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     btnPrint.Enabled = true;
                     btnPrintTravellog.Visible = true;
-                                     
+
                 }
                 SendEmailToRequester();
             }
@@ -318,8 +321,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         // _presenter.CurrentVehicleRequest.CurrentStatus = VRS.ApprovalStatus;
                         //GetNextApprover();
                     }
-                    else if(VRS.ApprovalStatus == ApprovalStatus.Canceled.ToString())
-                     {
+                    else if (VRS.ApprovalStatus == ApprovalStatus.Canceled.ToString())
+                    {
                         _presenter.CurrentVehicleRequest.ProgressStatus = ProgressStatus.Completed.ToString();
                         _presenter.CurrentVehicleRequest.CurrentStatus = VRS.ApprovalStatus;
                         VRS.Approver = _presenter.CurrentUser().Id;
@@ -501,27 +504,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 PopCarRentals(ddlCarRental);
                 DropDownList ddlCarModel = e.Item.FindControl("ddlFCarModel") as DropDownList;
                 PopCarModels(ddlCarModel);
-                DropDownList ddlDriver = e.Item.FindControl("ddlDriver") as DropDownList;
-                PopDrivers(ddlDriver);
                 DropDownList ddlVehicle = e.Item.FindControl("ddlFPlateNo") as DropDownList;
                 PopVehicles(ddlVehicle);
-
 
             }
             else
             {
                 if (_presenter.CurrentVehicleRequest.VehicleRequestDetails != null)
                 {
-                    DropDownList ddlEdtAssignedVehicle = e.Item.FindControl("ddlEdtAssignedVehicle") as DropDownList;
-                    if (ddlEdtAssignedVehicle != null)
-                    {
-                        if (_presenter.CurrentVehicleRequest.VehicleRequestDetails[e.Item.DataSetIndex].AssignedVehicle != "")
-                        {
-                            ListItem liI = ddlEdtAssignedVehicle.Items.FindByValue(_presenter.CurrentVehicleRequest.VehicleRequestDetails[e.Item.DataSetIndex].AssignedVehicle);
-                            if (liI != null)
-                                liI.Selected = true;
-                        }
-                    }
                     DropDownList ddlEdtCarRental = e.Item.FindControl("ddlEdtCarRental") as DropDownList;
                     if (ddlEdtCarRental != null)
                     {
@@ -540,17 +530,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         if (_presenter.CurrentVehicleRequest.VehicleRequestDetails[e.Item.DataSetIndex].CarModel != null)
                         {
                             ListItem liI = ddlEdtCarModel.Items.FindByValue(_presenter.CurrentVehicleRequest.VehicleRequestDetails[e.Item.DataSetIndex].CarModel.Id.ToString());
-                            if (liI != null)
-                                liI.Selected = true;
-                        }
-                    }
-                    DropDownList ddlEdtDriver = e.Item.FindControl("ddlEdtDriver") as DropDownList;
-                    if (ddlEdtDriver != null)
-                    {
-                        PopDrivers(ddlEdtDriver);
-                        if (_presenter.CurrentVehicleRequest.VehicleRequestDetails[e.Item.DataSetIndex].AppUser != null)
-                        {
-                            ListItem liI = ddlEdtDriver.Items.FindByValue(_presenter.CurrentVehicleRequest.VehicleRequestDetails[e.Item.DataSetIndex].AppUser.Id.ToString());
                             if (liI != null)
                                 liI.Selected = true;
                         }
@@ -622,7 +601,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     if (ddlApprovalStatus.SelectedValue == "Rejected" && txtRejectedReason.Text == "")
                     {
                         Master.ShowMessage(new AppMessage("Please Insert Rejected/Canceled Reason ", RMessageType.Error));
-                        
+
                     }
                     else
                     {
@@ -684,13 +663,71 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             TextBox txtPhoneNo = ddlDriver.FindControl("txtFDriverPhoneNo") as TextBox;
             if (_presenter.GetAssignDriver(Convert.ToInt32(ddlDriver.SelectedValue)) != null)
             {
-                if(_presenter.GetAssignDriver(Convert.ToInt32(ddlDriver.SelectedValue)).Employee != null)
+                if (_presenter.GetAssignDriver(Convert.ToInt32(ddlDriver.SelectedValue)).Employee != null)
                 {
                     txtPhoneNo.Text = _presenter.GetAssignDriver(Convert.ToInt32(ddlDriver.SelectedValue)).Employee.CellPhone;
                 }
-            }                
+            }
             else
                 txtPhoneNo.Text = String.Empty;
+            pnlApproval_ModalPopupExtender.Show();
+        }
+        protected void ddlEdtDriver_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DropDownList ddlEdtDriver = (DropDownList)sender;
+            TextBox txtEdtPhoneNo = ddlEdtDriver.FindControl("txtEdtDriverPhoneNo") as TextBox;
+            if (_presenter.GetAssignDriver(Convert.ToInt32(ddlEdtDriver.SelectedValue)) != null)
+            {
+                if (_presenter.GetAssignDriver(Convert.ToInt32(ddlEdtDriver.SelectedValue)).Employee != null)
+                {
+                    txtEdtPhoneNo.Text = _presenter.GetAssignDriver(Convert.ToInt32(ddlEdtDriver.SelectedValue)).Employee.CellPhone;
+                }
+            }
+            else
+                txtEdtPhoneNo.Text = String.Empty;
+            pnlApproval_ModalPopupExtender.Show();
+        }
+        protected void ddlAssignedVehicle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DropDownList ddlAssignedVehicle = (DropDownList)sender;
+            DropDownList ddlDriver = ddlAssignedVehicle.FindControl("ddlDriver") as DropDownList;
+            if (ddlAssignedVehicle.SelectedValue == "driver")
+            {
+                PopDrivers(ddlDriver);
+            }
+            else if (ddlAssignedVehicle.SelectedValue == "carRental")
+            {
+                ddlDriver.DataSource = "";
+                ddlDriver.DataBind();
+                ddlDriver.Items.Insert(0, new ListItem("Select Driver", "-1"));
+                ddlDriver.Items.Insert(1, new ListItem("Hired Driver", "0"));
+                ddlDriver.SelectedIndex = 0;
+            }
+
+            pnlApproval_ModalPopupExtender.Show();
+        }
+        protected void ddlEdtAssignedVehicle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DropDownList ddlEdtAssignedVehicle = (DropDownList)sender;
+            DropDownList ddlEdtDriver = ddlEdtAssignedVehicle.FindControl("ddlEdtDriver") as DropDownList;
+            if (ddlEdtAssignedVehicle.SelectedValue == "driver")
+            {
+                ddlEdtDriver.DataSource = _presenter.GetDrivers();
+                ddlEdtDriver.DataTextField = "FullName";
+                ddlEdtDriver.DataValueField = "ID";
+                ddlEdtDriver.DataBind();
+
+                ddlEdtDriver.Items.Insert(0, new ListItem("Select Driver", "0"));
+            }
+            else if (ddlEdtAssignedVehicle.SelectedValue == "carRental")
+            {
+                ddlEdtDriver.DataSource = "";
+                ddlEdtDriver.DataBind();
+                ddlEdtDriver.Items.Insert(0, new ListItem("Select Driver", "-1"));
+                ddlEdtDriver.Items.Insert(1, new ListItem("Hired Driver", "0"));
+                ddlEdtDriver.SelectedIndex = 0;
+            }
+
             pnlApproval_ModalPopupExtender.Show();
         }
         protected void btnCancelPopup_Click(object sender, EventArgs e)

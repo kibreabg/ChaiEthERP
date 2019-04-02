@@ -500,6 +500,10 @@ namespace Chai.WorkflowManagment.Modules.Request
             return _workspace.SqlQuery<BidAnalysisRequest>(filterExpression).ToList();
 
         }
+        public BidderItemDetail GetBiderItem(int id)
+        {
+            return _workspace.Single<BidderItemDetail>(x => x.Id == id);
+        }
         public int GetLastBidAnalysisRequestId()
         {
             if (_workspace.Last<BidAnalysisRequest>() != null)
