@@ -186,6 +186,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 EmailSender.Send(_presenter.GetUser(_presenter.GetAssignedJobbycurrentuser(PRS.Approver).AssignedTo).Email, "Purchase Request", _presenter.GetUser(_presenter.CurrentPurchaseRequest.Requester).FullName + "Requests for Purchase with Request No." + (_presenter.CurrentPurchaseRequest.RequestNo).ToUpper());
             }
         }
+        private void SendEmailToRequester()
+        {
+            EmailSender.Send(_presenter.GetUser(_presenter.CurrentPurchaseRequest.Requester).Email, "Purchase Request ", "Your Purchase Request with Purchase Request No. - '" + (_presenter.CurrentPurchaseRequest.RequestNo).ToUpper() + "' was Completed and a bid process is initiated.");
+        }
         private void SendEmailRejected(PurchaseRequestStatus PRS)
         {
             EmailSender.Send(_presenter.GetUser(_presenter.CurrentPurchaseRequest.Requester).Email, "Purchase Request Rejection", "Your Purchase Request with Request No. - '" + (_presenter.CurrentPurchaseRequest.RequestNo.ToString()).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (PRS.RejectedReason).ToUpper() + "'");
@@ -224,11 +228,20 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     PRRS.ApprovalDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
                     if (PRRS.ApprovalStatus != ApprovalStatus.Rejected.ToString())
                     {
-                        //Completed is commented out because we're going to complete purchase request
-                        //when Bid or SoleVendor is completed. 
+                        if (_presenter.CurrentPurchaseRequest.CurrentLevel == _presenter.CurrentPurchaseRequest.PurchaseRequestStatuses.Count)
+                        {
+                            _presenter.CurrentPurchaseRequest.CurrentApprover = PRRS.Approver;
+                            _presenter.CurrentPurchaseRequest.CurrentLevel = PRRS.WorkflowLevel;
+                            _presenter.CurrentPurchaseRequest.CurrentStatus = PRRS.ApprovalStatus;
+                            //Completed is commented out because we're going to complete purchase request
+                            //when Bid or SoleVendor is completed. 
 
-                        //_presenter.CurrentPurchaseRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                            //_presenter.CurrentPurchaseRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                            SendEmailToRequester();
+                        }
                         GetNextApprover();
+                        PRRS.Approver = _presenter.CurrentUser().Id;
+                        Log.Info(_presenter.GetUser(PRRS.Approver).FullName + " has " + PRRS.ApprovalStatus + " Purchase Request made by " + _presenter.GetUser(_presenter.CurrentPurchaseRequest.Requester).FullName);
                         SendEmail(PRRS);
                     }
                     else if (PRRS.ApprovalStatus == ApprovalStatus.Canceled.ToString())

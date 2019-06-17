@@ -198,7 +198,11 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 grvFamilyDetails.DataSource = _presenter.CurrentAppUser.Employee.FamilyDetails;
                 grvFamilyDetails.DataBind();
                 if (grvFamilyDetails.Columns.Count > 0 && !_presenter.CurrentUser().EmployeePosition.PositionName.Equals("Head, Administration & HR"))
-                    grvFamilyDetails.Columns[6].Visible = false;
+                {
+                    grvFamilyDetails.Columns[5].Visible = false; //Certificate Preview
+                    grvFamilyDetails.Columns[6].Visible = false; //Review Certificate
+                }
+
             }
         }
         private void BindEmergencyContacts()
@@ -751,7 +755,10 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 int rowIndex = Convert.ToInt32(ckBox.Attributes["RowIndex"]);
                 HiddenField hfFamilyId = grvFamilyDetails.Rows[rowIndex].FindControl("hfFamId") as HiddenField;
                 FamilyDetail familyDetail = _presenter.CurrentAppUser.Employee.GetFamilyDetail(Convert.ToInt32(hfFamilyId.Value));
-                familyDetail.Reviewed = true;
+                if (ckBox.Checked == true)
+                    familyDetail.Reviewed = true;
+                else
+                    familyDetail.Reviewed = false;
                 _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
                 Master.ShowMessage(new AppMessage("You've Successfully Reviewed this Certificate!", RMessageType.Info));
                 ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetofamily();", true);
@@ -772,7 +779,10 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 int rowIndex = Convert.ToInt32(ckBox.Attributes["RowIndex"]);
                 HiddenField hfEducationId = grvEducations.Rows[rowIndex].FindControl("hfEduId") as HiddenField;
                 Education education = _presenter.CurrentAppUser.Employee.GetEducation(Convert.ToInt32(hfEducationId.Value));
-                education.Reviewed = true;
+                if (ckBox.Checked == true)
+                    education.Reviewed = true;
+                else
+                    education.Reviewed = false;
                 _presenter.SaveOrUpdateEmployee(_presenter.CurrentAppUser);
                 Master.ShowMessage(new AppMessage("You've Successfully Reviewed this Certificate!", RMessageType.Info));
                 ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "movetoeducation();", true);

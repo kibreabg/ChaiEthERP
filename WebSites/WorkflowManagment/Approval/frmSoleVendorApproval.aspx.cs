@@ -256,6 +256,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         GetNextApprover();
                         SVRS.Approver = _presenter.CurrentUser().Id;
                         Log.Info(_presenter.GetUser(SVRS.Approver).FullName + " has " + SVRS.ApprovalStatus + " Sole Vendor Request made by " + _presenter.GetUser(_presenter.CurrentSoleVendorRequest.AppUser.Id).FullName);
+                        SendEmail(SVRS);
                     }
                     else
                     {

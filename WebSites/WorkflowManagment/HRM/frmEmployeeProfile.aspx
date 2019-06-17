@@ -500,7 +500,7 @@
                                                         </asp:TemplateField>
                                                         <asp:TemplateField HeaderText="Reviewed">
                                                             <ItemTemplate>
-                                                                <asp:CheckBox ID="ckFamCertReview" runat="server" AutoPostBack="true" OnCheckedChanged="ckFamCertReview_Check"></asp:CheckBox>
+                                                                <asp:CheckBox ID="ckFamCertReview" Checked='<%# DataBinder.Eval(Container.DataItem, "Reviewed")%>' runat="server" AutoPostBack="true" OnCheckedChanged="ckFamCertReview_Check"></asp:CheckBox>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
                                                         <asp:CommandField ShowSelectButton="True" SelectText="Edit" />
@@ -802,7 +802,7 @@
                                                         </asp:TemplateField>
                                                         <asp:TemplateField HeaderText="Reviewed">
                                                             <ItemTemplate>
-                                                                <asp:CheckBox ID="ckEduCertReview" runat="server" AutoPostBack="true" OnCheckedChanged="ckEduCertReview_Check"></asp:CheckBox>
+                                                                <asp:CheckBox ID="ckEduCertReview"  Checked='<%# DataBinder.Eval(Container.DataItem, "Reviewed")%>' runat="server" AutoPostBack="true" OnCheckedChanged="ckEduCertReview_Check"></asp:CheckBox>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
                                                         <asp:CommandField ShowSelectButton="True" SelectText="Edit" />
