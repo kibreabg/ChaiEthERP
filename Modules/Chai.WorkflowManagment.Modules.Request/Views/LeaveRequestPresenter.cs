@@ -134,6 +134,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.GetEmployee(empId);
         }
+        public decimal getTotalSickLeaveTaken(int UserId)
+        {
+            return _controller.getTotalSickLeaveTaken(UserId);
+        }
         public decimal EmpLeaveTaken(int empid, DateTime LeaveSettingDate)
         {
             return _settingcontroller.TotalleaveTaken(empid, LeaveSettingDate);

@@ -35,5 +35,9 @@ namespace Chai.WorkflowManagment.Shared.Settings
         {
             get { return UserConfig.GetConfiguration()["SuperUser"]; }
         }
+        public static string GetEntitledSickLeave
+        {
+            get { return UserConfig.GetConfiguration()["EntitledSickLeave"]; }
+        }
     }
 }

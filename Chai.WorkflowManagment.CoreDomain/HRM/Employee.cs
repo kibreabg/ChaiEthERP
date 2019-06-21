@@ -414,10 +414,10 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         {
             DateTime ced = CED;
 
-            decimal leaveEnti = 0;
-            decimal Sumleave = 0;
+            int leaveEnti = 0;
+            int Sumleave = 0;
             TimeSpan workingdays =  ced - GetEmployeeHiredDate();
-            decimal wd = workingdays.Days;
+            int wd = workingdays.Days;
 
 
             int count = 1;
@@ -479,15 +479,63 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
 
             return Sumleave;
         }
+        public virtual decimal Leavefromhiredtolast(DateTime lastday)
+        {
+           // DateTime lastday = lastday;
 
-       
+            decimal leaveEnti = 0;
+            decimal Sumleave = 0;
+            TimeSpan workingdays = lastday - GetEmployeeHiredDate(); ;
+            decimal wd = workingdays.Days;
+
+
+            int count = 1;
+            if (wd > 365)
+            {
+                while (wd > 365)
+                {
+                    if (count > 1)
+                        leaveEnti = leaveEnti + 2;
+                    if (count >= 6)
+                        Sumleave = Sumleave + 30;
+                    else
+                        if (count == 1)
+                        Sumleave = 20;
+                    else
+                        Sumleave = Sumleave + (20 + Convert.ToInt32(leaveEnti));
+
+                    count++;
+                    wd = wd - 365;
+                }
+                if (wd <= 365)
+                {
+
+                    // leaveEnti = leaveEnti + Math.Round(wd / 365);
+                    Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti))) / 365);
+
+                }
+            }
+            else
+            { //leaveEnti = leaveEnti + Math.Round(wd / 365);
+                Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365));
+            }
+
+            return Sumleave;
+        }
+
         public virtual decimal EmployeeLeaveBalance()
         {
             return (Leavefromhiredtonow() - LeavefromhiredtoSettingDate()) + SDLeaveBalance.Value;
         }
         public virtual decimal EmployeeLeaveBalanceCED(DateTime CED)
         {
-            return (LeavefromhiredtoCED(CED) - LeavefromhiredtoSettingDate()) + SDLeaveBalance.Value;
+            
+            if ((LeavefromhiredtoCED(CED) - LeavefromhiredtoSettingDate()) + SDLeaveBalance.Value > 50)
+            {
+                return 50;
+            }
+            else
+            { return  (LeavefromhiredtoCED(CED) - LeavefromhiredtoSettingDate()) + SDLeaveBalance.Value; }
         }
         public virtual decimal EmployeeLeaveBalanceYE()
         {
@@ -497,6 +545,16 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             }
              else
                 { return (LeavefromhiredtoYE() - LeavefromhiredtoSettingDate()) + SDLeaveBalance.Value; }
+        }
+        public virtual decimal EmployeeLeaveBalanceLastDay(DateTime Lastday)
+        {
+
+            if ((Leavefromhiredtolast(Lastday) - LeavefromhiredtoSettingDate()) + SDLeaveBalance.Value > 50)
+            {
+                return 50;
+            }
+            else
+            { return (Leavefromhiredtolast(Lastday) - LeavefromhiredtoSettingDate()) + SDLeaveBalance.Value; }
         }
         #endregion
 
