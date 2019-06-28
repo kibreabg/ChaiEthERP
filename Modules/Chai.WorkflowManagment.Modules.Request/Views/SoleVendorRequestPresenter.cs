@@ -109,8 +109,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     {
                         if (Approver(AL.EmployeePosition.Id) != null)
                             SVRS.Approver = Approver(AL.EmployeePosition.Id).Id;
-                        else
-                            
+                        else                            
                             SVRS.Approver = 0;
                     }
                     SVRS.WorkflowLevel = i;
