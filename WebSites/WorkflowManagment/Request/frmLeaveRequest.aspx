@@ -46,10 +46,10 @@
 								<h5 style="margin:5px 0 0 0"> Leave Balance as of Today <span class="txt-color-blue"><asp:Label ID="txtLeaveAsOfToday" runat="server"></asp:Label></span></h5>
 								
 							</li>
-							<li class="sparks-info">
+						<%--	<li class="sparks-info">
 								<h5 style="margin:5px 0 0 0"> Leave Balance as of Calendar End Date<span class="txt-color-purple"><asp:Label ID="txtLeaveAsOfCalEndDate" runat="server"></asp:Label></span></h5>
 								
-							</li>
+							</li>--%>
 						
 						</ul>
 					</div>

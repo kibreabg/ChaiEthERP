@@ -359,7 +359,16 @@ namespace Chai.WorkflowManagment.Modules.Request
         {
             return _workspace.Single<LeaveRequest>(x => x.Id == LeaveRequestId);
         }
+        public decimal getTotalSickLeaveTaken(int EmpId)
+        {
+            string filterExpression = "";
 
+            filterExpression = "SELECT *  FROM LeaveRequests Inner Join LeaveTypes on LeaveRequests.LeaveType_Id = LeaveTypes.Id "
+                               + " Where LeaveTypes.LeaveTypeName = 'Sick Leave' and LeaveRequests.CurrentStatus= 'Issued' and LeaveRequests.Requester = '" + EmpId + "'and Year(LeaveRequests.RequestedDate) = '" + DateTime.Today.Year + "'";
+            // return WorkspaceFactory.CreateReadOnly().Queryable<CashPaymentRequest>(filterExpression).ToList();
+            IList<LeaveRequest> EmpLeaverequest = _workspace.SqlQuery<LeaveRequest>(filterExpression).ToList();
+            return EmpLeaverequest.Sum(x => x.RequestedDays);
+        }
         public IList<LeaveRequest> ListLeaveRequests(string RequestNo, string RequestDate)
         {
             string filterExpression = "";

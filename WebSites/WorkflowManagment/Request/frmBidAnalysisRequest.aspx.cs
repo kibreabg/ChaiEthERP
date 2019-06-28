@@ -723,17 +723,27 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 //try
                 //{
                 //  _presenter.SaveOrUpdateBidAnalysisRequest();
-                if (_presenter.CurrentBidAnalysisRequest.BAAttachments.Count != 0)
+                if (_presenter.CurrentBidAnalysisRequest.BAAttachments.Count != 0 )
                 {
+                    foreach (Bidder bider in _presenter.CurrentBidAnalysisRequest.Bidders)
+                    {
+                        if (bider.BidderItemDetails.Count > 0)
+                        {
+                            _presenter.SaveOrUpdateBidAnalysisRequest();
+                            BindBidAnalysisRequests();
+                            Master.ShowMessage(new AppMessage("Successfully did a Bid Analysis  Request, Reference No - <b>'" + _presenter.CurrentBidAnalysisRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                            Log.Info(_presenter.CurrentUser().FullName + " has requested a For a Bid Analyis");
+                            //btnSave.Visible = false;
+                            PrintTransaction();
+                            btnPrintworksheet.Enabled = true;
+                        }
 
-                    _presenter.SaveOrUpdateBidAnalysisRequest();
-                    BindBidAnalysisRequests();
-
-                    Master.ShowMessage(new AppMessage("Successfully did a Bid Analysis  Request, Reference No - <b>'" + _presenter.CurrentBidAnalysisRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                    Log.Info(_presenter.CurrentUser().FullName + " has requested a For a Bid Analyis");
-                    //btnSave.Visible = false;
-                    PrintTransaction();
-                    btnPrintworksheet.Enabled = true;
+                        else
+                        {
+                            Master.ShowMessage(new AppMessage("Please Add at least one Bidder Item Detail", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        }
+                    }
+                   
                 }
                 else
                 {
