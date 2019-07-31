@@ -436,7 +436,6 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon"></span>
                                                     <asp:DropDownList ID="ddlDutyStation" runat="server" CssClass="form-control" placeholder="Duty Station" AppendDataBoundItems="True">
-                                                        <asp:ListItem Value="">Select Duty Station</asp:ListItem>
                                                         <asp:ListItem Value="Addis Ababa">Addis Ababa</asp:ListItem>
                                                         <asp:ListItem Value="SNNPR">SNNPR</asp:ListItem>
                                                         <asp:ListItem Value="Tigray">Tigray</asp:ListItem>
@@ -472,7 +471,6 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon"></span>
                                                     <asp:DropDownList ID="txtEmployeeStatus" runat="server" CssClass="form-control" placeholder="Employement Status">
-                                                        <asp:ListItem Value="">Select Employement Status</asp:ListItem>
                                                         <asp:ListItem Value="Fulltime">Fulltime</asp:ListItem>
                                                         <asp:ListItem Value="Temporary">Temporary</asp:ListItem>
                                                         <asp:ListItem Value="Volunteer">Volunteer</asp:ListItem>
@@ -508,7 +506,7 @@
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"></span>
-                                                    <asp:TextBox ID="txtHoursPerWeek" runat="server" CssClass="form-control" placeholder="Hours Per Week"></asp:TextBox>
+                                                    <asp:TextBox ID="txtHoursPerWeek" runat="server" CssClass="form-control" placeholder="Hours Per Week">40</asp:TextBox>
                                                     <cc1:FilteredTextBoxExtender ID="txtHoursPerWeek_FilteredTextBoxExtender" runat="server" FilterType="Numbers" TargetControlID="txtHoursPerWeek" ValidChars="">
                                                     </cc1:FilteredTextBoxExtender>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidatorhour" runat="server" ControlToValidate="txtHoursPerWeek" CssClass="validator" Display="Dynamic" ErrorMessage="Hours Per Week is required" SetFocusOnError="true" ValidationGroup="Savedetail" ForeColor="Red"></asp:RequiredFieldValidator>
@@ -522,7 +520,7 @@
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"></span>
-                                                    <asp:TextBox ID="txtBaseCount" runat="server" CssClass="form-control" placeholder="Base Country"></asp:TextBox>
+                                                    <asp:TextBox ID="txtBaseCount" runat="server" CssClass="form-control" placeholder="Base Country">Ethiopia</asp:TextBox>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidatorbasecount" runat="server" ControlToValidate="txtBaseCount" CssClass="validator" Display="Dynamic" ErrorMessage="Base Country is required" SetFocusOnError="true" ValidationGroup="Savedetail" ForeColor="Red"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
@@ -533,7 +531,7 @@
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"></span>
-                                                    <asp:TextBox ID="txtBaseCity" runat="server" CssClass="form-control" placeholder="Base City"></asp:TextBox>
+                                                    <asp:TextBox ID="txtBaseCity" runat="server" CssClass="form-control" placeholder="Base City">Addis Ababa</asp:TextBox>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidatorcity" runat="server" ControlToValidate="txtBaseCity" CssClass="validator" Display="Dynamic" ErrorMessage="Base City is required" SetFocusOnError="true" ValidationGroup="Savedetail" ForeColor="Red"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
