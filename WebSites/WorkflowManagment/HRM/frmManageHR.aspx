@@ -150,6 +150,21 @@
                                         <asp:Label ID="txttoalleavetaken" runat="server"></asp:Label></span>
                                 </p>
                             </li>
+                                <li>
+                                    <fieldset>
+                                        <div class="form-group">
+                                           <div class="input-group">
+                                            <asp:TextBox ID="txtthisdate" CssClass="form-control datepicker" placeholder="Leave Balance as of this date" data-dateformat="mm/dd/yy" runat="server"></asp:TextBox>
+                                           </div>
+                                        <div class="input-group-append">
+                                        <asp:Button ID="btnGet" runat="server" Text="Get" class="btn btn-outline-secondary" OnClick="btnGet_Click"/>
+                                        </div>                                   
+                                    <span class="badge bg-color-yellow"><asp:Label ID="lbllastdayleave" runat="server"></asp:Label></span>
+                                        </div>
+                                       </fieldset>
+                                   
+                               
+                            </li>
                         </ul>
                     </div>
 

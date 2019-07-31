@@ -100,7 +100,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 txtDeliverto.Text = _presenter.CurrentPurchaseRequest.DeliverTo.ToString();
                 txtdeliveryDate.Text = _presenter.CurrentPurchaseRequest.Requireddateofdelivery.ToShortDateString();
                 txtSuggestedSupplier.Text = _presenter.CurrentPurchaseRequest.SuggestedSupplier.ToString();
-               
+
 
             }
         }
@@ -114,21 +114,21 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 _presenter.CurrentPurchaseRequest.RequestNo = AutoNumber();
                 _presenter.CurrentPurchaseRequest.DeliverTo = txtDeliverto.Text;
                 _presenter.CurrentPurchaseRequest.Comment = txtComment.Text;
-                _presenter.CurrentPurchaseRequest.SuggestedSupplier = txtSuggestedSupplier.Text;              
-             
+                _presenter.CurrentPurchaseRequest.SuggestedSupplier = txtSuggestedSupplier.Text;
+
                 _presenter.CurrentPurchaseRequest.Requireddateofdelivery = Convert.ToDateTime(txtdeliveryDate.Text);
-                
+
                 //Determine total cost
-         /*       decimal cost = 0;
-                if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Count > 0)
-                {
-                    
-                    foreach (PurchaseRequestDetail detail in _presenter.CurrentPurchaseRequest.PurchaseRequestDetails)
-                    {
-                        cost = cost + detail.EstimatedCost;
-                    }
-                }
-                _presenter.CurrentPurchaseRequest.TotalPrice = cost;*/
+                /*       decimal cost = 0;
+                       if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Count > 0)
+                       {
+
+                           foreach (PurchaseRequestDetail detail in _presenter.CurrentPurchaseRequest.PurchaseRequestDetails)
+                           {
+                               cost = cost + detail.EstimatedCost;
+                           }
+                       }
+                       _presenter.CurrentPurchaseRequest.TotalPrice = cost;*/
                 //Determine total cost end
                 SavePurchaseRequestStatus();
                 GetCurrentApprover();
@@ -190,7 +190,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
                 else { pnlWarning.Visible = true; }
             }
-            
+
         }
         private void GetCurrentApprover()
         {
@@ -303,15 +303,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             _presenter.OnViewLoaded();
             BindPurchaseRequest();
             BindPurchaseRequestDetails();
-            if (_presenter.CurrentPurchaseRequest.CurrentLevel>1)
+            if (_presenter.CurrentPurchaseRequest.CurrentLevel > 1)
             {
                 btnRequest.Visible = false;
                 btnDelete.Visible = false;
+                dgPurchaseRequestDetail.Columns[8].Visible = false;
             }
             else
             {
                 btnRequest.Visible = true;
                 btnDelete.Visible = true;
+                dgPurchaseRequestDetail.Columns[8].Visible = true;
             }
         }
         protected void grvPurchaseRequestList_RowDeleting(object sender, GridViewDeleteEventArgs e)
@@ -361,7 +363,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         protected void btnCancelPopup_Click(object sender, EventArgs e)
         {
             _presenter.CancelPage();
-        }       
+        }
         protected void ddlFProject_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
@@ -427,8 +429,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void btnDelete_Click(object sender, EventArgs e)
         {
-            
-           
+
+
 
 
 

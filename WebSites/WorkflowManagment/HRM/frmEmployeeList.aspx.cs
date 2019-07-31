@@ -64,8 +64,9 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     e.Row.Cells[2].Text = emp.GetEmployeeProgram();
                     e.Row.Cells[3].Text = emp.GetEmployeePosition();
                     e.Row.Cells[4].Text = emp.AppUser.HiredDate.ToString();
+
                     e.Row.Cells[5].Text = emp.AppUser.IsActive == true ? "Active" : "In-Active";
-                    e.Row.Cells[5].ForeColor = System.Drawing.Color.LawnGreen;
+                    e.Row.Cells[5].ForeColor = emp.AppUser.IsActive == true ? System.Drawing.Color.LawnGreen : System.Drawing.Color.Red;
                 }    
         
 

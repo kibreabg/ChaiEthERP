@@ -1204,6 +1204,15 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
             }
         }
+     
+        protected void btnGet_Click(object sender, EventArgs e)
+        {
+            if (txtthisdate.Text != "")
+            {
+                DateTime lastday = Convert.ToDateTime(txtthisdate.Text);
+                lbllastdayleave.Text = (Math.Round((_presenter.CurrentEmployee.EmployeeLeaveBalanceLastDay(lastday) - _presenter.EmpLeaveTaken(_presenter.CurrentEmployee.Id, _presenter.CurrentEmployee.LeaveSettingDate.Value)) * 2, MidpointRounding.AwayFromZero) / 2).ToString();
+            }
+        }
     }
 
 }

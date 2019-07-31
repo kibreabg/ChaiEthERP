@@ -16,6 +16,7 @@ using log4net;
 using System.Reflection;
 using log4net.Config;
 using Chai.WorkflowManagment.CoreDomain.HRM;
+using Chai.WorkflowManagment.Shared.Settings;
 
 namespace Chai.WorkflowManagment.Modules.Request.Views
 {
@@ -26,6 +27,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         private LeaveRequest _leaverequest;
         private int _leaverequestId = 0;
         private decimal requesteddays = 0;
+        private decimal totalsickleavetaken = 0;
         private Employee employee = null;
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -41,7 +43,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
             this._presenter.OnViewLoaded();
             employee = _presenter.GetEmployee(_presenter.CurrentUser().Id);
-            txtLeaveAsOfCalEndDate.Text = (Math.Round((employee.EmployeeLeaveBalanceYE() - _presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value)) * 2, MidpointRounding.AwayFromZero) / 2).ToString();
+            //txtLeaveAsOfCalEndDate.Text = (Math.Round((employee.EmployeeLeaveBalanceYE() - _presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value)) * 2, MidpointRounding.AwayFromZero) / 2).ToString();
             txtLeaveAsOfToday.Text = (Math.Round((employee.EmployeeLeaveBalance() - _presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value)) * 2, MidpointRounding.AwayFromZero) / 2).ToString();
             if (employee != null)
                 BindInitialValues();
@@ -288,14 +290,21 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     {
                         if (_presenter.CurrentLeaveRequest.FilePath != "")
                         {
-                            GetCurrentApprover();
-                            _presenter.SaveOrUpdateLeaveRequest(_presenter.CurrentLeaveRequest);
+                            if ((totalsickleavetaken + Convert.ToInt32(txtapplyfor.Text)) < Convert.ToDecimal(UserSettings.GetEntitledSickLeave))
+                            {
+                                GetCurrentApprover();
+                                _presenter.SaveOrUpdateLeaveRequest(_presenter.CurrentLeaveRequest);
 
-                            ClearForm();
-                            BindSearchLeaveRequestGrid();
-                            Master.TransferMessage(new AppMessage("Successfully did a Leave  Request, Reference No - <b>'" + _presenter.CurrentLeaveRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                            _presenter.RedirectPage(String.Format("frmLeaveRequest.aspx?{0}=0", AppConstants.TABID));
-                            Log.Info(_presenter.CurrentUser().FullName + " has requested for a Leave Type of " + ddlLeaveType.SelectedValue);
+                                ClearForm();
+                                BindSearchLeaveRequestGrid();
+                                Master.TransferMessage(new AppMessage("Successfully did a Leave  Request, Reference No - <b>'" + _presenter.CurrentLeaveRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                                _presenter.RedirectPage(String.Format("frmLeaveRequest.aspx?{0}=0", AppConstants.TABID));
+                                Log.Info(_presenter.CurrentUser().FullName + " has requested for a Leave Type of " + ddlLeaveType.SelectedValue);
+                            }
+                            else
+                            {
+                                Master.ShowMessage(new AppMessage("Please contact HR, Your Sick Leave balance exceeded from your Entitlement", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                            }
                         }
                         else
                         {
@@ -537,6 +546,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 txtforward.Visible = false;
                 txtbalance.Visible = false;
                 FileUpload1.Visible = true;
+                totalsickleavetaken = _presenter.getTotalSickLeaveTaken(employee.Id);
 
             }
             else
