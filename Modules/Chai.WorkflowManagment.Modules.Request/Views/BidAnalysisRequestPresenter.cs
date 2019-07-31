@@ -186,8 +186,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                BidAnalysisRequest.TotalPrice  = price;
                 break;
             }
-          
-            SaveBidAnalysisRequestStatus();
+            if (CurrentBidAnalysisRequest.BidAnalysisRequestStatuses.Count == 0)
+                SaveBidAnalysisRequestStatus();
             GetCurrentApprover();
 
             _controller.SaveOrUpdateEntity(BidAnalysisRequest);
