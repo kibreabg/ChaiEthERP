@@ -19,7 +19,7 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
     public class WorkflowManagmentDbContext : BaseDbContext
     {
         public WorkflowManagmentDbContext(bool disableProxy)
-            : base("CHAIWorkflow")
+            : base("ERP")
         {
             if (disableProxy)
                 ObjContext().ContextOptions.ProxyCreationEnabled = false;
@@ -48,6 +48,7 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
         public DbSet<EmployeeLeave> EmployeeLeaves { get; set; }
         public DbSet<ItemAccount> ItemAccounts { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<SoleVendorSupplier> SoleVendorSuppliers { get; set; }
         public DbSet<SupplierType> SupplierTypes { get; set; }
         public DbSet<CarRental> CarRentals { get; set; }
         public DbSet<CarModel> CarModels { get; set; }
