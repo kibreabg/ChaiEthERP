@@ -208,7 +208,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (PRS.ApprovalStatus == null)
                 {
-                    // SendEmail(PRS);
+                    SendEmail(PRS);
                     _presenter.CurrentPurchaseRequest.CurrentApprover = PRS.Approver;
                     _presenter.CurrentPurchaseRequest.CurrentLevel = PRS.WorkflowLevel;
                     _presenter.CurrentPurchaseRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
@@ -242,7 +242,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         GetNextApprover();
                         PRRS.Approver = _presenter.CurrentUser().Id;
                         Log.Info(_presenter.GetUser(PRRS.Approver).FullName + " has " + PRRS.ApprovalStatus + " Purchase Request made by " + _presenter.GetUser(_presenter.CurrentPurchaseRequest.Requester).FullName);
-                        SendEmail(PRRS);
                     }
                     else if (PRRS.ApprovalStatus == ApprovalStatus.Canceled.ToString())
                     {

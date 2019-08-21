@@ -202,12 +202,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         private void SendEmailRejected(SoleVendorRequestStatus SVRS)
         {
             EmailSender.Send(_presenter.GetUser(_presenter.CurrentSoleVendorRequest.AppUser.Id).Email, "Sole Vendor Request Rejection", "Your Sole Vendor Request with Sole Vendor Request No. " + (_presenter.CurrentSoleVendorRequest.RequestNo).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (SVRS.RejectedReason).ToUpper() + "'");
+            EmailSender.Send(_presenter.GetUser(_presenter.CurrentSoleVendorRequest.PurchaseRequest.Requester).Email, "Purchase Request Rejection", "Your Purchase Request with Request No. - '" + (_presenter.CurrentSoleVendorRequest.PurchaseRequest.RequestNo.ToString()).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (SVRS.RejectedReason).ToUpper() + "'");
 
             if (SVRS.WorkflowLevel > 1)
             {
                 for (int i = 0; i + 1 < SVRS.WorkflowLevel; i++)
                 {
-                    EmailSender.Send(_presenter.GetUser(_presenter.CurrentSoleVendorRequest.SoleVendorRequestStatuses[i].Approver).Email, "Sole Vendor Request Rejection", "Leave Request with Leave Request No. - " + (_presenter.CurrentSoleVendorRequest.RequestNo).ToUpper() + " made by " + (_presenter.GetUser(_presenter.CurrentSoleVendorRequest.AppUser.Id).FullName).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (SVRS.RejectedReason).ToUpper() + "'");
+                    EmailSender.Send(_presenter.GetUser(_presenter.CurrentSoleVendorRequest.SoleVendorRequestStatuses[i].Approver).Email, "Sole Vendor Request Rejection", "Sole Vendor Request with Sole Vendor Request No. - " + (_presenter.CurrentSoleVendorRequest.RequestNo).ToUpper() + " made by " + (_presenter.GetUser(_presenter.CurrentSoleVendorRequest.AppUser.Id).FullName).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (SVRS.RejectedReason).ToUpper() + "'");
+                    EmailSender.Send(_presenter.GetUser(_presenter.CurrentSoleVendorRequest.PurchaseRequest.PurchaseRequestStatuses[i].Approver).Email, "Purchase Request Rejection", "Purchase Request with Request No. - '" + (_presenter.CurrentSoleVendorRequest.PurchaseRequest.RequestNo.ToString()).ToUpper() + "' made by " + (_presenter.GetUser(_presenter.CurrentSoleVendorRequest.PurchaseRequest.Requester).FullName).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (SVRS.RejectedReason).ToUpper() + "'");
                 }
             }
         }
@@ -264,6 +266,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         _presenter.CurrentSoleVendorRequest.CurrentLevel = SVRS.WorkflowLevel;
                         _presenter.CurrentSoleVendorRequest.CurrentStatus = SVRS.ApprovalStatus;
                         _presenter.CurrentSoleVendorRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                        //Make sure the Purchase Request is also Rejected
+                        _presenter.CurrentSoleVendorRequest.PurchaseRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                        _presenter.CurrentSoleVendorRequest.PurchaseRequest.CurrentStatus = ApprovalStatus.Rejected.ToString();
+
                         SVRS.Approver = _presenter.CurrentUser().Id;
                         SendEmailRejected(SVRS);
                         Log.Info(_presenter.GetUser(SVRS.Approver).FullName + " has " + SVRS.ApprovalStatus + " Sole Vendor Request made by " + _presenter.GetUser(_presenter.CurrentSoleVendorRequest.AppUser.Id).FullName);
