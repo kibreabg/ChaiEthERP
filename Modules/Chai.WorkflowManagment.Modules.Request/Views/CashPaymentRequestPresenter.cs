@@ -139,42 +139,47 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         public void SaveOrUpdateCashPaymentRequest()
         {
-            CashPaymentRequest CashPaymentRequest = CurrentCashPaymentRequest;
-            if (CashPaymentRequest.Id <= 0)
+            CashPaymentRequest cashPaymentRequest = CurrentCashPaymentRequest;
+            if (cashPaymentRequest.Id <= 0)
             {
-                CashPaymentRequest.RequestNo = View.GetRequestNo;
-                CashPaymentRequest.VoucherNo = View.GetVoucherNo;
+                cashPaymentRequest.RequestNo = View.GetRequestNo;
+                cashPaymentRequest.VoucherNo = View.GetVoucherNo;
             }
-            CashPaymentRequest.RequestDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
-            CashPaymentRequest.Payee = "";
-            CashPaymentRequest.Description = View.GetDescription;
-            CashPaymentRequest.AmountType = View.GetAmountType;
-            CashPaymentRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
-            CashPaymentRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
-            CashPaymentRequest.Supplier = _settingController.GetSupplier(View.GetPayee);
+            cashPaymentRequest.RequestDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
+            cashPaymentRequest.Description = View.GetDescription;
+            cashPaymentRequest.AmountType = View.GetAmountType;
+            cashPaymentRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
+            cashPaymentRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
+            //Check if the Payee is the logged in employee or a supplier
+            if (View.GetPayee == -1)
+                cashPaymentRequest.Payee = CurrentUser().FullName;
+            else
+                cashPaymentRequest.Supplier = _settingController.GetSupplier(View.GetPayee);
+
             if (View.GetAmountType != "Actual Amount")
             {
-                CashPaymentRequest.PaymentReimbursementStatus = "Not Retired";
+                cashPaymentRequest.PaymentReimbursementStatus = "Not Retired";
             }
             else
             {
-                CashPaymentRequest.PaymentReimbursementStatus = "Retired";
-                CashPaymentRequest.TotalActualExpendture = CashPaymentRequest.TotalAmount;
+                cashPaymentRequest.PaymentReimbursementStatus = "Retired";
+                cashPaymentRequest.TotalActualExpendture = cashPaymentRequest.TotalAmount;
             }
 
-            CashPaymentRequest.ExportStatus = "Not Exported";
+            cashPaymentRequest.ExportStatus = "Not Exported";
+            cashPaymentRequest.IsLiquidated = false;
             if (CurrentCashPaymentRequest.CashPaymentRequestStatuses.Count == 0)
                 SaveCashPaymentRequestStatus();
 
             GetCurrentApprover();
 
-            _controller.SaveOrUpdateEntity(CashPaymentRequest);
+            _controller.SaveOrUpdateEntity(cashPaymentRequest);
 
 
         }
-        public void SaveOrUpdateCashPaymentRequest(CashPaymentRequest CashPaymentRequest)
+        public void SaveOrUpdateCashPaymentRequest(CashPaymentRequest cashPaymentRequest)
         {
-            _controller.SaveOrUpdateEntity(CashPaymentRequest);
+            _controller.SaveOrUpdateEntity(cashPaymentRequest);
             _controller.CurrentObject = null;
         }
         public void CancelPage()

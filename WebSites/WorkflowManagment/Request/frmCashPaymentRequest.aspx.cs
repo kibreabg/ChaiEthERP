@@ -129,7 +129,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ListItem lst = new ListItem();
             lst.Text = " Select Payee ";
             lst.Value = "0";
+            ListItem empPayee = new ListItem();
+            empPayee.Text = _presenter.CurrentUser().FullName;
+            empPayee.Value = "-1";
             ddlPayee.Items.Add(lst);
+            ddlPayee.Items.Add(empPayee);
             ddlPayee.DataSource = _presenter.GetSuppliers();
             ddlPayee.DataBind();
         }
@@ -139,14 +143,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (_presenter.CurrentCashPaymentRequest != null)
             {
                 // txtRequestNo.Text = _presenter.CurrentCashPaymentRequest.RequestNo.ToString();
-                if(_presenter.CurrentCashPaymentRequest.Supplier != null)
+                if (_presenter.CurrentCashPaymentRequest.Supplier != null)
                 {
                     ddlPayee.SelectedValue = _presenter.CurrentCashPaymentRequest.Supplier.Id.ToString();
                 }
                 else
                 {
                     ddlPayee.SelectedValue = "0";
-                }                
+                }
                 txtDescription.Text = _presenter.CurrentCashPaymentRequest.Description;
                 //txtVoucherNo.Text = _presenter.CurrentCashPaymentRequest.VoucherNo.ToString();
                 ddlAmountType.SelectedValue = _presenter.CurrentCashPaymentRequest.AmountType;
@@ -226,6 +230,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     cprd.Project = _presenter.GetProject(Convert.ToInt32(ddlProject.SelectedValue));
                     DropDownList ddlGrant = e.Item.FindControl("ddlGrant") as DropDownList;
                     cprd.Grant = _presenter.GetGrant(int.Parse(ddlGrant.SelectedValue));
+                    CheckBox ckSupDocAttached = e.Item.FindControl("ckSupDocAttached") as CheckBox;
+                    cprd.SupportDocAttached = ckSupDocAttached.Checked;
                     _presenter.CurrentCashPaymentRequest.TotalAmount += cprd.Amount;
                     if (ddlAmountType.SelectedValue == "Actual Amount")
                     {
@@ -235,11 +241,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                     dgCashPaymentDetail.EditItemIndex = -1;
                     BindCashPaymentDetails();
-                    Master.ShowMessage(new AppMessage("Payment Detail Successfully Added", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    Master.ShowMessage(new AppMessage("Payment Detail Successfully Added", RMessageType.Info));
                 }
                 catch (Exception ex)
                 {
-                    Master.ShowMessage(new AppMessage("Error: Unable to Save Payment " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Error: Unable to Save Payment " + ex.Message, RMessageType.Error));
                 }
             }
         }
@@ -274,6 +280,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 cprd.Project = _presenter.GetProject(Convert.ToInt32(ddlProject.SelectedValue));
                 DropDownList ddlGrant = e.Item.FindControl("ddlEdtGrant") as DropDownList;
                 cprd.Grant = _presenter.GetGrant(int.Parse(ddlGrant.SelectedValue));
+                CheckBox ckEdtSupDocAttached = e.Item.FindControl("ckEdtSupDocAttached") as CheckBox;
+                cprd.SupportDocAttached = ckEdtSupDocAttached.Checked;
                 _presenter.CurrentCashPaymentRequest.TotalAmount -= previousAmount; //Subtract the previous Total amount
                 _presenter.CurrentCashPaymentRequest.TotalAmount += cprd.Amount; //Then add the new individual amounts to the Total amount
 
@@ -396,8 +404,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     {
                         Master.ShowMessage(new AppMessage("Please Attach Receipt", Chai.WorkflowManagment.Enums.RMessageType.Error));
                     }
-
-
                 }
                 else
                 {
@@ -406,7 +412,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage(ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage(ex.Message, RMessageType.Error));
                 if (ex.InnerException != null)
                 {
                     if (ex.InnerException.InnerException.Message.Contains("Violation of UNIQUE KEY"))
@@ -487,8 +493,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             grvAttachments.DataSource = _presenter.CurrentCashPaymentRequest.CPRAttachments;
             grvAttachments.DataBind();
             //Response.Redirect(Request.Url.AbsoluteUri);
-
-
         }
         private void UploadFile()
         {
@@ -496,9 +500,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
             if (fileName != String.Empty)
             {
-
-
-
                 CPRAttachment attachment = new CPRAttachment();
                 attachment.FilePath = "~/CPUploads/" + fileName;
                 fuReciept.PostedFile.SaveAs(Server.MapPath("~/CPUploads/") + fileName);
@@ -508,11 +509,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 grvAttachments.DataSource = _presenter.CurrentCashPaymentRequest.CPRAttachments;
                 grvAttachments.DataBind();
 
+                Master.ShowMessage(new AppMessage("Successfully uploaded the attachment", RMessageType.Info));
 
             }
             else
             {
-                Master.ShowMessage(new AppMessage("Please select file ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Please select file ", RMessageType.Error));
             }
         }
         #endregion

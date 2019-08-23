@@ -535,8 +535,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             pnlDetail.Visible = false;
         }
-
-
         protected void grvStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses != null)
@@ -573,11 +571,18 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails != null)
                 {
-                    if (_presenter.CurrentCashPaymentRequest.CurrentLevel == 1 && (_presenter.CurrentUser().Id == _presenter.CurrentCashPaymentRequest.CurrentApprover))
+                    //For the last level (usually the finance officer) only allow editing of the accounts 
+                    if ((_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses.Count == _presenter.CurrentCashPaymentRequest.CurrentLevel) && (_presenter.CurrentUser().Id == _presenter.CurrentCashPaymentRequest.CurrentApprover))
                     {
-                        LinkButton lnkEdit = e.Item.FindControl("lnkEdit") as LinkButton;
-                        if (lnkEdit != null)
-                            lnkEdit.Visible = false;
+                        TextBox txtEdtAmount = e.Item.FindControl("txtEdtAmount") as TextBox;
+                        if (txtEdtAmount != null)
+                            txtEdtAmount.ReadOnly = true;
+                        DropDownList ddlEditProject = e.Item.FindControl("ddlEdtProject") as DropDownList;
+                        if (ddlEditProject != null)
+                            ddlEditProject.Enabled = false;
+                        DropDownList ddlEditGrant = e.Item.FindControl("ddlEdtGrant") as DropDownList;
+                        if (ddlEditGrant != null)
+                            ddlEditGrant.Enabled = false;
                     }
 
                     DropDownList ddlProject = e.Item.FindControl("ddlEdtProject") as DropDownList;
@@ -606,7 +611,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     if (ddlEdtGrant != null)
                     {
                         BindGrant(ddlEdtGrant, Convert.ToInt32(ddlProject.SelectedValue));
-                        if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[e.Item.DataSetIndex].Grant.Id != null)
+                        if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[e.Item.DataSetIndex].Grant.Id != 0)
                         {
                             ListItem liI = ddlEdtGrant.Items.FindByValue(_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[e.Item.DataSetIndex].Grant.Id.ToString());
                             if (liI != null)
@@ -626,6 +631,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void dgCashPaymentRequestDetail_UpdateCommand(object source, DataGridCommandEventArgs e)
         {
+            decimal previousAmount = 0;
             int CPRDId = (int)dgCashPaymentRequestDetail.DataKeys[e.Item.ItemIndex];
             CashPaymentRequestDetail cprd;
 
@@ -641,6 +647,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 cprd.AccountCode = txtEdtAccountCode.Text;
                 DropDownList ddlAccountDescription = e.Item.FindControl("ddlEdtAccountDescription") as DropDownList;
                 cprd.ItemAccount = _presenter.GetItemAccount(Convert.ToInt32(ddlAccountDescription.SelectedValue));
+                TextBox txtEdtAmount = e.Item.FindControl("txtEdtAmount") as TextBox;
+                previousAmount = cprd.Amount; //This is the Total Amount of this request before any edit 
+                cprd.Amount = Convert.ToDecimal(txtEdtAmount.Text);
+                _presenter.CurrentCashPaymentRequest.TotalAmount -= previousAmount; //Subtract the previous Total amount
+                _presenter.CurrentCashPaymentRequest.TotalAmount += cprd.Amount; //Then add the new individual amounts to the Total amount
                 DropDownList ddlProject = e.Item.FindControl("ddlEdtProject") as DropDownList;
                 cprd.Project = _presenter.GetProject(Convert.ToInt32(ddlProject.SelectedValue));
                 DropDownList ddlGrant = e.Item.FindControl("ddlEdtGrant") as DropDownList;
@@ -650,11 +661,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 dgCashPaymentRequestDetail.DataSource = _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails;
                 dgCashPaymentRequestDetail.DataBind();
                 pnlDetail_ModalPopupExtender.Show();
-                Master.ShowMessage(new AppMessage("Payment Detail Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Payment Detail Successfully Updated", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to Update Payment Detail. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to Update Payment Detail. " + ex.Message, RMessageType.Error));
             }
         }
         protected void ddlEdtAccountDescription_SelectedIndexChanged(object sender, EventArgs e)

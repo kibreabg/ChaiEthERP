@@ -32,6 +32,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string PaymentReimbursementStatus { get; set; }
         public string ExportStatus { get; set; }
         public string AmountType { get; set; }
+        public bool IsLiquidated { get; set; }
         public virtual AppUser AppUser { get; set; }
         public virtual Supplier Supplier { get; set; }
         public virtual PaymentReimbursementRequest PaymentReimbursementRequest { get; set; }

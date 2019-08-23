@@ -12,11 +12,11 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
 
         public Bidder()
         {
-            this.BidderItemDetails = new List<BidderItemDetail>();
+            //this.BidderItemDetails = new List<BidderItemDetail>();
         }
 
         public int Id { get; set; }
-        public virtual BidAnalysisRequest BidAnalysisRequest { get; set; }
+        public virtual BidderItemDetail BidderItemDetail { get; set; }
         public string ContactDetails { get; set; }
         public string LeadTimefromSupplier { get; set; }
        
@@ -24,67 +24,65 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public int Rank { get; set; }
         public virtual Supplier Supplier { get; set; }
         public virtual SupplierType SupplierType { get; set; }
+        public int Qty { get; set; }
+        public decimal UnitCost { get; set; }
+        public decimal TotalCost { get; set; }
 
-        [NotMapped]
-        public string GetSelectionReason
-        {
-            get
-            {
-                if (Rank == 1)
-                {
-                    return BidAnalysisRequest.ReasonforSelection;
+        // [NotMapped]
+        /*   public string GetSelectionReason
+           {
+               get
+               {
+                   if (Rank == 1)
+                   {
+                       return BidderItemDetail.ReasonforSelection;
 
-                }
-                else
-                {
-                    return "";
-                }
-            }
-        }
-        //   public virtual ItemAccount ItemAccount { get; set; }
+                   }
+                   else
+                   {
+                       return "";
+                   }
+               }
+           }*/
 
-        //    public int Qty { get; set; }
+        //  public virtual IList<BidderItemDetail> BidderItemDetails { get; set; }
 
-        //  public decimal UnitCost { get; set; }
-        //  public decimal TotalCost { get; set; }    
-        public virtual IList<BidderItemDetail> BidderItemDetails { get; set; }
+        /*     #region Bidder
+              public virtual BidderItemDetail GetBidderItemDetail(int Id)
+              {
 
-        #region Bidder
-        public virtual BidderItemDetail GetBidderItemDetail(int Id)
-        {
+                  foreach (BidderItemDetail BidderItemDetail in BidderItemDetails)
+                  {
+                      if (BidderItemDetail.Id == Id)
+                          return BidderItemDetail;
 
-            foreach (BidderItemDetail BidderItemDetail in BidderItemDetails)
-            {
-                if (BidderItemDetail.Id == Id)
-                    return BidderItemDetail;
+                  }
+                  return null;
+              }
 
-            }
-            return null;
-        }
+              public virtual IList<BidderItemDetail> GetBidderItemDetailByBidderId(int bidderId)
+              {
+                  IList<BidderItemDetail> Bidders = new List<BidderItemDetail>();
+                  foreach (BidderItemDetail BidderItemDetail in BidderItemDetails)
+                  {
+                      if (BidderItemDetail.Bidder.Id == bidderId)
+                          Bidders.Add(BidderItemDetail);
 
-        public virtual IList<BidderItemDetail> GetBidderItemDetailByBidderId(int bidderId)
-        {
-            IList<BidderItemDetail> Bidders = new List<BidderItemDetail>();
-            foreach (BidderItemDetail BidderItemDetail in BidderItemDetails)
-            {
-                if (BidderItemDetail.Bidder.Id == bidderId)
-                    Bidders.Add(BidderItemDetail);
+                  }
+                  return Bidders;
+              }
+              public virtual void RemoveBidderItemDetail(int Id)
+              {
 
-            }
-            return Bidders;
-        }
-        public virtual void RemoveBidderItemDetail(int Id)
-        {
+                  foreach (BidderItemDetail BidderItemDetail in BidderItemDetails)
+                  {
+                      if (BidderItemDetail.Id == Id)
+                          BidderItemDetails.Remove(BidderItemDetail);
+                      break;
+                  }
 
-            foreach (BidderItemDetail BidderItemDetail in BidderItemDetails)
-            {
-                if (BidderItemDetail.Id == Id)
-                    BidderItemDetails.Remove(BidderItemDetail);
-                break;
-            }
+              }
 
-        }
-
-        #endregion
+              #endregion*/
     }
 }

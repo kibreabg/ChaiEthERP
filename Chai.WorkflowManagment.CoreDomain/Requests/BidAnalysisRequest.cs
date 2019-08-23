@@ -16,9 +16,9 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         {
             this.BidAnalysisRequestStatuses = new List<BidAnalysisRequestStatus>();
             this.BAAttachments = new List<BAAttachment>();
-            this.Bidders = new List<Bidder>();
+            this.BidderItemDetails = new List<BidderItemDetail>();
             this.BidAnalysisRequestDetails = new List<BidAnalysisRequestDetail>();
-
+    
         }
         public int Id { get; set; }
     
@@ -48,22 +48,22 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
       
         public virtual IList<BidAnalysisRequestStatus> BidAnalysisRequestStatuses { get; set; }
         public virtual PurchaseOrder PurchaseOrders { get; set; }        
-        public virtual IList<Bidder> Bidders { get; set; }
+        public virtual IList<BidderItemDetail> BidderItemDetails { get; set; }
         public virtual IList<BAAttachment> BAAttachments { get; set; }
         public virtual IList<BidAnalysisRequestDetail> BidAnalysisRequestDetails { get; set; }
         #region Bidder
-        public virtual Bidder GetBidder(int Id)
+        public virtual BidderItemDetail GetBidderItemDetail(int Id)
         {
 
-            foreach (Bidder bidder in Bidders)
+            foreach (BidderItemDetail bidderItemDetail in BidderItemDetails)
             {
-                if (bidder.Id == Id)
-                    return bidder;
+                if (bidderItemDetail.Id == Id)
+                    return bidderItemDetail;
 
             }
             return null;
         }
-        public virtual Bidder GetBidderbyRank()
+     /*   public virtual Bidder GetBidderbyRank()
         {
 
             foreach (Bidder bidder in Bidders)
@@ -73,36 +73,36 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
 
             }
             return null;
-        }
-        public virtual IList<Bidder> GetBidderByBidAnalysisId(int AnalisisId)
+        }*/
+        public virtual IList<BidderItemDetail> GetBidderItemDetailByBidAnalysisId(int AnalisisId)
         {
-            IList<Bidder> Bidders = new List<Bidder>();
-            foreach (Bidder bidder in Bidders)
+            IList<BidderItemDetail> BidderItemDetails = new List<BidderItemDetail>();
+            foreach (BidderItemDetail bidderItemDetail in BidderItemDetails)
             {
-                if (bidder.BidAnalysisRequest.Id == AnalisisId)
-                    Bidders.Add(bidder);
+                if (bidderItemDetail.BidAnalysisRequest.Id == AnalisisId)
+                    BidderItemDetails.Add(bidderItemDetail);
 
             }
-            return Bidders;
+            return BidderItemDetails;
         }
-        public virtual void RemoveBidder(int Id)
+        public virtual void RemoveBidderItemDetail(int Id)
         {
 
-            foreach (Bidder bidder in Bidders)
+            foreach (BidderItemDetail bidderItemDetail in BidderItemDetails)
             {
-                if (bidder.Id == Id)
-                    Bidders.Remove(bidder);
+                if (bidderItemDetail.Id == Id)
+                    BidderItemDetails.Remove(bidderItemDetail);
                 break;
             }
 
         }
 
-        public IList<BidderItemDetail> GetAllBidderItemDetails()
+        public IList<Bidder> GetAllBidders()
         {
-            IList<BidderItemDetail> details = new List<BidderItemDetail>();
-            foreach (Bidder b in Bidders)
+            IList<Bidder> details = new List<Bidder>();
+            foreach (BidderItemDetail b in BidderItemDetails)
             {
-                foreach (BidderItemDetail det in b.BidderItemDetails)
+                foreach (Bidder det in b.Bidders)
                 {
                     details.Add(det);
                 }

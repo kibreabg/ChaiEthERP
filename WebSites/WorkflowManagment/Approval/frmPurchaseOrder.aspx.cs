@@ -160,13 +160,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 Label lblVatP = Repeater1.Controls[Repeater1.Controls.Count - 1].FindControl("lblVatP") as Label;
                
                 Label lblTotalP = Repeater1.Controls[Repeater1.Controls.Count - 1].FindControl("lblTotalP") as Label;
-                foreach (BidderItemDetail detail in _presenter.CurrentBidAnalysisRequest.GetBidderbyRank().BidderItemDetails)
+                foreach (Bidder detail in _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders)
                 {
                     PurchaseOrderDetail POD = new PurchaseOrderDetail();
-                    POD.ItemAccount = _presenter.GetItemAccount(detail.ItemAccount.Id);
-                    POD.Qty = detail.Qty;
-                    POD.UnitCost = detail.UnitCost;
-                    POD.TotalCost = detail.TotalCost;
+                    POD.ItemAccount = _presenter.GetItemAccount(detail.BidderItemDetail.ItemAccount.Id);
+                    POD.Qty = detail.BidderItemDetail.Qty;
+                    POD.UnitCost = detail.BidderItemDetail.UnitCost;
+                    POD.TotalCost = detail.BidderItemDetail.TotalCost;
                     _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PurchaseOrderDetails.Add(POD);
                
                    lblItemTotalP.Text = ((lblItemTotalP.Text != "" ? Convert.ToDecimal(lblItemTotalP.Text) : 0) + POD.TotalCost).ToString();
@@ -197,13 +197,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             txtRequester.Text = _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName;
                 if (_presenter.CurrentBidAnalysisRequest != null)
                 {
-                    Bidder bider = _presenter.CurrentBidAnalysisRequest.GetBidderbyRank();
+                    int bider = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Rank;
 
-                    if (bider != null)
+                    if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails.Count != 0 && _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Rank !=1)
                     {
-                        txtSupplierName.Text = bider.Supplier.SupplierName;
-                        txtSupplierAddress.Text = bider.Supplier.SupplierAddress;
-                        txtSupplierContact.Text = bider.Supplier.SupplierContact;
+                    txtSupplierName.Text = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Supplier.SupplierName;                   
+                    txtSupplierAddress.Text = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Supplier.SupplierAddress;
+                    txtSupplierContact.Text = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Supplier.SupplierContact;
                     }
                 }
 
@@ -246,7 +246,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 _presenter.CurrentBidAnalysisRequest.PurchaseOrders.BidAnalysisRequest = _presenter.CurrentBidAnalysisRequest;
                 if (_presenter.CurrentBidAnalysisRequest != null)
                 {
-                    _presenter.CurrentBidAnalysisRequest.PurchaseOrders.Supplier = _presenter.CurrentBidAnalysisRequest.GetBidderbyRank().Supplier;
+                    if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Rank == 1)
+                    {
+                        _presenter.CurrentBidAnalysisRequest.PurchaseOrders.Supplier = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Supplier;
+                    }
                 }
 
                 AddPurchasingItem();
@@ -269,7 +272,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         private void BindPODetail()
         {
 
-            dgPODetail.DataSource = _presenter.CurrentBidAnalysisRequest.Bidders[0].BidderItemDetails;
+            dgPODetail.DataSource = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders;
             dgPODetail.DataBind();
 
         }
@@ -281,10 +284,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             if (_presenter.CurrentBidAnalysisRequest.PurchaseOrders.Id <= 0)
             {
 
-                if (_presenter.CurrentBidAnalysisRequest != null)
+                if (_presenter.CurrentBidAnalysisRequest != null && _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Rank == 1)
                 {
 
-                    foreach (BidderItemDetail detail in _presenter.CurrentBidAnalysisRequest.GetBidderbyRank().BidderItemDetails)
+                    foreach (BidderItemDetail detail in _presenter.CurrentBidAnalysisRequest.BidderItemDetails)
                     {
                         PurchaseOrderDetail POD = new PurchaseOrderDetail();
                         POD.ItemAccount = _presenter.GetItemAccount(detail.ItemAccount.Id);
@@ -363,13 +366,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 lblPaymentTerms.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PaymentTerms;
                 lblDeliveryFeesResult.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.DeliveryFees.ToString();
             
-                lblSuggestedSupplierResult.Text = _presenter.CurrentBidAnalysisRequest.GetBidderbyRank().Supplier.SupplierName;
+                lblSuggestedSupplierResult.Text = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Supplier.SupplierName;
                 if (_presenter.CurrentBidAnalysisRequest != null)
                 {
                     lblReasonforSelectionResult.Text = _presenter.CurrentBidAnalysisRequest.ReasonforSelection;
                     lblSelectedbyResult.Text = _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName;
 
-                    grvDetails.DataSource = _presenter.CurrentBidAnalysisRequest.GetAllBidderItemDetails();
+                    grvDetails.DataSource = _presenter.CurrentBidAnalysisRequest.GetAllBidders();
                     grvDetails.DataBind();
 
                     

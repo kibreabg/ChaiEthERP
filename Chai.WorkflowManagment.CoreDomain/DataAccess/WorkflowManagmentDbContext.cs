@@ -19,7 +19,7 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
     public class WorkflowManagmentDbContext : BaseDbContext
     {
         public WorkflowManagmentDbContext(bool disableProxy)
-            : base("WorkflowManagmentTest")
+            : base("ERP")
         {
             if (disableProxy)
                 ObjContext().ContextOptions.ProxyCreationEnabled = false;
@@ -48,6 +48,7 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
         public DbSet<EmployeeLeave> EmployeeLeaves { get; set; }
         public DbSet<ItemAccount> ItemAccounts { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<SoleVendorSupplier> SoleVendorSuppliers { get; set; }
         public DbSet<SupplierType> SupplierTypes { get; set; }
         public DbSet<CarRental> CarRentals { get; set; }
         public DbSet<CarModel> CarModels { get; set; }
@@ -120,7 +121,7 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
         public DbSet<WorkExperience> WorkExperiences { get; set; }
         public DbSet<Holiday> Holidays { get; set; }
 
-        public DbSqlQuery UpdateTaskpanNodePosition { get; set; }
+       
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             //modelBuilder.Entity<AppUser>().HasMany(p => p.AppUserRoles).WithMany();

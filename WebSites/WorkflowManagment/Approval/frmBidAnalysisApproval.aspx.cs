@@ -437,7 +437,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void BindPurchaseRequestDetails()
         {
-            dgPurchaseRequestDetail.DataSource = _presenter.CurrentBidAnalysisRequest.Bidders;
+            dgPurchaseRequestDetail.DataSource = _presenter.CurrentBidAnalysisRequest.BidderItemDetails;
             dgPurchaseRequestDetail.DataBind();
         }
         protected void grvPurchaseRequestList_RowDeleting(object sender, GridViewDeleteEventArgs e)
@@ -579,10 +579,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
            // grvPurchaseRequestList.DataSource = _presenter.CurrentBidAnalysisRequest.Bidders;
             //grvPurchaseRequestList.DataBind();
-            IList<BidderItemDetail> biddetail = new List<BidderItemDetail>();
-            foreach (Bidder bider in _presenter.CurrentBidAnalysisRequest.Bidders)
+            IList<Bidder> biddetail = new List<Bidder>();
+            foreach (BidderItemDetail bider in _presenter.CurrentBidAnalysisRequest.BidderItemDetails)
             {
-                foreach (BidderItemDetail biderdetail in bider.BidderItemDetails)
+                foreach (Bidder biderdetail in bider.Bidders)
                 {
                     biddetail.Add(biderdetail);
                 }
@@ -625,10 +625,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
                 grvStatuses.DataSource = _presenter.CurrentBidAnalysisRequest.BidAnalysisRequestStatuses;
                 grvStatuses.DataBind();
-                IList<BidderItemDetail> biddetail = new List<BidderItemDetail>();
-                foreach (Bidder bider in _presenter.CurrentBidAnalysisRequest.Bidders)
+                IList<Bidder> biddetail = new List<Bidder>();
+                foreach (BidderItemDetail bideritem in _presenter.CurrentBidAnalysisRequest.BidderItemDetails)
                 {
-                    foreach (BidderItemDetail biderdetail in bider.BidderItemDetails)
+                    foreach (Bidder biderdetail in bideritem.Bidders)
                     {
                         biddetail.Add(biderdetail);
                     }
