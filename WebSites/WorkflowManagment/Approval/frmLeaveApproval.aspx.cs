@@ -207,7 +207,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void SendEmailToRequester()
         {
-            EmailSender.Send(_presenter.GetUser(_presenter.CurrentLeaveRequest.Requester).Email, "Leave Request ", "Your Leave Request with Leave Request No. - '" + (_presenter.CurrentLeaveRequest.RequestNo).ToUpper() + "' was Completed.");
+            EmailSender.Send(_presenter.GetUser(_presenter.CurrentLeaveRequest.Requester).Email, "Leave Request ", "Your Leave Request with Leave Request No. - '" + (_presenter.CurrentLeaveRequest.RequestNo).ToUpper() + "' was processed.");
         }
         private void GetNextApprover()
         {

@@ -136,8 +136,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
         }
         public void SaveOrUpdateSoleVendorRequest()
-        {
-           
+        {           
             SoleVendorRequest SoleVendorRequest = CurrentSoleVendorRequest;
             SoleVendorRequest.PurchaseRequest = _controller.GetPurchaseRequest(View.GetPurchaseRequestId);
             
@@ -145,7 +144,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             SoleVendorRequest.RequestDate = Convert.ToDateTime(DateTime.Today);
             SoleVendorRequest.ContactPersonNumber = View.GetContactPersonNumber;
             SoleVendorRequest.ProposedPurchasedPrice = View.GetProposedPurchasedPrice;
-          //  if (View.GetProposedSupplier != 0)
             SoleVendorRequest.Supplier =  _settingController.GetSupplier(View.GetProposedSupplier);          
             SoleVendorRequest.SoleSourceJustificationPreparedBy = View.GetSoleSourceJustificationPreparedBy;
             SoleVendorRequest.SoleVendorJustificationType = View.GetSoleVendorJustificationType;
@@ -155,7 +153,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 SoleVendorRequest.Project = _settingController.GetProject(View.GetProjectId);
             if (View.GetGrantId != 0)
                 SoleVendorRequest.Grant = _settingController.GetGrant(View.GetGrantId);
-                    //_settingController.GetGrant(View.GetGrantId);
             SoleVendorRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
 
             if (CurrentSoleVendorRequest.SoleVendorRequestStatuses.Count == 0)
@@ -164,6 +161,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
             _controller.SaveOrUpdateEntity(SoleVendorRequest);
             _controller.CurrentObject = null;
+            //Notify the Purchase requester that bid process is initiated
+            SendEmailToRequester();
         }
         public void SaveOrUpdateSoleVendorRequest(SoleVendorRequest SoleVendorRequest)
         {
@@ -193,7 +192,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.ListSoleVendorRequests(RequestNo, RequestDate);
         }
-
         public AppUser Approver(int Position)
         {
             return _controller.Approver(Position);
@@ -264,6 +262,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 EmailSender.Send(GetSuperviser(_controller.GetAssignedJobbycurrentuser(SVRS.Approver).AssignedTo).Email, "Sole Vendor Request", (CurrentSoleVendorRequest.AppUser.FullName).ToUpper() + "' Request  for Sole Vendor");
             }
+        }
+        private void SendEmailToRequester()
+        {
+            EmailSender.Send(GetUser(CurrentSoleVendorRequest.PurchaseRequest.Requester).Email, "Purchase Request ", "Your Purchase Request with Purchase Request No. - '" + (CurrentSoleVendorRequest.PurchaseRequest.RequestNo).ToUpper() + "' was Completed and a bid process is initiated.");
         }
         public void Commit()
         {

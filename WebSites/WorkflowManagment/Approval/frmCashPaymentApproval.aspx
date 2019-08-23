@@ -377,6 +377,9 @@
                                                     <ItemTemplate>
                                                         <%# DataBinder.Eval(Container.DataItem, "Amount")%>
                                                     </ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <asp:TextBox ID="txtEdtAmount" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "Amount")%>'></asp:TextBox>
+                                                    </EditItemTemplate>
                                                 </asp:TemplateColumn>
                                                 <asp:TemplateColumn HeaderText="Project ID">
                                                     <ItemTemplate>
@@ -400,7 +403,7 @@
                                                         </asp:DropDownList>
                                                         <asp:RequiredFieldValidator ID="RfvGrant" runat="server" ControlToValidate="ddlEdtGrant" ErrorMessage="Grant is required" InitialValue="0" SetFocusOnError="True" ValidationGroup="edit"></asp:RequiredFieldValidator>
                                                     </EditItemTemplate>
-                                                </asp:TemplateColumn>
+                                                </asp:TemplateColumn>                                                
                                                 <asp:TemplateColumn HeaderText="Actions">
                                                     <EditItemTemplate>
                                                         <asp:LinkButton ID="lnkUpdate" runat="server" CausesValidation="true" CommandName="Update" CssClass="btn btn-xs btn-default" ValidationGroup="edit"><i class="fa fa-save"></i></asp:LinkButton>

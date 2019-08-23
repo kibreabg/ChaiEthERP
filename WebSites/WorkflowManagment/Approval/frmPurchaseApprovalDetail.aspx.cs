@@ -162,7 +162,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     ddlApprovalStatus.Enabled = true;
                 }
             }
-            if (_presenter.CurrentUser().EmployeePosition.PositionName == "Procurement Officer" && _presenter.CurrentPurchaseRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
+            if (_presenter.CurrentUser().EmployeePosition.PositionName == "Procurement Officer" && _presenter.CurrentPurchaseRequest.CurrentStatus != ApprovalStatus.Rejected.ToString() && _presenter.CurrentPurchaseRequest.CurrentLevel == (_presenter.CurrentPurchaseRequest.PurchaseRequestStatuses.Count - 1))
             {
                 lnkBidRequest.Visible = true;
                 lnkSoleVendor.Visible = true;
@@ -186,10 +186,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 EmailSender.Send(_presenter.GetUser(_presenter.GetAssignedJobbycurrentuser(PRS.Approver).AssignedTo).Email, "Purchase Request", _presenter.GetUser(_presenter.CurrentPurchaseRequest.Requester).FullName + "Requests for Purchase with Request No." + (_presenter.CurrentPurchaseRequest.RequestNo).ToUpper());
             }
         }
-        private void SendEmailToRequester()
-        {
-            EmailSender.Send(_presenter.GetUser(_presenter.CurrentPurchaseRequest.Requester).Email, "Purchase Request ", "Your Purchase Request with Purchase Request No. - '" + (_presenter.CurrentPurchaseRequest.RequestNo).ToUpper() + "' was Completed and a bid process is initiated.");
-        }
         private void SendEmailRejected(PurchaseRequestStatus PRS)
         {
             EmailSender.Send(_presenter.GetUser(_presenter.CurrentPurchaseRequest.Requester).Email, "Purchase Request Rejection", "Your Purchase Request with Request No. - '" + (_presenter.CurrentPurchaseRequest.RequestNo.ToString()).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (PRS.RejectedReason).ToUpper() + "'");
@@ -208,7 +204,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (PRS.ApprovalStatus == null)
                 {
-                    // SendEmail(PRS);
+                    SendEmail(PRS);
                     _presenter.CurrentPurchaseRequest.CurrentApprover = PRS.Approver;
                     _presenter.CurrentPurchaseRequest.CurrentLevel = PRS.WorkflowLevel;
                     _presenter.CurrentPurchaseRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
@@ -237,12 +233,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                             //when Bid or SoleVendor is completed. 
 
                             //_presenter.CurrentPurchaseRequest.ProgressStatus = ProgressStatus.Completed.ToString();
-                            SendEmailToRequester();
                         }
                         GetNextApprover();
                         PRRS.Approver = _presenter.CurrentUser().Id;
                         Log.Info(_presenter.GetUser(PRRS.Approver).FullName + " has " + PRRS.ApprovalStatus + " Purchase Request made by " + _presenter.GetUser(_presenter.CurrentPurchaseRequest.Requester).FullName);
-                        SendEmail(PRRS);
                     }
                     else if (PRRS.ApprovalStatus == ApprovalStatus.Canceled.ToString())
                     {

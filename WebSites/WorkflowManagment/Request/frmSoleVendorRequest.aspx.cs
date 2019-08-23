@@ -194,7 +194,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             txtProposedPurchasedPrice.Text = String.Empty;
             txtSoleSource.Text = String.Empty;
 
-        }
+        }        
         private void BindSoleVendorRequests()
         {
             grvSoleVendorRequestList.DataSource = _presenter.ListSoleVendorRequests(txtSrchRequestNo.Text, txtSrchRequestDate.Text);
@@ -270,7 +270,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
                 else
                 {
-                    Master.ShowMessage(new AppMessage("Please Attach Sole Vendor Quotation", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Please Attach Sole Vendor Quotation", RMessageType.Error));
                 }
             }
             catch (Exception ex)
@@ -373,7 +373,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 ddlGrant.SelectedValue = _presenter.CurrentSoleVendorRequest.PurchaseRequest.PurchaseRequestDetails[0].Grant.Id.ToString();
             }
             }
-
         protected void dgSoleVenderDetail_PageIndexChanged(object source, DataGridPageChangedEventArgs e)
         {
 
@@ -535,7 +534,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             this.dgSoleVenderDetail.EditItemIndex = e.Item.ItemIndex;
             BindSoleVendorRequestDetails();
         }
-
         private void PopPurchaseRequest()
         {
             lblPurRequestNoResult.Text = _presenter.CurrentSoleVendorRequest.PurchaseRequest.RequestNo.ToString();
@@ -547,13 +545,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
 
         }
-
         protected void grvSoleVendorRequestList_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             grvSoleVendorRequestList.PageIndex = e.NewPageIndex;
             btnFind_Click(sender, e);            
         }
-
         protected void grvSoleVendorRequestList_SelectedIndexChanged(object sender, EventArgs e)
         {
             Session["SoleVendorRequest"] = true;
@@ -569,7 +565,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 btnDelete.Visible = true;
             }
         }
-
         protected void grvSoleVendorRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.DataItem != null)

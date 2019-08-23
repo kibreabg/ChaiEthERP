@@ -54,7 +54,6 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 return "{8E5FAA6E-E9E9-4B21-888D-11539FA9BBA8}";
             }
         }
-
         void BindSoleVendorSupplier()
         {
             dgSupplier.DataSource = _presenter.ListSoleVendorSuppliers(txtSupplierName.Text);
@@ -70,7 +69,6 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 ddlSupplierTypes.DataBind();
             }
         }
-
         #region interface
       
         #endregion
@@ -136,8 +134,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 }
             }
         }
-
-        private void SaveSoleVendorSupplier(Chai.WorkflowManagment.CoreDomain.Setting.SoleVendorSupplier Supplier)
+        private void SaveSoleVendorSupplier(SoleVendorSupplier Supplier)
         {
             try
             {
@@ -167,18 +164,14 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         }
         protected void dgSupplier_ItemDataBound(object sender, DataGridItemEventArgs e)
         {
-
-
-
             if (e.Item.ItemType == ListItemType.Footer)
             {
-
                 DropDownList ddlSupplierType = e.Item.FindControl("ddlSupplierType") as DropDownList;
                 DropDownList ddlFStatus = e.Item.FindControl("ddlFStatus") as DropDownList;
+                BindSupplierTypes(ddlSupplierType);
             }
             else
             {
-
                 DropDownList ddlEdtSupplierType = e.Item.FindControl("ddlEdtSupplierType") as DropDownList;
                 if (ddlEdtSupplierType != null)
                 {
@@ -188,8 +181,8 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                         if (liI != null)
                             liI.Selected = true;
                     }
+                    BindSupplierTypes(ddlEdtSupplierType);
                 }
-
 
                 DropDownList ddlStatus = e.Item.FindControl("ddlStatus") as DropDownList;
                 if (ddlStatus != null)
@@ -241,14 +234,11 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 Master.ShowMessage(new AppMessage("Error: Unable to Update Sole Vendor Supplier. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
             }
         }
-
-
         public string SupplierName
         {
             get { return txtSupplierName.Text; }
         }
-
-       public IList<CoreDomain.Setting.SoleVendorSupplier> soleVendorSupplier
+       public IList<SoleVendorSupplier> soleVendorSupplier
         {
             get
             {
@@ -260,7 +250,6 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 _SVendorSuppliers = value;
             }
         }
-
         protected void dgSupplier_SelectedIndexChanged(object sender, EventArgs e)
         {
             int suppliertypeid = (int)dgSupplier.DataKeys[dgSupplier.SelectedIndex];

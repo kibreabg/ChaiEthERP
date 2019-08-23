@@ -25,26 +25,17 @@
                 <div class="smart-form">
                     <fieldset>
                         <div class="row">
-                            <%-- <section class="col col-6">
-                                <label class="label">Request No</label>
-                                <label class="input">
-                                    <asp:TextBox ID="txtVoucherNo" runat="server" ReadOnly="true"></asp:TextBox>
-                                </label>
-                            </section>--%>
-                            <%-- <section class="col col-6">
-                                <label class="label">Request Number</label>
-                                <label class="input">
-                                    <asp:TextBox ID="txtRequestNo" ReadOnly="true" runat="server"></asp:TextBox>
-                                    <asp:RequiredFieldValidator
-                                        ID="rfvtxtRequestNo" runat="server" ErrorMessage="Request number is required" Display="Dynamic"
-                                        CssClass="validator" ControlToValidate="txtRequestNo" EnableClientScript="False"></asp:RequiredFieldValidator>
-                                </label>
-                            </section>--%>
                             <section class="col col-6">
                                 <label class="label">Request Date</label>
                                 <label class="input">
                                     <i class="icon-append fa fa-calendar"></i>
                                     <asp:TextBox ID="txtRequestDate" ReadOnly="true" runat="server"></asp:TextBox>
+                                </label>
+                            </section>
+                            <section class="col col-6">
+                                <label class="label">Description</label>
+                                <label class="input">
+                                    <asp:TextBox ID="txtDescription" TextMode="MultiLine" Width="100%" runat="server"></asp:TextBox>
                                 </label>
                             </section>
                         </div>
@@ -55,12 +46,6 @@
                                     <asp:DropDownList ID="ddlPayee" runat="server" DataTextField="SupplierName" AppendDataBoundItems="true" DataValueField="Id">
                                         <asp:ListItem Value="0">Select Payee</asp:ListItem>
                                     </asp:DropDownList><i></i>
-                                </label>
-                            </section>
-                            <section class="col col-6">
-                                <label class="label">Description</label>
-                                <label class="input">
-                                    <asp:TextBox ID="txtDescription" runat="server"></asp:TextBox>
                                 </label>
                             </section>
                         </div>
@@ -207,6 +192,21 @@
                                                         <ItemTemplate>
                                                             <%# DataBinder.Eval(Container.DataItem, "Grant.GrantCode")%>
                                                         </ItemTemplate>
+                                                    </asp:TemplateColumn>
+                                                    <asp:TemplateColumn HeaderText="Supporting Doc Attached">
+                                                        <ItemTemplate>
+                                                            <%# DataBinder.Eval(Container.DataItem, "SupportDocAttached")%>
+                                                        </ItemTemplate>
+                                                        <FooterTemplate>
+                                                            <label class="checkbox">
+                                                                <asp:CheckBox runat="server" ID="ckSupDocAttached" /><i></i>
+                                                            </label>
+                                                        </FooterTemplate>
+                                                        <EditItemTemplate>
+                                                            <label class="checkbox">
+                                                                <asp:CheckBox runat="server" ID="ckEdtSupDocAttached" /><i></i>
+                                                            </label>
+                                                        </EditItemTemplate>
                                                     </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="Actions">
                                                         <EditItemTemplate>
