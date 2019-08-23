@@ -10,18 +10,55 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
     {
 
         public BidderItemDetail()
-        { 
-        
+        {
+            this.Bidders = new List<Bidder>();
         }
 
         public int Id { get; set; }
-        public virtual Bidder Bidder { get; set; }
+
+        public virtual BidAnalysisRequest BidAnalysisRequest { get; set; }
+       // public virtual Bidder Bidder { get; set; }
         public virtual ItemAccount ItemAccount { get; set; }
 
         public string ItemDescription { get; set; }
         public int Qty { get; set; }
         public decimal UnitCost { get; set; }
         public decimal TotalCost { get; set; }
-        
+
+        public virtual IList<Bidder> Bidders { get; set; }
+
+
+
+        #region Bidders
+        public virtual Bidder GetTBidder(int bidId)
+        {
+            foreach (Bidder BID in Bidders)
+            {
+                if (BID.Id == bidId)
+                    return BID;
+            }
+            return null;
+        }
+
+        public virtual IList<Bidder> GetBidderByItemId(int itemId)
+        {
+            IList<Bidder> BIDs = new List<Bidder>();
+            foreach (Bidder BID in Bidders)
+            {
+                if (BID.BidderItemDetail.Id == itemId)
+                    BIDs.Add(BID);
+            }
+            return BIDs;
+        }
+        public virtual void RemoveBidder(int Id)
+        {
+            foreach (Bidder BID in Bidders)
+            {
+                if (BID.Id == Id)
+                    Bidders.Remove(BID);
+                break;
+            }
+        }
+        #endregion
     }
 }

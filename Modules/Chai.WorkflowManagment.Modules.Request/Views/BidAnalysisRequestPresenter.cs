@@ -41,6 +41,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
         public override void OnViewInitialized()
         {
+
             if (_bidAnalysisRequest == null)
             {
                 int id = View.GetBidAnalysisRequestId;
@@ -49,21 +50,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 else
                     _controller.CurrentObject = new BidAnalysisRequest();
             }
-        }
-        public IList<ItemAccount> GetItemAccounts()
-        {
-            return _settingController.GetItemAccounts();
-
-        }
-
-
-        public AppUser Approver(int Position)
-        {
-            return _controller.Approver(Position);
-        }
-        public AppUser GetUser(int UserId)
-        {
-            return _adminController.GetUser(UserId);
         }
         public BidAnalysisRequest CurrentBidAnalysisRequest
         {
@@ -84,6 +70,26 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 _bidAnalysisRequest = value;
             }
         }
+
+        public IList<ItemAccount> GetItemAccounts()
+        {
+            return _settingController.GetItemAccounts();
+
+        }
+
+
+        public AppUser Approver(int Position)
+        {
+            return _controller.Approver(Position);
+        }
+        public AppUser GetUser(int UserId)
+        {
+            return _adminController.GetUser(UserId);
+        }
+        
+
+
+      
         public IList<BidAnalysisRequest> GetBidAnalysisRequests()
         {
             return _controller.GetBidAnalysisRequests();
@@ -169,8 +175,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 BidAnalysisRequest.Grant = _settingController.GetGrant(View.GetGrantId);
             BidAnalysisRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
 
-            decimal price = 0;
-            foreach (Bidder bider in CurrentBidAnalysisRequest.Bidders)
+         /*    decimal price = 0;
+           foreach (Bidder bider in CurrentBidAnalysisRequest.Bidders)
             {
 
 
@@ -185,23 +191,24 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
                BidAnalysisRequest.TotalPrice  = price;
                 break;
-            }
+            }*/
             if (CurrentBidAnalysisRequest.BidAnalysisRequestStatuses.Count == 0)
                 SaveBidAnalysisRequestStatus();
             GetCurrentApprover();
 
             _controller.SaveOrUpdateEntity(BidAnalysisRequest);
             _controller.CurrentObject = null;
-            if (CurrentBidAnalysisRequest.BidAnalysisRequestStatuses.Count == 0 && CurrentBidAnalysisRequest.GetBidderbyRank().Rank == 1)
-                foreach (Bidder bider in CurrentBidAnalysisRequest.Bidders)
+            if (CurrentBidAnalysisRequest.BidAnalysisRequestStatuses.Count == 0 )
+               // && CurrentBidAnalysisRequest.GetBidderbyRank().Rank == 1)
+                foreach (BidderItemDetail biderItem in CurrentBidAnalysisRequest.BidderItemDetails)
                 {
 
 
 
 
-                    foreach (BidderItemDetail detail in bider.BidderItemDetails)
+                    foreach (Bidder detail in biderItem.Bidders)
                     {
-                        Totalamount = Totalamount + detail.TotalCost;
+                       ///// Totalamount = Totalamount + detail.TotalCost;
                     }
 
                 }
