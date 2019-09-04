@@ -83,6 +83,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return Convert.ToInt32(ddlPayee.SelectedValue); }
         }
+        public string GetRequestType
+        {
+            get { return ddlRequestType.SelectedValue; }
+        }
         public string GetDescription
         {
             get { return txtDescription.Text; }

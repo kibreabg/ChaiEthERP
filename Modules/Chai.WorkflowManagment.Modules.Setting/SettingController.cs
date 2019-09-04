@@ -420,6 +420,10 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             return _workspace.Single<ApprovalSetting>(x => x.Id == ApprovalSettingId);
         }
+        public ApprovalSetting GetApprovalSettingMedical()
+        {
+            return _workspace.Single<ApprovalSetting>(x => x.CriteriaCondition == "MedicalExpense");
+        }
         public ApprovalLevel GetApprovalLevel(int ApprovalLevelId)
         {
             return _workspace.Single<ApprovalLevel>(x => x.Id == ApprovalLevelId);
@@ -456,6 +460,10 @@ namespace Chai.WorkflowManagment.Modules.Setting
                     return s;
                 }
                 else if (value == 0 && "None" == s.CriteriaCondition)
+                {
+                    return s;
+                }
+                else if (value == 0 && "MedicalExpense" == s.CriteriaCondition)
                 {
                     return s;
                 }
