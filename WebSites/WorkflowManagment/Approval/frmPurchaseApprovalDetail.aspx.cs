@@ -48,7 +48,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     PrintTransaction();
                 }
             }
-            lnkBidRequest.Visible = false;
+            lnkBidRequest.Visible = true;
             lnkSoleVendor.Visible = false;
         }
         [CreateNew]

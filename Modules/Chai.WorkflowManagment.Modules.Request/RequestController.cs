@@ -139,6 +139,8 @@ namespace Chai.WorkflowManagment.Modules.Request
             int currentUserId = GetCurrentUser().Id;
             return WorkspaceFactory.CreateReadOnly().Query<CashPaymentRequest>(x => x.PaymentReimbursementStatus == "Completed" && x.PaymentReimbursementRequest == null && currentUserId == x.AppUser.Id).ToList();
         }
+
+       
         public CashPaymentRequestDetail GetCashPaymentRequestDetail(int CPRDId)
         {
             return _workspace.Single<CashPaymentRequestDetail>(x => x.Id == CPRDId);
@@ -347,6 +349,34 @@ namespace Chai.WorkflowManagment.Modules.Request
         public ELRAttachment GetELRAttachment(int attachmentId)
         {
             return _workspace.Single<ELRAttachment>(x => x.Id == attachmentId);
+        }
+        #endregion
+        #region Payment Liquidation
+        public IList<PaymentLiquidationRequest> ListPaymentLiquidationRequests(string ExpenseType, string RequestDate)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM PaymentLiquidationRequests INNER JOIN CashPaymentRequests ON CashPaymentRequests.Id = PaymentLiquidationRequests.Id Where 1 = Case when '" + ExpenseType + "' = '' Then 1 When PaymentLiquidationRequests.ExpenseType = '" + ExpenseType + "' Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When PaymentLiquidationRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND CashPaymentRequests.AppUser_Id='" + GetCurrentUser().Id + "' ORDER BY PaymentLiquidationRequests.Id Desc ";
+
+            return _workspace.SqlQuery<PaymentLiquidationRequest>(filterExpression).ToList();
+        }
+        public PaymentLiquidationRequest GetPaymentLiquidationRequest(int RequestId)
+        {
+            return _workspace.Single<PaymentLiquidationRequest>(x => x.Id == RequestId);
+        }
+        public IList<PaymentLiquidationRequest> GetPaymentLiquidationRequests()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<PaymentLiquidationRequest>(null).ToList();
+        }
+        public PLRAttachment GetPLRAttachment(int attachmentId)
+        {
+            return _workspace.Single<PLRAttachment>(x => x.Id == attachmentId);
+        }
+
+        public IList<CashPaymentRequest> ListCashPaymentRequestNotLiquidated()
+        {
+            int currentUserId = GetCurrentUser().Id;
+            return WorkspaceFactory.CreateReadOnly().Query<CashPaymentRequest>(x => x.IsLiquidated == false && x.AppUser.Id == currentUserId).ToList();
         }
         #endregion
         #region LeaveRequest

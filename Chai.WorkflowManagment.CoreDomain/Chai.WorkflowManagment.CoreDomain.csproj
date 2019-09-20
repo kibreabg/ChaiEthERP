@@ -103,6 +103,10 @@
     <Compile Include="HRM\Termination.cs" />
     <Compile Include="HRM\TerminationReason.cs" />
     <Compile Include="HRM\WorkExperience.cs" />
+    <Compile Include="Requests\PLRAttachment.cs" />
+    <Compile Include="Requests\PaymentLiquidationRequest.cs" />
+    <Compile Include="Requests\PaymentLiquidationRequestDetail.cs" />
+    <Compile Include="Requests\PaymentLiquidationRequestStatus.cs" />
     <Compile Include="Setting\Holiday.cs" />
     <Compile Include="Setting\JobTitle.cs" />
     <Compile Include="Setting\CarModel.cs" />

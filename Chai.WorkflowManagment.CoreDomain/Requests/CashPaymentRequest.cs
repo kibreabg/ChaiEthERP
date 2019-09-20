@@ -35,6 +35,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public bool IsLiquidated { get; set; }
         public virtual AppUser AppUser { get; set; }
         public virtual Supplier Supplier { get; set; }
+        public virtual PaymentLiquidationRequest PaymentLiquidationRequest { get; set; }
         public virtual PaymentReimbursementRequest PaymentReimbursementRequest { get; set; }
         public virtual IList<CashPaymentRequestDetail> CashPaymentRequestDetails { get; set; }
         public virtual IList<CashPaymentRequestStatus> CashPaymentRequestStatuses { get; set; }
