@@ -63,18 +63,17 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
             }
             return null;
         }
-        public virtual Bidder GetBidderbyRank()
+     /*   public virtual Bidder GetBidderbyRank()
         {
 
-            foreach (BidderItemDetail bidderItem in BidderItemDetails)
+            foreach (Bidder bidder in Bidders)
             {
-                foreach(Bidder bidder in bidderItem.Bidders)
                 if (bidder.Rank == 1)
                     return bidder;
 
             }
             return null;
-        }
+        }*/
         public virtual IList<BidderItemDetail> GetBidderItemDetailByBidAnalysisId(int AnalisisId)
         {
             IList<BidderItemDetail> BidderItemDetails = new List<BidderItemDetail>();

@@ -81,8 +81,6 @@
     <Compile Include="Views\BankPaymentRequestPresenter.cs" />
     <Compile Include="Views\BidAnalysisRequestPresenter.cs" />
     <Compile Include="Views\CostSharingRequestPresenter.cs" />
-    <Compile Include="Views\IPaymentLiquidationRequestView.cs" />
-    <Compile Include="Views\PaymentLiquidationRequestPresenter.cs" />
     <Compile Include="Views\IBankPaymentRequestView.cs" />
     <Compile Include="Views\IBidAnalysisRequestView.cs" />
     <Compile Include="Views\ICostSharingRequestView.cs" />
