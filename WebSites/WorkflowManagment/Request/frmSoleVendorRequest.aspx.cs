@@ -110,10 +110,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return txtContactPersonNumber.Text; }
         }
-        public decimal GetProposedPurchasedPrice
-        {
-            get { return Convert.ToDecimal(txtProposedPurchasedPrice.Text); }
-        }
         public int GetProposedSupplier
         {
             get { return int.Parse(ddlSupplier.SelectedValue); }
@@ -122,10 +118,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public string GetSoleSourceJustificationPreparedBy
         {
             get { return txtSoleSource.Text; }
-        }
-        public string GetSoleVendorJustificationType
-        {
-            get { return ddlSoleVendorJustification.SelectedValue; }
         }
         public string GetComment
         {
@@ -191,7 +183,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         private void ClearFormFields()
         {
             txtContactPersonNumber.Text = String.Empty;
-            txtProposedPurchasedPrice.Text = String.Empty;
             txtSoleSource.Text = String.Empty;
 
         }        
@@ -208,10 +199,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 txtRequestDate.Text = _presenter.CurrentSoleVendorRequest.RequestDate.Value.ToShortDateString();
                 txtContactPersonNumber.Text = _presenter.CurrentSoleVendorRequest.ContactPersonNumber;
-                txtProposedPurchasedPrice.Text = _presenter.CurrentSoleVendorRequest.ProposedPurchasedPrice.ToString();
                 ddlSupplier.SelectedValue = _presenter.CurrentSoleVendorRequest.Supplier.Id.ToString();
-                //  txtSoleSource.Text = _presenter.CurrentSoleVendorRequest.SoleSourceJustificationPreparedBy.ToString();
-                ddlSoleVendorJustification.SelectedValue = _presenter.CurrentSoleVendorRequest.SoleVendorJustificationType.ToString();
+                txtSoleSource.Text = _presenter.CurrentSoleVendorRequest.SoleSourceJustificationPreparedBy.ToString();
                 txtComment.Text = _presenter.CurrentSoleVendorRequest.Comment;
                 ddlProject.SelectedValue = _presenter.CurrentSoleVendorRequest.Project.Id.ToString();
                 PopGrants(Convert.ToInt32(ddlProject.SelectedValue));
@@ -235,7 +224,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             lblProposedPurchasedpriceres.Text = _presenter.CurrentSoleVendorRequest.ProposedPurchasedPrice.ToString();
             lblProposedSupplierresp.Text = _presenter.CurrentSoleVendorRequest.Supplier.SupplierName;
             lblSoleSourceJustificationPreparedByresp.Text = _presenter.CurrentSoleVendorRequest.SoleSourceJustificationPreparedBy;
-            lblSoleVendorJustificationTyperes.Text = _presenter.CurrentSoleVendorRequest.SoleVendorJustificationType;
             lblapprovalstatusres.Text = _presenter.CurrentSoleVendorRequest.CurrentStatus;
             lblRequesterres.Text = _presenter.GetUser(_presenter.CurrentSoleVendorRequest.AppUser.Id).FullName;
 
@@ -265,7 +253,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     BindSoleVendorRequests();
                     Master.ShowMessage(new AppMessage("Successfully did a Sole Vendor  Request, Reference No - <b>'" + _presenter.CurrentSoleVendorRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                    Log.Info(_presenter.CurrentUser().FullName + " has requested a For a Sole Vendor");
+                    Log.Info(_presenter.CurrentUser().FullName + " has requested a for Sole Vendor");
                     btnSave.Visible = false;
                 }
                 else
@@ -279,7 +267,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (ex.InnerException.InnerException.Message.Contains("Violation of UNIQUE KEY"))
                     {
-                        Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", RMessageType.Error));
                         //AutoNumber();
                     }
                 }
@@ -448,6 +436,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     detail.ItemAccount = _presenter.GetItemAccount(Convert.ToInt32(ddlItem.SelectedValue));
                     TextBox txtItemDescription = e.Item.FindControl("txtFDescription") as TextBox;
                     detail.ItemDescription = txtItemDescription.Text;
+                    DropDownList ddlSoleVendorJustification = e.Item.FindControl("ddlSoleVendorJustification") as DropDownList;
+                    detail.SoleVendorJustificationType = ddlSoleVendorJustification.SelectedValue;
                     TextBox txtQty = e.Item.FindControl("txtQty") as TextBox;
                     detail.Qty = Convert.ToInt32(txtQty.Text);
                     TextBox txtUnitCost = e.Item.FindControl("txtUnitCost") as TextBox;
@@ -484,6 +474,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 detail.ItemAccount = _presenter.GetItemAccount(Convert.ToInt32(ddlItem.SelectedValue));
                 TextBox txtItemDescription = e.Item.FindControl("txtDescription") as TextBox;
                 detail.ItemDescription = txtItemDescription.Text;
+                DropDownList ddlEdtSoleVendorJustification = e.Item.FindControl("ddlEdtSoleVendorJustification") as DropDownList;
+                detail.SoleVendorJustificationType = ddlEdtSoleVendorJustification.SelectedValue;
                 TextBox txtQty = e.Item.FindControl("txtEdtQty") as TextBox;
                 detail.Qty = Convert.ToInt32(txtQty.Text);
                 TextBox txtUnitCost = e.Item.FindControl("txtEdtUnitCost") as TextBox;

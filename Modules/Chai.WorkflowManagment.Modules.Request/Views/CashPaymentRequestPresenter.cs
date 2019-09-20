@@ -73,10 +73,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void SaveCashPaymentRequestStatus()
         {
-            if (GetApprovalSetting(RequestType.CashPayment_Request.ToString().Replace('_', ' '), CurrentCashPaymentRequest.TotalAmount) != null)
+            if (View.GetRequestType == "Medical")
             {
                 int i = 1;
-                foreach (ApprovalLevel AL in GetApprovalSetting(RequestType.CashPayment_Request.ToString().Replace('_', ' '), CurrentCashPaymentRequest.TotalAmount).ApprovalLevels)
+                foreach (ApprovalLevel AL in GetApprovalSettingMedical().ApprovalLevels)
                 {
                     CashPaymentRequestStatus CPRS = new CashPaymentRequestStatus();
                     CPRS.CashPaymentRequest = CurrentCashPaymentRequest;
@@ -102,7 +102,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     {
                         if (Approver(AL.EmployeePosition.Id) != null)
                         {
-                            if (AL.EmployeePosition.PositionName == "Finance Officer")
+                            if (AL.EmployeePosition.PositionName == "Accountant")
                             {
                                 CPRS.ApproverPosition = AL.EmployeePosition.Id; //So that we can entertain more than one finance manager to handle the request
                             }
@@ -119,6 +119,56 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     CurrentCashPaymentRequest.CashPaymentRequestStatuses.Add(CPRS);
                 }
             }
+            else if (View.GetRequestType == "Other")
+            {
+                if (GetApprovalSetting(RequestType.CashPayment_Request.ToString().Replace('_', ' '), CurrentCashPaymentRequest.TotalAmount) != null)
+                {
+                    int i = 1;
+                    foreach (ApprovalLevel AL in GetApprovalSetting(RequestType.CashPayment_Request.ToString().Replace('_', ' '), CurrentCashPaymentRequest.TotalAmount).ApprovalLevels)
+                    {
+                        CashPaymentRequestStatus CPRS = new CashPaymentRequestStatus();
+                        CPRS.CashPaymentRequest = CurrentCashPaymentRequest;
+                        //All Approver positions must be entered into the database before the approval workflow could run effectively!
+                        if (AL.EmployeePosition.PositionName == "Superviser/Line Manager")
+                        {
+                            if (CurrentUser().Superviser != 0)
+                                CPRS.Approver = CurrentUser().Superviser.Value;
+                            else
+                            {
+                                CPRS.ApprovalStatus = ApprovalStatus.Approved.ToString();
+                                CPRS.Date = Convert.ToDateTime(DateTime.Today.Date.ToShortDateString());
+                            }
+                        }
+                        else if (AL.EmployeePosition.PositionName == "Program Manager")
+                        {
+                            if (CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Project.Id != 0)
+                            {
+                                CPRS.Approver = GetProject(CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Project.Id).AppUser.Id;
+                            }
+                        }
+                        else
+                        {
+                            if (Approver(AL.EmployeePosition.Id) != null)
+                            {
+                                if (AL.EmployeePosition.PositionName == "Accountant")
+                                {
+                                    CPRS.ApproverPosition = AL.EmployeePosition.Id; //So that we can entertain more than one finance manager to handle the request
+                                }
+                                else
+                                {
+                                    CPRS.Approver = Approver(AL.EmployeePosition.Id).Id;
+                                }
+                            }
+                            else
+                                CPRS.Approver = 0;
+                        }
+                        CPRS.WorkflowLevel = i;
+                        i++;
+                        CurrentCashPaymentRequest.CashPaymentRequestStatuses.Add(CPRS);
+                    }
+                }
+            }
+
         }
         private void GetCurrentApprover()
         {
@@ -267,16 +317,39 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _settingController.GetApprovalSettingforProcess(RequestType, value);
         }
+        public ApprovalSetting GetApprovalSettingMedical()
+        {
+            return _settingController.GetApprovalSettingMedical();
+        }
         private void SendEmail(CashPaymentRequestStatus CPRS)
         {
-            if (GetSuperviser(CPRS.Approver).IsAssignedJob != true)
+            if (CPRS.Approver != 0)
             {
-                EmailSender.Send(GetSuperviser(CPRS.Approver).Email, "Cash Payment Request", (CurrentCashPaymentRequest.AppUser.FullName).ToUpper() + "Requests for Cash Payment with Request No. - '" + (CurrentCashPaymentRequest.RequestNo).ToUpper() + "'");
+                if (GetSuperviser(CPRS.Approver).IsAssignedJob != true)
+                {
+                    EmailSender.Send(GetSuperviser(CPRS.Approver).Email, "Cash Payment Request", (CurrentCashPaymentRequest.AppUser.FullName).ToUpper() + "Requests for Cash Payment with Request No. - '" + (CurrentCashPaymentRequest.RequestNo).ToUpper() + "'");
+                }
+                else
+                {
+                    EmailSender.Send(GetSuperviser(_controller.GetAssignedJobbycurrentuser(CPRS.Approver).AssignedTo).Email, "Cash Payment Request", (CurrentCashPaymentRequest.AppUser.FullName).ToUpper() + " Requests for Cash Payment with Request No. - '" + (CurrentCashPaymentRequest.RequestNo).ToUpper() + "'");
+                }
             }
             else
             {
-                EmailSender.Send(GetSuperviser(_controller.GetAssignedJobbycurrentuser(CPRS.Approver).AssignedTo).Email, "Cash Payment Request", (CurrentCashPaymentRequest.AppUser.FullName).ToUpper() + " Requests for Cash Payment with Request No. - '" + (CurrentCashPaymentRequest.RequestNo).ToUpper() + "'");
+                foreach(AppUser accountant in _settingController.GetAppUsersByEmployeePosition(CPRS.ApproverPosition))
+                {
+                    if (accountant.IsAssignedJob != true)
+                    {
+                        EmailSender.Send(accountant.Email, "Cash Payment Request", (CurrentCashPaymentRequest.AppUser.FullName).ToUpper() + " Requests for Cash Payment with Request No. - '" + (CurrentCashPaymentRequest.RequestNo).ToUpper() + "'");
+                    }
+                    else
+                    {
+                        EmailSender.Send(GetSuperviser(_controller.GetAssignedJobbycurrentuser(accountant.Id).AssignedTo).Email, "Cash Payment Request", (CurrentCashPaymentRequest.AppUser.FullName).ToUpper() + " Requests for Cash Payment with Request No. - '" + (CurrentCashPaymentRequest.RequestNo).ToUpper() + "'");
+                    }
+                    
+                }
             }
+
         }
         public void Commit()
         {

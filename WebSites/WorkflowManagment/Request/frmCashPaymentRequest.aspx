@@ -48,6 +48,17 @@
                                     </asp:DropDownList><i></i>
                                 </label>
                             </section>
+                            <section class="col col-6">
+                                <label class="label">Request Type</label>
+                                <label class="select">
+                                    <asp:DropDownList ID="ddlRequestType" runat="server">
+                                        <asp:ListItem Value="">Select Request Type</asp:ListItem>
+                                        <asp:ListItem Value="Medical">Medical Expense</asp:ListItem>
+                                        <asp:ListItem Value="Other">Other Payment</asp:ListItem>
+                                    </asp:DropDownList><i></i>
+                                </label>
+                                <asp:RequiredFieldValidator ID="rfvPaymentType" runat="server" ControlToValidate="ddlRequestType" CssClass="validator" Display="Dynamic" ErrorMessage="Select Request Type" SetFocusOnError="true" ValidationGroup="request"></asp:RequiredFieldValidator>
+                            </section>
                         </div>
                         <div class="row">
                             <section class="col col-6">

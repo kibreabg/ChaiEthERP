@@ -293,7 +293,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             lblSuggestedSupplierResult.Text = _presenter.CurrentSoleVendorRequest.Supplier.SupplierName;
             if (_presenter.CurrentSoleVendorRequest != null)
             {
-                lblReasonforSelectionResult.Text = _presenter.CurrentSoleVendorRequest.SoleVendorJustificationType;
                 lblSelectedbyResult.Text = _presenter.GetUser(_presenter.CurrentSoleVendorRequest.AppUser.Id).FullName;
 
                 grvDetails.DataSource = _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails;
