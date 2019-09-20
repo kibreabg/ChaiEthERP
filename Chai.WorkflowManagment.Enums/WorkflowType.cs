@@ -15,7 +15,6 @@ namespace Chai.WorkflowManagment.Enums
         OperationalControl_Request,
         TravelAdvance_Request,
         ExpenseLiquidation_Request,
-        PaymentLiquidation_Request,
         BankPayment_Request,
         CostSharing_Request,
         SoleVendor_Request,

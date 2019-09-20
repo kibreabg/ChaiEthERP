@@ -145,9 +145,9 @@
                                         </div>
                                         <div class="row">
                                             <section class="col col-6">
-                                                <asp:LinkButton runat="server" ID="lnkBidRequest" Visible="true" Text="Prepare Bid Analysis" OnClick="lnkBidRequest_Click" CssClass="btn btn-primary"></asp:LinkButton><br />
+                                                <asp:LinkButton runat="server" ID="lnkBidRequest" Visible="false" Text="Prepare Bid Analysis" OnClick="lnkBidRequest_Click" CssClass="btn btn-primary"></asp:LinkButton><br />
                                                 <br />
-                                                <asp:LinkButton runat="server" ID="lnkSoleVendor" Visible="true" Text="Prepare Sole Vendor Verification" OnClick="lnkSoleVendor_Click" CssClass="btn btn-primary"></asp:LinkButton>
+                                                <asp:LinkButton runat="server" ID="lnkSoleVendor" Visible="false" Text="Prepare Sole Vendor Verification" OnClick="lnkSoleVendor_Click" CssClass="btn btn-primary"></asp:LinkButton>
                                             </section>
                                         </div>
                                     </fieldset>

@@ -1,4 +1,4 @@
-﻿<%@ Page Title=" Bid Analysis Request Form" EnableViewState="true" Language="C#" MasterPageFile="~/Shared/ModuleMaster.master" AutoEventWireup="true" CodeFile="frmBidAnalysisRequest.aspx.cs" Inherits="Chai.WorkflowManagment.Modules.Request.Views.frmBidAnalysisRequest" %>
+﻿<%@ Page Title=" Bid Analysis Request Form" Language="C#" MasterPageFile="~/Shared/ModuleMaster.master" AutoEventWireup="true" CodeFile="frmBidAnalysisRequest.aspx.cs" Inherits="Chai.WorkflowManagment.Modules.Request.Views.frmBidAnalysisRequest" %>
 
 <%@ MasterType TypeName="Chai.WorkflowManagment.Modules.Shell.BaseMaster" %>
 
@@ -13,7 +13,7 @@
                 $('#searchModal').modal('show');
             });
         }
-       
+
         function Clickheretoprint(theid) {
             var disp_setting = "toolbar=yes,location=no,directories=yes,menubar=yes,";
             disp_setting += "scrollbars=yes,width=750, height=600, left=100, top=25";
@@ -224,7 +224,7 @@
                          <fieldset>
                             <div class="row">
                     
-                                <asp:DataGrid ID="dgItemDetail" runat="server" CellPadding="0"
+                                <asp:DataGrid ID="dgItemDetail" runat="server" AlternatingRowStyle-CssClass="" CellPadding="0"
                             CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id" AutoGenerateColumns="False"
                             GridLines="None"  ShowFooter="True" OnCancelCommand="dgItemDetail_CancelCommand" OnDeleteCommand="dgItemDetail_DeleteCommand" OnItemCommand="dgItemDetail_ItemCommand" OnUpdateCommand="dgItemDetail_UpdateCommand" OnEditCommand="dgItemDetail_EditCommand1" OnItemDataBound="dgItemDetail_ItemDataBound1" OnSelectedIndexChanged="dgItemDetail_SelectedIndexChanged">
 
@@ -284,8 +284,7 @@
                 </div>
                     <br />
                     <footer>
-                         <asp:Button ID="btnSave" runat="server" Text="Request" OnClick="btnSave_Click" CausesValidation="true" ValidationGroup="save" CssClass="btn btn-primary"></asp:Button>
-                       <%-- <asp:Button ID="btnRequest" runat="server" CssClass="btn btn-primary" OnClick="btnRequest_Click" Text="Request" ValidationGroup="Save" />--%>
+                        <asp:Button ID="btnRequest" runat="server" CssClass="btn btn-primary" OnClick="btnRequest_Click" Text="Request" ValidationGroup="Save" />
                         &nbsp;<asp:Button ID="btnCancel" runat="server" CssClass="btn btn-primary" OnClick="btnCancel_Click" Text="Back" />
                      <%--<asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary" Text="Search" />--%>
                             <a data-toggle="modal" runat="server" id="searchLink" href="#searchModal" class="btn btn-primary"><i class="fa fa-circle-arrow-up fa-lg"></i>Search</a>
@@ -500,8 +499,8 @@
         </div>
     </div>
    
-      <asp:Panel ID="pnlBidItem" runat="server" EnableViewState="False" >
-   <%--<ContentTemplate>--%>
+      <asp:UpdatePanel ID="pnlBidItem" Visible="true" runat="server">
+   <ContentTemplate>
         <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
             <header>
                 <span class="widget-icon"><i class="fa fa-edit"></i></span>
@@ -512,10 +511,10 @@
                 <div class="widget-body no-padding">
                     <div class="smart-form">
 
-               <asp:DataGrid ID="dgBidders" runat="server" AutoGenerateColumns="False" CellPadding="0"
+               <asp:DataGrid ID="dgBidders" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
                         CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
-                        ShowFooter="True" GridLines="None" Height="30px" OnSelectedIndexChanged="dgBidders_SelectedIndexChanged" OnUpdateCommand="dgBidders_UpdateCommand" OnCancelCommand="dgBidders_CancelCommand1" OnDeleteCommand="dgBidders_DeleteCommand1" OnItemCommand="dgBidders_ItemCommand1" OnItemDataBound="dgBidders_ItemDataBound1">
-                    
+                        ShowFooter="True" GridLines="None" Height="30px" OnSelectedIndexChanged="dgBidders_SelectedIndexChanged" OnUpdateCommand="dgBidders_UpdateCommand" OnCancelCommand="dgBidders_CancelCommand1" OnDeleteCommand="dgBidders_DeleteCommand1" OnEditCommand="dgBidders_EditCommand1" OnItemCommand="dgBidders_ItemCommand1" OnItemDataBound="dgBidders_ItemDataBound1">
+                      
 
                         <Columns>
                             <asp:TemplateColumn HeaderText="Supplier Type">
@@ -530,13 +529,10 @@
                                         InitialValue="0" SetFocusOnError="True" ValidationGroup="proedit">*</asp:RequiredFieldValidator>
                                 </EditItemTemplate>
                                 <FooterTemplate>
-                                    
-                            
                                     <asp:DropDownList ID="ddlFSupplierType" runat="server" CssClass="form-control"
-                                        AppendDataBoundItems="True"  DataTextField="SupplierTypeName" DataValueField="Id"
+                                        AppendDataBoundItems="True" DataTextField="SupplierTypeName" DataValueField="Id"
                                         EnableViewState="true" AutoPostBack="True" OnSelectedIndexChanged="ddlFSupplierType_SelectedIndexChanged">
                                         <asp:ListItem Value="0">Select Supplier Type</asp:ListItem>
-
                                     </asp:DropDownList>
                                     <asp:RequiredFieldValidator ID="RfvFSupplierType" runat="server" CssClass="validator"
                                         ControlToValidate="ddlFSupplierType" Display="Dynamic"
@@ -549,8 +545,8 @@
                             </asp:TemplateColumn>
                             <asp:TemplateColumn HeaderText="Supplier">
                                 <EditItemTemplate>
-                                    <asp:DropDownList ID="ddlSupplier" runat="server"  AutoPostBack="true"
-                                        AppendDataBoundItems="True" DataTextField="SupplierName" DataValueField="Id" EnableViewState="true"
+                                    <asp:DropDownList ID="ddlSupplier" runat="server" CssClass="form-control"
+                                        AppendDataBoundItems="True" DataTextField="SupplierName" DataValueField="Id"
                                         ValidationGroup="proedit">
                                         <asp:ListItem Value="0">Select Supplier</asp:ListItem>
                                     </asp:DropDownList>
@@ -559,7 +555,7 @@
                                         InitialValue="0" SetFocusOnError="True" ValidationGroup="proedit">*</asp:RequiredFieldValidator>
                                 </EditItemTemplate>
                                 <FooterTemplate>
-                                    <asp:DropDownList ID="ddlFSupplier" runat="server"  AutoPostBack="true"
+                                    <asp:DropDownList ID="ddlFSupplier" runat="server" CssClass="form-control"
                                         AppendDataBoundItems="True" DataTextField="SupplierName" DataValueField="Id"
                                         EnableViewState="true" ValidationGroup="proadd">
                                         <asp:ListItem Value="0">Select Supplier</asp:ListItem>
@@ -671,16 +667,15 @@
                                        
                                       <asp:TemplateColumn HeaderText="Actions">
                                     <EditItemTemplate>
-                                        
-                                        <asp:LinkButton ID="lnkUpdate" runat="server" CommandName="Update" CommandArgument='<%# DataBinder.Eval(Container, "ItemIndex") %>' ValidationGroup="edit" CssClass="btn btn-xs btn-default"><i class="fa fa-save"></i></asp:LinkButton>
-                                        <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CommandArgument='<%# DataBinder.Eval(Container, "ItemIndex") %>' CssClass="btn btn-xs btn-default"><i class="fa fa-times"></i></asp:LinkButton>
+                                        <asp:LinkButton ID="lnkUpdate" runat="server" CommandName="Update" ValidationGroup="edit" CssClass="btn btn-xs btn-default"><i class="fa fa-save"></i></asp:LinkButton>
+                                        <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default"><i class="fa fa-times"></i></asp:LinkButton>
                                     </EditItemTemplate>
                                     <FooterTemplate>
-                                        <asp:LinkButton ID="lnkAddNew" runat="server" CommandName="AddNew" CommandArgument='<%# DataBinder.Eval(Container, "ItemIndex") %>' ValidationGroup="save" CssClass="btn btn-sm btn-success"><i class="fa fa-save"></i></asp:LinkButton>
+                                        <asp:LinkButton ID="lnkAddNew" runat="server" CommandName="AddNew" ValidationGroup="save" CssClass="btn btn-sm btn-success"><i class="fa fa-save"></i></asp:LinkButton>
                                     </FooterTemplate>
                                     <ItemTemplate>
-                                        <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CommandArgument='<%# DataBinder.Eval(Container, "ItemIndex") %>' CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
-                                        <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CommandArgument='<%# DataBinder.Eval(Container, "ItemIndex") %>' CssClass="btn btn-xs btn-default" OnClientClick="javascript:return confirm('Are you sure you want to delete this entry?');"><i class="fa fa-times"></i></asp:LinkButton>
+                                        <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
+                                        <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default" OnClientClick="javascript:return confirm('Are you sure you want to delete this entry?');"><i class="fa fa-times"></i></asp:LinkButton>
                                     </ItemTemplate>
                                 </asp:TemplateColumn>
                             
@@ -688,7 +683,7 @@
                         <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
                     </asp:DataGrid>                                        
 
-                        <asp:Button ID="btnindexChanged" Text="IndexChanged" style="display:none;" OnClick="ddlFSupplierType_SelectedIndexChanged" runat="server" Visible="False" />
+
 
 
                                     <footer>
@@ -699,29 +694,11 @@
                                 </div>
                             </div>
                         </div>
-            
+
                     </div>
-            <%--  </ContentTemplate>
-           
-          <Triggers>
-              
-              
-              <asp:AsyncPostBackTrigger ControlID="dgBidders" EventName="ItemDataBound" />     
-              <asp:AsyncPostBackTrigger ControlID="dgBidders" EventName="SelectedIndexChanged" />     
-              <asp:AsyncPostBackTrigger ControlID="dgBidders" EventName="UpdateCommand" />     
-              <asp:AsyncPostBackTrigger ControlID="dgBidders" EventName="CancelCommand" />   
-              <asp:AsyncPostBackTrigger ControlID="dgBidders" EventName="DeleteCommand" />     
-              <asp:AsyncPostBackTrigger ControlID="dgBidders" EventName="EditCommand" />    
-               <asp:AsyncPostBackTrigger ControlID="dgBidders" EventName="ItemCommand" /> 
-               
-             
-            
-              
-                
-              <asp:AsyncPostBackTrigger ControlID="btncancelCost" EventName="Click" />
-          </Triggers>--%>
+              </ContentTemplate>
        
-    </asp:Panel>
+    </asp:UpdatePanel>
      <cc1:ModalPopupExtender runat="server" Enabled="True" CancelControlID="btncancelCost"
         ID="pnlBidItem_ModalPopupExtender" TargetControlID="btnHiddenPopupp" BackgroundCssClass="modalBackground"
         PopupControlID="pnlBidItem">
