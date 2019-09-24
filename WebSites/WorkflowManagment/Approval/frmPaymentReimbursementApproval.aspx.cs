@@ -55,7 +55,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             get
             {
-                return "{A1CF3CA4-8F4D-477F-82D2-15A7B689B697}";
+                return "{A1C33CA4-8F4D-477F-82D2-15A7B689B697}";
             }
         }
         #region Field Getters
@@ -133,7 +133,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     btnApprove.Enabled = true;
                 }
                 else
-                    btnApprove.Enabled = false;
+                   // btnApprove.Enabled = false;
                 if (PRRS.ApprovalStatus != null)
                 {
                     btnPrint.Enabled = true;
@@ -175,9 +175,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     else
                     {
                         _presenter.CurrentPaymentReimbursementRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                        _presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.IsLiquidated = true;
                     }
+                    break;
                 }
-                break;
+               
             }
         }
         private void GetNextApprover()
@@ -187,12 +189,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 if (PRRS.ApprovalStatus == null)
                 {
                     SendEmail(PRRS);
-                    _presenter.CurrentPaymentReimbursementRequest.CurrentApprover = PRRS.Approver;
-                    _presenter.CurrentPaymentReimbursementRequest.CurrentLevel = PRRS.WorkflowLevel;
-                    _presenter.CurrentPaymentReimbursementRequest.CurrentStatus = PRRS.ApprovalStatus;
-                    _presenter.CurrentPaymentReimbursementRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
+                   _presenter.CurrentPaymentReimbursementRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
                     break;
                 }
+                _presenter.CurrentPaymentReimbursementRequest.CurrentApprover = PRRS.Approver;
+                _presenter.CurrentPaymentReimbursementRequest.CurrentLevel = PRRS.WorkflowLevel;
+                _presenter.CurrentPaymentReimbursementRequest.CurrentStatus = PRRS.ApprovalStatus;
+               
             }
         }
         protected void grvPaymentReimbursementRequestList_SelectedIndexChanged(object sender, EventArgs e)
@@ -210,11 +213,21 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void grvPaymentReimbursementRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            if (e.Row.RowType == DataControlRowType.DataRow)
-            {
-                //LinkButton db = (LinkButton)e.Row.Cells[5].Controls[0];
-                //db.OnClientClick = "return confirm('Are you sure you want to delete this Recieve?');";
-            }
+            
+                //PaymentReimbursementRequest PR = e.Row.DataItem as PaymentReimbursementRequest;
+                //if (LR != null)
+                //{
+                //    if (e.Row.RowType == DataControlRowType.DataRow)
+                //    {
+
+                //        if (e.Row.RowType == DataControlRowType.DataRow)
+                //        {
+                //            e.Row.Cells[1].Text = _presenter.GetUser(PR.CashPaymentRequest.AppUser).FullName;
+                //        }
+                //    }
+                //    //LinkButton db = (LinkButton)e.Row.Cells[5].Controls[0];
+                //    //db.OnClientClick = "return confirm('Are you sure you want to delete this Recieve?');";
+                //}
         }
         protected void grvPaymentReimbursementRequestList_RowCommand(Object sender, GridViewCommandEventArgs e)
         {
@@ -222,7 +235,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 reqID = (int)grvPaymentReimbursementRequestList.DataKeys[Convert.ToInt32(e.CommandArgument)].Value;
                 _presenter.CurrentPaymentReimbursementRequest = _presenter.GetPaymentReimbursementRequest(reqID);
-                _presenter.OnViewLoaded();
+                //_presenter.OnViewLoaded();
                 dgReimbursementDetail.DataSource = _presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestDetails;
                 dgReimbursementDetail.DataBind();
                 pnlDetail.Visible = true;
@@ -265,6 +278,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     Master.ShowMessage(new AppMessage("Payment Reimbursement Approval Processed", Chai.WorkflowManagment.Enums.RMessageType.Info));
                     btnApprove.Enabled = false;
                     BindSearchPaymentReimbursementRequestGrid();
+                    pnlApproval_ModalPopupExtender.Show();
                 }
             }
             catch (Exception ex)
@@ -359,7 +373,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             if (_presenter.CurrentPaymentReimbursementRequest != null)
             {
                 int attachmentId = Convert.ToInt32(grvAttachments.SelectedDataKey.Value);
-                ELRAttachment attachment = _presenter.GetAttachment(attachmentId);
+                PRAttachment attachment = _presenter.GetAttachment(attachmentId);
 
                 string Filename = attachment.FilePath;
 

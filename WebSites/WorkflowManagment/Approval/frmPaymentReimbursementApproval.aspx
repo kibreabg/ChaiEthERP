@@ -68,7 +68,8 @@
             CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" PageSize="30">
             <RowStyle CssClass="rowstyle" />
             <Columns>
-                <asp:BoundField DataField="ExpenseType" HeaderText="Expense Type" SortExpression="ExpenseType" />
+                <asp:BoundField DataField="CashPaymentRequest.RequestNo" HeaderText="Cash Payment Request No." SortExpression="Cash Payment Request No" />
+                <asp:BoundField DataField="CashPaymentRequest.AppUser.FullName" HeaderText="Requester" />
                 <asp:BoundField DataField="RequestDate" HeaderText="Request Date" SortExpression="RequestDate" />
                 <asp:ButtonField ButtonType="Button" CommandName="ViewItem" Text="View Item Detail" />
                 <asp:CommandField ButtonType="Button" SelectText="Process Request" ShowSelectButton="True" />

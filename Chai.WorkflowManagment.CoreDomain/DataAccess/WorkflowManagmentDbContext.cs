@@ -74,7 +74,7 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
         public DbSet<PaymentReimbursementRequest> PaymentReimbursementRequests { get; set; }
         public DbSet<PaymentReimbursementRequestDetail> PaymentReimbursementRequestDetails { get; set; }
         public DbSet<PaymentReimbursementRequestStatus> PaymentReimbursementRequestStatuses { get; set; }
-
+        public DbSet<PRAttachment> PRAttachments { get; set; }
         public DbSet<OperationalControlRequest> OperationalControlRequests { get; set; }
         public DbSet<OperationalControlRequestDetail> OperationalControlRequestDetails { get; set; }
         public DbSet<OperationalControlRequestStatus> OperationalControlRequestStatuses { get; set; }

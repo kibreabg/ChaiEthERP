@@ -116,7 +116,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
             CurrentCashPaymentRequest.PaymentReimbursementRequest.RequestDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
             CurrentCashPaymentRequest.PaymentReimbursementRequest.Comment = View.GetComment;
-            CurrentCashPaymentRequest.PaymentReimbursementRequest.ExpenseType = View.GetExpenseType;
+            
             CurrentCashPaymentRequest.PaymentReimbursementRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
 
             CurrentCashPaymentRequest.PaymentReimbursementRequest.CashPaymentRequest = _controller.GetCashPaymentRequest(tarId);
