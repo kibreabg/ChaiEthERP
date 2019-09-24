@@ -110,7 +110,6 @@ namespace Chai.WorkflowManagment.Modules.Setting
         }
         #endregion
         #region Grant
-
         public IList<Grant> GetGrants()
         {
             return WorkspaceFactory.CreateReadOnly().Query<Grant>(x => x.Status == "Active").ToList();
@@ -334,20 +333,19 @@ namespace Chai.WorkflowManagment.Modules.Setting
         }
         #endregion
         #region Program
-
         public IList<Program> GetPrograms()
         {
-            return WorkspaceFactory.CreateReadOnly().Query<Program>(null).OrderBy(x => x.ProgramName).ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<Program>(x => x.Status == "Active").OrderBy(x => x.ProgramName).ToList();
         }
         public Program GetProgram(int progId)
         {
             return _workspace.Single<Program>(x => x.Id == progId);
         }
-        public IList<Program> ListPrograms()
+        public IList<Program> ListPrograms(string ProgramName, string ProgramCode)
         {
             string filterExpression = "";
 
-            filterExpression = "SELECT  *  FROM Programs ";
+            filterExpression = "SELECT * FROM Programs Where Status = 'Active' AND 1 = Case when '" + ProgramName + "' = '' Then 1 When Programs.ProgramName = '" + ProgramName + "'  Then 1 END AND 1 = Case when '" + ProgramCode + "' = '' Then 1 When Programs.ProgramCode = '" + ProgramCode + "'  Then 1 END  ";
 
             return _workspace.SqlQuery<Program>(filterExpression).ToList();
 
@@ -358,6 +356,10 @@ namespace Chai.WorkflowManagment.Modules.Setting
         public IList<Project> GetProjects()
         {
             return WorkspaceFactory.CreateReadOnly().Query<Project>(x=>x.Status == "Active").ToList();
+        }
+        public IList<Project> GetProjectsByProgramId(int programID)
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<Project>(x => x.Status == "Active" && x.Program.Id == programID).ToList();
         }
         public Project GetProject(int ProjectId)
         {

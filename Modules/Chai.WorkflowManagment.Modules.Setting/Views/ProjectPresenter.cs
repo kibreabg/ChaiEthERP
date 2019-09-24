@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Microsoft.Practices.ObjectBuilder;
 using Microsoft.Practices.CompositeWeb;
 using Chai.WorkflowManagment.CoreDomain.Setting;
@@ -15,8 +14,8 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         // NOTE: Uncomment the following code if you want ObjectBuilder to inject the module controller
         //       The code will not work in the Shell module, as a module controller is not created by default
         //
-        private Chai.WorkflowManagment.Modules.Setting.SettingController _controller;
-        public ProjectPresenter([CreateNew] Chai.WorkflowManagment.Modules.Setting.SettingController controller)
+        private SettingController _controller;
+        public ProjectPresenter([CreateNew] SettingController controller)
         {
             _controller = controller;
         }
@@ -34,7 +33,14 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         {
             return _controller.GetProjects();
         }
-
+        public Program GetProgram(int programID)
+        {
+            return _controller.GetProgram(programID);
+        }
+        public IList<Program> GetPrograms()
+        {
+            return _controller.GetPrograms();
+        }
         public void SaveOrUpdateProject(Project project)
         {
             _controller.SaveOrUpdateEntity(project);
@@ -47,7 +53,6 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         {
             _controller.Navigate(String.Format("~/Setting/Default.aspx?{0}=3", AppConstants.TABID));
         }
-
         public void DeleteProject(Project project)
         {
             _controller.DeleteEntity(project);
@@ -63,17 +68,14 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         public IList<Project> ListProjects(string ProjectCode)
         {
             return _controller.ListProjects(ProjectCode);
-
         }
         public IList<Grant> ListGrant()
         {
             return _controller.GetGrants();
-
         }
         public Grant GetGrant(int GrantId)
         {
             return _controller.GetGrant(GrantId);
-
         }
         public IList<AppUser> GetProgramManagers()
         {
@@ -87,6 +89,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         {
             _controller.Commit();
         }
+        
     }
 }
 

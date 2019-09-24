@@ -82,10 +82,12 @@
     <Compile Include="Views\BeneficiaryPresenter.cs" />
     <Compile Include="Views\CarModelPresenter.cs" />
     <Compile Include="Views\EmpLeaveSettingPresenter.cs" />
+    <Compile Include="Views\ProgramPresenter.cs" />
     <Compile Include="Views\ICarModellView.cs" />
     <Compile Include="Views\IEmpLeaveSettingView.cs" />
     <Compile Include="Views\IExpenseTypeView.cs" />
     <Compile Include="Views\ExpenseTypePresenter.cs" />
+    <Compile Include="Views\IProgramView.cs" />
     <Compile Include="Views\IHolidayView.cs" />
     <Compile Include="Views\HolidayPresenter.cs" />
     <Compile Include="Views\ISoleVendorSupplierView.cs" />
