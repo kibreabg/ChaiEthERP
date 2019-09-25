@@ -8,7 +8,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
     public interface IPaymentReimbursementRequestView
     {
         int GetTARequestId { get; }
-        string GetExpenseType { get; }
+        
         string GetComment { get; }
      
     }

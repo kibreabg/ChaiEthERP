@@ -74,9 +74,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _settingController.GetCarRental(Id);
         }
-        public ELRAttachment GetAttachment(int attachmentId)
+        public PRAttachment GetAttachment(int attachmentId)
         {
-            return _requestController.GetELRAttachment(attachmentId);
+            return _requestController.GetPRAttachment(attachmentId);
         }
         public AppUser GetUser(int UserId)
         {
