@@ -31,7 +31,7 @@
                     </fieldset>
                     <footer>
                         <asp:Button ID="btnFind" runat="server" Text="Find" OnClick="btnFind_Click" CssClass="btn btn-primary"></asp:Button>
-                          <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" PostBackUrl="../Default.aspx"></asp:Button>
+                        <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" PostBackUrl="../Default.aspx"></asp:Button>
                     </footer>
                 </div>
             </div>
@@ -79,6 +79,30 @@
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" CssClass="validator" ControlToValidate="txtFProjectCode" ErrorMessage="Project Code Required" ValidationGroup="proadd">*</asp:RequiredFieldValidator>
                                         </FooterTemplate>
                                     </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="Program">
+                                        <ItemTemplate>
+                                            <%# DataBinder.Eval(Container.DataItem, "Program.ProgramName")%>
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:DropDownList ID="ddlProgram" runat="server" Width="90px" CssClass="form-control"
+                                                AppendDataBoundItems="True" DataTextField="ProgramName" DataValueField="Id">
+                                                <asp:ListItem Value="">Select Program</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RfvProgram" runat="server"
+                                                ControlToValidate="ddlProgram" ErrorMessage="Program Required"
+                                                InitialValue="" SetFocusOnError="True" ValidationGroup="proedit">*</asp:RequiredFieldValidator>
+                                        </EditItemTemplate>
+                                        <FooterTemplate>
+                                            <asp:DropDownList ID="ddlFProgram" runat="server" Width="90px" CssClass="form-control"
+                                                AppendDataBoundItems="True" DataTextField="ProgramName" DataValueField="Id">
+                                                <asp:ListItem Value="">Select Program</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RfvFProgram" runat="server"
+                                                ControlToValidate="ddlFProgram" Display="Dynamic"
+                                                ErrorMessage="Program Required" InitialValue="" SetFocusOnError="True"
+                                                ValidationGroup="proadd">*</asp:RequiredFieldValidator>
+                                        </FooterTemplate>
+                                    </asp:TemplateColumn>
                                     <asp:TemplateColumn HeaderText="Starting Date">
                                         <ItemTemplate>
                                             <%# DataBinder.Eval(Container.DataItem, "StartingDate")%>
@@ -88,7 +112,7 @@
                                                 data-dateformat="mm/dd/yy" Text=' <%# DataBinder.Eval(Container.DataItem, "StartingDate","{0:M/d/yyyy}")%>'></asp:TextBox>
                                             <asp:RequiredFieldValidator
                                                 ID="rfvEdtFromDate" runat="server" ErrorMessage="Starting date is required" Display="Dynamic"
-                                                CssClass="validator" ValidationGroup="proedit" 
+                                                CssClass="validator" ValidationGroup="proedit"
                                                 SetFocusOnError="true" ControlToValidate="txtEdtStartingDate"></asp:RequiredFieldValidator>
                                             <asp:CompareValidator ID="cvEdtStartEndDates" runat="server" ErrorMessage="Starting Date must be less than End Date"
                                                 ControlToCompare="txtEdtEndDate" ControlToValidate="txtEdtStartingDate"

@@ -30,7 +30,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 BindCashPaymentRequests();
                 BindCashPaymentDetails();
                 PopPayee();
-
+                BindPrograms();
             }
             txtRequestDate.Text = DateTime.Today.Date.ToShortDateString();
             this._presenter.OnViewLoaded();
@@ -162,15 +162,21 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 BindCashPaymentRequests();
             }
         }
-        private void BindProject(DropDownList ddlProject)
+        private void BindPrograms()
         {
-            ddlProject.DataSource = _presenter.ListProjects();
+            ddlProgram.DataSource = _presenter.GetPrograms();
+            ddlProgram.DataBind();
+        }
+        private void BindProject(DropDownList ddlProject, int programID)
+        {
+            ddlProject.DataSource = _presenter.ListProjects(programID);
             ddlProject.DataValueField = "Id";
             ddlProject.DataTextField = "ProjectCode";
             ddlProject.DataBind();
         }
         private void BindGrant(DropDownList ddlGrant, int ProjectId)
         {
+            ddlGrant.Items.Clear();
             ddlGrant.DataSource = _presenter.GetGrantbyprojectId(ProjectId);
             ddlGrant.DataValueField = "Id";
             ddlGrant.DataTextField = "GrantCode";
@@ -308,7 +314,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (e.Item.ItemType == ListItemType.Footer)
             {
                 DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
-                BindProject(ddlProject);
+                int programID = Convert.ToInt32(ddlProgram.SelectedValue);
+                BindProject(ddlProject, programID);
                 DropDownList ddlGrant = e.Item.FindControl("ddlGrant") as DropDownList;
                 BindGrant(ddlGrant, Convert.ToInt32(ddlProject.SelectedValue));
                 DropDownList ddlAccountDescription = e.Item.FindControl("ddlAccountDescription") as DropDownList;
@@ -319,9 +326,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails != null)
                 {
                     DropDownList ddlProject = e.Item.FindControl("ddlEdtProject") as DropDownList;
+                    int programID = Convert.ToInt32(ddlProgram.SelectedValue);
                     if (ddlProject != null)
                     {
-                        BindProject(ddlProject);
+                        BindProject(ddlProject, programID);
                         if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[e.Item.DataSetIndex].Project.Id != 0)
                         {
                             ListItem liI = ddlProject.Items.FindByValue(_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[e.Item.DataSetIndex].Project.Id.ToString());
@@ -406,25 +414,27 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     }
                     else
                     {
-                        Master.ShowMessage(new AppMessage("Please Attach Receipt", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        Master.ShowMessage(new AppMessage("Please Attach Receipt", RMessageType.Error));
                     }
                 }
                 else
                 {
-                    Master.ShowMessage(new AppMessage("Please insert at least one Item Detail", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Please insert at least one Item Detail", RMessageType.Error));
                 }
             }
             catch (Exception ex)
-            {
-                Master.ShowMessage(new AppMessage(ex.Message, RMessageType.Error));
+            {                
                 if (ex.InnerException != null)
                 {
                     if (ex.InnerException.InnerException.Message.Contains("Violation of UNIQUE KEY"))
                     {
-                        Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", RMessageType.Error));
                         //AutoNumber();
                     }
                 }
+                Master.ShowMessage(new AppMessage(ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
 
         }
@@ -476,6 +486,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             DropDownList ddlFGrant = ddl.FindControl("ddlGrant") as DropDownList;
             BindGrant(ddlFGrant, Convert.ToInt32(ddl.SelectedValue));
         }
+        protected void ddlProgram_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            BindCashPaymentDetails();
+        }
         #region Attachments
         protected void btnUpload_Click(object sender, EventArgs e)
         {
@@ -521,8 +535,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 Master.ShowMessage(new AppMessage("Please select file ", RMessageType.Error));
             }
         }
-        #endregion
-
-
+        #endregion        
     }
 }

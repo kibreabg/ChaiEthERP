@@ -169,7 +169,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
             }
 
-        }
+        }   
         private void GetCurrentApprover()
         {
             if (CurrentCashPaymentRequest.CashPaymentRequestStatuses != null)
@@ -276,6 +276,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _settingController.GetItemAccount(ItemAccountId);
         }
+        public IList<Program> GetPrograms()
+        {
+            return _settingController.GetPrograms();
+        }
         public Project GetProject(int ProjectId)
         {
             return _settingController.GetProject(ProjectId);
@@ -288,9 +292,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _settingController.GetSuppliers();
         }
-        public IList<Project> ListProjects()
+        public IList<Project> ListProjects(int programID)
         {
-            return _settingController.GetProjects();
+            return _settingController.GetProjectsByProgramId(programID);
         }
         public IList<Grant> ListGrants()
         {
