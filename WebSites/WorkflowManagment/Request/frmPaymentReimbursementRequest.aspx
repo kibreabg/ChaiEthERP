@@ -166,8 +166,17 @@
                                                         CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
                                                         <RowStyle CssClass="rowstyle" />
                                                         <Columns>
-                                                            <asp:BoundField DataField="FileName" HeaderText="File Name" SortExpression="FileName" />
-                                                            <asp:BoundField DataField="ContentType" HeaderText="Content Type" SortExpression="ContentType" />
+                                                            <asp:BoundField DataField="FilePath" HeaderText="File Name" SortExpression="FilePath" />
+                                                                <asp:TemplateField>
+                                                        <ItemTemplate>
+                                                            <asp:LinkButton ID="lnkDownload" Text="Download" CommandArgument='<%# Eval("FilePath") %>' runat="server" OnClick="DownloadFile"></asp:LinkButton>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                           <asp:TemplateField>
+                                                        <ItemTemplate>
+                                                            <asp:LinkButton ID="lnkDelete" Text="Delete" CommandArgument='<%# Eval("FilePath") %>' runat="server" OnClick="DeleteFile" />
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
                                                         </Columns>
                                                         <FooterStyle CssClass="FooterStyle" />
                                                         <HeaderStyle CssClass="headerstyle" />

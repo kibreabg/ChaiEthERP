@@ -331,3 +331,4 @@ ASALocalRun/
 /azure-pipelines.yml
 /Chai.WorkflowManagment.CoreDomain/DataAccess/WorkflowManagmentDbContext.cs
 /WebSites/WorkflowManagment/Web.config
+/WebSites/WorkflowManagment/PRUploads/STC Progress Report.docx

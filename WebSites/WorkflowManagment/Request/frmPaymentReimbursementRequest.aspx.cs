@@ -243,6 +243,23 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 Master.ShowMessage(new AppMessage("Unable to upload the file,The file is to big or The internet is too slow " + ex.InnerException.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
             }
         }
+        protected void DownloadFile(object sender, EventArgs e)
+        {
+            string filePath = (sender as LinkButton).CommandArgument;
+            Response.ContentType = ContentType;
+            Response.AppendHeader("Content-Disposition", "attachment; filename=" + Path.GetFileName(filePath));
+            Response.WriteFile(filePath);
+            Response.End();
+        }
+        protected void DeleteFile(object sender, EventArgs e)
+        {
+            string filePath = (sender as LinkButton).CommandArgument;
+            _presenter.CurrentCashPaymentRequest.RemoveCPAttachment(filePath);
+            File.Delete(Server.MapPath(filePath));
+            grvAttachments.DataSource = _presenter.CurrentCashPaymentRequest.CPRAttachments;
+            grvAttachments.DataBind();
+            //Response.Redirect(Request.Url.AbsoluteUri);
+        }
         protected void btnSave_Click(object sender, EventArgs e)
         {
             if (_presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PRAttachments.Count != 0)
