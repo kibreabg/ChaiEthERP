@@ -44,55 +44,45 @@
         <header>
             <span class="widget-icon"><i class="fa fa-edit"></i></span>
             <h2>BID ANALYSIS WORKSHEET</h2>
-        </header>
-        <div class="smart-form">
-                    <fieldset>
-         <table style="width: 100%;">
-
-            
-            <tr>
-                <td style="width: 576px; height: 18px; ">
-                    <strong>
-                        <asp:Label ID="lblPurRequestNo" runat="server" Text="Pucrchase Request No:"></asp:Label>
-                    </strong></td>
-                <td style="width: 490px" class="modal-sm">
-                    <asp:Label ID="lblPurRequestNoResult" runat="server"></asp:Label>
-                </td>
-
-               <td style="width: 576px; height: 18px; ">
-                    <strong>
-                        <asp:Label ID="lblpurRequester" runat="server" Text="Requested By:"></asp:Label>
-                    </strong></td>
-                <td style="width: 490px" class="modal-sm">
-                    <asp:Label ID="lblPurrequesterres" runat="server"></asp:Label>
-                </td>
-          
-                <td style="width: 576px; height: 18px; ">
-                    <strong>
-                        <asp:Label ID="lblRequestedDate" runat="server" Text="Requested Date:"></asp:Label>
-                    </strong></td>
-                <td style="width: 490px" class="modal-sm">
-                    <asp:Label ID="lblRequestedDateResult" runat="server"></asp:Label>
-                </td>
-               
-            </tr></table> </fieldset></div>
+        </header></div>
+        <div class="row" >
+         <section class="col col-4">
+                                <label id="lblPurchaseReq" runat="server" class="label" visible="true">
+                                  Purchase Request </label>
+                                <label class="select">
+                                    <asp:DropDownList ID="ddlPurchaseReq" AutoPostBack="true" runat="server" DataValueField="Id" DataTextField="RequestNo" OnSelectedIndexChanged="ddlPurchaseReq_SelectedIndexChanged" >
+                                    </asp:DropDownList>
+                                </label>
+                            </section></div>
+       
              <asp:GridView ID="grvDetails"
                 runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                CssClass="table table-striped table-bordered table-hover">
+                CssClass="table table-striped table-bordered table-hover" OnSelectedIndexChanged="grvDetails_SelectedIndexChanged">
                 <RowStyle CssClass="rowstyle" />
                 <Columns>
                     <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="AccountName" SortExpression="ItemAccount.AccountName" />
                     <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
+                    <asp:BoundField DataField="Item" HeaderText="Item Description" SortExpression="Item"></asp:BoundField>
                     <asp:BoundField DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
-                   
                     <asp:BoundField DataField="Project.ProjectCode" HeaderText="Project Code" />
-                    <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant Code" />
+                    <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant Code" />                                       
+                     <asp:CommandField ShowSelectButton="True" />
                 </Columns>
                 <FooterStyle CssClass="FooterStyle" />
                 <HeaderStyle CssClass="headerstyle" />
                 <PagerStyle CssClass="PagerStyle" />
                 <RowStyle CssClass="rowstyle" />
               </asp:GridView>
+    <div>
+          <asp:Panel ID="pnlInfo" runat="server">
+            <div class="alert alert-info fade in">
+                <button class="close" data-dismiss="alert">
+                    ×
+                </button>
+                <i class="fa-fw fa fa-info"></i>
+                <strong>Info!</strong> Please select the Purchase Request Transaction to perform Bid Analysis
+            </div>
+        </asp:Panel></div>
         <!-- widget div-->
         <div>
 
@@ -106,21 +96,44 @@
             <!-- widget content -->
             <div class="widget-body no-padding">
                 <div class="smart-form">
-                    <fieldset>
-
-                        <div class="row">
+                    
+                       
+                
+         
+                         <div class="row">
                            
                             <section class="col col-4">
                                 <label class="label">
-                                    Requester</label>
-                                <label class="input">
-                                    <asp:TextBox ID="txtRequester" runat="server" Visible="true"></asp:TextBox>
+                                   Purchase Requester</label>
+                                <label class="label">
+                                     <asp:Label ID="lblPurReqRequester" runat="server"></asp:Label>
                                 </label>
                             </section>
                              
                             <section class="col col-4">
+                                <label id="Label2" runat="server" class="label" visible="true">
+                                   Purchase Request No</label>
+                                <label class="label">
+                                     <asp:Label ID="lblPurchaseReqNo" runat="server"></asp:Label>
+                                </label>
+                            </section>
+                           
+                            <section class="col col-4">
+                                <label class="label">
+                                    Purchase Requested Date</label>
+                                <label class="label">
+                                 
+                                      <asp:Label ID="lblRequestedDate" runat="server"></asp:Label>
+                                </label>
+                            </section>
+                        </div>
+                        <div class="row">
+                           
+                           
+                             
+                            <section class="col col-4">
                                 <label id="lblRequestDate" runat="server" class="label" visible="true">
-                                   Purchase Requested Date</label>
+                                   Bid Analysis Requested Date</label>
                                 <label class="input">
                                     <i class="icon-append fa fa-calendar"></i>
                                     <asp:TextBox ID="txtRequestDate" runat="server" Visible="true" CssClass="form-control datepicker" Enabled="False"></asp:TextBox>
@@ -129,11 +142,19 @@
                            
                             <section class="col col-4">
                                 <label class="label">
-                                     Date</label>
-                                <label class="input">
-                                    <i class="icon-append fa fa-calendar"></i>
-                                    <asp:TextBox ID="txtAnalyzedDate" runat="server" Visible="true" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" Enabled="False"></asp:TextBox>
-                                    <asp:RequiredFieldValidator ID="RfvAnalyzedDate" runat="server" CssClass="validator" ControlToValidate="txtAnalyzedDate" ErrorMessage="Analyzed Date Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Save">*</asp:RequiredFieldValidator>
+                                     Project</label>
+                                 <label class="label">
+                                 
+                                      <asp:Label ID="lblProject" runat="server"></asp:Label>
+                                </label>
+                            </section>
+                                                  
+                            <section class="col col-4">
+                                <label class="label">
+                                     Grant</label>
+                                 <label class="label">
+                                 
+                                      <asp:Label ID="lblGrant" runat="server"></asp:Label>
                                 </label>
                             </section>
                         </div>
@@ -156,41 +177,16 @@
                              </asp:GridView>
                               </section>
                            </div>--%>
-                          <div class="row">                            
-                            <section class="col col-6">
-                                <label class="label">Project</label>
-                                <label class="select">
-                                    <asp:DropDownList ID="ddlProject" AutoPostBack="true" runat="server" DataValueField="Id" DataTextField="ProjectCode" OnSelectedIndexChanged="ddlProject_SelectedIndexChanged">
-                                    </asp:DropDownList><i></i>
-                                    <asp:RequiredFieldValidator
-                                        ID="rfvddlProject" runat="server" ErrorMessage="Project is required" Display="Dynamic"
-                                        CssClass="validator" ValidationGroup="saveMain" InitialValue="0"
-                                        SetFocusOnError="true" ControlToValidate="ddlProject"></asp:RequiredFieldValidator>
-                                </label>
-                            </section>
-                             <section class="col col-6">
-                                <label class="label">Grant</label>
-                                <label class="select">
-                                    <asp:DropDownList ID="ddlGrant" runat="server" DataValueField="Id" DataTextField="GrantCode">
-                                    </asp:DropDownList><i></i>
-                                    <asp:RequiredFieldValidator
-                                        ID="rfvGrant" runat="server" ErrorMessage="Grant is required" Display="Dynamic"
-                                        CssClass="validator" ValidationGroup="saveMain" InitialValue="0"
-                                        SetFocusOnError="true" ControlToValidate="ddlGrant"></asp:RequiredFieldValidator>
-                                </label>
-                            </section>
-                        </div>
-                        <div class="row">
-                         
-                            
+                            <div class="row">
                              <section class="col col-4">
                                 <label class="label">
-                                    Special Need</label>
+                                  Bid Analysis Requester</label>
                                 <label class="input">
-                                    <asp:TextBox ID="txtSpecialNeed" runat="server" Visible="true"></asp:TextBox>
+                                    <asp:TextBox ID="txtRequester" runat="server" Visible="true"></asp:TextBox>
                                 </label>
                             </section>
-                             <section class="col col-8">
+                        
+                             <section class="col col-6">
                                 <label class="label">
                                     Reason for Selecting Supplier</label>
                                 <label class="input">
@@ -198,16 +194,21 @@
                                 </label>
                                  <asp:RequiredFieldValidator ID="Rfvreasons" runat="server" CssClass="validator" ControlToValidate="txtselectionfor" ErrorMessage="Reason For Selection Required" ValidationGroup="Save">*</asp:RequiredFieldValidator>
                             </section>
-                        </div>
-                       <div class="row">
+                        
+                      
                            <section class="col col-6">
                                 <label class="label">Total Price </label>
                                 <label class="input">
                                     <asp:TextBox ID="txtTotal" ReadOnly="true" runat="server"></asp:TextBox>
                                 </label>
-                            </section>                  
-                           </div>
-           </fieldset>
+                            </section>  
+                        </div>
+                       
+                         
+                            
+                                           
+                         
+           
                     <div class="tab-content">
                     <div class="tab-pane active" id="hr2">
 

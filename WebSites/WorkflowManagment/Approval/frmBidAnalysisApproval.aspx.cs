@@ -563,12 +563,19 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 _presenter.CurrentBidAnalysisRequest = _presenter.GetBidAnalysisRequestById(reqid);
                 if (e.CommandName == "ViewItem")
                 {
+                   // dgPurchaseRequestDetail.DataSource = _presenter.CurrentBidAnalysisRequest.BidAnalysisRequestDetails;
+                   // dgPurchaseRequestDetail.DataBind();
                     reqid = Convert.ToInt32(grvPurchaseRequestList.DataKeys[0].Value);
 
                     pnlDetail_ModalPopupExtender.Show();
                     BindItemDetal();
                 }
             }
+
+
+
+          
+           
         }
         #region Field Getters
       
@@ -577,8 +584,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         #endregion
         private void BindItemDetal()
         {
-           // grvPurchaseRequestList.DataSource = _presenter.CurrentBidAnalysisRequest.Bidders;
-            //grvPurchaseRequestList.DataBind();
             IList<Bidder> biddetail = new List<Bidder>();
             foreach (BidderItemDetail bider in _presenter.CurrentBidAnalysisRequest.BidderItemDetails)
             {
@@ -591,6 +596,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
             dgPurchaseRequestDetail.DataSource = biddetail;
             dgPurchaseRequestDetail.DataBind();
+
+
+
         }
         protected void btnCancelPopup2_Click(object sender, EventArgs e)
         {

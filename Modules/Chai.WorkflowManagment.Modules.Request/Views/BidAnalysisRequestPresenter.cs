@@ -159,9 +159,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             BidAnalysisRequest.PurchaseRequest = _controller.GetPurchaseRequest(View.GetPurchaseRequestId); 
             BidAnalysisRequest.RequestNo = View.GetRequestNo;
             BidAnalysisRequest.RequestDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
-            BidAnalysisRequest.AnalyzedDate = Convert.ToDateTime(View.GetAnalysedDate.ToShortDateString());
+            
           //  BidAnalysisRequest.Neededfor = View.GetNeededFor;
-            BidAnalysisRequest.SpecialNeed = View.GetSpecialNeed;
+            
 
 
             //  BidAnalysisRequest.Supplier.Id=View.GetSupplierId;
@@ -169,10 +169,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             //   BidAnalysisRequest.SelectedBy = View.GetSelectedBy;
 
             BidAnalysisRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
-            if (View.GetProjectId != 0)
-                BidAnalysisRequest.Project = _settingController.GetProject(View.GetProjectId);
-            if (View.GetGrantId != 0)
-                BidAnalysisRequest.Grant = _settingController.GetGrant(View.GetGrantId);
+
+            BidAnalysisRequest.Project.ProjectCode = View.GetProject.ToString();
+
+            BidAnalysisRequest.Grant.GrantCode = View.GetGrant.ToString();
             BidAnalysisRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
 
          /*    decimal price = 0;
@@ -314,6 +314,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.GetPurchaseRequest(purchaseRequestId);
         }
+        public IList<PurchaseRequest> GetPurchaseRequestList()
+        {
+            return _controller.GetPurchaseRequests();
+        }
+
         public void DeleteBidAnalysis(BidAnalysisRequest BidAnalysis)
         {
             _controller.DeleteEntity(BidAnalysis);
@@ -321,6 +326,18 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public void DeleteBidder(Bidder Bidder)
         {
             _controller.DeleteEntity(Bidder);
+        }
+        public IList<PurchaseRequestDetail> ListPurchaseReqInProgress()
+        {
+            return _controller.ListPurchaseReqInProgress();
+        }
+        public IList<PurchaseRequestDetail> ListPurchaseReqInProgressbyId(int id)
+        {
+            return _controller.ListPurchaseReqInProgressById(id);
+        }
+        public IList<PurchaseRequestDetail> ListPurchaseReqbyId(int id)
+        {
+            return _controller.ListPurchaseReqById(id);
         }
         public void DeleteBidderItemDetail(BidderItemDetail BidderItemDetail)
         {
