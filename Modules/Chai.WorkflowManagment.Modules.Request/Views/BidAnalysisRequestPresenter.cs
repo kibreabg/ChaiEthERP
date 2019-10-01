@@ -157,7 +157,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public void SaveOrUpdateBidAnalysisRequest()
         {
 
-            PurchaseRequest purchaseRequest = Session["PR"] as PurchaseRequest;
+           
             BidAnalysisRequest BidAnalysisRequest = CurrentBidAnalysisRequest;
             BidAnalysisRequest.PurchaseRequest = _controller.GetPurchaseRequest(View.GetPurchaseRequestId); 
             BidAnalysisRequest.RequestNo = View.GetRequestNo;
