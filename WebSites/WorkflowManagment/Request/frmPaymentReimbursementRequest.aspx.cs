@@ -50,7 +50,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get
             {
-                return "{0B827E67-C83E-45CB-B048-A709BD4625C8}";
+                return "{0B827E67-C83E-45CB-B048-A744BD4625C8}";
             }
         }
 
@@ -73,10 +73,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return txtComment.Text; }
         }
-        public string GetExpenseType
-        {
-            get { return ddlExpenseType.SelectedValue; }
-        }
+        
         public IList<PaymentReimbursementRequest> PaymentReimbursementRequests
         {
             get
@@ -112,7 +109,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (_presenter.CurrentCashPaymentRequest != null)
             {
                 txtComment.Text = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.Comment;
-                ddlExpenseType.Text = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.ExpenseType;
+                
                 BindPaymentReimbursementRequests();
                 //grvAttachments.DataSource = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.CPRAttachments;
                 //grvAttachments.DataBind();
@@ -217,68 +214,64 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void UploadFile()
         {
-            string filePath = fuReciept.PostedFile.FileName;
-            string filename = Path.GetFileName(filePath);
-            string ext = Path.GetExtension(filename);
-            string contenttype = String.Empty;
-
-            //Set the contenttype based on File Extension
-            switch (ext)
+            string fileName = Path.GetFileName(fuReciept.PostedFile.FileName);
+            try
             {
-                case ".doc":
-                    contenttype = "application/vnd.ms-word";
-                    break;
-                case ".docx":
-                    contenttype = "application/vnd.ms-word";
-                    break;
-                case ".xls":
-                    contenttype = "application/vnd.ms-excel";
-                    break;
-                case ".xlsx":
-                    contenttype = "application/vnd.ms-excel";
-                    break;
-                case ".jpg":
-                    contenttype = "image/jpg";
-                    break;
-                case ".png":
-                    contenttype = "image/png";
-                    break;
-                case ".gif":
-                    contenttype = "image/gif";
-                    break;
-                case ".pdf":
-                    contenttype = "application/pdf";
-                    break;
+                if (fileName != String.Empty)
+                {
+
+
+
+                    PRAttachment attachment = new PRAttachment();
+                    attachment.FilePath = "~/PRUploads/" + fileName;
+                    fuReciept.PostedFile.SaveAs(Server.MapPath("~/PRUploads/") + fileName);
+                    //Response.Redirect(Request.Url.AbsoluteUri);
+                    _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PRAttachments.Add(attachment);
+
+                    grvAttachments.DataSource = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PRAttachments;
+                    grvAttachments.DataBind();
+
+
+                }
+                else
+                {
+                    Master.ShowMessage(new AppMessage("Please select file ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                }
             }
-            if (contenttype != String.Empty)
+            catch (HttpException ex)
             {
-
-                Stream fs = fuReciept.PostedFile.InputStream;
-                BinaryReader br = new BinaryReader(fs);
-                Byte[] bytes = br.ReadBytes((Int32)fs.Length);
-
-                CPRAttachment attachment = new CPRAttachment();
-                attachment.FilePath = filename;
-             
-
-                //_presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.CPRAttachments.Add(attachment);
-                ////insert the file into database
-                //grvAttachments.DataSource = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.CPRAttachments;
-                //grvAttachments.DataBind();
+                Master.ShowMessage(new AppMessage("Unable to upload the file,The file is to big or The internet is too slow " + ex.InnerException.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
             }
-            else
-            {
-                Master.ShowMessage(new AppMessage("File format not recognised. Upload Image/Word/PDF/Excel formats ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-            }
+        }
+        protected void DownloadFile(object sender, EventArgs e)
+        {
+            string filePath = (sender as LinkButton).CommandArgument;
+            Response.ContentType = ContentType;
+            Response.AppendHeader("Content-Disposition", "attachment; filename=" + Path.GetFileName(filePath));
+            Response.WriteFile(filePath);
+            Response.End();
+        }
+        protected void DeleteFile(object sender, EventArgs e)
+        {
+            string filePath = (sender as LinkButton).CommandArgument;
+            _presenter.CurrentCashPaymentRequest.RemoveCPAttachment(filePath);
+            File.Delete(Server.MapPath(filePath));
+            grvAttachments.DataSource = _presenter.CurrentCashPaymentRequest.CPRAttachments;
+            grvAttachments.DataBind();
+            //Response.Redirect(Request.Url.AbsoluteUri);
         }
         protected void btnSave_Click(object sender, EventArgs e)
         {
-            SetReimbursementDetails();
+            if (_presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PRAttachments.Count != 0)
+            {
+                SetReimbursementDetails();
             _presenter.SaveOrUpdatePaymentReimbursementRequest(Convert.ToInt32(Session["tarId"]));
             BindPaymentReimbursementRequests();
             Master.ShowMessage(new AppMessage("Cash Payment Successfully Reimbursed!", Chai.WorkflowManagment.Enums.RMessageType.Info));
             btnSave.Visible = false;
             Session["tarId"] = null;
+            }
+            else { Master.ShowMessage(new AppMessage("Please attach Receipt", Chai.WorkflowManagment.Enums.RMessageType.Error)); }
         }
         protected void btnDelete_Click(object sender, EventArgs e)
         {

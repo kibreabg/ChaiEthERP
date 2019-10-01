@@ -137,7 +137,7 @@ namespace Chai.WorkflowManagment.Modules.Request
         public IList<CashPaymentRequest> ListCashPaymentsNotExpensed()
         {
             int currentUserId = GetCurrentUser().Id;
-            return WorkspaceFactory.CreateReadOnly().Query<CashPaymentRequest>(x => x.PaymentReimbursementStatus == "Completed" && x.PaymentReimbursementRequest == null && currentUserId == x.AppUser.Id).ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<CashPaymentRequest>(x => x.IsLiquidated == false && x.AmountType == "Estimated Amount" && x.ProgressStatus == "Completed" && currentUserId == x.AppUser.Id).ToList();
         }
         public CashPaymentRequestDetail GetCashPaymentRequestDetail(int CPRDId)
         {
@@ -343,6 +343,10 @@ namespace Chai.WorkflowManagment.Modules.Request
         public IList<ExpenseLiquidationRequest> GetExpenseLiquidationRequests()
         {
             return WorkspaceFactory.CreateReadOnly().Query<ExpenseLiquidationRequest>(null).ToList();
+        }
+        public PRAttachment GetPRAttachment(int attachmentId)
+        {
+            return _workspace.Single<PRAttachment>(x => x.Id == attachmentId);
         }
         public ELRAttachment GetELRAttachment(int attachmentId)
         {

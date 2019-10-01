@@ -84,7 +84,7 @@
 
                                     <ul class="nav nav-tabs">
                                         <li class="active">
-                                            <a href="#iss1" data-toggle="tab">Expense Form</a>
+                                            <a href="#iss1" data-toggle="tab">Re-Imbursement Form</a>
                                         </li>
                                         <li class="">
                                             <a href="#iss2" data-toggle="tab">Attach Invoice</a>
@@ -102,25 +102,13 @@
                                                         </label>
                                                     </section>
                                                        <section class="col col-6">
-                                                        <label class="label">Expense Type</label>
-                                                        <label class="select">
-                                                          <asp:DropDownList ID="ddlExpenseType" runat="server" AppendDataBoundItems="True">
-                                                           <asp:ListItem Value=" ">Select Expense Type</asp:ListItem>
-                                                           <asp:ListItem Value="Advance">Advance</asp:ListItem>
-                                                           <asp:ListItem Value="Claim">Claim</asp:ListItem>
-                                                         </asp:DropDownList><i></i>
-                                                            <asp:RequiredFieldValidator ID="RfvExpenseType" runat="server" ControlToValidate="ddlExpenseType" ErrorMessage="Expense Type Required" InitialValue=" " SetFocusOnError="True" ValidationGroup="Save">*</asp:RequiredFieldValidator>
-                                                      </label>
-                                                    </section>
-                                                    </div>
-                                                 <div class="row">
-                                                    <section class="col col-6">
                                                         <label class="label">Comment</label>
                                                         <label class="input">
                                                             <asp:TextBox ID="txtComment" runat="server"></asp:TextBox>
                                                         </label>
                                                     </section>
-                                                </div>
+                                                    </div>
+                                                 
                                                 <asp:DataGrid ID="dgPaymentReimbursementDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
                                                     CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
                                                     GridLines="None" OnItemDataBound="dgPaymentReimbursementDetail_ItemDataBound" ShowFooter="True">
@@ -178,8 +166,17 @@
                                                         CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
                                                         <RowStyle CssClass="rowstyle" />
                                                         <Columns>
-                                                            <asp:BoundField DataField="FileName" HeaderText="File Name" SortExpression="FileName" />
-                                                            <asp:BoundField DataField="ContentType" HeaderText="Content Type" SortExpression="ContentType" />
+                                                            <asp:BoundField DataField="FilePath" HeaderText="File Name" SortExpression="FilePath" />
+                                                                <asp:TemplateField>
+                                                        <ItemTemplate>
+                                                            <asp:LinkButton ID="lnkDownload" Text="Download" CommandArgument='<%# Eval("FilePath") %>' runat="server" OnClick="DownloadFile"></asp:LinkButton>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                           <asp:TemplateField>
+                                                        <ItemTemplate>
+                                                            <asp:LinkButton ID="lnkDelete" Text="Delete" CommandArgument='<%# Eval("FilePath") %>' runat="server" OnClick="DeleteFile" />
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
                                                         </Columns>
                                                         <FooterStyle CssClass="FooterStyle" />
                                                         <HeaderStyle CssClass="headerstyle" />

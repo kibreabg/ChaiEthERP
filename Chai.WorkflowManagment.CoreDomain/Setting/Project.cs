@@ -22,6 +22,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Setting
         public string Status { get; set; }
         public virtual IList<ProGrant> ProGrants { get; set; }
         public virtual AppUser AppUser { get; set; }
+        public virtual Program Program { get; set; }
         public virtual ProGrant GetProjectGrant(int Id)
         {
 

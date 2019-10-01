@@ -72,7 +72,15 @@
                                 </label>
                                 <asp:RequiredFieldValidator ID="RfvAmountType" runat="server" ControlToValidate="ddlAmountType" CssClass="validator" Display="Dynamic" ErrorMessage="Amount Type Required" SetFocusOnError="true" ValidationGroup="request"></asp:RequiredFieldValidator>
                             </section>
-
+                            <section class="col col-6">
+                                <label class="label">Program</label>
+                                <label class="select">
+                                    <asp:DropDownList ID="ddlProgram" AutoPostBack="true" DataTextField="ProgramName" DataValueField="Id" AppendDataBoundItems="true" runat="server" OnSelectedIndexChanged="ddlProgram_SelectedIndexChanged">
+                                        <asp:ListItem Value="0">Select Program</asp:ListItem>
+                                    </asp:DropDownList><i></i>
+                                </label>
+                                <asp:RequiredFieldValidator ID="rfvProgram" runat="server" ControlToValidate="ddlProgram" CssClass="validator" Display="Dynamic" ErrorMessage="Select Program" SetFocusOnError="true" ValidationGroup="request"></asp:RequiredFieldValidator>
+                            </section>
                         </div>
                     </fieldset>
                     <div role="content">
@@ -87,28 +95,13 @@
                         <!-- widget content -->
                         <div class="widget-body">
                             <div class="tab-content">
-                                <div class="tab-pane" id="hr1">
-                                    <div class="tabbable tabs-below">
-                                        <div class="tab-content padding-10">
-                                            <div class="tab-pane" id="AA">
-                                            </div>
-                                        </div>
-                                        <ul class="nav nav-tabs">
-                                            <li class="active">
-                                                <a data-toggle="tab" href="#AA">Tab 1</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-
-                                </div>
-                                <div class="tab-pane active" id="hr2">
-
+                                <div class="tab-pane active" id="hr1">
                                     <ul class="nav nav-tabs">
                                         <li class="active">
                                             <a href="#iss1" data-toggle="tab">Add Details</a>
                                         </li>
                                         <li class="">
-                                            <a href="#iss2" data-toggle="tab">Attach Reciept</a>
+                                            <a href="#iss2" data-toggle="tab">Attach Receipt</a>
                                         </li>
                                     </ul>
                                     <div class="tab-content padding-10">
@@ -268,8 +261,8 @@
                                                 <PagerStyle CssClass="PagerStyle" />
                                                 <RowStyle CssClass="rowstyle" />
                                             </asp:GridView>
-
                                         </div>
+
                                     </div>
                                 </div>
                             </div>

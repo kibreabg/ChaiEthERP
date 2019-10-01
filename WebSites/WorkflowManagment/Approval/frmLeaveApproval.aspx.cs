@@ -277,10 +277,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     _presenter.SaveOrUpdateLeaveRequest(_presenter.CurrentLeaveRequest);
                     //CalculateLeavetaken();
                     ShowPrint();
-                    SendEmailToRequester();
+                   
                     if (ddlApprovalStatus.SelectedValue != "Rejected")
                     {
                         Master.ShowMessage(new AppMessage("Leave Approval Processed ", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                        SendEmailToRequester();
                     }
                     else
                     {
