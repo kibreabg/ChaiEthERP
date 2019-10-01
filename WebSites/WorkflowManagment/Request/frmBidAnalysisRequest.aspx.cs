@@ -640,29 +640,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 if (fileName != String.Empty)
                 {
-                    if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails.Count > 0)
-                    {
-
-                        foreach (BidderItemDetail detail in _presenter.CurrentBidAnalysisRequest.BidderItemDetails)
-                        {
-
-                            foreach (Bidder bidderdetail in detail.Bidders)
-                            {
-                                
-                                    BAAttachment attachment = new BAAttachment();
-                                    attachment.FilePath = "~/BAUploads/" + fileName;
-                                    fuReciept.PostedFile.SaveAs(Server.MapPath("~/BAUploads/") + fileName);
-                                    //Response.Redirect(Request.Url.AbsoluteUri);
-                                    _presenter.CurrentBidAnalysisRequest.BAAttachments.Add(attachment);
-                               
-                              
-                            }
-
-                        }
-                    }
 
 
-                  
+
+                    BAAttachment attachment = new BAAttachment();
+                    attachment.FilePath = "~/BAUploads/" + fileName;
+                    fuReciept.PostedFile.SaveAs(Server.MapPath("~/BAUploads/") + fileName);
+                    //Response.Redirect(Request.Url.AbsoluteUri);
+                    _presenter.CurrentBidAnalysisRequest.BAAttachments.Add(attachment);
 
                     grvAttachments.DataSource = _presenter.CurrentBidAnalysisRequest.BAAttachments;
                     grvAttachments.DataBind();
@@ -1333,60 +1318,36 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             pnlBidItem_ModalPopupExtender.Show();
         }
 
-
+        
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
+
+
+
+
+
             try
             {
-                //try
-                //{
-                _presenter.SaveOrUpdateBidAnalysisRequest();
-                if (_presenter.CurrentBidAnalysisRequest.BAAttachments.Count != 0 && _presenter.CurrentBidAnalysisRequest.BidAnalysisRequestStatuses.Count != 0)
+                
+                if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails.Count != 0)
                 {
-                    //// foreach (Bidder bider in _presenter.CurrentBidAnalysisRequest.Bidders)
-                    //// {
-                    ////   if (bider.BidderItemDetails.Count > 0)
-                    //// {
-                    // _presenter.SaveOrUpdateBidAnalysisRequest();
+                    _presenter.SaveOrUpdateBidAnalysisRequest();
                     BindBidAnalysisRequests();
                     Master.ShowMessage(new AppMessage("Successfully did a Bid Analysis  Request, Reference No - <b>'" + _presenter.CurrentBidAnalysisRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
                     Log.Info(_presenter.CurrentUser().FullName + " has requested a For a Bid Analyis");
                     btnSave.Visible = false;
-                    //PrintTransaction();
-                    // btnPrintworksheet.Enabled = true;
-                    ////   }                   
-
-
-
-
-                   
-
+                    btnPrintworksheet.Enabled = true;
+                    PrintTransaction();
+                    
                 }
+                              
                 else
                 {
                     Master.ShowMessage(new AppMessage("Please Attach Bid Analysis Quotation", Chai.WorkflowManagment.Enums.RMessageType.Error));
                 }
 
-                //  Will solve  after the crud of the new architecture
-                /*   decimal price = 0;
-                    foreach (Bidder bider in _presenter.CurrentBidAnalysisRequest.Bidders)
-                    {
-
-
-                        if (_presenter.CurrentBidAnalysisRequest.GetBidderbyRank().Rank == 1)
-                        {
-
-                            foreach (BidderItemDetail biditemdet in bider.BidderItemDetails)
-                            {
-
-                                price = price + biditemdet.TotalCost;
                             }
-                        }
-                        txtTotal.Text = price.ToString();
-                        break;
-                    }*/
-            }
             catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
             {
                 Exception raise = dbEx;
@@ -1474,6 +1435,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 bidd = (Bidder)bidditem.Bidders[e.Item.ItemIndex];
             BindBidder(bidd.BidderItemDetail);
             pnlBidItem_ModalPopupExtender.Show();
+        }
+
+        protected void grvDetails_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            grvDetails.PageIndex = e.NewPageIndex;
+            BindBidItemDetails();
+            
         }
     }
 }

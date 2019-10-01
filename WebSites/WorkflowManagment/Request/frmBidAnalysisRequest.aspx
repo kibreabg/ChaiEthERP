@@ -44,8 +44,17 @@
         <header>
             <span class="widget-icon"><i class="fa fa-edit"></i></span>
             <h2>BID ANALYSIS WORKSHEET</h2>
-        </header></div>
-        <div class="row" >
+        </header>
+      <%--<div>
+            <!-- widget edit box -->
+            <div class="jarviswidget-editbox">
+                <!-- This area used as dropdown edit box -->
+            </div>
+            <!-- end widget edit box -->
+            <!-- widget content -->
+            <div class="widget-body no-padding">--%>
+                <div class="smart-form">
+                    <fieldset>
          <section class="col col-4">
                                 <label id="lblPurchaseReq" runat="server" class="label" visible="true">
                                   Purchase Request </label>
@@ -53,8 +62,8 @@
                                     <asp:DropDownList ID="ddlPurchaseReq" AutoPostBack="true" runat="server" DataValueField="Id" DataTextField="RequestNo" OnSelectedIndexChanged="ddlPurchaseReq_SelectedIndexChanged" >
                                     </asp:DropDownList>
                                 </label>
-                            </section></div>
-       
+                            </section>
+       </fieldset>
              <asp:GridView ID="grvDetails"
                 runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
                 CssClass="table table-striped table-bordered table-hover" OnSelectedIndexChanged="grvDetails_SelectedIndexChanged">
@@ -73,7 +82,7 @@
                 <PagerStyle CssClass="PagerStyle" />
                 <RowStyle CssClass="rowstyle" />
               </asp:GridView>
-    <div>
+    
           <asp:Panel ID="pnlInfo" runat="server">
             <div class="alert alert-info fade in">
                 <button class="close" data-dismiss="alert">
@@ -82,7 +91,7 @@
                 <i class="fa-fw fa fa-info"></i>
                 <strong>Info!</strong> Please select the Purchase Request Transaction to perform Bid Analysis
             </div>
-        </asp:Panel></div>
+        </asp:Panel></div></div>
         <!-- widget div-->
         <div>
 
@@ -97,7 +106,7 @@
             <div class="widget-body no-padding">
                 <div class="smart-form">
                     
-                       
+                       <div class="row">
                 
          
                          <div class="row">
@@ -204,7 +213,7 @@
                             </section>  
                         </div>
                        
-                         
+                         </div>
                             
                                            
                          
@@ -298,8 +307,8 @@
                 </div>
             </div>
             <!-- end widget content -->
-
-        </div>
+    </div>
+       
 
         <!-- end widget div -->
         <div id="divprint" style="display: none;" visible="true">
@@ -434,7 +443,7 @@
                 <RowStyle CssClass="rowstyle" />
             </asp:GridView><br /> </fieldset>
         </div>
-    </div>
+   
     <div class="modal fade" id="searchModal" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">

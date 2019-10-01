@@ -24,6 +24,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         private SettingController _settingController;
         private BidAnalysisRequest _bidAnalysisRequest;
         private decimal Totalamount = 0;
+       
         public BidAnalysisRequestPresenter([CreateNew] RequestController controller, AdminController adminController, SettingController settingController)
         {
             _controller = controller;
@@ -155,6 +156,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         public void SaveOrUpdateBidAnalysisRequest()
         {
+
+            PurchaseRequest purchaseRequest = Session["PR"] as PurchaseRequest;
             BidAnalysisRequest BidAnalysisRequest = CurrentBidAnalysisRequest;
             BidAnalysisRequest.PurchaseRequest = _controller.GetPurchaseRequest(View.GetPurchaseRequestId); 
             BidAnalysisRequest.RequestNo = View.GetRequestNo;
@@ -175,23 +178,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             BidAnalysisRequest.Grant.GrantCode = View.GetGrant.ToString();
             BidAnalysisRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
 
-         /*    decimal price = 0;
-           foreach (Bidder bider in CurrentBidAnalysisRequest.Bidders)
-            {
-
-
-                if (CurrentBidAnalysisRequest.GetBidderbyRank().Rank == 1)
-                {
-
-                    foreach (BidderItemDetail biditemdet in bider.BidderItemDetails)
-                    {
-
-                        price = price + biditemdet.TotalCost;
-                    }
-                }
-               BidAnalysisRequest.TotalPrice  = price;
-                break;
-            }*/
+        
             if (CurrentBidAnalysisRequest.BidAnalysisRequestStatuses.Count == 0)
                 SaveBidAnalysisRequestStatus();
             GetCurrentApprover();
