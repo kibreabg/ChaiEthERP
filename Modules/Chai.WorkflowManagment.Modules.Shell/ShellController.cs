@@ -132,9 +132,9 @@ namespace Chai.WorkflowManagment.Modules.Shell
             string filterExpression = "";
 
             filterExpression = " SELECT * FROM CashPaymentRequests " +
-                                    " LEFT JOIN AppUsers on AppUsers.Id = CashPaymentRequests.CurrentApprover " + 
+                                    " LEFT JOIN AppUsers ON AppUsers.Id = CashPaymentRequests.CurrentApprover " + 
                                     " LEFT JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
-                                    " WHERE CashPaymentRequests.ProgressStatus = 'InProgress'" + 
+                                    " WHERE CashPaymentRequests.ProgressStatus = 'InProgress'" +
                                         " AND ((CashPaymentRequests.CurrentApprover = '" + currentUser + "')" +
                                         " OR (CashPaymentRequests.CurrentApproverPosition = '" + GetCurrentUser().EmployeePosition.Id + "')" +
                                         " OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "'))" +
