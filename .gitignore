@@ -332,3 +332,5 @@ ASALocalRun/
 /Chai.WorkflowManagment.CoreDomain/DataAccess/WorkflowManagmentDbContext.cs
 /WebSites/WorkflowManagment/Web.config
 /WebSites/WorkflowManagment/PRUploads/STC Progress Report.docx
+/WebSites/WorkflowManagment/BAUploads
+/WebSites/WorkflowManagment/SVUploads
