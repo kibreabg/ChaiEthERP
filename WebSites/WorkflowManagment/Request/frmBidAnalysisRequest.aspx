@@ -227,7 +227,7 @@
                     
                                 <asp:DataGrid ID="dgItemDetail" runat="server" CellPadding="0"
                             CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id" AutoGenerateColumns="False"
-                            GridLines="None"  ShowFooter="True" OnCancelCommand="dgItemDetail_CancelCommand" OnDeleteCommand="dgItemDetail_DeleteCommand" OnItemCommand="dgItemDetail_ItemCommand" OnUpdateCommand="dgItemDetail_UpdateCommand" OnEditCommand="dgItemDetail_EditCommand1" OnItemDataBound="dgItemDetail_ItemDataBound1" OnSelectedIndexChanged="dgItemDetail_SelectedIndexChanged">
+                            GridLines="None"  ShowFooter="True" OnCancelCommand="dgItemDetail_CancelCommand" OnDeleteCommand="dgItemDetail_DeleteCommand" OnItemCommand="dgItemDetail_ItemCommand" OnUpdateCommand="dgItemDetail_UpdateCommand" OnEditCommand="dgItemDetail_EditCommand1"  OnSelectedIndexChanged="dgItemDetail_SelectedIndexChanged">
 
                             <Columns>
                                
@@ -515,7 +515,7 @@
 
                <asp:DataGrid ID="dgBidders" runat="server" AutoGenerateColumns="False" CellPadding="0"
                         CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
-                        ShowFooter="True" GridLines="None" Height="30px" OnSelectedIndexChanged="dgBidders_SelectedIndexChanged" OnUpdateCommand="dgBidders_UpdateCommand" OnCancelCommand="dgBidders_CancelCommand1" OnDeleteCommand="dgBidders_DeleteCommand1" OnItemCommand="dgBidders_ItemCommand1" OnItemDataBound="dgBidders_ItemDataBound1">
+                        ShowFooter="True" GridLines="None" Height="30px" OnSelectedIndexChanged="dgBidders_SelectedIndexChanged" OnUpdateCommand="dgBidders_UpdateCommand" OnCancelCommand="dgBidders_CancelCommand1" OnDeleteCommand="dgBidders_DeleteCommand1" OnItemCommand="dgBidders_ItemCommand1" OnItemDataBound="dgBidders_ItemDataBound1" OnEditCommand="dgBidders_EditCommand">
                     
 
                         <Columns>

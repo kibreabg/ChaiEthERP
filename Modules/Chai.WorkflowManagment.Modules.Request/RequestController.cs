@@ -551,9 +551,12 @@ namespace Chai.WorkflowManagment.Modules.Request
             else { return 0; }
         }
 
-      
-      
-        
+        public Bidder GetBidder(int id)
+        {
+            return _workspace.Single<Bidder>(x => x.Id == id);
+        }
+
+
 
         #endregion
         #region Employee

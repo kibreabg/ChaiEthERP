@@ -347,6 +347,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.GetBiderItem(id);
         }
+        public Bidder GetBidder(int id)
+        {
+            return _controller.GetBidder(id);
+        }
         public void Commit()
         {
             _controller.Commit();
