@@ -210,6 +210,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 if (_presenter.CurrentBidAnalysisRequest.CurrentLevel == _presenter.CurrentBidAnalysisRequest.BidAnalysisRequestStatuses.Count && (PRS.ApprovalStatus != null) && _presenter.CurrentBidAnalysisRequest.ProgressStatus == ProgressStatus.Completed.ToString())
                 {
                     btnPurchaseOrder.Enabled = true;
+                    _presenter.CurrentBidAnalysisRequest.PurchaseRequest.PurchaseRequestDetails[0].BidAnalysisRequestStatus = "Completed";
                 }
             }
         }

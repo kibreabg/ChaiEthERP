@@ -24,7 +24,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         private SettingController _settingController;
         private BidAnalysisRequest _bidAnalysisRequest;
         private decimal Totalamount = 0;
-       
+        private PurchaseRequest _PurchaseRequest;
         public BidAnalysisRequestPresenter([CreateNew] RequestController controller, AdminController adminController, SettingController settingController)
         {
             _controller = controller;
@@ -38,6 +38,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 _controller.CurrentObject = _controller.GetBidAnalysisRequest(View.GetBARequestId);
             }
             CurrentBidAnalysisRequest = _controller.CurrentObject as BidAnalysisRequest;
+
         }
 
         public override void OnViewInitialized()
@@ -118,9 +119,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     }
                     else if (AL.EmployeePosition.PositionName == "Program Manager")
                     {
-                        if (CurrentBidAnalysisRequest.Project.Id != 0)
+                       if(_bidAnalysisRequest.PurchaseRequest.PurchaseRequestDetails[0].Id != 0)
+                        //if (CurrentBidAnalysisRequest.Project.Id != 0)
                         {
-                            BARS.Approver = GetProject(CurrentBidAnalysisRequest.Project.Id).AppUser.Id;
+                            BARS.Approver = GetProject(_bidAnalysisRequest.BidderItemDetails[0].Project.Id).AppUser.Id;
+                           //BARS.Approver = GetProject(CurrentBidAnalysisRequest.Project.Id).AppUser.Id;
                         }
                     }
                     else
@@ -154,12 +157,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
             }
         }
-        public void SaveOrUpdateBidAnalysisRequest()
+        public void SaveOrUpdateBidAnalysisRequest(int PRID)
         {
 
            
             BidAnalysisRequest BidAnalysisRequest = CurrentBidAnalysisRequest;
-            BidAnalysisRequest.PurchaseRequest = _controller.GetPurchaseRequest(View.GetPurchaseRequestId); 
+            BidAnalysisRequest.PurchaseRequest = _controller.GetPurchaseRequestbyPuID(PRID); 
             BidAnalysisRequest.RequestNo = View.GetRequestNo;
             BidAnalysisRequest.RequestDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
             
@@ -173,9 +176,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
             BidAnalysisRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
 
-            BidAnalysisRequest.Project.ProjectCode = View.GetProject.ToString();
-
-            BidAnalysisRequest.Grant.GrantCode = View.GetGrant.ToString();
+             
             BidAnalysisRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
 
         
@@ -241,6 +242,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _settingController.GetProject(ProjectId);
         }
+
+        public Project GetProjectbyid(int ProjectId)
+        {
+            return _settingController.GetProjectbyid(ProjectId);
+        }
         public IList<Project> GetProjects()
         {
             return _settingController.GetProjects();
@@ -301,6 +307,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.GetPurchaseRequest(purchaseRequestId);
         }
+        public PurchaseRequest GetPurchaseRequestbyPuID(int purchaseRequestId)
+        {
+            return _controller.GetPurchaseRequestbyPuID(purchaseRequestId);
+        }
+        
         public IList<PurchaseRequest> GetPurchaseRequestList()
         {
             return _controller.GetPurchaseRequests();

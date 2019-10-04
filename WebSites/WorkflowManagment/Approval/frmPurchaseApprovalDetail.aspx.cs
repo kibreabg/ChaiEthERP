@@ -164,8 +164,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
             if (_presenter.CurrentUser().EmployeePosition.PositionName == "Procurement Officer" && _presenter.CurrentPurchaseRequest.CurrentStatus != ApprovalStatus.Rejected.ToString() && _presenter.CurrentPurchaseRequest.CurrentLevel == (_presenter.CurrentPurchaseRequest.PurchaseRequestStatuses.Count - 1))
             {
-                lnkBidRequest.Visible = true;
-                lnkSoleVendor.Visible = true;
+                //lnkBidRequest.Visible = true;
+               // lnkSoleVendor.Visible = true;
+                _presenter.CurrentPurchaseRequest.PurchaseRequestDetails[0].BidAnalysisRequestStatus = "InProgress";
             }
         }
         private void ShowPrint()

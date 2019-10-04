@@ -365,6 +365,10 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             return _workspace.Single<Project>(x => x.Id == ProjectId, x => x.ProGrants,x=>x.AppUser, x => x.ProGrants.Select(y => y.Grant));
         }
+        public Project GetProjectbyid(int ProjectId)
+        {
+            return _workspace.Single<Project>(x => x.Id == ProjectId);
+        }
         public Project GetProjectforCostSharing(int ProjectId)
         {
             return _workspace.Single<Project>(x => x.Id == ProjectId && x.Status=="Active", x => x.ProGrants, x => x.AppUser, x => x.ProGrants.Select(y => y.Grant));
