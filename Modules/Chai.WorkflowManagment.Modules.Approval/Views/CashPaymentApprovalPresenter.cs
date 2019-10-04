@@ -99,9 +99,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _settingController.GetAppUsersByEmployeePosition(employeePosition);
         }
-        public IList<Project> ListProjects()
+        public IList<Program> GetPrograms()
         {
-            return _settingController.GetProjects();
+            return _settingController.GetPrograms();
+        }
+        public IList<Project> ListProjects(int programID)
+        {
+            return _settingController.GetProjectsByProgramId(programID);
         }
         public Project GetProject(int ProjectId)
         {
@@ -134,6 +138,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         public void navigate(string url)
         {
             _controller.Navigate(url);
+        }
+        public ApprovalSetting GetApprovalSettingMedical()
+        {
+            return _settingController.GetApprovalSettingMedical();
         }
         public ApprovalSetting GetApprovalSettingforProcess(string Requesttype, decimal value)
         {

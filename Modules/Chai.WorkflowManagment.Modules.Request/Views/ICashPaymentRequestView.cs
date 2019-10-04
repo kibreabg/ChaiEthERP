@@ -1,9 +1,4 @@
-﻿using Chai.WorkflowManagment.CoreDomain.Requests;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Chai.WorkflowManagment.Modules.Request.Views
+﻿namespace Chai.WorkflowManagment.Modules.Request.Views
 {
     public interface ICashPaymentRequestView
     {
@@ -14,6 +9,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         string GetDescription { get; }
         string GetVoucherNo { get; }
         string GetAmountType { get; }
+        int GetProgram { get; }
     }
 }
 

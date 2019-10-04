@@ -113,11 +113,20 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private string GetWillStatus()
         {
-            ApprovalSetting AS = _presenter.GetApprovalSettingforProcess(RequestType.CashPayment_Request.ToString().Replace('_', ' ').ToString(), _presenter.CurrentCashPaymentRequest.TotalAmount);
+            ApprovalSetting AS = null;
+            if (_presenter.CurrentCashPaymentRequest.RequestType == "Medical")
+            {
+                AS = _presenter.GetApprovalSettingMedical();
+            }
+            else
+            {
+                AS = _presenter.GetApprovalSettingforProcess(RequestType.CashPayment_Request.ToString().Replace('_', ' ').ToString(), _presenter.CurrentCashPaymentRequest.TotalAmount);
+            }
+
             string will = "";
             foreach (ApprovalLevel AL in AS.ApprovalLevels)
             {
-                if (AL.EmployeePosition.PositionName == "Superviser/Line Manager" || AL.EmployeePosition.PositionName == "Program Manager" && _presenter.CurrentCashPaymentRequest.CurrentLevel == 1)
+                if ((AL.EmployeePosition.PositionName == "Superviser/Line Manager" || AL.EmployeePosition.PositionName == "Program Manager") && _presenter.CurrentCashPaymentRequest.CurrentLevel == 1)
                 {
                     will = "Approve";
                     break;
@@ -130,16 +139,18 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     try
                     {
-                        if (_presenter.GetUser(_presenter.CurrentCashPaymentRequest.CurrentApprover).EmployeePosition.PositionName == AL.EmployeePosition.PositionName)
+                        if (_presenter.GetUser(_presenter.CurrentCashPaymentRequest.CurrentApprover).EmployeePosition.PositionName == AL.EmployeePosition.PositionName && AL.WorkflowLevel == _presenter.CurrentCashPaymentRequest.CurrentLevel)
                         {
                             will = AL.Will;
+                            break;
                         }
                     }
                     catch
                     {
-                        if (_presenter.CurrentCashPaymentRequest.CurrentApproverPosition == AL.EmployeePosition.Id)
+                        if (_presenter.CurrentCashPaymentRequest.CurrentApproverPosition == AL.EmployeePosition.Id && AL.WorkflowLevel == _presenter.CurrentCashPaymentRequest.CurrentLevel)
                         {
                             will = AL.Will;
+                            break;
                         }
                     }
                 }
@@ -190,23 +201,30 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void BindAccounts()
         {
-            if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses.Count == _presenter.CurrentCashPaymentRequest.CurrentLevel && (_presenter.CurrentUser().EmployeePosition.PositionName == "Finance Officer" || _presenter.GetUser(_presenter.CurrentCashPaymentRequest.CurrentApprover).IsAssignedJob == true))
+            if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses.Count == _presenter.CurrentCashPaymentRequest.CurrentLevel && (_presenter.CurrentUser().EmployeePosition.PositionName == "Accountant"))
             {
                 lblAccount.Visible = true;
                 lblAccountdd.Visible = true;
             }
-
-
         }
-        private void BindProject(DropDownList ddlProject)
+        private void BindProgram(DropDownList ddlProgram)
         {
-            ddlProject.DataSource = _presenter.ListProjects();
+            ddlProgram.DataSource = _presenter.GetPrograms();
+            ddlProgram.DataValueField = "Id";
+            ddlProgram.DataTextField = "ProgramName";
+            ddlProgram.DataBind();
+        }
+        private void BindProject(DropDownList ddlProject, int programID)
+        {
+            ddlProject.Items.Clear();
+            ddlProject.DataSource = _presenter.ListProjects(programID);
             ddlProject.DataValueField = "Id";
             ddlProject.DataTextField = "ProjectCode";
             ddlProject.DataBind();
         }
         private void BindGrant(DropDownList ddlGrant, int ProjectId)
         {
+            ddlGrant.Items.Clear();
             ddlGrant.DataSource = _presenter.GetGrantbyprojectId(ProjectId);
             ddlGrant.DataValueField = "Id";
             ddlGrant.DataTextField = "GrantCode";
@@ -245,9 +263,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
             else
             {
-                foreach(AppUser Payer in _presenter.GetAppUsersByEmployeePosition(CPRS.ApproverPosition))
+                foreach (AppUser Payer in _presenter.GetAppUsersByEmployeePosition(CPRS.ApproverPosition))
                 {
-                    if(Payer.IsAssignedJob != true)
+                    if (Payer.IsAssignedJob != true)
                     {
                         EmailSender.Send(Payer.Email, "Payment Approval", (_presenter.CurrentCashPaymentRequest.AppUser.FullName).ToUpper() + " Requests for Payment with Request No. " + (_presenter.CurrentCashPaymentRequest.RequestNo).ToUpper());
                     }
@@ -267,7 +285,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 for (int i = 0; i + 1 < CPRS.WorkflowLevel; i++)
                 {
-                    EmailSender.Send(_presenter.GetUser(_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses[i].Approver).Email, "Payment Request Rejection", "Payment Request with Voucher No. " + (_presenter.CurrentCashPaymentRequest.VoucherNo).ToUpper()+ " made by " + (_presenter.GetUser(_presenter.CurrentCashPaymentRequest.AppUser.Id).FullName).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (CPRS.RejectedReason).ToUpper() + "'");
+                    EmailSender.Send(_presenter.GetUser(_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses[i].Approver).Email, "Payment Request Rejection", "Payment Request with Voucher No. " + (_presenter.CurrentCashPaymentRequest.VoucherNo).ToUpper() + " made by " + (_presenter.GetUser(_presenter.CurrentCashPaymentRequest.AppUser.Id).FullName).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (CPRS.RejectedReason).ToUpper() + "'");
                 }
             }
         }
@@ -381,9 +399,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             if (fileName != String.Empty)
             {
-
-
-
                 CPRAttachment attachment = new CPRAttachment();
                 attachment.FilePath = "~/CPUploads/" + fileName;
                 fuReciept.PostedFile.SaveAs(Server.MapPath("~/CPUploads/") + fileName);
@@ -392,12 +407,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
                 grvAttachments.DataSource = _presenter.CurrentCashPaymentRequest.CPRAttachments;
                 grvAttachments.DataBind();
-
-
             }
             else
             {
-                Master.ShowMessage(new AppMessage("Please select file ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Please select file ", RMessageType.Error));
             }
         }
         protected void DownloadFile(object sender, EventArgs e)
@@ -491,11 +504,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     ShowPrint();
                     if (ddlApprovalStatus.SelectedValue != "Rejected")
                     {
-                        Master.ShowMessage(new AppMessage("Payment Approval Processed", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                        Master.ShowMessage(new AppMessage("Payment Approval Processed", RMessageType.Info));
                     }
                     else
                     {
-                        Master.ShowMessage(new AppMessage("Payment Approval Rejected", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                        Master.ShowMessage(new AppMessage("Payment Approval Rejected", RMessageType.Info));
                     }
 
                     btnApprove.Enabled = false;
@@ -506,7 +519,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
             catch (Exception ex)
             {
-
+                Master.ShowMessage(new AppMessage(ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         private void PrintTransaction()
@@ -518,7 +533,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 lblPayeeResult.Text = _presenter.CurrentCashPaymentRequest.Supplier.SupplierName.ToString() != null ? _presenter.CurrentCashPaymentRequest.Supplier.SupplierName.ToString() : "";
             }
-            
+
             lblVoucherNoResult.Text = _presenter.CurrentCashPaymentRequest.VoucherNo;
             lblTotalAmountResult.Text = _presenter.CurrentCashPaymentRequest.TotalAmount.ToString();
             lblApprovalStatusResult.Text = _presenter.CurrentCashPaymentRequest.ProgressStatus.ToString();
@@ -571,12 +586,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails != null)
                 {
-                    //For the last level (usually the finance officer) only allow editing of the accounts 
+                    //For the last level (usually for the accountant) only allow editing of the accounts 
                     if ((_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses.Count == _presenter.CurrentCashPaymentRequest.CurrentLevel) && (_presenter.CurrentUser().Id == _presenter.CurrentCashPaymentRequest.CurrentApprover))
                     {
                         TextBox txtEdtAmount = e.Item.FindControl("txtEdtAmount") as TextBox;
                         if (txtEdtAmount != null)
                             txtEdtAmount.ReadOnly = true;
+                        DropDownList ddlEditProgram = e.Item.FindControl("ddlEdtProgram") as DropDownList;
+                        if (ddlEditProgram != null)
+                            ddlEditProgram.Enabled = false;
                         DropDownList ddlEditProject = e.Item.FindControl("ddlEdtProject") as DropDownList;
                         if (ddlEditProject != null)
                             ddlEditProject.Enabled = false;
@@ -585,10 +603,22 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                             ddlEditGrant.Enabled = false;
                     }
 
+                    DropDownList ddlProgram = e.Item.FindControl("ddlEdtProgram") as DropDownList;
+                    if (ddlProgram != null)
+                    {
+                        BindProgram(ddlProgram);
+                        if (_presenter.CurrentCashPaymentRequest.Program != null)
+                        {
+                            ListItem liI = ddlProgram.Items.FindByValue(_presenter.CurrentCashPaymentRequest.Program.Id.ToString());
+                            if (liI != null)
+                                liI.Selected = true;
+                        }
+                    }
+
                     DropDownList ddlProject = e.Item.FindControl("ddlEdtProject") as DropDownList;
                     if (ddlProject != null)
                     {
-                        BindProject(ddlProject);
+                        BindProject(ddlProject, Convert.ToInt32(ddlProgram.SelectedValue));
                         if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[e.Item.DataSetIndex].Project.Id != 0)
                         {
                             ListItem liI = ddlProject.Items.FindByValue(_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[e.Item.DataSetIndex].Project.Id.ToString());
@@ -680,6 +710,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             DropDownList ddl = (DropDownList)sender;
             DropDownList ddlEdtGrant = ddl.FindControl("ddlEdtGrant") as DropDownList;
             BindGrant(ddlEdtGrant, Convert.ToInt32(ddl.SelectedValue));
+            pnlDetail_ModalPopupExtender.Show();
+        }
+        protected void ddlEdtProgram_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DropDownList ddl = (DropDownList)sender;
+            DropDownList ddlEdtProject = ddl.FindControl("ddlEdtProject") as DropDownList;
+            BindProject(ddlEdtProject, Convert.ToInt32(ddl.SelectedValue));
             pnlDetail_ModalPopupExtender.Show();
         }
         protected void btnCancel_Click(object sender, EventArgs e)

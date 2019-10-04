@@ -178,6 +178,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (CPRS.ApprovalStatus == null)
                     {
+                        if (CPRS.Approver == 0)
+                        {
+                            //This is to handle multiple Finance Officers responding to this request
+                            //SendEmailToFinanceOfficers;
+                            CurrentCashPaymentRequest.CurrentApproverPosition = CPRS.ApproverPosition;
+                        }
                         SendEmail(CPRS);
                         CurrentCashPaymentRequest.CurrentApprover = CPRS.Approver;
                         CurrentCashPaymentRequest.CurrentLevel = CPRS.WorkflowLevel;
@@ -198,6 +204,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             cashPaymentRequest.RequestDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
             cashPaymentRequest.Description = View.GetDescription;
             cashPaymentRequest.AmountType = View.GetAmountType;
+            cashPaymentRequest.RequestType = View.GetRequestType;
+            cashPaymentRequest.Program = _settingController.GetProgram(View.GetProgram);
             cashPaymentRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
             cashPaymentRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
             //Check if the Payee is the logged in employee or a supplier
