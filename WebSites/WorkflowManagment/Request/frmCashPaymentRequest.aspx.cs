@@ -451,7 +451,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails.Count != 0)
                 {
-                    if ((ddlAmountType.SelectedValue == "Advanced" || ddlAmountType.SelectedValue == "Actual Amount") && _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[0].CPRAttachments.Count != 0)
+                    if ((ddlAmountType.SelectedValue == "Advanced" || ddlAmountType.SelectedValue == "Actual Amount") && CheckReceiptsAttached())
                     {
                         _presenter.SaveOrUpdateCashPaymentRequest();
                         BindCashPaymentRequests();
@@ -537,6 +537,32 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             BindCashPaymentDetails();
         }
         #region Attachments
+        protected bool CheckReceiptsAttached()
+        {
+            int numAttachedReceipts = 0;
+            int numChecklists = 0;
+            foreach (CashPaymentRequestDetail detail in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
+            {
+                foreach (CPRAttachment attachment in detail.CPRAttachments)
+                {
+                    if (attachment.FilePath != null)
+                    {
+                        numAttachedReceipts++;
+                    }
+                }
+            }
+            foreach (CashPaymentRequestDetail detail in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
+            {
+                foreach (ItemAccountChecklist checklist in detail.ItemAccount.ItemAccountChecklists)
+                {
+                    numChecklists++;
+                }
+            }
+            if (numAttachedReceipts == numChecklists)
+                return true;
+            else
+                return false;
+        }
         protected void btnUpload_Click(object sender, EventArgs e)
         {
             Button uploadBtn = (Button)sender;
