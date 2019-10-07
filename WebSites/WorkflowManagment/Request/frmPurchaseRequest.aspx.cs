@@ -550,6 +550,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     Detail.Project = _presenter.GetProject(int.Parse(ddlFProject.SelectedValue));
                     DropDownList ddlFGrant = e.Item.FindControl("ddlFGrant") as DropDownList;
                     Detail.Grant = _presenter.GetGrant(int.Parse(ddlFGrant.SelectedValue));
+                    Detail.BidAnalysisRequestStatus = "InProgress";
                     Detail.PurchaseRequest = _presenter.CurrentPurchaseRequest;
                     _presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Add(Detail);
                     Master.ShowMessage(new AppMessage("Purchase Request Detail added successfully.", RMessageType.Info));

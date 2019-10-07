@@ -5,68 +5,73 @@ using System.Text;
 
 namespace Chai.WorkflowManagment.CoreDomain.Setting
 {
-    public partial class ApprovalSetting : IEntity 
+    public partial class ApprovalSetting : IEntity
     {
 
-       public ApprovalSetting()
+        public ApprovalSetting()
         {
             this.ApprovalLevels = new List<ApprovalLevel>();
         }
-       public int Id { get; set; }
-       public string RequestType { get; set; }
-       public string CriteriaCondition { get; set; }
-       public int Value { get; set; }
-       public Nullable<int> Value2 { get; set; }
-       public string CriteriaQuery { get; set; }
-       public Nullable<int> ApprovalLevel { get; set; }
-       public virtual IList<ApprovalLevel> ApprovalLevels { get; set; }
+        public int Id { get; set; }
+        public string RequestType { get; set; }
+        public string CriteriaCondition { get; set; }
+        public int Value { get; set; }
+        public Nullable<int> Value2 { get; set; }
+        public string CriteriaQuery { get; set; }
+        public Nullable<int> ApprovalLevel { get; set; }
+        public virtual IList<ApprovalLevel> ApprovalLevels { get; set; }
 
-       public virtual ApprovalLevel GetApprovalLevel(int Id)
-       {
+        public virtual int GetApprovalLevelCount()
+        {
+            return ApprovalLevels.Count;
+        }
 
-           foreach (ApprovalLevel pr in ApprovalLevels)
-           {
-               if (pr.Id == Id)
-                   return pr;
+        public virtual ApprovalLevel GetApprovalLevel(int Id)
+        {
 
-           }
-           return null;
-       }
-       public virtual IList<ApprovalLevel> GetApprovalLevelByApprovalId(int ApprovalId)
-       {
-           IList<ApprovalLevel> ApprovalLevels = new List<ApprovalLevel>();
-           foreach (ApprovalLevel AR in ApprovalLevels)
-           {
-               if (AR.ApprovalSetting.Id == ApprovalId)
-                   ApprovalLevels.Add(AR);
+            foreach (ApprovalLevel pr in ApprovalLevels)
+            {
+                if (pr.Id == Id)
+                    return pr;
 
-           }
-           return ApprovalLevels;
-       }
-       public virtual void RemoveApprovalLevel(int Id)
-       {
+            }
+            return null;
+        }
+        public virtual IList<ApprovalLevel> GetApprovalLevelByApprovalId(int ApprovalId)
+        {
+            IList<ApprovalLevel> ApprovalLevels = new List<ApprovalLevel>();
+            foreach (ApprovalLevel AR in ApprovalLevels)
+            {
+                if (AR.ApprovalSetting.Id == ApprovalId)
+                    ApprovalLevels.Add(AR);
 
-           foreach (ApprovalLevel AL in ApprovalLevels)
-           {
-               if (AL.Id == Id)
-                   ApprovalLevels.Remove(AL);
-               break;
-           }
+            }
+            return ApprovalLevels;
+        }
+        public virtual void RemoveApprovalLevel(int Id)
+        {
 
-       }
-       public virtual bool IsEmployeePositionExist(int PositionId)
-       {
-           bool result = false;
-           foreach (ApprovalLevel isDetail in ApprovalLevels)
-           {
-               if (isDetail.EmployeePosition.Id == PositionId)
-               {
-                   result = true;
-                   break;
-               }
-           }
-           return result;
-       }
+            foreach (ApprovalLevel AL in ApprovalLevels)
+            {
+                if (AL.Id == Id)
+                    ApprovalLevels.Remove(AL);
+                break;
+            }
+
+        }
+        public virtual bool IsEmployeePositionExist(int PositionId)
+        {
+            bool result = false;
+            foreach (ApprovalLevel isDetail in ApprovalLevels)
+            {
+                if (isDetail.EmployeePosition.Id == PositionId)
+                {
+                    result = true;
+                    break;
+                }
+            }
+            return result;
+        }
 
     }
 }

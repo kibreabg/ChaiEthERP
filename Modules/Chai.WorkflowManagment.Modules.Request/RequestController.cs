@@ -418,9 +418,43 @@ namespace Chai.WorkflowManagment.Modules.Request
         {
             return WorkspaceFactory.CreateReadOnly().Query<PurchaseRequest>(null).ToList();
         }
+
+      
+        public IList<PurchaseRequestDetail> ListPurchaseReqInProgress()
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM PurchaseRequestDetails INNER JOIN PurchaseRequests on PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id  Where PurchaseRequestDetails.BidAnalysisRequestStatus = 'InProgress'  order by PurchaseRequests.Id Desc ";
+
+            return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
+
+        }
+        public IList<PurchaseRequestDetail> ListPurchaseReqInProgressById(int ReqId)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM PurchaseRequestDetails INNER JOIN PurchaseRequests on PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id  Where 1 = Case when '" + ReqId + "' = '' Then 1 When PurchaseRequests.Id = '" + ReqId + "'  Then 1 END  order by PurchaseRequests.Id Desc ";
+
+            return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
+
+        }
+        public IList<PurchaseRequestDetail> ListPurchaseReqById(int Id)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM PurchaseRequestDetails INNER JOIN PurchaseRequests on PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id  Where 1 = Case when '" + Id + "' = '' Then 1 When PurchaseRequestDetails.Id = '" + Id + "'  Then 1 END  order by PurchaseRequestDetails.Id Desc ";
+
+            return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
+
+        }
         public PurchaseRequest GetPurchaseRequest(int PurchaseRequestId)
         {
             return _workspace.Single<PurchaseRequest>(x => x.Id == PurchaseRequestId, x => x.PurchaseRequestDetails.Select(y => y.ItemAccount), x => x.PurchaseRequestDetails.Select(z => z.Project));
+        }
+
+        public PurchaseRequest GetPurchaseRequestbyPuID(int PurchaseRequestId)
+        {
+            return _workspace.Single<PurchaseRequest>(x => x.Id == PurchaseRequestId);
         }
         public PurchaseRequestDetail GetPurchaseRequestDetail(int PurchaseRequestDetailId)
         {
@@ -526,9 +560,12 @@ namespace Chai.WorkflowManagment.Modules.Request
             else { return 0; }
         }
 
-      
-      
-        
+        public Bidder GetBidder(int id)
+        {
+            return _workspace.Single<Bidder>(x => x.Id == id);
+        }
+
+
 
         #endregion
         #region Employee

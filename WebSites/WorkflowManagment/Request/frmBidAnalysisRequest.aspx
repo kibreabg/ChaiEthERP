@@ -5,15 +5,15 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 
 <asp:Content ID="Content" ContentPlaceHolderID="DefaultContent" runat="Server">
-      <script src="../js/libs/jquery-2.0.2.min.js"></script>
-     <script type="text/javascript">
-           
+    <script src="../js/libs/jquery-2.0.2.min.js"></script>
+    <script type="text/javascript">
+
         function showSearch() {
             $(document).ready(function () {
                 $('#searchModal').modal('show');
             });
         }
-       
+
         function Clickheretoprint(theid) {
             var disp_setting = "toolbar=yes,location=no,directories=yes,menubar=yes,";
             disp_setting += "scrollbars=yes,width=750, height=600, left=100, top=25";
@@ -29,8 +29,8 @@
             docprint.focus();
         }
     </script>
-    
-  <%--  <asp:ValidationSummary ID="VSBid" runat="server"
+
+    <%--  <asp:ValidationSummary ID="VSBid" runat="server"
         CssClass="alert alert-danger fade in" DisplayMode="SingleParagraph"
         ValidationGroup="Save" ForeColor="" />
     <asp:ValidationSummary ID="VSBidder" runat="server"
@@ -45,119 +45,140 @@
             <span class="widget-icon"><i class="fa fa-edit"></i></span>
             <h2>BID ANALYSIS WORKSHEET</h2>
         </header>
+        <%--<div>
+            <!-- widget edit box -->
+            <div class="jarviswidget-editbox">
+                <!-- This area used as dropdown edit box -->
+            </div>
+            <!-- end widget edit box -->
+            <!-- widget content -->
+            <div class="widget-body no-padding">--%>
         <div class="smart-form">
-                    <fieldset>
-         <table style="width: 100%;">
-
-            
-            <tr>
-                <td style="width: 576px; height: 18px; ">
-                    <strong>
-                        <asp:Label ID="lblPurRequestNo" runat="server" Text="Pucrchase Request No:"></asp:Label>
-                    </strong></td>
-                <td style="width: 490px" class="modal-sm">
-                    <asp:Label ID="lblPurRequestNoResult" runat="server"></asp:Label>
-                </td>
-
-               <td style="width: 576px; height: 18px; ">
-                    <strong>
-                        <asp:Label ID="lblpurRequester" runat="server" Text="Requested By:"></asp:Label>
-                    </strong></td>
-                <td style="width: 490px" class="modal-sm">
-                    <asp:Label ID="lblPurrequesterres" runat="server"></asp:Label>
-                </td>
-          
-                <td style="width: 576px; height: 18px; ">
-                    <strong>
-                        <asp:Label ID="lblRequestedDate" runat="server" Text="Requested Date:"></asp:Label>
-                    </strong></td>
-                <td style="width: 490px" class="modal-sm">
-                    <asp:Label ID="lblRequestedDateResult" runat="server"></asp:Label>
-                </td>
-               
-            </tr></table> </fieldset></div>
-             <asp:GridView ID="grvDetails"
+            <fieldset>
+                <section class="col col-4">
+                    <label id="lblPurchaseReq" runat="server" class="label" visible="true">
+                        Purchase Request
+                    </label>
+                    <label class="select">
+                        <asp:DropDownList ID="ddlPurchaseReq" AutoPostBack="true" runat="server" DataValueField="Id" DataTextField="RequestNo" OnSelectedIndexChanged="ddlPurchaseReq_SelectedIndexChanged">
+                        </asp:DropDownList><i></i>
+                    </label>
+                </section>
+            </fieldset>
+            <asp:GridView ID="grvDetails"
                 runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                CssClass="table table-striped table-bordered table-hover">
+                CssClass="table table-striped table-bordered table-hover" OnSelectedIndexChanged="grvDetails_SelectedIndexChanged">
                 <RowStyle CssClass="rowstyle" />
                 <Columns>
                     <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="AccountName" SortExpression="ItemAccount.AccountName" />
                     <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
+                    <asp:BoundField DataField="Item" HeaderText="Item Description" SortExpression="Item"></asp:BoundField>
                     <asp:BoundField DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
-                   
-                    <asp:BoundField DataField="Project.ProjectCode" HeaderText="Project Code" />
-                    <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant Code" />
+                    <%--<asp:BoundField DataField="Project.ProjectCode" HeaderText="Project Code" />
+                    <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant Code" />     --%>
+                    <asp:CommandField ShowSelectButton="True" />
                 </Columns>
                 <FooterStyle CssClass="FooterStyle" />
                 <HeaderStyle CssClass="headerstyle" />
                 <PagerStyle CssClass="PagerStyle" />
                 <RowStyle CssClass="rowstyle" />
-              </asp:GridView>
-        <!-- widget div-->
-        <div>
+            </asp:GridView>
 
-            <!-- widget edit box -->
-            <div class="jarviswidget-editbox">
-                <!-- This area used as dropdown edit box -->
+            <asp:Panel ID="pnlInfo" runat="server">
+                <div class="alert alert-info fade in">
+                    <button class="close" data-dismiss="alert">
+                        ×
+                    </button>
+                    <i class="fa-fw fa fa-info"></i>
+                    <strong>Info!</strong> Please select the Purchase Request Transaction to perform Bid Analysis
+                </div>
+            </asp:Panel>
+        </div>
+    </div>
+    <!-- widget div-->
 
-            </div>
-            <!-- end widget edit box -->
 
-            <!-- widget content -->
+    <!-- widget edit box -->
+    <div class="jarviswidget-editbox">
+        <!-- This area used as dropdown edit box -->
+
+    </div>
+    <!-- end widget edit box -->
+
+    <!-- widget content -->
+    <div id="wid-id-1" class="jarviswidget" data-widget-custombutton="false" data-widget-editbutton="false">
+        <div class="smart-form">
             <div class="widget-body no-padding">
-                <div class="smart-form">
-                    <fieldset>
-
-                        <div class="row">
+               
+                    
+                
+         
+                         <div class="row">
                            
                             <section class="col col-4">
                                 <label class="label">
-                                    Requester</label>
-                                <label class="input">
-                                    <asp:TextBox ID="txtRequester" runat="server" Visible="true"></asp:TextBox>
+                                   Purchase Requester</label>
+                                <label class="label">
+                                     <asp:Label ID="lblPurReqRequester" runat="server"></asp:Label>
                                 </label>
                             </section>
                              
                             <section class="col col-4">
+                                <label id="Label2" runat="server" class="label" visible="true">
+                                   Purchase Request No</label>
+                                <label class="label">
+                                     <asp:Label ID="lblPurchaseReqNo" runat="server"></asp:Label>
+                                </label>
+                            </section>
+                           
+                            <section class="col col-4">
+                                <label class="label">
+                                    Purchase Requested Date</label>
+                                <label class="label">
+                                 
+                                      <asp:Label ID="lblRequestedDate" runat="server"></asp:Label>
+                                </label>
+                            </section>
+                        </div>
+                        <div class="row">
+                           
+                           
+                             
+                            <section class="col col-4">
                                 <label id="lblRequestDate" runat="server" class="label" visible="true">
-                                   Purchase Requested Date</label>
+                                   Bid Analysis Requested Date</label>
                                 <label class="input">
                                     <i class="icon-append fa fa-calendar"></i>
                                     <asp:TextBox ID="txtRequestDate" runat="server" Visible="true" CssClass="form-control datepicker" Enabled="False"></asp:TextBox>
                                 </label>
                             </section>
-                           
                             <section class="col col-4">
-                                <label class="label">
-                                     Date</label>
+                                <label class="label">Total Price </label>
                                 <label class="input">
-                                    <i class="icon-append fa fa-calendar"></i>
-                                    <asp:TextBox ID="txtAnalyzedDate" runat="server" Visible="true" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" Enabled="False"></asp:TextBox>
-                                    <asp:RequiredFieldValidator ID="RfvAnalyzedDate" runat="server" CssClass="validator" ControlToValidate="txtAnalyzedDate" ErrorMessage="Analyzed Date Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Save">*</asp:RequiredFieldValidator>
+                                    <asp:TextBox ID="txtTotal" ReadOnly="true" runat="server"></asp:TextBox>
+                                </label>
+                            </section> 
+                             <section class="col col-4">
+                                <label class="label">
+                                  Bid Analysis Requester</label>
+                                <label class="input">
+                                    <asp:TextBox ID="txtRequester" runat="server" Visible="true"></asp:TextBox>
                                 </label>
                             </section>
                         </div>
-                          <%-- <div class="row">                            
-                            <section class="col col-6">
+                         
+                            <div class="row">
                             
-                             
-                                <asp:GridView ID="GridView1" runat="server" HorizontalAlign="Left" Width="430px" DataKeyNames="Id"   CssClass="table table-striped table-bordered table-hover" AutoGenerateColumns="False">
-                <RowStyle CssClass="rowstyle" />  
-                                    <Columns>
-                                        <asp:BoundField DataField="PurchaseRequest.ConditionsofOrder" HeaderText="Item Description" />
-                                       
-                                    </Columns>
-               
-                <FooterStyle CssClass="FooterStyle" />
-                <HeaderStyle CssClass="headerstyle" />
-                <PagerStyle CssClass="PagerStyle" />
-                <RowStyle CssClass="rowstyle" />
-               
-                             </asp:GridView>
-                              </section>
-                           </div>--%>
-                          <div class="row">                            
-                            <section class="col col-6">
+                        
+                             <section class="col col-4">
+                                <label class="label">
+                                    Reason for Selecting Supplier</label>
+                                <label class="input">
+                                    <asp:TextBox ID="txtselectionfor" runat="server" Visible="true"></asp:TextBox>
+                                </label>
+                                 <asp:RequiredFieldValidator ID="Rfvreasons" runat="server" CssClass="validator" ControlToValidate="txtselectionfor" ErrorMessage="Reason For Selection Required" ValidationGroup="Save">*</asp:RequiredFieldValidator>
+                            </section>
+                         <section class="col col-4">
                                 <label class="label">Project</label>
                                 <label class="select">
                                     <asp:DropDownList ID="ddlProject" AutoPostBack="true" runat="server" DataValueField="Id" DataTextField="ProjectCode" OnSelectedIndexChanged="ddlProject_SelectedIndexChanged">
@@ -168,7 +189,7 @@
                                         SetFocusOnError="true" ControlToValidate="ddlProject"></asp:RequiredFieldValidator>
                                 </label>
                             </section>
-                             <section class="col col-6">
+                            <section class="col col-4">
                                 <label class="label">Grant</label>
                                 <label class="select">
                                     <asp:DropDownList ID="ddlGrant" runat="server" DataValueField="Id" DataTextField="GrantCode">
@@ -179,35 +200,15 @@
                                         SetFocusOnError="true" ControlToValidate="ddlGrant"></asp:RequiredFieldValidator>
                                 </label>
                             </section>
+                      
+                           
                         </div>
-                        <div class="row">
-                         
+                       
+                        
                             
-                             <section class="col col-4">
-                                <label class="label">
-                                    Special Need</label>
-                                <label class="input">
-                                    <asp:TextBox ID="txtSpecialNeed" runat="server" Visible="true"></asp:TextBox>
-                                </label>
-                            </section>
-                             <section class="col col-8">
-                                <label class="label">
-                                    Reason for Selecting Supplier</label>
-                                <label class="input">
-                                    <asp:TextBox ID="txtselectionfor" runat="server" Visible="true"></asp:TextBox>
-                                </label>
-                                 <asp:RequiredFieldValidator ID="Rfvreasons" runat="server" CssClass="validator" ControlToValidate="txtselectionfor" ErrorMessage="Reason For Selection Required" ValidationGroup="Save">*</asp:RequiredFieldValidator>
-                            </section>
-                        </div>
-                       <div class="row">
-                           <section class="col col-6">
-                                <label class="label">Total Price </label>
-                                <label class="input">
-                                    <asp:TextBox ID="txtTotal" ReadOnly="true" runat="server"></asp:TextBox>
-                                </label>
-                            </section>                  
-                           </div>
-           </fieldset>
+                                           
+                         
+           
                     <div class="tab-content">
                     <div class="tab-pane active" id="hr2">
 
@@ -226,14 +227,14 @@
                     
                                 <asp:DataGrid ID="dgItemDetail" runat="server" CellPadding="0"
                             CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id" AutoGenerateColumns="False"
-                            GridLines="None"  ShowFooter="True" OnCancelCommand="dgItemDetail_CancelCommand" OnDeleteCommand="dgItemDetail_DeleteCommand" OnItemCommand="dgItemDetail_ItemCommand" OnUpdateCommand="dgItemDetail_UpdateCommand" OnEditCommand="dgItemDetail_EditCommand1" OnItemDataBound="dgItemDetail_ItemDataBound1" OnSelectedIndexChanged="dgItemDetail_SelectedIndexChanged">
+                            GridLines="None"  ShowFooter="True" OnCancelCommand="dgItemDetail_CancelCommand" OnDeleteCommand="dgItemDetail_DeleteCommand" OnItemCommand="dgItemDetail_ItemCommand" OnUpdateCommand="dgItemDetail_UpdateCommand" OnEditCommand="dgItemDetail_EditCommand1"  OnSelectedIndexChanged="dgItemDetail_SelectedIndexChanged">
 
                             <Columns>
                                
                                
                                 <asp:BoundColumn DataField="ItemDescription" HeaderText="Item Description" SortExpression="ItemDescription"></asp:BoundColumn>
                                  <asp:BoundColumn DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
-                               
+                              
                                
                                     <asp:ButtonColumn ButtonType="PushButton" CommandName="Select" Text="Bidders"></asp:ButtonColumn>
                                
@@ -282,7 +283,7 @@
                     </div>
                  </div>
                 </div>
-                    <br />
+                    <br /></div>
                     <footer>
                          <asp:Button ID="btnSave" runat="server" Text="Request" OnClick="btnSave_Click" CausesValidation="true" ValidationGroup="save" CssClass="btn btn-primary"></asp:Button>
                        <%-- <asp:Button ID="btnRequest" runat="server" CssClass="btn btn-primary" OnClick="btnRequest_Click" Text="Request" ValidationGroup="Save" />--%>
@@ -294,11 +295,11 @@
                            <asp:HiddenField ID="hfDetailId" runat="server" />
                     </footer>
 
-                </div>
-            </div>
+    </div>
+    </div>
             <!-- end widget content -->
-
-        </div>
+    
+       
 
         <!-- end widget div -->
         <div id="divprint" style="display: none;" visible="true">
@@ -405,12 +406,9 @@
                 CssClass="table table-striped table-bordered table-hover">
                 <RowStyle CssClass="rowstyle" />
                 <Columns>
-                    <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="Requested Items" SortExpression="ItemAccount.AccountName" />
-                    <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="AccountCode" />
-                    <asp:BoundField DataField="ItemDescription" HeaderText="Item Description" SortExpression="ItemDescription" />
-                    <asp:BoundField DataField="UnitCost" HeaderText="Unit Cost" SortExpression="UnitCost" />                    
-                    <asp:BoundField DataField="TotalCost" HeaderText="Total" SortExpression="TotalCost" />
-                    <asp:BoundField DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
+                                      
+                    <asp:BoundField DataField="Item" HeaderText="Item Description" SortExpression="Item" />
+                     <asp:BoundField DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
                 </Columns>
                 <FooterStyle CssClass="FooterStyle" />
                 <HeaderStyle CssClass="headerstyle" />
@@ -433,7 +431,7 @@
                 <RowStyle CssClass="rowstyle" />
             </asp:GridView><br /> </fieldset>
         </div>
-    </div>
+   
     <div class="modal fade" id="searchModal" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -514,7 +512,7 @@
 
                <asp:DataGrid ID="dgBidders" runat="server" AutoGenerateColumns="False" CellPadding="0"
                         CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
-                        ShowFooter="True" GridLines="None" Height="30px" OnSelectedIndexChanged="dgBidders_SelectedIndexChanged" OnUpdateCommand="dgBidders_UpdateCommand" OnCancelCommand="dgBidders_CancelCommand1" OnDeleteCommand="dgBidders_DeleteCommand1" OnItemCommand="dgBidders_ItemCommand1" OnItemDataBound="dgBidders_ItemDataBound1">
+                        ShowFooter="True" GridLines="None" Height="30px" OnSelectedIndexChanged="dgBidders_SelectedIndexChanged" OnUpdateCommand="dgBidders_UpdateCommand" OnCancelCommand="dgBidders_CancelCommand1" OnDeleteCommand="dgBidders_DeleteCommand1" OnItemCommand="dgBidders_ItemCommand1" OnItemDataBound="dgBidders_ItemDataBound1" OnEditCommand="dgBidders_EditCommand">
                     
 
                         <Columns>

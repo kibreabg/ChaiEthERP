@@ -101,6 +101,29 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
             }
             return LRS;
         }
+        public virtual IList<PurchaseRequestDetail> GetPurchaseReqDetails(int PurchaseRequestId)
+        {
+            IList<PurchaseRequestDetail> LRS = new List<PurchaseRequestDetail>();
+            if (PurchaseRequestId != 0)
+            {
+                foreach (PurchaseRequestDetail AR in PurchaseRequestDetails)
+                {
+                    if (AR.BidAnalysisRequestStatus == "InProgress" && AR.PurchaseRequest.Id == PurchaseRequestId)
+                        LRS.Add(AR);
+
+                }
+                return LRS;
+            }
+            else
+                foreach (PurchaseRequestDetail AR in PurchaseRequestDetails)
+                {
+                    if (AR.BidAnalysisRequestStatus == "InProgress")
+                        LRS.Add(AR);
+
+                }
+            return LRS;
+           
+        }
         public virtual void RemovePurchaseRequestDetail(int Id)
         {
 

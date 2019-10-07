@@ -381,6 +381,18 @@
                                                         <asp:TextBox ID="txtEdtAmount" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "Amount")%>'></asp:TextBox>
                                                     </EditItemTemplate>
                                                 </asp:TemplateColumn>
+                                                <asp:TemplateColumn HeaderText="Program">
+                                                    <ItemTemplate>
+                                                        <%# DataBinder.Eval(Container.DataItem, "CashPaymentRequest.Program.ProgramName")%>
+                                                    </ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <asp:DropDownList ID="ddlEdtProgram" CssClass="form-control" runat="server" AutoPostBack="true" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlEdtProgram_SelectedIndexChanged">
+                                                            <asp:ListItem Value="0">Select Program</asp:ListItem>
+                                                        </asp:DropDownList>
+                                                        <i></i>
+                                                        <asp:RequiredFieldValidator ID="rfvddlEdtProgram" runat="server" ControlToValidate="ddlEdtProgram" CssClass="validator" Display="Dynamic" ErrorMessage="Program must be selected" InitialValue="0" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                                    </EditItemTemplate>
+                                                </asp:TemplateColumn>
                                                 <asp:TemplateColumn HeaderText="Project ID">
                                                     <ItemTemplate>
                                                         <%# DataBinder.Eval(Container.DataItem, "Project.ProjectCode")%>

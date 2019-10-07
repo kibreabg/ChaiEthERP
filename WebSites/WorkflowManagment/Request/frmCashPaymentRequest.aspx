@@ -41,14 +41,6 @@
                         </div>
                         <div class="row">
                             <section class="col col-6">
-                                <label class="label">Payee</label>
-                                <label class="select">
-                                    <asp:DropDownList ID="ddlPayee" runat="server" DataTextField="SupplierName" AppendDataBoundItems="true" DataValueField="Id">
-                                        <asp:ListItem Value="0">Select Payee</asp:ListItem>
-                                    </asp:DropDownList><i></i>
-                                </label>
-                            </section>
-                            <section class="col col-6">
                                 <label class="label">Request Type</label>
                                 <label class="select">
                                     <asp:DropDownList ID="ddlRequestType" runat="server">
@@ -59,6 +51,14 @@
                                 </label>
                                 <asp:RequiredFieldValidator ID="rfvPaymentType" runat="server" ControlToValidate="ddlRequestType" CssClass="validator" Display="Dynamic" ErrorMessage="Select Request Type" SetFocusOnError="true" ValidationGroup="request"></asp:RequiredFieldValidator>
                             </section>
+                            <section class="col col-6">
+                                <label class="label">Payee</label>
+                                <label class="select">
+                                    <asp:DropDownList ID="ddlPayee" runat="server" DataTextField="SupplierName" AppendDataBoundItems="true" DataValueField="Id">
+                                        <asp:ListItem Value="0">Select Payee</asp:ListItem>
+                                    </asp:DropDownList><i></i>
+                                </label>
+                            </section>
                         </div>
                         <div class="row">
                             <section class="col col-6">
@@ -66,7 +66,7 @@
                                 <label class="select">
                                     <asp:DropDownList ID="ddlAmountType" runat="server">
                                         <asp:ListItem Value="">Select Amount Type</asp:ListItem>
-                                        <asp:ListItem>Estimated Amount</asp:ListItem>
+                                        <asp:ListItem>Advanced</asp:ListItem>
                                         <asp:ListItem>Actual Amount</asp:ListItem>
                                     </asp:DropDownList><i></i>
                                 </label>

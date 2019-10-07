@@ -24,6 +24,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         private SettingController _settingController;
         private BidAnalysisRequest _bidAnalysisRequest;
         private decimal Totalamount = 0;
+        private PurchaseRequest _PurchaseRequest;
         public BidAnalysisRequestPresenter([CreateNew] RequestController controller, AdminController adminController, SettingController settingController)
         {
             _controller = controller;
@@ -37,6 +38,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 _controller.CurrentObject = _controller.GetBidAnalysisRequest(View.GetBARequestId);
             }
             CurrentBidAnalysisRequest = _controller.CurrentObject as BidAnalysisRequest;
+
         }
 
         public override void OnViewInitialized()
@@ -117,9 +119,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     }
                     else if (AL.EmployeePosition.PositionName == "Program Manager")
                     {
-                        if (CurrentBidAnalysisRequest.Project.Id != 0)
+                       if(_bidAnalysisRequest.PurchaseRequest.PurchaseRequestDetails[0].Id != 0)
+                        //if (CurrentBidAnalysisRequest.Project.Id != 0)
                         {
-                            BARS.Approver = GetProject(CurrentBidAnalysisRequest.Project.Id).AppUser.Id;
+                            BARS.Approver = GetProject(_bidAnalysisRequest.BidderItemDetails[0].Project.Id).AppUser.Id;
+                           //BARS.Approver = GetProject(CurrentBidAnalysisRequest.Project.Id).AppUser.Id;
                         }
                     }
                     else
@@ -153,15 +157,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
             }
         }
-        public void SaveOrUpdateBidAnalysisRequest()
+        public void SaveOrUpdateBidAnalysisRequest(int PRID)
         {
+
+           
             BidAnalysisRequest BidAnalysisRequest = CurrentBidAnalysisRequest;
-            BidAnalysisRequest.PurchaseRequest = _controller.GetPurchaseRequest(View.GetPurchaseRequestId); 
+            BidAnalysisRequest.PurchaseRequest = _controller.GetPurchaseRequestbyPuID(PRID); 
             BidAnalysisRequest.RequestNo = View.GetRequestNo;
             BidAnalysisRequest.RequestDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
-            BidAnalysisRequest.AnalyzedDate = Convert.ToDateTime(View.GetAnalysedDate.ToShortDateString());
+            
           //  BidAnalysisRequest.Neededfor = View.GetNeededFor;
-            BidAnalysisRequest.SpecialNeed = View.GetSpecialNeed;
+            
 
 
             //  BidAnalysisRequest.Supplier.Id=View.GetSupplierId;
@@ -169,29 +175,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             //   BidAnalysisRequest.SelectedBy = View.GetSelectedBy;
 
             BidAnalysisRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
-            if (View.GetProjectId != 0)
-                BidAnalysisRequest.Project = _settingController.GetProject(View.GetProjectId);
-            if (View.GetGrantId != 0)
-                BidAnalysisRequest.Grant = _settingController.GetGrant(View.GetGrantId);
+
+             
             BidAnalysisRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
 
-         /*    decimal price = 0;
-           foreach (Bidder bider in CurrentBidAnalysisRequest.Bidders)
-            {
-
-
-                if (CurrentBidAnalysisRequest.GetBidderbyRank().Rank == 1)
-                {
-
-                    foreach (BidderItemDetail biditemdet in bider.BidderItemDetails)
-                    {
-
-                        price = price + biditemdet.TotalCost;
-                    }
-                }
-               BidAnalysisRequest.TotalPrice  = price;
-                break;
-            }*/
+        
             if (CurrentBidAnalysisRequest.BidAnalysisRequestStatuses.Count == 0)
                 SaveBidAnalysisRequestStatus();
             GetCurrentApprover();
@@ -254,6 +242,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _settingController.GetProject(ProjectId);
         }
+
+        public Project GetProjectbyid(int ProjectId)
+        {
+            return _settingController.GetProjectbyid(ProjectId);
+        }
         public IList<Project> GetProjects()
         {
             return _settingController.GetProjects();
@@ -314,6 +307,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.GetPurchaseRequest(purchaseRequestId);
         }
+        public PurchaseRequest GetPurchaseRequestbyPuID(int purchaseRequestId)
+        {
+            return _controller.GetPurchaseRequestbyPuID(purchaseRequestId);
+        }
+        
+        public IList<PurchaseRequest> GetPurchaseRequestList()
+        {
+            return _controller.GetPurchaseRequests();
+        }
+
         public void DeleteBidAnalysis(BidAnalysisRequest BidAnalysis)
         {
             _controller.DeleteEntity(BidAnalysis);
@@ -322,6 +325,18 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             _controller.DeleteEntity(Bidder);
         }
+        public IList<PurchaseRequestDetail> ListPurchaseReqInProgress()
+        {
+            return _controller.ListPurchaseReqInProgress();
+        }
+        public IList<PurchaseRequestDetail> ListPurchaseReqInProgressbyId(int id)
+        {
+            return _controller.ListPurchaseReqInProgressById(id);
+        }
+        public IList<PurchaseRequestDetail> ListPurchaseReqbyId(int id)
+        {
+            return _controller.ListPurchaseReqById(id);
+        }
         public void DeleteBidderItemDetail(BidderItemDetail BidderItemDetail)
         {
             _controller.DeleteEntity(BidderItemDetail);
@@ -329,6 +344,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public BidderItemDetail GetBiderItemDet(int id)
         {
             return _controller.GetBiderItem(id);
+        }
+        public Bidder GetBidder(int id)
+        {
+            return _controller.GetBidder(id);
         }
         public void Commit()
         {

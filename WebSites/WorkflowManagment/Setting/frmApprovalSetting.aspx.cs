@@ -26,12 +26,12 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 PopRequestTypeforSearch();
                 BindApprovalLevels();
             }
-            
+
             this._presenter.OnViewLoaded();
-            
+
             BindSearchApprovalSettingGrid();
             //BindApprovalLevels(); 
-            
+
 
         }
 
@@ -53,14 +53,12 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         }
         public override string PageID
         {
-            
+
             get
             {
                 return "{CBF21161-18DD-434A-9B0B-E6316AB62637}";
             }
         }
-
-
         public ApprovalSetting ApprovalSetting
         {
             get
@@ -72,13 +70,10 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 _approvalsetting = value;
             }
         }
-
         public string RequestType
         {
             get { return ddlRequestTypesrch.SelectedValue; }
         }
-
-
         private void PopRequestType()
         {
             string[] s = Enum.GetNames(typeof(RequestType));
@@ -89,7 +84,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
 
             }
 
-        
+
         }
         private void PopRequestTypeforSearch()
         {
@@ -106,7 +101,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         private void PopEmployeePosition(DropDownList ddlPosition)
         {
 
-            
+
             ddlPosition.DataSource = _presenter.ListEmployeePosition();
             ddlPosition.DataBind();
         }
@@ -120,7 +115,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 ddlWill.Items.Add(new ListItem(s[i].Replace('_', ' '), s[i].Replace('_', ' ')));
 
             }
-            
+
         }
         private void BindApprovalSetting(int ApprovalSettingId)
         {
@@ -133,10 +128,10 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 txtValue2.Text = _presenter.CurrentApprovalSetting.Value2.ToString();
                 //txtLevel.Text = _presenter.CurrentApprovalSetting.ApprovalLevel.ToString();
                 DisplayCondition();
-                BindApprovalLevels();        
-                
+                BindApprovalLevels();
+
             }
-           
+
         }
         private void DisplayCondition()
         {
@@ -176,11 +171,11 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                     _presenter.CurrentApprovalSetting.RequestType = ddlRequestType.SelectedValue;
                     _presenter.CurrentApprovalSetting.CriteriaCondition = ddlCriteria.SelectedValue;
                     _presenter.CurrentApprovalSetting.Value = txtValue.Text != "" ? Convert.ToInt32(txtValue.Text) : 0;
-                    if(ddlCriteria.SelectedValue == "Between")
+                    if (ddlCriteria.SelectedValue == "Between")
                     {
-                    _presenter.CurrentApprovalSetting.Value2 = txtValue2.Text != "" ? Convert.ToInt32(txtValue2.Text) : 0;
-                    _presenter.CurrentApprovalSetting.CriteriaQuery = ddlCriteria.SelectedValue + " " + _presenter.CurrentApprovalSetting.Value + " " + "And" + " "+ _presenter.CurrentApprovalSetting.Value2;
-                     }
+                        _presenter.CurrentApprovalSetting.Value2 = txtValue2.Text != "" ? Convert.ToInt32(txtValue2.Text) : 0;
+                        _presenter.CurrentApprovalSetting.CriteriaQuery = ddlCriteria.SelectedValue + " " + _presenter.CurrentApprovalSetting.Value + " " + "And" + " " + _presenter.CurrentApprovalSetting.Value2;
+                    }
                     else
                     {
                         _presenter.CurrentApprovalSetting.CriteriaQuery = ddlCriteria.SelectedValue + " " + _presenter.CurrentApprovalSetting.Value;
@@ -191,56 +186,53 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 {
                     lblError.Text = "You have to add atleast one Approval Level for this approval setting";
                 }
-               // _presenter.CurrentApprovalSetting.ApprovalLevel = Convert.ToInt32(txtLevel.Text);
-               // SetIssueDetailValues();
+                // _presenter.CurrentApprovalSetting.ApprovalLevel = Convert.ToInt32(txtLevel.Text);
+                // SetIssueDetailValues();
             }
 
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                  
-               
-            
+                Master.ShowMessage(new AppMessage(ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
-        
         }
-       
-      
-        //private void GenerateApprovalLevelByWorkflowLevel()
-        //{
 
-        //    for (int i = 1; i <= int.Parse(txtLevel.Text);i++ )
-        //    {
-                
-        //            ApprovalLevel iDetail = new ApprovalLevel();
-        //            iDetail.ApprovalSetting = _presenter.CurrentApprovalSetting;
-        //            _presenter.CurrentApprovalSetting.ApprovalLevels.Add(iDetail);
-                
-        //    }
-        //}
-        //private void SetIssueDetailValues()
-        //{
-        //    int index = 0;
-        //    foreach (DataGridItem dgi in dgApprovalLevel.Items)
-        //    {
-        //        int id = (int)dgApprovalLevel.DataKeys[dgi.ItemIndex];
+        /*private void GenerateApprovalLevelByWorkflowLevel()
+        {
+            for (int i = 1; i <= int.Parse(txtLevel.Text); i++)
+            {
 
-        //        ApprovalLevel iDetail;
-        //        if (id > 0)
-        //            iDetail = _presenter.CurrentApprovalSetting.GetApprovalLevel(id);
-        //        else
-        //            iDetail = (ApprovalLevel)_presenter.CurrentApprovalSetting.ApprovalLevels[index];
+                ApprovalLevel iDetail = new ApprovalLevel();
+                iDetail.ApprovalSetting = _presenter.CurrentApprovalSetting;
+                _presenter.CurrentApprovalSetting.ApprovalLevels.Add(iDetail);
 
-        //        DropDownList ddl = dgi.FindControl("ddlPosition") as DropDownList;
-        //        iDetail.EmployeePosition = _presenter.GetEmployeePosition(int.Parse(ddl.SelectedValue));
+            }
+        }
+        private void SetIssueDetailValues()
+        {
+            int index = 0;
+            foreach (DataGridItem dgi in dgApprovalLevel.Items)
+            {
+                int id = (int)dgApprovalLevel.DataKeys[dgi.ItemIndex];
 
-        //        TextBox txt = dgi.FindControl("txtLevel") as TextBox;
-        //        iDetail.WorkflowLevel = Convert.ToInt32(txt.Text);
+                ApprovalLevel iDetail;
+                if (id > 0)
+                    iDetail = _presenter.CurrentApprovalSetting.GetApprovalLevel(id);
+                else
+                    iDetail = (ApprovalLevel)_presenter.CurrentApprovalSetting.ApprovalLevels[index];
 
-                
-        //        index++;
-        //    }
-        //}
-        
+                DropDownList ddl = dgi.FindControl("ddlPosition") as DropDownList;
+                iDetail.EmployeePosition = _presenter.GetEmployeePosition(int.Parse(ddl.SelectedValue));
+
+                TextBox txt = dgi.FindControl("txtLevel") as TextBox;
+                iDetail.WorkflowLevel = Convert.ToInt32(txt.Text);
+
+
+                index++;
+            }
+        }*/
+
         private void BindApprovalLevels()
         {
             this.dgApprovalLevel.DataSource = _presenter.CurrentApprovalSetting.ApprovalLevels;
@@ -257,18 +249,17 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
 
             try
             {
-               
                 _presenter.DeleteApprovalLevel(_presenter.GetApprovalLevel(id));
                 _presenter.CurrentApprovalSetting.RemoveApprovalLevel(id);
                 _presenter.SaveOrUpdateApprovalSetting(_presenter.CurrentApprovalSetting);
 
                 BindApprovalLevels();
 
-                Master.ShowMessage(new AppMessage("Approval Level was Removed Successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Approval Level was Removed Successfully", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to delete Approval Level " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to delete Approval Level " + ex.Message, RMessageType.Error));
             }
 
         }
@@ -278,7 +269,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
 
             BindApprovalLevels();
         }
-       
+
         protected void dgApprovalLevel_ItemCommand(object source, DataGridCommandEventArgs e)
         {
             if (e.CommandName == "AddNew")
@@ -290,15 +281,19 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                     approvallevel.EmployeePosition = _presenter.GetEmployeePosition(Convert.ToInt32(ddlFPositionName.SelectedValue));
                     DropDownList ddlFWill = e.Item.FindControl("ddlFWill") as DropDownList;
                     approvallevel.Will = ddlFWill.SelectedValue;
+
+                    approvallevel.WorkflowLevel = _presenter.CurrentApprovalSetting.GetApprovalLevelCount() + 1;
                     approvallevel.ApprovalSetting = _approvalsetting;
+
                     _presenter.CurrentApprovalSetting.ApprovalLevels.Add(approvallevel);
-                    Master.ShowMessage(new AppMessage("Approval Level added successfully.", Chai.WorkflowManagment.Enums.RMessageType.Info));
+
+                    Master.ShowMessage(new AppMessage("Approval Level added successfully.", RMessageType.Info));
                     dgApprovalLevel.EditItemIndex = -1;
                     BindApprovalLevels();
                 }
                 catch (Exception ex)
                 {
-                    Master.ShowMessage(new AppMessage("Error: Unable to Add Approval Level. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Error: Unable to Add Approval Level. " + ex.Message, RMessageType.Error));
                 }
             }
         }
@@ -308,39 +303,30 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
 
             if (e.Item.ItemType == ListItemType.Footer)
             {
-               DropDownList ddlFEmployeePosition = e.Item.FindControl("ddlFPosition") as DropDownList;
-               PopEmployeePosition(ddlFEmployeePosition);
-               DropDownList ddlFWill = e.Item.FindControl("ddlFWill") as DropDownList;
-               PopWill(ddlFWill);
+                DropDownList ddlFEmployeePosition = e.Item.FindControl("ddlFPosition") as DropDownList;
+                PopEmployeePosition(ddlFEmployeePosition);
+                DropDownList ddlFWill = e.Item.FindControl("ddlFWill") as DropDownList;
+                PopWill(ddlFWill);
 
             }
             else
             {
-
-
                 if (_presenter.CurrentApprovalSetting.ApprovalLevels != null)
                 {
-
-
                     DropDownList ddlEmployeePosition = e.Item.FindControl("ddlPosition") as DropDownList;
                     if (ddlEmployeePosition != null)
                     {
                         PopEmployeePosition(ddlEmployeePosition);
-                        if (_presenter.CurrentApprovalSetting.ApprovalLevels[e.Item.DataSetIndex].EmployeePosition.Id != null)
+                        if (_presenter.CurrentApprovalSetting.ApprovalLevels[e.Item.DataSetIndex].EmployeePosition != null)
                         {
                             ListItem liI = ddlEmployeePosition.Items.FindByValue(_presenter.CurrentApprovalSetting.ApprovalLevels[e.Item.DataSetIndex].EmployeePosition.Id.ToString());
                             if (liI != null)
                                 liI.Selected = true;
                         }
-
                     }
-
-                   
                 }
                 if (_presenter.CurrentApprovalSetting.ApprovalLevels != null)
                 {
-
-
                     DropDownList ddlWill = e.Item.FindControl("ddlWill") as DropDownList;
                     if (ddlWill != null)
                     {
@@ -353,8 +339,6 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                         }
 
                     }
-
-
                 }
             }
 
@@ -366,23 +350,22 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
             ApprovalLevel approvalLevel = _presenter.CurrentApprovalSetting.GetApprovalLevel(id);
             try
             {
-                
                 DropDownList ddlPositionName = e.Item.FindControl("ddlPosition") as DropDownList;
                 approvalLevel.EmployeePosition = _presenter.GetEmployeePosition(Convert.ToInt32(ddlPositionName.SelectedValue));
                 DropDownList ddlWill = e.Item.FindControl("ddlWill") as DropDownList;
                 approvalLevel.Will = ddlWill.SelectedValue;
-               // approvalLevel.ApprovalSetting = _approvalsetting;
+                // approvalLevel.ApprovalSetting = _approvalsetting;
                 _presenter.SaveOrUpdateApprovalSetting(_presenter.CurrentApprovalSetting);
-                Master.ShowMessage(new AppMessage("Approval Level  Updated successfully.", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Approval Level  Updated successfully.", RMessageType.Info));
                 dgApprovalLevel.EditItemIndex = -1;
                 BindApprovalLevels();
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to Update Approval Level Detail. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to Update Approval Level Detail. " + ex.Message, RMessageType.Error));
             }
         }
-      
+
         private void ClearForm()
         {
             //txtLevel.Text = string.Empty;
@@ -390,9 +373,9 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
             PopRequestType();
         }
         protected void btnFind_Click(object sender, EventArgs e)
-        {         
-           BindSearchApprovalSettingGrid();
-           ScriptManager.RegisterStartupScript(this, GetType(), "showSearch", "showSearch();", true);
+        {
+            BindSearchApprovalSettingGrid();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showSearch", "showSearch();", true);
         }
         protected void grvApprovalSettingList_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -403,10 +386,10 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         protected void grvApprovalSettingList_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
             _presenter.DeleteApprovalSetting(_presenter.GetApprovalSettingById(Convert.ToInt32(grvApprovalSettingList.DataKeys[e.RowIndex].Value)));
-            
-              btnFind_Click(sender, e);
-              Master.ShowMessage(new AppMessage("Approval Setting Successfully Deleted", Chai.WorkflowManagment.Enums.RMessageType.Info));
-            
+
+            btnFind_Click(sender, e);
+            Master.ShowMessage(new AppMessage("Approval Setting Successfully Deleted", Chai.WorkflowManagment.Enums.RMessageType.Info));
+
         }
         protected void grvApprovalSettingList_RowDataBound(object sender, GridViewRowEventArgs e)
         {
@@ -420,7 +403,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         {
             grvApprovalSettingList.PageIndex = e.NewPageIndex;
             btnFind_Click(sender, e);
-            
+
         }
         public int ApprovalSettingId
         {
@@ -441,9 +424,8 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
             SaveApprovalSetting();
             _presenter.SaveOrUpdateApprovalSetting(_presenter.CurrentApprovalSetting);
             ClearForm();
-            Master.ShowMessage(new AppMessage("Approval Setting Successfully Saved", Chai.WorkflowManagment.Enums.RMessageType.Info));
+            Master.ShowMessage(new AppMessage("Approval Setting Successfully Saved", RMessageType.Info));
         }
-     
         protected void ddlCriteria_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (ddlCriteria.SelectedValue == "None")
@@ -460,7 +442,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 txtValue2.Visible = true;
                 lblValue2.Visible = true;
             }
-            else 
+            else
             {
                 txtValue2.Visible = false;
                 lblValue2.Visible = false;
@@ -468,13 +450,10 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 lblValue.Visible = true;
             }
         }
-
-
-
         protected void dgApprovalLevel_CancelCommand1(object source, DataGridCommandEventArgs e)
         {
             this.dgApprovalLevel.EditItemIndex = -1;
             BindApprovalLevels();
         }
-}
+    }
 }

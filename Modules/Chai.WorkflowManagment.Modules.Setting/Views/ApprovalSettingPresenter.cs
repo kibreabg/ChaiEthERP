@@ -5,6 +5,7 @@ using Microsoft.Practices.ObjectBuilder;
 using Microsoft.Practices.CompositeWeb;
 using Chai.WorkflowManagment.CoreDomain.Setting;
 using Chai.WorkflowManagment.Shared;
+using Chai.WorkflowManagment.CoreDomain.Users;
 
 namespace Chai.WorkflowManagment.Modules.Setting.Views
 {
@@ -14,13 +15,12 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         // NOTE: Uncomment the following code if you want ObjectBuilder to inject the module controller
         //       The code will not work in the Shell module, as a module controller is not created by default
         //
-        private Chai.WorkflowManagment.Modules.Setting.SettingController _controller;
+        private SettingController _controller;
         private ApprovalSetting _approvalsetting;
-        public ApprovalSettingPresenter([CreateNew] Chai.WorkflowManagment.Modules.Setting.SettingController controller)
+        public ApprovalSettingPresenter([CreateNew] SettingController controller)
         {
             _controller = controller;
         }
-
         public override void OnViewLoaded()
         {
             if (View.ApprovalSettingId > 0)
@@ -60,7 +60,6 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         {
             return _controller.GetApprovalSettings();
         }
-
         public void SaveOrUpdateApprovalSetting(ApprovalSetting ApprovalSetting)
         {
             _controller.SaveOrUpdateEntity(ApprovalSetting);
@@ -73,7 +72,6 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         {
             _controller.Navigate(String.Format("~/Setting/Default.aspx?{0}=3", AppConstants.TABID));
         }
-
         public void DeleteApprovalSetting(ApprovalSetting approvalsetting)
         {
             _controller.DeleteEntity(approvalsetting);
@@ -86,21 +84,24 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         {
             return _controller.GetApprovalSetting(id);
         }
-
         public IList<ApprovalSetting> ListApprovalSettings(string RequestType)
         {
             return _controller.ListApprovalSettings(RequestType);
-          
+
         }
         public IList<EmployeePosition> ListEmployeePosition()
         {
             return _controller.GetEmployeePositions();
-        
+
         }
         public EmployeePosition GetEmployeePosition(int EmployeePositionId)
         {
             return _controller.GetEmployeePosition(EmployeePositionId);
-           
+
+        }
+        public AppUser CurrentUser()
+        {
+            return _controller.GetCurrentUser();
         }
         public void Commit()
         {
