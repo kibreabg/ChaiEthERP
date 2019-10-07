@@ -205,6 +205,17 @@ namespace Chai.WorkflowManagment.Modules.Shell
                 return 0;
 
         }
+        public int GetPaymentReimbursementTasks()
+        {
+            currentUser = GetCurrentUser().Id;
+            int Count = 0;
+            Count = WorkspaceFactory.CreateReadOnly().Count<PaymentReimbursementRequest>(x => x.CashPaymentRequest.AppUser.Id == currentUser && x.RequestDate == null);
+            if (Count != 0)
+                return Count;
+            else
+                return 0;
+
+        }
         public int GetBankPaymentTasks()
         {
             currentUser = GetCurrentUser().Id;
