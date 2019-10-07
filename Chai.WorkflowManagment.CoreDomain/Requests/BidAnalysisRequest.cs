@@ -32,6 +32,8 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string SpecialNeed { get; set; }
         
         public virtual Supplier Supplier { get; set; }
+
+      
         public decimal TotalPrice { get; set; }
         public string ReasonforSelection { get; set; }
         public int SelectedBy { get; set; }

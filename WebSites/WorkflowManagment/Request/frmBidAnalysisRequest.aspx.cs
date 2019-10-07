@@ -46,8 +46,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 PopPurchaseRequestsDropDown();
                 PopPurchaseRequest();
                 PopBidAnalysisRequesters();
-               
-              
+               // PopProjects();
+
 
                 BindBidAnalysisRequestsList();
 
@@ -59,6 +59,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
             }
             this._presenter.OnViewLoaded();
+            
             BindBidAnalysisRequests();
             txtRequestDate.Text = DateTime.Today.Date.ToShortDateString();
 
@@ -147,9 +148,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return txtselectionfor.Text; }
         }
-       
-      
-       
+
+        public int GetProjectId
+        {
+            get { return Convert.ToInt32(ddlProject.SelectedValue); }
+        }
+        public int GetGrantId
+        {
+            get { return Convert.ToInt32(ddlGrant.SelectedValue); }
+        }
+
 
         public IList<BidAnalysisRequest> BidAnalysisRequests
         {
@@ -173,22 +181,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
       
 
-        public string GetProject
-        {
-            get
-            {
-                return lblProject.Text;
-                    
-            }
-        }
+     
 
-        public string GetGrant
-        {
-            get
-            {
-                return lblGrant.Text;
-            }
-        }
+       
         #endregion
 
         private void BindBidAnalysisRequests()
@@ -207,6 +202,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         detail.ItemAccount = PD.ItemAccount;
                         detail.ItemDescription = PD.Item;
                         detail.Qty = PD.Qty;
+                        detail.Project = PD.Project;
+                        detail.Grant = PD.Grant;
                         _presenter.CurrentBidAnalysisRequest.BidderItemDetails.Add(detail);
                     }
 
@@ -467,9 +464,23 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             grvDetails.DataBind();
         }
 
+        private void PopProjects()
+        {
+            ddlProject.DataSource = _presenter.GetProjects();
+            ddlProject.DataBind();
 
+            ddlProject.Items.Insert(0, new ListItem("---Select Project---", "0"));
+            ddlProject.SelectedIndex = 0;
+        }
+        private void PopGrants(int ProjectId)
+        {
+            ddlGrant.DataSource = _presenter.GetGrantbyprojectId(ProjectId);
+            ddlGrant.DataBind();
 
-   
+            ddlGrant.Items.Insert(0, new ListItem("---Select Grant---", "0"));
+            ddlGrant.SelectedIndex = 0;
+        }
+
         private void BindBidAnalysisRequestsList()
         {
             grvBidAnalysisRequestList.DataSource = _presenter.ListBidAnalysisRequests(txtSrchRequestNo.Text, txtSrchRequestDate.Text);
@@ -500,8 +511,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
               
                 txtselectionfor.Text = _presenter.CurrentBidAnalysisRequest.ReasonforSelection;
                 txtTotal.Text = Convert.ToDecimal(_presenter.CurrentBidAnalysisRequest.TotalPrice).ToString();
-                lblProject.Text = _presenter.CurrentBidAnalysisRequest.Project.ToString();
-                lblGrant.Text = _presenter.CurrentBidAnalysisRequest.Grant.ToString();
+                
                 BindBidAnalysisRequests();
                 btnPrintworksheet.Enabled = true;
                 PrintTransaction();
@@ -790,7 +800,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ddlPurchaseReq.DataSource = _presenter.GetPurchaseRequestList();
             ddlPurchaseReq.DataBind();
 
-            ddlPurchaseReq.Items.Insert(0, new ListItem("---Select Purchase Request---", "0"));
+            ddlPurchaseReq.Items.Insert(0, new ListItem("---Select Purchase Request---", ""));
             ddlPurchaseReq.SelectedIndex = 0;
         }
        
@@ -929,7 +939,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         _presenter.DeleteBidder(_presenter.GetBidder(id));
                     _presenter.CurrentBidAnalysisRequest.TotalPrice = _presenter.CurrentBidAnalysisRequest.TotalPrice - bidd.TotalCost;
                     txtTotal.Text = _presenter.CurrentBidAnalysisRequest.TotalPrice.ToString();
-                    _presenter.SaveOrUpdateBidAnalysisRequest();
+                    _presenter.SaveOrUpdateBidAnalysisRequest(id);
                 }
                 else
                 {
@@ -1244,8 +1254,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             txtselectionfor.Text = _presenter.CurrentBidAnalysisRequest.ReasonforSelection;
             lblReasonForSelection.Text = _presenter.CurrentBidAnalysisRequest.ReasonforSelection;
 
-            grvprtBidders.DataSource = _presenter.CurrentBidAnalysisRequest.BidderItemDetails;
-            grvprtBidders.DataBind();
+           // grvprtBidderItemDetails.DataSource = _presenter.CurrentBidAnalysisRequest.BidderItemDetails;
+           // grvprtBidderItemDetails.DataBind();
 
             grvStatuses.DataSource = _presenter.CurrentBidAnalysisRequest.BidAnalysisRequestStatuses;
             grvStatuses.DataBind();
@@ -1253,8 +1263,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
             foreach (BidderItemDetail detail in _presenter.CurrentBidAnalysisRequest.BidderItemDetails)
             {
-                grvprtBidderItemDetails.DataSource = detail.Bidders;
-                grvprtBidderItemDetails.DataBind();
+                grvprtBidders.DataSource = detail.Bidders;
+                grvprtBidders.DataBind();
             }
         }
         protected void grvBidAnalysisRequestList_PageIndexChanging(object sender, GridViewPageEventArgs e)
@@ -1332,7 +1342,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 
                 if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails.Count != 0)
                 {
-                    _presenter.SaveOrUpdateBidAnalysisRequest();
+
+                    int PRID = Convert.ToInt32(Session["PRID"]);
+                 
+                    _presenter.SaveOrUpdateBidAnalysisRequest(PRID);
                     BindBidAnalysisRequests();
                     Master.ShowMessage(new AppMessage("Successfully did a Bid Analysis  Request, Reference No - <b>'" + _presenter.CurrentBidAnalysisRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
                     Log.Info(_presenter.CurrentUser().FullName + " has requested a For a Bid Analyis");
@@ -1385,27 +1398,31 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             grvDetails.Visible = false;
             pnlInfo.Visible = false;
             int PuID = Convert.ToInt32(Session["prId"]);
-            int userid = _presenter.GetPurchaseRequest(PuID).Requester;
+            int userid = _presenter.GetPurchaseRequestbyPuID(PuID).Requester;
             //Session["prId"] = _presenter.CurrentBidAnalysisRequest.PurchaseRequest;
 
 
-            if (_presenter.GetPurchaseRequest(PuID) != null)
+            if (_presenter.GetPurchaseRequestbyPuID(PuID) != null)
             {
-                foreach (PurchaseRequestDetail PD in _presenter.GetPurchaseRequest(PuID).PurchaseRequestDetails)
+                foreach (PurchaseRequestDetail PD in _presenter.GetPurchaseRequestbyPuID(PuID).PurchaseRequestDetails)
                 {
                     BidderItemDetail detail = new BidderItemDetail();
                     detail.ItemAccount = PD.ItemAccount;
                     detail.ItemDescription = PD.Item;
                     detail.Qty = PD.Qty;
+                    detail.Project= PD.Project;
+                    detail.Grant = PD.Grant;
+                  
                     _presenter.CurrentBidAnalysisRequest.BidderItemDetails.Add(detail);
                     txtRequester.Text = _presenter.CurrentUser().FirstName + " " + _presenter.CurrentUser().LastName;
                     lblPurchaseReqNo.Text = PD.PurchaseRequest.RequestNo;
                     lblPurReqRequester.Text = _presenter.GetUser(userid).FullName;
-                       
-                    
+                    //ddlProject.SelectedValue = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Project.Id.ToString();
+                    //ddlGrant.DataSource = _presenter.GetGrantbyprojectId(Convert.ToInt32(ddlProject.SelectedValue));
+                    //ddlGrant.DataBind();
+                    //ddlGrant.SelectedValue = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Grant.Id.ToString();
                     lblRequestedDate.Text = PD.PurchaseRequest.RequestedDate.ToShortDateString();
-                    lblProject.Text = PD.Project.ProjectCode;
-                    lblGrant.Text = PD.Grant.GrantCode;
+                   
                 }
 
             }
@@ -1414,7 +1431,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             //Response.Redirect(String.Format("../Request/frmBidAnalysisRequest.aspx?PurchaseRequestId={0}", prId));
             dgItemDetail.DataSource = _presenter.CurrentBidAnalysisRequest.BidderItemDetails;
             dgItemDetail.DataBind();
-
+            grvDetails.DataSource = _presenter.ListPurchaseReqInProgressbyId(Convert.ToInt32(PuID));
+            grvDetails.DataBind();
 
         }
 
@@ -1442,6 +1460,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             grvDetails.PageIndex = e.NewPageIndex;
             BindBidItemDetails();
             
+        }
+
+        protected void ddlProject_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PopGrants(Convert.ToInt32(ddlProject.SelectedValue));
         }
     }
 }

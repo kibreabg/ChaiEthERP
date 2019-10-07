@@ -451,6 +451,11 @@ namespace Chai.WorkflowManagment.Modules.Request
         {
             return _workspace.Single<PurchaseRequest>(x => x.Id == PurchaseRequestId, x => x.PurchaseRequestDetails.Select(y => y.ItemAccount), x => x.PurchaseRequestDetails.Select(z => z.Project));
         }
+
+        public PurchaseRequest GetPurchaseRequestbyPuID(int PurchaseRequestId)
+        {
+            return _workspace.Single<PurchaseRequest>(x => x.Id == PurchaseRequestId);
+        }
         public PurchaseRequestDetail GetPurchaseRequestDetail(int PurchaseRequestDetailId)
         {
             return _workspace.Single<PurchaseRequestDetail>(x => x.Id == PurchaseRequestDetailId);
