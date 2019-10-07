@@ -230,7 +230,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                     grvAttachments.DataSource = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PRAttachments;
                     grvAttachments.DataBind();
-
+                    Master.ShowMessage(new AppMessage("Successfully uploaded the attachment", RMessageType.Info));
 
                 }
                 else

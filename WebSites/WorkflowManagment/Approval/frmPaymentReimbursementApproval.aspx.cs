@@ -13,6 +13,7 @@ using Chai.WorkflowManagment.Modules.Approval.Views;
 using Chai.WorkflowManagment.Shared;
 using Chai.WorkflowManagment.Shared.MailSender;
 using Microsoft.Practices.ObjectBuilder;
+using System.IO;
 
 namespace Chai.WorkflowManagment.Modules.Approval.Views
 {
@@ -101,7 +102,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private string GetWillStatus()
         {
-            ApprovalSetting AS = _presenter.GetApprovalSettingforProcess(RequestType.PaymentReimbursement_Request.ToString().Replace('_', ' ').ToString(), 0);
+            ApprovalSetting AS = _presenter.GetApprovalSettingforProcess(RequestType.PaymentReimbursement_Request.ToString().Replace('_', ' ').ToString(),0);
             string will = "";
             foreach (ApprovalLevel AL in AS.ApprovalLevels)
             {
@@ -110,9 +111,26 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     will = "Approve";
                     break;
                 }
-                else if (_presenter.GetUser(_presenter.CurrentPaymentReimbursementRequest.CurrentApprover).EmployeePosition.PositionName == AL.EmployeePosition.PositionName)
+                /*else if (_presenter.GetUser(_presenter.CurrentCashPaymentRequest.CurrentApprover).EmployeePosition.PositionName == AL.EmployeePosition.PositionName)
                 {
                     will = AL.Will;
+                }*/
+                else
+                {
+                    try
+                    {
+                        if (_presenter.GetUser(_presenter.CurrentPaymentReimbursementRequest.CurrentApprover).EmployeePosition.PositionName == AL.EmployeePosition.PositionName)
+                        {
+                            will = AL.Will;
+                        }
+                    }
+                    catch
+                    {
+                        if (_presenter.CurrentPaymentReimbursementRequest.CurrentApproverPosition == AL.EmployeePosition.Id)
+                        {
+                            will = AL.Will;
+                        }
+                    }
                 }
 
             }
@@ -203,8 +221,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             //grvPaymentReimbursementRequestList.SelectedDataKey.Value
             _presenter.OnViewLoaded();
             PopApprovalStatus();
-            //grvAttachments.DataSource = _presenter.CurrentPaymentReimbursementRequest.CPRAttachments;
-            //grvAttachments.DataBind();
+            grvAttachments.DataSource = _presenter.CurrentPaymentReimbursementRequest.PRAttachments;
+            grvAttachments.DataBind();
             BindPaymentReimbursementRequestStatus();
             txtRejectedReason.Visible = false;
             rfvRejectedReason.Enabled = false;
@@ -306,91 +324,18 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             grvStatuses.DataSource = _presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses;
             grvStatuses.DataBind();
         }
-        public string GetMimeTypeByFileName(string sFileName)
+        protected void DownloadFile(object sender, EventArgs e)
         {
-            string sMime = "application/octet-stream";
-
-            string sExtension = System.IO.Path.GetExtension(sFileName);
-            if (!string.IsNullOrEmpty(sExtension))
-            {
-                sExtension = sExtension.Replace(".", "");
-                sExtension = sExtension.ToLower();
-
-                if (sExtension == "xls" || sExtension == "xlsx")
-                {
-                    sMime = "application/ms-excel";
-                }
-                else if (sExtension == "doc" || sExtension == "docx")
-                {
-                    sMime = "application/msword";
-                }
-                else if (sExtension == "ppt" || sExtension == "pptx")
-                {
-                    sMime = "application/ms-powerpoint";
-                }
-                else if (sExtension == "rtf")
-                {
-                    sMime = "application/rtf";
-                }
-                else if (sExtension == "zip")
-                {
-                    sMime = "application/zip";
-                }
-                else if (sExtension == "mp3")
-                {
-                    sMime = "audio/mpeg";
-                }
-                else if (sExtension == "bmp")
-                {
-                    sMime = "image/bmp";
-                }
-                else if (sExtension == "gif")
-                {
-                    sMime = "image/gif";
-                }
-                else if (sExtension == "jpg" || sExtension == "jpeg")
-                {
-                    sMime = "image/jpeg";
-                }
-                else if (sExtension == "png")
-                {
-                    sMime = "image/png";
-                }
-                else if (sExtension == "tiff" || sExtension == "tif")
-                {
-                    sMime = "image/tiff";
-                }
-                else if (sExtension == "txt")
-                {
-                    sMime = "text/plain";
-                }
-            }
-
-            return sMime;
+            string filePath = (sender as LinkButton).CommandArgument;
+            Response.ContentType = ContentType;
+            Response.AppendHeader("Content-Disposition", "attachment; filename=" + Path.GetFileName(filePath));
+            Response.WriteFile(filePath);
+            Response.End();
+            
+            pnlApproval_ModalPopupExtender.Show();
         }
-        protected void grvAttachments_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (_presenter.CurrentPaymentReimbursementRequest != null)
-            {
-                int attachmentId = Convert.ToInt32(grvAttachments.SelectedDataKey.Value);
-                PRAttachment attachment = _presenter.GetAttachment(attachmentId);
-
-                string Filename = attachment.FilePath;
-
-              
-
-                System.Web.HttpContext context = System.Web.HttpContext.Current;
-                context.Response.Clear();
-                context.Response.ClearHeaders();
-                context.Response.ClearContent();
-                //context.Response.AppendHeader("content-length", FileData.Length.ToString());
-                context.Response.ContentType = GetMimeTypeByFileName(Filename);
-                context.Response.AppendHeader("content-disposition", "attachment; filename=" + Filename);
-               // context.Response.BinaryWrite(FileData);
-
-                context.ApplicationInstance.CompleteRequest();
-            }
-        }
+       
+        
         protected void btnCancelPopup2_Click(object sender, EventArgs e)
         {
             pnlDetail.Visible = false;

@@ -118,15 +118,17 @@
                                         <div class="row">
                                             <section class="col col-6">
                                                 <asp:Label ID="lblAttachments" runat="server" Text="Attachments" CssClass="label"></asp:Label>
-                                                <asp:GridView ID="grvAttachments"
+                                               <asp:GridView ID="grvAttachments"
                                                     runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                                                    CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" OnSelectedIndexChanged="grvAttachments_SelectedIndexChanged">
+                                                    CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
                                                     <RowStyle CssClass="rowstyle" />
                                                     <Columns>
-                                                        <asp:BoundField DataField="FileName" HeaderText="File Name" SortExpression="FileName" />
-                                                        <asp:BoundField DataField="ContentType" HeaderText="Content Type" SortExpression="ContentType" />
-                                                        <asp:BoundField DataField="Data" HeaderText="Data" Visible="false" />
-                                                        <asp:CommandField ButtonType="Link" SelectText="View Attachment" ShowSelectButton="True" />
+                                                        <asp:BoundField DataField="FilePath" HeaderText="File Name" SortExpression="FilePath" />
+                                                        <asp:TemplateField>
+                                                            <ItemTemplate>
+                                                                <asp:LinkButton ID="lnkDownload" Text="Download" CommandArgument='<%# Eval("FilePath") %>' runat="server" OnClick="DownloadFile"></asp:LinkButton>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
                                                     </Columns>
                                                     <FooterStyle CssClass="FooterStyle" />
                                                     <HeaderStyle CssClass="headerstyle" />

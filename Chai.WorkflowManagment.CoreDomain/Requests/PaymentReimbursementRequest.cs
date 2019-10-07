@@ -22,6 +22,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public int CurrentLevel { get; set; }
         public string CurrentStatus { get; set; }
         public string ProgressStatus { get; set; }
+        public int CurrentApproverPosition { get; set; }
 
         [Required]
         public virtual CashPaymentRequest CashPaymentRequest { get; set; }

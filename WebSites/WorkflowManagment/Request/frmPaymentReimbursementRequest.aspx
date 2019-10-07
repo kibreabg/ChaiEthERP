@@ -139,7 +139,7 @@
                                                         </asp:TemplateColumn>
                                                         <asp:TemplateColumn HeaderText="Variance">
                                                             <ItemTemplate>
-                                                                <asp:TextBox ID="txtVariance" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "Variance")%>'></asp:TextBox>
+                                                                <asp:TextBox ID="txtVariance" Enabled="false" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "Variance")%>'></asp:TextBox>
                                                             </ItemTemplate>
                                                         </asp:TemplateColumn>
 

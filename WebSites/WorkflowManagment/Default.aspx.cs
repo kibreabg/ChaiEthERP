@@ -150,6 +150,17 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         {
             lblExpenseLiquidation.Text = Convert.ToString(0);
         }
+        if (_presenter.GetPaymentReimbursementTasks() != 0)
+        {
+            lblReimbursement.Text = _presenter.GetPaymentReimbursementTasks().ToString();
+            lnkPaymentReimbursement.Enabled = true;
+            lnkPaymentReimbursement.PostBackUrl = ResolveUrl("Request/frmPaymentReimbursementRequest.aspx");
+
+        }
+        else
+        {
+            lblExpenseLiquidation.Text = Convert.ToString(0);
+        }
         if (_presenter.GetBankPaymentRequestsTasks() != 0)
         {
             lblbankpayment.Text = _presenter.GetBankPaymentRequestsTasks().ToString();
