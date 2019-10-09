@@ -150,6 +150,17 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         {
             lblExpenseLiquidation.Text = Convert.ToString(0);
         }
+        if (_presenter.GetPaymentReimbursementTasks() != 0)
+        {
+            lblReimbursement.Text = _presenter.GetPaymentReimbursementTasks().ToString();
+            lnkPaymentReimbursement.Enabled = true;
+            lnkPaymentReimbursement.PostBackUrl = ResolveUrl("Request/frmPaymentReimbursementRequest.aspx");
+
+        }
+        else
+        {
+            lblExpenseLiquidation.Text = Convert.ToString(0);
+        }
         if (_presenter.GetBankPaymentRequestsTasks() != 0)
         {
             lblbankpayment.Text = _presenter.GetBankPaymentRequestsTasks().ToString();
@@ -348,7 +359,7 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
                     if (_presenter.ListPaymentApprovalProgress()[e.Row.RowIndex].CurrentApprover != 0)
                         e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListPaymentApprovalProgress()[e.Row.RowIndex].CurrentApprover).FullName;
                     else
-                        e.Row.Cells[2].Text = "Finance Officer";
+                        e.Row.Cells[2].Text = "Accountant";
                 }
             }
         }        

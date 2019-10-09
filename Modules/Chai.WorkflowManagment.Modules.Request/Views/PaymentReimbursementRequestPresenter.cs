@@ -79,18 +79,47 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (GetApprovalSetting(RequestType.ExpenseLiquidation_Request.ToString().Replace('_', ' '), 0) != null)
             {
                 int i = 1;
-                foreach (ApprovalLevel AL in GetApprovalSetting(RequestType.ExpenseLiquidation_Request.ToString().Replace('_', ' '), 0).ApprovalLevels)
+                foreach (ApprovalLevel AL in GetApprovalSetting(RequestType.PaymentReimbursement_Request.ToString().Replace('_', ' '), 0).ApprovalLevels)
                 {
                     PaymentReimbursementRequestStatus ELRS = new PaymentReimbursementRequestStatus();
                     ELRS.PaymentReimbursementRequest = _CashPaymentRequest.PaymentReimbursementRequest;
 
-                    if (Approver(AL.EmployeePosition.Id) != null)
-                        ELRS.Approver = Approver(AL.EmployeePosition.Id).Id;
+                    if (AL.EmployeePosition.PositionName == "Superviser/Line Manager")
+                    {
+                        if (CurrentUser().Superviser != 0)
+                            ELRS.Approver = CurrentUser().Superviser.Value;
+                        else
+                        {
+                            ELRS.ApprovalStatus = ApprovalStatus.Approved.ToString();
+                            ELRS.Date = Convert.ToDateTime(DateTime.Today.Date.ToShortDateString());
+                        }
+                    }
+                    else if (AL.EmployeePosition.PositionName == "Program Manager")
+                    {
+                        if (CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails[0].Project.Id != 0)
+                        {
+                            ELRS.Approver = GetProject(CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails[0].Project.Id).AppUser.Id;
+                        }
+                    }
                     else
-                        ELRS.Approver = 0;
+                    {
+                        if (Approver(AL.EmployeePosition.Id) != null)
+                        {
+                            if (AL.EmployeePosition.PositionName == "Accountant")
+                            {
+                                ELRS.ApproverPosition = AL.EmployeePosition.Id; //So that we can entertain more than one finance manager to handle the request
+                            }
+                            else
+                            {
+                                ELRS.Approver = Approver(AL.EmployeePosition.Id).Id;
+                            }
+                        }
+                        else
+                            ELRS.Approver = 0;
+                    }
                     ELRS.WorkflowLevel = i;
                     i++;
-                    _CashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Add(ELRS);
+                    CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Add(ELRS);
                 }
             }
         }
@@ -102,10 +131,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (ELRS.ApprovalStatus == null)
                     {
-                        SendEmail(ELRS);
+                        
                         CurrentCashPaymentRequest.PaymentReimbursementRequest.CurrentApprover = ELRS.Approver;
                         CurrentCashPaymentRequest.PaymentReimbursementRequest.CurrentLevel = ELRS.WorkflowLevel;
                         CurrentCashPaymentRequest.PaymentReimbursementRequest.CurrentStatus = ELRS.ApprovalStatus;
+                        SendEmail(ELRS);
                         break;
                     }
                 }
@@ -123,7 +153,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
             if (CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Count == 0)
                 SavePaymentReimbursementRequestStatus();
-            GetCurrentApprover();
+                GetCurrentApprover();
             _controller.SaveOrUpdateEntity(CurrentCashPaymentRequest);
         }
         public void CancelPage()
@@ -166,20 +196,41 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.GetSuperviser(superviser);
         }
-
+        public Project GetProject(int ProjectId)
+        {
+            return _settingController.GetProject(ProjectId);
+        }
         public ApprovalSetting GetApprovalSetting(string RequestType, int value)
         {
             return _settingController.GetApprovalSettingforProcess(RequestType, value);
         }
         private void SendEmail(PaymentReimbursementRequestStatus ELRS)
         {
-            if (GetSuperviser(ELRS.Approver).IsAssignedJob != true)
+            if (ELRS.Approver != 0)
             {
-                EmailSender.Send(GetSuperviser(ELRS.Approver).Email, "Payment Reimbursement Request", (CurrentCashPaymentRequest.AppUser.FullName).ToUpper() + " Requests for Payment Reimbursement with Voucher No. - '" + (CurrentCashPaymentRequest.VoucherNo).ToUpper() + "'");
+                if (GetSuperviser(ELRS.Approver).IsAssignedJob != true)
+                {
+                    EmailSender.Send(GetSuperviser(ELRS.Approver).Email, "Payment Reimbursement Request", (CurrentCashPaymentRequest.AppUser.FullName).ToUpper() + " Requests for Payment Reimbursement with Voucher No. - '" + (CurrentCashPaymentRequest.VoucherNo).ToUpper() + "'");
+                }
+                else
+                {
+                    EmailSender.Send(GetSuperviser(_controller.GetAssignedJobbycurrentuser(ELRS.Approver).AssignedTo).Email, "Payment Reimbursement Request", (CurrentCashPaymentRequest.AppUser.FullName).ToUpper() + " Requests for Payment Reimbursement with Voucher No. - '" + (CurrentCashPaymentRequest.VoucherNo).ToUpper() + "'");
+                }
             }
             else
             {
-                EmailSender.Send(GetSuperviser(_controller.GetAssignedJobbycurrentuser(ELRS.Approver).AssignedTo).Email, "Payment Reimbursement Request", (CurrentCashPaymentRequest.AppUser.FullName).ToUpper() + " Requests for Payment Reimbursement with Voucher No. - '" + (CurrentCashPaymentRequest.VoucherNo).ToUpper() + "'");
+                foreach (AppUser accountant in _settingController.GetAppUsersByEmployeePosition(ELRS.ApproverPosition))
+                {
+                    if (accountant.IsAssignedJob != true)
+                    {
+                        EmailSender.Send(accountant.Email, "Payment Reimbursement Request", (CurrentCashPaymentRequest.AppUser.FullName).ToUpper() + " Requests for Payment Reimbursement with Request No. - '" + (CurrentCashPaymentRequest.RequestNo).ToUpper() + "'");
+                    }
+                    else
+                    {
+                        EmailSender.Send(GetSuperviser(_controller.GetAssignedJobbycurrentuser(accountant.Id).AssignedTo).Email, "Payment Reimbursement Request", (CurrentCashPaymentRequest.AppUser.FullName).ToUpper() + " Requests for Payment Reimbursement with Request No. - '" + (CurrentCashPaymentRequest.RequestNo).ToUpper() + "'");
+                    }
+
+                }
             }
         }
         public void Commit()

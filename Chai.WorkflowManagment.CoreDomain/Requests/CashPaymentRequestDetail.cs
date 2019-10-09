@@ -8,6 +8,10 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
 {
     public partial class CashPaymentRequestDetail : IEntity
     {
+        public CashPaymentRequestDetail()
+        {
+            this.CPRAttachments = new List<CPRAttachment>();
+        }
         public int Id { get; set; }
         public decimal Amount { get; set; }
         public decimal ActualExpendture { get; set; }
@@ -17,5 +21,19 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string AccountCode { get; set; }
         public virtual Project Project { get; set; }
         public virtual Grant Grant { get; set; }
+        public virtual IList<CPRAttachment> CPRAttachments { get; set; }
+        #region CPAttachment
+        public virtual void RemoveCPAttachment(string FilePath)
+        {
+            foreach (CPRAttachment cpa in CPRAttachments)
+            {
+                if (cpa.FilePath == FilePath)
+                {
+                    CPRAttachments.Remove(cpa);
+                    break;
+                }
+            }
+        }
+        #endregion
     }
 }

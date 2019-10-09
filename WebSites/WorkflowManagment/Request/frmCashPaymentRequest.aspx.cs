@@ -131,6 +131,18 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             grvCashPaymentRequestList.DataSource = _presenter.ListCashPaymentRequests(txtSrchRequestNo.Text, txtSrchRequestDate.Text);
             grvCashPaymentRequestList.DataBind();
         }
+        private void BindAttachments()
+        {
+            List<CPRAttachment> attachments = new List<CPRAttachment>();
+            foreach (CashPaymentRequestDetail detail in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
+            {
+                attachments.AddRange(detail.CPRAttachments);
+                Session["attachments"] = attachments;
+
+                grvAttachments.DataSource = attachments;
+                grvAttachments.DataBind();
+            }
+        }
         private void PopPayee()
         {
             ddlPayee.Items.Clear();
@@ -219,11 +231,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 else { _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails.Remove(cprd); }
                 BindCashPaymentDetails();
 
-                Master.ShowMessage(new AppMessage("Payment Request Detail was Removed Successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Payment Request Detail was Removed Successfully", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to delete Payment Request Detail. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to delete Payment Request Detail. " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         protected void dgCashPaymentDetail_ItemCommand(object source, DataGridCommandEventArgs e)
@@ -251,15 +265,32 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     {
                         cprd.ActualExpendture = Convert.ToDecimal(txtAmount.Text);
                     }
+                    //Add Checklists for attachments if available                    
+                    foreach (ItemAccountChecklist checklist in cprd.ItemAccount.ItemAccountChecklists)
+                    {
+                        CPRAttachment attachment = new CPRAttachment();
+                        attachment.CashPaymentRequestDetail = _presenter.CurrentCashPaymentRequest.GetDetailByItemAccount(cprd.ItemAccount.Id);
+                        attachment.ItemAccountChecklists.Add(checklist);
+                        cprd.CPRAttachments.Add(attachment);
+                    }
                     _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails.Add(cprd);
+                    BindAttachments();
 
                     dgCashPaymentDetail.EditItemIndex = -1;
                     BindCashPaymentDetails();
+
+                    foreach (CPRAttachment attachment in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[e.Item.ItemIndex + 1].CPRAttachments)
+                    {
+                        attachment.CashPaymentRequestDetail = _presenter.CurrentCashPaymentRequest.GetCashPaymentRequestDetail((int)dgCashPaymentDetail.DataKeys[e.Item.ItemIndex + 1]);
+                    }
+
                     Master.ShowMessage(new AppMessage("Payment Detail Successfully Added", RMessageType.Info));
                 }
                 catch (Exception ex)
                 {
-                    Master.ShowMessage(new AppMessage("Error: Unable to Save Payment " + ex.Message, RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Error: Unable to Save Payment Detail" + ex.Message, RMessageType.Error));
+                    ExceptionUtility.LogException(ex, ex.Source);
+                    ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
                 }
             }
         }
@@ -278,7 +309,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (CPRDId > 0)
                 cprd = _presenter.CurrentCashPaymentRequest.GetCashPaymentRequestDetail(CPRDId);
             else
-                cprd = (CashPaymentRequestDetail)_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[e.Item.ItemIndex];
+                cprd = _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[e.Item.ItemIndex];
 
             try
             {
@@ -303,14 +334,27 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     cprd.ActualExpendture = Convert.ToDecimal(txtAmount.Text);
                 }
+                //Add Checklists for attachments if available but clear all attachments first because this is update                    
+                cprd.CPRAttachments = new List<CPRAttachment>();
+                foreach (ItemAccountChecklist checklist in cprd.ItemAccount.ItemAccountChecklists)
+                {
+                    CPRAttachment attachment = new CPRAttachment();
+                    attachment.CashPaymentRequestDetail = _presenter.CurrentCashPaymentRequest.GetDetailByItemAccount(cprd.ItemAccount.Id);
+                    attachment.ItemAccountChecklists.Add(checklist);
+                    
+                    cprd.CPRAttachments.Add(attachment);
+                }
+                BindAttachments();
 
                 dgCashPaymentDetail.EditItemIndex = -1;
                 BindCashPaymentDetails();
-                Master.ShowMessage(new AppMessage("Payment Detail Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Payment Detail Successfully Updated", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to Update Payment. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to Update Payment. " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         protected void dgCashPaymentDetail_ItemDataBound(object sender, DataGridItemEventArgs e)
@@ -372,8 +416,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             Session["CashPaymentRequest"] = true;
             //ClearForm();
             BindCashPaymentRequestFields();
-            grvAttachments.DataSource = _presenter.CurrentCashPaymentRequest.CPRAttachments;
-            grvAttachments.DataBind();
+            BindAttachments();
             if (_presenter.CurrentCashPaymentRequest.CurrentStatus != null)
             {
                 btnSave.Visible = false;
@@ -408,7 +451,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails.Count != 0)
                 {
-                    if ((ddlAmountType.SelectedValue == "Advanced" || ddlAmountType.SelectedValue == "Actual Amount") && _presenter.CurrentCashPaymentRequest.CPRAttachments.Count != 0)
+                    if ((ddlAmountType.SelectedValue == "Advanced" || ddlAmountType.SelectedValue == "Actual Amount") && CheckReceiptsAttached())
                     {
                         _presenter.SaveOrUpdateCashPaymentRequest();
                         BindCashPaymentRequests();
@@ -418,16 +461,19 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     }
                     else
                     {
-                        Master.ShowMessage(new AppMessage("Please Attach Receipt", RMessageType.Error));
+                        Master.ShowMessage(new AppMessage("Please attach the required receipts!", RMessageType.Error));
                     }
                 }
                 else
                 {
-                    Master.ShowMessage(new AppMessage("Please insert at least one Item Detail", RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Please insert at least one Payment Detail", RMessageType.Error));
                 }
             }
             catch (Exception ex)
-            {                
+            {
+                Master.ShowMessage(new AppMessage(ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
                 if (ex.InnerException != null)
                 {
                     if (ex.InnerException.InnerException.Message.Contains("Violation of UNIQUE KEY"))
@@ -436,11 +482,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         //AutoNumber();
                     }
                 }
-                Master.ShowMessage(new AppMessage(ex.Message, RMessageType.Error));
-                ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
-
         }
         protected void btnDelete_Click(object sender, EventArgs e)
         {
@@ -449,7 +491,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             BindCashPaymentRequests();
             BindCashPaymentDetails();
             btnDelete.Visible = false;
-            Master.ShowMessage(new AppMessage("Payment Request Successfully Deleted", Chai.WorkflowManagment.Enums.RMessageType.Info));
+            Master.ShowMessage(new AppMessage("Payment Request Successfully Deleted", RMessageType.Info));
         }
         protected void btnFind_Click(object sender, EventArgs e)
         {
@@ -495,9 +537,58 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             BindCashPaymentDetails();
         }
         #region Attachments
+        protected bool CheckReceiptsAttached()
+        {
+            int numAttachedReceipts = 0;
+            int numChecklists = 0;
+            foreach (CashPaymentRequestDetail detail in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
+            {
+                foreach (CPRAttachment attachment in detail.CPRAttachments)
+                {
+                    if (attachment.FilePath != null)
+                    {
+                        numAttachedReceipts++;
+                    }
+                }
+            }
+            foreach (CashPaymentRequestDetail detail in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
+            {
+                foreach (ItemAccountChecklist checklist in detail.ItemAccount.ItemAccountChecklists)
+                {
+                    numChecklists++;
+                }
+            }
+            if (numAttachedReceipts == numChecklists)
+                return true;
+            else
+                return false;
+        }
         protected void btnUpload_Click(object sender, EventArgs e)
         {
-            UploadFile();
+            Button uploadBtn = (Button)sender;
+            GridViewRow attachmentRow = (GridViewRow)uploadBtn.NamingContainer;
+            FileUpload fuReciept = attachmentRow.FindControl("fuReciept") as FileUpload;
+            string fileName = Path.GetFileName(fuReciept.PostedFile.FileName);
+            if (fileName != String.Empty)
+            {
+                List<CPRAttachment> attachments = (List<CPRAttachment>)Session["attachments"];
+                foreach (CPRAttachment attachment in attachments)
+                {
+                    if (attachment.ItemAccountChecklists[0].ChecklistName == attachmentRow.Cells[1].Text)
+                    {
+                        attachment.FilePath = "~/CPUploads/" + fileName;
+                        fuReciept.PostedFile.SaveAs(Server.MapPath("~/CPUploads/") + fileName);
+                    }
+                }
+
+                BindAttachments();
+                Master.ShowMessage(new AppMessage("Successfully uploaded the attachment", RMessageType.Info));
+
+            }
+            else
+            {
+                Master.ShowMessage(new AppMessage("Please select file ", RMessageType.Error));
+            }
         }
         protected void DownloadFile(object sender, EventArgs e)
         {
@@ -509,35 +600,21 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void DeleteFile(object sender, EventArgs e)
         {
+            //Deleting attachment shouldn't take place since there are checklists implemented now
             string filePath = (sender as LinkButton).CommandArgument;
-            _presenter.CurrentCashPaymentRequest.RemoveCPAttachment(filePath);
-            File.Delete(Server.MapPath(filePath));
-            grvAttachments.DataSource = _presenter.CurrentCashPaymentRequest.CPRAttachments;
-            grvAttachments.DataBind();
+            foreach (CashPaymentRequestDetail detail in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
+            {
+                foreach (CPRAttachment attachment in detail.CPRAttachments)
+                {
+                    if (attachment.FilePath == filePath)
+                    {
+                        detail.RemoveCPAttachment(filePath);
+                        File.Delete(Server.MapPath(filePath));
+                    }
+                }
+            }            
+            BindAttachments();
             //Response.Redirect(Request.Url.AbsoluteUri);
-        }
-        private void UploadFile()
-        {
-            string fileName = Path.GetFileName(fuReciept.PostedFile.FileName);
-
-            if (fileName != String.Empty)
-            {
-                CPRAttachment attachment = new CPRAttachment();
-                attachment.FilePath = "~/CPUploads/" + fileName;
-                fuReciept.PostedFile.SaveAs(Server.MapPath("~/CPUploads/") + fileName);
-                //Response.Redirect(Request.Url.AbsoluteUri);
-                _presenter.CurrentCashPaymentRequest.CPRAttachments.Add(attachment);
-
-                grvAttachments.DataSource = _presenter.CurrentCashPaymentRequest.CPRAttachments;
-                grvAttachments.DataBind();
-
-                Master.ShowMessage(new AppMessage("Successfully uploaded the attachment", RMessageType.Info));
-
-            }
-            else
-            {
-                Master.ShowMessage(new AppMessage("Please select file ", RMessageType.Error));
-            }
         }
         #endregion        
     }

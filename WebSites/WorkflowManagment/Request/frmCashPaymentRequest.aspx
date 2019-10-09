@@ -234,8 +234,6 @@
                                                 <div class="row">
                                                     <section class="col col-6">
                                                         <label class="label">Attach Reciepts</label>
-                                                        <asp:FileUpload ID="fuReciept" runat="server" />
-                                                        <asp:Button ID="btnUpload" runat="server" Text="Upload" CssClass="btn btn-primary" OnClick="btnUpload_Click" />
                                                     </section>
                                                 </div>
                                             </fieldset>
@@ -245,14 +243,18 @@
                                                 <RowStyle CssClass="rowstyle" />
                                                 <Columns>
                                                     <asp:BoundField DataField="FilePath" HeaderText="File Name" SortExpression="FilePath" />
+                                                    <asp:BoundField DataField="ItemAccountChecklists[0].ChecklistName" HeaderText="Checklist Name" SortExpression="ItemAccountChecklists[0].ChecklistName" />
                                                     <asp:TemplateField>
                                                         <ItemTemplate>
-                                                            <asp:LinkButton ID="lnkDownload" Text="Download" CommandArgument='<%# Eval("FilePath") %>' runat="server" OnClick="DownloadFile"></asp:LinkButton>
+                                                            <div class="input input-file">
+                                                                <asp:FileUpload ID="fuReciept" runat="server" />
+                                                                <asp:Button ID="btnUpload" Text="Upload" CssClass="btn btn-primary" CommandArgument='<%# Eval("FilePath") %>' runat="server" OnClick="btnUpload_Click"></asp:Button>
+                                                            </div>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
                                                     <asp:TemplateField>
                                                         <ItemTemplate>
-                                                            <asp:LinkButton ID="lnkDelete" Text="Delete" CommandArgument='<%# Eval("FilePath") %>' runat="server" OnClick="DeleteFile" />
+                                                            <asp:LinkButton ID="lnkDownload" Text="Download" CommandArgument='<%# Eval("FilePath") %>' runat="server" OnClick="DownloadFile"></asp:LinkButton>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
                                                 </Columns>

@@ -147,6 +147,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             OCRD.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
                             _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails.Add(OCRD);
                         }
+                        /*Attachments should be edited
                         if (CPR.CPRAttachments.Count > 0)
                         {
                             foreach (CPRAttachment CP in CPR.CPRAttachments)
@@ -157,7 +158,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                                 OPA.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
                                 _presenter.CurrentOperationalControlRequest.OCRAttachments.Add(OPA);
                             }
-                        }
+                        }*/
 
                     }
                 }

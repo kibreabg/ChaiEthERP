@@ -105,6 +105,7 @@
     <Compile Include="HRM\WorkExperience.cs" />
     <Compile Include="Requests\PRAttachment.cs" />
     <Compile Include="Setting\Holiday.cs" />
+    <Compile Include="Setting\ItemAccountChecklist.cs" />
     <Compile Include="Setting\JobTitle.cs" />
     <Compile Include="Setting\CarModel.cs" />
     <Compile Include="Setting\Program.cs" />

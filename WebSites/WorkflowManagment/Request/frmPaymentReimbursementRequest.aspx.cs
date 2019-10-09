@@ -230,7 +230,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                     grvAttachments.DataSource = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PRAttachments;
                     grvAttachments.DataBind();
-
+                    Master.ShowMessage(new AppMessage("Successfully uploaded the attachment", RMessageType.Info));
 
                 }
                 else
@@ -253,12 +253,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void DeleteFile(object sender, EventArgs e)
         {
+            //Deleting attachment shouldn't take place since there are checklists implemented now
+            /*
             string filePath = (sender as LinkButton).CommandArgument;
             _presenter.CurrentCashPaymentRequest.RemoveCPAttachment(filePath);
             File.Delete(Server.MapPath(filePath));
             grvAttachments.DataSource = _presenter.CurrentCashPaymentRequest.CPRAttachments;
             grvAttachments.DataBind();
-            //Response.Redirect(Request.Url.AbsoluteUri);
+            //Response.Redirect(Request.Url.AbsoluteUri);*/
         }
         protected void btnSave_Click(object sender, EventArgs e)
         {

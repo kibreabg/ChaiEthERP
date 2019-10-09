@@ -253,6 +253,13 @@
                                         (<small class="num-of-tasks"><asp:Label ID="lblExpenseLiquidation" runat="server" Text=""></asp:Label></small>)
                                     </p>
                                 </li>
+                                       <li class="">
+                                    <span class="handle" style="display: none"></span>
+                                    <p>
+                                        <asp:LinkButton ID="lnkPaymentReimbursement" runat="server" Text="Payment Reimbursement" Enabled="false"></asp:LinkButton>
+                                        (<small class="num-of-tasks"><asp:Label ID="lblReimbursement" runat="server" Text=""></asp:Label></small>)
+                                    </p>
+                                </li>
                                 <li class="">
                                     <span class="handle" style="display: none"></span>
                                     <p>

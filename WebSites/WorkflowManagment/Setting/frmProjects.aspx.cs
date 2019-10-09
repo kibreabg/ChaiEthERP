@@ -232,7 +232,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                     }
                 }
             }
-        }        
+        }
         protected void dgProject_UpdateCommand(object source, DataGridCommandEventArgs e)
         {
 
@@ -304,11 +304,11 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
 
                 BindProjectGrants();
 
-                Master.ShowMessage(new AppMessage("Project Grant was Removed Successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Project Grant was Removed Successfully", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to delete Project Grant. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to delete Project Grant. " + ex.Message, RMessageType.Error));
             }
         }
         protected void dgProjectGrant_EditCommand(object source, DataGridCommandEventArgs e)
@@ -330,13 +330,13 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                     projectgrant.Project = _Project;
                     _Project.ProGrants.Add(projectgrant);
                     _presenter.SaveOrUpdateProject(_Project);
-                    Master.ShowMessage(new AppMessage("Project Grant Added Successfully.", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    Master.ShowMessage(new AppMessage("Project Grant Added Successfully.", RMessageType.Info));
                     dgProjectGrant.EditItemIndex = -1;
                     BindProjectGrants();
                 }
                 catch (Exception ex)
                 {
-                    Master.ShowMessage(new AppMessage("Error: Unable to Add Project Grant. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Error: Unable to Add Project Grant. " + ex.Message, RMessageType.Error));
                 }
             }
         }
@@ -355,7 +355,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                     if (ddlGrant != null)
                     {
                         BindGrant(ddlGrant);
-                        if (_Project.ProGrants[e.Item.DataSetIndex].Grant.Id != null)
+                        if (_Project.ProGrants[e.Item.DataSetIndex].Grant != null)
                         {
                             ListItem lig = ddlGrant.Items.FindByValue(_Project.ProGrants[e.Item.DataSetIndex].Grant.Id.ToString());
                             if (lig != null)

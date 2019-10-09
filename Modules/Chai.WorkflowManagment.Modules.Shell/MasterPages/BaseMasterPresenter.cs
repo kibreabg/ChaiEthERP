@@ -134,6 +134,10 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         {
             return _controller.GetExpenseLiquidationRequestsTasks();
         }
+        public int GetPaymentReimbursementTasks()
+        {
+            return _controller.GetPaymentReimbursementTasks();
+        }
         public int GetBankPaymentRequestsTasks()
         {
             return _controller.GetBankPaymentTasks();
