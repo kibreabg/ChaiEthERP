@@ -416,15 +416,21 @@ namespace Chai.WorkflowManagment.Modules.Request
 
         public IList<PurchaseRequest> GetPurchaseRequests()
         {
-            return WorkspaceFactory.CreateReadOnly().Query<PurchaseRequest>(null).ToList();
+              return WorkspaceFactory.CreateReadOnly().Query<PurchaseRequest>(null).ToList();
+           
         }
+        string filterExpression = "";
+        public IList<PurchaseRequest> GetPurchaseRequestsInProgress()
+        {
+            filterExpression = "SELECT  *  FROM PurchaseRequests INNER JOIN PurchaseRequestDetails on dbo.PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id  Where PurchaseRequestDetails.BidAnalysisRequestStatus = 'InProgress'  order by PurchaseRequests.Id Desc ";
 
-      
+            return _workspace.SqlQuery<PurchaseRequest>(filterExpression).ToList();
+        }
         public IList<PurchaseRequestDetail> ListPurchaseReqInProgress()
         {
             string filterExpression = "";
 
-            filterExpression = "SELECT  *  FROM PurchaseRequestDetails INNER JOIN PurchaseRequests on PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id  Where PurchaseRequestDetails.BidAnalysisRequestStatus = 'InProgress'  order by PurchaseRequests.Id Desc ";
+            filterExpression = "SELECT  *  FROM PurchaseRequestDetails INNER JOIN PurchaseRequests on dbo.PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id  Where PurchaseRequestDetails.BidAnalysisRequestStatus = 'InProgress'  order by PurchaseRequests.Id Desc ";
 
             return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
 
@@ -433,7 +439,7 @@ namespace Chai.WorkflowManagment.Modules.Request
         {
             string filterExpression = "";
 
-            filterExpression = "SELECT  *  FROM PurchaseRequestDetails INNER JOIN PurchaseRequests on PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id  Where 1 = Case when '" + ReqId + "' = '' Then 1 When PurchaseRequests.Id = '" + ReqId + "'  Then 1 END  order by PurchaseRequests.Id Desc ";
+            filterExpression = "SELECT  *  FROM PurchaseRequestDetails INNER JOIN PurchaseRequests on PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id  Where 1 = Case when '" + ReqId + "' = '' Then 1 When PurchaseRequestDetails.PurchaseRequest_Id = '" + ReqId + "'  Then 1 END  order by PurchaseRequests.Id Desc ";
 
             return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
 
@@ -452,9 +458,9 @@ namespace Chai.WorkflowManagment.Modules.Request
             return _workspace.Single<PurchaseRequest>(x => x.Id == PurchaseRequestId, x => x.PurchaseRequestDetails.Select(y => y.ItemAccount), x => x.PurchaseRequestDetails.Select(z => z.Project));
         }
 
-        public PurchaseRequest GetPurchaseRequestbyPuID(int PurchaseRequestId)
+        public PurchaseRequestDetail GetPurchaseRequestbyPuID(int PurchaseRequestId)
         {
-            return _workspace.Single<PurchaseRequest>(x => x.Id == PurchaseRequestId);
+            return _workspace.Single<PurchaseRequestDetail>(x => x.Id == PurchaseRequestId,y=>y.PurchaseRequest);
         }
         public PurchaseRequestDetail GetPurchaseRequestDetail(int PurchaseRequestDetailId)
         {

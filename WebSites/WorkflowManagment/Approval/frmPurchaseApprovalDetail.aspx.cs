@@ -48,7 +48,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     PrintTransaction();
                 }
             }
-            lnkBidRequest.Visible = true;
+            lnkBidRequest.Visible = false;
             lnkSoleVendor.Visible = false;
         }
         [CreateNew]
@@ -329,8 +329,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     BindSearchPurchaseRequestGrid();
                     if (_presenter.CurrentUser().EmployeePosition.PositionName == "Procurement Officer" && _presenter.CurrentPurchaseRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
                     {
-                        lnkBidRequest.Visible = true;
-                        lnkSoleVendor.Visible = true;
+                        //lnkBidRequest.Visible = true;
+                       // lnkSoleVendor.Visible = true;
                     }
                     pnlApproval_ModalPopupExtender.Show();
                 }

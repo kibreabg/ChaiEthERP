@@ -181,23 +181,17 @@
                          <section class="col col-4">
                                 <label class="label">Project</label>
                                 <label class="select">
-                                    <asp:DropDownList ID="ddlProject" AutoPostBack="true" runat="server" DataValueField="Id" DataTextField="ProjectCode" OnSelectedIndexChanged="ddlProject_SelectedIndexChanged">
-                                    </asp:DropDownList><i></i>
-                                    <asp:RequiredFieldValidator
-                                        ID="rfvddlProject" runat="server" ErrorMessage="Project is required" Display="Dynamic"
-                                        CssClass="validator" ValidationGroup="saveMain" InitialValue="0"
-                                        SetFocusOnError="true" ControlToValidate="ddlProject"></asp:RequiredFieldValidator>
+                                    <asp:TextBox ID="ddlProject"  runat="server" Enabled="False">
+                                    </asp:TextBox>
+                                  
                                 </label>
                             </section>
                             <section class="col col-4">
                                 <label class="label">Grant</label>
                                 <label class="select">
-                                    <asp:DropDownList ID="ddlGrant" runat="server" DataValueField="Id" DataTextField="GrantCode">
-                                    </asp:DropDownList><i></i>
-                                    <asp:RequiredFieldValidator
-                                        ID="rfvGrant" runat="server" ErrorMessage="Grant is required" Display="Dynamic"
-                                        CssClass="validator" ValidationGroup="saveMain" InitialValue="0"
-                                        SetFocusOnError="true" ControlToValidate="ddlGrant"></asp:RequiredFieldValidator>
+                                    <asp:TextBox ID="ddlGrant" runat="server" Enabled="False">
+                                    </asp:TextBox>
+                                   
                                 </label>
                             </section>
                       
@@ -227,7 +221,7 @@
                     
                                 <asp:DataGrid ID="dgItemDetail" runat="server" CellPadding="0"
                             CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id" AutoGenerateColumns="False"
-                            GridLines="None"  ShowFooter="True" OnCancelCommand="dgItemDetail_CancelCommand" OnDeleteCommand="dgItemDetail_DeleteCommand" OnItemCommand="dgItemDetail_ItemCommand" OnUpdateCommand="dgItemDetail_UpdateCommand" OnEditCommand="dgItemDetail_EditCommand1"  OnSelectedIndexChanged="dgItemDetail_SelectedIndexChanged">
+                            GridLines="None"  ShowFooter="True" OnSelectedIndexChanged="dgItemDetail_SelectedIndexChanged">
 
                             <Columns>
                                
@@ -236,7 +230,7 @@
                                  <asp:BoundColumn DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
                               
                                
-                                    <asp:ButtonColumn ButtonType="PushButton" CommandName="Select" Text="Bidders"></asp:ButtonColumn>
+                                    <asp:ButtonColumn CommandName="Select" Text="Bidders"></asp:ButtonColumn>
                                
                             </Columns>
                             <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
@@ -547,7 +541,7 @@
                             </asp:TemplateColumn>
                             <asp:TemplateColumn HeaderText="Supplier">
                                 <EditItemTemplate>
-                                    <asp:DropDownList ID="ddlSupplier" runat="server"  AutoPostBack="true"
+                                    <asp:DropDownList ID="ddlSupplier" runat="server"
                                         AppendDataBoundItems="True" DataTextField="SupplierName" DataValueField="Id" EnableViewState="true"
                                         ValidationGroup="proedit">
                                         <asp:ListItem Value="0">Select Supplier</asp:ListItem>
@@ -557,7 +551,7 @@
                                         InitialValue="0" SetFocusOnError="True" ValidationGroup="proedit">*</asp:RequiredFieldValidator>
                                 </EditItemTemplate>
                                 <FooterTemplate>
-                                    <asp:DropDownList ID="ddlFSupplier" runat="server"  AutoPostBack="true"
+                                    <asp:DropDownList ID="ddlFSupplier" runat="server"
                                         AppendDataBoundItems="True" DataTextField="SupplierName" DataValueField="Id"
                                         EnableViewState="true" ValidationGroup="proadd">
                                         <asp:ListItem Value="0">Select Supplier</asp:ListItem>
