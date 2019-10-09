@@ -30,6 +30,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors = new PurchaseOrderSoleVendor();
                 }
+
+                
+
                 BindPurchaseOrder();
                 btnPrintPurchaseForm.Enabled = true;
                 btnPrintPurchaseOrder.Enabled = true;
