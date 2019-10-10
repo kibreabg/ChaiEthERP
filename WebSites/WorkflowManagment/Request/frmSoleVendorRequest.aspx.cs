@@ -21,21 +21,26 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         private SoleVendorRequestPresenter _presenter;
         private IList<SoleVendorRequest> _SoleVendorRequests;
         private static readonly ILog Log = LogManager.GetLogger("AuditTrailLog");
+        int prId;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!this.IsPostBack)
             {
+
+                Session["PR"] = _presenter.GetPurchaseRequestList();
                 this._presenter.OnViewInitialized();
                 XmlConfigurator.Configure();
                 CheckApprovalSettings();
                 PurchaseRequest purchaseRequest = _presenter.GetPurchaseRequest(GetPurchaseRequestId);
                 _presenter.CurrentSoleVendorRequest.PurchaseRequest = purchaseRequest;
-                PopProjects();
+                //PopProjects();
+                PopPurchaseRequestsDropDown();
                 BindSoleVendorRequests();
-                PopSoleVendorRequesters();
                 PopPurchaseRequest();
+                PopSoleVendorRequesters();
+               
 
-                BindSoleVendorRequestDetails();
+               // BindSoleVendorRequestDetails();
                 PopSupplier();
                 if (_presenter.CurrentSoleVendorRequest.Id <= 0)
                 {
@@ -106,30 +111,18 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return Convert.ToDateTime(txtRequestDate.Text); }
         }
-        public string GetContactPersonNumber
-        {
-            get { return txtContactPersonNumber.Text; }
-        }
-        public int GetProposedSupplier
-        {
-            get { return int.Parse(ddlSupplier.SelectedValue); }
-
-        }
-        public string GetSoleSourceJustificationPreparedBy
-        {
-            get { return txtSoleSource.Text; }
-        }
+       
         public string GetComment
         {
-            get { return txtComment.Text; }
+            get { return txtselectionfor.Text; }
         }
-        public int GetProjectId
+        public string GetProject
         {
-            get { return Convert.ToInt32(ddlProject.SelectedValue); }
+            get { return ddlProject.Text; }
         }
-        public int GetGrantId
+        public string GetGrant
         {
-            get { return Convert.ToInt32(ddlGrant.SelectedValue); }
+            get { return ddlGrant.Text; }
         }
         public IList<SoleVendorRequest> SoleVendorRequests
         {
@@ -140,6 +133,46 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             set
             {
                 _SoleVendorRequests = value;
+            }
+        }
+
+        public string GetContactPersonNumber
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public int GetProposedSupplier
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public string GetSoleSourceJustificationPreparedBy
+        {
+            get
+            {
+                return txtSoleSource.Text;
+            }
+        }
+
+        public int GetProjectId
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public int GetGrantId
+        {
+            get
+            {
+                throw new NotImplementedException();
             }
         }
         #endregion
@@ -154,22 +187,22 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 pnlWarning.Visible = true;
             }
         }
-        private void PopProjects()
-        {
-            ddlProject.DataSource = _presenter.GetProjects();
-            ddlProject.DataBind();
+        //private void PopProjects()
+        //{
+        //    ddlProject.DataSource = _presenter.GetProjects();
+        //    ddlProject.DataBind();
 
-            ddlProject.Items.Insert(0, new ListItem("---Select Project---", "0"));
-            ddlProject.SelectedIndex = 0;
-        }
-        private void PopGrants(int ProjectId)
-        {
-            ddlGrant.DataSource = _presenter.GetGrantbyprojectId(ProjectId);
-            ddlGrant.DataBind();
+        //    ddlProject.Items.Insert(0, new ListItem("---Select Project---", "0"));
+        //    ddlProject.SelectedIndex = 0;
+        //}
+        //private void PopGrants(int ProjectId)
+        //{
+        //    ddlGrant.DataSource = _presenter.GetGrantbyprojectId(ProjectId);
+        //    ddlGrant.DataBind();
 
-            ddlGrant.Items.Insert(0, new ListItem("---Select Grant---", "0"));
-            ddlGrant.SelectedIndex = 0;
-        }
+        //    ddlGrant.Items.Insert(0, new ListItem("---Select Grant---", "0"));
+        //    ddlGrant.SelectedIndex = 0;
+        //}
         private void PopSupplier()
         {
             ddlSupplier.Items.Clear();
@@ -182,8 +215,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void ClearFormFields()
         {
-            txtContactPersonNumber.Text = String.Empty;
-            txtSoleSource.Text = String.Empty;
+            //txtContactPersonNumber.Text = String.Empty;
+            //txtSoleSource.Text = String.Empty;
 
         }        
         private void BindSoleVendorRequests()
@@ -201,18 +234,44 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 txtContactPersonNumber.Text = _presenter.CurrentSoleVendorRequest.ContactPersonNumber;
                 ddlSupplier.SelectedValue = _presenter.CurrentSoleVendorRequest.Supplier.Id.ToString();
                 txtSoleSource.Text = _presenter.CurrentSoleVendorRequest.SoleSourceJustificationPreparedBy.ToString();
-                txtComment.Text = _presenter.CurrentSoleVendorRequest.Comment;
-                ddlProject.SelectedValue = _presenter.CurrentSoleVendorRequest.Project.Id.ToString();
-                PopGrants(Convert.ToInt32(ddlProject.SelectedValue));
-                ddlGrant.SelectedValue = _presenter.CurrentSoleVendorRequest.Grant.Id.ToString();
+                txtselectionfor.Text = _presenter.CurrentSoleVendorRequest.Comment;
+                //ddlProject.SelectedValue = _presenter.CurrentSoleVendorRequest.Project.Id.ToString();
+                //PopGrants(Convert.ToInt32(ddlProject.SelectedValue));
+                //ddlGrant.SelectedValue = _presenter.CurrentSoleVendorRequest.Grant.Id.ToString();
                 BindSoleVendorRequestDetails();
                 BindSoleVendorRequests();
             }
         }
         private void BindSoleVendorRequestDetails()
         {
-            dgSoleVenderDetail.DataSource = _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails;
-            dgSoleVenderDetail.DataBind();
+            int PuID = Convert.ToInt32(Session["prId"]);
+
+            //if (_presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails.Count == 0)
+            //{
+                if (_presenter.GetPurchaseRequestbyPuID(PuID) != null)
+                {
+                    foreach (PurchaseRequestDetail PD in _presenter.GetPurchaseRequestbyPuID(PuID).PurchaseRequestDetails)
+                    {
+                        SoleVendorRequestDetail detail = new SoleVendorRequestDetail();
+                        detail.ItemAccount = PD.ItemAccount;
+                        detail.ItemDescription = PD.Item;
+                        detail.Qty = PD.Qty;
+                        detail.Project = PD.Project;
+                        detail.Grant = PD.Grant;
+                        _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails.Add(detail);
+                    }
+                }
+            //}
+          dgSoleVenderDetail.DataSource = _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails;
+                dgSoleVenderDetail.DataBind();
+           // prId = Convert.ToInt32(grvDetails.SelectedDataKey[0]);
+            //PopPurchaseRequest();
+           
+           
+
+            ////dgSoleVenderDetail.DataSource = _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails;
+            ////    dgSoleVenderDetail.DataBind();
+            
             grvAttachments.DataSource = _presenter.CurrentSoleVendorRequest.SVRAttachments;
             grvAttachments.DataBind();
         }
@@ -287,6 +346,15 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
 
         }
+
+        private void PopPurchaseRequestsDropDown()
+        {
+            ddlPurchaseReq.DataSource = _presenter.GetPurchaseRequestList();
+            ddlPurchaseReq.DataBind();
+
+            ddlPurchaseReq.Items.Insert(0, new ListItem("---Select Purchase Request---", ""));
+            ddlPurchaseReq.SelectedIndex = 0;
+        }
         protected void btnFind_Click(object sender, EventArgs e)
         {
             BindSoleVendorRequests();
@@ -351,16 +419,30 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void PopSoleVendorRequesters()
         {
-            if (_presenter.CurrentSoleVendorRequest.PurchaseRequest != null)
+            PurchaseRequest purchaseRequest = Session["PR"] as PurchaseRequest;
+            if (_presenter.CurrentSoleVendorRequest != null && purchaseRequest != null)
             {
-                txtSoleSource.Text = _presenter.CurrentUser().FirstName + " " + _presenter.CurrentUser().LastName;
-                txtRequestDate.Text = _presenter.CurrentSoleVendorRequest.PurchaseRequest.RequestedDate.ToShortDateString();
-                ddlProject.SelectedValue = _presenter.CurrentSoleVendorRequest.PurchaseRequest.PurchaseRequestDetails[0].Project.Id.ToString();
-                ddlGrant.DataSource = _presenter.GetGrantbyprojectId(Convert.ToInt32(ddlProject.SelectedValue));
-                ddlGrant.DataBind();
-                ddlGrant.SelectedValue = _presenter.CurrentSoleVendorRequest.PurchaseRequest.PurchaseRequestDetails[0].Grant.Id.ToString();
+
+                txtRequester.Text = _presenter.CurrentUser().FirstName + " " + _presenter.CurrentUser().LastName;
+
+                txtRequestDate.Text = purchaseRequest.RequestedDate.ToShortDateString();
+
+
+
+
+                
+                //ddlGrant.DataSource = _presenter.GetGrantbyprojectId(Convert.ToInt32(ddlProject.SelectedValue));
+                //ddlGrant.DataBind();
+                //ddlGrant.SelectedValue = purchaseRequest.PurchaseRequestDetails[0].Grant.Id.ToString();
+
+                //    GridView1.DataSource = _presenter.CurrentBidAnalysisRequest.PurchaseRequest.PurchaseRequestDetails;
+                //  GridView1.DataBind();
             }
+            else if (purchaseRequest == null && _presenter.CurrentSoleVendorRequest != null)
+            {
+                PopPurchaseRequest();
             }
+        }
         protected void dgSoleVenderDetail_PageIndexChanged(object source, DataGridPageChangedEventArgs e)
         {
 
@@ -384,42 +466,42 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void dgSoleVenderDetail_ItemDataBound(object sender, DataGridItemEventArgs e)
         {
-            if (e.Item.ItemType == ListItemType.Footer)
-            {
-                DropDownList ddlFItemAcc = e.Item.FindControl("ddlFItemAcc") as DropDownList;
-                BindItems(ddlFItemAcc);
-                /* if ((_presenter.CurrentBidAnalysisRequest.Bidders[e.Item.DataSetIndex].BidderItemDetails != null))
-                 {
-                     DropDownList ddlItemAcc = e.Item.FindControl("ddlFItemAcc") as DropDownList;
-                     ListItem liI = ddlItemAcc.Items.FindByValue(_presenter.CurrentBidAnalysisRequest.Bidders[e.Item.DataSetIndex].BidderItemDetails[0].ItemAccount.Id.ToString());
-                     if (liI != null)
-                         liI.Selected = true;
-                 }*/
+            //if (e.Item.ItemType == ListItemType.Footer)
+            //{
+            //    DropDownList ddlFItemAcc = e.Item.FindControl("ddlFItemAcc") as DropDownList;
+            //    BindItems(ddlFItemAcc);
+            //    /* if ((_presenter.CurrentBidAnalysisRequest.Bidders[e.Item.DataSetIndex].BidderItemDetails != null))
+            //     {
+            //         DropDownList ddlItemAcc = e.Item.FindControl("ddlFItemAcc") as DropDownList;
+            //         ListItem liI = ddlItemAcc.Items.FindByValue(_presenter.CurrentBidAnalysisRequest.Bidders[e.Item.DataSetIndex].BidderItemDetails[0].ItemAccount.Id.ToString());
+            //         if (liI != null)
+            //             liI.Selected = true;
+            //     }*/
 
-            }
-            else
-            {
-                if (_presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails != null)
-                {
-                    DropDownList ddlItemAcc = e.Item.FindControl("ddlItemAcc") as DropDownList;
-                    if (ddlItemAcc != null)
-                    {
-                        BindItems(ddlItemAcc);
-                        if (_presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[e.Item.DataSetIndex].ItemAccount.Id != 0)
-                        {
-                            ListItem liI = ddlItemAcc.Items.FindByValue(_presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[e.Item.DataSetIndex].ItemAccount.Id.ToString());
-                            if (liI != null)
-                                liI.Selected = true;
-                        }
-                    }
-                }
-            }
+            //}
+            //else
+            //{
+            //    if (_presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails != null)
+            //    {
+            //        DropDownList ddlItemAcc = e.Item.FindControl("ddlItemAcc") as DropDownList;
+            //        if (ddlItemAcc != null)
+            //        {
+            //            BindItems(ddlItemAcc);
+            //            if (_presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[e.Item.DataSetIndex].ItemAccount.Id != 0)
+            //            {
+            //                ListItem liI = ddlItemAcc.Items.FindByValue(_presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[e.Item.DataSetIndex].ItemAccount.Id.ToString());
+            //                if (liI != null)
+            //                    liI.Selected = true;
+            //            }
+            //        }
+            //    }
+            //}
         }
-        private void BindItems(DropDownList ddlItems)
-        {
-            ddlItems.DataSource = _presenter.GetItemAccounts();
-            ddlItems.DataBind();
-        }
+        //private void BindItems(DropDownList ddlItems)
+        //{
+        //    ddlItems.DataSource = _presenter.GetItemAccounts();
+        //    ddlItems.DataBind();
+        //}
         protected void dgSoleVenderDetail_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -528,13 +610,19 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void PopPurchaseRequest()
         {
-            lblPurRequestNoResult.Text = _presenter.CurrentSoleVendorRequest.PurchaseRequest.RequestNo.ToString();
-            lblpurreqdateres.Text = _presenter.CurrentSoleVendorRequest.PurchaseRequest.RequestedDate.ToShortDateString();
-            lblPurrequesterres.Text = _presenter.GetUser(_presenter.CurrentSoleVendorRequest.PurchaseRequest.Requester).FullName;
+          ////  txtRequester.Text = _presenter.CurrentSoleVendorRequest.PurchaseRequest..UserName.ToString();
+          ////  // txtRequestDate.Text = _presenter.CurrentBidAnalysisRequest.RequestDate.Value.ToShortDateString();
 
-            grvDetails.DataSource = _presenter.CurrentSoleVendorRequest.PurchaseRequest.PurchaseRequestDetails;
+          ////  //  txtselectionfor.Text = _presenter.CurrentBidAnalysisRequest.Neededfor;
+
+          ////  txtselectionfor.Text = _presenter.CurrentSoleVendorRequest.Comment;
+          //////  txtTotal.Text = Convert.ToDecimal(_presenter.CurrentSoleVendorRequest.t.TotalPrice).ToString();
+           
+
+          ////  grvDetails.DataSource = _presenter.CurrentSoleVendorRequest.PurchaseRequest.PurchaseRequestDetails;
+          ////  grvDetails.DataBind();
+            grvDetails.DataSource = _presenter.ListPurchaseReqInProgress();
             grvDetails.DataBind();
-
 
         }
         protected void grvSoleVendorRequestList_PageIndexChanging(object sender, GridViewPageEventArgs e)
@@ -567,6 +655,60 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     e.Row.ForeColor = System.Drawing.Color.Red;
                 }
             }
+        }
+
+        protected void ddlPurchaseReq_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            grvDetails.DataSource = _presenter.ListPurchaseReqInProgressbyId(Convert.ToInt32(ddlPurchaseReq.SelectedValue));
+            grvDetails.DataBind();
+
+
+        }
+
+        protected void grvDetails_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            prId = Convert.ToInt32(grvDetails.SelectedDataKey[0]);
+            Session["prId"] = Convert.ToInt32(grvDetails.SelectedDataKey[0]);
+            _presenter.OnViewLoaded();
+            btnSave.Visible = true;
+            grvDetails.Visible = false;
+            pnlInfo.Visible = false;
+            int PuID = Convert.ToInt32(Session["prId"]);
+            int userid = _presenter.GetPurchaseRequestbyPuID(PuID).Requester;
+            //Session["prId"] = _presenter.CurrentBidAnalysisRequest.PurchaseRequest;
+
+
+            //if (_presenter.GetPurchaseRequestbyPuID(PuID) != null)
+            //{
+            //    foreach (PurchaseRequestDetail PD in _presenter.GetPurchaseRequestbyPuID(PuID).PurchaseRequestDetails)
+            //    {
+            //        SoleVendorRequestDetail detail = new SoleVendorRequestDetail();
+            //        detail.ItemAccount = PD.ItemAccount;
+            //        detail.ItemDescription = PD.Item;
+            //        detail.Qty = PD.Qty;
+            //        detail.Project = PD.Project;
+            //        detail.Grant = PD.Grant;
+
+            //        _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails.Add(detail);
+            //        txtRequester.Text = _presenter.CurrentUser().FirstName + " " + _presenter.CurrentUser().LastName;
+            //        lblPurchaseReqNo.Text = PD.PurchaseRequest.RequestNo;
+            //        lblPurReqRequester.Text = _presenter.GetUser(userid).FullName;
+            //        ddlProject.Text = PD.Project.ProjectCode;
+            //        ddlGrant.Text = PD.Grant.GrantCode;
+            //        lblRequestedDate.Text = PD.PurchaseRequest.RequestedDate.ToShortDateString();
+
+            //    }
+
+            //}
+
+            BindSoleVendorRequestDetails();
+            grvDetails.DataSource = _presenter.ListPurchaseReqbyId(Convert.ToInt32(prId));
+            grvDetails.DataBind();
+            //dgSoleVenderDetail.DataSource = _presenter.ListPurchaseReqbyId(Convert.ToInt32(prId));
+            //dgSoleVenderDetail.DataBind();
+           
+
         }
     }
 }

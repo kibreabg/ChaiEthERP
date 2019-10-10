@@ -162,7 +162,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
            
             BidAnalysisRequest BidAnalysisRequest = CurrentBidAnalysisRequest;
-            BidAnalysisRequest.PurchaseRequest = _controller.GetPurchaseRequestbyPuID(PRID); 
+            BidAnalysisRequest.PurchaseRequest = _controller.GetPurchaseRequestbyPuID(PRID).PurchaseRequest; 
             BidAnalysisRequest.RequestNo = View.GetRequestNo;
             BidAnalysisRequest.RequestDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
             
@@ -307,7 +307,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.GetPurchaseRequest(purchaseRequestId);
         }
-        public PurchaseRequest GetPurchaseRequestbyPuID(int purchaseRequestId)
+        public PurchaseRequestDetail GetPurchaseRequestbyPuID(int purchaseRequestId)
         {
             return _controller.GetPurchaseRequestbyPuID(purchaseRequestId);
         }
@@ -316,7 +316,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.GetPurchaseRequests();
         }
-
+        public IList<PurchaseRequest> GetPurchaseRequestListInProgress()
+        {
+            return _controller.GetPurchaseRequestsInProgress();
+        }
         public void DeleteBidAnalysis(BidAnalysisRequest BidAnalysis)
         {
             _controller.DeleteEntity(BidAnalysis);

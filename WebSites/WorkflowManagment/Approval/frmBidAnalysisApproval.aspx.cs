@@ -238,7 +238,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     {
                         if (_presenter.CurrentBidAnalysisRequest.CurrentLevel == _presenter.CurrentBidAnalysisRequest.BidAnalysisRequestStatuses.Count)
                             _presenter.CurrentBidAnalysisRequest.ProgressStatus = ProgressStatus.Completed.ToString();
-                     GetNextApprover();
+                        _presenter.CurrentBidAnalysisRequest.PurchaseRequest.PurchaseRequestDetails[0].BidAnalysisRequestStatus = "Completed";
+                        GetNextApprover();
                         PRS.Approver = _presenter.CurrentUser().Id;
                         Log.Info(_presenter.GetUser(PRS.Approver).FullName + " has " + PRS.ApprovalStatus + " Bid Analysis Request made by " + _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName);
                        // btnPurchaseOrder.Enabled = true;
@@ -607,7 +608,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void btnPurchaseOrder_Click(object sender, EventArgs e)
         {
-            int purchaseId = _presenter.CurrentBidAnalysisRequest.PurchaseRequest.Id;
+            int purchaseId = _presenter.CurrentBidAnalysisRequest.Id;
                 Response.Redirect(String.Format("frmPurchaseOrder.aspx?BidAnalysisRequestId={0}", purchaseId));
         }
         protected void DownloadFile(object sender, EventArgs e)

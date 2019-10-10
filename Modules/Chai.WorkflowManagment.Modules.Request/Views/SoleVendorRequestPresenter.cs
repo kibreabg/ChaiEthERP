@@ -187,6 +187,26 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.GetSoleVendorRequest(id);
         }
+        public IList<PurchaseRequest> GetPurchaseRequestList()
+        {
+            return _controller.GetPurchaseRequests();
+        }
+        public PurchaseRequest GetPurchaseRequestbyPuID(int purchaseRequestId)
+        {
+            return null;// return _controller.GetPurchaseRequestbyPuID(purchaseRequestId);
+        }
+        public IList<PurchaseRequestDetail> ListPurchaseReqInProgress()
+        {
+            return _controller.ListPurchaseReqInProgress();
+        }
+        public IList<PurchaseRequestDetail> ListPurchaseReqInProgressbyId(int id)
+        {
+            return _controller.ListPurchaseReqInProgressById(id);
+        }
+        public IList<PurchaseRequestDetail> ListPurchaseReqbyId(int id)
+        {
+            return _controller.ListPurchaseReqById(id);
+        }
         public IList<SoleVendorRequest> ListSoleVendorRequests(string RequestNo, string RequestDate)
         {
             return _controller.ListSoleVendorRequests(RequestNo, RequestDate);

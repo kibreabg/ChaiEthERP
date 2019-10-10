@@ -59,17 +59,17 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         
          public override void OnViewInitialized()
          {
-            
-                 if (_purchaserequest == null)
-                 {
-                     int id = View.BidAnalysisRequestId;
-                     if (id > 0)
-                         _controller.CurrentObject = _controller.GetBidAnalysisRequest(id);
-                     else
-                         _controller.CurrentObject = new BidAnalysisRequest();
-                 }
-            
-         }
+
+            if (_purchaserequest == null)
+            {
+                int id = View.BidAnalysisRequestId;
+                if (id > 0)
+                    _controller.CurrentObject = _controller.GetBidAnalysisRequest(id);
+                else
+                    _controller.CurrentObject = new BidAnalysisRequest();
+            }
+
+        }
          public IList<ItemAccount> GetItemAccounts()
          {
              return _settingcontroller.GetItemAccounts();

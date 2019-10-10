@@ -18,39 +18,38 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
     {
         private PurchaseOrderPresenter _presenter;
         private BidAnalysisRequest _bidanalysisrequest;
-      
+        private int reqid;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!this.IsPostBack)
             {
+                //Session["BAR"] = _presenter.CurrentBidAnalysisRequest.Id;
+              
                 this._presenter.OnViewInitialized();
-               
-                    if (_presenter.CurrentBidAnalysisRequest.PurchaseOrders == null)
-                    {
-                        _presenter.CurrentBidAnalysisRequest.PurchaseOrders = new PurchaseOrder();
+                if (_presenter.CurrentBidAnalysisRequest.PurchaseOrders  == null)
+                {
+                    _presenter.CurrentBidAnalysisRequest.PurchaseOrders = new PurchaseOrder();
+                }
 
-                    }
-                
+
+
                 BindPurchaseOrder();
                 btnPrintPurchaseForm.Enabled = true;
                 btnPrintPurchaseOrder.Enabled = true;
                 //BindRepeater();  
             }
             this._presenter.OnViewLoaded();
-           
-                if (_presenter.CurrentBidAnalysisRequest.PurchaseOrders != null)
-                {
-                    if (_presenter.CurrentBidAnalysisRequest.PurchaseOrders.Id != 0)
-                    {
-                        PrintTransaction();
-                        BindRepeater();
-                    }
-               
-           
 
+            if (_presenter.CurrentBidAnalysisRequest.PurchaseOrders  != null)
+            {
+                if (_presenter.CurrentBidAnalysisRequest.PurchaseOrders.Id != 0)
+                {
+                    PrintTransaction();
+                    BindRepeater();
+                }
             }
 
-          
             //btnPrintworksheet.Attributes.Add("onclick", "javascript:Clickheretoprint('divprint'); return false;");
             //BindJS();
         }
@@ -101,17 +100,31 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         public int BidAnalysisRequestId
         {
+
             get
             {
+               
                 if (Convert.ToInt32(Request.QueryString["BidAnalysisRequestId"]) != 0)
                 {
                     return Convert.ToInt32(Request.QueryString["BidAnalysisRequestId"]);
                 }
-                return 0;
+                else if (Convert.ToInt32(Session["ReqID"]) != 0)
+                {
+                    return Convert.ToInt32(Session["ReqID"]);
+                }
 
-
-
+                else
+                {
+                    return 0;
+                }
             }
+            set
+            {
+                reqid = value;
+            }
+
+
+           
         }
      
         public string RequestType
@@ -194,14 +207,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             this._presenter.OnViewLoaded();
             txtDate.Text = DateTime.Today.ToString();
 
-
+            //txtRequester.Text = _presenter.GetUser(Session["BAR"]).FullName;
 
             txtRequester.Text = _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName;
                 if (_presenter.CurrentBidAnalysisRequest != null)
                 {
                     int bider = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Rank;
 
-                    if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails.Count != 0 && _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Rank !=1)
+                    if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails.Count != 0 && _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Rank ==1)
                     {
                     txtSupplierName.Text = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Supplier.SupplierName;                   
                     txtSupplierAddress.Text = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Supplier.SupplierAddress;
@@ -238,7 +251,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             
             try
             {
-
+                
                 _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PoNumber = txtPONo.Text;
                 _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PODate = Convert.ToDateTime(txtDate.Text);
                 _presenter.CurrentBidAnalysisRequest.PurchaseOrders.Billto = txtBillto.Text;

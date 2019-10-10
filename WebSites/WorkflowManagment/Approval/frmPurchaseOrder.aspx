@@ -146,7 +146,7 @@
             <asp:TemplateColumn HeaderText="Item">
                     
                      <ItemTemplate>
-                         <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountName")%>
+                         <%# DataBinder.Eval(Container.DataItem, "BidderItemDetail.ItemDescription")%>
                      </ItemTemplate>
                  </asp:TemplateColumn>
             <asp:TemplateColumn HeaderText="Qty">
@@ -328,7 +328,7 @@
             <ItemTemplate>
                <tr >
                     <td>
-                        <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountName")%>
+                        <%# DataBinder.Eval(Container.DataItem, "BidderItemDetail.ItemDescription")%>
                         
                     </td>
                     <td>
@@ -512,7 +512,7 @@
                     <asp:BoundField DataField="Bidder.Supplier.SupplierName" HeaderText="Supplier" SortExpression="Bidder.Supplier.SupplierName" />
                     
                     <asp:BoundField DataField="Bidder.Rank" HeaderText="Rank" SortExpression="Bidder.Rank" />
-                    <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="ItemAccount.AccountName" />
+                    <asp:BoundField DataField="BidderItemDetail.ItemDescription" HeaderText="Item" />
                     <asp:BoundField DataField="Qty" HeaderText="Qty" />
                     <asp:BoundField DataField="UnitCost" HeaderText="UnitCost" />
                     <asp:BoundField DataField="TotalCost" HeaderText="TotalCost" />
