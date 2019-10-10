@@ -99,10 +99,10 @@
                                 </label>
                             </section>
                             <section class="col col-4">
-                                <label id="lblapplyfor" runat="server" class="label" visible="true">
+                                <label id="lblapplyfor" runat="server" class="label" visible="false">
                                     Remark</label>
                                 <label class="input">
-                                    <asp:TextBox ID="txtComment" runat="server" Visible="true"></asp:TextBox>
+                                    <asp:TextBox ID="txtComment" runat="server" Visible="false"></asp:TextBox>
                                 </label>
                             </section>
 
@@ -177,6 +177,19 @@
                                         <asp:TextBox ID="txtFQty" runat="server" CssClass="form-control"></asp:TextBox>
                                         <asp:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtFQty" ID="txtFQty_FilteredTextBoxExtender" FilterType="Numbers"></asp:FilteredTextBoxExtender>
                                         <asp:RequiredFieldValidator ID="RfvFQty" CssClass="validator" runat="server" ControlToValidate="txtFQty" ErrorMessage="Qty Required" ValidationGroup="proadd"></asp:RequiredFieldValidator>
+                                    </FooterTemplate>
+                                </asp:TemplateColumn>
+                                <asp:TemplateColumn HeaderText="Remark">
+                                    <ItemTemplate>
+                                        <%# DataBinder.Eval(Container.DataItem, "Remark")%>
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <asp:TextBox ID="txtRemark" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "Remark")%>'></asp:TextBox>
+                                        <asp:RequiredFieldValidator ID="RfvRemark" CssClass="validator" runat="server" ControlToValidate="txtRemark" ErrorMessage="Remark Required" ValidationGroup="proedit"></asp:RequiredFieldValidator>
+                                    </EditItemTemplate>
+                                    <FooterTemplate>
+                                        <asp:TextBox ID="txtFRemark" runat="server" CssClass="form-control"></asp:TextBox>
+                                        <asp:RequiredFieldValidator ID="RfvFRemark" CssClass="validator" runat="server" ControlToValidate="txtFQty" ErrorMessage="Remark Required" ValidationGroup="proadd"></asp:RequiredFieldValidator>
                                     </FooterTemplate>
                                 </asp:TemplateColumn>
                                 <asp:TemplateColumn HeaderText="Unit of Measurment">

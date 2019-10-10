@@ -157,7 +157,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
                 else
                 {
-                    btnPrint.Enabled = false;
+                    btnPrint.Enabled = true;
                     btnApprove.Enabled = true;
                     ddlApprovalStatus.Enabled = true;
                 }
@@ -532,6 +532,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 Detail.PurposeOfPurchase = ddlPurposeOfPurchase.SelectedValue;
                 DropDownList ddlUnitOfMeasurment = e.Item.FindControl("ddlUnitOfMeasurment") as DropDownList;
                 Detail.UnitOfMeasurment = ddlUnitOfMeasurment.SelectedValue;
+                TextBox txtRemark = e.Item.FindControl("txtRemark") as TextBox;
+                Detail.Remark = txtRemark.Text;
                 DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
                 Detail.Project = _presenter.GetProject(int.Parse(ddlProject.SelectedValue));
                 TextBox txtGrant = e.Item.FindControl("txtGrant") as TextBox;
