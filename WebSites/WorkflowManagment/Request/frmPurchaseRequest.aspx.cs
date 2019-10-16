@@ -96,7 +96,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 // txtRequestNo.Text = _presenter.CurrentPurchaseRequest.RequestNo;
                 txtRequestDate.Text = _presenter.CurrentPurchaseRequest.RequestedDate.ToShortDateString();
-                txtComment.Text = _presenter.CurrentPurchaseRequest.Comment.ToString();
+                txtComment.Text = "";
                 txtDeliverto.Text = _presenter.CurrentPurchaseRequest.DeliverTo.ToString();
                 txtdeliveryDate.Text = _presenter.CurrentPurchaseRequest.Requireddateofdelivery.ToShortDateString();
                 txtSuggestedSupplier.Text = _presenter.CurrentPurchaseRequest.SuggestedSupplier.ToString();
@@ -113,7 +113,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 _presenter.CurrentPurchaseRequest.RequestedDate = Convert.ToDateTime(txtRequestDate.Text);
                 _presenter.CurrentPurchaseRequest.RequestNo = AutoNumber();
                 _presenter.CurrentPurchaseRequest.DeliverTo = txtDeliverto.Text;
-                _presenter.CurrentPurchaseRequest.Comment = txtComment.Text;
+                _presenter.CurrentPurchaseRequest.Comment = "";
                 _presenter.CurrentPurchaseRequest.SuggestedSupplier = txtSuggestedSupplier.Text;
 
                 _presenter.CurrentPurchaseRequest.Requireddateofdelivery = Convert.ToDateTime(txtdeliveryDate.Text);
@@ -529,11 +529,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     Detail.PurposeOfPurchase = ddlFPurposeOfPurchase.SelectedValue;
                     DropDownList ddlFUnitOfMeasurment = e.Item.FindControl("ddlFUnitOfMeasurment") as DropDownList;
                     Detail.UnitOfMeasurment = ddlFUnitOfMeasurment.SelectedValue;
-                    // TextBox txtFPriceperunit = e.Item.FindControl("txtFPriceperunit") as TextBox;
-                    // Detail.Priceperunit = Convert.ToDecimal(txtFPriceperunit.Text);
-                    //Detail.EstimatedCost = Convert.ToInt32(txtFQty.Text) * Convert.ToDecimal(txtFPriceperunit.Text);
-                    //Determine total cost
-                    /*  decimal cost = 0;
+                    TextBox txtFRemark = e.Item.FindControl("txtFRemark") as TextBox;
+                    Detail.Remark = txtFRemark.Text;
+                    /*TextBox txtFPriceperunit = e.Item.FindControl("txtFPriceperunit") as TextBox;
+                    Detail.Priceperunit = Convert.ToDecimal(txtFPriceperunit.Text);
+                    Detail.EstimatedCost = Convert.ToInt32(txtFQty.Text) * Convert.ToDecimal(txtFPriceperunit.Text);
+                    Determine total cost
+                      decimal cost = 0;
                       if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Count > 0)
                       {
 
@@ -541,11 +543,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                           {
                               cost = cost + detail.EstimatedCost;
                           }
-                      }*/
-                    //  _presenter.CurrentPurchaseRequest.TotalPrice = cost;
-                    //Determine total cost end
-                    //  _presenter.CurrentPurchaseRequest.TotalPrice = _presenter.CurrentPurchaseRequest.TotalPrice + Detail.EstimatedCost;
-                    // txtTotal.Text = (_presenter.CurrentPurchaseRequest.TotalPrice).ToString();
+                      }
+                    _presenter.CurrentPurchaseRequest.TotalPrice = cost;
+                    Determine total cost end
+                      _presenter.CurrentPurchaseRequest.TotalPrice = _presenter.CurrentPurchaseRequest.TotalPrice + Detail.EstimatedCost;
+                    txtTotal.Text = (_presenter.CurrentPurchaseRequest.TotalPrice).ToString();*/
                     DropDownList ddlFProject = e.Item.FindControl("ddlFProject") as DropDownList;
                     Detail.Project = _presenter.GetProject(int.Parse(ddlFProject.SelectedValue));
                     DropDownList ddlFGrant = e.Item.FindControl("ddlFGrant") as DropDownList;
@@ -640,26 +642,27 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 Detail.PurposeOfPurchase = ddlPurposeOfPurchase.SelectedValue;
                 DropDownList ddlUnitOfMeasurment = e.Item.FindControl("ddlUnitOfMeasurment") as DropDownList;
                 Detail.UnitOfMeasurment = ddlUnitOfMeasurment.SelectedValue;
+                TextBox txtRemark = e.Item.FindControl("txtRemark") as TextBox;
+                Detail.Remark = txtRemark.Text;
+                /*TextBox txtPriceperunit = e.Item.FindControl("txtPriceperunit") as TextBox;
+                Detail.Priceperunit = Convert.ToDecimal(txtPriceperunit.Text);
 
-                //     TextBox txtPriceperunit = e.Item.FindControl("txtPriceperunit") as TextBox;
-                //   Detail.Priceperunit = Convert.ToDecimal(txtPriceperunit.Text);
+                TextBox txtEstimatedCost = e.Item.FindControl("txtEstimatedCost") as TextBox;
+                Detail.EstimatedCost = Convert.ToInt32(txtQty.Text) * Convert.ToDecimal(txtPriceperunit.Text);
+                Determine total cost
+                decimal cost = 0;
+                if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Count > 0)
+                {
 
-                //TextBox txtEstimatedCost = e.Item.FindControl("txtEstimatedCost") as TextBox;
-                //    Detail.EstimatedCost = Convert.ToInt32(txtQty.Text) * Convert.ToDecimal(txtPriceperunit.Text);
-                //Determine total cost
-                /*    decimal cost = 0;
-                    if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Count > 0)
+                    foreach (PurchaseRequestDetail detail in _presenter.CurrentPurchaseRequest.PurchaseRequestDetails)
                     {
-
-                        foreach (PurchaseRequestDetail detail in _presenter.CurrentPurchaseRequest.PurchaseRequestDetails)
-                        {
-                            cost = cost + detail.EstimatedCost;
-                        }
+                        cost = cost + detail.EstimatedCost;
                     }
-                    _presenter.CurrentPurchaseRequest.TotalPrice = cost;*/
-                //Determine total cost end
-                //_presenter.CurrentPurchaseRequest.TotalPrice = _presenter.CurrentPurchaseRequest.TotalPrice + Detail.EstimatedCost;
-                //  txtTotal.Text = (_presenter.CurrentPurchaseRequest.TotalPrice).ToString();
+                }
+                _presenter.CurrentPurchaseRequest.TotalPrice = cost;
+                Determine total cost end
+                _presenter.CurrentPurchaseRequest.TotalPrice = _presenter.CurrentPurchaseRequest.TotalPrice + Detail.EstimatedCost;
+                txtTotal.Text = (_presenter.CurrentPurchaseRequest.TotalPrice).ToString();*/
                 DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
                 Detail.Project = _presenter.GetProject(int.Parse(ddlProject.SelectedValue));
                 DropDownList ddlGrant = e.Item.FindControl("ddlGrant") as DropDownList;
