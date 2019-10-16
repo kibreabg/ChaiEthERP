@@ -34,7 +34,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 PurchaseRequest purchaseRequest = _presenter.GetPurchaseRequest(GetPurchaseRequestId);
                 _presenter.CurrentSoleVendorRequest.PurchaseRequest = purchaseRequest;
                 //PopProjects();
-                PopPurchaseRequestsDropDown();
+                //PopPurchaseRequestsDropDown();
                 //BindSoleVendorRequests();
                 //PopPurchaseRequest();
                 PopSoleVendorRequesters();
@@ -378,14 +378,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
         }
 
-        private void PopPurchaseRequestsDropDown()
-        {
-            ddlPurchaseReq.DataSource = _presenter.GetPurchaseRequestList();
-            ddlPurchaseReq.DataBind();
+        //private void PopPurchaseRequestsDropDown()
+        //{
+        //    ddlPurchaseReq.DataSource = _presenter.GetPurchaseRequestList();
+        //    ddlPurchaseReq.DataBind();
 
-            ddlPurchaseReq.Items.Insert(0, new ListItem("---Select Purchase Request---", ""));
-            ddlPurchaseReq.SelectedIndex = 0;
-        }
+        //    ddlPurchaseReq.Items.Insert(0, new ListItem("---Select Purchase Request---", ""));
+        //    ddlPurchaseReq.SelectedIndex = 0;
+        //}
         protected void btnFind_Click(object sender, EventArgs e)
         {
             BindSoleVendorRequests();
@@ -678,14 +678,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
         }
 
-        protected void ddlPurchaseReq_SelectedIndexChanged(object sender, EventArgs e)
-        {
+        //protected void ddlPurchaseReq_SelectedIndexChanged(object sender, EventArgs e)
+        //{
 
-            grvDetails.DataSource = _presenter.ListPurchaseReqInProgressbyId(Convert.ToInt32(ddlPurchaseReq.SelectedValue));
-            grvDetails.DataBind();
+        //    grvDetails.DataSource = _presenter.ListPurchaseReqInProgressbyId(Convert.ToInt32(ddlPurchaseReq.SelectedValue));
+        //    grvDetails.DataBind();
 
 
-        }
+        //}
 
         protected void grvDetails_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -720,7 +720,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     PopSupplier();
                     ddlProject.SelectedItem.Text = detail.Project.ProjectCode;
                     ddlGrant.SelectedItem.Text = detail.Grant.GrantCode;
-                   
+                    
                 lblPurchaseRequestDate.Text= PD.PurchaseRequest.RequestedDate.ToShortDateString();
 
 
