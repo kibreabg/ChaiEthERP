@@ -137,11 +137,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             foreach (CashPaymentRequestDetail detail in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
             {
                 attachments.AddRange(detail.CPRAttachments);
-                Session["attachments"] = attachments;
-
-                grvAttachments.DataSource = attachments;
-                grvAttachments.DataBind();
+                Session["attachments"] = attachments;                
             }
+
+            grvAttachments.DataSource = attachments;
+            grvAttachments.DataBind();
         }
         private void PopPayee()
         {
