@@ -21,5 +21,8 @@ namespace Chai.WorkflowManagment.CoreDomain.Approval
         public decimal UnitCost { get; set; }
         public decimal TotalCost { get; set; }
         public decimal Vat { get; set; }
+
+        public int Rank { get; set; }
+        public string Item { get; set; }
     }
 }

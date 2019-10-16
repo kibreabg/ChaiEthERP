@@ -135,18 +135,18 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
             }
         }
-        public void SaveOrUpdateSoleVendorRequest()
+        public void SaveOrUpdateSoleVendorRequest(int PRID)
         {           
             SoleVendorRequest SoleVendorRequest = CurrentSoleVendorRequest;
-            SoleVendorRequest.PurchaseRequest = _controller.GetPurchaseRequest(View.GetPurchaseRequestId);
+            SoleVendorRequest.PurchaseRequest = _controller.GetPurchaseRequestbyPuID(PRID).PurchaseRequest; 
             
             SoleVendorRequest.RequestNo = View.GetRequestNo;
             SoleVendorRequest.RequestDate = Convert.ToDateTime(DateTime.Today);
             SoleVendorRequest.ContactPersonNumber = View.GetContactPersonNumber;
             SoleVendorRequest.ProposedPurchasedPrice = 0; //Zero for now
-            SoleVendorRequest.Supplier =  _settingController.GetSupplier(View.GetProposedSupplier);          
+            SoleVendorRequest.Supplier =  _settingController.GetSupplier(View.GetProposedSupplier);
             SoleVendorRequest.SoleSourceJustificationPreparedBy = View.GetSoleSourceJustificationPreparedBy;
-            SoleVendorRequest.Comment = View.GetComment;
+            SoleVendorRequest.ReasonForSelection = View.GetReasonForSelection;
             SoleVendorRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
             if (View.GetProjectId != 0)
                 SoleVendorRequest.Project = _settingController.GetProject(View.GetProjectId);
@@ -191,9 +191,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.GetPurchaseRequests();
         }
-        public PurchaseRequest GetPurchaseRequestbyPuID(int purchaseRequestId)
+        public PurchaseRequestDetail GetPurchaseRequestbyPuID(int purchaseRequestId)
         {
-            return null;// return _controller.GetPurchaseRequestbyPuID(purchaseRequestId);
+            return _controller.GetPurchaseRequestbyPuID(purchaseRequestId);
         }
         public IList<PurchaseRequestDetail> ListPurchaseReqInProgress()
         {

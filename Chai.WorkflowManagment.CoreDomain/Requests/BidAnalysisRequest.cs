@@ -65,17 +65,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
             }
             return null;
         }
-     /*   public virtual Bidder GetBidderbyRank()
-        {
-
-            foreach (Bidder bidder in Bidders)
-            {
-                if (bidder.Rank == 1)
-                    return bidder;
-
-            }
-            return null;
-        }*/
+       
         public virtual IList<BidderItemDetail> GetBidderItemDetailByBidAnalysisId(int AnalisisId)
         {
             IList<BidderItemDetail> BidderItemDetails = new List<BidderItemDetail>();

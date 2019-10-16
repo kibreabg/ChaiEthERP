@@ -12,7 +12,7 @@
 
             var docprint = window.open("", "", disp_setting);
             docprint.document.open();
-            docprint.document.write('<html><head><title>CHAI Zimbabwe</title>');
+            docprint.document.write('<html><head><title>CHAI Ethiopia</title>');
             docprint.document.write('</head><body onLoad="self.print()"><center>');
             docprint.document.write(content_vlue);
             docprint.document.write('</center></body></html>');
@@ -127,9 +127,9 @@
                                                     </section>
                                                     <section class="col col-4">
                                                         <label class="label">
-                                                       Supplier Contact</label>
+                                                       Item</label>
                                                         <label class="input">
-                                                        <asp:TextBox ID="txtSupplierContact" runat="server" Enabled="true"></asp:TextBox>
+                                                        <asp:TextBox ID="txtItem" runat="server" Enabled="true"></asp:TextBox>
                                                            
                                                         </label>
                                                     </section>
@@ -143,10 +143,10 @@
          GridLines="None" ShowFooter="True">
    
         <Columns>
-            <asp:TemplateColumn HeaderText="Item">
+            <asp:TemplateColumn HeaderText="Supplier Type Name">
                     
                      <ItemTemplate>
-                         <%# DataBinder.Eval(Container.DataItem, "BidderItemDetail.ItemDescription")%>
+                         <%# DataBinder.Eval(Container.DataItem, "Supplier.SupplierNameType")%>
                      </ItemTemplate>
                  </asp:TemplateColumn>
             <asp:TemplateColumn HeaderText="Qty">
@@ -167,7 +167,12 @@
                 </ItemTemplate>
                
             </asp:TemplateColumn>
-            
+               <asp:TemplateColumn HeaderText="Rank">
+                <ItemTemplate>
+                    <%# DataBinder.Eval(Container.DataItem, "Rank")%>
+                </ItemTemplate>
+               
+            </asp:TemplateColumn>
         </Columns>
            <PagerStyle  Cssclass="paginate_button active" HorizontalAlign="Center" />
                  </asp:DataGrid>
@@ -200,206 +205,172 @@
                             PURCHASE ORDER FORM</strong></td>
                 </tr>
             </table>
-				<asp:Repeater ID="Repeater1" runat="server" Visible="true">
-    <HeaderTemplate>
-               <table border="1">
-                   <tr><td>
-
-                       </td>
-                       <td>
-                           Purchase Order Form
-                       </td>
-                       <td>
-
-                       </td>
-                       <td>
-
-                       </td>
-                   </tr>
-                    <tr >
-                        <b>
-                            <td>
-                                PO Number
+			<asp:Repeater ID="Repeater1" runat="server" Visible="true">
+                <HeaderTemplate>
+                    <table border="1">
+                        <tr>
+                            <td></td>
+                            <td>Purchase Order Form
                             </td>
-                             <td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <b>
+                            <td>PO Number
+                            </td>
+                            <td>
                                 <asp:Label ID="lblPONumberP" runat="server" Text=""></asp:Label>
                             </td>
-                             <td>                         
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <b>
+                                <td>Requester
+                                </td>
+                                <td>
+                                    <asp:Label ID="lblRequesterP" runat="server" Text=""></asp:Label></td>
+                                <td></td>
+                                <td></td>
+                            </b>
+                        </tr>
+                        <tr>
+                            <b>
+                                <td>Date
+                                </td>
+                                <td>
+                                    <asp:Label ID="lblDateP" runat="server" Text=""></asp:Label></td>
+                                <td></td>
+                                <td></td>
+                            </b>
+                        </tr>
+                        <tr>
+                            <b>
+                                <td>Supplier Name
+                                </td>
+                                <td>
+                                    <asp:Label ID="lblSupplierNameP" runat="server" Text=""></asp:Label></td>
+                                <td></td>
+                                <td></td>
+                            </b>
+                        </tr>
+                        <tr>
+                            <b>
+                                <td>Supplier Address
+                                </td>
+                                <td>
+                                    <asp:Label ID="lblSupplierAddressP" runat="server" Text=""></asp:Label></td>
+                                <td></td>
+                                <td></td>
+                            </b>
+                        </tr>
+                        <tr>
+                            <b>
+                                <td>Item
+                                </td>
+                                <td>
+                                    <asp:Label ID="lblItemP" runat="server" Text=""></asp:Label></td>
+                                <td></td>
+                                <td></td>
+                            </b>
+                        </tr>
+                        <tr>
+                            <b>
+                                <td>Bill To:
+                                </td>
+                                <td>
+                                    <asp:Label ID="lblBillToP" runat="server" Text=""></asp:Label></td>
+                                <td>Ship To:</td>
+                                <td>
+                                    <asp:Label ID="lblShipTo" runat="server" Text=""></asp:Label></td>
+                            </b>
+                        </tr>
+                        <tr>
+                            <b>
+                                <td>Payment Terms:
+                                </td>
+                                <td>
+                                    <asp:Label ID="lblPaymentTermsP" runat="server" Text=""></asp:Label></td>
+                                <td></td>
+                                <td></td>
+                            </b>
+                        </tr>
+                        <tr style="background-color: grey">
+                            <td>Item Account
                             </td>
-                            <td>
+                            <td>Qty
                             </td>
-                            </tr>
-                            <tr>
-                              <b>
-                            <td>
-                                Requester
+                            <td>Unit Cost 
                             </td>
-                            <td><asp:Label ID="lblRequesterP" runat="server" Text=""></asp:Label></td>
-                                
-                            
-                             <td></td>
-                              <td></td>
-                         </b>
-                            </tr>
-                   <tr>
-                              <b>
-                            <td>
-                                Date
-                            </td>
-                            <td><asp:Label ID="lblDateP" runat="server" Text=""></asp:Label></td>
-                                
-                            
-                             <td></td>
-                              <td></td>
-                         </b>
-                            </tr>
-                      <tr>
-                              <b>
-                            <td>
-                                Supplier Name
-                            </td>
-                            <td><asp:Label ID="lblSupplierName" runat="server" Text=""></asp:Label></td>
-                                
-                            
-                             <td></td>
-                              <td></td>
-                         </b>
-                            </tr>      
-                   <tr>
-                              <b>
-                            <td>
-                                Supplier Address
-                            </td>
-                            <td><asp:Label ID="lblSupplierAddress" runat="server" Text=""></asp:Label></td>
-                                
-                            
-                             <td></td>
-                              <td></td>
-                         </b>
-                            </tr>
-                   <tr>
-                              <b>
-                            <td>
-                                Supplier Contact
-                            </td>
-                            <td><asp:Label ID="lblSupplierContactP" runat="server" Text=""></asp:Label></td>
-                                
-                            
-                             <td></td>
-                              <td></td>
-                         </b>
-                            </tr>
-                   <tr>
-                              <b>
-                            <td>
-                                Bill To:
-                            </td>
-                            <td><asp:Label ID="lblBillToP" runat="server" Text=""></asp:Label></td>
-                                
-                            
-                             <td>Ship To:</td>
-                              <td><asp:Label ID="lblShipTo" runat="server" Text=""></asp:Label></td>
-                         </b>
-                            </tr>
-                   <tr>
-                              <b>
-                            <td>
-                                Payment Terms:
-                            </td>
-                            <td><asp:Label ID="lblPaymentTermsP" runat="server" Text=""></asp:Label></td>
-                                                      
-                             <td></td>
-                              <td></td>
-                         </b>
-                            </tr>
-                   <tr style="background-color:grey">
-                       <td>
-                           Item Description
-                       </td>
-                       <td>
-                           Qty
-                       </td>
-                       <td>
-                          Unit Cost 
-                       </td>
-                       <td></td>
-                      </tr>
-            </HeaderTemplate>
-            <ItemTemplate>
-               <tr >
-                    <td>
-                        <%# DataBinder.Eval(Container.DataItem, "BidderItemDetail.ItemDescription")%>
-                        
-                    </td>
-                    <td>
-                        <%# DataBinder.Eval(Container.DataItem, "Qty")%>
-                    </td>
-                    <td>
-                         <%# DataBinder.Eval(Container.DataItem, "UnitCost")%>
-                    </td>
-                   <td>
-                         <%# DataBinder.Eval(Container.DataItem, "TotalCost")%>
-                    </td>
-                  </tr>
-            </ItemTemplate>
-            <SeparatorTemplate>
-               
-            </SeparatorTemplate>
-            <AlternatingItemTemplate>
-               
-            </AlternatingItemTemplate>
-            <SeparatorTemplate>
-               
-            </SeparatorTemplate>
-            <FooterTemplate>
-                <tr>
-                   <td></td>
-                    <td></td>
-                    <td></td>
-                    <td><asp:Label ID="lblItemTotalP" runat="server" Text=""></asp:Label></td>
-               
-                </tr>
-                <tr>
-                   <td></td>
-                    <td></td>
-                    <td>Delivery Fees:</td>
-                    <td>  <asp:Label ID="lblDeliveryFeesP" runat="server" Text=""></asp:Label></td>
-               
-                </tr>
-                <tr>
-                   <td></td>
-                    <td></td>
-                    <td>Vat/Sales tax:</td>
-                    <td>  <asp:Label ID="lblVatP" runat="server" Text=""></asp:Label></td>
-               
-                </tr>
-                <tr>
-                   <td></td>
-                    <td></td>
-                    <td>Total Cost (USD):</td>
-                    <td>  <asp:Label ID="lblTotalP" runat="server" Text=""></asp:Label></td>
-               
-                </tr>
-                 <tr>
+                            <td>Total Cost (USD)</td>
+                        </tr>
+                </HeaderTemplate>
+                <ItemTemplate>
+                    <tr>
+                        <td>
+                            <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountName")%>                        
+                        </td>
+                        <td>
+                            <%# DataBinder.Eval(Container.DataItem, "Qty")%>
+                        </td>
+                        <td>
+                            <%# DataBinder.Eval(Container.DataItem, "UnitCost")%>
+                        </td>
+                        <td>
+                            <%# DataBinder.Eval(Container.DataItem, "TotalCost")%>
+                        </td>
+                    </tr>
+                </ItemTemplate>
+                <SeparatorTemplate>
+                </SeparatorTemplate>
+                <AlternatingItemTemplate>
+                </AlternatingItemTemplate>
+                <SeparatorTemplate>
+                </SeparatorTemplate>
+                <FooterTemplate>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <asp:Label ID="lblItemTotalP" runat="server" Text=""></asp:Label></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>Delivery Fees:</td>
+                        <td>
+                            <asp:Label ID="lblDeliveryFeesP" runat="server" Text=""></asp:Label></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>Vat/Sales tax:</td>
+                        <td>
+                            <asp:Label ID="lblVatP" runat="server" Text=""></asp:Label></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>Total:</td>
+                        <td>
+                            <asp:Label ID="lblTotalP" runat="server" Text=""></asp:Label></td>
+                    </tr>
+                    <tr>
                         <b>
-                            <td>
-                                Authorized by:
+                            <td>Authorized by:
                             </td>
                             <td>
                                 <asp:Label ID="lblAuthorizedByP" runat="server" Text=""></asp:Label>
                             </td>
-                            <td>
-                              
-                            </td>
-                            <td>
-                               
-                            </td>
-                            
-                    </b>
+                            <td></td>
+                            <td></td>
+                        </b>
                     </tr>
-                </table>
-            </FooterTemplate>
-</asp:Repeater>
+                    </table>
+                </FooterTemplate>
+            </asp:Repeater>
             </div>
        <div id="printtran" style="display:none;">
         <fieldset>
@@ -418,8 +389,7 @@
                 <tr>
                     <td style="width: 585px">Request No</td>
                     <td style="width: 617px" ><asp:Label ID="lblRequestNoResult" runat="server"></asp:Label></td>
-                    <td class="modal-sm" style="width: 404px" >Purpose</td>
-                    <td ><asp:Label ID="lblPurposeResult" runat="server"></asp:Label></td>
+                   
                     
                 </tr>
 
@@ -473,10 +443,10 @@
                 </tr>
                  <tr>
                     <td style="width: 585px" >
-                      Reason for Selection
+                     Item
                     </td>
                     <td style="width: 617px" >
-                        <asp:Label ID="lblReasonforSelectionResult" runat="server"></asp:Label>
+                        <asp:Label ID="lblItemResult" runat="server"></asp:Label>
                     </td>
                     <td class="modal-sm" style="width: 404px" >
                        Selected by</td>

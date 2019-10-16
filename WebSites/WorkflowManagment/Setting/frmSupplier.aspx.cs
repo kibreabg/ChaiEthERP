@@ -129,6 +129,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                     supplier.ContactPhone = txtFSupplierphoneContact.Text;
                     TextBox txtFSupplierEmail = e.Item.FindControl("txtFSupplierEmail") as TextBox;
                     supplier.Email = txtFSupplierEmail.Text;
+                    supplier.SupplierNameType = String.Format(supplier.SupplierName + "--" +supplier.SupplierType.SupplierTypeName);
                     supplier.Status = "Active";
                     SaveSupplier(supplier);
                     dgSupplier.EditItemIndex = -1;
@@ -206,6 +207,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 Supplier.ContactPhone = txtSupplierphoneContact.Text;
                 TextBox txtFSupplierEmail = e.Item.FindControl("txtSupplierEmail") as TextBox;
                 Supplier.Email = txtFSupplierEmail.Text;
+                Supplier.SupplierNameType = String.Format(Supplier.SupplierName + " -- " + Supplier.SupplierType.SupplierTypeName);
                 SaveSupplier(Supplier);
                 dgSupplier.EditItemIndex = -1;
                 BindSupplier();
