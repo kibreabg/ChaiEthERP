@@ -710,7 +710,7 @@
                                                             <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default"><i class="fa fa-times"></i></asp:LinkButton>
                                                         </EditItemTemplate>
                                                         <FooterTemplate>
-                                                            <asp:LinkButton ID="lnkAddNew" runat="server" CommandName="AddNew" CssClass="btn btn-sm btn-success" ValidationGroup="save"><i class="fa fa-save"></i></asp:LinkButton>
+                                                            <asp:LinkButton ID="lnkAddNew" runat="server" CommandName="AddNew" CssClass="btn btn-sm btn-success" ValidationGroup="Save"><i class="fa fa-save"></i></asp:LinkButton>
                                                         </FooterTemplate>
                                                         <ItemTemplate>
                                                             <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
