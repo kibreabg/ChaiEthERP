@@ -205,11 +205,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             foreach (CashPaymentRequestDetail detail in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
             {
                 attachments.AddRange(detail.CPRAttachments);
-                Session["attachments"] = attachments;
-
-                grvdetailAttachments.DataSource = attachments;
-                grvdetailAttachments.DataBind();
+                Session["attachments"] = attachments;                
             }
+
+            grvdetailAttachments.DataSource = attachments;
+            grvdetailAttachments.DataBind();
         }
         private void BindAccounts()
         {
