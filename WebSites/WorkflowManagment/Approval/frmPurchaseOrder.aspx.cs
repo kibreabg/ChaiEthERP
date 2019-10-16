@@ -156,12 +156,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 lblDateP.Text = _presenter.CurrentBidAnalysisRequest.RequestDate.ToString();
                 if (_presenter.CurrentBidAnalysisRequest.PurchaseOrders.Supplier != null)
                 {
-                    Label lblSupplierName = Repeater1.Controls[0].Controls[0].FindControl("lblSupplierName") as Label;
+                    Label lblSupplierName = Repeater1.Controls[0].Controls[0].FindControl("lblSupplierNamep") as Label;
                     lblSupplierName.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.Supplier.SupplierName;
-                    Label lblSupplierAddress = Repeater1.Controls[0].Controls[0].FindControl("lblSupplierAddress") as Label;
+                    Label lblSupplierAddress = Repeater1.Controls[0].Controls[0].FindControl("lblSupplierAddressp") as Label;
                     lblSupplierAddress.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.Supplier.SupplierAddress;
-                    Label lblSupplierContactP = Repeater1.Controls[0].Controls[0].FindControl("lblSupplierContactP") as Label;
-                    lblSupplierContactP.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.Supplier.SupplierContact;
+                    
+                    
                 }
                 Label lblBillToP = Repeater1.Controls[0].Controls[0].FindControl("lblBillToP") as Label;
                 lblBillToP.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.Billto;
@@ -177,17 +177,28 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 Label lblTotalP = Repeater1.Controls[Repeater1.Controls.Count - 1].FindControl("lblTotalP") as Label;
                 foreach (Bidder detail in _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders)
                 {
+                if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails.Count != 0 && _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Rank == 1)
+                {
                     PurchaseOrderDetail POD = new PurchaseOrderDetail();
                     POD.ItemAccount = _presenter.GetItemAccount(detail.BidderItemDetail.ItemAccount.Id);
                     POD.Qty = detail.BidderItemDetail.Qty;
-                    POD.UnitCost = detail.BidderItemDetail.UnitCost;
-                    POD.TotalCost = detail.BidderItemDetail.TotalCost;
+                    POD.UnitCost = detail.BidderItemDetail.Bidders[0].UnitCost;
+                    POD.TotalCost = detail.BidderItemDetail.Bidders[0].TotalCost;
                     _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PurchaseOrderDetails.Add(POD);
-               
-                   lblItemTotalP.Text = ((lblItemTotalP.Text != "" ? Convert.ToDecimal(lblItemTotalP.Text) : 0) + POD.TotalCost).ToString();
+                   
                 }
+                }
+            foreach (Bidder detail in _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders)
+            {
+                if (detail.Rank == 1)
+                {
+                    Label lblItemP = Repeater1.Controls[0].Controls[0].FindControl("lblItemP") as Label;
+                    lblItemP.Text = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].ItemDescription;
 
-                lblTotalP.Text = Convert.ToString((!String.IsNullOrEmpty(lblItemTotalP.Text) ? Convert.ToDecimal(lblItemTotalP.Text) : 0) + (!String.IsNullOrEmpty(lblVatP.Text) ? Convert.ToDecimal(lblVatP.Text) : 0) + (!String.IsNullOrEmpty(lblDeliveryFeesP.Text) ? Convert.ToDecimal(lblDeliveryFeesP.Text) : 0));
+                    lblItemTotalP.Text =detail.TotalCost.ToString();
+                }
+            }
+            lblTotalP.Text = Convert.ToString((!String.IsNullOrEmpty(lblItemTotalP.Text) ? Convert.ToDecimal(lblItemTotalP.Text) : 0) + (!String.IsNullOrEmpty(lblVatP.Text) ? Convert.ToDecimal(lblVatP.Text) : 0) + (!String.IsNullOrEmpty(lblDeliveryFeesP.Text) ? Convert.ToDecimal(lblDeliveryFeesP.Text) : 0));
                 Label lblAuthorizedBy = Repeater1.Controls[Repeater1.Controls.Count - 1].FindControl("lblAuthorizedByP") as Label;
                 foreach (BidAnalysisRequestStatus detail in _presenter.CurrentBidAnalysisRequest.BidAnalysisRequestStatuses)
                 {
@@ -200,7 +211,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void AutoNumber()
         {
-            txtPONo.Text = "PO-" + (_presenter.GetLastPurchaseOrderId() + 1);
+            txtPONo.Text = "POBA-" + (_presenter.GetLastPurchaseOrderId() + 1);
         }
         private void BindPurchaseOrder()
         {
@@ -214,12 +225,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     int bider = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Rank;
 
-                    if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails.Count != 0 && _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Rank ==1)
+                if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails.Count != 0 && _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Rank == 1)
+                {
+                    if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Supplier != null)
                     {
-                    txtSupplierName.Text = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Supplier.SupplierName;                   
-                    txtSupplierAddress.Text = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Supplier.SupplierAddress;
-                    txtSupplierContact.Text = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Supplier.SupplierContact;
+                        txtSupplierName.Text = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Supplier.SupplierName;
+                        txtSupplierAddress.Text = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Supplier.SupplierAddress;
+                        txtItem.Text = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].ItemDescription;
                     }
+                }
                 }
 
                 if (_presenter.CurrentBidAnalysisRequest.PurchaseOrders != null)
@@ -258,6 +272,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 _presenter.CurrentBidAnalysisRequest.PurchaseOrders.ShipTo = txtShipTo.Text;
                 _presenter.CurrentBidAnalysisRequest.PurchaseOrders.DeliveryFees = Convert.ToDecimal(txtDeliveeryFees.Text);
                 _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PaymentTerms = txtPaymentTerms.Text;
+                _presenter.CurrentBidAnalysisRequest.PurchaseOrders.TotalPrice = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].TotalCost;
                 _presenter.CurrentBidAnalysisRequest.PurchaseOrders.BidAnalysisRequest = _presenter.CurrentBidAnalysisRequest;
                 if (_presenter.CurrentBidAnalysisRequest != null)
                 {
@@ -286,9 +301,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void BindPODetail()
         {
-
-            dgPODetail.DataSource = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders;
-            dgPODetail.DataBind();
+          
+                dgPODetail.DataSource = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders;
+                dgPODetail.DataBind();
+         
 
         }
        
@@ -306,9 +322,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     {
                         PurchaseOrderDetail POD = new PurchaseOrderDetail();
                         POD.ItemAccount = _presenter.GetItemAccount(detail.ItemAccount.Id);
-                        POD.Qty = detail.Qty;
-                        POD.UnitCost = detail.UnitCost;
-                        POD.TotalCost = detail.TotalCost;
+                        POD.Qty = detail.Bidders[0].Qty;
+                        POD.UnitCost = detail.Bidders[0].UnitCost;
+                        POD.TotalCost = detail.Bidders[0].TotalCost;
+                        POD.Rank = 1;
+                        POD.Item = detail.ItemDescription;
+                        
                         _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PurchaseOrderDetails.Add(POD);
                     }
                     
@@ -345,8 +364,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     PrintTransaction();
                     btnPrintPurchaseOrder.Enabled = true;
                     btnPrintPurchaseForm.Enabled = true;
-                    // Response.Redirect(String.Format("frmPurchaseApproval.aspx?PurchaseRequestId={0}&PnlStatus={1}", _presenter.CurrentBidAnalysisRequest.Id, "Enabled"));
-                }
+                btnRequest.Enabled = false;
+                // Response.Redirect(String.Format("frmPurchaseApproval.aspx?PurchaseRequestId={0}&PnlStatus={1}", _presenter.CurrentBidAnalysisRequest.Id, "Enabled"));
+            }
                
             catch (Exception ex)
             {
@@ -372,23 +392,29 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 lblRequestNoResult.Text = _presenter.CurrentBidAnalysisRequest.RequestNo;
                 lblRequesterResult.Text = _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName;
                 lblRequestedDateResult.Text = _presenter.CurrentBidAnalysisRequest.RequestDate.ToString();
-                //    lblDeliverToResult.Text = _presenter.CurrentBidAnalysisRequest..DeliverTo;
+                //lblDeliverToResult.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders..DeliverTo;
                 lblPurchaseOrderNo.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PoNumber;
+            lblDeliverToResult.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.ShipTo;
                 //  lblDeliveryDateresult.Text = _presenter.CurrentBidAnalysisRequest..Requireddateofdelivery.ToString();
              //   lblPurposeResult.Text = _presenter.CurrentBidAnalysisRequest.Neededfor;
                 lblBillToResult.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.Billto;
                 lblShipToResult.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.ShipTo;
                 lblPaymentTerms.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PaymentTerms;
                 lblDeliveryFeesResult.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.DeliveryFees.ToString();
-            
+
+            if (_presenter.CurrentBidAnalysisRequest != null && _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Rank == 1)
+            {
+                lblItemResult.Text = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].ItemDescription;
+            }
+            lblDeliveryDateresult.Text = _presenter.CurrentBidAnalysisRequest.PurchaseRequest.Requireddateofdelivery.ToShortDateString();
                 lblSuggestedSupplierResult.Text = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Supplier.SupplierName;
                 if (_presenter.CurrentBidAnalysisRequest != null)
                 {
-                    lblReasonforSelectionResult.Text = _presenter.CurrentBidAnalysisRequest.ReasonforSelection;
+                 
                     lblSelectedbyResult.Text = _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName;
 
-                    grvDetails.DataSource = _presenter.CurrentBidAnalysisRequest.GetAllBidders();
-                    grvDetails.DataBind();
+                    //grvDetails.DataSource = _presenter.CurrentBidAnalysisRequest.GetAllBidders();
+                    //grvDetails.DataBind();
 
                     
                 }

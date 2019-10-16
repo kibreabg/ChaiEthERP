@@ -18,9 +18,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
       
         string GetNeededFor { get; }
         
-       
-        string GetProject { get; }
-        string GetGrant { get; }
+        decimal GetTotalPrice { get; }
+        //string GetProject { get; }
+        //string GetGrant { get; }
+        int GetProjectId { get; }
+        int GetGrantId { get; }
         string GetReasonForSelection { get; }  
     
     }

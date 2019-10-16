@@ -25,7 +25,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string ContactPersonNumber { get; set; }
         public decimal ProposedPurchasedPrice { get; set; }
         public string SoleSourceJustificationPreparedBy { get; set; }        
-        public string Comment { get; set; }
+        public string ReasonForSelection { get; set; }
         public int CurrentApprover { get; set; }
         public Nullable<int> CurrentLevel { get; set; }
         public string CurrentStatus { get; set; }

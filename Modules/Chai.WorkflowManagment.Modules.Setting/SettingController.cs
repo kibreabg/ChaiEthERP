@@ -158,9 +158,9 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             return WorkspaceFactory.CreateReadOnly().Query<Supplier>(x => x.SupplierType.Id == SupplierTypeId && x.Status =="Active").ToList();
         }
-        public Supplier GetSupplier(int SupplierId)
+        public Supplier GetSupplier(int Id)
         {
-            return _workspace.Single<Supplier>(x => x.Id == SupplierId);
+            return _workspace.Single<Supplier>(x => x.Id == Id);
         }
         public IList<Supplier> ListSuppliers(string SupplierName)
         {

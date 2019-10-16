@@ -166,17 +166,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             BidAnalysisRequest.RequestNo = View.GetRequestNo;
             BidAnalysisRequest.RequestDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
             
-          //  BidAnalysisRequest.Neededfor = View.GetNeededFor;
+           BidAnalysisRequest.TotalPrice = Convert.ToDecimal(View.GetTotalPrice);
             
 
-
-            //  BidAnalysisRequest.Supplier.Id=View.GetSupplierId;
-             BidAnalysisRequest.ReasonforSelection = View.GetReasonForSelection;
-            //   BidAnalysisRequest.SelectedBy = View.GetSelectedBy;
+          
 
             BidAnalysisRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
 
-             
+            if (View.GetProjectId != 0)
+                BidAnalysisRequest.Project = _settingController.GetProject(View.GetProjectId);
+            if (View.GetGrantId != 0)
+                BidAnalysisRequest.Grant = _settingController.GetGrant(View.GetGrantId);
             BidAnalysisRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
 
         
