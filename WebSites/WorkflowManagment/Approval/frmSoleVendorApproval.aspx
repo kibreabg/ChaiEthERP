@@ -224,7 +224,7 @@
                                     <div class="tab-pane active" id="iss1">
                                         <asp:DataGrid ID="dgSoleVendorRequestDetail" runat="server"
                                             AutoGenerateColumns="False" CellPadding="0" CssClass="table table-striped table-bordered table-hover"
-                                            DataKeyField="Id" GridLines="None" PagerStyle-CssClass="paginate_button active" ShowFooter="True">
+                                            DataKeyField="Id" GridLines="None" PagerStyle-CssClass="paginate_button active" ShowFooter="True" TextWrap = "Wrap">
                                             <Columns>
                                                 <asp:TemplateColumn HeaderText="Account Name">
                                                     <ItemTemplate>
