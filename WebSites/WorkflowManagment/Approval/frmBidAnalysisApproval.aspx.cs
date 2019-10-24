@@ -349,7 +349,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
                 grvStatuses.DataSource = _presenter.CurrentBidAnalysisRequest.BidAnalysisRequestStatuses;
                 grvStatuses.DataBind();
-            }
+           }
         }
         protected void btnApprove_Click(object sender, EventArgs e)
         {
