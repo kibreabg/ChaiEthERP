@@ -59,7 +59,7 @@
             </asp:Panel>
             <asp:GridView ID="grvDetails"
                 runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                CssClass="table table-striped table-bordered table-hover" OnSelectedIndexChanged="grvDetails_SelectedIndexChanged" AllowPaging="True">
+                CssClass="table table-striped table-bordered table-hover" OnSelectedIndexChanged="grvDetails_SelectedIndexChanged" AllowPaging="True" OnPageIndexChanging="grvDetails_PageIndexChanging" PageSize="15">
                 <RowStyle CssClass="rowstyle" />
                 <Columns>
                       <asp:BoundField DataField="PurchaseRequest.RequestNo" HeaderText="Purchase Request No" SortExpression="PurchaseRequest.RequestNo" />

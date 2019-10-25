@@ -1303,8 +1303,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
 
 
-      
-      
-        
+
+
+
+
+        protected void grvDetails_PageIndexChanging1(object sender, GridViewPageEventArgs e)
+        {
+            grvDetails.PageIndex = e.NewPageIndex;
+            PopPurchaseRequest();
+        }
     }
 }

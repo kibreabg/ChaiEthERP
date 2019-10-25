@@ -752,5 +752,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ddlGrant.SelectedIndex = 0;
         }
 
+
+        protected void grvDetails_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            grvDetails.PageIndex = e.NewPageIndex;
+            PopPurchaseRequest();
+
+        }
     }
 }

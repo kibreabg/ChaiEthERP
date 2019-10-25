@@ -37,7 +37,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 BindPurchaseOrder();
                 btnPrintPurchaseForm.Enabled = true;
                 btnPrintPurchaseOrder.Enabled = true;
-                BindRepeater();  
+               // BindRepeater();  
             }
             this._presenter.OnViewLoaded();
 
