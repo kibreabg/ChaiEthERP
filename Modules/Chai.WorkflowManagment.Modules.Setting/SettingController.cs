@@ -152,7 +152,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
         #region Supplier
         public IList<Supplier> GetSuppliers()
         {
-            return WorkspaceFactory.CreateReadOnly().Query<Supplier>(x => x.Status == "Active").OrderBy(x => x.SupplierName).ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<Supplier>(x => x.Status == "Active").OrderByDescending(x => x.SupplierName).ToList();
         }
         public IList<Supplier> GetSuppliers(int SupplierTypeId)
         {

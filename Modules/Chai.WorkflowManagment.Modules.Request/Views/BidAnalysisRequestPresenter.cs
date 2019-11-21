@@ -167,7 +167,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             BidAnalysisRequest.RequestDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
             
            BidAnalysisRequest.TotalPrice = Convert.ToDecimal(View.GetTotalPrice);
-            
+            BidAnalysisRequest.ReasonforSelection = View.GetReasonForSelection;
 
           
 

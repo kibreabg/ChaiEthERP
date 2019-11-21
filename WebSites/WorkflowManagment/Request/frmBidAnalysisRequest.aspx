@@ -29,7 +29,9 @@
             docprint.focus();
         }
     </script>
-
+      <asp:ValidationSummary ID="VSBidAnalysis" runat="server"
+        CssClass="alert alert-danger fade in" DisplayMode="SingleParagraph"
+        ValidationGroup="save" ForeColor="" />
     <%--  <asp:ValidationSummary ID="VSBid" runat="server"
         CssClass="alert alert-danger fade in" DisplayMode="SingleParagraph"
         ValidationGroup="Save" ForeColor="" />
@@ -54,7 +56,7 @@
             <!-- widget content -->
             <div class="widget-body no-padding">--%>
         <div class="smart-form">
-            <fieldset>
+           <%-- <fieldset>
                 <section class="col col-4">
                     <label id="lblPurchaseReq" runat="server" class="label" visible="true">
                         Purchase Request
@@ -64,7 +66,7 @@
                         </asp:DropDownList><i></i>
                     </label>
                 </section>
-            </fieldset>
+            </fieldset>--%>
               <asp:Panel ID="pnlInfo" runat="server">
                 <div class="alert alert-info fade in">
                     <button class="close" data-dismiss="alert">
@@ -76,9 +78,10 @@
             </asp:Panel>
             <asp:GridView ID="grvDetails"
                 runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                CssClass="table table-striped table-bordered table-hover" OnSelectedIndexChanged="grvDetails_SelectedIndexChanged">
+                CssClass="table table-striped table-bordered table-hover" OnSelectedIndexChanged="grvDetails_SelectedIndexChanged" AllowPaging="True" OnPageIndexChanging="grvDetails_PageIndexChanging1" PageSize="15">
                 <RowStyle CssClass="rowstyle" />
                 <Columns>
+                     <asp:BoundField DataField="PurchaseRequest.RequestNo" HeaderText="Purchase Request No" SortExpression="PurchaseRequest.RequestNo" />
                     <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="AccountName" SortExpression="ItemAccount.AccountName" />
                     <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
                     <asp:BoundField DataField="Item" HeaderText="Item Description" SortExpression="Item"></asp:BoundField>
@@ -177,7 +180,7 @@
                         <label class="input">
                             <asp:TextBox ID="txtselectionfor" runat="server" Visible="true"></asp:TextBox>
                         </label>
-                        <asp:RequiredFieldValidator ID="Rfvreasons" runat="server" CssClass="validator" ControlToValidate="txtselectionfor" ErrorMessage="Reason For Selection Required" ValidationGroup="Save">*</asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator ID="Rfvreasons" runat="server" CssClass="validator" ControlToValidate="txtselectionfor" ErrorMessage="Reason For Selection Required" ValidationGroup="save">*</asp:RequiredFieldValidator>
                     </section>
                     <%-- <section class="col col-4">
                                 <label class="label">Project</label>
@@ -384,19 +387,7 @@
                         <td style="width: 389px;">&nbsp;</td>
                         <td>&nbsp;</td>
                     </tr>
-                <tr>
-
-                    <td style="width: 629px; height: 18px; padding-left: 20%;">
-                        <strong>
-                            <asp:Label ID="lblProposedPurchasedprice" runat="server" Text="Special Need:"></asp:Label>
-                        </strong></td>
-                    <td style="width: 244px; height: 18px;">
-                        <asp:Label ID="lblSpecialNeed" runat="server" Text="" class="label"></asp:Label>
-                    </td>
-                    <td style="width: 389px;">&nbsp;</td>
-                    <td style="width: 389px;">&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
+              
             </table>
 
 
@@ -408,7 +399,7 @@
                 CssClass="table table-striped table-bordered table-hover">
                 <RowStyle CssClass="rowstyle" />
                 <Columns>
-                    <asp:BoundField DataField="SupplierType.SupplierTypeName" HeaderText="Supplier Type" SortExpression="SupplierType.SupplierTypeName" />
+                    
                     <asp:BoundField DataField="Supplier.SupplierName" HeaderText="Supplier" SortExpression="Supplier.SupplierName" />
                     <asp:BoundField DataField="Rank" HeaderText="Rank" SortExpression="Rank" />
 
@@ -719,7 +710,7 @@
                                                             <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default"><i class="fa fa-times"></i></asp:LinkButton>
                                                         </EditItemTemplate>
                                                         <FooterTemplate>
-                                                            <asp:LinkButton ID="lnkAddNew" runat="server" CommandName="AddNew" CssClass="btn btn-sm btn-success" ValidationGroup="save"><i class="fa fa-save"></i></asp:LinkButton>
+                                                            <asp:LinkButton ID="lnkAddNew" runat="server" CommandName="AddNew" CssClass="btn btn-sm btn-success" ValidationGroup="Save"><i class="fa fa-save"></i></asp:LinkButton>
                                                         </FooterTemplate>
                                                         <ItemTemplate>
                                                             <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>

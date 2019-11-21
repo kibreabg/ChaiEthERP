@@ -179,7 +179,7 @@
                     <div class="jarviswidget-editbox"></div>
                     <div class="widget-body no-padding">
                         <div class="smart-form">
-                            <asp:DataGrid ID="dgPurchaseRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
+                            <asp:DataGrid ID="dgPurchaseRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0" TextWrap = "Wrap"
                                 CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
                                 GridLines="None" OnCancelCommand="dgPurchaseRequestDetail_CancelCommand" OnEditCommand="dgPurchaseRequestDetail_EditCommand"
                                 OnItemDataBound="dgPurchaseRequestDetail_ItemDataBound" OnUpdateCommand="dgPurchaseRequestDetail_UpdateCommand"

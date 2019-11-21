@@ -209,6 +209,8 @@
                                             <asp:ListItem Value="Liter (L)">Liter (L)</asp:ListItem>
                                             <asp:ListItem Value="Day (D)">Day (D)</asp:ListItem>
                                             <asp:ListItem Value="Hour (Hr)">Hour (Hr)</asp:ListItem>
+                                            <asp:ListItem Value="Pack (Pk)">Pack (Pk)</asp:ListItem>
+                                            <asp:ListItem Value="Set (St)">Set (St)</asp:ListItem>
                                             <asp:ListItem Value="Other">Other</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RfvUoM" runat="server" CssClass="validator"
@@ -231,6 +233,8 @@
                                             <asp:ListItem Value="Liter (L)">Liter (L)</asp:ListItem>
                                             <asp:ListItem Value="Day (D)">Day (D)</asp:ListItem>
                                             <asp:ListItem Value="Hour (Hr)">Hour (Hr)</asp:ListItem>
+                                             <asp:ListItem Value="Pack (Pk)">Pack (Pk)</asp:ListItem>
+                                            <asp:ListItem Value="Set (St)">Set (St)</asp:ListItem>
                                             <asp:ListItem Value="Other">Other</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RfvFUoM" runat="server" CssClass="validator"

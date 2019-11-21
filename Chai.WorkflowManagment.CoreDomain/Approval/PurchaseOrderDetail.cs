@@ -23,6 +23,6 @@ namespace Chai.WorkflowManagment.CoreDomain.Approval
         public decimal Vat { get; set; }
 
         public int Rank { get; set; }
-        public string Item { get; set; }
+        public string ItemDescription { get; set; }
     }
 }

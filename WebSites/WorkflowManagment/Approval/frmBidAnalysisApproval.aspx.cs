@@ -290,15 +290,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             if (_presenter.GetUser(PRS.Approver).IsAssignedJob != true)
             {
-                EmailSender.Send(_presenter.GetUser(PRS.Approver).Email, "Bid Analysis Request", (_presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName).ToUpper() + " Requests for Bid Analysis with Purchase No. - '" + (_presenter.CurrentBidAnalysisRequest.RequestNo).ToUpper() + "'");
+                EmailSender.Send(_presenter.GetUser(PRS.Approver).Email, "Bid Analysis Request", (_presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName).ToUpper() + " Requests for Bid Analysis with Request No. - '" + (_presenter.CurrentBidAnalysisRequest.RequestNo).ToUpper() + "'");
             }
             else
             {
-                EmailSender.Send(_presenter.GetUser(_presenter.GetAssignedJobbycurrentuser(PRS.Approver).AssignedTo).Email, "Bid Analysis Request", (_presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName).ToUpper() + " Requests for Bid Analysis with Purchase No '" + (_presenter.CurrentBidAnalysisRequest.RequestNo).ToUpper() + "'");
+                EmailSender.Send(_presenter.GetUser(_presenter.GetAssignedJobbycurrentuser(PRS.Approver).AssignedTo).Email, "Bid Analysis Request", (_presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName).ToUpper() + " Requests for Bid Analysis with Request No '" + (_presenter.CurrentBidAnalysisRequest.RequestNo).ToUpper() + "'");
             }
         }
 
-       
+      
 
         private void SendCanceledEmail()
         {
@@ -349,7 +349,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
                 grvStatuses.DataSource = _presenter.CurrentBidAnalysisRequest.BidAnalysisRequestStatuses;
                 grvStatuses.DataBind();
-            }
+           }
         }
         protected void btnApprove_Click(object sender, EventArgs e)
         {

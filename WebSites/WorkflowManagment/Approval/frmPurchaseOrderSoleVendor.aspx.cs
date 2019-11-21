@@ -158,7 +158,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (detail.ApprovalStatus == ApprovalStatus.Authorized.ToString())
                 {
-                    Label lblAuthorizedBy = Repeater1.Controls[Repeater1.Controls.Count - 1].FindControl("lblAuthorizedByP") as Label;
+                    Label lblAuthorizedBy = Repeater1.Controls[Repeater1.Controls.Count - 1].FindControl("lblAuthorizedBy") as Label;
                     lblAuthorizedBy.Text = _presenter.GetUser(detail.Approver).FullName;
                 }
             }
@@ -275,6 +275,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 btnPrintPurchaseOrder.Enabled = true;
                 btnPrintPurchaseForm.Enabled = true;
                 btnRequest.Enabled = false;
+                Master.ShowMessage(new AppMessage("Successfully did a Sole Vendor Purchase Order, Reference No - <b>'" + _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.PoNumber + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
                 // Response.Redirect(String.Format("frmPurchaseApproval.aspx?PurchaseRequestId={0}&PnlStatus={1}", _presenter.CurrentBidAnalysisRequest.Id, "Enabled"));
             }
             catch (Exception ex)

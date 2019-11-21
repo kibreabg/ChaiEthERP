@@ -37,7 +37,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 BindPurchaseOrder();
                 btnPrintPurchaseForm.Enabled = true;
                 btnPrintPurchaseOrder.Enabled = true;
-                //BindRepeater();  
+               // BindRepeater();  
             }
             this._presenter.OnViewLoaded();
 
@@ -173,7 +173,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 lblDeliveryFeesP.Text = Convert.ToString(_presenter.CurrentBidAnalysisRequest.PurchaseOrders.DeliveryFees);
                 Label lblItemTotalP = Repeater1.Controls[Repeater1.Controls.Count - 1].FindControl("lblTotalP") as Label;
                 Label lblVatP = Repeater1.Controls[Repeater1.Controls.Count - 1].FindControl("lblVatP") as Label;
-               
+              
                 Label lblTotalP = Repeater1.Controls[Repeater1.Controls.Count - 1].FindControl("lblTotalP") as Label;
                 foreach (Bidder detail in _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders)
                 {
@@ -184,6 +184,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     POD.Qty = detail.BidderItemDetail.Qty;
                     POD.UnitCost = detail.BidderItemDetail.Bidders[0].UnitCost;
                     POD.TotalCost = detail.BidderItemDetail.Bidders[0].TotalCost;
+
+                    POD.Vat = Convert.ToDecimal((POD.TotalCost * 15)/ 100);
                     _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PurchaseOrderDetails.Add(POD);
                    
                 }
@@ -196,6 +198,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     lblItemP.Text = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].ItemDescription;
 
                     lblItemTotalP.Text =detail.TotalCost.ToString();
+
+                    decimal vat=0;
+                    vat = (detail.TotalCost * 15 / 100);
+                    lblVatP.Text = vat.ToString();
                 }
             }
             lblTotalP.Text = Convert.ToString((!String.IsNullOrEmpty(lblItemTotalP.Text) ? Convert.ToDecimal(lblItemTotalP.Text) : 0) + (!String.IsNullOrEmpty(lblVatP.Text) ? Convert.ToDecimal(lblVatP.Text) : 0) + (!String.IsNullOrEmpty(lblDeliveryFeesP.Text) ? Convert.ToDecimal(lblDeliveryFeesP.Text) : 0));
@@ -246,6 +252,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         txtBillto.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.Billto;
                         txtDeliveeryFees.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.DeliveryFees.ToString();
                         txtPaymentTerms.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PaymentTerms;
+                        
                         btnPrintPurchaseOrder.Enabled = true;
                         btnPrintPurchaseForm.Enabled = true;
                     }
@@ -273,6 +280,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 _presenter.CurrentBidAnalysisRequest.PurchaseOrders.DeliveryFees = Convert.ToDecimal(txtDeliveeryFees.Text);
                 _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PaymentTerms = txtPaymentTerms.Text;
                 _presenter.CurrentBidAnalysisRequest.PurchaseOrders.TotalPrice = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].TotalCost;
+              
                 _presenter.CurrentBidAnalysisRequest.PurchaseOrders.BidAnalysisRequest = _presenter.CurrentBidAnalysisRequest;
                 if (_presenter.CurrentBidAnalysisRequest != null)
                 {
@@ -326,7 +334,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         POD.UnitCost = detail.Bidders[0].UnitCost;
                         POD.TotalCost = detail.Bidders[0].TotalCost;
                         POD.Rank = 1;
-                        POD.Item = detail.ItemDescription;
+                        POD.ItemDescription = detail.ItemDescription;
                         
                         _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PurchaseOrderDetails.Add(POD);
                     }
@@ -360,11 +368,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     SavePurchaseOrder();
                     _presenter.SaveOrUpdateBidAnalysisRequest(_presenter.CurrentBidAnalysisRequest);
-                    BindRepeater();
+                   // BindRepeater();
                     PrintTransaction();
                     btnPrintPurchaseOrder.Enabled = true;
                     btnPrintPurchaseForm.Enabled = true;
                 btnRequest.Enabled = false;
+                Master.ShowMessage(new AppMessage("Successfully did a Purchase Order, Reference No - <b>'" + _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PoNumber + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
                 // Response.Redirect(String.Format("frmPurchaseApproval.aspx?PurchaseRequestId={0}&PnlStatus={1}", _presenter.CurrentBidAnalysisRequest.Id, "Enabled"));
             }
                

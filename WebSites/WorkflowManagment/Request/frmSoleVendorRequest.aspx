@@ -29,13 +29,15 @@
             docprint.focus();
         }
     </script>
+    
+
     <div class="jarviswidget jarviswidget-sortable">
         <header role="heading">
             <span class="widget-icon"><i class="fa fa-edit"></i></span>
             <h2>Sole Vendor Request</h2>
         </header>
         <div class="smart-form">
-            <fieldset>
+          <%--  <fieldset>
                 <section class="col col-4">
                     <label id="lblPurchaseReq" runat="server" class="label" visible="true">
                         Purchase Request
@@ -45,7 +47,7 @@
                         </asp:DropDownList><i></i>
                     </label>
                 </section>
-            </fieldset>
+            </fieldset>--%>
             <asp:Panel ID="pnlInfo" runat="server">
                 <div class="alert alert-info fade in">
                     <button class="close" data-dismiss="alert">
@@ -57,9 +59,10 @@
             </asp:Panel>
             <asp:GridView ID="grvDetails"
                 runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                CssClass="table table-striped table-bordered table-hover" OnSelectedIndexChanged="grvDetails_SelectedIndexChanged">
+                CssClass="table table-striped table-bordered table-hover" OnSelectedIndexChanged="grvDetails_SelectedIndexChanged" AllowPaging="True" OnPageIndexChanging="grvDetails_PageIndexChanging" PageSize="15">
                 <RowStyle CssClass="rowstyle" />
                 <Columns>
+                      <asp:BoundField DataField="PurchaseRequest.RequestNo" HeaderText="Purchase Request No" SortExpression="PurchaseRequest.RequestNo" />
                     <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="AccountName" SortExpression="ItemAccount.AccountName" />
                     <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
                     <asp:BoundField DataField="Item" HeaderText="Item Description" SortExpression="Item"></asp:BoundField>
