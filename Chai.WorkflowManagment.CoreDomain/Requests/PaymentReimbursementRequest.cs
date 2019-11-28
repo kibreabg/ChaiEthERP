@@ -23,7 +23,8 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string CurrentStatus { get; set; }
         public string ProgressStatus { get; set; }
         public int CurrentApproverPosition { get; set; }
-
+        public decimal TotalAmount { get; set; }
+        public decimal ReceivableAmount { get; set; }
         [Required]
         public virtual CashPaymentRequest CashPaymentRequest { get; set; }
         public virtual IList<PaymentReimbursementRequestDetail> PaymentReimbursementRequestDetails { get; set; }

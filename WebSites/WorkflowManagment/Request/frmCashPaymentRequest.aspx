@@ -103,6 +103,7 @@
                                         <li class="">
                                             <a href="#iss2" data-toggle="tab">Attach Receipt</a>
                                         </li>
+                                        <li></li>
                                     </ul>
                                     <div class="tab-content padding-10">
                                         <div class="tab-pane active" id="iss1">
