@@ -11,10 +11,9 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
     {
         public CashPaymentRequest()
         {
-            
+
             this.CashPaymentRequestDetails = new List<CashPaymentRequestDetail>();
             this.CashPaymentRequestStatuses = new List<CashPaymentRequestStatus>();
-            this.CPRAttachments = new List<CPRAttachment>();
         }
         public int Id { get; set; }
         public string RequestNo { get; set; }
@@ -40,7 +39,6 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public virtual PaymentReimbursementRequest PaymentReimbursementRequest { get; set; }
         public virtual IList<CashPaymentRequestDetail> CashPaymentRequestDetails { get; set; }
         public virtual IList<CashPaymentRequestStatus> CashPaymentRequestStatuses { get; set; }
-        public virtual IList<CPRAttachment> CPRAttachments { get; set; }
 
         #region CashPaymentRequestStatus
         public virtual CashPaymentRequestStatus GetCashPaymentRequestStatus(int Id)
@@ -87,23 +85,22 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public virtual CashPaymentRequestDetail GetCashPaymentRequestDetail(int Id)
         {
 
-            foreach (CashPaymentRequestDetail CPRS in CashPaymentRequestDetails)
+            foreach (CashPaymentRequestDetail CPRD in CashPaymentRequestDetails)
             {
-                if (CPRS.Id == Id)
-                    return CPRS;
+                if (CPRD.Id == Id)
+                    return CPRD;
             }
             return null;
         }
 
-        public virtual IList<CashPaymentRequestDetail> GetCashPaymentRequestDetailByPurchaseId(int PurchaseId)
+        public virtual CashPaymentRequestDetail GetDetailByItemAccount(int itemAccountId)
         {
-            IList<CashPaymentRequestDetail> LRS = new List<CashPaymentRequestDetail>();
-            foreach (CashPaymentRequestDetail CPRS in CashPaymentRequestDetails)
+            foreach (CashPaymentRequestDetail CPRD in CashPaymentRequestDetails)
             {
-                if (CPRS.CashPaymentRequest.Id == PurchaseId)
-                    LRS.Add(CPRS);
+                if (CPRD.CashPaymentRequest.Id == itemAccountId)
+                    return CPRD;
             }
-            return LRS;
+            return null;
         }
         public virtual void RemoveCashPaymentRequestDetail(int Id)
         {
@@ -117,19 +114,6 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
             }
         }
         #endregion
-        #region CPAttachment
 
-        public virtual void RemoveCPAttachment(string FilePath)
-        {
-            foreach (CPRAttachment cpa in CPRAttachments)
-            {
-                if (cpa.FilePath == FilePath)
-                {
-                    CPRAttachments.Remove(cpa);
-                    break;
-                }
-            }
-        }
-        #endregion
     }
 }

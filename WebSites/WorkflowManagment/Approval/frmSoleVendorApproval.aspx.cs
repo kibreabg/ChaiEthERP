@@ -167,6 +167,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     btnPrint.Enabled = true;
                     btnPurchaseOrder.Enabled = true;
                     btnApprove.Enabled = false;
+                    _presenter.CurrentSoleVendorRequest.PurchaseRequest.PurchaseRequestDetails[0].BidAnalysisRequestStatus = "Completed";
                 }
                 else
                 {
@@ -457,9 +458,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
        protected void btnPurchaseOrder_Click(object sender, EventArgs e)
        {
-           int purchaseID = _presenter.CurrentSoleVendorRequest.PurchaseRequest.Id;
+           int purchaseID = _presenter.CurrentSoleVendorRequest.Id;
            Response.Redirect(String.Format("frmPurchaseOrderSoleVendor.aspx?SoleVendorRequestId={0}", purchaseID));
-       }
+
+          
+        }
 
         protected void grvSoleVendorRequestList_RowCommand(object sender, GridViewCommandEventArgs e)
         {

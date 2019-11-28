@@ -48,7 +48,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     PrintTransaction();
                 }
             }
-            lnkBidRequest.Visible = true;
+            lnkBidRequest.Visible = false;
             lnkSoleVendor.Visible = false;
         }
         [CreateNew]
@@ -157,7 +157,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
                 else
                 {
-                    btnPrint.Enabled = false;
+                    btnPrint.Enabled = true;
                     btnApprove.Enabled = true;
                     ddlApprovalStatus.Enabled = true;
                 }
@@ -329,8 +329,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     BindSearchPurchaseRequestGrid();
                     if (_presenter.CurrentUser().EmployeePosition.PositionName == "Procurement Officer" && _presenter.CurrentPurchaseRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
                     {
-                        lnkBidRequest.Visible = true;
-                        lnkSoleVendor.Visible = true;
+                        //lnkBidRequest.Visible = true;
+                       // lnkSoleVendor.Visible = true;
                     }
                     pnlApproval_ModalPopupExtender.Show();
                 }
@@ -532,6 +532,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 Detail.PurposeOfPurchase = ddlPurposeOfPurchase.SelectedValue;
                 DropDownList ddlUnitOfMeasurment = e.Item.FindControl("ddlUnitOfMeasurment") as DropDownList;
                 Detail.UnitOfMeasurment = ddlUnitOfMeasurment.SelectedValue;
+                TextBox txtRemark = e.Item.FindControl("txtRemark") as TextBox;
+                Detail.Remark = txtRemark.Text;
                 DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
                 Detail.Project = _presenter.GetProject(int.Parse(ddlProject.SelectedValue));
                 TextBox txtGrant = e.Item.FindControl("txtGrant") as TextBox;

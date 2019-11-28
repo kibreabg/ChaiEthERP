@@ -199,6 +199,18 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             }
         }
+        private void BindAttachments()
+        {
+            List<CPRAttachment> attachments = new List<CPRAttachment>();
+            foreach (CashPaymentRequestDetail detail in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
+            {
+                attachments.AddRange(detail.CPRAttachments);
+                Session["attachments"] = attachments;                
+            }
+
+            grvdetailAttachments.DataSource = attachments;
+            grvdetailAttachments.DataBind();
+        }
         private void BindAccounts()
         {
             if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses.Count == _presenter.CurrentCashPaymentRequest.CurrentLevel && (_presenter.CurrentUser().EmployeePosition.PositionName == "Accountant"))
@@ -367,16 +379,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     dgCashPaymentRequestDetail.DataSource = _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails;
                     dgCashPaymentRequestDetail.DataBind();
-                    grvdetailAttachments.DataSource = _presenter.CurrentCashPaymentRequest.CPRAttachments;
-                    grvdetailAttachments.DataBind();
+                    BindAttachments();
                     pnlDetail_ModalPopupExtender.Show();
                 }
                 else if (e.CommandName == "Retire")
                 {
                     lblEstimatedAmountresult.Text = _presenter.CurrentCashPaymentRequest.TotalAmount.ToString();
                     txtActualExpenditure.Text = _presenter.CurrentCashPaymentRequest.TotalActualExpendture != 0 ? _presenter.CurrentCashPaymentRequest.TotalActualExpendture.ToString() : "";
-                    grvAttachments.DataSource = _presenter.CurrentCashPaymentRequest.CPRAttachments;
-                    grvAttachments.DataBind();
+                    BindAttachments();
                     grvReimbursementdetail.DataSource = _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails;
                     grvReimbursementdetail.DataBind();
                     GetActualAmount();
@@ -390,28 +400,31 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void btnUpload_Click(object sender, EventArgs e)
         {
-            UploadFile();
-            pnlReimbursement_ModalPopupExtender.Show();
-        }
-        private void UploadFile()
-        {
+            Button uploadBtn = (Button)sender;
+            GridViewRow attachmentRow = (GridViewRow)uploadBtn.NamingContainer;
+            FileUpload fuReciept = attachmentRow.FindControl("fuReciept") as FileUpload;
             string fileName = Path.GetFileName(fuReciept.PostedFile.FileName);
-
             if (fileName != String.Empty)
             {
-                CPRAttachment attachment = new CPRAttachment();
-                attachment.FilePath = "~/CPUploads/" + fileName;
-                fuReciept.PostedFile.SaveAs(Server.MapPath("~/CPUploads/") + fileName);
-                //Response.Redirect(Request.Url.AbsoluteUri);
-                _presenter.CurrentCashPaymentRequest.CPRAttachments.Add(attachment);
+                List<CPRAttachment> attachments = (List<CPRAttachment>)Session["attachments"];
+                foreach (CPRAttachment attachment in attachments)
+                {
+                    if (attachment.ItemAccountChecklists[0].ChecklistName == attachmentRow.Cells[2].Text)
+                    {
+                        attachment.FilePath = "~/CPUploads/" + fileName;
+                        fuReciept.PostedFile.SaveAs(Server.MapPath("~/CPUploads/") + fileName);
+                    }
+                }
 
-                grvAttachments.DataSource = _presenter.CurrentCashPaymentRequest.CPRAttachments;
-                grvAttachments.DataBind();
+                BindAttachments();
+                Master.ShowMessage(new AppMessage("Successfully uploaded the attachment", RMessageType.Info));
+
             }
             else
             {
                 Master.ShowMessage(new AppMessage("Please select file ", RMessageType.Error));
             }
+            pnlReimbursement_ModalPopupExtender.Show();
         }
         protected void DownloadFile(object sender, EventArgs e)
         {
@@ -434,10 +447,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         protected void DeleteFile(object sender, EventArgs e)
         {
             string filePath = (sender as LinkButton).CommandArgument;
-            _presenter.CurrentCashPaymentRequest.RemoveCPAttachment(filePath);
+            //_presenter.CurrentCashPaymentRequest.RemoveCPAttachment(filePath);
             File.Delete(Server.MapPath(filePath));
-            grvAttachments.DataSource = _presenter.CurrentCashPaymentRequest.CPRAttachments;
-            grvAttachments.DataBind();
+            BindAttachments();
             pnlReimbursement_ModalPopupExtender.Show();
         }
         protected void grvCashPaymentRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -731,13 +743,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             try
             {
-                if (_presenter.CurrentCashPaymentRequest.CPRAttachments.Count != 0)
+                if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[0].CPRAttachments.Count != 0)
                 {
                     _presenter.CurrentCashPaymentRequest.TotalActualExpendture = Convert.ToDecimal(txtActualExpenditure.Text);
                     _presenter.CurrentCashPaymentRequest.PaymentReimbursementStatus = "Retired";
                     _presenter.SaveOrUpdateCashPaymentRequest(_presenter.CurrentCashPaymentRequest);
                     btnPrintReimburse.Enabled = true;
-                    Master.ShowMessage(new AppMessage("Payment Retired Successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    Master.ShowMessage(new AppMessage("Payment Retired Successfully", RMessageType.Info));
                     BindSearchCashPaymentRequestGrid();
                     //btnReimburse.Enabled = false;
                     pnlReimbursement_ModalPopupExtender.Show();
@@ -802,11 +814,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 grvReimbursementdetail.EditItemIndex = -1;
                 grvReimbursementdetail.DataSource = _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails;
                 grvReimbursementdetail.DataBind();
-                Master.ShowMessage(new AppMessage("Payment Detail Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Payment Detail Successfully Updated", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to Update Payment Detail. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to Update Payment Detail. " + ex.Message, RMessageType.Error));
             }
             pnlReimbursement_ModalPopupExtender.Show();
         }

@@ -40,7 +40,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
             }
             return null;
         }
-
+       
         public virtual IList<Bidder> GetBidderByItemId(int itemId)
         {
             IList<Bidder> BIDs = new List<Bidder>();

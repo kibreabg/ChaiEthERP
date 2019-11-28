@@ -162,21 +162,21 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
            
             BidAnalysisRequest BidAnalysisRequest = CurrentBidAnalysisRequest;
-            BidAnalysisRequest.PurchaseRequest = _controller.GetPurchaseRequestbyPuID(PRID); 
+            BidAnalysisRequest.PurchaseRequest = _controller.GetPurchaseRequestbyPuID(PRID).PurchaseRequest; 
             BidAnalysisRequest.RequestNo = View.GetRequestNo;
             BidAnalysisRequest.RequestDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
             
-          //  BidAnalysisRequest.Neededfor = View.GetNeededFor;
-            
+           BidAnalysisRequest.TotalPrice = Convert.ToDecimal(View.GetTotalPrice);
+            BidAnalysisRequest.ReasonforSelection = View.GetReasonForSelection;
 
-
-            //  BidAnalysisRequest.Supplier.Id=View.GetSupplierId;
-             BidAnalysisRequest.ReasonforSelection = View.GetReasonForSelection;
-            //   BidAnalysisRequest.SelectedBy = View.GetSelectedBy;
+          
 
             BidAnalysisRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
 
-             
+            if (View.GetProjectId != 0)
+                BidAnalysisRequest.Project = _settingController.GetProject(View.GetProjectId);
+            if (View.GetGrantId != 0)
+                BidAnalysisRequest.Grant = _settingController.GetGrant(View.GetGrantId);
             BidAnalysisRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
 
         
@@ -307,7 +307,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.GetPurchaseRequest(purchaseRequestId);
         }
-        public PurchaseRequest GetPurchaseRequestbyPuID(int purchaseRequestId)
+        public PurchaseRequestDetail GetPurchaseRequestbyPuID(int purchaseRequestId)
         {
             return _controller.GetPurchaseRequestbyPuID(purchaseRequestId);
         }
@@ -316,7 +316,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.GetPurchaseRequests();
         }
-
+        public IList<PurchaseRequest> GetPurchaseRequestListInProgress()
+        {
+            return _controller.GetPurchaseRequestsInProgress();
+        }
         public void DeleteBidAnalysis(BidAnalysisRequest BidAnalysis)
         {
             _controller.DeleteEntity(BidAnalysis);

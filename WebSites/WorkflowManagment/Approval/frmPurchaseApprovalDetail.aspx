@@ -179,7 +179,7 @@
                     <div class="jarviswidget-editbox"></div>
                     <div class="widget-body no-padding">
                         <div class="smart-form">
-                            <asp:DataGrid ID="dgPurchaseRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
+                            <asp:DataGrid ID="dgPurchaseRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0" TextWrap = "Wrap"
                                 CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
                                 GridLines="None" OnCancelCommand="dgPurchaseRequestDetail_CancelCommand" OnEditCommand="dgPurchaseRequestDetail_EditCommand"
                                 OnItemDataBound="dgPurchaseRequestDetail_ItemDataBound" OnUpdateCommand="dgPurchaseRequestDetail_UpdateCommand"
@@ -271,6 +271,14 @@
                                                 <asp:ListItem Value="Training">Training</asp:ListItem>
                                                 <asp:ListItem Value="Donation">Donation</asp:ListItem>
                                             </asp:DropDownList>
+                                        </EditItemTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="Remark">
+                                        <ItemTemplate>
+                                            <%# DataBinder.Eval(Container.DataItem, "Remark")%>
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:TextBox ID="txtRemark" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "Remark")%>'></asp:TextBox>
                                         </EditItemTemplate>
                                     </asp:TemplateColumn>
                                     <asp:TemplateColumn HeaderText="Project ID">
@@ -372,7 +380,7 @@
             <tr>
                 <td style="width: 576px; height: 18px; padding-left: 15%;">
                     <strong>
-                        <asp:Label ID="lblSpecialNeed" runat="server" Text="Remark:"></asp:Label>
+                        <asp:Label ID="lblSpecialNeed" runat="server" Text="Comment:"></asp:Label>
                     </strong></td>
                 <td style="width: 490px" class="modal-sm">
                     <asp:Label ID="lblRemarkResult" runat="server"></asp:Label>
@@ -425,6 +433,7 @@
                 <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
                 <asp:BoundField DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
                 <asp:BoundField DataField="Item" HeaderText="Item" SortExpression="Item" />
+                <asp:BoundField DataField="Remark" HeaderText="Remark" SortExpression="Remark" />
                 <asp:BoundField DataField="Project.ProjectCode" HeaderText="Project Code" />
                 <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant Code" />
             </Columns>

@@ -30,6 +30,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors = new PurchaseOrderSoleVendor();
                 }
+
+                
+
                 BindPurchaseOrder();
                 btnPrintPurchaseForm.Enabled = true;
                 btnPrintPurchaseOrder.Enabled = true;
@@ -150,7 +153,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 lblItemTotalP.Text = ((!String.IsNullOrEmpty(lblItemTotalP.Text) ? Convert.ToDecimal(lblItemTotalP.Text) : 0) + POD.TotalCost).ToString();
             }
             lblTotalP.Text = Convert.ToString((!String.IsNullOrEmpty(lblItemTotalP.Text) ? Convert.ToDecimal(lblItemTotalP.Text) : 0) + (!String.IsNullOrEmpty(lblVatP.Text) ? Convert.ToDecimal(lblVatP.Text) : 0) + (!String.IsNullOrEmpty(lblDeliveryFeesP.Text) ? Convert.ToDecimal(lblDeliveryFeesP.Text) : 0));
-
+           
+            foreach (SoleVendorRequestStatus detail in _presenter.CurrentSoleVendorRequest.SoleVendorRequestStatuses)
+            {
+                if (detail.ApprovalStatus == ApprovalStatus.Authorized.ToString())
+                {
+                    Label lblAuthorizedBy = Repeater1.Controls[Repeater1.Controls.Count - 1].FindControl("lblAuthorizedBy") as Label;
+                    lblAuthorizedBy.Text = _presenter.GetUser(detail.Approver).FullName;
+                }
+            }
         }
 
         private void AutoNumber()
@@ -264,6 +275,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 btnPrintPurchaseOrder.Enabled = true;
                 btnPrintPurchaseForm.Enabled = true;
                 btnRequest.Enabled = false;
+                Master.ShowMessage(new AppMessage("Successfully did a Sole Vendor Purchase Order, Reference No - <b>'" + _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.PoNumber + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
                 // Response.Redirect(String.Format("frmPurchaseApproval.aspx?PurchaseRequestId={0}&PnlStatus={1}", _presenter.CurrentBidAnalysisRequest.Id, "Enabled"));
             }
             catch (Exception ex)

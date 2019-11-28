@@ -22,6 +22,9 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string SoleVendorJustificationType { get; set; }
         public decimal UnitCost { get; set; }
         public decimal TotalCost { get; set; }
-        
+
+        public virtual Project Project { get; set; }
+        public virtual Grant Grant { get; set; }
+
     }
 }

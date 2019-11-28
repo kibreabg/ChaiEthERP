@@ -135,18 +135,18 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
             }
         }
-        public void SaveOrUpdateSoleVendorRequest()
+        public void SaveOrUpdateSoleVendorRequest(int PRID)
         {           
             SoleVendorRequest SoleVendorRequest = CurrentSoleVendorRequest;
-            SoleVendorRequest.PurchaseRequest = _controller.GetPurchaseRequest(View.GetPurchaseRequestId);
+            SoleVendorRequest.PurchaseRequest = _controller.GetPurchaseRequestbyPuID(PRID).PurchaseRequest; 
             
             SoleVendorRequest.RequestNo = View.GetRequestNo;
             SoleVendorRequest.RequestDate = Convert.ToDateTime(DateTime.Today);
             SoleVendorRequest.ContactPersonNumber = View.GetContactPersonNumber;
             SoleVendorRequest.ProposedPurchasedPrice = 0; //Zero for now
-            SoleVendorRequest.Supplier =  _settingController.GetSupplier(View.GetProposedSupplier);          
+            SoleVendorRequest.Supplier =  _settingController.GetSupplier(View.GetProposedSupplier);
             SoleVendorRequest.SoleSourceJustificationPreparedBy = View.GetSoleSourceJustificationPreparedBy;
-            SoleVendorRequest.Comment = View.GetComment;
+            SoleVendorRequest.ReasonForSelection = View.GetReasonForSelection;
             SoleVendorRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
             if (View.GetProjectId != 0)
                 SoleVendorRequest.Project = _settingController.GetProject(View.GetProjectId);
@@ -186,6 +186,26 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public SoleVendorRequest GetSoleVendorRequest(int id)
         {
             return _controller.GetSoleVendorRequest(id);
+        }
+        public IList<PurchaseRequest> GetPurchaseRequestList()
+        {
+            return _controller.GetPurchaseRequests();
+        }
+        public PurchaseRequestDetail GetPurchaseRequestbyPuID(int purchaseRequestId)
+        {
+            return _controller.GetPurchaseRequestbyPuID(purchaseRequestId);
+        }
+        public IList<PurchaseRequestDetail> ListPurchaseReqInProgress()
+        {
+            return _controller.ListPurchaseReqInProgress();
+        }
+        public IList<PurchaseRequestDetail> ListPurchaseReqInProgressbyId(int id)
+        {
+            return _controller.ListPurchaseReqInProgressById(id);
+        }
+        public IList<PurchaseRequestDetail> ListPurchaseReqbyId(int id)
+        {
+            return _controller.ListPurchaseReqById(id);
         }
         public IList<SoleVendorRequest> ListSoleVendorRequests(string RequestNo, string RequestDate)
         {

@@ -18,7 +18,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string UnitOfMeasurment { get; set; }
         public decimal Priceperunit { get; set; }
         public decimal EstimatedCost { get; set; }
-
+        public string Remark { get; set; }
         public string BidAnalysisRequestStatus { get; set; }
         public virtual ItemAccount ItemAccount { get; set; }
         public string AccountCode { get; set; }     

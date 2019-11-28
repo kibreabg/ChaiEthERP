@@ -99,10 +99,10 @@
                                 </label>
                             </section>
                             <section class="col col-4">
-                                <label id="lblapplyfor" runat="server" class="label" visible="true">
+                                <label id="lblapplyfor" runat="server" class="label" visible="false">
                                     Remark</label>
                                 <label class="input">
-                                    <asp:TextBox ID="txtComment" runat="server" Visible="true"></asp:TextBox>
+                                    <asp:TextBox ID="txtComment" runat="server" Visible="false"></asp:TextBox>
                                 </label>
                             </section>
 
@@ -179,6 +179,19 @@
                                         <asp:RequiredFieldValidator ID="RfvFQty" CssClass="validator" runat="server" ControlToValidate="txtFQty" ErrorMessage="Qty Required" ValidationGroup="proadd"></asp:RequiredFieldValidator>
                                     </FooterTemplate>
                                 </asp:TemplateColumn>
+                                <asp:TemplateColumn HeaderText="Remark">
+                                    <ItemTemplate>
+                                        <%# DataBinder.Eval(Container.DataItem, "Remark")%>
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <asp:TextBox ID="txtRemark" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "Remark")%>'></asp:TextBox>
+                                        <asp:RequiredFieldValidator ID="RfvRemark" CssClass="validator" runat="server" ControlToValidate="txtRemark" ErrorMessage="Remark Required" ValidationGroup="proedit"></asp:RequiredFieldValidator>
+                                    </EditItemTemplate>
+                                    <FooterTemplate>
+                                        <asp:TextBox ID="txtFRemark" runat="server" CssClass="form-control"></asp:TextBox>
+                                        <asp:RequiredFieldValidator ID="RfvFRemark" CssClass="validator" runat="server" ControlToValidate="txtFQty" ErrorMessage="Remark Required" ValidationGroup="proadd"></asp:RequiredFieldValidator>
+                                    </FooterTemplate>
+                                </asp:TemplateColumn>
                                 <asp:TemplateColumn HeaderText="Unit of Measurment">
                                     <EditItemTemplate>
                                         <asp:DropDownList ID="ddlUnitOfMeasurment" runat="server" CssClass="form-control"
@@ -196,6 +209,8 @@
                                             <asp:ListItem Value="Liter (L)">Liter (L)</asp:ListItem>
                                             <asp:ListItem Value="Day (D)">Day (D)</asp:ListItem>
                                             <asp:ListItem Value="Hour (Hr)">Hour (Hr)</asp:ListItem>
+                                            <asp:ListItem Value="Pack (Pk)">Pack (Pk)</asp:ListItem>
+                                            <asp:ListItem Value="Set (St)">Set (St)</asp:ListItem>
                                             <asp:ListItem Value="Other">Other</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RfvUoM" runat="server" CssClass="validator"
@@ -218,6 +233,8 @@
                                             <asp:ListItem Value="Liter (L)">Liter (L)</asp:ListItem>
                                             <asp:ListItem Value="Day (D)">Day (D)</asp:ListItem>
                                             <asp:ListItem Value="Hour (Hr)">Hour (Hr)</asp:ListItem>
+                                             <asp:ListItem Value="Pack (Pk)">Pack (Pk)</asp:ListItem>
+                                            <asp:ListItem Value="Set (St)">Set (St)</asp:ListItem>
                                             <asp:ListItem Value="Other">Other</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RfvFUoM" runat="server" CssClass="validator"

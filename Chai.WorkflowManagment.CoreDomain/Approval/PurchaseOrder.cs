@@ -24,6 +24,8 @@ namespace Chai.WorkflowManagment.CoreDomain.Approval
        
         public Nullable<DateTime> PODate { get; set; }
         public Supplier Supplier { get; set; }
+
+       
         public string PoNumber { get; set; }
         public string Billto { get; set; }
         public string ShipTo { get; set; }

@@ -143,11 +143,11 @@
                             <div class="widget-body no-padding">
                                 <div class="smart-form">
 
-                                    <asp:DataGrid ID="dgPurchaseRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0" CssClass="table table-striped table-bordered table-hover" DataKeyField="Id" GridLines="None" OnItemDataBound="dgPurchaseRequestDetail_ItemDataBound" PagerStyle-CssClass="paginate_button active" ShowFooter="True">
+                                    <asp:DataGrid ID="dgPurchaseRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False"  CellPadding="0" TextWrap = "Wrap" CssClass="table table-striped table-bordered table-hover" DataKeyField="Id" GridLines="None" OnItemDataBound="dgPurchaseRequestDetail_ItemDataBound" PagerStyle-CssClass="paginate_button active" ShowFooter="True">
                                          <Columns>
-                                                <asp:TemplateColumn HeaderText="Bidder Name">
+                                                <asp:TemplateColumn HeaderText="Bidder Name" >
                                                     <ItemTemplate>
-                                                        <%# DataBinder.Eval(Container.DataItem, "Supplier.SupplierName")%>
+                                                        <%# DataBinder.Eval(Container.DataItem, "Supplier.SupplierNameType")%>
                                                     </ItemTemplate>
                                                 </asp:TemplateColumn>
                                                 <asp:TemplateColumn HeaderText="Quantity">

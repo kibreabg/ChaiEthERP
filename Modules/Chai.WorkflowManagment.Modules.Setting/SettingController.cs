@@ -48,7 +48,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
         public IList<AppUser> GetProgramManagers()
         {
             return WorkspaceFactory.CreateReadOnly().Query<AppUser>(x => x.EmployeePosition.PositionName.Contains("Program Manager") || x.EmployeePosition.PositionName == "Vice President & Country Director, Ethiopia" || x.EmployeePosition.PositionName == "Finance Manager" || x.EmployeePosition.PositionName == "Senior Deputy Country Director" || x.EmployeePosition.PositionName== "Coordinator, Program Operations" || x.EmployeePosition.PositionName == "M&E Manager" || x.EmployeePosition.PositionName == "Head, Administration & HR").ToList();
-        }
+        }     
         public IList<AppUser> GetEmployeeList()
         {
             return WorkspaceFactory.CreateReadOnly().Query<AppUser>(x => x.IsActive == true).OrderBy(x=>x.FullName).ToList();
@@ -88,9 +88,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
         public IList<ItemAccount> GetItemAccounts()
         {
             return WorkspaceFactory.CreateReadOnly().Query<ItemAccount>(x => x.Status == "Active").OrderBy(x => x.AccountName).ToList();
-        }
-
-       
+        }       
         public ItemAccount GetItemAccount(int ItemAccountId)
         {
             return _workspace.Single<ItemAccount>(x => x.Id == ItemAccountId);
@@ -107,6 +105,25 @@ namespace Chai.WorkflowManagment.Modules.Setting
         public ItemAccount GetDefaultItemAccount()
         {
             return _workspace.Single<ItemAccount>(x => x.AccountCode == "13110");
+        }
+        #endregion
+        #region ItemAccountChecklist
+        public IList<ItemAccountChecklist> GetItemAccountChecklists()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<ItemAccountChecklist>(x => x.Status == "Active").OrderBy(x => x.ChecklistName).ToList();
+        }
+        public ItemAccountChecklist GetItemAccountChecklist(int checklistId)
+        {
+            return _workspace.Single<ItemAccountChecklist>(x => x.Id == checklistId);
+        }
+        public IList<ItemAccountChecklist> ListItemAccountChecklists(string checkListName)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM ItemAccountChecklists Where Status = 'Active' And 1 = Case when '" + checkListName + "' = '' Then 1 When ItemAccountChecklists.ChecklistName = '" + checkListName + "'  Then 1 END";
+
+            return _workspace.SqlQuery<ItemAccountChecklist>(filterExpression).ToList();
+
         }
         #endregion
         #region Grant
@@ -135,15 +152,15 @@ namespace Chai.WorkflowManagment.Modules.Setting
         #region Supplier
         public IList<Supplier> GetSuppliers()
         {
-            return WorkspaceFactory.CreateReadOnly().Query<Supplier>(x => x.Status == "Active").OrderBy(x => x.SupplierName).ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<Supplier>(x => x.Status == "Active").OrderByDescending(x => x.SupplierName).ToList();
         }
         public IList<Supplier> GetSuppliers(int SupplierTypeId)
         {
             return WorkspaceFactory.CreateReadOnly().Query<Supplier>(x => x.SupplierType.Id == SupplierTypeId && x.Status =="Active").ToList();
         }
-        public Supplier GetSupplier(int SupplierId)
+        public Supplier GetSupplier(int Id)
         {
-            return _workspace.Single<Supplier>(x => x.Id == SupplierId);
+            return _workspace.Single<Supplier>(x => x.Id == Id);
         }
         public IList<Supplier> ListSuppliers(string SupplierName)
         {
@@ -465,11 +482,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
                 {
                     return s;
                 }
-                else if (value == 0 && "None" == s.CriteriaCondition)
-                {
-                    return s;
-                }
-                else if (s.Value == 0 && "MedicalExpense" == s.CriteriaCondition)
+                else if (s.Value == 0 && "None" == s.CriteriaCondition)
                 {
                     return s;
                 }

@@ -18,9 +18,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public int Id { get; set; }
         public virtual BidderItemDetail BidderItemDetail { get; set; }
         public string ContactDetails { get; set; }
-        public string LeadTimefromSupplier { get; set; }
        
-        public string SpecialTermsDelivery { get; set; }
         public int Rank { get; set; }
         public virtual Supplier Supplier { get; set; }
         public virtual SupplierType SupplierType { get; set; }
