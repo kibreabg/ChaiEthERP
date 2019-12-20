@@ -482,11 +482,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
                 {
                     return s;
                 }
-                else if (value == 0 && "None" == s.CriteriaCondition)
-                {
-                    return s;
-                }
-                else if (s.Value == 0 && "MedicalExpense" == s.CriteriaCondition)
+                else if (s.Value == 0 && "None" == s.CriteriaCondition)
                 {
                     return s;
                 }

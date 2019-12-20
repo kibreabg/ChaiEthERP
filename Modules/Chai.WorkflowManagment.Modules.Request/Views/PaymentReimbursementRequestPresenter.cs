@@ -172,6 +172,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.ListPaymentReimbursementRequests(RequestDate);
         }
+        public void DeletePaymentReimbursementRequestDetail(PaymentReimbursementRequestDetail PaymentReimbursementRequestDetailt)
+        {
+            _controller.DeleteEntity(PaymentReimbursementRequestDetailt);
+        }
         public IList<CashPaymentRequest> ListCashPaymentsNotExpensed()
         {
             return _controller.ListCashPaymentsNotExpensed();
@@ -183,6 +187,31 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public IList<AppUser> GetUsers()
         {
             return _adminController.GetUsers();
+        }
+        public IList<Program> GetPrograms()
+        {
+            return _settingController.GetPrograms();
+        }
+        public Grant GetGrant(int GrantId)
+        {
+            return _settingController.GetGrant(GrantId);
+        }
+        public ItemAccount GetItemAccount(int ItemAccountId)
+        {
+            return _settingController.GetItemAccount(ItemAccountId);
+        }
+        public IList<Project> ListProjects(int programID)
+        {
+            return _settingController.GetProjectsByProgramId(programID);
+        }
+        public IList<Grant> ListGrants()
+        {
+            return _settingController.GetGrants();
+        }
+        public IList<Grant> GetGrantbyprojectId(int projectId)
+        {
+            return _settingController.GetProjectGrantsByprojectId(projectId);
+
         }
         public AppUser GetUser(int id)
         {
@@ -199,6 +228,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public Project GetProject(int ProjectId)
         {
             return _settingController.GetProject(ProjectId);
+        }
+        public IList<ItemAccount> ListItemAccounts()
+        {
+            return _settingController.GetItemAccounts();
         }
         public ApprovalSetting GetApprovalSetting(string RequestType, int value)
         {
