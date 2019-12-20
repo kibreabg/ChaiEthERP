@@ -25,6 +25,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         private BidAnalysisRequest _bidanalysisrequest;
         private int reqid;
         private int PurchaseId;
+        private decimal totalamaount = 0;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!this.IsPostBack)
@@ -337,11 +338,16 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 lblRequestNoResult.Text = _presenter.CurrentBidAnalysisRequest.RequestNo;
                 lblRequestedDateResult.Text = _presenter.CurrentBidAnalysisRequest.RequestDate.ToString();
-                lblRequesterResult.Text = _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName; 
-                lblTotalPriceResult.Text = _presenter.CurrentBidAnalysisRequest.TotalPrice.ToString();
+                lblRequesterResult.Text = _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName;
+
+                foreach (Bidder detail in _presenter.CurrentBidAnalysisRequest.GetBidderbyRank())
+                {
+                    totalamaount = totalamaount + detail.TotalCost;
+                    lblTotalPriceResult.Text = totalamaount.ToString();
+                }
               
-                lblCommentResult.Text = _presenter.CurrentBidAnalysisRequest.ReasonforSelection;
-                lblRequireddateofdeliveryResult.Text = _presenter.CurrentBidAnalysisRequest.SpecialNeed;
+                //lblCommentResult.Text = _presenter.CurrentBidAnalysisRequest.ReasonforSelection;
+                //lblRequireddateofdeliveryResult.Text = _presenter.CurrentBidAnalysisRequest.SpecialNeed;
 
               //  lblApprovalStatusResult.Text = _presenter.CurrentBidAnalysisRequest.CurrentStatus;
                 
@@ -628,9 +634,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 lblRequestNoResult.Text = _presenter.CurrentBidAnalysisRequest.RequestNo.ToString();
                 lblRequestedDateResult.Text = _presenter.CurrentBidAnalysisRequest.RequestDate.ToString();
                 lblRequesterResult.Text = _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName;
-                lblCommentResult.Text = _presenter.CurrentBidAnalysisRequest.SelectedBy.ToString();
+          //      lblCommentResult.Text = _presenter.CurrentBidAnalysisRequest.SelectedBy.ToString();
               //  lblApprovalStatusResult.Text = _presenter.CurrentBidAnalysisRequest.ProgressStatus.ToString();
-                lblRequireddateofdeliveryResult.Text = _presenter.CurrentBidAnalysisRequest.SpecialNeed;
+            //    lblRequireddateofdeliveryResult.Text = _presenter.CurrentBidAnalysisRequest.SpecialNeed;
                 lblTotalPriceResult.Text = _presenter.CurrentBidAnalysisRequest.TotalPrice.ToString();
 
                 grvStatuses.DataSource = _presenter.CurrentBidAnalysisRequest.BidAnalysisRequestStatuses;

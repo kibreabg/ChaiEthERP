@@ -165,18 +165,24 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             BidAnalysisRequest.PurchaseRequest = _controller.GetPurchaseRequestbyPuID(PRID).PurchaseRequest; 
             BidAnalysisRequest.RequestNo = View.GetRequestNo;
             BidAnalysisRequest.RequestDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
-            
-           BidAnalysisRequest.TotalPrice = Convert.ToDecimal(View.GetTotalPrice);
-            BidAnalysisRequest.ReasonforSelection = View.GetReasonForSelection;
 
-          
+            foreach (Bidder detail in CurrentBidAnalysisRequest.GetBidderbyRank())
+            {
+                if (detail.Rank == 1)
+                {
+                    Totalamount = Totalamount + detail.TotalCost;
+
+                }
+            }
+
+            BidAnalysisRequest.TotalPrice = Totalamount;
 
             BidAnalysisRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
 
-            if (View.GetProjectId != 0)
-                BidAnalysisRequest.Project = _settingController.GetProject(View.GetProjectId);
-            if (View.GetGrantId != 0)
-                BidAnalysisRequest.Grant = _settingController.GetGrant(View.GetGrantId);
+          //  if (View.GetProjectId != 0)
+           //     BidAnalysisRequest.Project = _settingController.GetProject(View.GetProjectId);
+           // if (View.GetGrantId != 0)
+             //   BidAnalysisRequest.Grant = _settingController.GetGrant(View.GetGrantId);
             BidAnalysisRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
 
         

@@ -81,7 +81,7 @@
                     </ItemTemplate>
                 </asp:TemplateField>
                 
-                <asp:BoundField DataField="SpecialNeed" HeaderText="Suggested Supplier" SortExpression="SuggestedSupplier" />
+                <asp:BoundField DataField="Supplier.SupplierName" HeaderText="Suggested Supplier" SortExpression="Supplier.SupplierName" />
                 
                 <asp:BoundField DataField="TotalPrice" HeaderText="Total Price" SortExpression="TotalPrice" />
 
@@ -89,7 +89,7 @@
                    
                 </asp:TemplateField>
                
-                 <asp:TemplateField HeaderText="Supervisor For Requester">
+                 <asp:TemplateField HeaderText="Bid Analysis Prepared By">
                    
                 </asp:TemplateField>
                  <asp:TemplateField HeaderText="Purchase Requested No">
@@ -148,6 +148,11 @@
                                                 <asp:TemplateColumn HeaderText="Bidder Name" >
                                                     <ItemTemplate>
                                                         <%# DataBinder.Eval(Container.DataItem, "Supplier.SupplierNameType")%>
+                                                    </ItemTemplate>
+                                                </asp:TemplateColumn>
+                                                <asp:TemplateColumn HeaderText="Item" >
+                                                    <ItemTemplate>
+                                                        <%# DataBinder.Eval(Container.DataItem, "Item")%>
                                                     </ItemTemplate>
                                                 </asp:TemplateColumn>
                                                 <asp:TemplateColumn HeaderText="Quantity">

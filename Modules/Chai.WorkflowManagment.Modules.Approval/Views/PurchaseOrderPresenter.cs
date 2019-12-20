@@ -109,7 +109,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
              _controller.DeleteEntity(SoleVendorRequest);
          }
 
-         public BidAnalysisRequest GetPurchaseRequestById(int id)
+        public IList<BidAnalysisRequest> ListBidReqInProgressbyId(int id)
+        {
+            return _controller.ListBidReqInProgressById(id);
+        }
+        public IList<Bidder> GetBiddersByBidReq(int id)
+        {
+            return _controller.GetBiddersByBidReq(id);
+        }
+        public BidAnalysisRequest GetPurchaseRequestById(int id)
          {
              return _controller.GetBidAnalysisRequest(id);
          }
@@ -123,8 +131,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
              return _controller.ListBidAnalysisRequests(requestNo, RequestDate, ProgressStatus);
 
          }
-         
-         public IList<Supplier> GetSuppliers()
+        public IList<PurchaseRequest> GetPurchaseRequestListInProgressForPO()
+        {
+            return _controller.GetPurchaseRequestsInProgressPO();
+        }
+        public IList<Supplier> GetSuppliers()
          {
             return _settingcontroller.GetSuppliers();
          }

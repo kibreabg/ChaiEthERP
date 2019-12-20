@@ -22,9 +22,13 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public int Rank { get; set; }
         public virtual Supplier Supplier { get; set; }
         public virtual SupplierType SupplierType { get; set; }
+
+        public string Item { get; set; }
         public int Qty { get; set; }
         public decimal UnitCost { get; set; }
         public decimal TotalCost { get; set; }
+        public string ReasonForSelection { get; set; }
+        public string POStatus { get; set; }
 
         // [NotMapped]
         /*   public string GetSelectionReason

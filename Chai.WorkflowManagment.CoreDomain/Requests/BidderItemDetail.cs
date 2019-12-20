@@ -31,6 +31,18 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
 
 
         #region Bidders
+
+        public virtual Bidder GetBidderbyRank()
+        {
+
+            foreach (Bidder bidder in Bidders)
+            {
+                if (bidder.Rank == 1)
+                    return bidder;
+
+            }
+            return null;
+        }
         public virtual Bidder GetTBidder(int bidId)
         {
             foreach (Bidder BID in Bidders)
