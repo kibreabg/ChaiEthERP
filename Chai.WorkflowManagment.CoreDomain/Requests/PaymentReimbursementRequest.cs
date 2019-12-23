@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chai.WorkflowManagment.CoreDomain.Setting;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         {
             this.PaymentReimbursementRequestStatuses = new List<PaymentReimbursementRequestStatus>();
             this.PaymentReimbursementRequestDetails = new List<PaymentReimbursementRequestDetail>();
-            this.PRAttachments = new List<PRAttachment>();
+           
         }
         public int Id { get; set; }
         public Nullable<DateTime> RequestDate { get; set; }
@@ -23,13 +24,15 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string CurrentStatus { get; set; }
         public string ProgressStatus { get; set; }
         public int CurrentApproverPosition { get; set; }
+        public virtual Project Project { get; set; }
+        public virtual Grant Grant { get; set; }
         public decimal TotalAmount { get; set; }
         public decimal ReceivableAmount { get; set; }
         [Required]
         public virtual CashPaymentRequest CashPaymentRequest { get; set; }
         public virtual IList<PaymentReimbursementRequestDetail> PaymentReimbursementRequestDetails { get; set; }
         public virtual IList<PaymentReimbursementRequestStatus> PaymentReimbursementRequestStatuses { get; set; }
-        public virtual IList<PRAttachment> PRAttachments { get; set; }
+      
 
         #region ReimbursementDetails
         public virtual PaymentReimbursementRequestDetail GetPaymentReimbursementRequestDetail(int Id)
@@ -64,19 +67,6 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         }
 
         #endregion
-        #region PRAttachment
-
-        public virtual void RemovePRAttachment(string FilePath)
-        {
-            foreach (PRAttachment cpa in PRAttachments)
-            {
-                if (cpa.FilePath == FilePath)
-                {
-                    PRAttachments.Remove(cpa);
-                    break;
-                }
-            }
-        }
-        #endregion
+        
     }
 }

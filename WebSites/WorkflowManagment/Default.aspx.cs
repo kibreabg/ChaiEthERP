@@ -32,6 +32,7 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
             BindBankPaymentRequests();
             BindBidAnalysisRequests();
             BindSoleVendorRequests();
+            BindPaymentReimburesmentRequests();
         }
         this._presenter.OnViewLoaded();
         MyTasks();
@@ -159,7 +160,7 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         }
         else
         {
-            lblExpenseLiquidation.Text = Convert.ToString(0);
+            lblReimbursement.Text = Convert.ToString(0);
         }
         if (_presenter.GetBankPaymentRequestsTasks() != 0)
         {
@@ -254,7 +255,12 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
             lblSoleVendorStatus.ForeColor = System.Drawing.Color.Green;
 
         }
+        if (_presenter.GetPaymentReimbursementRequestMyRequest() != 0)
+        {
+            lblSoleVendorStatus.Text = ProgressStatus.InProgress.ToString();
+            lblSoleVendorStatus.ForeColor = System.Drawing.Color.Green;
 
+        }
     }
     private void ReimbersmentStatus()
     {
@@ -313,7 +319,11 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         grvBankProgress.DataSource = _presenter.ListBankPaymentApprovalProgress();
         grvBankProgress.DataBind();
     }
-
+    private void BindPaymentReimburesmentRequests()
+    {
+        grvSettlement.DataSource = _presenter.ListPaymentReimbursementApprovalProgress();
+        grvSettlement.DataBind();
+    }
     private void BindBidAnalysisRequests()
     {
         grvBidAnalysisProgress.DataSource = _presenter.ListBidAnalysisApprovalProgress();
@@ -427,6 +437,22 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
             {
                 if (_presenter.ListSoleVendorApprovalProgress()[e.Row.RowIndex].CurrentApprover != 0)
                     e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListSoleVendorApprovalProgress()[e.Row.RowIndex].CurrentApprover).FullName;
+            }
+        }
+    }
+    protected void grvSettlementProgress_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        if (_presenter.ListPaymentReimbursementApprovalProgress() != null)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                if (_presenter.ListPaymentReimbursementApprovalProgress().Count != 0)
+                {
+                    if (_presenter.ListPaymentReimbursementApprovalProgress()[e.Row.RowIndex].CurrentApprover != 0)
+                        e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListPaymentReimbursementApprovalProgress()[e.Row.RowIndex].CurrentApprover).FullName;
+                    else
+                        e.Row.Cells[2].Text = "Accountant";
+                }
             }
         }
     }

@@ -108,7 +108,21 @@
                                                         </label>
                                                     </section>
                                                     </div>
-                                                      <div class="row">
+                                                <div class="row">
+                                                    <section class="col col-6">
+                                                        <label class="label">Project</label>
+                                                        <label class="input">
+                                                             <asp:TextBox ID="txtProject" ReadOnly="true" runat="server"></asp:TextBox>
+                                                        </label>
+                                                    </section>
+                                                       <section class="col col-6">
+                                                        <label class="label">Grant</label>
+                                                        <label class="input">
+                                                            <asp:TextBox ID="txtGrant" runat="server"></asp:TextBox>
+                                                        </label>
+                                                    </section>
+                                                    </div>
+                                                <div class="row">
                                                     <section class="col col-6">
                                                         <label class="label">Account Receivables</label>
                                                         <label class="input">
@@ -161,12 +175,12 @@
 
                                                         </FooterTemplate>
                                                     </asp:TemplateColumn>
-                                                    <asp:TemplateColumn HeaderText="Amount">
+                                                    <asp:TemplateColumn HeaderText="Actual Expendture">
                                                         <ItemTemplate>
-                                                            <%# DataBinder.Eval(Container.DataItem, "Amount")%>
+                                                            <%# DataBinder.Eval(Container.DataItem, "ActualExpendture")%>
                                                         </ItemTemplate>
                                                         <EditItemTemplate>
-                                                            <asp:TextBox ID="txtEdtAmount" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "Amount")%>'></asp:TextBox>
+                                                            <asp:TextBox ID="txtEdtAmount" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "ActualExpendture")%>'></asp:TextBox>
                                                             <cc1:FilteredTextBoxExtender ID="txtEdtAmount_FilteredTextBoxExtender" runat="server" Enabled="True" FilterType="Custom, Numbers" TargetControlID="txtEdtAmount" ValidChars="&quot;.&quot;">
                                                             </cc1:FilteredTextBoxExtender>
                                                             <asp:RequiredFieldValidator ID="rfvtxtEdtAmount" runat="server" ControlToValidate="txtEdtAmount" CssClass="validator" Display="Dynamic" ErrorMessage="Amount is required" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
@@ -178,42 +192,7 @@
                                                             <asp:RequiredFieldValidator ID="rfvtxtAmount" runat="server" ControlToValidate="txtAmount" CssClass="validator" Display="Dynamic" ErrorMessage="Amount is required" SetFocusOnError="true" ValidationGroup="save"></asp:RequiredFieldValidator>
                                                         </FooterTemplate>
                                                     </asp:TemplateColumn>
-                                                    <asp:TemplateColumn HeaderText="Project ID">
-                                                        <ItemTemplate>
-                                                            <%# DataBinder.Eval(Container.DataItem, "Project.ProjectCode")%>
-                                                        </ItemTemplate>
-                                                        <EditItemTemplate>
-                                                            <asp:DropDownList ID="ddlEdtProject" runat="server" AutoPostBack="true" CssClass="form-control" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlEdtProject_SelectedIndexChanged">
-                                                                <asp:ListItem Value="0">Select Project</asp:ListItem>
-                                                            </asp:DropDownList>
-                                                            <i></i>
-                                                            <asp:RequiredFieldValidator ID="rfvddlEdtProject" runat="server" ControlToValidate="ddlEdtProject" CssClass="validator" Display="Dynamic" ErrorMessage="Project must be selected" InitialValue="0" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
-                                                        </EditItemTemplate>
-                                                        <FooterTemplate>
-                                                            <asp:DropDownList ID="ddlProject" runat="server" AutoPostBack="true" CssClass="form-control" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlProject_SelectedIndexChanged">
-                                                                <asp:ListItem Value="0">Select Project</asp:ListItem>
-                                                            </asp:DropDownList>
-                                                            <i></i>
-                                                            <asp:RequiredFieldValidator ID="rfvddlProject" runat="server" ControlToValidate="ddlProject" CssClass="validator" Display="Dynamic" ErrorMessage="Project must be selected" InitialValue="0" SetFocusOnError="true" ValidationGroup="save"></asp:RequiredFieldValidator>
-                                                        </FooterTemplate>
-                                                    </asp:TemplateColumn>
-                                                    <asp:TemplateColumn HeaderText="Grant ID">
-                                                        <EditItemTemplate>
-                                                            <asp:DropDownList ID="ddlEdtGrant" runat="server" AppendDataBoundItems="True" CssClass="form-control" DataTextField="GrantCode" DataValueField="Id">
-                                                                <asp:ListItem Value="0">Select Grant</asp:ListItem>
-                                                            </asp:DropDownList>
-                                                            <asp:RequiredFieldValidator ID="RfvGrant" runat="server" CssClass="validator" ControlToValidate="ddlEdtGrant" ErrorMessage="Grant is required" InitialValue="0" SetFocusOnError="True" ValidationGroup="edit"></asp:RequiredFieldValidator>
-                                                        </EditItemTemplate>
-                                                        <FooterTemplate>
-                                                            <asp:DropDownList ID="ddlGrant" runat="server" AppendDataBoundItems="True" CssClass="form-control" DataTextField="GrantCode" DataValueField="Id" EnableViewState="true">
-                                                                <asp:ListItem Value="0">Select Grant</asp:ListItem>
-                                                            </asp:DropDownList>
-                                                            <asp:RequiredFieldValidator ID="RfvFGrantCode" runat="server" CssClass="validator" ControlToValidate="ddlGrant" Display="Dynamic" ErrorMessage="Grant is required" InitialValue="0" SetFocusOnError="True" ValidationGroup="save"></asp:RequiredFieldValidator>
-                                                        </FooterTemplate>
-                                                        <ItemTemplate>
-                                                            <%# DataBinder.Eval(Container.DataItem, "Grant.GrantCode")%>
-                                                        </ItemTemplate>
-                                                    </asp:TemplateColumn>
+                                                                                                     
                                                     <asp:TemplateColumn HeaderText="Supporting Doc Attached">
                                                         <ItemTemplate>
                                                             <%# DataBinder.Eval(Container.DataItem, "SupportDocAttached")%>
@@ -246,6 +225,7 @@
                                                 <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
                                             </asp:DataGrid>
                                                 
+                                                
                                             </fieldset>
                                         </div>
                                         <div class="tab-pane" id="iss2">
@@ -255,34 +235,37 @@
                                                     <fieldset>
                                                         <div class="row">
                                                             <section class="col col-6">
-                                                                <label class="label">Invoice Reciept</label>
-                                                                <asp:FileUpload ID="fuReciept" runat="server" />
-                                                                <asp:Button ID="btnUpload" runat="server" Text="Upload" CssClass="btn btn-primary" OnClick="btnUpload_Click" />
+                                                                    <label class="label">Attach Reciepts</label>
                                                             </section>
+                                                     
                                                         </div>
                                                     </fieldset>
                                                     <asp:GridView ID="grvAttachments"
-                                                        runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                                                        CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
-                                                        <RowStyle CssClass="rowstyle" />
-                                                        <Columns>
-                                                            <asp:BoundField DataField="FilePath" HeaderText="File Name" SortExpression="FilePath" />
-                                                                <asp:TemplateField>
+                                                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                                                CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
+                                                <RowStyle CssClass="rowstyle" />
+                                                <Columns>
+                                                    <asp:BoundField DataField="FilePath" HeaderText="File Name" SortExpression="FilePath" />
+                                                    <asp:BoundField DataField="ItemAccountChecklists[0].ChecklistName" HeaderText="Checklist Name" SortExpression="ItemAccountChecklists[0].ChecklistName" />
+                                                    <asp:TemplateField>
+                                                        <ItemTemplate>
+                                                            <div class="input input-file">
+                                                                <asp:FileUpload ID="fuReciept" runat="server" />
+                                                                <asp:Button ID="btnUpload" Text="Upload" CssClass="btn btn-primary" CommandArgument='<%# Eval("FilePath") %>' runat="server" OnClick="btnUpload_Click"></asp:Button>
+                                                            </div>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:TemplateField>
                                                         <ItemTemplate>
                                                             <asp:LinkButton ID="lnkDownload" Text="Download" CommandArgument='<%# Eval("FilePath") %>' runat="server" OnClick="DownloadFile"></asp:LinkButton>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
-                                                           <asp:TemplateField>
-                                                        <ItemTemplate>
-                                                            <asp:LinkButton ID="lnkDelete" Text="Delete" CommandArgument='<%# Eval("FilePath") %>' runat="server" OnClick="DeleteFile" />
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
-                                                        </Columns>
-                                                        <FooterStyle CssClass="FooterStyle" />
-                                                        <HeaderStyle CssClass="headerstyle" />
-                                                        <PagerStyle CssClass="PagerStyle" />
-                                                        <RowStyle CssClass="rowstyle" />
-                                                    </asp:GridView>
+                                                </Columns>
+                                                <FooterStyle CssClass="FooterStyle" />
+                                                <HeaderStyle CssClass="headerstyle" />
+                                                <PagerStyle CssClass="PagerStyle" />
+                                                <RowStyle CssClass="rowstyle" />
+                                            </asp:GridView>
                                                 </div>
                                             </div>
                                         </div>

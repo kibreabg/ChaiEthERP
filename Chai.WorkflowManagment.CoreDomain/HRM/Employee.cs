@@ -41,7 +41,8 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public string Photo { get; set; }
         public Nullable<decimal> SDLeaveBalance { get; set; }
         public Nullable<decimal> ExpiredLeave { get; set; }
-        
+
+        public string FullName { get { return FirstName + " " + LastName; } }
         public DateTime? LeaveSettingDate { get; set; }
         public Nullable<Boolean> Status { get; set; }
         [Required]

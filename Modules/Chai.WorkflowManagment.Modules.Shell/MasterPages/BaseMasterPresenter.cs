@@ -193,7 +193,11 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         public int GetBankRequestsMyRequest()
         {
             return _controller.GetBankRequestsMyRequest();
-        }              
+        }
+        public int GetPaymentReimbursementRequestMyRequest()
+        {
+            return _controller.GetPaymentReimbursementRequestMyRequest();
+        }
         public IList<LeaveRequest> ListLeaveApprovalProgress()
         {
             return _controller.GetLeaveInProgress();
@@ -206,6 +210,11 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         {
             return _controller.GetCashPaymentsInProgress();
         }
+        public IList<PaymentReimbursementRequest> ListPaymentReimbursementApprovalProgress()
+        {
+            return _controller.GetPaymentReimbursementRequestInProgress();
+        }
+    
         public IList<CostSharingRequest> ListCostApprovalProgress()
         {
             return _controller.GetCostSharingInProgress();

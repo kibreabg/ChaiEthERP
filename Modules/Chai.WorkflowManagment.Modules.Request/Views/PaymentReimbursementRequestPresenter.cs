@@ -42,14 +42,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         public override void OnViewInitialized()
         {
-            //if (_CashPaymentRequest == null)
-            //{
-            //    int id = View.GetTARequestId;
-            //    if (id > 0)
-            //        _controller.CurrentObject = _controller.GetCashPaymentRequest(id);
-            //    else
-            //        _controller.CurrentObject = new CashPaymentRequest();
-            //}
+            
         }
         public CashPaymentRequest CurrentCashPaymentRequest
         {
@@ -96,9 +89,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     }
                     else if (AL.EmployeePosition.PositionName == "Program Manager")
                     {
-                        if (CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails[0].Project.Id != 0)
+                        if (CurrentCashPaymentRequest.PaymentReimbursementRequest.Project.Id != 0)
                         {
-                            ELRS.Approver = GetProject(CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails[0].Project.Id).AppUser.Id;
+                            ELRS.Approver = GetProject(CurrentCashPaymentRequest.PaymentReimbursementRequest.Project.Id).AppUser.Id;
                         }
                     }
                     else
