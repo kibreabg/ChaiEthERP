@@ -19,6 +19,8 @@ using Chai.WorkflowManagment.Shared.Navigation;
 using System.Data;
 using Chai.WorkflowManagment.CoreDomain.Report;
 using Chai.WorkflowManagment.CoreDomain.Requests;
+using Chai.WorkflowManagment.CoreDomain.HRM;
+using Chai.WorkflowManagment.CoreDomain.Request;
 
 namespace Chai.WorkflowManagment.Modules.Report
 {
@@ -218,6 +220,27 @@ namespace Chai.WorkflowManagment.Modules.Report
         {
             ReportDao re = new ReportDao();
             return re.EmployeeBirthReport(month);
+        }
+        public IList<Employee> ListEmployees(string FullName)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM Employees left Join Contracts on Contracts.Employee_Id=Employees.Id Inner Join AppUsers on Appusers.Id = Employees.Id left Join EmployeeDetails on EmployeeDetails.Contract_Id = Contracts.Id and EmployeeDetails.Id = (SELECT MAX(Id) FROM EmployeeDetails)  Where 1 = Case when '" + FullName + "' = '' Then 1 When (Employees.FirstName + ' ' + Employees.lastName) like '%" + FullName + "%' Then 1 END ";
+            // return WorkspaceFactory.CreateReadOnly().Queryable<CashPaymentRequest>(filterExpression).ToList();
+            return _workspace.SqlQuery<Employee>(filterExpression).ToList();
+        }
+        public decimal TotalleaveTaken(int EmpId, DateTime Leavedatesetting)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT *  FROM LeaveRequests Inner Join LeaveTypes on LeaveRequests.LeaveType_Id = LeaveTypes.Id "
+                               + " Where LeaveTypes.LeaveTypeName = 'Annual Leave' and LeaveRequests.CurrentStatus= 'Issued' and LeaveRequests.Requester = '" + EmpId + "' and LeaveRequests.RequestedDate >= '" + Leavedatesetting + "'";
+            // return WorkspaceFactory.CreateReadOnly().Queryable<CashPaymentRequest>(filterExpression).ToList();
+            IList<LeaveRequest> EmpLeaverequest = _workspace.SqlQuery<LeaveRequest>(filterExpression).ToList();
+            return EmpLeaverequest.Sum(x => x.RequestedDays);
+
+
+
         }
         #region Entity Manipulation
         public void SaveOrUpdateEntity<T>(T item) where T : class

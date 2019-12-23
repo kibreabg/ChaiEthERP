@@ -205,16 +205,33 @@ namespace Chai.WorkflowManagment.Modules.Shell
                 return 0;
 
         }
+        //public int GetPaymentReimbursementTasks()
+        //{
+        //    currentUser = GetCurrentUser().Id;
+        //    int Count = 0;
+        //    Count = WorkspaceFactory.CreateReadOnly().Count<PaymentReimbursementRequest>(x => x.CashPaymentRequest.AppUser.Id == currentUser && x..RequestDate == null);
+        //    if (Count != 0)
+        //        return Count;
+        //    else
+        //        return 0;
+
+        //}
         public int GetPaymentReimbursementTasks()
         {
             currentUser = GetCurrentUser().Id;
-            int Count = 0;
-            Count = WorkspaceFactory.CreateReadOnly().Count<PaymentReimbursementRequest>(x => x.CashPaymentRequest.AppUser.Id == currentUser && x.RequestDate == null);
-            if (Count != 0)
-                return Count;
-            else
-                return 0;
+            string filterExpression = "";
 
+            filterExpression = " SELECT *,CashPaymentRequests.* FROM PaymentReimbursementRequests " +
+                                    " Inner join CashPaymentRequests ON CashPaymentRequests.Id =  PaymentReimbursementRequests.Id " +
+                                    " LEFT JOIN AppUsers ON AppUsers.Id = PaymentReimbursementRequests.CurrentApprover " +
+                                    " LEFT JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
+                                    " WHERE PaymentReimbursementRequests.ProgressStatus = 'InProgress'" +
+                                        " AND ((PaymentReimbursementRequests.CurrentApprover = '" + currentUser + "')" +
+                                        " OR (PaymentReimbursementRequests.CurrentApproverPosition = '" + GetCurrentUser().EmployeePosition.Id + "')" +
+                                        " OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "'))" +
+                                        " ORDER BY PaymentReimbursementRequests.Id";
+
+            return _workspace.SqlQuery<CashPaymentRequest>(filterExpression).Count();
         }
         public int GetBankPaymentTasks()
         {
@@ -330,7 +347,17 @@ namespace Chai.WorkflowManagment.Modules.Shell
                 return 0;
 
         }
+        public int GetPaymentReimbursementRequestMyRequest()
+        {
+            currentUser = GetCurrentUser().Id;
+            int Count = 0;
+            Count = WorkspaceFactory.CreateReadOnly().Count<PaymentReimbursementRequest>(x => x.CashPaymentRequest.AppUser.Id == currentUser && x.ProgressStatus == "InProgress");
+            if (Count != 0)
+                return Count;
+            else
+                return 0;
 
+        }
         public int GetBidAnalysisRequestsMyRequest()
         {
             currentUser = GetCurrentUser().Id;
@@ -368,7 +395,12 @@ namespace Chai.WorkflowManagment.Modules.Shell
             IList<CashPaymentRequest> cashPaymentRequests = WorkspaceFactory.CreateReadOnly().Query<CashPaymentRequest>(x => x.AppUser.Id == currentUser && x.ProgressStatus == "InProgress").ToList();
             return cashPaymentRequests;
         }
-
+        public IList<PaymentReimbursementRequest> GetPaymentReimbursementRequestInProgress()
+        {
+            currentUser = GetCurrentUser().Id;
+            IList<PaymentReimbursementRequest> paymentReimbursementRequest = WorkspaceFactory.CreateReadOnly().Query<PaymentReimbursementRequest>(x => x.CashPaymentRequest.AppUser.Id == currentUser && x.ProgressStatus == "InProgress").ToList();
+            return paymentReimbursementRequest;
+        }
         public IList<CostSharingRequest> GetCostSharingInProgress()
         {
             currentUser = GetCurrentUser().Id;

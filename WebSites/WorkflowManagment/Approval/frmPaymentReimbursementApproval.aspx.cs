@@ -216,13 +216,24 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                
             }
         }
+        private void BindAttachments()
+        {
+            List<PRAttachment> attachments = new List<PRAttachment>();
+            foreach (PaymentReimbursementRequestDetail detail in _presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestDetails)
+            {
+                attachments.AddRange(detail.PRAttachments);
+                Session["attachments"] = attachments;
+            }
+
+            grvAttachments.DataSource = attachments;
+            grvAttachments.DataBind();
+        }
         protected void grvPaymentReimbursementRequestList_SelectedIndexChanged(object sender, EventArgs e)
         {
             //grvPaymentReimbursementRequestList.SelectedDataKey.Value
             _presenter.OnViewLoaded();
             PopApprovalStatus();
-            grvAttachments.DataSource = _presenter.CurrentPaymentReimbursementRequest.PRAttachments;
-            grvAttachments.DataBind();
+            BindAttachments();
             BindPaymentReimbursementRequestStatus();
             txtRejectedReason.Visible = false;
             rfvRejectedReason.Enabled = false;
@@ -317,7 +328,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             lblRequesterResult.Text = _presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.AppUser.UserName;
             lblCommentResult.Text = _presenter.CurrentPaymentReimbursementRequest.Comment.ToString();
             lblApprovalStatusResult.Text = _presenter.CurrentPaymentReimbursementRequest.ProgressStatus.ToString();
-
+            lbladvancetakenresult.Text = _presenter.CurrentPaymentReimbursementRequest.ReceivableAmount.ToString();
+            lblActualExpenditureresult.Text = _presenter.CurrentPaymentReimbursementRequest.TotalAmount.ToString();
             grvDetails.DataSource = _presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestDetails;
             grvDetails.DataBind();
 
@@ -334,8 +346,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             
             pnlApproval_ModalPopupExtender.Show();
         }
-       
-        
         protected void btnCancelPopup2_Click(object sender, EventArgs e)
         {
             pnlDetail.Visible = false;
