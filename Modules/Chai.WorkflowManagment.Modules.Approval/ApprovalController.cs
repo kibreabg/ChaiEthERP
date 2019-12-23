@@ -306,6 +306,32 @@ namespace Chai.WorkflowManagment.Modules.Approval
             return _workspace.SqlQuery<BidAnalysisRequest>(filterExpression).ToList();
 
         }
+        public IList<BidAnalysisRequest> ListBidReqInProgressById(int ReqId)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  * "+
+                       " FROM   dbo.BidAnalysisRequests INNER JOIN"+
+                      " dbo.BidderItemDetails ON dbo.BidAnalysisRequests.Id = dbo.BidderItemDetails.BidAnalysisRequest_Id INNER JOIN"+
+                      " dbo.Bidders ON dbo.BidderItemDetails.Id = dbo.Bidders.BidderItemDetail_Id INNER JOIN"+
+                      " dbo.PurchaseRequests ON dbo.BidAnalysisRequests.PurchaseRequest_Id = dbo.PurchaseRequests.Id INNER JOIN"+
+                      " dbo.Suppliers ON dbo.Bidders.Supplier_Id = dbo.Suppliers.Id  Where dbo.BidAnalysisRequests.Id = '" + ReqId + "' And dbo.Bidders.Rank = 1  order by BidAnalysisRequests.Id Desc ";
+                 return _workspace.SqlQuery<BidAnalysisRequest>(filterExpression).ToList();
+
+        }
+
+        public IList<Bidder> GetBiddersByBidReq(int ReqId)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *" +
+                                " FROM dbo.Bidders INNER JOIN "+
+                                " dbo.BidderItemDetails ON dbo.Bidders.BidderItemDetail_Id = dbo.BidderItemDetails.Id INNER JOIN"+
+                                " dbo.BidAnalysisRequests ON dbo.BidderItemDetails.BidAnalysisRequest_Id = dbo.BidAnalysisRequests.Id INNER JOIN"+
+                                " dbo.Suppliers ON dbo.Bidders.Supplier_Id = dbo.Suppliers.Id  Where dbo.BidAnalysisRequests.Id = '" + ReqId + "' And dbo.Bidders.Rank = 1  order by BidAnalysisRequests.Id Desc ";
+            return _workspace.SqlQuery<Bidder>(filterExpression).ToList();
+
+        }
         public BAAttachment GetBAAttachment(int attachmentId)
         {
             return _workspace.Single<BAAttachment>(x => x.Id == attachmentId);
@@ -343,7 +369,12 @@ namespace Chai.WorkflowManagment.Modules.Approval
             return _workspace.SqlQuery<PurchaseRequest>(filterExpression).ToList();
 
         }
+        public IList<PurchaseRequest> GetPurchaseRequestsInProgressPO()
+        {
+           string  filterExpression = "SELECT  *  FROM BidAnalysisRequests INNER JOIN PurchaseRequests on PurchaseRequests.Id = BidAnalysisRequests.PurchaseRequest_Id  Where BidAnalysisRequests.ProgressStatus = 'Completed'  order by BidAnalysisRequests.Id Desc ";
 
+            return _workspace.SqlQuery<PurchaseRequest>(filterExpression).ToList();
+        }
         #endregion
         #region SoleVendorApproval
         public SoleVendorRequest GetSoleVendorRequest(int SoleVendorRequestId)

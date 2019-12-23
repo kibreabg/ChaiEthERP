@@ -41,6 +41,79 @@
             <!-- end widget edit box -->
 
             <!-- widget content -->
+            <div class="smart-form">
+
+              
+                  <asp:Panel ID="pnlInfo" runat="server">
+                <div class="alert alert-info fade in">
+                    <button class="close" data-dismiss="alert">
+                        ×
+                    </button>
+                    <i class="fa-fw fa fa-info"></i>
+                    <strong>Info!</strong> Please select the Bid Analysis Request Transaction to perform Purchase Order
+                </div>
+            </asp:Panel>
+             <asp:GridView ID="grvBidforPO" Visible="True"
+                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                CssClass="table table-striped table-bordered table-hover" AllowPaging="True"  PageSize="15">
+                <RowStyle CssClass="rowstyle" />
+                <Columns>
+                      
+                    <%-- <asp:BoundField DataField="RequestNo" HeaderText="Bid Analysis Request No" SortExpression="RequestNo" />--%>
+                    
+                        <asp:BoundField DataField="Item" HeaderText="Item" SortExpression="Item" />
+                     
+                     <asp:BoundField DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
+                       <asp:BoundField DataField="Supplier.SupplierNameType" HeaderText="Supplier" SortExpression="Supplier.SupplierNameType" />
+                       <asp:BoundField DataField="Rank" HeaderText="Rank" SortExpression="Rank" />
+                      <asp:BoundField DataField="TotalCost" HeaderText="Total Cost" SortExpression="TotalCost" />                     
+                        <asp:BoundField DataField="ReasonForSelection" HeaderText="Reason For Selection" SortExpression="ReasonForSelection" />
+                      <asp:TemplateField>
+                         
+                          <ItemTemplate>
+                              <asp:CheckBox ID="chkSelect" runat="server" />
+                          </ItemTemplate>
+                      </asp:TemplateField>
+                      
+                </Columns>
+                <FooterStyle CssClass="FooterStyle" />
+                <HeaderStyle CssClass="headerstyle" />
+                <PagerStyle CssClass="PagerStyle" />
+                <RowStyle CssClass="rowstyle" />
+            </asp:GridView>
+                  <footer>
+           <asp:Button ID="btnCreatePO" runat="server" CssClass="btn btn-primary" Text="Create Purchase Order" OnClick="btnCreatePO_Click"/>
+          </footer>
+            </div>
+
+              <asp:GridView ID="grvRankedBidders" Visible="True"
+                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                CssClass="table table-striped table-bordered table-hover" AllowPaging="True"  PageSize="15" OnSelectedIndexChanged="grvRankedBidders_SelectedIndexChanged">
+                <RowStyle CssClass="rowstyle" />
+                <Columns>
+                      
+                    
+                    <asp:BoundField DataField="Supplier.SupplierNameType" HeaderText="Supplier" SortExpression="Supplier.SupplierNameType" />
+                     <asp:BoundField DataField="Rank" HeaderText="Rank" SortExpression="Rank" />
+                     <asp:BoundField DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
+                     <asp:BoundField DataField="UnitCost" HeaderText="Total Cost" SortExpression="UnitCost" />    
+                     <asp:BoundField DataField="TotalCost" HeaderText="Total Cost" SortExpression="TotalCost" />                                        
+                    <asp:BoundField DataField="ReasonForSelection" HeaderText="Reason For Selection" SortExpression="ReasonForSelection" />
+                     
+                      
+                      <asp:TemplateField>
+                         
+                          <ItemTemplate>
+                                 <asp:Button runat="server" CommandName="Select" Text="Prepare Purchase Order"></asp:Button>
+                          </ItemTemplate>
+                      </asp:TemplateField>
+                      
+                </Columns>
+                <FooterStyle CssClass="FooterStyle" />
+                <HeaderStyle CssClass="headerstyle" />
+                <PagerStyle CssClass="PagerStyle" />
+                <RowStyle CssClass="rowstyle" />
+            </asp:GridView>
             <div class="widget-body no-padding">
                 <div class="smart-form">
                     <fieldset>
@@ -143,12 +216,7 @@
          GridLines="None" ShowFooter="True">
    
         <Columns>
-            <asp:TemplateColumn HeaderText="Supplier Type Name">
-                    
-                     <ItemTemplate>
-                         <%# DataBinder.Eval(Container.DataItem, "Supplier.SupplierNameType")%>
-                     </ItemTemplate>
-                 </asp:TemplateColumn>
+          
             <asp:TemplateColumn HeaderText="Qty">
                 <ItemTemplate>
                     <%# DataBinder.Eval(Container.DataItem, "Qty")%>
@@ -185,7 +253,7 @@
                                                 &nbsp;<asp:Button ID="btnCancel" runat="server" Cssclass="btn btn-primary" onclick="btnCancel_Click" Text="Back"  />
 												 <asp:Button ID="btnPrintPurchaseForm" runat="server" Cssclass="btn btn-primary"  Text="Print Purchase Form" OnClientClick="javascript:Clickheretoprint('printtran')" Enabled="False" />										
                                                 <asp:Button ID="btnPrintPurchaseOrder" runat="server" Cssclass="btn btn-primary"  Text="Print Purchase Order" OnClientClick="javascript:Clickheretoprint('divprint')" Enabled="False" />
-																						
+																					
 											</footer>
                                       
                                     </div></div>
@@ -478,15 +546,14 @@
                 CssClass="table table-striped table-bordered table-hover">
                 <RowStyle CssClass="rowstyle" />
                 <Columns>
-                    <asp:BoundField DataField="Bidder.SupplierType.SupplierTypeName" HeaderText="AccountName" SortExpression="Bidder.ItemAccount.AccountName" />
-                    <asp:BoundField DataField="Bidder.Supplier.SupplierName" HeaderText="Supplier" SortExpression="Bidder.Supplier.SupplierName" />
+                   
                     
-                    <asp:BoundField DataField="Bidder.Rank" HeaderText="Rank" SortExpression="Bidder.Rank" />
-                    <asp:BoundField DataField="BidderItemDetail.ItemDescription" HeaderText="Item" />
+                    <asp:BoundField DataField="Rank" HeaderText="Rank" SortExpression="Rank" />
+                    <asp:BoundField DataField="ItemDescription" HeaderText="Item" />
                     <asp:BoundField DataField="Qty" HeaderText="Qty" />
                     <asp:BoundField DataField="UnitCost" HeaderText="UnitCost" />
                     <asp:BoundField DataField="TotalCost" HeaderText="TotalCost" />
-                    
+                    <asp:BoundField DataField="Vat" HeaderText="Vat" />
                 </Columns>
                 <FooterStyle CssClass="FooterStyle" />
                 <HeaderStyle CssClass="headerstyle" />
