@@ -439,7 +439,7 @@ namespace Chai.WorkflowManagment.Modules.Request
         {
             string filterExpression = "";
 
-            filterExpression = "SELECT  *  FROM PurchaseRequestDetails INNER JOIN PurchaseRequests on PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id  Where 1 = Case when '" + ReqId + "' = '' Then 1 When PurchaseRequestDetails.PurchaseRequest_Id = '" + ReqId + "'  Then 1 END  order by PurchaseRequests.Id Desc ";
+            filterExpression = "SELECT  *  FROM PurchaseRequestDetails INNER JOIN PurchaseRequests on PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id  Where  PurchaseRequests.Id = '" + ReqId + "'  order by PurchaseRequests.Id Desc ";
 
             return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
 

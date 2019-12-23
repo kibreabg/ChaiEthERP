@@ -18,6 +18,8 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public virtual SoleVendorRequest SoleVendorRequest { get; set; }
         public virtual ItemAccount ItemAccount { get; set; }
         public string ItemDescription { get; set; }
+        public string ReasonForSelection { get; set; }
+        public virtual SoleVendorSupplier SoleVendorSupplier { get; set; }
         public int Qty { get; set; }
         public string SoleVendorJustificationType { get; set; }
         public decimal UnitCost { get; set; }

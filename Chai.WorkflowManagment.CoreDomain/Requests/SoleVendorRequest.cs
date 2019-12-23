@@ -33,7 +33,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public virtual AppUser AppUser { get; set; }
         public virtual Project Project { get; set; }
         public virtual Grant Grant { get; set; }
-        public virtual Supplier Supplier { get; set; }
+       // public virtual Supplier Supplier { get; set; }
 
         public virtual PurchaseRequest PurchaseRequest { get; set; }
         public virtual PurchaseOrderSoleVendor PurchaseOrderSoleVendors { get; set; }

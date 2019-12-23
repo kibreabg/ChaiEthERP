@@ -549,7 +549,7 @@
                    
                     
                     <asp:BoundField DataField="Rank" HeaderText="Rank" SortExpression="Rank" />
-                    <asp:BoundField DataField="ItemDescription" HeaderText="Item" />
+                    <asp:BoundField DataField="Item" HeaderText="Item" />
                     <asp:BoundField DataField="Qty" HeaderText="Qty" />
                     <asp:BoundField DataField="UnitCost" HeaderText="UnitCost" />
                     <asp:BoundField DataField="TotalCost" HeaderText="TotalCost" />
