@@ -430,7 +430,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             lblRequestedDateresult.Text = _presenter.CurrentSoleVendorRequest.RequestDate.ToString();
             lblContactPersonNumberRes.Text = _presenter.CurrentSoleVendorRequest.ContactPersonNumber;
             lblProposedPurchasedpriceres.Text = _presenter.CurrentSoleVendorRequest.ProposedPurchasedPrice.ToString();
-            lblProposedSupplierresp.Text = _presenter.CurrentSoleVendorRequest.Supplier.SupplierName;
+            lblProposedSupplierresp.Text = _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[0].SoleVendorSupplier.SupplierName;
             lblSoleSourceJustificationPreparedByresp.Text = _presenter.CurrentSoleVendorRequest.SoleSourceJustificationPreparedBy;
             lblapprovalstatusres.Text = _presenter.CurrentSoleVendorRequest.CurrentStatus;
             lblRequesterres.Text = _presenter.GetUser(_presenter.CurrentSoleVendorRequest.AppUser.Id).FullName;

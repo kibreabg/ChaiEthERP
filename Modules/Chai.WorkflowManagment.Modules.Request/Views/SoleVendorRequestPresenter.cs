@@ -142,17 +142,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             
             SoleVendorRequest.RequestNo = View.GetRequestNo;
             SoleVendorRequest.RequestDate = Convert.ToDateTime(DateTime.Today);
-            SoleVendorRequest.ContactPersonNumber = View.GetContactPersonNumber;
+          
             SoleVendorRequest.ProposedPurchasedPrice = 0; //Zero for now
-            SoleVendorRequest.Supplier =  _settingController.GetSupplier(View.GetProposedSupplier);
-            SoleVendorRequest.SoleSourceJustificationPreparedBy = View.GetSoleSourceJustificationPreparedBy;
-            SoleVendorRequest.ReasonForSelection = View.GetReasonForSelection;
+           
             SoleVendorRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
-            if (View.GetProjectId != 0)
-                SoleVendorRequest.Project = _settingController.GetProject(View.GetProjectId);
-            if (View.GetGrantId != 0)
-                SoleVendorRequest.Grant = _settingController.GetGrant(View.GetGrantId);
-            SoleVendorRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
+        //    SoleVendorRequest.Supplier = _settingController.GetSupplier(View.GetProposedSupplier);
+           
 
             if (CurrentSoleVendorRequest.SoleVendorRequestStatuses.Count == 0)
                 SaveSoleVendorRequestStatus();
@@ -183,6 +178,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.GetPurchaseRequest(purchaseRequestId);
         }
+
+        public IList<PurchaseRequest> GetPurchaseRequestListInProgress()
+        {
+            return _controller.GetPurchaseRequestsInProgress();
+        }
         public SoleVendorRequest GetSoleVendorRequest(int id)
         {
             return _controller.GetSoleVendorRequest(id);
@@ -199,6 +199,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.ListPurchaseReqInProgress();
         }
+       
         public IList<PurchaseRequestDetail> ListPurchaseReqInProgressbyId(int id)
         {
             return _controller.ListPurchaseReqInProgressById(id);
@@ -211,6 +212,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.ListSoleVendorRequests(RequestNo, RequestDate);
         }
+        public SoleVendorSupplier GetSoleVendorSupplier(int Id)
+        {
+            return _settingController.GetSoleVendorSupplier(Id);
+        }
         public AppUser Approver(int Position)
         {
             return _controller.Approver(Position);
@@ -218,6 +223,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public AssignJob GetAssignedJobbycurrentuser()
         {
             return _controller.GetAssignedJobbycurrentuser();
+        }
+        public IList<SoleVendorSupplier> GetSuppliers()
+
+        {
+            return _settingController.GetSoleVendorSuppliers();
         }
         public AssignJob GetAssignedJobbycurrentuser(int UserId)
         {

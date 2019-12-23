@@ -173,9 +173,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             this._presenter.OnViewLoaded();
             txtDate.Text = DateTime.Today.ToString();
             txtRequester.Text = _presenter.GetUser(_presenter.CurrentSoleVendorRequest.AppUser.Id).FullName;
-            txtSupplierName.Text = _presenter.CurrentSoleVendorRequest.Supplier.SupplierName;
-            txtSupplierAddress.Text = _presenter.CurrentSoleVendorRequest.Supplier.SupplierAddress;
-            txtSupplierContact.Text = _presenter.CurrentSoleVendorRequest.Supplier.SupplierContact;
+            txtSupplierName.Text = _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[0].SoleVendorSupplier.SupplierName;
+            txtSupplierAddress.Text = _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[0].SoleVendorSupplier.SupplierAddress;
+            txtSupplierContact.Text = _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[0].SoleVendorSupplier.SupplierContact;
             if(_presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.PurchaseOrderSoleVendorDetails.Count == 0)
             {
                 _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.PurchaseOrderSoleVendorDetails = new List<PurchaseOrderSoleVendorDetail>();
@@ -224,7 +224,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.SoleVendorRequest = _presenter.CurrentSoleVendorRequest;
                 if (_presenter.CurrentSoleVendorRequest != null)
                 {
-                    _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.Supplier = _presenter.CurrentSoleVendorRequest.Supplier;
+                 ////   _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.Supplier = _presenter.CurrentSoleVendorRequest.Supplier;
                 }
                 //_presenter.CurrentBidAnalysisRequest.PurchaseOrders.Status = "Completed";       
                 Master.ShowMessage(new AppMessage("Purchase Order Successfully Approved", Chai.WorkflowManagment.Enums.RMessageType.Info));
@@ -302,7 +302,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             lblPaymentTerms.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.PaymentTerms;
             lblDeliveryFeesResult.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.DeliveryFees.ToString();
 
-            lblSuggestedSupplierResult.Text = _presenter.CurrentSoleVendorRequest.Supplier.SupplierName;
+         //   lblSuggestedSupplierResult.Text = _presenter.CurrentSoleVendorRequest.Supplier.SupplierName;
             if (_presenter.CurrentSoleVendorRequest != null)
             {
                 lblSelectedbyResult.Text = _presenter.GetUser(_presenter.CurrentSoleVendorRequest.AppUser.Id).FullName;

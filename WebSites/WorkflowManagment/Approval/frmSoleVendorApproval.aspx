@@ -80,7 +80,7 @@
                 </asp:TemplateField>
                 <asp:BoundField DataField="ContactPersonNumber" HeaderText="Contact Person & Number" SortExpression="ContactPersonNumber" />
                 <asp:BoundField DataField="ProposedPurchasedPrice" HeaderText="Proposed Purchased Price" SortExpression="ProposedPurchasedPrice" />
-                <asp:BoundField DataField="Supplier.SupplierName" HeaderText="Proposed Supplier" SortExpression="Supplier.SupplierName" />
+                <asp:BoundField DataField="SoleVendorSupplier.SupplierName" HeaderText="Proposed Supplier" SortExpression="SoleVendorSupplier.SupplierName" />
                 <asp:BoundField DataField="ReasonForSelection" HeaderText="Sole Vendor Selection Reason" SortExpression="ReasonForSelection" />
                 <asp:ButtonField ButtonType="Button" CommandName="ViewItem" Text="View Item Detail" />
                 <asp:CommandField ShowSelectButton="True" SelectText="Process Request" ButtonType="Button" />
