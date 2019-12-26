@@ -527,7 +527,14 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
 
         public virtual decimal EmployeeLeaveBalance()
         {
-            return (Leavefromhiredtonow() - LeavefromhiredtoSettingDate()) + SDLeaveBalance.Value;
+
+            if ((Leavefromhiredtonow() - LeavefromhiredtoSettingDate()) + SDLeaveBalance.Value > 50)
+            {
+                return 50;
+            }
+            else
+            { return (Leavefromhiredtonow() - LeavefromhiredtoSettingDate()) + SDLeaveBalance.Value; }
+            
         }
         public virtual decimal EmployeeLeaveBalanceCED(DateTime CED)
         {
