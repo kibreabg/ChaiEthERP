@@ -17,7 +17,8 @@ namespace Chai.WorkflowManagment.Modules.Report.Views
 			{
 				this._presenter.OnViewInitialized();
                 BindEmployee();
-                GRVEmployeeList.DataSource = _presenter.ListEmployees(ddlEmployeeName.SelectedValue);
+                BindProgram();
+                GRVEmployeeList.DataSource = _presenter.ListEmployees(ddlEmployeeName.SelectedValue,Convert.ToInt32(ddlProgram.SelectedValue));
                 GRVEmployeeList.DataBind();
 
             }
@@ -49,18 +50,24 @@ namespace Chai.WorkflowManagment.Modules.Report.Views
         }
         private void BindEmployee()
         {
-            ddlEmployeeName.DataSource = _presenter.ListEmployees(string.Empty);
+            ddlEmployeeName.DataSource = _presenter.ListEmployees(string.Empty, Convert.ToInt32(ddlProgram.SelectedValue));
             ddlEmployeeName.DataBind();
+        }
+        private void BindProgram()
+        {
+            ddlProgram.DataSource = _presenter.GetPrograms();
+            ddlProgram.DataBind();
         }
         protected void GRVEmployeeList_PageIndexChanging(object sender, System.Web.UI.WebControls.GridViewPageEventArgs e)
         {
             GRVEmployeeList.PageIndex = e.NewPageIndex;
-            GRVEmployeeList.DataSource = _presenter.ListEmployees(ddlEmployeeName.SelectedValue);
+            GRVEmployeeList.DataSource = _presenter.ListEmployees(ddlEmployeeName.SelectedValue, Convert.ToInt32(ddlProgram.SelectedValue));
             GRVEmployeeList.DataBind();
         }
         protected void GRVEmployeeList_RowDataBound(object sender, System.Web.UI.WebControls.GridViewRowEventArgs e)
         {
-            if (_presenter.ListEmployees(ddlEmployeeName.SelectedValue) != null)
+            int tempcounter = 0;
+            if (_presenter.ListEmployees(ddlEmployeeName.SelectedValue, Convert.ToInt32(ddlProgram.SelectedValue)) != null)
             {
                 if (e.Row.RowType == DataControlRowType.DataRow)
                 {
@@ -70,10 +77,15 @@ namespace Chai.WorkflowManagment.Modules.Report.Views
                     e.Row.Cells[4].Text = emp.GetActiveContract() != null ? (Math.Round((emp.EmployeeLeaveBalanceCED(emp.GetActiveContract().ContractEndDate) - _presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value)) * 2, MidpointRounding.AwayFromZero) / 2).ToString() : "";
                     e.Row.Cells[3].Text = (Math.Round((emp.EmployeeLeaveBalance() - _presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value)) * 2, MidpointRounding.AwayFromZero) / 2).ToString();
                     e.Row.Cells[2].Text = _presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value).ToString();
-
+                    tempcounter = tempcounter + 1;
+                    if (tempcounter == 10)
+                    {
+                        e.Row.Attributes.Add("style", "page-break-after: always;");
+                        tempcounter = 0;
+                    }
                 }
 
-
+               
             }
         }
         protected void btnCancel_Click(object sender, EventArgs e)
@@ -82,10 +94,21 @@ namespace Chai.WorkflowManagment.Modules.Report.Views
         }
         protected void btnView_Click(object sender, EventArgs e)
         {
-            GRVEmployeeList.DataSource = _presenter.ListEmployees(ddlEmployeeName.SelectedValue);
+            GRVEmployeeList.DataSource = _presenter.ListEmployees(ddlEmployeeName.SelectedValue, Convert.ToInt32(ddlProgram.SelectedValue));
             GRVEmployeeList.DataBind();
         }
-        
-}
+         protected void chkdisable_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkdisable.Checked == true)
+            {
+                GRVEmployeeList.AllowPaging = false;
+                GRVEmployeeList.DataSource = _presenter.ListEmployees(ddlEmployeeName.SelectedValue, Convert.ToInt32(ddlProgram.SelectedValue));
+                GRVEmployeeList.DataBind();
+                GRVEmployeeList.UseAccessibleHeader = true;
+                GRVEmployeeList.HeaderRow.TableSection = TableRowSection.TableHeader;
+
+            }
+        }
+    }
 }
 

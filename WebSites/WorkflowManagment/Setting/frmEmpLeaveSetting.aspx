@@ -34,7 +34,7 @@
                                       <label class="checkbox">
                                     <asp:CheckBox ID="chkItems" runat="server" AutoPostBack="True" OnCheckedChanged="chkItems_CheckedChanged"/>
                                     <i></i>Select All</label>
-                                                    </div>
+                                </div>
                                               
                     </footer>
                 </div>
