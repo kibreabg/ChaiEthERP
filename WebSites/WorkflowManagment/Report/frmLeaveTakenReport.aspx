@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="frmLeaveTakenReport.aspx.cs" Inherits="Chai.WorkflowManagment.Modules.Report.Views.frmLeaveTakenReport"
-    Title="Vehicle Report" MasterPageFile="~/Shared/ModuleMaster.master" %>
+    Title="Employee Leave Report" MasterPageFile="~/Shared/ModuleMaster.master" %>
 
 
 
@@ -24,6 +24,15 @@
     }
    
     </script>
+    <style>
+        @media print
+        {
+            input
+            {
+                display: none;
+            }
+        }
+    </style>
     <div class="jarviswidget" id="wid-id-8" data-widget-editbutton="false" data-widget-custombutton="false">
         <header>
             <span class="widget-icon"><i class="fa fa-edit"></i></span>
@@ -43,12 +52,25 @@
                                     </asp:DropDownList><i></i>
                                 </label>
                             </section>
+                                  <section class="col col-6">
+                                <label class="label">Program</label>
+                                <label class="select">
+                                    <asp:DropDownList ID="ddlProgram" runat="server" AppendDataBoundItems="True" DataTextField="ProgramName" DataValueField="Id">
+                                        <asp:ListItem Value="0">Select Program</asp:ListItem>
+                                    </asp:DropDownList><i></i>
+                                </label>
+                            </section>
                         </div>
                     </fieldset>
                     <footer>
+                           <div class="inline-group">
+                                      <label class="checkbox">
+                                    <asp:CheckBox ID="chkdisable" runat="server" AutoPostBack="True" OnCheckedChanged="chkdisable_CheckedChanged"/>
+                                    <i></i>Disable Paging</label>
+                                </div>
                         <asp:Button ID="btnView" runat="server" Text="View" CssClass="btn btn-primary" OnClick="btnView_Click"></asp:Button>
                         <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" PostBackUrl="../Default.aspx"></asp:Button>
-                        <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-primary" OnClientClick="CallPrint('divPrint')"></asp:Button>
+                        <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-primary" OnClientClick="CallPrint('divPrint')" ></asp:Button>
                         
 
                     </footer>
