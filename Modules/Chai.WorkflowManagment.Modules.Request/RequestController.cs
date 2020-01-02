@@ -113,9 +113,9 @@ namespace Chai.WorkflowManagment.Modules.Request
         public IList<VehicleRequest> GetExtVehicleRequest()
         {
             int currentUserId = GetCurrentUser().Id;
-            return WorkspaceFactory.CreateReadOnly().Query<VehicleRequest>(x=> x.AppUser.Id== currentUserId && x.CurrentStatus != "Rejected").ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<VehicleRequest>(x => x.AppUser.Id == currentUserId && x.CurrentStatus != "Rejected").ToList();
         }
-        
+
         #endregion
         #region Cash Payment
         public CashPaymentRequest GetCashPaymentRequest(int RequestId)
@@ -127,7 +127,7 @@ namespace Chai.WorkflowManagment.Modules.Request
             string filterExpression = "";
 
             filterExpression = "SELECT * FROM CashPaymentRequests LEFT JOIN Suppliers on CashPaymentRequests.Supplier_Id = Suppliers.Id Where 1 = Case when '" + RequestNo + "' = '' Then 1 When CashPaymentRequests.VoucherNo = '" + RequestNo + "' Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When CashPaymentRequests.RequestDate = '" + RequestDate + "'  Then 1 END And CashPaymentRequests.AppUser_Id='" + GetCurrentUser().Id + "' ORDER BY CashPaymentRequests.Id Desc";
-           // return WorkspaceFactory.CreateReadOnly().Queryable<CashPaymentRequest>(filterExpression).ToList();
+            // return WorkspaceFactory.CreateReadOnly().Queryable<CashPaymentRequest>(filterExpression).ToList();
             return _workspace.SqlQuery<CashPaymentRequest>(filterExpression).ToList();
         }
         public IList<CashPaymentRequest> GetCashPaymentRequests()
@@ -151,7 +151,7 @@ namespace Chai.WorkflowManagment.Modules.Request
             }
             else { return 0; }
         }
-       
+
         public CPRAttachment GetCPRAttachment(int attachmentId)
         {
             return _workspace.Single<CPRAttachment>(x => x.Id == attachmentId);
@@ -412,12 +412,10 @@ namespace Chai.WorkflowManagment.Modules.Request
                 return 0;
         }
         #endregion
-         #region PurchaseRequest
-
+        #region PurchaseRequest
         public IList<PurchaseRequest> GetPurchaseRequests()
         {
-              return WorkspaceFactory.CreateReadOnly().Query<PurchaseRequest>(null).ToList();
-           
+            return WorkspaceFactory.CreateReadOnly().Query<PurchaseRequest>(null).ToList();
         }
         string filterExpression = "";
         public IList<PurchaseRequest> GetPurchaseRequestsInProgress()
@@ -435,11 +433,11 @@ namespace Chai.WorkflowManagment.Modules.Request
             return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
 
         }
-        public IList<PurchaseRequestDetail> ListPurchaseReqInProgressById(int ReqId)
+        public IList<PurchaseRequestDetail> ListPRDetailsInProgressById(int ReqId)
         {
             string filterExpression = "";
 
-            filterExpression = "SELECT  *  FROM PurchaseRequestDetails INNER JOIN PurchaseRequests on PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id  Where  PurchaseRequests.Id = '" + ReqId + "'  order by PurchaseRequests.Id Desc ";
+            filterExpression = "SELECT  *  FROM PurchaseRequestDetails INNER JOIN PurchaseRequests ON PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id WHERE PurchaseRequestDetails.BidAnalysisRequestStatus = 'InProgress' AND PurchaseRequests.Id = '" + ReqId + "'  ORDER BY PurchaseRequests.Id DESC";
 
             return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
 
@@ -460,7 +458,7 @@ namespace Chai.WorkflowManagment.Modules.Request
 
         public PurchaseRequestDetail GetPurchaseRequestbyPuID(int PurchaseRequestId)
         {
-            return _workspace.Single<PurchaseRequestDetail>(x => x.Id == PurchaseRequestId,y=>y.PurchaseRequest);
+            return _workspace.Single<PurchaseRequestDetail>(x => x.Id == PurchaseRequestId, y => y.PurchaseRequest);
         }
         public PurchaseRequestDetail GetPurchaseRequestDetail(int PurchaseRequestDetailId)
         {
@@ -503,7 +501,7 @@ namespace Chai.WorkflowManagment.Modules.Request
         }
 
         #endregion
-          #region Sole Vendor Requests
+        #region Sole Vendor Requests
         public IList<SoleVendorRequest> GetSoleVendorRequests()
         {
             return WorkspaceFactory.CreateReadOnly().Query<SoleVendorRequest>(null).ToList();
@@ -577,7 +575,7 @@ namespace Chai.WorkflowManagment.Modules.Request
         #region Employee
         public Employee GetEmployee(int empid)
         {
-              return _workspace.Single<Employee>(x => x.Id == empid);
+            return _workspace.Single<Employee>(x => x.Id == empid);
         }
         #endregion
         #region Entity Manipulation

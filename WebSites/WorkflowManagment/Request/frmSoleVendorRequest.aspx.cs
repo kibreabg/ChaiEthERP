@@ -26,50 +26,31 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             if (!this.IsPostBack)
             {
-
-                Session["PR"] = _presenter.GetPurchaseRequestList();
                 this._presenter.OnViewInitialized();
                 XmlConfigurator.Configure();
-                CheckApprovalSettings();
-                PurchaseRequest purchaseRequest = _presenter.GetPurchaseRequest(GetPurchaseRequestId);
-                _presenter.CurrentSoleVendorRequest.PurchaseRequest = purchaseRequest;
-                //PopProjects();
+                CheckApprovalSettings();                
                 PopPurchaseRequestsDropDown();
                 pnlInfo.Visible = false;
-                //BindSoleVendorRequests();
-                //PopPurchaseRequest();
-                PopSoleVendorRequesters();
-               
-
+                PopPurchaseRequest();
                 BindSoleVendorRequestDetails();
-              //  PopSupplier();
                 if (_presenter.CurrentSoleVendorRequest.Id <= 0)
                 {
                     AutoNumber();
                     btnDelete.Visible = false;
                 }
             }
-         //   txtRequestDate.Text = DateTime.Today.Date.ToShortDateString();
+            txtRequestDate.Text = DateTime.Today.Date.ToShortDateString();
             this._presenter.OnViewLoaded();
 
             BindSoleVendorRequests();
-           // PopPurchaseRequest();
+            // PopPurchaseRequest();
             if (_presenter.CurrentSoleVendorRequest != null)
             {
-
                 if (_presenter.CurrentSoleVendorRequest.Id != 0)
                 {
                     BindSoleVendorRequestDetails();
                 }
-
-
-
             }
-
-            //if (_presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails.Count > 0)
-            //{
-            //    BindSoleVendorRequestDetails();
-            //}
 
         }
         [CreateNew]
@@ -127,25 +108,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return AutoNumber(); }
         }
-        //public DateTime GetRequestDate
-        //{
-        //    get { return Convert.ToDateTime(txtRequestDate.Text); }
-        //}
-       
-        //public string GetReasonForSelection
-        //{
-        //    get { return txtselectionfor.Text; }
-        //}
-        //public int GetProjectId
-        //{
-        //    get { return Convert.ToInt32(ddlProject.SelectedValue); }
-        //}
-        //public int GetGrantId
-        //{
-        //    get { return Convert.ToInt32(ddlGrant.SelectedValue); }
-        //}
-
-
+        public string GetComment
+        {
+            get { return txtComment.Text; }
+        }
         public IList<SoleVendorRequest> SoleVendorRequests
         {
             get
@@ -157,39 +123,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 _SoleVendorRequests = value;
             }
         }
-
-        //public string GetContactPersonNumber
-        //{
-        //    get
-        //    {
-        //        return txtContactPersonNumber.Text;
-        //    }
-        //}
-
-     
-
-
-
-
-
-        //public string GetSoleSource
-        //{
-        //    get
-        //    {
-        //        return txtSoleSource.Text;
-        //    }
-        //}
-
-        //public string GetSoleSourceJustificationPreparedBy
-        //{
-        //    get
-        //    {
-        //        return txtRequester.Text;
-        //    }
-        //}
-
-
-
         #endregion
         private string AutoNumber()
         {
@@ -202,51 +135,43 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 pnlWarning.Visible = true;
             }
         }
-        //private void PopProjects()
-        //{
-        //    ddlProject.DataSource = _presenter.GetProjects();
-        //    ddlProject.DataBind();
-
-        //    ddlProject.Items.Insert(0, new ListItem("---Select Project---", "0"));
-        //    ddlProject.SelectedIndex = 0;
-        //}
-        //private void PopGrants(int ProjectId)
-        //{
-        //    ddlGrant.DataSource = _presenter.GetGrantbyprojectId(ProjectId);
-        //    ddlGrant.DataBind();
-
-        //    ddlGrant.Items.Insert(0, new ListItem("---Select Grant---", "0"));
-        //    ddlGrant.SelectedIndex = 0;
-        //}
-        //private void PopSupplier()
-        //{
-        //    ddlSupplier.Items.Clear();
-        //    ListItem lst = new ListItem();
-        //    lst.Text = " Select Supplier ";
-        //    lst.Value = "";
-        //    ddlSupplier.Items.Add(lst);
-        //    ddlSupplier.DataSource = _presenter.GetSoleVendorSuppliers();
-        //    ddlSupplier.DataBind();
-        //}
         private void ClearFormFields()
         {
             //txtContactPersonNumber.Text = String.Empty;
             //txtSoleSource.Text = String.Empty;
 
-        }        
+        }
+        private void BindItems(DropDownList ddlItems)
+        {
+            ddlItems.DataSource = _presenter.GetItemAccounts();
+            ddlItems.DataBind();
+        }
+        private void BindSupplier(DropDownList ddlSupplier)
+        {
+
+            ddlSupplier.DataSource = _presenter.GetSuppliers();
+            ddlSupplier.DataBind();
+            ////ddlSupplier.Items.Insert(0, new ListItem("---Select Supplier---", "0"));
+            ////ddlSupplier.SelectedIndex = 0;
+            //ListItem lst = new ListItem();
+            //lst.Text = "Select Supplier";
+            //lst.Value = "0";
+            //ddlSupplier.Items.Add(lst);
+            //ddlSupplier.DataSource = _presenter.GetSuppliers(SupplierTypeId);
+            //ddlSupplier.DataBind();
+        }
         private void BindSoleVendorRequests()
         {
             grvSoleVendorRequestList.DataSource = _presenter.ListSoleVendorRequests(txtSrchRequestNo.Text, txtSrchRequestDate.Text);
             grvSoleVendorRequestList.DataBind();
-
         }
         private void BindSoleVendorRequestFields()
         {
             _presenter.OnViewLoaded();
             if (_presenter.CurrentSoleVendorRequest != null)
             {
-             
-               
+
+
                 //ddlProject.SelectedValue = _presenter.CurrentSoleVendorRequest.Project.Id.ToString();
                 //PopGrants(Convert.ToInt32(ddlProject.SelectedValue));
                 //ddlGrant.SelectedValue = _presenter.CurrentSoleVendorRequest.Grant.Id.ToString();
@@ -256,35 +181,22 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void BindSoleVendorRequestDetails()
         {
-           
-                dgSoleVenderDetail.DataSource = _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails;
-                dgSoleVenderDetail.DataBind();
-                // prId = Convert.ToInt32(grvDetails.SelectedDataKey[0]);
-                //PopPurchaseRequest();
+            dgSoleVenderDetail.DataSource = _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails;
+            dgSoleVenderDetail.DataBind();
+            // prId = Convert.ToInt32(grvDetails.SelectedDataKey[0]);
+            //PopPurchaseRequest();
 
+            grvAttachments.DataSource = _presenter.CurrentSoleVendorRequest.SVRAttachments;
+            grvAttachments.DataBind();
+            // PopPurchaseRequest();
 
-
-                ////dgSoleVenderDetail.DataSource = _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails;
-                ////    dgSoleVenderDetail.DataBind();
-
-                grvAttachments.DataSource = _presenter.CurrentSoleVendorRequest.SVRAttachments;
-                grvAttachments.DataBind();
-
-
-               // PopPurchaseRequest();
-            
         }
         private void BindSoleVendorRequestforprint()
         {
             lblRequestNoresult.Text = _presenter.CurrentSoleVendorRequest.RequestNo;
             lblRequestedDateresult.Text = _presenter.CurrentSoleVendorRequest.RequestDate.ToString();
-            lblContactPersonNumberRes.Text = _presenter.CurrentSoleVendorRequest.ContactPersonNumber;
-            lblProposedPurchasedpriceres.Text = _presenter.CurrentSoleVendorRequest.ProposedPurchasedPrice.ToString();
-           // lblProposedSupplierresp.Text = _presenter.CurrentSoleVendorRequest.Supplier.SupplierName;
-            lblSoleSourceJustificationPreparedByresp.Text = _presenter.CurrentSoleVendorRequest.SoleSourceJustificationPreparedBy;
             lblapprovalstatusres.Text = _presenter.CurrentSoleVendorRequest.CurrentStatus;
             lblRequesterres.Text = _presenter.GetUser(_presenter.CurrentSoleVendorRequest.AppUser.Id).FullName;
-
 
             grvStatuses.DataSource = _presenter.CurrentSoleVendorRequest.SoleVendorRequestStatuses;
             grvStatuses.DataBind();
@@ -338,8 +250,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         //AutoNumber();
                     }
                 }
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
-           
+
         }
         protected void btnDelete_Click(object sender, EventArgs e)
         {
@@ -353,15 +267,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
 
         }
-
-        //private void PopPurchaseRequestsDropDown()
-        //{
-        //    ddlPurchaseReq.DataSource = _presenter.GetPurchaseRequestList();
-        //    ddlPurchaseReq.DataBind();
-
-        //    ddlPurchaseReq.Items.Insert(0, new ListItem("---Select Purchase Request---", ""));
-        //    ddlPurchaseReq.SelectedIndex = 0;
-        //}
         protected void btnFind_Click(object sender, EventArgs e)
         {
             BindSoleVendorRequests();
@@ -379,7 +284,76 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void btnUpload_Click(object sender, EventArgs e)
         {
-            UploadFile();
+            string fileName = Path.GetFileName(fuReciept.PostedFile.FileName);
+            try
+            {
+                if (fileName != String.Empty)
+                {
+                    SVRAttachment attachment = new SVRAttachment();
+                    attachment.FilePath = "~/SVUploads/" + fileName;
+                    fuReciept.PostedFile.SaveAs(Server.MapPath("~/SVUploads/") + fileName);
+                    //Response.Redirect(Request.Url.AbsoluteUri);
+                    _presenter.CurrentSoleVendorRequest.SVRAttachments.Add(attachment);
+
+                    grvAttachments.DataSource = _presenter.CurrentSoleVendorRequest.SVRAttachments;
+                    grvAttachments.DataBind();
+                    Master.ShowMessage(new AppMessage("Successfully uploaded the attachment", RMessageType.Info));
+                }
+                else
+                {
+                    Master.ShowMessage(new AppMessage("Please select file ", RMessageType.Error));
+                }
+            }
+            catch (HttpException ex)
+            {
+                Master.ShowMessage(new AppMessage("Unable to upload the file; the file is to big or the internet is too slow! " + ex.InnerException.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
+            }
+        }
+        protected void btnCreateSoleVendor_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                _presenter.OnViewLoaded();
+                btnSave.Visible = true;
+                pnlInfo.Visible = false;
+
+                foreach (GridViewRow item in grvDetails.Rows)
+                {
+                    int prDetailID = (int)grvDetails.DataKeys[item.RowIndex].Value;
+                    Session["prId"] = prDetailID;
+
+                    if (item.RowType == DataControlRowType.DataRow)
+                    {
+                        CheckBox chk = (CheckBox)item.FindControl("chkSelect");
+                        if (chk.Checked)
+                        {
+                            if (_presenter.GetPurchaseRequestDetail(prDetailID) != null)
+                            {
+                                PurchaseRequestDetail PRDetail = _presenter.GetPurchaseRequestDetail(prDetailID);
+                                SoleVendorRequestDetail svDetail = new SoleVendorRequestDetail();
+                                svDetail.PRDetailID = PRDetail.Id;
+                                svDetail.ItemAccount = PRDetail.ItemAccount;
+                                svDetail.ItemDescription = PRDetail.Item;
+                                svDetail.Qty = PRDetail.Qty;
+                                svDetail.Project = PRDetail.Project;
+                                svDetail.Grant = PRDetail.Grant;
+                                _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails.Add(svDetail);
+                                _presenter.CurrentSoleVendorRequest.PurchaseRequest = PRDetail.PurchaseRequest;
+                                BindSoleVendorRequestDetails();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Master.ShowMessage(new AppMessage("Error: Unable to Add SoleVendor Item " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
+            }
+
         }
         protected void DownloadFile(object sender, EventArgs e)
         {
@@ -398,99 +372,38 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             grvAttachments.DataBind();
             //Response.Redirect(Request.Url.AbsoluteUri);
         }
-        private void UploadFile()
+        private void PopPurchaseRequest()
         {
-            string fileName = Path.GetFileName(fuReciept.PostedFile.FileName);
-            try
+            if (Convert.ToInt32(ddlPurchaseReq.SelectedValue) > 0)
             {
-                if (fileName != String.Empty)
-                {
-                    SVRAttachment attachment = new SVRAttachment();
-                    attachment.FilePath = "~/SVUploads/" + fileName;
-                    fuReciept.PostedFile.SaveAs(Server.MapPath("~/SVUploads/") + fileName);
-                    //Response.Redirect(Request.Url.AbsoluteUri);
-                    _presenter.CurrentSoleVendorRequest.SVRAttachments.Add(attachment);
-
-                    grvAttachments.DataSource = _presenter.CurrentSoleVendorRequest.SVRAttachments;
-                    grvAttachments.DataBind();
-                }
-                else
-                {
-                    Master.ShowMessage(new AppMessage("Please select file ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-                }
-            }
-            catch (HttpException ex)
-            {
-                Master.ShowMessage(new AppMessage("Unable to upload the file,The file is to big or The internet is too slow " + ex.InnerException.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                grvDetails.DataSource = _presenter.ListPRDetailsInProgressById(Convert.ToInt32(ddlPurchaseReq.SelectedValue));
+                //grvDetails.DataSource = _presenter.ListPurchaseReqInProgress();
+                grvDetails.DataBind();
             }
         }
-        private void PopSoleVendorRequesters()
-        {
-            PurchaseRequest purchaseRequest = Session["PR"] as PurchaseRequest;
-            if (_presenter.CurrentSoleVendorRequest != null && purchaseRequest != null)
-            {
-
-                ////txtRequester.Text = _presenter.CurrentUser().FirstName + " " + _presenter.CurrentUser().LastName;
-
-                ////txtRequestDate.Text = purchaseRequest.RequestedDate.ToShortDateString();
-
-
-
-
-                
-                //ddlGrant.DataSource = _presenter.GetGrantbyprojectId(Convert.ToInt32(ddlProject.SelectedValue));
-                //ddlGrant.DataBind();
-                //ddlGrant.SelectedValue = purchaseRequest.PurchaseRequestDetails[0].Grant.Id.ToString();
-
-                //    GridView1.DataSource = _presenter.CurrentBidAnalysisRequest.PurchaseRequest.PurchaseRequestDetails;
-                //  GridView1.DataBind();
-            }
-            else if (purchaseRequest == null && _presenter.CurrentSoleVendorRequest != null)
-            {
-                PopPurchaseRequest();
-            }
-        }
-
-
         private void PopPurchaseRequestsDropDown()
         {
-            
             ddlPurchaseReq.Items.Clear();
             ListItem lst = new ListItem();
-            lst.Text = " Select Request No ";
+            lst.Text = "--Select Request No--";
             lst.Value = "0";
             ddlPurchaseReq.Items.Add(lst);
             ddlPurchaseReq.DataSource = _presenter.GetPurchaseRequestListInProgress();
             ddlPurchaseReq.DataBind();
-
-
         }
-
+        protected void ddlPurchaseReq_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PopPurchaseRequest();
+            pnlInfo.Visible = true;
+            grvDetails.Visible = true;
+        }
         protected void dgSoleVenderDetail_PageIndexChanged(object source, DataGridPageChangedEventArgs e)
         {
 
 
         }
-        //protected void txtUnitCost_TextChanged(object sender, EventArgs e)
-        //{
-        //    TextBox txt = (TextBox)sender;
-        //    TextBox hfQty = txt.FindControl("txtQty") as TextBox;
-        //    TextBox txtUnitCost = txt.FindControl("txtUnitCost") as TextBox;
-        //    TextBox txtTot = txt.FindControl("txtTotalCost") as TextBox;
-        //    txtTot.Text = ((Convert.ToInt32(hfQty.Text) * Convert.ToDecimal(txtUnitCost.Text))).ToString();
-        //}
-        //protected void txtEdtUnitCost_TextChanged(object sender, EventArgs e)
-        //{
-        //    TextBox txt = (TextBox)sender;
-        //    TextBox txtEdtQty = txt.FindControl("txtEdtQty") as TextBox;
-        //    TextBox txtEdtUnitCost = txt.FindControl("txtEdtUnitCost") as TextBox;
-        //    TextBox txtEdtTotalCost = txt.FindControl("txtEdtTotalCost") as TextBox;
-        //    txtEdtTotalCost.Text = ((Convert.ToInt32(txtEdtQty.Text) * Convert.ToDecimal(txtEdtUnitCost.Text))).ToString();
-        //}
         protected void dgSoleVenderDetail_ItemDataBound(object sender, DataGridItemEventArgs e)
         {
-
-
             if (_presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails != null)
             {
                 DropDownList ddlItemAcc = e.Item.FindControl("ddlItemAcc") as DropDownList;
@@ -507,9 +420,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
                 if (e.Item.ItemType == ListItemType.EditItem)
                 {
-
                     DropDownList ddlSupplier = e.Item.FindControl("ddlEdtSupplier") as DropDownList;
-
                     BindSupplier(ddlSupplier);
                     //if (ddlSupplier != null)
 
@@ -529,56 +440,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                     //}
                 }
-               
-
             }
-        }
-        private void BindItems(DropDownList ddlItems)
-        {
-            ddlItems.DataSource = _presenter.GetItemAccounts();
-            ddlItems.DataBind();
         }
         protected void dgSoleVenderDetail_SelectedIndexChanged(object sender, EventArgs e)
         {
-
-        }
-        protected void dgSoleVenderDetail_ItemCommand(object source, DataGridCommandEventArgs e)
-        {
-            if (e.CommandName == "AddNew")
-            {
-                try
-                {
-                    SoleVendorRequestDetail detail = new SoleVendorRequestDetail();
-                    detail.SoleVendorRequest = _presenter.CurrentSoleVendorRequest;
-                    DropDownList ddlItem = e.Item.FindControl("ddlFItemAcc") as DropDownList;
-                    detail.ItemAccount = _presenter.GetItemAccount(Convert.ToInt32(ddlItem.SelectedValue));
-                    TextBox txtItemDescription = e.Item.FindControl("txtFDescription") as TextBox;
-                    detail.ItemDescription = txtItemDescription.Text;
-                    DropDownList ddlSup = e.Item.FindControl("ddlSupplier") as DropDownList;
-
-                    detail.SoleVendorSupplier = _presenter.GetSoleVendorSupplier(Convert.ToInt32(ddlSup.SelectedValue));
-                    
-                    DropDownList ddlSoleVendorJustification = e.Item.FindControl("ddlSoleVendorJustification") as DropDownList;
-                    detail.SoleVendorJustificationType = ddlSoleVendorJustification.SelectedValue;
-                    TextBox txtFReason = e.Item.FindControl("txtFReason") as TextBox;
-                    detail.ReasonForSelection = txtFReason.Text;
-                    TextBox txtQty = e.Item.FindControl("txtQty") as TextBox;
-                    detail.Qty = Convert.ToInt32(txtQty.Text);
-                    TextBox txtUnitCost = e.Item.FindControl("txtUnitCost") as TextBox;
-                    detail.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
-                    TextBox txtTotalCost = e.Item.FindControl("txtTotalCost") as TextBox;
-                    detail.TotalCost = Convert.ToDecimal(txtTotalCost.Text);
-                    _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails.Add(detail);
-                    dgSoleVenderDetail.EditItemIndex = -1;
-                   // BindSoleVendorRequests();
-                    BindSoleVendorRequestDetails();
-
-                }
-                catch (Exception ex)
-                {
-                    Master.ShowMessage(new AppMessage("Error: Unable to Update Bidder " + ex.Message, RMessageType.Error));
-                }
-            }
 
         }
         protected void dgSoleVenderDetail_UpdateCommand(object source, DataGridCommandEventArgs e)
@@ -587,56 +452,37 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 int id = (int)dgSoleVenderDetail.DataKeys[e.Item.ItemIndex];
 
-                SoleVendorRequestDetail detail;
+                SoleVendorRequestDetail svDetail;
                 if (id > 0)
-                    detail = _presenter.CurrentSoleVendorRequest.GetSoleVendorRequestDetailDetail(id);
+                    svDetail = _presenter.CurrentSoleVendorRequest.GetSoleVendorRequestDetailDetail(id);
                 else
-                    detail = (SoleVendorRequestDetail)_presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[e.Item.ItemIndex];
+                    svDetail = _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[e.Item.ItemIndex];
 
-                //   SoleVendorRequestDetail detail = new SoleVendorRequestDetail();
-
-                detail.SoleVendorRequest = _presenter.CurrentSoleVendorRequest;
-              //  DropDownList ddlItem = e.Item.FindControl("ddlItemAcc") as DropDownList;
-                detail.ItemAccount = _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[0].ItemAccount;
-              //  TextBox txtItemDescription = e.Item.FindControl("txtDescription") as TextBox;
-                detail.ItemDescription = _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[0].ItemDescription;
+                svDetail.SoleVendorRequest = _presenter.CurrentSoleVendorRequest;
                 DropDownList ddlSup = e.Item.FindControl("ddlEdtSupplier") as DropDownList;
-
-                detail.SoleVendorSupplier = _presenter.GetSoleVendorSupplier(Convert.ToInt32(ddlSup.SelectedValue));
+                svDetail.SoleVendorSupplier = _presenter.GetSoleVendorSupplier(Convert.ToInt32(ddlSup.SelectedValue));
                 DropDownList ddlEdtSoleVendorJustification = e.Item.FindControl("ddlEdtSoleVendorJustification") as DropDownList;
-                detail.SoleVendorJustificationType = ddlEdtSoleVendorJustification.SelectedValue;
-                TextBox txtReason = e.Item.FindControl("txtReason") as TextBox;
-                detail.ReasonForSelection = txtReason.Text;
-                //   TextBox txtQty = e.Item.FindControl("txtEdtQty") as TextBox;
-                detail.Qty = _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[0].Qty;
+                svDetail.SoleVendorJustificationType = ddlEdtSoleVendorJustification.SelectedValue;
+                TextBox txtEdtReason = e.Item.FindControl("txtEdtReason") as TextBox;
+                svDetail.ReasonForSelection = txtEdtReason.Text;
                 TextBox txtUnitCost = e.Item.FindControl("txtEdtUnitCost") as TextBox;
-                detail.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
+                svDetail.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
                 TextBox txtTotalCost = e.Item.FindControl("txtEdtTotalCost") as TextBox;
-                // detail.TotalCost = Convert.ToDecimal(txtTotalCost.Text);
-                detail.TotalCost = Convert.ToInt32(detail.Qty) * Convert.ToDecimal(txtUnitCost.Text);
+                svDetail.TotalCost = Convert.ToInt32(svDetail.Qty) * Convert.ToDecimal(txtUnitCost.Text);
+
+                //Change the status of the Purchase Request Detail so that the SoleVendor Item assosiated with it won't appear in the request page
+                _presenter.CurrentSoleVendorRequest.PurchaseRequest.GetPurchaseRequestDetail(svDetail.PRDetailID).BidAnalysisRequestStatus = "Pending";
+
                 dgSoleVenderDetail.EditItemIndex = -1;
                 BindSoleVendorRequestDetails();
                 Master.ShowMessage(new AppMessage("Sole Vendor Detail Successfully Updated", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to Update Sole Vendor " + ex.Message, RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to Update Sole Vendor Detail" + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
-        }
-
-        private void BindSupplier(DropDownList ddlSupplier)
-        {
-
-            ddlSupplier.DataSource = _presenter.GetSuppliers();
-            ddlSupplier.DataBind();
-            ////ddlSupplier.Items.Insert(0, new ListItem("---Select Supplier---", "0"));
-            ////ddlSupplier.SelectedIndex = 0;
-            //ListItem lst = new ListItem();
-            //lst.Text = "Select Supplier";
-            //lst.Value = "0";
-            //ddlSupplier.Items.Add(lst);
-            //ddlSupplier.DataSource = _presenter.GetSuppliers(SupplierTypeId);
-            //ddlSupplier.DataBind();
         }
         protected void dgSoleVenderDetail_DeleteCommand(object source, DataGridCommandEventArgs e)
         {
@@ -660,42 +506,24 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 else { _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails.Remove(tard); }
 
 
-                Master.ShowMessage(new AppMessage("Sole Vendor Request Detail was Removed Successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Sole Vendor Request Detail was Removed Successfully", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to delete Sole Vendor Request Detail. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to delete Sole Vendor Request Detail. " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         protected void dgSoleVenderDetail_EditCommand(object source, DataGridCommandEventArgs e)
         {
-            this.dgSoleVenderDetail.EditItemIndex = e.Item.ItemIndex;
+            dgSoleVenderDetail.EditItemIndex = e.Item.ItemIndex;
             BindSoleVendorRequestDetails();
-        }
-        private void PopPurchaseRequest()
-        {
-            ////  txtRequester.Text = _presenter.CurrentSoleVendorRequest.PurchaseRequest..UserName.ToString();
-            ////  // txtRequestDate.Text = _presenter.CurrentBidAnalysisRequest.RequestDate.Value.ToShortDateString();
-
-            ////  //  txtselectionfor.Text = _presenter.CurrentBidAnalysisRequest.Neededfor;
-
-            ////  txtselectionfor.Text = _presenter.CurrentSoleVendorRequest.Comment;
-            //////  txtTotal.Text = Convert.ToDecimal(_presenter.CurrentSoleVendorRequest.t.TotalPrice).ToString();
-
-
-            ////  grvDetails.DataSource = _presenter.CurrentSoleVendorRequest.PurchaseRequest.PurchaseRequestDetails;
-            if (Convert.ToInt32(ddlPurchaseReq.SelectedValue) > 0)
-            {
-                grvDetails.DataSource = _presenter.ListPurchaseReqInProgressbyId(Convert.ToInt32(ddlPurchaseReq.SelectedValue));
-                //  grvDetails.DataSource = _presenter.ListPurchaseReqInProgress();
-                grvDetails.DataBind();
-            }
-
         }
         protected void grvSoleVendorRequestList_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             grvSoleVendorRequestList.PageIndex = e.NewPageIndex;
-            btnFind_Click(sender, e);            
+            btnFind_Click(sender, e);
         }
         protected void grvSoleVendorRequestList_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -723,150 +551,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
             }
         }
-
-      
-        //protected void ddlPurchaseReq_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-
-        //    grvDetails.DataSource = _presenter.ListPurchaseReqInProgressbyId(Convert.ToInt32(ddlPurchaseReq.SelectedValue));
-        //    grvDetails.DataBind();
-
-
-        //}
-
-        protected void grvDetails_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            prId = Convert.ToInt32(grvDetails.SelectedDataKey[0]);
-            Session["prId"] = Convert.ToInt32(grvDetails.SelectedDataKey[0]);
-            _presenter.OnViewLoaded();
-            btnSave.Visible = true;
-            grvDetails.Visible = false;
-            pnlInfo.Visible = false;
-            int PuID = Convert.ToInt32(Session["prId"]);
-            // int userid = _presenter.GetPurchaseRequestbyPuID(PuID).Requester;
-            //Session["prId"] = _presenter.CurrentBidAnalysisRequest.PurchaseRequest;
-
-
-            if (_presenter.GetPurchaseRequestbyPuID(PuID) != null)
-            {
-                PurchaseRequestDetail PD = _presenter.GetPurchaseRequestbyPuID(PuID);
-                SoleVendorRequestDetail detail = new SoleVendorRequestDetail();
-                    detail.ItemAccount = PD.ItemAccount;
-                    detail.ItemDescription = PD.Item;
-                    detail.Qty = PD.Qty;
-                    detail.Project = PD.Project;
-                    detail.Grant = PD.Grant;
-
-                    _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails.Add(detail);
-                  //  txtRequester.Text = _presenter.CurrentUser().FirstName + " " + _presenter.CurrentUser().LastName;
-                   // lblPurchaseReqNo.Text = PD.PurchaseRequest.RequestNo;
-                    int userid = _presenter.GetPurchaseRequestbyPuID(PuID).PurchaseRequest.Requester;
-                  //  lblPurReqRequester.Text = _presenter.GetUser(userid).FullName;
-                    //PopProjects();
-                    //PopGrants();
-                    //PopSupplier();
-                    ////ddlProject.SelectedItem.Text = detail.Project.ProjectCode;
-                    ////ddlGrant.SelectedItem.Text = detail.Grant.GrantCode;
-                    
-              //  lblPurchaseRequestDate.Text= PD.PurchaseRequest.RequestedDate.ToShortDateString();
-
-
-            }
-
-            BindSoleVendorRequestDetails();
-            grvDetails.DataSource = _presenter.ListPurchaseReqbyId(Convert.ToInt32(prId));
-            grvDetails.DataBind();
-            //dgSoleVenderDetail.DataSource = _presenter.ListPurchaseReqbyId(Convert.ToInt32(prId));
-            //dgSoleVenderDetail.DataBind();
-           
-
-        }
-
-        //private void PopProjects()
-        //{
-        //    ddlProject.DataSource = _presenter.GetProjects();
-        //    ddlProject.DataBind();
-
-        //    ddlProject.Items.Insert(0, new ListItem("---Select Project---", "0"));
-        //    ddlProject.SelectedIndex = 0;
-        //}
-        //private void PopGrants()
-        //{
-        //    ddlGrant.DataSource = _presenter.GetGrants();
-        //    ddlGrant.DataBind();
-
-        //    ddlGrant.Items.Insert(0, new ListItem("---Select Grant---", "0"));
-        //    ddlGrant.SelectedIndex = 0;
-        //}
-
-
         protected void grvDetails_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             grvDetails.PageIndex = e.NewPageIndex;
             PopPurchaseRequest();
-
-        }
-
-        protected void btnCreateSoleVendor_Click(object sender, EventArgs e)
-        {
-            try
-            {
-
-                PurchaseRequest purchaseRequest = Session["PR"] as PurchaseRequest;
-
-
-                _presenter.OnViewLoaded();
-                btnSave.Visible = true;
-                
-                pnlInfo.Visible = false;
-                int PuID = Convert.ToInt32(Session["prId"]);
-
-                foreach (GridViewRow item in grvDetails.Rows)
-                {
-                    int prId = (int)grvDetails.DataKeys[item.RowIndex].Value;
-                    Session["prId"] = prId;
-                    // check row is datarow
-                    if (item.RowType == DataControlRowType.DataRow)
-                    {
-                        CheckBox chk = (CheckBox)item.FindControl("chkSelect");
-                        if (chk.Checked)
-                        {
-
-                            if (_presenter.GetPurchaseRequestbyPuID(prId) != null)
-                            {
-                                PurchaseRequestDetail PD = _presenter.GetPurchaseRequestbyPuID(prId);
-
-                                SoleVendorRequestDetail detail = new SoleVendorRequestDetail();
-                                detail.ItemAccount = PD.ItemAccount;
-                                detail.ItemDescription = PD.Item;
-                                detail.Qty = PD.Qty;
-                                detail.Project = PD.Project;
-                                detail.Grant = PD.Grant;
-
-
-                                _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails.Add(detail);
-                                BindSoleVendorRequestDetails();
-                            }
-                            
-                           
-                        }
-                    }
-                }
-
-
-            }
-            catch (Exception ex)
-            {
-                Master.ShowMessage(new AppMessage("Error: Unable to Add SoleVendor Item " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
-            }
-
-        }
-
-        protected void ddlPurchaseReq_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            PopPurchaseRequest();
-            pnlInfo.Visible = true;
-            grvDetails.Visible = true;
         }
     }
 }
