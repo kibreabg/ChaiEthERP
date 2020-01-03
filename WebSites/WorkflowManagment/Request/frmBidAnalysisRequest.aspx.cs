@@ -489,7 +489,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             if (Convert.ToInt32(ddlPurchaseReq.SelectedValue) > 0)
             {
-                grvDetails.DataSource = _presenter.ListPurchaseReqInProgressbyId(Convert.ToInt32(ddlPurchaseReq.SelectedValue));
+                grvDetails.DataSource = _presenter.ListPRDetailsInProgressById(Convert.ToInt32(ddlPurchaseReq.SelectedValue));
                 //  grvDetails.DataSource = _presenter.ListPurchaseReqInProgress();
                 grvDetails.DataBind();
             }
@@ -1301,7 +1301,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         //protected void ddlPurchaseReq_SelectedIndexChanged(object sender, EventArgs e)
         //{
         //    // PopPurchaseRequest();
-        //    grvDetails.DataSource = _presenter.ListPurchaseReqInProgressbyId(Convert.ToInt32(ddlPurchaseReq.SelectedValue));
+        //    grvDetails.DataSource = _presenter.ListPRDetailsInProgressById(Convert.ToInt32(ddlPurchaseReq.SelectedValue));
         //    grvDetails.DataBind();
 
 
