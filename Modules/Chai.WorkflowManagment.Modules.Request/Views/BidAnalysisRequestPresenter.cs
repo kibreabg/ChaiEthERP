@@ -339,9 +339,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.ListPurchaseReqInProgress();
         }
-        public IList<PurchaseRequestDetail> ListPurchaseReqInProgressbyId(int id)
+        public IList<PurchaseRequestDetail> ListPRDetailsInProgressById(int id)
         {
-            return _controller.ListPurchaseReqInProgressById(id);
+            return _controller.ListPRDetailsInProgressById(id);
         }
         public IList<PurchaseRequestDetail> ListPurchaseReqbyId(int id)
         {

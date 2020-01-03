@@ -447,6 +447,15 @@ namespace Chai.WorkflowManagment.Modules.Request
             return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
 
         }
+        public IList<PurchaseRequestDetail> ListPRDetailsInProgressById(int ReqId)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM PurchaseRequestDetails INNER JOIN PurchaseRequests ON PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id WHERE PurchaseRequestDetails.BidAnalysisRequestStatus = 'InProgress' AND PurchaseRequests.Id = '" + ReqId + "'  ORDER BY PurchaseRequests.Id DESC";
+
+            return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
+
+        }
         public IList<PurchaseRequestDetail> ListPurchaseReqById(int Id)
         {
             string filterExpression = "";
