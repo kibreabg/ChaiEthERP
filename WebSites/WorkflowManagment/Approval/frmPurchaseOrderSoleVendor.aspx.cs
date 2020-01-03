@@ -29,9 +29,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 if (_presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors == null)
                 {
                     _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors = new PurchaseOrderSoleVendor();
-                }
-
-                
+                }               
 
                 BindPurchaseOrder();
                 btnPrintPurchaseForm.Enabled = true;

@@ -44,6 +44,43 @@
             <!-- widget content -->
             <div class="widget-body no-padding">
                 <div class="smart-form">
+                    <asp:Panel ID="pnlInfo" runat="server">
+                        <div class="alert alert-info fade in">
+                            <button class="close" data-dismiss="alert">
+                                ×
+                            </button>
+                            <i class="fa-fw fa fa-info"></i>
+                            <strong>Info!</strong> Please select the Sole Vendor Request Transaction to create a Purchase Order for!
+                        </div>
+                    </asp:Panel>
+                    <asp:GridView ID="grvSoleVendPO" Visible="True"
+                        runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                        CssClass="table table-striped table-bordered table-hover" AllowPaging="True" PageSize="15">
+                        <RowStyle CssClass="rowstyle" />
+                        <Columns>
+                            <%-- <asp:BoundField DataField="RequestNo" HeaderText="Bid Analysis Request No" SortExpression="RequestNo" />--%>
+                            <asp:BoundField DataField="Item" HeaderText="Item" SortExpression="Item" />
+                            <asp:BoundField DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
+                            <asp:BoundField DataField="Supplier.SupplierNameType" HeaderText="Supplier" SortExpression="Supplier.SupplierNameType" />
+                            <asp:BoundField DataField="Rank" HeaderText="Rank" SortExpression="Rank" />
+                            <asp:BoundField DataField="TotalCost" HeaderText="Total Cost" SortExpression="TotalCost" />
+                            <asp:BoundField DataField="ReasonForSelection" HeaderText="Reason For Selection" SortExpression="ReasonForSelection" />
+                            <asp:TemplateField>
+
+                                <ItemTemplate>
+                                    <asp:CheckBox ID="chkSelect" runat="server" />
+                                </ItemTemplate>
+                            </asp:TemplateField>
+
+                        </Columns>
+                        <FooterStyle CssClass="FooterStyle" />
+                        <HeaderStyle CssClass="headerstyle" />
+                        <PagerStyle CssClass="PagerStyle" />
+                        <RowStyle CssClass="rowstyle" />
+                    </asp:GridView>
+                    <footer>
+                        <asp:Button ID="btnCreatePO" runat="server" CssClass="btn btn-primary" Text="Create Purchase Order" OnClick="btnCreatePO_Click" />
+                    </footer>
                     <fieldset>
 
                         <div class="row">
