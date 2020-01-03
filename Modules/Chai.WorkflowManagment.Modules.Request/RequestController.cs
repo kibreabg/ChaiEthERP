@@ -422,7 +422,10 @@ namespace Chai.WorkflowManagment.Modules.Request
         string filterExpression = "";
         public IList<PurchaseRequest> GetPurchaseRequestsInProgress()
         {
-            filterExpression = "SELECT  *  FROM PurchaseRequests INNER JOIN PurchaseRequestDetails on dbo.PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id  Where PurchaseRequestDetails.BidAnalysisRequestStatus = 'InProgress'  order by PurchaseRequests.Id Desc ";
+            filterExpression = "SELECT Distinct PurchaseRequests.Id,RequestNo,Requester,RequestedDate,Requireddateofdelivery ,TotalPrice,SpecialNeed ,NeededFor, "+
+                                      " DeliverTo ,	Comment ,SuggestedSupplier ,CurrentApprover,CurrentLevel ,ProgressStatus ,CurrentStatus FROM "+
+                                      " PurchaseRequests INNER JOIN PurchaseRequestDetails on dbo.PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id"+
+                                       " Where PurchaseRequestDetails.BidAnalysisRequestStatus = 'InProgress'  order by PurchaseRequests.Id Desc ";
 
             return _workspace.SqlQuery<PurchaseRequest>(filterExpression).ToList();
         }
@@ -439,7 +442,7 @@ namespace Chai.WorkflowManagment.Modules.Request
         {
             string filterExpression = "";
 
-            filterExpression = "SELECT  *  FROM PurchaseRequestDetails INNER JOIN PurchaseRequests on PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id  Where  PurchaseRequests.Id = '" + ReqId + "'  order by PurchaseRequests.Id Desc ";
+            filterExpression = "SELECT  *  FROM PurchaseRequestDetails INNER JOIN PurchaseRequests on PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id  Where  PurchaseRequests.Id = '" + ReqId + "' AND PurchaseRequestDetails.BidAnalysisRequestStatus='InProgress' order by PurchaseRequests.Id Desc ";
 
             return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
 
@@ -458,9 +461,9 @@ namespace Chai.WorkflowManagment.Modules.Request
             return _workspace.Single<PurchaseRequest>(x => x.Id == PurchaseRequestId, x => x.PurchaseRequestDetails.Select(y => y.ItemAccount), x => x.PurchaseRequestDetails.Select(z => z.Project));
         }
 
-        public PurchaseRequestDetail GetPurchaseRequestbyPuID(int PurchaseRequestId)
+        public PurchaseRequestDetail GetPurchaseRequestbyPuID(int Id)
         {
-            return _workspace.Single<PurchaseRequestDetail>(x => x.Id == PurchaseRequestId,y=>y.PurchaseRequest);
+            return _workspace.Single<PurchaseRequestDetail>(x => x.Id == Id,y=>y.PurchaseRequest);
         }
         public PurchaseRequestDetail GetPurchaseRequestDetail(int PurchaseRequestDetailId)
         {

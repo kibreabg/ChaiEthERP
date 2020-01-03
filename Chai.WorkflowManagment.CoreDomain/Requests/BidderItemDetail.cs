@@ -24,6 +24,8 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public int Qty { get; set; }
         public decimal UnitCost { get; set; }
         public decimal TotalCost { get; set; }
+
+        public int PRDetailId { get; set; }
         public virtual Project Project { get; set; }
         public virtual Grant Grant { get; set; }
         public virtual IList<Bidder> Bidders { get; set; }

@@ -65,6 +65,9 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
             }
             return null;
         }
+
+
+      
         public virtual BidderItemDetail GetBidderItemDetailbyItem(int ItemId)
         {
 
@@ -107,6 +110,20 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
             return RankedItemDetals;
         }
 
+
+        public virtual IList<BidderItemDetail> GetBidderItemDetailByPRDetailId()
+        {
+            IList<BidderItemDetail>BItemDetails = new List<BidderItemDetail>();
+            foreach (BidderItemDetail bidderItemDetail in BidderItemDetails)
+            {
+                if (bidderItemDetail.PRDetailId !=0)
+                    BItemDetails.Add(bidderItemDetail);
+
+            }
+            return BItemDetails;
+        }
+
+      
         public IList<Bidder> GetBidderbyRankBIDID(int BIDID)
         {
             IList<Bidder> RankedItemDetals = new List<Bidder>();

@@ -174,7 +174,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                 }
             }
-
+            PurchaseRequestDetail PD = _controller.GetPurchaseRequestbyPuID(PRID);
+            PD.BidAnalysisRequestStatus = "Pending";
             BidAnalysisRequest.TotalPrice = Totalamount;
 
             BidAnalysisRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
@@ -184,8 +185,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
            // if (View.GetGrantId != 0)
              //   BidAnalysisRequest.Grant = _settingController.GetGrant(View.GetGrantId);
             BidAnalysisRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
+           
 
-        
             if (CurrentBidAnalysisRequest.BidAnalysisRequestStatuses.Count == 0)
                 SaveBidAnalysisRequestStatus();
             GetCurrentApprover();
@@ -313,9 +314,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.GetPurchaseRequest(purchaseRequestId);
         }
-        public PurchaseRequestDetail GetPurchaseRequestbyPuID(int purchaseRequestId)
+        public PurchaseRequestDetail GetPurchaseRequestbyPuID(int Id)
         {
-            return _controller.GetPurchaseRequestbyPuID(purchaseRequestId);
+            return _controller.GetPurchaseRequestbyPuID(Id);
         }
         
         public IList<PurchaseRequest> GetPurchaseRequestList()

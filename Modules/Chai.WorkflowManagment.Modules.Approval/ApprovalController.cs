@@ -332,6 +332,10 @@ namespace Chai.WorkflowManagment.Modules.Approval
             return _workspace.SqlQuery<Bidder>(filterExpression).ToList();
 
         }
+        public PurchaseRequestDetail GetPurchaseRequestbyPuID(int Id)
+        {
+            return _workspace.Single<PurchaseRequestDetail>(x => x.Id == Id, y => y.PurchaseRequest);
+        }
         public BAAttachment GetBAAttachment(int attachmentId)
         {
             return _workspace.Single<BAAttachment>(x => x.Id == attachmentId);

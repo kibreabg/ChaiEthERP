@@ -199,7 +199,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     txtRejectedReason.Text = PRS.RejectedReason;
                     if (_presenter.CurrentBidAnalysisRequest.ProgressStatus == ProgressStatus.Completed.ToString())
                     {
+
                         btnApprove.Enabled = false;
+                        
                       //  btnPrint0.Enabled = true;
                     }
                     else
@@ -211,7 +213,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 if (_presenter.CurrentBidAnalysisRequest.CurrentLevel == _presenter.CurrentBidAnalysisRequest.BidAnalysisRequestStatuses.Count && (PRS.ApprovalStatus != null) && _presenter.CurrentBidAnalysisRequest.ProgressStatus == ProgressStatus.Completed.ToString())
                 {
                     btnPurchaseOrder.Enabled = true;
-                    _presenter.CurrentBidAnalysisRequest.PurchaseRequest.PurchaseRequestDetails[0].BidAnalysisRequestStatus = "Completed";
+                    foreach (BidderItemDetail detail in _presenter.CurrentBidAnalysisRequest.GetBidderItemDetailByPRDetailId())
+                    {
+                        PurchaseRequestDetail PD = _presenter.GetPurchaseRequestbyPuID(detail.PRDetailId);
+                        PD.BidAnalysisRequestStatus = "Completed";
+                    }
                 }
             }
         }
@@ -229,35 +235,42 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             foreach (BidAnalysisRequestStatus PRS in _presenter.CurrentBidAnalysisRequest.BidAnalysisRequestStatuses)
             {
-                if ((PRS.Approver == _presenter.CurrentUser().Id || _presenter.CurrentUser().Id == (_presenter.GetAssignedJobbycurrentuser(PRS.Approver) != null ? _presenter.GetAssignedJobbycurrentuser(PRS.Approver).AssignedTo : 0)) && PRS.WorkflowLevel == _presenter.CurrentBidAnalysisRequest.CurrentLevel)
+                foreach (BidderItemDetail detail in _presenter.CurrentBidAnalysisRequest.GetBidderItemDetailByPRDetailId())
                 {
-                    PRS.ApprovalDate = DateTime.Now;
-                    PRS.ApprovalStatus = ddlApprovalStatus.SelectedValue;
-                    PRS.AssignedBy = _presenter.GetAssignedJobbycurrentuser(PRS.Approver) != null ? _presenter.GetAssignedJobbycurrentuser(PRS.Approver).AppUser.FullName : "";
-                    PRS.RejectedReason = txtRejectedReason.Text;
-                    if (PRS.ApprovalStatus != ApprovalStatus.Rejected.ToString())
+                    PurchaseRequestDetail PD = _presenter.GetPurchaseRequestbyPuID(detail.PRDetailId);
+               
+
+                    if ((PRS.Approver == _presenter.CurrentUser().Id || _presenter.CurrentUser().Id == (_presenter.GetAssignedJobbycurrentuser(PRS.Approver) != null ? _presenter.GetAssignedJobbycurrentuser(PRS.Approver).AssignedTo : 0)) && PRS.WorkflowLevel == _presenter.CurrentBidAnalysisRequest.CurrentLevel)
                     {
-                        if (_presenter.CurrentBidAnalysisRequest.CurrentLevel == _presenter.CurrentBidAnalysisRequest.BidAnalysisRequestStatuses.Count)
+                        PRS.ApprovalDate = DateTime.Now;
+                        PRS.ApprovalStatus = ddlApprovalStatus.SelectedValue;
+                        PRS.AssignedBy = _presenter.GetAssignedJobbycurrentuser(PRS.Approver) != null ? _presenter.GetAssignedJobbycurrentuser(PRS.Approver).AppUser.FullName : "";
+                        PRS.RejectedReason = txtRejectedReason.Text;
+                        if (PRS.ApprovalStatus != ApprovalStatus.Rejected.ToString())
+                        {
+                            if (_presenter.CurrentBidAnalysisRequest.CurrentLevel == _presenter.CurrentBidAnalysisRequest.BidAnalysisRequestStatuses.Count)
+                                _presenter.CurrentBidAnalysisRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                          
+                            GetNextApprover();
+                            PRS.Approver = _presenter.CurrentUser().Id;
+                            Log.Info(_presenter.GetUser(PRS.Approver).FullName + " has " + PRS.ApprovalStatus + " Bid Analysis Request made by " + _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName);
+                            // btnPurchaseOrder.Enabled = true;
+                            PD.BidAnalysisRequestStatus = "Pending";
+                        }
+                        else
+                        {
                             _presenter.CurrentBidAnalysisRequest.ProgressStatus = ProgressStatus.Completed.ToString();
-                        _presenter.CurrentBidAnalysisRequest.PurchaseRequest.PurchaseRequestDetails[0].BidAnalysisRequestStatus = "Completed";
-                        GetNextApprover();
-                        PRS.Approver = _presenter.CurrentUser().Id;
-                        Log.Info(_presenter.GetUser(PRS.Approver).FullName + " has " + PRS.ApprovalStatus + " Bid Analysis Request made by " + _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName);
-                       // btnPurchaseOrder.Enabled = true;
+                            PRS.Approver = _presenter.CurrentUser().Id;
+                            SendEmailRejected(PRS);
+                            Log.Info(_presenter.GetUser(PRS.Approver).FullName + " has " + PRS.ApprovalStatus + " Bid Analysis Request made by " + _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName);
+                            PD.BidAnalysisRequestStatus = "InProgress";
+                            //btnPurchaseOrder.Enabled = true;
+                        }
+                        break;
                     }
-                    else
-                    {
-                        _presenter.CurrentBidAnalysisRequest.ProgressStatus = ProgressStatus.Completed.ToString();
-                        PRS.Approver = _presenter.CurrentUser().Id;
-                        SendEmailRejected(PRS);
-                        Log.Info(_presenter.GetUser(PRS.Approver).FullName + " has " + PRS.ApprovalStatus + " Bid Analysis Request made by " + _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName);
-                        //btnPurchaseOrder.Enabled = true;
-                    }
-                    break;
+
                 }
-
             }
-
         }
         private void SendEmailRejected(BidAnalysisRequestStatus PRS)
         {
@@ -361,29 +374,35 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             try
             {
-               
+
                 if (_presenter.CurrentBidAnalysisRequest.ProgressStatus != ProgressStatus.Completed.ToString())
                 {
-                    SavePurchaseRequestStatus();
-                    Session["PurchaseId"] = _presenter.CurrentBidAnalysisRequest.PurchaseRequest.Id;
-                    _presenter.SaveOrUpdateBidAnalysisRequest(_presenter.CurrentBidAnalysisRequest);
-                   //ShowPrint();
-                    EnableControls();
-                    if (ddlApprovalStatus.SelectedValue != "Rejected")
+                    foreach (BidderItemDetail detail in _presenter.CurrentBidAnalysisRequest.GetBidderItemDetailByPRDetailId())
                     {
-                        Master.ShowMessage(new AppMessage("Purchase  Approval Processed ", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                        PurchaseRequestDetail PD = _presenter.GetPurchaseRequestbyPuID(detail.PRDetailId);
+                        SavePurchaseRequestStatus();
+                        Session["PurchaseId"] = _presenter.CurrentBidAnalysisRequest.PurchaseRequest.Id;
+                        _presenter.SaveOrUpdateBidAnalysisRequest(_presenter.CurrentBidAnalysisRequest);
+                        //ShowPrint();
+                        EnableControls();
+                        if (ddlApprovalStatus.SelectedValue != "Rejected")
+                        {
+                            Master.ShowMessage(new AppMessage("Purchase  Approval Processed ", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                           
+                        }
+                        else
+                        {
+                            Master.ShowMessage(new AppMessage("Purchase  Approval Rejected ", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                            PD.BidAnalysisRequestStatus = "InProgress";
+                        }
+                        btnApprove.Enabled = false;
+                        BindSearchPurchaseRequestGrid();
+                        pnlApproval_ModalPopupExtender.Show();
                     }
-                    else
-                    {
-                        Master.ShowMessage(new AppMessage("Purchase  Approval Rejected ", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                    }
-                    btnApprove.Enabled = false;
-                    BindSearchPurchaseRequestGrid();
-                    pnlApproval_ModalPopupExtender.Show();
-                }
 
-                BindBidAnalysisRequestforprint();
-                btnApprove.Enabled = false;
+                    BindBidAnalysisRequestforprint();
+                    btnApprove.Enabled = false;
+                }
             }
                 catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)  
                          {  
