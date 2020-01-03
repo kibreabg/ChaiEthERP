@@ -100,9 +100,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     }
                     else if (AL.EmployeePosition.PositionName == "Program Manager")
                     {
-                        if (CurrentSoleVendorRequest.SoleVendorRequestDetails[0].Project != null)
+                        if (CurrentSoleVendorRequest.Project.Id != 0)
                         {
-                            SVRS.Approver = GetProject(CurrentSoleVendorRequest.SoleVendorRequestDetails[0].Project.Id).AppUser.Id;
+                            SVRS.Approver = GetProject(CurrentSoleVendorRequest.Project.Id).AppUser.Id;
                         }
                     }
                     else
@@ -137,20 +137,23 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         public void SaveOrUpdateSoleVendorRequest(int PRID)
         {           
-            PurchaseRequest thePurchaseRequest = _controller.GetPurchaseRequestbyPuID(PRID).PurchaseRequest;
-            SoleVendorRequest soleVendorRequest = CurrentSoleVendorRequest;
-            soleVendorRequest.PurchaseRequest = thePurchaseRequest;
-            soleVendorRequest.RequestNo = View.GetRequestNo;
-            soleVendorRequest.RequestDate = Convert.ToDateTime(DateTime.Today);
-            soleVendorRequest.Comment = View.GetComment;
-            soleVendorRequest.AppUser = CurrentUser();
-            soleVendorRequest.ProgressStatus = ProgressStatus.InProgress.ToString();      
+            SoleVendorRequest SoleVendorRequest = CurrentSoleVendorRequest;
+            SoleVendorRequest.PurchaseRequest = _controller.GetPurchaseRequestbyPuID(PRID).PurchaseRequest; 
+            
+            SoleVendorRequest.RequestNo = View.GetRequestNo;
+            SoleVendorRequest.RequestDate = Convert.ToDateTime(DateTime.Today);
+          
+            SoleVendorRequest.ProposedPurchasedPrice = 0; //Zero for now
+           
+            SoleVendorRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
+        //    SoleVendorRequest.Supplier = _settingController.GetSupplier(View.GetProposedSupplier);
+           
 
             if (CurrentSoleVendorRequest.SoleVendorRequestStatuses.Count == 0)
                 SaveSoleVendorRequestStatus();
             GetCurrentApprover();
 
-            _controller.SaveOrUpdateEntity(soleVendorRequest);
+            _controller.SaveOrUpdateEntity(SoleVendorRequest);
             _controller.CurrentObject = null;
             //Notify the Purchase requester that bid process is initiated
             SendEmailToRequester();
@@ -188,18 +191,18 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.GetPurchaseRequests();
         }
-        public PurchaseRequestDetail GetPurchaseRequestDetail(int prDetailId)
+        public PurchaseRequestDetail GetPurchaseRequestbyPuID(int purchaseRequestId)
         {
-            return _controller.GetPurchaseRequestDetail(prDetailId);
+            return _controller.GetPurchaseRequestbyPuID(purchaseRequestId);
         }
         public IList<PurchaseRequestDetail> ListPurchaseReqInProgress()
         {
             return _controller.ListPurchaseReqInProgress();
         }
        
-        public IList<PurchaseRequestDetail> ListPRDetailsInProgressById(int id)
+        public IList<PurchaseRequestDetail> ListPurchaseReqInProgressbyId(int id)
         {
-            return _controller.ListPRDetailsInProgressById(id);
+            return _controller.ListPurchaseReqInProgressById(id);
         }
         public IList<PurchaseRequestDetail> ListPurchaseReqbyId(int id)
         {
@@ -282,11 +285,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             if (GetSuperviser(SVRS.Approver).IsAssignedJob != true)
             {
-                EmailSender.Send(GetSuperviser(SVRS.Approver).Email, "Sole Vendor Request", (CurrentSoleVendorRequest.AppUser.FullName).ToUpper() + "' has made a request for Sole Vendor Purchase with Request No '" + (CurrentSoleVendorRequest.RequestNo).ToUpper() + "'");
+                EmailSender.Send(GetSuperviser(SVRS.Approver).Email, "Sole Vendor Request", (CurrentSoleVendorRequest.AppUser.FullName).ToUpper() + "' Request for Sole Vendor No '" + (CurrentSoleVendorRequest.RequestNo).ToUpper() + "'");
             }
             else
             {
-                EmailSender.Send(GetSuperviser(_controller.GetAssignedJobbycurrentuser(SVRS.Approver).AssignedTo).Email, "Sole Vendor Request", (CurrentSoleVendorRequest.AppUser.FullName).ToUpper() + "' has made a request for Sole Vendor Purchase with Request No '" + (CurrentSoleVendorRequest.RequestNo).ToUpper() + "'");
+                EmailSender.Send(GetSuperviser(_controller.GetAssignedJobbycurrentuser(SVRS.Approver).AssignedTo).Email, "Sole Vendor Request", (CurrentSoleVendorRequest.AppUser.FullName).ToUpper() + "' Request  for Sole Vendor");
             }
         }
         private void SendEmailToRequester()

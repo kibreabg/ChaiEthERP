@@ -64,7 +64,7 @@
                             <section class="col col-6">
                                 <label class="label">Amount Type</label>
                                 <label class="select">
-                                    <asp:DropDownList ID="ddlAmountType" AutoPostBack="true" OnSelectedIndexChanged="ddlAmountType_SelectedIndexChanged" runat="server">
+                                    <asp:DropDownList ID="ddlAmountType" runat="server">
                                         <asp:ListItem Value="">Select Amount Type</asp:ListItem>
                                         <asp:ListItem>Advanced</asp:ListItem>
                                         <asp:ListItem>Actual Amount</asp:ListItem>

@@ -88,11 +88,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
         public IList<ItemAccount> GetItemAccounts()
         {
             return WorkspaceFactory.CreateReadOnly().Query<ItemAccount>(x => x.Status == "Active").OrderBy(x => x.AccountName).ToList();
-        }
-        public IList<ItemAccount> GetAdvanceAccount()
-        {
-            return WorkspaceFactory.CreateReadOnly().Query<ItemAccount>(x => x.AccountName == "Account Receivable").ToList();
-        }
+        }       
         public ItemAccount GetItemAccount(int ItemAccountId)
         {
             return _workspace.Single<ItemAccount>(x => x.Id == ItemAccountId);

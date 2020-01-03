@@ -9,9 +9,22 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
     {
         IList<SoleVendorRequest> SoleVendorRequests { get; set; }
         int GetSoleVendorRequestId { get; }
-        string GetRequestNo { get; }
-        string GetComment { get; }        
+        string GetRequestNo { get; }        
+       // DateTime GetRequestDate { get; }
+      //  string GetContactPersonNumber { get; }
         int GetPurchaseRequestId { get; }
+       // int GetProposedSupplier { get; }
+        //string GetSoleSource { get; }
+
+      //  string GetSoleSourceJustificationPreparedBy { get; }
+        //int GetProjectId { get; }
+        //int GetGrantId { get; }
+        //string GetReasonForSelection { get; }
+       
+
+       
+      
+
     }
 }
 

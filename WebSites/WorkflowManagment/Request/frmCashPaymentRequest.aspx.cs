@@ -137,7 +137,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             foreach (CashPaymentRequestDetail detail in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
             {
                 attachments.AddRange(detail.CPRAttachments);
-                Session["attachments"] = attachments;
+                Session["attachments"] = attachments;                
             }
 
             grvAttachments.DataSource = attachments;
@@ -200,15 +200,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void BindAccountDescription(DropDownList ddlAccountDescription)
         {
-            if (ddlAmountType.SelectedValue == "Advanced")
-            {
-                ddlAccountDescription.DataSource = _presenter.GetAdvanceAccount();
-            }
-            else
-            {
-                ddlAccountDescription.DataSource = _presenter.ListItemAccounts();
-            }
-
+            ddlAccountDescription.DataSource = _presenter.ListItemAccounts();
             ddlAccountDescription.DataValueField = "Id";
             ddlAccountDescription.DataTextField = "AccountName";
             ddlAccountDescription.DataBind();
@@ -282,8 +274,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         cprd.CPRAttachments.Add(attachment);
                     }
                     _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails.Add(cprd);
-                    if (ddlAmountType.SelectedValue != "Advanced")
-                        BindAttachments();
+                    BindAttachments();
 
                     dgCashPaymentDetail.EditItemIndex = -1;
                     BindCashPaymentDetails();
@@ -350,7 +341,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     CPRAttachment attachment = new CPRAttachment();
                     attachment.CashPaymentRequestDetail = _presenter.CurrentCashPaymentRequest.GetDetailByItemAccount(cprd.ItemAccount.Id);
                     attachment.ItemAccountChecklists.Add(checklist);
-
+                    
                     cprd.CPRAttachments.Add(attachment);
                 }
                 BindAttachments();
@@ -460,16 +451,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails.Count != 0)
                 {
-                    if (ddlAmountType.SelectedValue == "Actual Amount" && CheckReceiptsAttached())
-                    {
-                        _presenter.SaveOrUpdateCashPaymentRequest();
-                        BindCashPaymentRequests();
-                        Master.ShowMessage(new AppMessage("Successfully did a Payment  Request, Reference No - <b>'" + _presenter.CurrentCashPaymentRequest.VoucherNo + "'</b>", RMessageType.Info));
-                        Log.Info(_presenter.CurrentUser().FullName + " has requested a Payment of Total Amount " + _presenter.CurrentCashPaymentRequest.TotalAmount.ToString());
-                        btnSave.Visible = false;
-
-                    }
-                    else if (ddlAmountType.SelectedValue == "Advanced")
+                    if ((ddlAmountType.SelectedValue == "Advanced" || ddlAmountType.SelectedValue == "Actual Amount") && CheckReceiptsAttached())
                     {
                         _presenter.SaveOrUpdateCashPaymentRequest();
                         BindCashPaymentRequests();
@@ -531,10 +513,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             DropDownList ddl = (DropDownList)sender;
             TextBox txtAccountCode = ddl.FindControl("txtAccountCode") as TextBox;
             txtAccountCode.Text = _presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)).AccountCode;
-        }
-        protected void ddlAmountType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            BindCashPaymentDetails();
         }
         protected void ddlEdtAccountDescription_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -634,7 +612,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         File.Delete(Server.MapPath(filePath));
                     }
                 }
-            }
+            }            
             BindAttachments();
             //Response.Redirect(Request.Url.AbsoluteUri);
         }

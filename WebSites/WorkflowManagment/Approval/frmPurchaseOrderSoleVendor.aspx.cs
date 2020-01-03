@@ -294,6 +294,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             //    lblDeliverToResult.Text = _presenter.CurrentBidAnalysisRequest..DeliverTo;
             lblPurchaseOrderNo.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.PoNumber;
             //  lblDeliveryDateresult.Text = _presenter.CurrentBidAnalysisRequest..Requireddateofdelivery.ToString();
+            lblPurposeResult.Text = _presenter.CurrentSoleVendorRequest.ContactPersonNumber;
             lblBillToResult.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.Billto;
             lblShipToResult.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.ShipTo;
             lblPaymentTerms.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.PaymentTerms;

@@ -105,7 +105,7 @@
                 <RowStyle CssClass="rowstyle" />
             </asp:GridView>
              <footer>
-           <asp:Button ID="btnCreateBid" runat="server" CssClass="btn btn-primary" Text="Create Bid" OnClick="btnCreateBid_Click"/>
+           <asp:Button ID="btnCreateBid" runat="server" CssClass="btn btn-primary"  Text="Create Bid" OnClick="btnCreateBid_Click"/>
           </footer>
         </div>
   
@@ -141,7 +141,7 @@
 
                                         <asp:DataGrid ID="dgItemDetail" runat="server" CellPadding="0"
                                             CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id" AutoGenerateColumns="False"
-                                            GridLines="None" ShowFooter="True" OnSelectedIndexChanged="dgItemDetail_SelectedIndexChanged">
+                                            GridLines="None" ShowFooter="True" OnSelectedIndexChanged="dgItemDetail_SelectedIndexChanged" >
 
                                             <Columns>
 
@@ -462,7 +462,7 @@
                                     </FooterTemplate>
                                 </asp:TemplateColumn>
 
-                                <asp:TemplateColumn HeaderText="Qty">
+                               <%-- <asp:TemplateColumn HeaderText="Qty">
                                     <ItemTemplate>
                                         <%# DataBinder.Eval(Container.DataItem, "Qty")%>
                                         <asp:HiddenField ID="hfqty" runat="server" Value='<%# DataBinder.Eval(Container.DataItem, "Qty")%>'></asp:HiddenField>
@@ -484,6 +484,23 @@
                                     </EditItemTemplate>
                                     <FooterTemplate>
                                         <asp:TextBox ID="txtItem" runat="server" Enabled="false" CssClass="form-control"></asp:TextBox>
+                                    </FooterTemplate>
+                                </asp:TemplateColumn>--%>
+                                  <asp:TemplateColumn HeaderText="Rank">
+                                    <ItemTemplate>
+                                        <%# DataBinder.Eval(Container.DataItem, "Rank")%>
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <asp:TextBox ID="txtRank" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "Rank")%>' OnTextChanged="txtRank_TextChanged" AutoPostBack="True"></asp:TextBox>
+                                         <asp:TextBox ID="TextBox1" runat="server" CssClass="form-control" Visible="false" ></asp:TextBox>
+                                        <asp:RequiredFieldValidator ID="RfvRank" runat="server" CssClass="validator" ControlToValidate="txtRank" ErrorMessage="Rank Required" ValidationGroup="proedit">*</asp:RequiredFieldValidator>
+                                       <cc1:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtRank" ID="txtRank_FilteredTextBoxExtender" FilterType="numbers"></cc1:FilteredTextBoxExtender>
+                                    </EditItemTemplate>
+                                    <FooterTemplate>
+                                        <asp:TextBox ID="txtFRank" runat="server" CssClass="form-control" OnTextChanged="txtFRank_TextChanged" AutoPostBack="True"></asp:TextBox>
+                                          <asp:TextBox ID="TextBox2" runat="server" CssClass="form-control"  Visible="false" ></asp:TextBox>
+                                        <asp:RequiredFieldValidator ID="RfvFRank" runat="server" CssClass="validator" ControlToValidate="txtFRank" ErrorMessage="Rank Required" ValidationGroup="proadd">*</asp:RequiredFieldValidator>
+                                        <cc1:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtFRank" ID="txtFRank_FilteredTextBoxExtender" FilterType="numbers"></cc1:FilteredTextBoxExtender>
                                     </FooterTemplate>
                                 </asp:TemplateColumn>
                                 <asp:TemplateColumn HeaderText="Unit Cost">
@@ -511,23 +528,7 @@
                                         <asp:RequiredFieldValidator ID="RfvTotalCost" runat="server" ControlToValidate="txtTotalCost" ErrorMessage="Total Cost Required" Enabled="false" ValidationGroup="detailadd">*</asp:RequiredFieldValidator>
                                     </FooterTemplate>
                                 </asp:TemplateColumn>
-                                <asp:TemplateColumn HeaderText="Rank">
-                                    <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "Rank")%>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <asp:TextBox ID="txtRank" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "Rank")%>' OnTextChanged="txtRank_TextChanged" AutoPostBack="True"></asp:TextBox>
-                                         <asp:TextBox ID="TextBox1" runat="server" CssClass="form-control" Visible="false" ></asp:TextBox>
-                                        <asp:RequiredFieldValidator ID="RfvRank" runat="server" CssClass="validator" ControlToValidate="txtRank" ErrorMessage="Rank Required" ValidationGroup="proedit">*</asp:RequiredFieldValidator>
-                                       <cc1:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtRank" ID="txtRank_FilteredTextBoxExtender" FilterType="numbers"></cc1:FilteredTextBoxExtender>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:TextBox ID="txtFRank" runat="server" CssClass="form-control" OnTextChanged="txtFRank_TextChanged" AutoPostBack="True"></asp:TextBox>
-                                          <asp:TextBox ID="TextBox2" runat="server" CssClass="form-control"  Visible="false" ></asp:TextBox>
-                                        <asp:RequiredFieldValidator ID="RfvFRank" runat="server" CssClass="validator" ControlToValidate="txtFRank" ErrorMessage="Rank Required" ValidationGroup="proadd">*</asp:RequiredFieldValidator>
-                                        <cc1:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtFRank" ID="txtFRank_FilteredTextBoxExtender" FilterType="numbers"></cc1:FilteredTextBoxExtender>
-                                    </FooterTemplate>
-                                </asp:TemplateColumn>
+                              
                                 <asp:TemplateColumn HeaderText="Reason For Selection">
                                     <ItemTemplate>
                                         <%# DataBinder.Eval(Container.DataItem, "ReasonForSelection")%>
