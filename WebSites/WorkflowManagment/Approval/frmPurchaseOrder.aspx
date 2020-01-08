@@ -198,14 +198,7 @@
                                                             
                                                         </label>
                                                     </section>
-                                                    <section class="col col-4">
-                                                        <label class="label">
-                                                       Item</label>
-                                                        <label class="input">
-                                                        <asp:TextBox ID="txtItem" runat="server" Enabled="true"></asp:TextBox>
-                                                           
-                                                        </label>
-                                                    </section>
+                                                  
                                                                                                       
                                                     
                                                 </div>

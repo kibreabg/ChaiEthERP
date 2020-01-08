@@ -202,7 +202,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
                         btnApprove.Enabled = false;
                         
-                      //  btnPrint0.Enabled = true;
+                        btnPrint0.Enabled = true;
                     }
                     else
                     {

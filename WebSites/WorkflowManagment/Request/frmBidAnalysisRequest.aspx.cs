@@ -940,15 +940,15 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                     if (bidditem.Bidders.Count > 0)
                     {
-                        foreach (Bidder biddetail in bidditem.Bidders)
+                        foreach (Bidder biddetail in bidditem.GetBidders())
                         {
 
-                            if ((biddetail.Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue)) || (biddetail.Rank == Convert.ToInt32(txtFRank.Text)))
+                            if ((bidditem.GetLastBidder().Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue)) || (bidditem.GetLastBidder().Rank == Convert.ToInt32(txtFRank.Text)))
                             {
                                 Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier already Choosen / Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
                                 break;
                             }
-                            else if((biddetail.Supplier.Id != Convert.ToInt32(ddlSup.SelectedValue)) && (biddetail.Rank != Convert.ToInt32(txtFRank.Text)))
+                            else if((bidditem.GetLastBidder().Supplier.Id != Convert.ToInt32(ddlSup.SelectedValue)) && (bidditem.GetLastBidder().Rank != Convert.ToInt32(txtFRank.Text)))
                                 {
                                 bidder.Supplier = _presenter.GetSupplier(Convert.ToInt32(ddlSup.SelectedValue));
                                 TextBox txtFContactDetails = e.Item.FindControl("txtFContactDetails") as TextBox;
@@ -1427,7 +1427,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                 pnlInfo.Visible = false;
                 int PuID = Convert.ToInt32(Session["prId"]);
-
+                _presenter.CurrentBidAnalysisRequest.BidderItemDetails.Clear();
                 foreach (GridViewRow item in grvDetails.Rows)
                 {
                     int prId = (int)grvDetails.DataKeys[item.RowIndex].Value;
@@ -1452,7 +1452,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                                     detail.Grant = PD.Grant;
                                     detail.PRDetailId = PD.Id;
 
-                                _presenter.CurrentBidAnalysisRequest.BidderItemDetails.Clear();
+                               
                                     _presenter.CurrentBidAnalysisRequest.BidderItemDetails.Add(detail);
                                    dgItemDetail.DataSource = _presenter.CurrentBidAnalysisRequest.BidderItemDetails;
                                    dgItemDetail.DataBind();
