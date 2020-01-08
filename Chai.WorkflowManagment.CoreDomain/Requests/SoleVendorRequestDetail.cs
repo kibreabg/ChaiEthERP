@@ -15,18 +15,19 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         }
 
         public int Id { get; set; }
+        public int PRDetailID { get; set; }
         public virtual SoleVendorRequest SoleVendorRequest { get; set; }
         public virtual ItemAccount ItemAccount { get; set; }
-        public string ItemDescription { get; set; }
-        public string ReasonForSelection { get; set; }
         public virtual SoleVendorSupplier SoleVendorSupplier { get; set; }
+        public virtual Project Project { get; set; }
+        public virtual Grant Grant { get; set; }
+        public string ItemDescription { get; set; }
+        public string ReasonForSelection { get; set; }        
         public int Qty { get; set; }
         public string SoleVendorJustificationType { get; set; }
         public decimal UnitCost { get; set; }
-        public decimal TotalCost { get; set; }
-
-        public virtual Project Project { get; set; }
-        public virtual Grant Grant { get; set; }
+        public decimal TotalCost { get; set; } 
+        public string POStatus { get; set; }       
 
     }
 }

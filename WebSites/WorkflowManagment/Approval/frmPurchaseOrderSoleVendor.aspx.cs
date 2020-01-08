@@ -17,7 +17,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
     public partial class frmPurchaseOrderSoleVendor : POCBasePage, IPurchaseOrderSoleVendorView
     {
         private PurchaseOrderSoleVendorPresenter _presenter;
-
         private SoleVendorRequest _solevendorrequest;
 
         protected void Page_Load(object sender, EventArgs e)
@@ -29,11 +28,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 if (_presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors == null)
                 {
                     _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors = new PurchaseOrderSoleVendor();
-                }               
+                }
 
-                BindPurchaseOrder();
-                btnPrintPurchaseForm.Enabled = true;
-                btnPrintPurchaseOrder.Enabled = true;
+                BindSoleVendorsGrid();
                 //BindRepeater();  
             }
             this._presenter.OnViewLoaded();
@@ -72,8 +69,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 return "{64D3AC5F-DD78-414C-98F8-63EC02CB9673}";
             }
         }
-
-        public CoreDomain.Requests.SoleVendorRequest SoleVendorRequest
+        public SoleVendorRequest SoleVendorRequest
         {
             get
             {
@@ -92,7 +88,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             get { return string.Empty; }
         }
-
         public int SoleVendorRequestId
         {
             get
@@ -126,14 +121,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             lblRequesterP.Text = _presenter.GetUser(_presenter.CurrentSoleVendorRequest.AppUser.Id).FullName;
             Label lblDateP = Repeater1.Controls[0].Controls[0].FindControl("lblDateP") as Label;
             lblDateP.Text = _presenter.CurrentSoleVendorRequest.RequestDate.ToString();
-            if (_presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.Supplier != null)
+            if (_presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.SoleVendorSupplier != null)
             {
                 Label lblSupplierName = Repeater1.Controls[0].Controls[0].FindControl("lblSupplierName") as Label;
-                lblSupplierName.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.Supplier.SupplierName;
+                lblSupplierName.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.SoleVendorSupplier.SupplierName;
                 Label lblSupplierAddress = Repeater1.Controls[0].Controls[0].FindControl("lblSupplierAddress") as Label;
-                lblSupplierAddress.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.Supplier.SupplierAddress;
+                lblSupplierAddress.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.SoleVendorSupplier.SupplierAddress;
                 Label lblSupplierContactP = Repeater1.Controls[0].Controls[0].FindControl("lblSupplierContactP") as Label;
-                lblSupplierContactP.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.Supplier.SupplierContact;
+                lblSupplierContactP.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.SoleVendorSupplier.SupplierContact;
             }
             Label lblBillToP = Repeater1.Controls[0].Controls[0].FindControl("lblBillToP") as Label;
             lblBillToP.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.Billto;
@@ -151,7 +146,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 lblItemTotalP.Text = ((!String.IsNullOrEmpty(lblItemTotalP.Text) ? Convert.ToDecimal(lblItemTotalP.Text) : 0) + POD.TotalCost).ToString();
             }
             lblTotalP.Text = Convert.ToString((!String.IsNullOrEmpty(lblItemTotalP.Text) ? Convert.ToDecimal(lblItemTotalP.Text) : 0) + (!String.IsNullOrEmpty(lblVatP.Text) ? Convert.ToDecimal(lblVatP.Text) : 0) + (!String.IsNullOrEmpty(lblDeliveryFeesP.Text) ? Convert.ToDecimal(lblDeliveryFeesP.Text) : 0));
-           
+
             foreach (SoleVendorRequestStatus detail in _presenter.CurrentSoleVendorRequest.SoleVendorRequestStatuses)
             {
                 if (detail.ApprovalStatus == ApprovalStatus.Authorized.ToString())
@@ -161,53 +156,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
             }
         }
-
         private void AutoNumber()
         {
             txtPONo.Text = "POSV-" + (_presenter.GetLastPurchaseOrderSoleVendorId() + 1);
         }
-        private void BindPurchaseOrder()
+        private void BindSoleVendorsGrid()
         {
-            this._presenter.OnViewLoaded();
-            txtDate.Text = DateTime.Today.ToString();
-            txtRequester.Text = _presenter.GetUser(_presenter.CurrentSoleVendorRequest.AppUser.Id).FullName;
-            txtSupplierName.Text = _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[0].SoleVendorSupplier.SupplierName;
-            txtSupplierAddress.Text = _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[0].SoleVendorSupplier.SupplierAddress;
-            txtSupplierContact.Text = _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[0].SoleVendorSupplier.SupplierContact;
-            if(_presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.PurchaseOrderSoleVendorDetails.Count == 0)
-            {
-                _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.PurchaseOrderSoleVendorDetails = new List<PurchaseOrderSoleVendorDetail>();
-                AddPurchasingItembySoleVendor();
-            }
-            else
-            {
-                BindPODetailForSole();
-            }
-            
-
-            if (_presenter.CurrentSoleVendorRequest != null)
-            {
-                if (_presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors != null)
-                {
-                    if (_presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.Id > 0)
-                    {
-                        txtPONo.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.PoNumber;
-                        txtDate.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.PODate.ToString();
-                        txtShipTo.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.ShipTo;
-                        txtBillto.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.Billto;
-                        txtDeliveeryFees.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.DeliveryFees.ToString();
-                        txtPaymentTerms.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.PaymentTerms;
-                        btnPrintPurchaseOrder.Enabled = true;
-                        btnPrintPurchaseForm.Enabled = true;
-                    }
-                    else
-                    {
-                        
-                        txtDate.Text = DateTime.Today.ToString();
-                        AutoNumber();
-                    }
-                }         
-            }
+            grvSoleVendPO.DataSource = _presenter.CurrentSoleVendorRequest.GetPendingPurchaseOrderDetails();
+            grvSoleVendPO.DataBind();
         }
         private void SavePurchaseOrder()
         {
@@ -220,71 +176,29 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.DeliveryFees = Convert.ToDecimal(txtDeliveeryFees.Text);
                 _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.PaymentTerms = txtPaymentTerms.Text;
                 _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.SoleVendorRequest = _presenter.CurrentSoleVendorRequest;
-                if (_presenter.CurrentSoleVendorRequest != null)
+                _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.Status = "Completed";  
+                
+                List<int> checkedSoleVendorDetailIds  = (List<int>)Session["checkedSoleVendorDetailIds"];
+                for(int i = 0; i < checkedSoleVendorDetailIds.Count; i++)
                 {
-                 ////   _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.Supplier = _presenter.CurrentSoleVendorRequest.Supplier;
+                    _presenter.CurrentSoleVendorRequest.GetSoleVendorRequestDetail(checkedSoleVendorDetailIds[i]).POStatus = "Completed";
                 }
-                //_presenter.CurrentBidAnalysisRequest.PurchaseOrders.Status = "Completed";       
-                Master.ShowMessage(new AppMessage("Purchase Order Successfully Approved", Chai.WorkflowManagment.Enums.RMessageType.Info));
+
+
+                Master.ShowMessage(new AppMessage("Purchase Order Successfully Approved", RMessageType.Info));
 
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("There was an error Saving Purchase Order", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
+                Master.ShowMessage(new AppMessage("There was an error Saving the Purchase Order", RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
-
         private void BindPODetailForSole()
         {
             dgPODetail.DataSource = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.PurchaseOrderSoleVendorDetails;
             dgPODetail.DataBind();
-        }
-
-        #region PurchaseOrderDetail
-        private void AddPurchasingItembySoleVendor()
-        {
-            if (_presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.Id <= 0)
-            {
-                if (_presenter.CurrentSoleVendorRequest != null)
-                {
-                    foreach (SoleVendorRequestDetail detail in _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails)
-                    {
-                        PurchaseOrderSoleVendorDetail POD = new PurchaseOrderSoleVendorDetail();
-                        POD.ItemAccount = _presenter.GetItemAccount(detail.ItemAccount.Id);
-                        POD.Qty = detail.Qty;
-                        POD.UnitCost = detail.UnitCost;
-                        POD.TotalCost = detail.TotalCost;
-                        _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.PurchaseOrderSoleVendorDetails.Add(POD);
-                    }
-                }
-            }
-            BindPODetailForSole();
-        }
-        #endregion
-        protected void btnRequest_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                SavePurchaseOrder();
-                _presenter.SaveOrUpdateSoleVendorRequest(_presenter.CurrentSoleVendorRequest);
-                BindRepeater();
-                PrintTransaction();
-                btnPrintPurchaseOrder.Enabled = true;
-                btnPrintPurchaseForm.Enabled = true;
-                btnRequest.Enabled = false;
-                Master.ShowMessage(new AppMessage("Successfully did a Sole Vendor Purchase Order, Reference No - <b>'" + _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.PoNumber + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                // Response.Redirect(String.Format("frmPurchaseApproval.aspx?PurchaseRequestId={0}&PnlStatus={1}", _presenter.CurrentBidAnalysisRequest.Id, "Enabled"));
-            }
-            catch (Exception ex)
-            {
-                Master.ShowMessage(new AppMessage("Unable to save Purchase order", Chai.WorkflowManagment.Enums.RMessageType.Error));
-            }
-
-        }
-        protected void btnCancel_Click(object sender, EventArgs e)
-        {
-            Response.Redirect(String.Format("frmPurchaseApproval.aspx?PurchaseRequestId={0}&PnlStatus={1}", _presenter.CurrentSoleVendorRequest.Id, "Enabled"));
         }
         private void PrintTransaction()
         {
@@ -294,13 +208,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             //    lblDeliverToResult.Text = _presenter.CurrentBidAnalysisRequest..DeliverTo;
             lblPurchaseOrderNo.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.PoNumber;
             //  lblDeliveryDateresult.Text = _presenter.CurrentBidAnalysisRequest..Requireddateofdelivery.ToString();
-            lblPurposeResult.Text = _presenter.CurrentSoleVendorRequest.ContactPersonNumber;
+            //lblPurposeResult.Text = _presenter.CurrentSoleVendorRequest.ContactPersonNumber;
             lblBillToResult.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.Billto;
             lblShipToResult.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.ShipTo;
             lblPaymentTerms.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.PaymentTerms;
             lblDeliveryFeesResult.Text = _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.DeliveryFees.ToString();
 
-         //   lblSuggestedSupplierResult.Text = _presenter.CurrentSoleVendorRequest.Supplier.SupplierName;
+            //   lblSuggestedSupplierResult.Text = _presenter.CurrentSoleVendorRequest.Supplier.SupplierName;
             if (_presenter.CurrentSoleVendorRequest != null)
             {
                 lblSelectedbyResult.Text = _presenter.GetUser(_presenter.CurrentSoleVendorRequest.AppUser.Id).FullName;
@@ -320,6 +234,89 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     e.Row.Cells[1].Text = _presenter.GetUser(_presenter.CurrentSoleVendorRequest.SoleVendorRequestStatuses[e.Row.RowIndex].Approver).FullName;
                 }
             }
+        }
+        protected void btnCreatePO_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                _presenter.OnViewLoaded();
+                btnRequest.Visible = true;
+                pnlInfo.Visible = false;
+                if (_presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails != null)
+                {
+                    List<int> checkedSoleVendorDetailIds = new List<int>();
+                    foreach (GridViewRow item in grvSoleVendPO.Rows)
+                    {
+                        int soleVendorDetailId = (int)grvSoleVendPO.DataKeys[item.RowIndex].Value;
+                        if (item.RowType == DataControlRowType.DataRow)
+                        {
+                            CheckBox chk = (CheckBox)item.FindControl("chkSelect");
+                            if (chk.Checked)
+                            {
+                                //Collect the Ids of the selected Sole Vendor Detail objects                                
+                                checkedSoleVendorDetailIds.Add(soleVendorDetailId);
+
+                                AutoNumber();
+                                txtDate.Text = DateTime.Today.ToString();
+                                txtRequester.Text = _presenter.GetUser(_presenter.CurrentSoleVendorRequest.AppUser.Id).FullName;
+                                //Assign the Sole Vendor Supplier value to the Purchase Order
+                                _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.SoleVendorSupplier = _presenter.CurrentSoleVendorRequest.GetSoleVendorRequestDetail(soleVendorDetailId).SoleVendorSupplier;
+                                txtSupplierName.Text = _presenter.CurrentSoleVendorRequest.GetSoleVendorRequestDetail(soleVendorDetailId).SoleVendorSupplier.SupplierName;
+                                txtSupplierAddress.Text = _presenter.CurrentSoleVendorRequest.GetSoleVendorRequestDetail(soleVendorDetailId).SoleVendorSupplier.SupplierAddress;
+                                txtSupplierContact.Text = _presenter.CurrentSoleVendorRequest.GetSoleVendorRequestDetail(soleVendorDetailId).SoleVendorSupplier.SupplierContact;
+                                if (_presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.PurchaseOrderSoleVendorDetails.Count == 0)
+                                {
+                                    _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.PurchaseOrderSoleVendorDetails = new List<PurchaseOrderSoleVendorDetail>();
+                                    foreach (SoleVendorRequestDetail svDetail in _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails)
+                                    {
+                                        PurchaseOrderSoleVendorDetail POD = new PurchaseOrderSoleVendorDetail();
+                                        POD.ItemAccount = _presenter.GetItemAccount(svDetail.ItemAccount.Id);
+                                        POD.Item = svDetail.ItemDescription;
+                                        POD.Qty = svDetail.Qty;
+                                        POD.UnitCost = svDetail.UnitCost;
+                                        POD.TotalCost = svDetail.TotalCost;
+                                        _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.PurchaseOrderSoleVendorDetails.Add(POD);
+                                    }
+                                    BindPODetailForSole();
+                                }
+                                else
+                                {
+                                    BindPODetailForSole();
+                                }
+                            }
+                        }
+                    }
+                    Session["checkedSoleVendorDetailIds"] = checkedSoleVendorDetailIds;
+                }
+            }
+            catch (Exception ex)
+            {
+                Master.ShowMessage(new AppMessage("Error: Unable to bind Purchase Order " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
+            }
+        }
+        protected void btnRequest_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SavePurchaseOrder();
+                _presenter.SaveOrUpdateSoleVendorRequest(_presenter.CurrentSoleVendorRequest);
+                BindRepeater();
+                PrintTransaction();
+                btnPrintPurchaseOrder.Enabled = true;
+                btnPrintPurchaseForm.Enabled = true;
+                btnRequest.Enabled = false;
+                Master.ShowMessage(new AppMessage("Successfully did a Sole Vendor Purchase Order, Reference No - <b>'" + _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.PoNumber + "'</b>", RMessageType.Info));
+                // Response.Redirect(String.Format("frmPurchaseApproval.aspx?PurchaseRequestId={0}&PnlStatus={1}", _presenter.CurrentBidAnalysisRequest.Id, "Enabled"));
+            }
+            catch (Exception ex)
+            {
+                Master.ShowMessage(new AppMessage("Unable to save Purchase order", RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
+            }
+
         }
     }
 }

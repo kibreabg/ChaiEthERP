@@ -68,7 +68,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 return "{282224A8-DCCA-4FED-AAB1-BEB6A5AA0653}";
             }
         }
-        public CoreDomain.Requests.SoleVendorRequest SoleVendorRequest
+        public SoleVendorRequest SoleVendorRequest
         {
             get
             {
@@ -178,6 +178,23 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             }
         }
+        private void BindSoleVendorRequestforprint()
+        {
+            lblRequestNoresult.Text = _presenter.CurrentSoleVendorRequest.RequestNo;
+            lblRequestedDateresult.Text = _presenter.CurrentSoleVendorRequest.RequestDate.ToString();
+            lblRequesterres.Text = _presenter.GetUser(_presenter.CurrentSoleVendorRequest.AppUser.Id).FullName;
+
+            grvSoleDetailsPrint.DataSource = _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails;
+            grvSoleDetailsPrint.DataBind();
+
+            grvStatuses.DataSource = _presenter.CurrentSoleVendorRequest.SoleVendorRequestStatuses;
+            grvStatuses.DataBind();
+        }
+        private void BindSearchSoleVendorRequestGrid()
+        {
+            grvSoleVendorRequestList.DataSource = _presenter.ListSoleVendorRequests(txtRequestNosearch.Text, txtRequestDatesearch.Text, ddlProgressStatus.SelectedValue);
+            grvSoleVendorRequestList.DataBind();
+        }
         private void ShowPrint()
         {
             if (_presenter.CurrentSoleVendorRequest.CurrentLevel == _presenter.CurrentSoleVendorRequest.SoleVendorRequestStatuses.Count && _presenter.CurrentSoleVendorRequest.ProgressStatus == ProgressStatus.Completed.ToString())
@@ -253,8 +270,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                             _presenter.CurrentSoleVendorRequest.CurrentLevel = SVRS.WorkflowLevel;
                             _presenter.CurrentSoleVendorRequest.CurrentStatus = SVRS.ApprovalStatus;
                             _presenter.CurrentSoleVendorRequest.ProgressStatus = ProgressStatus.Completed.ToString();
-                            //At this point make the Purchase Request progress Completed as well
-                            _presenter.CurrentSoleVendorRequest.PurchaseRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                            //At this point make the status of the Purchase Request Details associated with this Sole Vendor Request; Completed. 
+                            foreach (SoleVendorRequestDetail svDetail in _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails)
+                            {
+                                _presenter.CurrentSoleVendorRequest.PurchaseRequest.GetPurchaseRequestDetail(svDetail.PRDetailID).BidAnalysisRequestStatus = "Completed";
+                            }
                         }
                         GetNextApprover();
                         SVRS.Approver = _presenter.CurrentUser().Id;
@@ -294,11 +314,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     ShowPrint();
                     if (ddlApprovalStatus.SelectedValue != "Rejected")
                     {
-                        Master.ShowMessage(new AppMessage("Sole Vendor Approval Processed ", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                        Master.ShowMessage(new AppMessage("Sole Vendor Approval Processed ", RMessageType.Info));
                     }
                     else
                     {
-                        Master.ShowMessage(new AppMessage("Sole Vendor Approval Rejected ", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                        Master.ShowMessage(new AppMessage("Sole Vendor Approval Rejected ", RMessageType.Info));
                     }
                     btnApprove.Enabled = false;
 
@@ -326,9 +346,51 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("There is an error approving the Sole Vendor Request", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("There was an error while approving the Sole Vendor Request!", RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
 
+        }
+        protected void btnFind_Click(object sender, EventArgs e)
+        {
+            BindSearchSoleVendorRequestGrid();
+            // pnlPopUpSearch_ModalPopupExtender.Show();
+        }
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("../Default.aspx");
+        }
+        protected void btnCancelPopup_Click(object sender, EventArgs e)
+        {
+            pnlApproval.Visible = false;
+            pnlApproval_ModalPopupExtender.Hide();
+        }
+        protected void btnCancelPopup2_Click(object sender, EventArgs e)
+        {
+            pnlDetail.Visible = false;
+        }
+        protected void btnPurchaseOrder_Click(object sender, EventArgs e)
+        {
+            int purchaseID = _presenter.CurrentSoleVendorRequest.Id;
+            Response.Redirect(String.Format("frmPurchaseOrderSoleVendor.aspx?SoleVendorRequestId={0}", purchaseID));
+        }
+        protected void ddlApprovalStatus_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ddlApprovalStatus.SelectedValue == "Rejected")
+            {
+                lblRejectedReason.Visible = true;
+                txtRejectedReason.Visible = true;
+                rfvRejectedReason.Enabled = true;
+            }
+            pnlApproval_ModalPopupExtender.Show();
+        }
+        protected void ddlEdtAccountDescription_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DropDownList ddl = (DropDownList)sender;
+            TextBox txtAccountCode = ddl.FindControl("txtEdtAccountCode") as TextBox;
+            txtAccountCode.Text = _presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)).AccountCode;
+            pnlDetail_ModalPopupExtender.Show();
         }
         protected void DownloadFile(object sender, EventArgs e)
         {
@@ -338,17 +400,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             Response.WriteFile(filePath);
             Response.End();
         }
-        private void BindSearchSoleVendorRequestGrid()
-        {
-            grvSoleVendorRequestList.DataSource = _presenter.ListSoleVendorRequests(txtRequestNosearch.Text, txtRequestDatesearch.Text, ddlProgressStatus.SelectedValue);
-            grvSoleVendorRequestList.DataBind();
-        }
         protected void grvSoleVendorRequestList_SelectedIndexChanged(object sender, EventArgs e)
         {
 
             _presenter.OnViewLoaded();
             PopApprovalStatus();
             BindSoleVendorRequestStatus();
+            BindSoleVendorRequestforprint();
             grvAttachments.DataSource = _presenter.CurrentSoleVendorRequest.SVRAttachments;
             grvAttachments.DataBind();
             txtRejectedReason.Visible = false;
@@ -393,77 +451,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             grvSoleVendorRequestList.PageIndex = e.NewPageIndex;
             btnFind_Click(sender, e);
         }
-        protected void btnFind_Click(object sender, EventArgs e)
-        {
-            BindSearchSoleVendorRequestGrid();
-            // pnlPopUpSearch_ModalPopupExtender.Show();
-        }
-        protected void Button1_Click(object sender, EventArgs e)
-        {
-            Response.Redirect("../Default.aspx");
-        }
-        protected void btnCancelPopup_Click(object sender, EventArgs e)
-        {
-            pnlApproval.Visible = false;
-            pnlApproval_ModalPopupExtender.Hide();
-        }
-        protected void ddlApprovalStatus_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ddlApprovalStatus.SelectedValue == "Rejected")
-            {
-                lblRejectedReason.Visible = true;
-                txtRejectedReason.Visible = true;
-                rfvRejectedReason.Enabled = true;
-            }
-            pnlApproval_ModalPopupExtender.Show();
-        }
-        protected void ddlEdtAccountDescription_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            DropDownList ddl = (DropDownList)sender;
-            TextBox txtAccountCode = ddl.FindControl("txtEdtAccountCode") as TextBox;
-            txtAccountCode.Text = _presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)).AccountCode;
-            pnlDetail_ModalPopupExtender.Show();
-        }
-        private void BindSoleVendorRequestforprint()
-        {
-            lblRequestNoresult.Text = _presenter.CurrentSoleVendorRequest.RequestNo;
-            lblRequestedDateresult.Text = _presenter.CurrentSoleVendorRequest.RequestDate.ToString();
-            lblContactPersonNumberRes.Text = _presenter.CurrentSoleVendorRequest.ContactPersonNumber;
-            lblProposedPurchasedpriceres.Text = _presenter.CurrentSoleVendorRequest.ProposedPurchasedPrice.ToString();
-            lblProposedSupplierresp.Text = _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[0].SoleVendorSupplier.SupplierName;
-            lblSoleSourceJustificationPreparedByresp.Text = _presenter.CurrentSoleVendorRequest.SoleSourceJustificationPreparedBy;
-            lblapprovalstatusres.Text = _presenter.CurrentSoleVendorRequest.CurrentStatus;
-            lblRequesterres.Text = _presenter.GetUser(_presenter.CurrentSoleVendorRequest.AppUser.Id).FullName;
-
-
-            grvStatuses.DataSource = _presenter.CurrentSoleVendorRequest.SoleVendorRequestStatuses;
-            grvStatuses.DataBind();
-        }
-        protected void grvStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
-        {
-            if (_presenter.CurrentSoleVendorRequest.SoleVendorRequestStatuses != null)
-            {
-                if (e.Row.RowType == DataControlRowType.DataRow)
-                {
-                    if (_presenter.GetUser(_presenter.CurrentSoleVendorRequest.SoleVendorRequestStatuses[e.Row.RowIndex].Approver) != null)
-                    {
-                        e.Row.Cells[1].Text = _presenter.GetUser(_presenter.CurrentSoleVendorRequest.SoleVendorRequestStatuses[e.Row.RowIndex].Approver).FullName;
-                    }
-                }
-            }
-        }
-        protected void btnCancelPopup2_Click(object sender, EventArgs e)
-        {
-            pnlDetail.Visible = false;
-        }
-       protected void btnPurchaseOrder_Click(object sender, EventArgs e)
-       {
-           int purchaseID = _presenter.CurrentSoleVendorRequest.Id;
-           Response.Redirect(String.Format("frmPurchaseOrderSoleVendor.aspx?SoleVendorRequestId={0}", purchaseID));
-
-          
-        }
-
         protected void grvSoleVendorRequestList_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             if (e.CommandName != "Page")
@@ -476,6 +463,19 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     dgSoleVendorRequestDetail.DataSource = _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails;
                     dgSoleVendorRequestDetail.DataBind();
                     pnlDetail_ModalPopupExtender.Show();
+                }
+            }
+        }
+        protected void grvStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (_presenter.CurrentSoleVendorRequest.SoleVendorRequestStatuses != null)
+            {
+                if (e.Row.RowType == DataControlRowType.DataRow)
+                {
+                    if (_presenter.GetUser(_presenter.CurrentSoleVendorRequest.SoleVendorRequestStatuses[e.Row.RowIndex].Approver) != null)
+                    {
+                        e.Row.Cells[1].Text = _presenter.GetUser(_presenter.CurrentSoleVendorRequest.SoleVendorRequestStatuses[e.Row.RowIndex].Approver).FullName;
+                    }
                 }
             }
         }

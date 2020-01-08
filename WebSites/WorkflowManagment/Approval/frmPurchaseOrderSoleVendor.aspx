@@ -58,20 +58,18 @@
                         CssClass="table table-striped table-bordered table-hover" AllowPaging="True" PageSize="15">
                         <RowStyle CssClass="rowstyle" />
                         <Columns>
-                            <%-- <asp:BoundField DataField="RequestNo" HeaderText="Bid Analysis Request No" SortExpression="RequestNo" />--%>
-                            <asp:BoundField DataField="Item" HeaderText="Item" SortExpression="Item" />
+                            <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="Account Name" SortExpression="ItemAccount.AccountName" />
+                            <asp:BoundField DataField="ItemDescription" HeaderText="Item" SortExpression="Item" />                            
+                            <asp:BoundField DataField="SoleVendorSupplier.SupplierName" HeaderText="Supplier" SortExpression="SoleVendorSupplier.SupplierName" />
                             <asp:BoundField DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
-                            <asp:BoundField DataField="Supplier.SupplierNameType" HeaderText="Supplier" SortExpression="Supplier.SupplierNameType" />
-                            <asp:BoundField DataField="Rank" HeaderText="Rank" SortExpression="Rank" />
+                            <asp:BoundField DataField="UnitCost" HeaderText="Unit Cost" SortExpression="UnitCost" />
                             <asp:BoundField DataField="TotalCost" HeaderText="Total Cost" SortExpression="TotalCost" />
                             <asp:BoundField DataField="ReasonForSelection" HeaderText="Reason For Selection" SortExpression="ReasonForSelection" />
                             <asp:TemplateField>
-
                                 <ItemTemplate>
                                     <asp:CheckBox ID="chkSelect" runat="server" />
                                 </ItemTemplate>
                             </asp:TemplateField>
-
                         </Columns>
                         <FooterStyle CssClass="FooterStyle" />
                         <HeaderStyle CssClass="headerstyle" />
@@ -177,17 +175,20 @@
                         GridLines="None" ShowFooter="True">
 
                         <Columns>
-                            <asp:TemplateColumn HeaderText="Item Description">
-
+                            <asp:TemplateColumn HeaderText="Account Name">
                                 <ItemTemplate>
                                     <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountName")%>
+                                </ItemTemplate>
+                            </asp:TemplateColumn>
+                            <asp:TemplateColumn HeaderText="Item">
+                                <ItemTemplate>
+                                    <%# DataBinder.Eval(Container.DataItem, "Item")%>
                                 </ItemTemplate>
                             </asp:TemplateColumn>
                             <asp:TemplateColumn HeaderText="Qty">
                                 <ItemTemplate>
                                     <%# DataBinder.Eval(Container.DataItem, "Qty")%>
                                 </ItemTemplate>
-
                             </asp:TemplateColumn>
                             <asp:TemplateColumn HeaderText="Unit Cost">
                                 <ItemTemplate>
@@ -199,16 +200,13 @@
                                 <ItemTemplate>
                                     <%# DataBinder.Eval(Container.DataItem, "TotalCost")%>
                                 </ItemTemplate>
-
                             </asp:TemplateColumn>
-
                         </Columns>
                         <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
                     </asp:DataGrid>
                     <br />
                     <footer>
                         <asp:Button ID="btnRequest" runat="server" CssClass="btn btn-primary" OnClick="btnRequest_Click" Text="Save" ValidationGroup="Save" />
-                        &nbsp;<asp:Button ID="btnCancel" runat="server" CssClass="btn btn-primary" OnClick="btnCancel_Click" Text="Back" />
                         <asp:Button ID="btnPrintPurchaseForm" runat="server" CssClass="btn btn-primary" Text="Print Purchase Form" OnClientClick="javascript:Clickheretoprint('printtran')" Enabled="False" />
                         <asp:Button ID="btnPrintPurchaseOrder" runat="server" CssClass="btn btn-primary" Text="Print Purchase Order" OnClientClick="javascript:Clickheretoprint('divprint')" Enabled="False" />
 

@@ -28,7 +28,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Approval
         public string PaymentTerms { get; set; }
         public string Status { get; set; }
         public decimal TotalPrice { get; set; }
-        public virtual Supplier Supplier { get; set; }
+        public virtual SoleVendorSupplier SoleVendorSupplier { get; set; }
         public virtual IList<PurchaseOrderSoleVendorDetail> PurchaseOrderSoleVendorDetails { get; set; }
 
         #region PurchaseOrderSoleVendorDetail
