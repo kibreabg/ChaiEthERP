@@ -78,10 +78,7 @@
                         <asp:Label ID="lblRequestedDate" runat="server" Text='<%# Eval("RequestDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:BoundField DataField="ContactPersonNumber" HeaderText="Contact Person & Number" SortExpression="ContactPersonNumber" />
-                <asp:BoundField DataField="ProposedPurchasedPrice" HeaderText="Proposed Purchased Price" SortExpression="ProposedPurchasedPrice" />
-                <asp:BoundField DataField="SoleVendorSupplier.SupplierName" HeaderText="Proposed Supplier" SortExpression="SoleVendorSupplier.SupplierName" />
-                <asp:BoundField DataField="ReasonForSelection" HeaderText="Sole Vendor Selection Reason" SortExpression="ReasonForSelection" />
+                <asp:BoundField DataField="Comment" HeaderText="Comment" SortExpression="Comment" />
                 <asp:ButtonField ButtonType="Button" CommandName="ViewItem" Text="View Item Detail" />
                 <asp:CommandField ShowSelectButton="True" SelectText="Process Request" ButtonType="Button" />
                 <asp:TemplateField>
@@ -224,7 +221,7 @@
                                     <div class="tab-pane active" id="iss1">
                                         <asp:DataGrid ID="dgSoleVendorRequestDetail" runat="server"
                                             AutoGenerateColumns="False" CellPadding="0" CssClass="table table-striped table-bordered table-hover"
-                                            DataKeyField="Id" GridLines="None" PagerStyle-CssClass="paginate_button active" ShowFooter="True" TextWrap = "Wrap">
+                                            DataKeyField="Id" GridLines="None" PagerStyle-CssClass="paginate_button active" ShowFooter="True" TextWrap="Wrap">
                                             <Columns>
                                                 <asp:TemplateColumn HeaderText="Account Name">
                                                     <ItemTemplate>
@@ -236,19 +233,39 @@
                                                         <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountCode")%>
                                                     </ItemTemplate>
                                                 </asp:TemplateColumn>
-                                                <asp:TemplateColumn HeaderText="Amount">
+                                                <asp:TemplateColumn HeaderText="Item">
                                                     <ItemTemplate>
                                                         <%# DataBinder.Eval(Container.DataItem, "ItemDescription")%>
                                                     </ItemTemplate>
                                                 </asp:TemplateColumn>
-                                                <asp:TemplateColumn HeaderText="Project ID">
+                                                <asp:TemplateColumn HeaderText="Reason For Selection">
+                                                    <ItemTemplate>
+                                                        <%# DataBinder.Eval(Container.DataItem, "ReasonForSelection")%>
+                                                    </ItemTemplate>
+                                                </asp:TemplateColumn>
+                                                <asp:TemplateColumn HeaderText="Supplier">
+                                                    <ItemTemplate>
+                                                        <%# DataBinder.Eval(Container.DataItem, "SoleVendorSupplier.SupplierName")%>
+                                                    </ItemTemplate>
+                                                </asp:TemplateColumn>
+                                                <asp:TemplateColumn HeaderText="Unit Cost">
                                                     <ItemTemplate>
                                                         <%# DataBinder.Eval(Container.DataItem, "UnitCost")%>
                                                     </ItemTemplate>
                                                 </asp:TemplateColumn>
-                                                <asp:TemplateColumn HeaderText="Grant ID">
+                                                <asp:TemplateColumn HeaderText="Total Cost">
                                                     <ItemTemplate>
                                                         <%# DataBinder.Eval(Container.DataItem, "TotalCost")%>
+                                                    </ItemTemplate>
+                                                </asp:TemplateColumn>
+                                                <asp:TemplateColumn HeaderText="Project ID">
+                                                    <ItemTemplate>
+                                                        <%# DataBinder.Eval(Container.DataItem, "Project.ProjectCode")%>
+                                                    </ItemTemplate>
+                                                </asp:TemplateColumn>
+                                                <asp:TemplateColumn HeaderText="Grant ID">
+                                                    <ItemTemplate>
+                                                        <%# DataBinder.Eval(Container.DataItem, "Grant.GrantCode")%>
                                                     </ItemTemplate>
                                                 </asp:TemplateColumn>
                                             </Columns>
@@ -339,75 +356,27 @@
                     <td style="width: 335px; height: 18px;">&nbsp;</td>
                     <td style="height: 18px">&nbsp;</td>
                 </tr>
-                <tr>
-                    <td style="width: 629px; height: 18px;">
-                        <strong>
-                            <asp:Label ID="lblContactPersonNumber" runat="server" Text="Contact Person & Number:"></asp:Label>
-                        </strong>
-                    </td>
-                    <td style="width: 244px; height: 18px;">
-                        <asp:Label ID="lblContactPersonNumberRes" runat="server"></asp:Label>
-                    </td>
-                    <td style="width: 334px; height: 18px;">
-                        <strong>
-                            <asp:Label ID="lblProposedPurchasedprice" runat="server" Text="Proposed Purchased price:"></asp:Label>
-                        </strong></td>
-                    <td style="width: 335px; height: 18px;">
-                        <asp:Label ID="lblProposedPurchasedpriceres" runat="server"></asp:Label>
-                    </td>
-                    <td style="height: 18px">&nbsp;</td>
-                </tr>
-                <tr>
-                    <td style="width: 682px; height: 18px;">
-                        <strong>
-                            <asp:Label ID="lblProposedSupplier" runat="server" Text="Proposed Supplier:"></asp:Label>
-                        </strong>
-                    </td>
-                    <td style="width: 244px; height: 18px;">
-                        <asp:Label ID="lblProposedSupplierresp" runat="server"></asp:Label>
-                    </td>
-                    <td style="width: 334px; height: 18px;">
-                        <strong>
-                            <asp:Label ID="lblRequestedSupplier" runat="server" Text="Requested Supplier"></asp:Label>
-                        </strong>
-                    </td>
-                    <td style="width: 335px; height: 18px;">
-                        <asp:Label ID="lblRequestedSupplierres" runat="server"></asp:Label>
-                    </td>
-                    <td style="height: 18px">&nbsp;</td>
-                </tr>
-                <tr>
-                    <td style="width: 682px; height: 18px;">
-                        <strong>
-                            <asp:Label ID="lblSoleSourceJustificationPreparedBy" runat="server" Text="Sole Source Justification PreparedBy:"></asp:Label>
-                        </strong>
-                    </td>
-                    <td style="width: 244px; height: 18px;">
-                        <asp:Label ID="lblSoleSourceJustificationPreparedByresp" runat="server"></asp:Label>
-                    </td>
-                    <td style="width: 334px; height: 18px;">
-                        <strong>
-                            <asp:Label ID="lblSoleVendorJustificationType" runat="server" Text="Sole Vendor JustificationType"></asp:Label>
-                        </strong>
-                    </td>
-                    <td style="width: 335px; height: 18px;">
-                        <asp:Label ID="lblSoleVendorJustificationTyperes" runat="server"></asp:Label>
-                    </td>
-                    <td style="height: 18px">&nbsp;</td>
-                </tr>
-                <tr>
-                    <td style="width: 334px; height: 18px;">
-                        <strong>
-                            <asp:Label ID="lblApprovalStatusp" runat="server" Text="Approval Status"></asp:Label>
-                        </strong>
-                    </td>
-                    <td style="width: 244px; height: 18px;">
-                        <asp:Label ID="lblapprovalstatusres" runat="server"></asp:Label>
-                    </td>
-                    <td style="height: 18px">&nbsp;</td>
-                </tr>
             </table>
             <br />
+            <asp:GridView ID="grvSoleDetailsPrint" CellPadding="5" CellSpacing="3"
+                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                CssClass="table table-striped table-bordered table-hover">
+                <Columns>
+                    <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="Account Description" SortExpression="ItemAccount.AccountName" />
+                    <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
+                    <asp:BoundField DataField="ItemDescription" HeaderText="Item" SortExpression="ItemDescription" />
+                    <asp:BoundField DataField="ReasonForSelection" HeaderText="Reason for Selection" SortExpression="ReasonForSelection" />
+                    <asp:BoundField DataField="SoleVendorSupplier.SupplierName" HeaderText="Supplier" SortExpression="SoleVendorSupplier.SupplierName" />
+                    <asp:BoundField DataField="UnitCost" HeaderText="Unit Cost" SortExpression="UnitCost" />
+                    <asp:BoundField DataField="TotalCost" HeaderText="Total Cost" SortExpression="TotalCost" />
+                    <asp:BoundField DataField="Project.ProjectCode" HeaderText="Project ID" SortExpression="Project.ProjectCode" />
+                    <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant ID" SortExpression="Grant.GrantCode" />
+                </Columns>
+                <FooterStyle CssClass="FooterStyle" />
+                <HeaderStyle CssClass="headerstyle" />
+                <PagerStyle CssClass="PagerStyle" />
+                <RowStyle CssClass="rowstyle" />
+            </asp:GridView>
             <br />
             <asp:GridView ID="grvStatuses" CellPadding="5" CellSpacing="3"
                 runat="server" AutoGenerateColumns="False" DataKeyNames="Id" OnRowDataBound="grvStatuses_RowDataBound"

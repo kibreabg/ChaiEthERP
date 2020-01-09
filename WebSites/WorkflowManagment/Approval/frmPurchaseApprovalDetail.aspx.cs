@@ -230,10 +230,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                             _presenter.CurrentPurchaseRequest.CurrentApprover = PRRS.Approver;
                             _presenter.CurrentPurchaseRequest.CurrentLevel = PRRS.WorkflowLevel;
                             _presenter.CurrentPurchaseRequest.CurrentStatus = PRRS.ApprovalStatus;
-                            //Completed is commented out because we're going to complete purchase request
-                            //when Bid or SoleVendor is completed. 
-
-                            //_presenter.CurrentPurchaseRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                            _presenter.CurrentPurchaseRequest.ProgressStatus = ProgressStatus.Completed.ToString();
                         }
                         GetNextApprover();
                         PRRS.Approver = _presenter.CurrentUser().Id;

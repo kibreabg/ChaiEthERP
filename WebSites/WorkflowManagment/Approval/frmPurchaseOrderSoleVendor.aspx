@@ -44,6 +44,41 @@
             <!-- widget content -->
             <div class="widget-body no-padding">
                 <div class="smart-form">
+                    <asp:Panel ID="pnlInfo" runat="server">
+                        <div class="alert alert-info fade in">
+                            <button class="close" data-dismiss="alert">
+                                ×
+                            </button>
+                            <i class="fa-fw fa fa-info"></i>
+                            <strong>Info!</strong> Please select the Sole Vendor Request Transaction to create a Purchase Order for!
+                        </div>
+                    </asp:Panel>
+                    <asp:GridView ID="grvSoleVendPO" Visible="True"
+                        runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                        CssClass="table table-striped table-bordered table-hover" AllowPaging="True" PageSize="15">
+                        <RowStyle CssClass="rowstyle" />
+                        <Columns>
+                            <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="Account Name" SortExpression="ItemAccount.AccountName" />
+                            <asp:BoundField DataField="ItemDescription" HeaderText="Item" SortExpression="Item" />                            
+                            <asp:BoundField DataField="SoleVendorSupplier.SupplierName" HeaderText="Supplier" SortExpression="SoleVendorSupplier.SupplierName" />
+                            <asp:BoundField DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
+                            <asp:BoundField DataField="UnitCost" HeaderText="Unit Cost" SortExpression="UnitCost" />
+                            <asp:BoundField DataField="TotalCost" HeaderText="Total Cost" SortExpression="TotalCost" />
+                            <asp:BoundField DataField="ReasonForSelection" HeaderText="Reason For Selection" SortExpression="ReasonForSelection" />
+                            <asp:TemplateField>
+                                <ItemTemplate>
+                                    <asp:CheckBox ID="chkSelect" runat="server" />
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                        </Columns>
+                        <FooterStyle CssClass="FooterStyle" />
+                        <HeaderStyle CssClass="headerstyle" />
+                        <PagerStyle CssClass="PagerStyle" />
+                        <RowStyle CssClass="rowstyle" />
+                    </asp:GridView>
+                    <footer>
+                        <asp:Button ID="btnCreatePO" runat="server" CssClass="btn btn-primary" Text="Create Purchase Order" OnClick="btnCreatePO_Click" />
+                    </footer>
                     <fieldset>
 
                         <div class="row">
@@ -140,17 +175,20 @@
                         GridLines="None" ShowFooter="True">
 
                         <Columns>
-                            <asp:TemplateColumn HeaderText="Item Description">
-
+                            <asp:TemplateColumn HeaderText="Account Name">
                                 <ItemTemplate>
                                     <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountName")%>
+                                </ItemTemplate>
+                            </asp:TemplateColumn>
+                            <asp:TemplateColumn HeaderText="Item">
+                                <ItemTemplate>
+                                    <%# DataBinder.Eval(Container.DataItem, "Item")%>
                                 </ItemTemplate>
                             </asp:TemplateColumn>
                             <asp:TemplateColumn HeaderText="Qty">
                                 <ItemTemplate>
                                     <%# DataBinder.Eval(Container.DataItem, "Qty")%>
                                 </ItemTemplate>
-
                             </asp:TemplateColumn>
                             <asp:TemplateColumn HeaderText="Unit Cost">
                                 <ItemTemplate>
@@ -162,16 +200,13 @@
                                 <ItemTemplate>
                                     <%# DataBinder.Eval(Container.DataItem, "TotalCost")%>
                                 </ItemTemplate>
-
                             </asp:TemplateColumn>
-
                         </Columns>
                         <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
                     </asp:DataGrid>
                     <br />
                     <footer>
                         <asp:Button ID="btnRequest" runat="server" CssClass="btn btn-primary" OnClick="btnRequest_Click" Text="Save" ValidationGroup="Save" />
-                        &nbsp;<asp:Button ID="btnCancel" runat="server" CssClass="btn btn-primary" OnClick="btnCancel_Click" Text="Back" />
                         <asp:Button ID="btnPrintPurchaseForm" runat="server" CssClass="btn btn-primary" Text="Print Purchase Form" OnClientClick="javascript:Clickheretoprint('printtran')" Enabled="False" />
                         <asp:Button ID="btnPrintPurchaseOrder" runat="server" CssClass="btn btn-primary" Text="Print Purchase Order" OnClientClick="javascript:Clickheretoprint('divprint')" Enabled="False" />
 
