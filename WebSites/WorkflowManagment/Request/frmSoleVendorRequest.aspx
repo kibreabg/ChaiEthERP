@@ -190,14 +190,14 @@
                                                                 <EditItemTemplate>
                                                                     <asp:DropDownList runat="server" ID="ddlEdtSoleVendorJustification" CssClass="form-control">
                                                                         <asp:ListItem Value=" ">--Select Sole Vendor Justification--</asp:ListItem>
-                                                                        <asp:ListItem>One Supplier</asp:ListItem>
-                                                                        <asp:ListItem>One-of-a-kind</asp:ListItem>
-                                                                        <asp:ListItem>Compatibility</asp:ListItem>
-                                                                        <asp:ListItem>Replacement Part</asp:ListItem>
-                                                                        <asp:ListItem>Research Continuity</asp:ListItem>
-                                                                        <asp:ListItem>CHAI standards</asp:ListItem>
-                                                                        <asp:ListItem>Unique design</asp:ListItem>
-                                                                        <asp:ListItem>Other</asp:ListItem>
+                                                                        <asp:ListItem Value="One Supplier">One Supplier</asp:ListItem>
+                                                                        <asp:ListItem Value="One-of-a-kind">One-of-a-kind</asp:ListItem>
+                                                                        <asp:ListItem Value="Compatibility">Compatibility</asp:ListItem>
+                                                                        <asp:ListItem Value="Replacement Part">Replacement Part</asp:ListItem>
+                                                                        <asp:ListItem Value="Research Continuity">Research Continuity</asp:ListItem>
+                                                                        <asp:ListItem Value="CHAI standards">CHAI standards</asp:ListItem>
+                                                                        <asp:ListItem Value="Unique design">Unique design</asp:ListItem>
+                                                                        <asp:ListItem Value="Other">Other</asp:ListItem>
                                                                     </asp:DropDownList>
                                                                     <asp:RequiredFieldValidator ID="rfvSoleJust" runat="server" ControlToValidate="ddlEdtSoleVendorJustification"
                                                                         CssClass="validator" InitialValue="" Display="Dynamic" ErrorMessage="Enter Sole Vendor Justification"
@@ -227,6 +227,8 @@
                                                                 </ItemTemplate>
                                                                 <EditItemTemplate>
                                                                     <asp:TextBox ID="txtEdtUnitCost" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "UnitCost")%>'></asp:TextBox>
+                                                                    <cc1:FilteredTextBoxExtender ID="txtEdtUnitCost_FilteredTextBoxExtender" runat="server" Enabled="True" FilterType="Custom, Numbers" TargetControlID="txtEdtUnitCost" ValidChars="&quot;.&quot;">
+                                                                    </cc1:FilteredTextBoxExtender>
                                                                 </EditItemTemplate>
                                                             </asp:TemplateColumn>
                                                             <asp:TemplateColumn HeaderText="Total Cost">

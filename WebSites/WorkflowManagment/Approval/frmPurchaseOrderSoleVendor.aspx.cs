@@ -175,13 +175,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.ShipTo = txtShipTo.Text;
                 _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.DeliveryFees = Convert.ToDecimal(txtDeliveeryFees.Text);
                 _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.PaymentTerms = txtPaymentTerms.Text;
-                _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.SoleVendorRequest = _presenter.CurrentSoleVendorRequest;
                 _presenter.CurrentSoleVendorRequest.PurchaseOrderSoleVendors.Status = "Completed";  
                 
                 List<int> checkedSoleVendorDetailIds  = (List<int>)Session["checkedSoleVendorDetailIds"];
                 for(int i = 0; i < checkedSoleVendorDetailIds.Count; i++)
                 {
-                    _presenter.CurrentSoleVendorRequest.GetSoleVendorRequestDetail(checkedSoleVendorDetailIds[i]).POStatus = "Completed";
+                    //_presenter.CurrentSoleVendorRequest.GetSoleVendorRequestDetail(checkedSoleVendorDetailIds[i]).POStatus = "Completed";
                 }
 
 

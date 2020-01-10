@@ -11,7 +11,6 @@ using Chai.WorkflowManagment.CoreDomain.Request;
 
 namespace Chai.WorkflowManagment.CoreDomain.Requests
 {
-    [Table("SoleVendorRequests")]
     public partial class SoleVendorRequest : IEntity
     {
         public SoleVendorRequest()

@@ -148,17 +148,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void BindSupplier(DropDownList ddlSupplier)
         {
-
             ddlSupplier.DataSource = _presenter.GetSuppliers();
             ddlSupplier.DataBind();
-            ////ddlSupplier.Items.Insert(0, new ListItem("---Select Supplier---", "0"));
-            ////ddlSupplier.SelectedIndex = 0;
-            //ListItem lst = new ListItem();
-            //lst.Text = "Select Supplier";
-            //lst.Value = "0";
-            //ddlSupplier.Items.Add(lst);
-            //ddlSupplier.DataSource = _presenter.GetSuppliers(SupplierTypeId);
-            //ddlSupplier.DataBind();
         }
         private void BindSoleVendorRequests()
         {
@@ -183,12 +174,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             dgSoleVenderDetail.DataSource = _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails;
             dgSoleVenderDetail.DataBind();
-            // prId = Convert.ToInt32(grvDetails.SelectedDataKey[0]);
-            //PopPurchaseRequest();
 
             grvAttachments.DataSource = _presenter.CurrentSoleVendorRequest.SVRAttachments;
             grvAttachments.DataBind();
-            // PopPurchaseRequest();
 
         }
         private void BindSoleVendorRequestforprint()
@@ -406,39 +394,23 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             if (_presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails != null)
             {
-                DropDownList ddlItemAcc = e.Item.FindControl("ddlItemAcc") as DropDownList;
-                if (ddlItemAcc != null)
-                {
-                    BindItems(ddlItemAcc);
-                    if (_presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[e.Item.DataSetIndex].ItemAccount.Id != 0)
-                    {
-                        ListItem liI = ddlItemAcc.Items.FindByValue(_presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[e.Item.DataSetIndex].ItemAccount.Id.ToString());
-                        if (liI != null)
-                            liI.Selected = true;
-                    }
-
-                }
                 if (e.Item.ItemType == ListItemType.EditItem)
                 {
-                    DropDownList ddlSupplier = e.Item.FindControl("ddlEdtSupplier") as DropDownList;
-                    BindSupplier(ddlSupplier);
-                    //if (ddlSupplier != null)
+                    DropDownList ddlEdtSupplier = e.Item.FindControl("ddlEdtSupplier") as DropDownList;
+                    if (ddlEdtSupplier != null)
+                    {
+                        BindSupplier(ddlEdtSupplier);
 
-                    //{
-                    //    BindSupplier(ddlSupplier);
-
-                    //    if (Convert.ToInt32(_presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[e.Item.DataSetIndex]) != 0)
-                    //    {
-                    //        if (_presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[e.Item.DataSetIndex].SoleVendorSupplier.Id != 0)
-                    //        {
-                    //            ListItem liI = ddlSupplier.Items.FindByValue(_presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[e.Item.DataSetIndex].SoleVendorSupplier.Id.ToString());
-                    //            if (liI != null)
-                    //                liI.Selected = true;
-                    //        }
-                    //    }
-
-
-                    //}
+                        if (_presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[e.Item.DataSetIndex].SoleVendorSupplier != null)
+                        {
+                            if (_presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[e.Item.DataSetIndex].SoleVendorSupplier.Id != 0)
+                            {
+                                ListItem liI = ddlEdtSupplier.Items.FindByValue(_presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails[e.Item.DataSetIndex].SoleVendorSupplier.Id.ToString());
+                                if (liI != null)
+                                    liI.Selected = true;
+                            }
+                        }
+                    }
                 }
             }
         }
