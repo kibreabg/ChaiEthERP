@@ -98,7 +98,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                // BindItemdetailGrid(ItemBid);
                  BindBidders(ItemBid);
 
-                pnlBidItem_ModalPopupExtender.Show();
+               
 
                 // BindBidder(bidditem);
 
@@ -1812,6 +1812,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                 if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails.Count != 0)
                 {
+
                     if (_presenter.CurrentBidAnalysisRequest.BAAttachments.Count != 0)
 
                     {
@@ -1824,34 +1825,37 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                                 PurchaseRequestDetail PD = _presenter.GetPurchaseRequestbyPuID(detail.PRDetailId);
                                 PD.Id = detail.PRDetailId;
-                                
+
                                 PD.BidAnalysisRequestStatus = "Pending";
+
+
+                                int PRID = Convert.ToInt32(Session["prId"]);
+                                _presenter.SaveOrUpdateBidAnalysisRequest(PRID);
+                                BindBidAnalysisRequests();
+                                Master.ShowMessage(new AppMessage("Successfully did a Bid Analysis  Request, Reference No - <b>'" + _presenter.CurrentBidAnalysisRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                                Log.Info(_presenter.CurrentUser().FullName + " has requested a For a Bid Analyis");
+                                btnSave.Visible = false;
+                                btnPrintworksheet.Enabled = true;
+                                PrintTransaction();
+                            }
+                            else
+                            {
+                                Master.ShowMessage(new AppMessage("Please Add Atleast one bidder ", Chai.WorkflowManagment.Enums.RMessageType.Error));
                             }
                         }
-                            int PRID = Convert.ToInt32(Session["prId"]);
-                            _presenter.SaveOrUpdateBidAnalysisRequest(PRID);
-                            BindBidAnalysisRequests();
-                            Master.ShowMessage(new AppMessage("Successfully did a Bid Analysis  Request, Reference No - <b>'" + _presenter.CurrentBidAnalysisRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                            Log.Info(_presenter.CurrentUser().FullName + " has requested a For a Bid Analyis");
-                            btnSave.Visible = false;
-                            btnPrintworksheet.Enabled = true;
-                            PrintTransaction();
-
-                            //    }
-
-                            //    else
-                            //    {
-                            //        Master.ShowMessage(new AppMessage("Please Add Atleast one bidder ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-                            //    }
-                            //}
-                        
                     }
+
+
+
 
                     else
                     {
                         Master.ShowMessage(new AppMessage("Please Attach Bid Analysis Quotation ", Chai.WorkflowManagment.Enums.RMessageType.Error));
                     }
                 }
+
+
+
               }
             catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
             {
