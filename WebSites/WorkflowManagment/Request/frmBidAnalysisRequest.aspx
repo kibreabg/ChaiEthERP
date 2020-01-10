@@ -417,7 +417,7 @@
 
                         <asp:DataGrid ID="dgBidders" runat="server" AutoGenerateColumns="False" CellPadding="0"
                             CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
-                            ShowFooter="True" GridLines="None" Height="30px" OnUpdateCommand="dgBidders_UpdateCommand" OnCancelCommand="dgBidders_CancelCommand1" OnDeleteCommand="dgBidders_DeleteCommand1" OnItemCommand="dgBidders_ItemCommand" OnItemDataBound="dgBidders_ItemDataBound1" OnEditCommand="dgBidders_EditCommand">
+                            ShowFooter="True" GridLines="None" Height="30px" OnUpdateCommand="dgBidders_UpdateCommand1" OnCancelCommand="dgBidders_CancelCommand1" OnDeleteCommand="dgBidders_DeleteCommand1" OnItemCommand="dgBidders_ItemCommand" OnItemDataBound="dgBidders_ItemDataBound1" OnEditCommand="dgBidders_EditCommand">
                             
                             <Columns>
                                 
@@ -509,10 +509,13 @@
                                     </ItemTemplate>
                                     <EditItemTemplate>
                                         <asp:TextBox ID="txtEdtUnitCost" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "UnitCost")%>'></asp:TextBox>
+                                          <cc1:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtEdtUnitCost" ID="txtUnitCost_FilteredTextBoxExtender" FilterType="Custom, Numbers" ValidChars='"."'></cc1:FilteredTextBoxExtender>
+                                       
                                         <asp:RequiredFieldValidator ID="rfvEdtUnitCost" runat="server" ControlToValidate="txtEdtUnitCost" CssClass="validator" Display="Dynamic" ErrorMessage="Unit Cost is required" SetFocusOnError="true" ValidationGroup="detailedit"></asp:RequiredFieldValidator>
                                     </EditItemTemplate>
                                     <FooterTemplate>
                                         <asp:TextBox ID="txtUnitCost" runat="server" CssClass="form-control"></asp:TextBox>
+                                        <cc1:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtUnitCost" ID="txtUnitCost_FilteredTextBoxExtender" FilterType="Custom, Numbers" ValidChars='"."'></cc1:FilteredTextBoxExtender>
                                         <asp:RequiredFieldValidator ID="rfvUnitCost" runat="server" ControlToValidate="txtUnitCost" CssClass="validator" Display="Dynamic" ErrorMessage="Unit Cost is required" SetFocusOnError="true" ValidationGroup="detailadd"></asp:RequiredFieldValidator>
                                     </FooterTemplate>
                                 </asp:TemplateColumn>

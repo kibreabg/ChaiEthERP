@@ -25,7 +25,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         private BidAnalysisRequestPresenter _presenter;
         private IList<BidAnalysisRequest> _BidAnalysisRequests;
         private static readonly ILog Log = LogManager.GetLogger("AuditTrailLog");
-        BidderItemDetail bidditem;
+        BidderItemDetail ItemBid;
         BidAnalysisRequest bid;
         Bidder bidd;
         private decimal totalamaount = 0;
@@ -95,9 +95,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 BindBidItem();
 
-                BindBidders(bidditem);
+               // BindItemdetailGrid(ItemBid);
+                 BindBidders(ItemBid);
 
-
+                pnlBidItem_ModalPopupExtender.Show();
 
                 // BindBidder(bidditem);
 
@@ -316,15 +317,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void BindItemdetailGrid(BidderItemDetail Tad)
         {
-            bidditem = Session["bidditem"] as BidderItemDetail;
-            dgBidders.DataSource = bidditem.Bidders;
+            ItemBid = Session["bidditem"] as BidderItemDetail;
+            dgBidders.DataSource = ItemBid.Bidders;
             dgBidders.DataBind();
+            
         }
 
         private void BindBidder(BidderItemDetail Bid)
         {
-            bidditem = Session["bidditem"] as BidderItemDetail;
-            dgBidders.DataSource = bidditem.Bidders;
+            ItemBid = Session["bidditem"] as BidderItemDetail;
+            dgBidders.DataSource = ItemBid.Bidders;
             dgBidders.DataBind();
            
         }
@@ -337,8 +339,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void BindBidders(BidderItemDetail biditem)
         {
-             bidditem = Session["bidditem"] as BidderItemDetail;
-            if(bidditem!=null)
+            ItemBid = Session["bidditem"] as BidderItemDetail;
+            if(ItemBid != null)
             {
                 dgBidders.DataSource = biditem.Bidders;
                 dgBidders.DataBind();
@@ -736,34 +738,34 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
            
             BidderItemDetail detail = Session["bidditem"] as BidderItemDetail;
             if (e.Item.ItemType == ListItemType.Footer)
-            {           
+            {
                 DropDownList ddlFSupplier = e.Item.FindControl("ddlFuSupplier") as DropDownList;
                 ddlFSupplier.EnableViewState = true;
                 BindSupplier(ddlFSupplier);
-         
-             
+
+
                 //////TextBox txtQty = e.Item.FindControl("txtQty") as TextBox;
                 //////txtQty.Text = detail.Qty.ToString();
                 //////TextBox txtItem = e.Item.FindControl("txtItem") as TextBox;
                 //////txtItem.Text = detail.ItemDescription;
-              
+
             }
-            else
+            else if (e.Item.ItemType == ListItemType.EditItem)
             {
                 // BidderItemDetail detail  Session["bidditem"] as BidderItemDetail;
                 if (detail.Bidders.Count > 0)
                 {
-                    if ( e.Item.ItemType == ListItemType.EditItem)
+
                     {
                         DropDownList ddlSupplier = e.Item.FindControl("ddlEdtSupplier") as DropDownList;
                         if (ddlSupplier != null)
                         {
                             BindSupplier(ddlSupplier);
-                            if (_presenter.CurrentBidAnalysisRequest.GetBidderItemDetail(detail.Id).Bidders[e.Item.DataSetIndex].Supplier != null)
+                            if (_presenter.CurrentBidAnalysisRequest.GetBidderItemDetail(Convert.ToInt32(hfDetailId.Value)).Bidders[e.Item.DataSetIndex].Supplier != null)
                             {
-                                if (_presenter.CurrentBidAnalysisRequest.GetBidderItemDetail(detail.Id).Bidders[e.Item.DataSetIndex].Supplier.Id != 0)
+                                if (_presenter.CurrentBidAnalysisRequest.GetBidderItemDetail(Convert.ToInt32(hfDetailId.Value)).Bidders[e.Item.DataSetIndex].Supplier.Id != 0)
                                 {
-                                    ListItem liI = ddlSupplier.Items.FindByValue(_presenter.CurrentBidAnalysisRequest.GetBidderItemDetail(detail.Id).Bidders[e.Item.DataSetIndex].Supplier.Id.ToString());
+                                    ListItem liI = ddlSupplier.Items.FindByValue(_presenter.CurrentBidAnalysisRequest.GetBidderItemDetail(Convert.ToInt32(hfDetailId.Value)).Bidders[e.Item.DataSetIndex].Supplier.Id.ToString());
                                     if (liI != null)
                                         liI.Selected = true;
                                 }
@@ -774,325 +776,50 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         //////txtQty.Text = detail.Qty.ToString();
                         //////TextBox txtItem = e.Item.FindControl("txtEdtItem") as TextBox;
                         //////txtItem.Text = detail.ItemDescription;
-                      
+
 
                     }
 
                 }
             }
-           
+            else
+            {
+                if (detail.Bidders.Count > 0)
+                {
 
+                    {
+                        DropDownList ddlSupplier = e.Item.FindControl("ddlEdtSupplier") as DropDownList;
+                        if (ddlSupplier != null)
+                        {
+                            BindSupplier(ddlSupplier);
+                            if (_presenter.CurrentBidAnalysisRequest.GetBidderItemDetail(Convert.ToInt32(hfDetailId.Value)).Bidders[e.Item.DataSetIndex].Supplier != null)
+                            {
+                                if (_presenter.CurrentBidAnalysisRequest.GetBidderItemDetail(Convert.ToInt32(hfDetailId.Value)).Bidders[e.Item.DataSetIndex].Supplier.Id != 0)
+                                {
+                                    ListItem liI = ddlSupplier.Items.FindByValue(_presenter.CurrentBidAnalysisRequest.GetBidderItemDetail(Convert.ToInt32(hfDetailId.Value)).Bidders[e.Item.DataSetIndex].Supplier.Id.ToString());
+                                    if (liI != null)
+                                        liI.Selected = true;
+                                }
+                            }
+                        }
+
+                        //////TextBox txtQty = e.Item.FindControl("txtEdtQty") as TextBox;
+                        //////txtQty.Text = detail.Qty.ToString();
+                        //////TextBox txtItem = e.Item.FindControl("txtEdtItem") as TextBox;
+                        //////txtItem.Text = detail.ItemDescription;
+
+
+                    }
+
+                }
+
+            }
         }
 
         protected void dgBidders_UpdateCommand(object source, DataGridCommandEventArgs e)
         {
             
-            bidditem = Session["bidditem"] as BidderItemDetail;
-            int id = (int)dgBidders.DataKeys[e.Item.ItemIndex];
-             Bidder Bid;
-            Chai.WorkflowManagment.CoreDomain.Requests.Bidder bidder = bidditem.GetTBidder(id);
-               
-                  
-          
-            if (id > 0)
-                bidder = bidditem.GetTBidder(id);
-            else
-
-                bidder = bidditem.Bidders[e.Item.ItemIndex];
-            try
-            {
-                //DropDownList ddlSupplierType = e.Item.FindControl("ddlSupplierType") as DropDownList;
-                //bidder.SupplierType = _presenter.GetSupplierType(Convert.ToInt32(ddlSupplierType.SelectedValue));
-                DropDownList ddlSupplier = e.Item.FindControl("ddlEdtSupplier") as DropDownList;
-                TextBox txtFRank = e.Item.FindControl("txtRank") as TextBox;
-                if (bidditem.Bidders.Count == 1)
-                {
-
-
-                    if (bidditem.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue))
-                    {
-                        Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
-                    }
-                    if (bidditem.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text))
-                    {
-                        Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
-                    }
-
-                    else
-                    {
-
-                        bidder.Supplier = _presenter.GetSupplier(Convert.ToInt32(ddlSupplier.SelectedValue));
-                        TextBox txtContactDetails = e.Item.FindControl("txtContactDetails") as TextBox;
-                        bidder.ContactDetails = txtContactDetails.Text;
-                        ///// TextBox txtItem = e.Item.FindControl("txtEdtItem") as TextBox;
-                        ///// bidder.Item = bidditem.ItemDescription;
-                        bidder.Item = bidditem.ItemDescription;
-                        ///// TextBox txtQty = e.Item.FindControl("txtEdtQty") as TextBox;
-                        bidder.Qty = bidditem.Qty;
-                        ///// bidder.Qty = bidditem.Qty;
-                        ///// txtQty.Text = Convert.ToInt32(bidder.Qty).ToString();
-                        TextBox txtUnitCost = e.Item.FindControl("txtEdtUnitCost") as TextBox;
-                        bidder.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
-                        bidder.TotalCost = Convert.ToInt32(bidder.Qty) * Convert.ToDecimal(txtUnitCost.Text);
-
-                        bidder.Rank = Convert.ToInt32(txtFRank.Text);
-                        TextBox txtReas = e.Item.FindControl("txtReason") as TextBox;
-                        bidder.ReasonForSelection = txtReas.Text;
-                        bidder.POStatus = "InProgress";
-                        dgBidders.EditItemIndex = -1;
-
-                        BindBidders(bidditem);
-
-                        pnlBidItem_ModalPopupExtender.Show();
-                        Master.ShowMessage(new AppMessage("Bidder info Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                    }
-
-                }
-
-                if (bidditem.Bidders.Count ==2)
-                {
-
-
-                    if (bidditem.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue)|| bidditem.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue))
-                    {
-                        Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
-                    }
-                    if (bidditem.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text)|| bidditem.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text))
-                    {
-                        Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
-                    }
-
-                    else
-                    {
-
-                        bidder.Supplier = _presenter.GetSupplier(Convert.ToInt32(ddlSupplier.SelectedValue));
-                        TextBox txtContactDetails = e.Item.FindControl("txtContactDetails") as TextBox;
-                        bidder.ContactDetails = txtContactDetails.Text;
-                        ///// TextBox txtItem = e.Item.FindControl("txtEdtItem") as TextBox;
-                        ///// bidder.Item = bidditem.ItemDescription;
-                        bidder.Item = bidditem.ItemDescription;
-                        ///// TextBox txtQty = e.Item.FindControl("txtEdtQty") as TextBox;
-                        bidder.Qty = bidditem.Qty;
-                        ///// bidder.Qty = bidditem.Qty;
-                        ///// txtQty.Text = Convert.ToInt32(bidder.Qty).ToString();
-                        TextBox txtUnitCost = e.Item.FindControl("txtEdtUnitCost") as TextBox;
-                        bidder.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
-                        bidder.TotalCost = Convert.ToInt32(bidder.Qty) * Convert.ToDecimal(txtUnitCost.Text);
-
-                        bidder.Rank = Convert.ToInt32(txtFRank.Text);
-                        TextBox txtReas = e.Item.FindControl("txtReason") as TextBox;
-                        bidder.ReasonForSelection = txtReas.Text;
-                        bidder.POStatus = "InProgress";
-                        dgBidders.EditItemIndex = -1;
-
-                        BindBidders(bidditem);
-
-                        pnlBidItem_ModalPopupExtender.Show();
-                        Master.ShowMessage(new AppMessage("Bidder info Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                    }
-
-                }
-                if (bidditem.Bidders.Count == 3)
-                {
-
-
-                    if (bidditem.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || bidditem.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || bidditem.Bidders[2].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue))
-                    {
-                        Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
-                    }
-                    if (bidditem.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || bidditem.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text) || bidditem.Bidders[2].Rank == Convert.ToInt32(txtFRank.Text))
-                    {
-                        Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
-                    }
-
-                    else
-                    {
-
-                        bidder.Supplier = _presenter.GetSupplier(Convert.ToInt32(ddlSupplier.SelectedValue));
-                        TextBox txtContactDetails = e.Item.FindControl("txtContactDetails") as TextBox;
-                        bidder.ContactDetails = txtContactDetails.Text;
-                        ///// TextBox txtItem = e.Item.FindControl("txtEdtItem") as TextBox;
-                        ///// bidder.Item = bidditem.ItemDescription;
-                        bidder.Item = bidditem.ItemDescription;
-                        ///// TextBox txtQty = e.Item.FindControl("txtEdtQty") as TextBox;
-                        bidder.Qty = bidditem.Qty;
-                        ///// bidder.Qty = bidditem.Qty;
-                        ///// txtQty.Text = Convert.ToInt32(bidder.Qty).ToString();
-                        TextBox txtUnitCost = e.Item.FindControl("txtEdtUnitCost") as TextBox;
-                        bidder.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
-                        bidder.TotalCost = Convert.ToInt32(bidder.Qty) * Convert.ToDecimal(txtUnitCost.Text);
-
-                        bidder.Rank = Convert.ToInt32(txtFRank.Text);
-                        TextBox txtReas = e.Item.FindControl("txtReason") as TextBox;
-                        bidder.ReasonForSelection = txtReas.Text;
-                        bidder.POStatus = "InProgress";
-                        dgBidders.EditItemIndex = -1;
-
-                        BindBidders(bidditem);
-
-                        pnlBidItem_ModalPopupExtender.Show();
-                        Master.ShowMessage(new AppMessage("Bidder info Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                    }
-
-                }
-                if (bidditem.Bidders.Count ==4)
-                {
-
-
-                    if (bidditem.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || bidditem.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue)
-                        || bidditem.Bidders[2].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || bidditem.Bidders[3].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue))
-                    {
-                        Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
-                    }
-                    if (bidditem.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || bidditem.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text) 
-                            || bidditem.Bidders[2].Rank == Convert.ToInt32(txtFRank.Text) || bidditem.Bidders[3].Rank == Convert.ToInt32(txtFRank.Text))
-                    {
-                        Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
-                    }
-
-                    else
-                    {
-
-                        bidder.Supplier = _presenter.GetSupplier(Convert.ToInt32(ddlSupplier.SelectedValue));
-                        TextBox txtContactDetails = e.Item.FindControl("txtContactDetails") as TextBox;
-                        bidder.ContactDetails = txtContactDetails.Text;
-                        ///// TextBox txtItem = e.Item.FindControl("txtEdtItem") as TextBox;
-                        ///// bidder.Item = bidditem.ItemDescription;
-                        bidder.Item = bidditem.ItemDescription;
-                        ///// TextBox txtQty = e.Item.FindControl("txtEdtQty") as TextBox;
-                        bidder.Qty = bidditem.Qty;
-                        ///// bidder.Qty = bidditem.Qty;
-                        ///// txtQty.Text = Convert.ToInt32(bidder.Qty).ToString();
-                        TextBox txtUnitCost = e.Item.FindControl("txtEdtUnitCost") as TextBox;
-                        bidder.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
-                        bidder.TotalCost = Convert.ToInt32(bidder.Qty) * Convert.ToDecimal(txtUnitCost.Text);
-
-                        bidder.Rank = Convert.ToInt32(txtFRank.Text);
-                        TextBox txtReas = e.Item.FindControl("txtReason") as TextBox;
-                        bidder.ReasonForSelection = txtReas.Text;
-                        bidder.POStatus = "InProgress";
-                        dgBidders.EditItemIndex = -1;
-
-                        BindBidders(bidditem);
-
-                        pnlBidItem_ModalPopupExtender.Show();
-                        Master.ShowMessage(new AppMessage("Bidder info Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                    }
-
-                }
-                if (bidditem.Bidders.Count == 5)
-                {
-
-
-                    if (bidditem.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || bidditem.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue)
-                        || bidditem.Bidders[2].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || bidditem.Bidders[3].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue)
-                        || bidditem.Bidders[4].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue))
-                    {
-                        Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
-                    }
-                    if (bidditem.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || bidditem.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text)
-                            || bidditem.Bidders[2].Rank == Convert.ToInt32(txtFRank.Text) || bidditem.Bidders[3].Rank == Convert.ToInt32(txtFRank.Text) || bidditem.Bidders[4].Rank == Convert.ToInt32(txtFRank.Text))
-                    {
-                        Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
-                    }
-
-                    else
-                    {
-
-                        bidder.Supplier = _presenter.GetSupplier(Convert.ToInt32(ddlSupplier.SelectedValue));
-                        TextBox txtContactDetails = e.Item.FindControl("txtContactDetails") as TextBox;
-                        bidder.ContactDetails = txtContactDetails.Text;
-                        ///// TextBox txtItem = e.Item.FindControl("txtEdtItem") as TextBox;
-                        ///// bidder.Item = bidditem.ItemDescription;
-                        bidder.Item = bidditem.ItemDescription;
-                        ///// TextBox txtQty = e.Item.FindControl("txtEdtQty") as TextBox;
-                        bidder.Qty = bidditem.Qty;
-                        ///// bidder.Qty = bidditem.Qty;
-                        ///// txtQty.Text = Convert.ToInt32(bidder.Qty).ToString();
-                        TextBox txtUnitCost = e.Item.FindControl("txtEdtUnitCost") as TextBox;
-                        bidder.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
-                        bidder.TotalCost = Convert.ToInt32(bidder.Qty) * Convert.ToDecimal(txtUnitCost.Text);
-
-                        bidder.Rank = Convert.ToInt32(txtFRank.Text);
-                        TextBox txtReas = e.Item.FindControl("txtReason") as TextBox;
-                        bidder.ReasonForSelection = txtReas.Text;
-                        bidder.POStatus = "InProgress";
-                        dgBidders.EditItemIndex = -1;
-
-                        BindBidders(bidditem);
-
-                        pnlBidItem_ModalPopupExtender.Show();
-                        Master.ShowMessage(new AppMessage("Bidder info Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                    }
-
-                }
-
-               
-
-                    else if(bidditem.Bidders.Count == 0)
-                    {
-
-                        bidder.Supplier = _presenter.GetSupplier(Convert.ToInt32(ddlSupplier.SelectedValue));
-                        TextBox txtContactDetails = e.Item.FindControl("txtContactDetails") as TextBox;
-                        bidder.ContactDetails = txtContactDetails.Text;
-                        ///// TextBox txtItem = e.Item.FindControl("txtEdtItem") as TextBox;
-                        ///// bidder.Item = bidditem.ItemDescription;
-                        bidder.Item = bidditem.ItemDescription;
-                        ///// TextBox txtQty = e.Item.FindControl("txtEdtQty") as TextBox;
-                        bidder.Qty = bidditem.Qty;
-                        ///// bidder.Qty = bidditem.Qty;
-                        ///// txtQty.Text = Convert.ToInt32(bidder.Qty).ToString();
-                        TextBox txtUnitCost = e.Item.FindControl("txtEdtUnitCost") as TextBox;
-                        bidder.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
-                        bidder.TotalCost = Convert.ToInt32(bidder.Qty) * Convert.ToDecimal(txtUnitCost.Text);
-
-                        bidder.Rank = Convert.ToInt32(txtFRank.Text);
-                        TextBox txtReas = e.Item.FindControl("txtReason") as TextBox;
-                        bidder.ReasonForSelection = txtReas.Text;
-                        bidder.POStatus = "InProgress";
-                        dgBidders.EditItemIndex = -1;
-
-                    BindItemdetailGrid(bidder.BidderItemDetail);
-
-                    pnlBidItem_ModalPopupExtender.Show();
-                    Master.ShowMessage(new AppMessage("Bidder info Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                }
-
-               
-                if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails.Count > 0)
-                {
-
-                    foreach (BidderItemDetail detail in _presenter.CurrentBidAnalysisRequest.BidderItemDetails)
-                    {
-
-                        foreach (Bidder bidderdetail in detail.Bidders)
-                        {
-                            if (bidderdetail.Rank == 1)
-                            {
-                                totalamaount = totalamaount + bidderdetail.TotalCost;
-                            }
-                        }
-
-                    }
-                }
-
-
-                //txtTotal.Text = totalamaount.ToString();
-            }
-            catch (Exception ex)
-            {
-                Master.ShowMessage(new AppMessage("Error: Unable to Update Bidder " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
-            }
+           
 
 
 
@@ -1104,7 +831,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void dgBidders_DeleteCommand1(object source, DataGridCommandEventArgs e)
         {
-            bidditem = Session["bidderitem"] as BidderItemDetail;
+            ItemBid = Session["bidderitem"] as BidderItemDetail;
 
          
             int id = (int)dgBidders.DataKeys[e.Item.ItemIndex];
@@ -1114,7 +841,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (BIDid > 0)
                 bidd = _presenter.GetBidder(BIDid);
             else
-                bidd = (Bidder)bidditem.Bidders[e.Item.ItemIndex];
+                bidd = (Bidder)ItemBid.Bidders[e.Item.ItemIndex];
 
             try
             {
@@ -1145,32 +872,32 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void dgBidders_ItemCommand(object source, DataGridCommandEventArgs e)
         {
-            bidditem = Session["bidditem"] as BidderItemDetail;
+            ItemBid = Session["bidditem"] as BidderItemDetail;
             if (e.CommandName == "AddNew")
             {
                 try
                 {
                     Bidder bidder = new Bidder();
-                    bidder.BidderItemDetail = bidditem;
+                    bidder.BidderItemDetail = ItemBid;
                     //DropDownList ddlSupplierType = e.Item.FindControl("ddlFooSupplierType") as DropDownList;
                     //bidder.SupplierType = _presenter.GetSupplierType(Convert.ToInt32(ddlSupplierType.SelectedValue));
                     DropDownList ddlSup = e.Item.FindControl("ddlFuSupplier") as DropDownList;
                     TextBox txtFRank = e.Item.FindControl("txtFRank") as TextBox;
                    
 
-                    if (bidditem.Bidders.Count == 1)
+                    if (ItemBid.Bidders.Count == 1)
                     {
                        
                             
-                            if (bidditem.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue))
+                            if (ItemBid.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue))
                             {
                                 Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-                                
+                            return;
                             }
-                            if (bidditem.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text))
+                            if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text))
                             {
                                 Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-                                
+                            return; 
                             }
 
                             else { 
@@ -1179,11 +906,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                                 bidder.ContactDetails = txtFContactDetails.Text;
                                 /////// TextBox txtItem = e.Item.FindControl("txtItem") as TextBox;
                                 ////// bidder.Item = txtItem.Text;
-                                bidder.Item = bidditem.ItemDescription;
+                                bidder.Item = ItemBid.ItemDescription;
                                 /////// TextBox txtQty = e.Item.FindControl("txtQty") as TextBox;
                                 ////// bidder.Qty = Convert.ToInt32(txtQty.Text);
 
-                                bidder.Qty = bidditem.Qty;
+                                bidder.Qty = ItemBid.Qty;
                                 // txtQty.Text = Convert.ToInt32(bidder.Qty).ToString();
                                 TextBox txtUnitCost = e.Item.FindControl("txtUnitCost") as TextBox;
                                 bidder.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
@@ -1197,7 +924,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                                 bidder.POStatus = "InProgress";
 
 
-                                bidditem.Bidders.Add(bidder);
+                            ItemBid.Bidders.Add(bidder);
 
 
 
@@ -1211,17 +938,19 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                            
                         }
                     }
-                    if (bidditem.Bidders.Count == 2)
+                    if (ItemBid.Bidders.Count == 2)
                     {
-                        if (bidditem.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || bidditem.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue))
+                        if (ItemBid.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue))
                         {
                             Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                            return;
 
                         }
-                        if (bidditem.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || bidditem.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text))
+                        
+                        if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text))
                         {
                             Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
+                            return;
                         }
 
                         else
@@ -1231,11 +960,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                                 bidder.ContactDetails = txtFContactDetails.Text;
                                 /////// TextBox txtItem = e.Item.FindControl("txtItem") as TextBox;
                                 ////// bidder.Item = txtItem.Text;
-                                bidder.Item = bidditem.ItemDescription;
+                                bidder.Item = ItemBid.ItemDescription;
                                 /////// TextBox txtQty = e.Item.FindControl("txtQty") as TextBox;
                                 ////// bidder.Qty = Convert.ToInt32(txtQty.Text);
 
-                                bidder.Qty = bidditem.Qty;
+                                bidder.Qty = ItemBid.Qty;
                                 // txtQty.Text = Convert.ToInt32(bidder.Qty).ToString();
                                 TextBox txtUnitCost = e.Item.FindControl("txtUnitCost") as TextBox;
                                 bidder.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
@@ -1249,7 +978,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                                 bidder.POStatus = "InProgress";
 
 
-                                bidditem.Bidders.Add(bidder);
+                            ItemBid.Bidders.Add(bidder);
 
 
 
@@ -1263,17 +992,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                         }
                     
-                    if (bidditem.Bidders.Count == 3)
+                    if (ItemBid.Bidders.Count == 3)
                     {
-                    if (bidditem.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || bidditem.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue)|| bidditem.Bidders[2].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue))
+                    if (ItemBid.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue)|| ItemBid.Bidders[2].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue))
                     {
                         Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
+                            return;
                     }
-                    if (bidditem.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || bidditem.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text) || bidditem.Bidders[2].Rank == Convert.ToInt32(txtFRank.Text))
+                    if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[2].Rank == Convert.ToInt32(txtFRank.Text))
                     {
                         Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
+                            return;
                     }
 
 
@@ -1284,11 +1013,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                                 bidder.ContactDetails = txtFContactDetails.Text;
                                 /////// TextBox txtItem = e.Item.FindControl("txtItem") as TextBox;
                                 ////// bidder.Item = txtItem.Text;
-                                bidder.Item = bidditem.ItemDescription;
+                                bidder.Item = ItemBid.ItemDescription;
                                 /////// TextBox txtQty = e.Item.FindControl("txtQty") as TextBox;
                                 ////// bidder.Qty = Convert.ToInt32(txtQty.Text);
 
-                                bidder.Qty = bidditem.Qty;
+                                bidder.Qty = ItemBid.Qty;
                                 // txtQty.Text = Convert.ToInt32(bidder.Qty).ToString();
                                 TextBox txtUnitCost = e.Item.FindControl("txtUnitCost") as TextBox;
                                 bidder.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
@@ -1302,7 +1031,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                                 bidder.POStatus = "InProgress";
 
 
-                                bidditem.Bidders.Add(bidder);
+                            ItemBid.Bidders.Add(bidder);
 
 
 
@@ -1316,17 +1045,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                         }
 
-                    if (bidditem.Bidders.Count == 4)
+                    if (ItemBid.Bidders.Count == 4)
                     {
-                        if (bidditem.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || bidditem.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || bidditem.Bidders[2].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || bidditem.Bidders[3].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue))
+                        if (ItemBid.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[2].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[3].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue))
                         {
                             Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
+                            return;
                         }
-                        if (bidditem.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || bidditem.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text) || bidditem.Bidders[2].Rank == Convert.ToInt32(txtFRank.Text) || bidditem.Bidders[3].Rank == Convert.ToInt32(txtFRank.Text))
+                        if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[2].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[3].Rank == Convert.ToInt32(txtFRank.Text))
                         {
                             Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
+                            return;
                         }
 
 
@@ -1337,11 +1066,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             bidder.ContactDetails = txtFContactDetails.Text;
                             /////// TextBox txtItem = e.Item.FindControl("txtItem") as TextBox;
                             ////// bidder.Item = txtItem.Text;
-                            bidder.Item = bidditem.ItemDescription;
+                            bidder.Item = ItemBid.ItemDescription;
                             /////// TextBox txtQty = e.Item.FindControl("txtQty") as TextBox;
                             ////// bidder.Qty = Convert.ToInt32(txtQty.Text);
 
-                            bidder.Qty = bidditem.Qty;
+                            bidder.Qty = ItemBid.Qty;
                             // txtQty.Text = Convert.ToInt32(bidder.Qty).ToString();
                             TextBox txtUnitCost = e.Item.FindControl("txtUnitCost") as TextBox;
                             bidder.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
@@ -1355,7 +1084,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             bidder.POStatus = "InProgress";
 
 
-                            bidditem.Bidders.Add(bidder);
+                            ItemBid.Bidders.Add(bidder);
 
 
 
@@ -1368,17 +1097,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         }
 
                     }
-                    if (bidditem.Bidders.Count == 5)
+                    if (ItemBid.Bidders.Count == 5)
                     {
-                        if (bidditem.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || bidditem.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || bidditem.Bidders[2].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || bidditem.Bidders[3].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || bidditem.Bidders[4].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue))
+                        if (ItemBid.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[2].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[3].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[4].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue))
                         {
                             Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
+                            return;
                         }
-                        if (bidditem.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || bidditem.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text) || bidditem.Bidders[2].Rank == Convert.ToInt32(txtFRank.Text) || bidditem.Bidders[3].Rank == Convert.ToInt32(txtFRank.Text) || bidditem.Bidders[4].Rank == Convert.ToInt32(txtFRank.Text))
+                        if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[2].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[3].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[4].Rank == Convert.ToInt32(txtFRank.Text))
                         {
                             Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
+                            return;
                         }
 
 
@@ -1389,11 +1118,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             bidder.ContactDetails = txtFContactDetails.Text;
                             /////// TextBox txtItem = e.Item.FindControl("txtItem") as TextBox;
                             ////// bidder.Item = txtItem.Text;
-                            bidder.Item = bidditem.ItemDescription;
+                            bidder.Item = ItemBid.ItemDescription;
                             /////// TextBox txtQty = e.Item.FindControl("txtQty") as TextBox;
                             ////// bidder.Qty = Convert.ToInt32(txtQty.Text);
 
-                            bidder.Qty = bidditem.Qty;
+                            bidder.Qty = ItemBid.Qty;
                             // txtQty.Text = Convert.ToInt32(bidder.Qty).ToString();
                             TextBox txtUnitCost = e.Item.FindControl("txtUnitCost") as TextBox;
                             bidder.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
@@ -1407,7 +1136,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             bidder.POStatus = "InProgress";
 
 
-                            bidditem.Bidders.Add(bidder);
+                            ItemBid.Bidders.Add(bidder);
 
 
 
@@ -1420,18 +1149,18 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         }
 
                     }
-                    if (bidditem.Bidders.Count == 6)
+                    if (ItemBid.Bidders.Count == 6)
                     {
-                        if (bidditem.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || bidditem.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || bidditem.Bidders[2].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue)
-                            || bidditem.Bidders[3].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || bidditem.Bidders[4].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || bidditem.Bidders[5].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue))
+                        if (ItemBid.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[2].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue)
+                            || ItemBid.Bidders[3].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[4].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[5].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue))
                         {
                             Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
+                            return;
                         }
-                        if (bidditem.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || bidditem.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text) || bidditem.Bidders[2].Rank == Convert.ToInt32(txtFRank.Text))
+                        if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[2].Rank == Convert.ToInt32(txtFRank.Text))
                         {
                             Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
+                            return;
                         }
 
 
@@ -1442,11 +1171,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             bidder.ContactDetails = txtFContactDetails.Text;
                             /////// TextBox txtItem = e.Item.FindControl("txtItem") as TextBox;
                             ////// bidder.Item = txtItem.Text;
-                            bidder.Item = bidditem.ItemDescription;
+                            bidder.Item = ItemBid.ItemDescription;
                             /////// TextBox txtQty = e.Item.FindControl("txtQty") as TextBox;
                             ////// bidder.Qty = Convert.ToInt32(txtQty.Text);
 
-                            bidder.Qty = bidditem.Qty;
+                            bidder.Qty = ItemBid.Qty;
                             // txtQty.Text = Convert.ToInt32(bidder.Qty).ToString();
                             TextBox txtUnitCost = e.Item.FindControl("txtUnitCost") as TextBox;
                             bidder.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
@@ -1460,7 +1189,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             bidder.POStatus = "InProgress";
 
 
-                            bidditem.Bidders.Add(bidder);
+                            ItemBid.Bidders.Add(bidder);
 
 
 
@@ -1474,7 +1203,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                     }
 
-                    else if (bidditem.Bidders.Count == 0)
+                    else if (ItemBid.Bidders.Count == 0)
                     {
                       
                                 bidder.Supplier = _presenter.GetSupplier(Convert.ToInt32(ddlSup.SelectedValue));
@@ -1482,11 +1211,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                                 bidder.ContactDetails = txtFContactDetails.Text;
                                 /////// TextBox txtItem = e.Item.FindControl("txtItem") as TextBox;
                                 ////// bidder.Item = txtItem.Text;
-                                bidder.Item = bidditem.ItemDescription;
+                                bidder.Item = ItemBid.ItemDescription;
                                 /////// TextBox txtQty = e.Item.FindControl("txtQty") as TextBox;
                                 ////// bidder.Qty = Convert.ToInt32(txtQty.Text);
 
-                                bidder.Qty = bidditem.Qty;
+                                bidder.Qty = ItemBid.Qty;
                                 // txtQty.Text = Convert.ToInt32(bidder.Qty).ToString();
                                 TextBox txtUnitCost = e.Item.FindControl("txtUnitCost") as TextBox;
                                 bidder.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
@@ -1500,7 +1229,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                                 bidder.POStatus = "InProgress";
 
 
-                                bidditem.Bidders.Add(bidder);
+                        ItemBid.Bidders.Add(bidder);
 
 
 
@@ -1552,8 +1281,364 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 //}
             }
         }
-       
 
+        protected void dgBidders_UpdateCommand1(object source, DataGridCommandEventArgs e)
+        {
+            ItemBid = Session["bidditem"] as BidderItemDetail;
+            int id = (int)dgBidders.DataKeys[e.Item.ItemIndex];
+            Bidder Bid;
+            Chai.WorkflowManagment.CoreDomain.Requests.Bidder bidder = ItemBid.GetTBidder(id);
+
+
+
+            if (id > 0)
+                bidder = ItemBid.GetTBidder(id);
+            else
+
+                bidder = ItemBid.Bidders[e.Item.ItemIndex];
+            try
+            {
+                //DropDownList ddlSupplierType = e.Item.FindControl("ddlSupplierType") as DropDownList;
+                //bidder.SupplierType = _presenter.GetSupplierType(Convert.ToInt32(ddlSupplierType.SelectedValue));
+                DropDownList ddlSupplier = e.Item.FindControl("ddlEdtSupplier") as DropDownList;
+                TextBox txtFRank = e.Item.FindControl("txtRank") as TextBox;
+                if (ItemBid.Bidders.Count == 1)
+                {
+
+
+                    if (ItemBid.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue))
+                    {
+                        Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        return;
+                    }
+                    if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text))
+                    {
+                        Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        return;
+                    }
+
+                    else
+                    {
+
+                        bidder.Supplier = _presenter.GetSupplier(Convert.ToInt32(ddlSupplier.SelectedValue));
+                        TextBox txtContactDetails = e.Item.FindControl("txtContactDetails") as TextBox;
+                        bidder.ContactDetails = txtContactDetails.Text;
+                        ///// TextBox txtItem = e.Item.FindControl("txtEdtItem") as TextBox;
+                        ///// bidder.Item = bidditem.ItemDescription;
+                        bidder.Item = ItemBid.ItemDescription;
+                        ///// TextBox txtQty = e.Item.FindControl("txtEdtQty") as TextBox;
+                        bidder.Qty = ItemBid.Qty;
+                        ///// bidder.Qty = bidditem.Qty;
+                        ///// txtQty.Text = Convert.ToInt32(bidder.Qty).ToString();
+                        TextBox txtUnitCost = e.Item.FindControl("txtEdtUnitCost") as TextBox;
+                        bidder.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
+                        bidder.TotalCost = Convert.ToInt32(bidder.Qty) * Convert.ToDecimal(txtUnitCost.Text);
+
+                        bidder.Rank = Convert.ToInt32(txtFRank.Text);
+                        TextBox txtReas = e.Item.FindControl("txtReason") as TextBox;
+                        bidder.ReasonForSelection = txtReas.Text;
+                        bidder.POStatus = "InProgress";
+                        dgBidders.EditItemIndex = -1;
+
+                        BindBidders(ItemBid);
+
+                        pnlBidItem_ModalPopupExtender.Show();
+                        Master.ShowMessage(new AppMessage("Bidder info Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    }
+
+                }
+
+                if (ItemBid.Bidders.Count == 2)
+                {
+
+
+                    if (ItemBid.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || ItemBid.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue))
+                    {
+                        Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        return;
+                    }
+                    if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text))
+                    {
+                        Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        return;
+                    }
+
+                    else
+                    {
+
+                        bidder.Supplier = _presenter.GetSupplier(Convert.ToInt32(ddlSupplier.SelectedValue));
+                        TextBox txtContactDetails = e.Item.FindControl("txtContactDetails") as TextBox;
+                        bidder.ContactDetails = txtContactDetails.Text;
+                        ///// TextBox txtItem = e.Item.FindControl("txtEdtItem") as TextBox;
+                        ///// bidder.Item = bidditem.ItemDescription;
+                        bidder.Item = ItemBid.ItemDescription;
+                        ///// TextBox txtQty = e.Item.FindControl("txtEdtQty") as TextBox;
+                        bidder.Qty = ItemBid.Qty;
+                        ///// bidder.Qty = bidditem.Qty;
+                        ///// txtQty.Text = Convert.ToInt32(bidder.Qty).ToString();
+                        TextBox txtUnitCost = e.Item.FindControl("txtEdtUnitCost") as TextBox;
+                        bidder.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
+                        bidder.TotalCost = Convert.ToInt32(bidder.Qty) * Convert.ToDecimal(txtUnitCost.Text);
+
+                        bidder.Rank = Convert.ToInt32(txtFRank.Text);
+                        TextBox txtReas = e.Item.FindControl("txtReason") as TextBox;
+                        bidder.ReasonForSelection = txtReas.Text;
+                        bidder.POStatus = "InProgress";
+                        dgBidders.EditItemIndex = -1;
+
+                        BindBidders(ItemBid);
+
+                        pnlBidItem_ModalPopupExtender.Show();
+                        Master.ShowMessage(new AppMessage("Bidder info Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    }
+
+                }
+                if (ItemBid.Bidders.Count == 3)
+                {
+
+
+                    if (ItemBid.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || ItemBid.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || ItemBid.Bidders[2].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue))
+                    {
+                        Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        return;
+                    }
+                    if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[2].Rank == Convert.ToInt32(txtFRank.Text))
+                    {
+                        Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        return;
+                    }
+
+                    else
+                    {
+
+                        bidder.Supplier = _presenter.GetSupplier(Convert.ToInt32(ddlSupplier.SelectedValue));
+                        TextBox txtContactDetails = e.Item.FindControl("txtContactDetails") as TextBox;
+                        bidder.ContactDetails = txtContactDetails.Text;
+                        ///// TextBox txtItem = e.Item.FindControl("txtEdtItem") as TextBox;
+                        ///// bidder.Item = bidditem.ItemDescription;
+                        bidder.Item = ItemBid.ItemDescription;
+                        ///// TextBox txtQty = e.Item.FindControl("txtEdtQty") as TextBox;
+                        bidder.Qty = ItemBid.Qty;
+                        ///// bidder.Qty = bidditem.Qty;
+                        ///// txtQty.Text = Convert.ToInt32(bidder.Qty).ToString();
+                        TextBox txtUnitCost = e.Item.FindControl("txtEdtUnitCost") as TextBox;
+                        bidder.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
+                        bidder.TotalCost = Convert.ToInt32(bidder.Qty) * Convert.ToDecimal(txtUnitCost.Text);
+
+                        bidder.Rank = Convert.ToInt32(txtFRank.Text);
+                        TextBox txtReas = e.Item.FindControl("txtReason") as TextBox;
+                        bidder.ReasonForSelection = txtReas.Text;
+                        bidder.POStatus = "InProgress";
+                        dgBidders.EditItemIndex = -1;
+
+                        BindBidders(ItemBid);
+
+                        pnlBidItem_ModalPopupExtender.Show();
+                        Master.ShowMessage(new AppMessage("Bidder info Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    }
+
+                }
+                if (ItemBid.Bidders.Count == 4)
+                {
+
+
+                    if (ItemBid.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || ItemBid.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue)
+                        || ItemBid.Bidders[2].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || ItemBid.Bidders[3].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue))
+                    {
+                        Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        return;
+                    }
+                    if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text)
+                            || ItemBid.Bidders[2].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[3].Rank == Convert.ToInt32(txtFRank.Text))
+                    {
+                        Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        return;
+                    }
+
+                    else
+                    {
+
+                        bidder.Supplier = _presenter.GetSupplier(Convert.ToInt32(ddlSupplier.SelectedValue));
+                        TextBox txtContactDetails = e.Item.FindControl("txtContactDetails") as TextBox;
+                        bidder.ContactDetails = txtContactDetails.Text;
+                        ///// TextBox txtItem = e.Item.FindControl("txtEdtItem") as TextBox;
+                        ///// bidder.Item = bidditem.ItemDescription;
+                        bidder.Item = ItemBid.ItemDescription;
+                        ///// TextBox txtQty = e.Item.FindControl("txtEdtQty") as TextBox;
+                        bidder.Qty = ItemBid.Qty;
+                        ///// bidder.Qty = bidditem.Qty;
+                        ///// txtQty.Text = Convert.ToInt32(bidder.Qty).ToString();
+                        TextBox txtUnitCost = e.Item.FindControl("txtEdtUnitCost") as TextBox;
+                        bidder.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
+                        bidder.TotalCost = Convert.ToInt32(bidder.Qty) * Convert.ToDecimal(txtUnitCost.Text);
+
+                        bidder.Rank = Convert.ToInt32(txtFRank.Text);
+                        TextBox txtReas = e.Item.FindControl("txtReason") as TextBox;
+                        bidder.ReasonForSelection = txtReas.Text;
+                        bidder.POStatus = "InProgress";
+                        dgBidders.EditItemIndex = -1;
+
+                        BindBidders(ItemBid);
+
+                        pnlBidItem_ModalPopupExtender.Show();
+                        Master.ShowMessage(new AppMessage("Bidder info Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    }
+
+                }
+                if (ItemBid.Bidders.Count == 5)
+                {
+
+
+                    if (ItemBid.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || ItemBid.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue)
+                        || ItemBid.Bidders[2].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || ItemBid.Bidders[3].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue)
+                        || ItemBid.Bidders[4].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue))
+                    {
+                        Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        return;
+                    }
+                    if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text)
+                            || ItemBid.Bidders[2].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[3].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[4].Rank == Convert.ToInt32(txtFRank.Text))
+                    {
+                        Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        return;
+                    }
+
+                    else
+                    {
+
+                        bidder.Supplier = _presenter.GetSupplier(Convert.ToInt32(ddlSupplier.SelectedValue));
+                        TextBox txtContactDetails = e.Item.FindControl("txtContactDetails") as TextBox;
+                        bidder.ContactDetails = txtContactDetails.Text;
+                        ///// TextBox txtItem = e.Item.FindControl("txtEdtItem") as TextBox;
+                        ///// bidder.Item = bidditem.ItemDescription;
+                        bidder.Item = ItemBid.ItemDescription;
+                        ///// TextBox txtQty = e.Item.FindControl("txtEdtQty") as TextBox;
+                        bidder.Qty = ItemBid.Qty;
+                        ///// bidder.Qty = bidditem.Qty;
+                        ///// txtQty.Text = Convert.ToInt32(bidder.Qty).ToString();
+                        TextBox txtUnitCost = e.Item.FindControl("txtEdtUnitCost") as TextBox;
+                        bidder.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
+                        bidder.TotalCost = Convert.ToInt32(bidder.Qty) * Convert.ToDecimal(txtUnitCost.Text);
+
+                        bidder.Rank = Convert.ToInt32(txtFRank.Text);
+                        TextBox txtReas = e.Item.FindControl("txtReason") as TextBox;
+                        bidder.ReasonForSelection = txtReas.Text;
+                        bidder.POStatus = "InProgress";
+                        dgBidders.EditItemIndex = -1;
+
+                        BindBidders(ItemBid);
+
+                        pnlBidItem_ModalPopupExtender.Show();
+                        Master.ShowMessage(new AppMessage("Bidder info Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    }
+
+                }
+
+                if (ItemBid.Bidders.Count == 6)
+                {
+
+
+                    if (ItemBid.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || ItemBid.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue)
+                        || ItemBid.Bidders[2].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || ItemBid.Bidders[3].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue)
+                        || ItemBid.Bidders[4].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || ItemBid.Bidders[5].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue))
+                    {
+                        Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        return;
+                    }
+                    if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text)
+                            || ItemBid.Bidders[2].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[3].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[4].Rank == Convert.ToInt32(txtFRank.Text)
+                             || ItemBid.Bidders[5].Rank == Convert.ToInt32(txtFRank.Text))
+                    {
+                        Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        return;
+                    }
+
+                    else
+                    {
+
+                        bidder.Supplier = _presenter.GetSupplier(Convert.ToInt32(ddlSupplier.SelectedValue));
+                        TextBox txtContactDetails = e.Item.FindControl("txtContactDetails") as TextBox;
+                        bidder.ContactDetails = txtContactDetails.Text;
+                        ///// TextBox txtItem = e.Item.FindControl("txtEdtItem") as TextBox;
+                        ///// bidder.Item = bidditem.ItemDescription;
+                        bidder.Item = ItemBid.ItemDescription;
+                        ///// TextBox txtQty = e.Item.FindControl("txtEdtQty") as TextBox;
+                        bidder.Qty = ItemBid.Qty;
+                        ///// bidder.Qty = bidditem.Qty;
+                        ///// txtQty.Text = Convert.ToInt32(bidder.Qty).ToString();
+                        TextBox txtUnitCost = e.Item.FindControl("txtEdtUnitCost") as TextBox;
+                        bidder.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
+                        bidder.TotalCost = Convert.ToInt32(bidder.Qty) * Convert.ToDecimal(txtUnitCost.Text);
+
+                        bidder.Rank = Convert.ToInt32(txtFRank.Text);
+                        TextBox txtReas = e.Item.FindControl("txtReason") as TextBox;
+                        bidder.ReasonForSelection = txtReas.Text;
+                        bidder.POStatus = "InProgress";
+                        dgBidders.EditItemIndex = -1;
+
+                        BindBidders(ItemBid);
+
+                        pnlBidItem_ModalPopupExtender.Show();
+                        Master.ShowMessage(new AppMessage("Bidder info Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    }
+
+                }
+
+                else if (ItemBid.Bidders.Count == 0)
+                {
+
+                    bidder.Supplier = _presenter.GetSupplier(Convert.ToInt32(ddlSupplier.SelectedValue));
+                    TextBox txtContactDetails = e.Item.FindControl("txtContactDetails") as TextBox;
+                    bidder.ContactDetails = txtContactDetails.Text;
+                    ///// TextBox txtItem = e.Item.FindControl("txtEdtItem") as TextBox;
+                    ///// bidder.Item = bidditem.ItemDescription;
+                    bidder.Item = ItemBid.ItemDescription;
+                    ///// TextBox txtQty = e.Item.FindControl("txtEdtQty") as TextBox;
+                    bidder.Qty = ItemBid.Qty;
+                    ///// bidder.Qty = bidditem.Qty;
+                    ///// txtQty.Text = Convert.ToInt32(bidder.Qty).ToString();
+                    TextBox txtUnitCost = e.Item.FindControl("txtEdtUnitCost") as TextBox;
+                    bidder.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
+                    bidder.TotalCost = Convert.ToInt32(bidder.Qty) * Convert.ToDecimal(txtUnitCost.Text);
+
+                    bidder.Rank = Convert.ToInt32(txtFRank.Text);
+                    TextBox txtReas = e.Item.FindControl("txtReason") as TextBox;
+                    bidder.ReasonForSelection = txtReas.Text;
+                    bidder.POStatus = "InProgress";
+                    dgBidders.EditItemIndex = -1;
+
+                    BindItemdetailGrid(bidder.BidderItemDetail);
+
+                    pnlBidItem_ModalPopupExtender.Show();
+                    Master.ShowMessage(new AppMessage("Bidder info Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                }
+
+
+                if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails.Count > 0)
+                {
+
+                    foreach (BidderItemDetail detail in _presenter.CurrentBidAnalysisRequest.BidderItemDetails)
+                    {
+
+                        foreach (Bidder bidderdetail in detail.Bidders)
+                        {
+                            if (bidderdetail.Rank == 1)
+                            {
+                                totalamaount = totalamaount + bidderdetail.TotalCost;
+                            }
+                        }
+
+                    }
+                }
+
+
+                //txtTotal.Text = totalamaount.ToString();
+            }
+            catch (Exception ex)
+            {
+                Master.ShowMessage(new AppMessage("Error: Unable to Update Bidder " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+            }
+        }
         protected void dgItemDetail_CancelCommand(object source, DataGridCommandEventArgs e)
         {
 
@@ -1568,7 +1653,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         private void BindBidItem()
         {
 
-            bidditem = Session["bidditem"] as BidderItemDetail;
+            ItemBid = Session["bidditem"] as BidderItemDetail;
 
             dgItemDetail.DataSource =_presenter.CurrentBidAnalysisRequest.BidderItemDetails;
             dgItemDetail.DataBind();
@@ -1678,34 +1763,37 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         protected void dgItemDetail_SelectedIndexChanged(object sender, EventArgs e)
         {
             BidderItemDetail detail = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[dgItemDetail.SelectedItem.ItemIndex];
-            
+
             Session["bidditem"] = detail;
 
-            BindBidders(detail);
-            pnlBidItem_ModalPopupExtender.Show();
+            ////////BindBidders(detail);
+            ////////pnlBidItem_ModalPopupExtender.Show();
+
+
+
 
             ////////////////////////////////////////////////////////////////////////////////
 
-            //int IIEMId = (int)dgItemDetail.DataKeys[dgItemDetail.SelectedItem.ItemIndex];
-            //int Id = dgItemDetail.SelectedItem.ItemIndex;
+            int IIEMId = (int)dgItemDetail.DataKeys[dgItemDetail.SelectedItem.ItemIndex];
+            int Id = dgItemDetail.SelectedItem.ItemIndex;
 
 
-            //if (IIEMId > 0)
-            //    Session["bidditem"] = _presenter.CurrentBidAnalysisRequest.GetBidderItemDetail(IIEMId);
-            //else
-            //    Session["bidditem"] = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[dgItemDetail.SelectedItem.ItemIndex];
+            if (IIEMId > 0)
+                Session["bidditem"] = _presenter.CurrentBidAnalysisRequest.GetBidderItemDetail(IIEMId);
+            else
+                Session["bidditem"] = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[dgItemDetail.SelectedItem.ItemIndex];
 
 
-            //int recordId = (int)dgItemDetail.SelectedIndex;
-            //if (_presenter.CurrentBidAnalysisRequest.Id > 0)
-            //{
-            //    hfDetailId.Value = IIEMId.ToString();
-            //}
-            //else
-            //{
-            //    hfDetailId.Value = dgItemDetail.SelectedItem.ItemIndex.ToString();
-            //}
-            //BindBidder(detail);
+            int recordId = (int)dgItemDetail.SelectedIndex;
+            if (_presenter.CurrentBidAnalysisRequest.Id > 0)
+            {
+                hfDetailId.Value = IIEMId.ToString();
+            }
+            else
+            {
+                hfDetailId.Value = dgItemDetail.SelectedItem.ItemIndex.ToString();
+            }
+            BindBidders(detail);
 
 
             pnlBidItem_ModalPopupExtender.Show();
@@ -1849,7 +1937,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
         protected void dgBidders_EditCommand(object source, DataGridCommandEventArgs e)
         {
-            bidditem = Session["bidditem"] as BidderItemDetail;
+            ItemBid = Session["bidditem"] as BidderItemDetail;
             this.dgBidders.EditItemIndex = e.Item.ItemIndex;
            // int BiddId = (int)dgBidders.DataKeys[e.Item.ItemIndex];
             int BiddId = (int)dgBidders.DataKeys[e.Item.ItemIndex];
@@ -1858,7 +1946,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (BiddId > 0)
                 bidd = _presenter.GetBidder(BiddId);
             else
-                bidd = (Bidder)bidditem.Bidders[e.Item.ItemIndex];
+                bidd = (Bidder)ItemBid.Bidders[e.Item.ItemIndex];
             BindBidder(bidd.BidderItemDetail);
             pnlBidItem_ModalPopupExtender.Show();
 
@@ -2012,6 +2100,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
             pnlBidItem_ModalPopupExtender.Show();
         }
+
+
 
        
     }
