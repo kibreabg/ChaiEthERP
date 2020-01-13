@@ -317,6 +317,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _settingController.GetItemAccounts();
         }
+        public IList<ItemAccount> GetAdvanceAccount()
+        {
+            return _settingController.GetAdvanceAccount();
+        }
         public AppUser CurrentUser()
         {
             return _controller.GetCurrentUser();

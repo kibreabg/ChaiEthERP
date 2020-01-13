@@ -10,10 +10,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
        
         SoleVendorRequest SoleVendorRequest { get; set; }
         string RequestType { get;  }
-        string RequestNo { get; }
-        string RequestDate { get; }
-     
-
         int SoleVendorRequestId { get; }
     }
 }
