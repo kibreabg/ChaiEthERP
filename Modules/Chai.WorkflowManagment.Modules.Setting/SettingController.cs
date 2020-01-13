@@ -101,7 +101,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             string filterExpression = "";
 
-            filterExpression = "SELECT  *  FROM ItemAccounts Where Status = 'Active' And 1 = Case when '" + ItemAccountName + "' = '' Then 1 When ItemAccounts.AccountName = '" + ItemAccountName + "'  Then 1 END AND 1 = Case when '" + ItemAccountCode + "' = '' Then 1 When ItemAccounts.AccountCode = '" + ItemAccountCode + "'  Then 1 END  ";
+            filterExpression = "SELECT * FROM ItemAccounts Where Status = 'Active' And 1 = Case when '" + ItemAccountName + "' = '' Then 1 When ItemAccounts.AccountName = '" + ItemAccountName + "'  Then 1 END AND 1 = Case when '" + ItemAccountCode + "' = '' Then 1 When ItemAccounts.AccountCode = '" + ItemAccountCode + "'  Then 1 END  ";
 
             return _workspace.SqlQuery<ItemAccount>(filterExpression).ToList();
 
