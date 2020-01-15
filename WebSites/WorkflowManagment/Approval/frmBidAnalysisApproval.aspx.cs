@@ -347,28 +347,31 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
         private void BindBidAnalysisRequestforprint()
         {
-            if (_presenter.CurrentBidAnalysisRequest.Id > 0)
+            if (_presenter.CurrentBidAnalysisRequest != null)
             {
-                lblRequestNoResult.Text = _presenter.CurrentBidAnalysisRequest.RequestNo;
-                lblRequestedDateResult.Text = _presenter.CurrentBidAnalysisRequest.RequestDate.ToString();
-                lblRequesterResult.Text = _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName;
-
-                foreach (Bidder detail in _presenter.CurrentBidAnalysisRequest.GetBidderbyRank())
+                if (_presenter.CurrentBidAnalysisRequest.Id > 0)
                 {
-                    totalamaount = totalamaount + detail.TotalCost;
-                    lblTotalPriceResult.Text = totalamaount.ToString();
+                    lblRequestNoResult.Text = _presenter.CurrentBidAnalysisRequest.RequestNo;
+                    lblRequestedDateResult.Text = _presenter.CurrentBidAnalysisRequest.RequestDate.ToString();
+                    lblRequesterResult.Text = _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName;
+
+                    foreach (Bidder detail in _presenter.CurrentBidAnalysisRequest.GetBidderbyRank())
+                    {
+                        totalamaount = totalamaount + detail.TotalCost;
+                        lblTotalPriceResult.Text = totalamaount.ToString();
+                    }
+
+                    //lblCommentResult.Text = _presenter.CurrentBidAnalysisRequest.ReasonforSelection;
+                    //lblRequireddateofdeliveryResult.Text = _presenter.CurrentBidAnalysisRequest.SpecialNeed;
+
+                    //  lblApprovalStatusResult.Text = _presenter.CurrentBidAnalysisRequest.CurrentStatus;
+
+
+
+                    grvStatuses.DataSource = _presenter.CurrentBidAnalysisRequest.BidAnalysisRequestStatuses;
+                    grvStatuses.DataBind();
                 }
-              
-                //lblCommentResult.Text = _presenter.CurrentBidAnalysisRequest.ReasonforSelection;
-                //lblRequireddateofdeliveryResult.Text = _presenter.CurrentBidAnalysisRequest.SpecialNeed;
-
-              //  lblApprovalStatusResult.Text = _presenter.CurrentBidAnalysisRequest.CurrentStatus;
-                
-
-
-                grvStatuses.DataSource = _presenter.CurrentBidAnalysisRequest.BidAnalysisRequestStatuses;
-                grvStatuses.DataBind();
-           }
+            }
         }
         protected void btnApprove_Click(object sender, EventArgs e)
         {

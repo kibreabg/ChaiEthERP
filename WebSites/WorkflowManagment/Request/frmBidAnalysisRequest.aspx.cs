@@ -575,12 +575,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 //}
                 _presenter.CurrentBidAnalysisRequest.TotalPrice = totalamaount;
               //  _presenter.CurrentBidAnalysisRequest.SelectedBy = _presenter.CurrentUser().Id;
-                if (_presenter.CurrentBidAnalysisRequest.Supplier != null)
-                    _presenter.CurrentBidAnalysisRequest.Supplier = _presenter.CurrentBidAnalysisRequest.Supplier;
-
-
-
-                _presenter.CurrentBidAnalysisRequest.Status = "Completed";
+               
 
             }
             catch (Exception ex)
@@ -891,12 +886,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             
                             if (ItemBid.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue))
                             {
-                                Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                                
                             return;
-                            }
+                          
+                                
+                        }
                             if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text))
                             {
-                                Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                               
                             return; 
                             }
 
@@ -942,14 +939,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     {
                         if (ItemBid.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue))
                         {
-                            Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                           
                             return;
 
                         }
                         
                         if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text))
                         {
-                            Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                          
                             return;
                         }
 
@@ -996,12 +993,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     {
                     if (ItemBid.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue)|| ItemBid.Bidders[2].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue))
                     {
-                        Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                       
                             return;
                     }
                     if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[2].Rank == Convert.ToInt32(txtFRank.Text))
                     {
-                        Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                      
                             return;
                     }
 
@@ -1049,12 +1046,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     {
                         if (ItemBid.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[2].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[3].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue))
                         {
-                            Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                           
                             return;
                         }
                         if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[2].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[3].Rank == Convert.ToInt32(txtFRank.Text))
                         {
-                            Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                           
                             return;
                         }
 
@@ -1101,12 +1098,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     {
                         if (ItemBid.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[2].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[3].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[4].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue))
                         {
-                            Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                           
                             return;
                         }
                         if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[2].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[3].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[4].Rank == Convert.ToInt32(txtFRank.Text))
                         {
-                            Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                           
                             return;
                         }
 
@@ -1154,12 +1151,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         if (ItemBid.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[2].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue)
                             || ItemBid.Bidders[3].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[4].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue) || ItemBid.Bidders[5].Supplier.Id == Convert.ToInt32(ddlSup.SelectedValue))
                         {
-                            Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                           
                             return;
                         }
                         if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[2].Rank == Convert.ToInt32(txtFRank.Text))
                         {
-                            Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                           
                             return;
                         }
 
@@ -1308,12 +1305,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                     if (ItemBid.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue))
                     {
-                        Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        
                         return;
                     }
                     if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text))
                     {
-                        Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        
                         return;
                     }
 
@@ -1354,12 +1351,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                     if (ItemBid.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || ItemBid.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue))
                     {
-                        Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                       
                         return;
                     }
                     if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text))
                     {
-                        Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        
                         return;
                     }
 
@@ -1399,12 +1396,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                     if (ItemBid.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || ItemBid.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || ItemBid.Bidders[2].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue))
                     {
-                        Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        
                         return;
                     }
                     if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[2].Rank == Convert.ToInt32(txtFRank.Text))
                     {
-                        Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        
                         return;
                     }
 
@@ -1445,13 +1442,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     if (ItemBid.Bidders[0].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || ItemBid.Bidders[1].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue)
                         || ItemBid.Bidders[2].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || ItemBid.Bidders[3].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue))
                     {
-                        Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
                         return;
                     }
                     if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text)
                             || ItemBid.Bidders[2].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[3].Rank == Convert.ToInt32(txtFRank.Text))
                     {
-                        Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                      
                         return;
                     }
 
@@ -1493,13 +1489,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         || ItemBid.Bidders[2].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || ItemBid.Bidders[3].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue)
                         || ItemBid.Bidders[4].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue))
                     {
-                        Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                       
                         return;
                     }
                     if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text)
                             || ItemBid.Bidders[2].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[3].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[4].Rank == Convert.ToInt32(txtFRank.Text))
                     {
-                        Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        
                         return;
                     }
 
@@ -1542,14 +1538,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         || ItemBid.Bidders[2].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || ItemBid.Bidders[3].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue)
                         || ItemBid.Bidders[4].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue) || ItemBid.Bidders[5].Supplier.Id == Convert.ToInt32(ddlSupplier.SelectedValue))
                     {
-                        Master.ShowMessage(new AppMessage("Error: Unable to Select this Supplier its already Choosen ", Chai.WorkflowManagment.Enums.RMessageType.Error));
                         return;
                     }
                     if (ItemBid.Bidders[0].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[1].Rank == Convert.ToInt32(txtFRank.Text)
                             || ItemBid.Bidders[2].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[3].Rank == Convert.ToInt32(txtFRank.Text) || ItemBid.Bidders[4].Rank == Convert.ToInt32(txtFRank.Text)
                              || ItemBid.Bidders[5].Rank == Convert.ToInt32(txtFRank.Text))
                     {
-                        Master.ShowMessage(new AppMessage("Error: Duplicate Rank ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        
                         return;
                     }
 
@@ -1825,24 +1820,29 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                                 PurchaseRequestDetail PD = _presenter.GetPurchaseRequestbyPuID(detail.PRDetailId);
                                 PD.Id = detail.PRDetailId;
+                                
 
-                                PD.BidAnalysisRequestStatus = "Pending";
-
+                           
+                        
 
                                 int PRID = Convert.ToInt32(Session["prId"]);
                                 _presenter.SaveOrUpdateBidAnalysisRequest(PRID);
-                                BindBidAnalysisRequests();
-                                Master.ShowMessage(new AppMessage("Successfully did a Bid Analysis  Request, Reference No - <b>'" + _presenter.CurrentBidAnalysisRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                                Log.Info(_presenter.CurrentUser().FullName + " has requested a For a Bid Analyis");
-                                btnSave.Visible = false;
-                                btnPrintworksheet.Enabled = true;
-                                PrintTransaction();
+                                PD.BidAnalysisRequestStatus = "Pending";
+
                             }
                             else
+
                             {
                                 Master.ShowMessage(new AppMessage("Please Add Atleast one bidder ", Chai.WorkflowManagment.Enums.RMessageType.Error));
                             }
                         }
+                        BindBidAnalysisRequests();
+                        Master.ShowMessage(new AppMessage("Successfully did a Bid Analysis  Request, Reference No - <b>'" + _presenter.CurrentBidAnalysisRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                        Log.Info(_presenter.CurrentUser().FullName + " has requested a For a Bid Analyis");
+                        btnSave.Visible = false;
+                        btnPrintworksheet.Enabled = true;
+                        PrintTransaction();
+
                     }
 
 
