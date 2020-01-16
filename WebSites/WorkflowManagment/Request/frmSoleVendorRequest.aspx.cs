@@ -325,7 +325,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                                 svDetail.PRDetailID = PRDetail.Id;
                                 svDetail.ItemAccount = PRDetail.ItemAccount;
                                 svDetail.ItemDescription = PRDetail.Item;
-                                svDetail.Qty = PRDetail.Qty;
+                                svDetail.Qty = PRDetail.ApprovedQuantity; //Make sure the approved quanity is the one to be used for purchase
                                 svDetail.Project = PRDetail.Project;
                                 svDetail.Grant = PRDetail.Grant;
                                 _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails.Add(svDetail);
