@@ -255,8 +255,8 @@
 
                 <table style="width: 100%; border-style: solid;">
                     <tr>
-                        <td style="width: 585px">Purchase Order No</td>
-                        <td style="width: 617px">
+                        <td style="width: 25%;">Purchase Order No</td>
+                        <td style="width: 25%; border-right-style: solid;">
                             <asp:Label ID="lblPurchaseOrderNo" runat="server"></asp:Label></td>
                         <td style="width: 25%;">Are the service being delivered by Supplier or picked up by CHAI?</td>
                         <td style="width: 25%;">
@@ -264,7 +264,7 @@
                     </tr>
                     <tr>
                         <td style="width: 25%;">PO Created Date:</td>
-                        <td style="width: 25%;">
+                        <td style="width: 25%; border-right-style: solid;">
                             <asp:Label ID="lblPOCreatedDate" runat="server"></asp:Label>
                         </td>
                         <td style="width: 25%;">Supplier</td>
@@ -273,7 +273,7 @@
                     </tr>
                     <tr>
                         <td style="width: 25%;">Payment Terms</td>
-                        <td style="width: 25%;">
+                        <td style="width: 25%; border-right-style: solid;">
                             <asp:Label ID="lblPaymentTerms" runat="server"></asp:Label>
                         </td>
                         <td style="width: 25%;">Supplier Contact</td>
@@ -282,7 +282,7 @@
                     </tr>
                     <tr>
                         <td style="width: 25%;">Ship To</td>
-                        <td style="width: 25%;">
+                        <td style="width: 25%; border-right-style: solid;">
                             <asp:Label ID="lblShipTo" runat="server"></asp:Label>
                         </td>
                         <td style="width: 25%;">Supplier Email</td>
@@ -290,17 +290,17 @@
                             <asp:Label ID="lblSupplierEmail" runat="server"></asp:Label></td>
                     </tr>
                     <tr>
-                        <td style="width: 585px">Bill To</td>
-                        <td style="width: 617px">
+                        <td style="width: 25%;">Bill To</td>
+                        <td style="width: 25%; border-right-style: solid;">
                             <asp:Label ID="lblBillToResult" runat="server"></asp:Label></td>
                         <td style="width: 25%;">Delivery Location: </td>
                         <td style="width: 25%;">
                             <asp:Label ID="lblDeliverLocation" runat="server"></asp:Label></td>
                     </tr>
                     <tr>
-                        <td style="width: 585px">Delivery Fees
+                        <td style="width: 25%;">Delivery Fees
                         </td>
-                        <td style="width: 617px">
+                        <td style="width: 25%; border-right-style: solid;">
                             <asp:Label ID="lblDeliveryFees" runat="server"></asp:Label>
                         </td>
                         <td style="width: 25%;">Delivery Date: </td>
@@ -309,22 +309,50 @@
                     </tr>
                 </table>
                 <br />
-                <asp:GridView Style="width: 100%;" ID="grvDetails"
+                <asp:GridView Style="width: 100%;" ID="grvDetails" ShowFooter="true" AllowPaging="true" PageSize="10"
                     runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                    CssClass="table table-striped table-bordered table-hover">
+                    CssClass="table table-striped table-bordered table-hover" OnRowDataBound="grvDetails_RowDataBound">
                     <RowStyle CssClass="rowstyle" />
                     <Columns>
                         <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="AccountName" />
                         <asp:BoundField DataField="ItemDescription" HeaderText="Description" />
                         <asp:BoundField DataField="Qty" HeaderText="Quantity" />
-                        <asp:BoundField DataField="UnitCost" HeaderText="Unit Price in Birr" />
-                        <asp:BoundField DataField="TotalCost" HeaderText="Total in Birr" />
+                        <asp:TemplateField HeaderText="Unit Price in Birr">
+                            <ItemTemplate>
+                                <asp:Label ID="lblUnitCost" runat="server" Text='<%#Eval("UnitCost")%>'>
+                                </asp:Label>
+                            </ItemTemplate>
+
+                            <FooterTemplate>
+                                <div style="font-weight: bold;">Sub Total</div>
+                                <div style="font-weight: bold;">VAT</div>
+                                <div style="font-weight: bold;">Grand Total</div>
+                            </FooterTemplate>
+
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="Total in Birr">
+                            <ItemTemplate>
+                                <asp:Label ID="lblTotalCost" runat="server" Text='<%#Eval("TotalCost")%>'>
+                                </asp:Label>
+                            </ItemTemplate>
+
+                            <FooterTemplate>
+                                <div>
+                                    <asp:Label ID="lblSubTotal" runat="server" /></div>
+                                <div>
+                                    <asp:Label ID="lblVAT" runat="server" /></div>
+                                <div style="font-weight: bold;">
+                                    <asp:Label ID="lblGrandTotal" runat="server" /></div>
+                            </FooterTemplate>
+
+                        </asp:TemplateField>
                     </Columns>
                     <FooterStyle CssClass="FooterStyle" />
                     <HeaderStyle CssClass="headerstyle" />
                     <PagerStyle CssClass="PagerStyle" />
                     <RowStyle CssClass="rowstyle" />
                 </asp:GridView>
+
                 <br />
                 <p style="text-align: left;">
                     <b>Supplier:  Please follow steps 1-4 in fulfilling this Purchase Order:</b><br />
@@ -340,6 +368,14 @@
                     <tr>
                         <td>Clinton Health Access Initiative</td>
                         <td style="width: 50%;">ALTA Computec PLC</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <br />
+                        </td>
+                        <td>
+                            <br />
+                        </td>
                     </tr>
                     <tr>
                         <td>Signature:___________________</td>

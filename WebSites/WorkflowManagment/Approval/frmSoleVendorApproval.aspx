@@ -248,6 +248,11 @@
                                                         <%# DataBinder.Eval(Container.DataItem, "SoleVendorSupplier.SupplierName")%>
                                                     </ItemTemplate>
                                                 </asp:TemplateColumn>
+                                                <asp:TemplateColumn HeaderText="Quantity">
+                                                    <ItemTemplate>
+                                                        <%# DataBinder.Eval(Container.DataItem, "Qty")%>
+                                                    </ItemTemplate>
+                                                </asp:TemplateColumn>
                                                 <asp:TemplateColumn HeaderText="Unit Cost">
                                                     <ItemTemplate>
                                                         <%# DataBinder.Eval(Container.DataItem, "UnitCost")%>
@@ -256,6 +261,16 @@
                                                 <asp:TemplateColumn HeaderText="Total Cost">
                                                     <ItemTemplate>
                                                         <%# DataBinder.Eval(Container.DataItem, "TotalCost")%>
+                                                    </ItemTemplate>
+                                                </asp:TemplateColumn>
+                                                <asp:TemplateColumn HeaderText="VAT">
+                                                    <ItemTemplate>
+                                                        <%# DataBinder.Eval(Container.DataItem, "VAT")%>
+                                                    </ItemTemplate>
+                                                </asp:TemplateColumn>
+                                                <asp:TemplateColumn HeaderText="Grand Total">
+                                                    <ItemTemplate>
+                                                        <%# DataBinder.Eval(Container.DataItem, "GrandTotal")%>
                                                     </ItemTemplate>
                                                 </asp:TemplateColumn>
                                                 <asp:TemplateColumn HeaderText="Project ID">

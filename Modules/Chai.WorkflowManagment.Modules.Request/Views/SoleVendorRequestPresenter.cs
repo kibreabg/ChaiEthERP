@@ -143,7 +143,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             soleVendorRequest.RequestNo = View.GetRequestNo;
             soleVendorRequest.RequestDate = Convert.ToDateTime(DateTime.Today);
             soleVendorRequest.Comment = View.GetComment;
-            soleVendorRequest.AppUser = CurrentUser();
+            soleVendorRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
             soleVendorRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
 
             if (CurrentSoleVendorRequest.SoleVendorRequestStatuses.Count == 0)
