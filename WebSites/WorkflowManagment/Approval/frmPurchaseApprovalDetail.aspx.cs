@@ -162,7 +162,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     ddlApprovalStatus.Enabled = true;
                 }
             }
-            if (_presenter.CurrentUser().EmployeePosition.PositionName == "Procurement Officer" && _presenter.CurrentPurchaseRequest.CurrentStatus != ApprovalStatus.Rejected.ToString() && _presenter.CurrentPurchaseRequest.CurrentLevel == (_presenter.CurrentPurchaseRequest.PurchaseRequestStatuses.Count - 1))
+            if (_presenter.CurrentUser().EmployeePosition.PositionName == "Logistic Assistant" && _presenter.CurrentPurchaseRequest.CurrentStatus != ApprovalStatus.Rejected.ToString() && _presenter.CurrentPurchaseRequest.CurrentLevel == (_presenter.CurrentPurchaseRequest.PurchaseRequestStatuses.Count - 1))
             {
                 //lnkBidRequest.Visible = true;
                // lnkSoleVendor.Visible = true;

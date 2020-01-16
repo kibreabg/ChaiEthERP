@@ -549,7 +549,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             txttoalleavetaken.Text = _presenter.EmpLeaveTaken(_presenter.CurrentEmployee.Id, _presenter.CurrentEmployee.LeaveSettingDate.Value).ToString();
         }
 
-
+       
 
         public void AddEmployeeDetail()
         {
@@ -1026,12 +1026,12 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 int Row = Convert.ToInt32(e.CommandArgument);
 
-                int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row].Value);
+                int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row-1].Value);
                 //   int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[dgContractDetail.SelectedRow.RowIndex].Value.ToString());
-
+              
 
                 if (TEMPChid > 0)
-                    Session["chan"] = _presenter.CurrentEmployee.GetContract(TEMPChid);
+                    Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
                 else
                     Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
 
@@ -1046,6 +1046,29 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     hfDetailId.Value = dgChange.SelectedRow.DataItemIndex.ToString();
                 }
                 BindEmpDetail(chan);
+                EmployeeDetail empdetail;
+
+              
+
+
+                chan = Session["chan"] as Contract;
+             
+                
+              
+
+                ddlPosition.SelectedValue =chan.EmployeeDetails[0].Position.Id.ToString();
+                ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
+                txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
+                txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
+                txtClass.Text = chan.EmployeeDetails[0].Class;
+                txtHoursPerWeek.Text = chan.EmployeeDetails[0].HoursPerWeek;
+                txtBaseCount.Text = chan.EmployeeDetails[0].BaseCountry;
+                txtBaseCity.Text = chan.EmployeeDetails[0].BaseCity;
+                txtBaseState.Text = chan.EmployeeDetails[0].BaseState;
+                txtCountryTeam.Text = chan.EmployeeDetails[0].CountryTeam;
+                ddlSuperVisor.SelectedValue = chan.EmployeeDetails[0].Supervisor.ToString();
+                txtEffectDate.Text = chan.EmployeeDetails[0].EffectiveDateOfChange.ToShortDateString();
                 pnlEMPHIST_ModalPopupExtender.Show();
 
 
