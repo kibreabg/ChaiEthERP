@@ -22,7 +22,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Approval
         public virtual BidAnalysisRequest BidAnalysisRequest { get; set; }
       
        
-        public Nullable<DateTime> PODate { get; set; }
+        public DateTime? PODate { get; set; }
         public virtual Supplier Supplier { get; set; }
 
        
@@ -33,7 +33,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Approval
         public string PaymentTerms { get; set; }
         public string Status { get; set; }
         public decimal TotalPrice { get; set; }
-        public DateTime DeliveryDate { get; set; }
+        public DateTime? DeliveryDate { get; set; }
         public string DeliveryLocation { get; set; }
         public string DeliveryBy { get; set; }
         public IList<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
@@ -45,6 +45,17 @@ namespace Chai.WorkflowManagment.CoreDomain.Approval
             foreach (PurchaseOrderDetail detail in PurchaseOrderDetails)
             {
                 if (detail.Id == Id)
+                    return detail;
+
+            }
+            return null;
+        }
+        public virtual PurchaseOrderDetail GetPurchaseOrderDetailBySupplierId(int Id)
+        {
+
+            foreach (PurchaseOrderDetail detail in PurchaseOrderDetails)
+            {
+                if (detail.Supplier.Id == Id)
                     return detail;
 
             }

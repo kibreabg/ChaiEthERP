@@ -227,9 +227,12 @@
                                                  <section class="col col-4">
                                                         <label class="label">
                                                        Delivery Date:</label>
-                                                        <label class="input">
-                                                        <asp:TextBox ID="txtDeliveryDate" runat="server" Enabled="true"></asp:TextBox>
-                                                            
+                                                     
+                                                       
+                                                           <label class="input" style="position: relative; display: block; font-weight: 400;">
+                                    <i class="icon-append fa fa-calendar" style="position: absolute; top: 5px; width: 22px; height: 22px; font-size: 14px; line-height: 22px; text-align: center; right: 5px; padding-left: 3px; border-left-width: 1px; border-left-style: solid; color: #A2A2A2;"></i>
+                                    <asp:TextBox ID="txtDeliveryDate" CssClass="form-control datepicker"
+                                        data-dateformat="mm/dd/yy" ToolTip="Delivery Date" runat="server"></asp:TextBox>   
                                                         </label>
                                                     </section>
                                                     
@@ -317,27 +320,21 @@
                         <td style="width: 25%;">
                             <asp:Label ID="lblPOCreatedDate" runat="server"></asp:Label>
                         </td>
-                        <td style="width: 25%;">Supplier</td>
-                        <td style="width: 25%;">
-                            <asp:Label ID="lblSupplier" runat="server"></asp:Label></td>
+                      
                     </tr>
                     <tr>
                         <td style="width: 25%;">Payment Terms</td>
                         <td style="width: 25%;">
                             <asp:Label ID="lblPaymentTerms" runat="server"></asp:Label>
                         </td>
-                        <td style="width: 25%;">Supplier Contact</td>
-                        <td style="width: 25%;">
-                            <asp:Label ID="lblSupplierContact" runat="server"></asp:Label></td>
+                      
                     </tr>
                     <tr>
                         <td style="width: 25%;">Ship To</td>
                         <td style="width: 25%;">
                             <asp:Label ID="lblShipTo" runat="server"></asp:Label>
                         </td>
-                        <td style="width: 25%;">Supplier Email</td>
-                        <td style="width: 25%;">
-                            <asp:Label ID="lblSupplierEmail" runat="server"></asp:Label></td>
+                      
                     </tr>
                     <tr>
                         <td style="width: 585px">Bill To</td>
@@ -372,6 +369,11 @@
                     <asp:BoundField DataField="UnitCost" HeaderText="UnitCost" />
                     <asp:BoundField DataField="TotalCost" HeaderText="TotalCost" />
                     <asp:BoundField DataField="Vat" HeaderText="Vat" />
+                    
+                    <asp:BoundField DataField="Supplier.SupplierName" HeaderText="Supplier Name" />
+                    <asp:BoundField DataField="Supplier.SupplierAddress" HeaderText="Supplier Address" />
+                  
+                    
                 </Columns>
                 <FooterStyle CssClass="FooterStyle" />
                 <HeaderStyle CssClass="headerstyle" />
@@ -392,7 +394,7 @@
                 <table style="width: 100%;">
                     <tr>
                         <td>Clinton Health Access Initiative</td>
-                        <td style="width: 50%;">ALTA Computec PLC</td>
+                        <td style="width: 50%;"><asp:Label ID="lblSupp" runat="server"></asp:Label></td>
                     </tr>
                     <tr>
                         <td>Signature:___________________</td>

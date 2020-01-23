@@ -85,13 +85,13 @@
                 
                 <asp:BoundField DataField="TotalPrice" HeaderText="Total Price" SortExpression="TotalPrice" />
 
-                 <asp:TemplateField HeaderText="Purchase Requested By">
+                <%-- <asp:TemplateField HeaderText="Purchase Requested By">
                    
                 </asp:TemplateField>
                
-                 <asp:TemplateField HeaderText="Bid Analysis Prepared By">
+                 <asp:TemplateField HeaderText="Bid Analysis Prepared By">--%>
                    
-                </asp:TemplateField>
+                <%--</asp:TemplateField>--%>
                  <asp:TemplateField HeaderText="Purchase Requested No">
                     <ItemTemplate>
                      <%# DataBinder.Eval(Container.DataItem, "PurchaseRequest.RequestNo")%>
@@ -349,31 +349,7 @@
                     <td>&nbsp;</td>
                 </tr>
               
-                 <tr>
-                    <td style="width: 848px; height: 18px;">
-                        <strong>
-                            <asp:Label ID="lblCommentPrint" runat="server" Text="Reason For Selection:"></asp:Label>
-                        </strong></td>
-                    <td style="width: 390px; height: 18px;">
-                        <asp:Label ID="lblCommentResult" runat="server"></asp:Label>
-                    </td>
-                    <td style="width: 389px; height: 18px;">&nbsp;</td>
-                    <td style="width: 389px; height: 18px;"></td>
-                    <td style="height: 18px">&nbsp;</td>
-                </tr>
-              
-                 <tr>
-                    <td style="width: 848px; height: 18px;">
-                        <strong>
-                            <asp:Label ID="lblRequireddateofdelivery" runat="server" Text="Special Need:"></asp:Label>
-                        </strong></td>
-                    <td style="width: 390px; height: 18px;">
-                        <asp:Label ID="lblRequireddateofdeliveryResult" runat="server"></asp:Label>
-                    </td>
-                    <td style="width: 389px; height: 18px;">&nbsp;</td>
-                    <td style="width: 389px; height: 18px;"></td>
-                    <td style="height: 18px">&nbsp;</td>
-                </tr>
+               
                    <tr>
                     <td style="width: 848px; height: 18px;">
                         <strong>

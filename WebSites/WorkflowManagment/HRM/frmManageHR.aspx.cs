@@ -237,7 +237,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                         cont.ContractEndDate = Convert.ToDateTime(EndDate);
                         cont.Reason = ddlReason.SelectedValue;
                         cont.Status = ddlStatus.SelectedValue;
-
+                        
                         _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
 
                         dgContractDetail.EditIndex = -1;
@@ -258,21 +258,23 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 var StartDate = txtStartDate.Text != "" ? txtStartDate.Text: "";
                 var EndDate = txtEndDate.Text != "" ? txtEndDate.Text : " ";
                 Contract cont = new Contract();
+               
                 if (_presenter.CurrentEmployee.Contracts.Count != 0)
                 {
                     if (_presenter.CurrentEmployee.GetEmpContract(GetId).ContractEndDate < Convert.ToDateTime(StartDate))
                     {
-                        
+                       
                         cont.ContractStartDate = Convert.ToDateTime(StartDate);
                         cont.ContractEndDate = Convert.ToDateTime(EndDate);
                         cont.Reason = ddlReason.SelectedItem.Text;
                         cont.Status = ddlStatus.SelectedItem.Text;
-                        
+                      
 
-                            _presenter.CurrentEmployee.GetActiveContract().Status = "In Active";
+                        _presenter.CurrentEmployee.GetActiveContract().Status = "In Active";
                        
 
                         _presenter.CurrentEmployee.Contracts.Add(cont);
+                      
                         dgContractDetail.EditIndex = -1;
                         ClearContractFormFields();
                         dgContractDetail.DataSource = _presenter.CurrentEmployee.Contracts;
@@ -384,6 +386,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         private void BindEmpDetail(Contract con)
         {
             chan = Session["chan"] as Contract;
+            chan.EmployeeDetails[0].Contract = _presenter.GetContract(chan.Id);
             dgChange.DataSource = chan.EmployeeDetails;
             dgChange.DataBind();
         }
@@ -944,6 +947,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
                 if (TEMPChid > 0)
                 {
+                    
                     EmployeeDetail empdetail = chan.GetEmployeeDetails(TEMPChid);
                     ddlPosition.SelectedValue = empdetail.Position.Id.ToString();
                     ddlProgram.SelectedValue = Convert.ToInt32(empdetail.Program.Id).ToString();
@@ -1025,52 +1029,573 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             if (e.CommandName == "History")
             {
                 int Row = Convert.ToInt32(e.CommandArgument);
-
-                int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row-1].Value);
-                //   int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[dgContractDetail.SelectedRow.RowIndex].Value.ToString());
-              
-
-                if (TEMPChid > 0)
-                    Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
-                else
-                    Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
-
-
-
-                if (_presenter.CurrentEmployee.Id > 0)
+                if (Row == 1)
                 {
-                    hfDetailId.Value = TEMPChid.ToString();
+
+                    int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 1].Value);
+                    if (TEMPChid > 0)
+                        Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
+                    else
+                        Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
+
+
+
+                    if (_presenter.CurrentEmployee.Id > 0)
+                    {
+                        hfDetailId.Value = TEMPChid.ToString();
+                    }
+                    else
+                    {
+                        hfDetailId.Value = dgChange.SelectedRow.DataItemIndex.ToString();
+                    }
+                    BindEmpDetail(chan);
+                   ;
+                    EmployeeDetail empdetail;
+
+
+
+                    chan = Session["chan"] as Contract;
+
+
+                    if (chan.EmployeeDetails.Count > 0)
+                    {
+
+                        ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
+                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                        ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
+                        txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
+                        txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
+                        txtClass.Text = chan.EmployeeDetails[0].Class;
+                        txtHoursPerWeek.Text = chan.EmployeeDetails[0].HoursPerWeek;
+                        txtBaseCount.Text = chan.EmployeeDetails[0].BaseCountry;
+                        txtBaseCity.Text = chan.EmployeeDetails[0].BaseCity;
+                        txtBaseState.Text = chan.EmployeeDetails[0].BaseState;
+                        txtCountryTeam.Text = chan.EmployeeDetails[0].CountryTeam;
+                        ddlSuperVisor.SelectedValue = chan.EmployeeDetails[0].Supervisor.ToString();
+                        txtEffectDate.Text = chan.EmployeeDetails[0].EffectiveDateOfChange.ToShortDateString();
+                        pnlEMPHIST_ModalPopupExtender.Show();
+                    }
+
                 }
-                else
+                else if (Row == 2)
                 {
-                    hfDetailId.Value = dgChange.SelectedRow.DataItemIndex.ToString();
+                    int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 2].Value);
+                    if (TEMPChid > 0)
+                        Session["chan"] = _presenter.CurrentEmployee.GetContract(TEMPChid);
+                    else
+                        Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
+
+
+
+                    if (_presenter.CurrentEmployee.Id > 0)
+                    {
+                        hfDetailId.Value = TEMPChid.ToString();
+                    }
+                    else
+                    {
+                        hfDetailId.Value = dgChange.SelectedRow.DataItemIndex.ToString();
+                    }
+                    BindEmpDetail(chan);
+                    EmployeeDetail empdetail;
+
+
+
+
+                    chan = Session["chan"] as Contract;
+
+
+
+                    if (chan.EmployeeDetails.Count > 0)
+                    {
+                        ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
+                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                        ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
+                        txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
+                        txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
+                        txtClass.Text = chan.EmployeeDetails[0].Class;
+                        txtHoursPerWeek.Text = chan.EmployeeDetails[0].HoursPerWeek;
+                        txtBaseCount.Text = chan.EmployeeDetails[0].BaseCountry;
+                        txtBaseCity.Text = chan.EmployeeDetails[0].BaseCity;
+                        txtBaseState.Text = chan.EmployeeDetails[0].BaseState;
+                        txtCountryTeam.Text = chan.EmployeeDetails[0].CountryTeam;
+                        ddlSuperVisor.SelectedValue = chan.EmployeeDetails[0].Supervisor.ToString();
+                        txtEffectDate.Text = chan.EmployeeDetails[0].EffectiveDateOfChange.ToShortDateString();
+                        pnlEMPHIST_ModalPopupExtender.Show();
+                    }
+
                 }
-                BindEmpDetail(chan);
-                EmployeeDetail empdetail;
+                else if (Row == 3)
+                {
+                    int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 3].Value);
+                    if (TEMPChid > 0)
+                        Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
+                    else
+                        Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
 
-              
 
 
-                chan = Session["chan"] as Contract;
-             
-                
-              
+                    if (_presenter.CurrentEmployee.Id > 0)
+                    {
+                        hfDetailId.Value = TEMPChid.ToString();
+                    }
+                    else
+                    {
+                        hfDetailId.Value = dgChange.SelectedRow.DataItemIndex.ToString();
+                    }
+                    BindEmpDetail(chan);
+                    EmployeeDetail empdetail;
 
-                ddlPosition.SelectedValue =chan.EmployeeDetails[0].Position.Id.ToString();
-                ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
-                ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
-                txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
-                txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
-                txtClass.Text = chan.EmployeeDetails[0].Class;
-                txtHoursPerWeek.Text = chan.EmployeeDetails[0].HoursPerWeek;
-                txtBaseCount.Text = chan.EmployeeDetails[0].BaseCountry;
-                txtBaseCity.Text = chan.EmployeeDetails[0].BaseCity;
-                txtBaseState.Text = chan.EmployeeDetails[0].BaseState;
-                txtCountryTeam.Text = chan.EmployeeDetails[0].CountryTeam;
-                ddlSuperVisor.SelectedValue = chan.EmployeeDetails[0].Supervisor.ToString();
-                txtEffectDate.Text = chan.EmployeeDetails[0].EffectiveDateOfChange.ToShortDateString();
-                pnlEMPHIST_ModalPopupExtender.Show();
 
+
+
+                    chan = Session["chan"] as Contract;
+
+
+
+                    if (chan.EmployeeDetails.Count > 0)
+                    {
+                        ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
+                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                        ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
+                        txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
+                        txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
+                        txtClass.Text = chan.EmployeeDetails[0].Class;
+                        txtHoursPerWeek.Text = chan.EmployeeDetails[0].HoursPerWeek;
+                        txtBaseCount.Text = chan.EmployeeDetails[0].BaseCountry;
+                        txtBaseCity.Text = chan.EmployeeDetails[0].BaseCity;
+                        txtBaseState.Text = chan.EmployeeDetails[0].BaseState;
+                        txtCountryTeam.Text = chan.EmployeeDetails[0].CountryTeam;
+                        ddlSuperVisor.SelectedValue = chan.EmployeeDetails[0].Supervisor.ToString();
+                        txtEffectDate.Text = chan.EmployeeDetails[0].EffectiveDateOfChange.ToShortDateString();
+                        pnlEMPHIST_ModalPopupExtender.Show();
+                    }
+
+                }
+                else if (Row == 4)
+                {
+                    int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 4].Value);
+                    if (TEMPChid > 0)
+                        Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
+                    else
+                        Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
+
+
+
+                    if (_presenter.CurrentEmployee.Id > 0)
+                    {
+                        hfDetailId.Value = TEMPChid.ToString();
+                    }
+                    else
+                    {
+                        hfDetailId.Value = dgChange.SelectedRow.DataItemIndex.ToString();
+                    }
+                    BindEmpDetail(chan);
+                    EmployeeDetail empdetail;
+
+
+
+                    chan = Session["chan"] as Contract;
+
+
+
+                    if (chan.EmployeeDetails.Count > 0)
+                    {
+                        ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
+                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                        ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
+                        txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
+                        txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
+                        txtClass.Text = chan.EmployeeDetails[0].Class;
+                        txtHoursPerWeek.Text = chan.EmployeeDetails[0].HoursPerWeek;
+                        txtBaseCount.Text = chan.EmployeeDetails[0].BaseCountry;
+                        txtBaseCity.Text = chan.EmployeeDetails[0].BaseCity;
+                        txtBaseState.Text = chan.EmployeeDetails[0].BaseState;
+                        txtCountryTeam.Text = chan.EmployeeDetails[0].CountryTeam;
+                        ddlSuperVisor.SelectedValue = chan.EmployeeDetails[0].Supervisor.ToString();
+                        txtEffectDate.Text = chan.EmployeeDetails[0].EffectiveDateOfChange.ToShortDateString();
+                        pnlEMPHIST_ModalPopupExtender.Show();
+                    }
+
+                }
+                else if (Row == 5)
+                {
+                    int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 5].Value);
+                    if (TEMPChid > 0)
+                        Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
+                    else
+                        Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
+
+
+
+                    if (_presenter.CurrentEmployee.Id > 0)
+                    {
+                        hfDetailId.Value = TEMPChid.ToString();
+                    }
+                    else
+                    {
+                        hfDetailId.Value = dgChange.SelectedRow.DataItemIndex.ToString();
+                    }
+                    BindEmpDetail(chan);
+                    EmployeeDetail empdetail;
+
+
+
+
+                    chan = Session["chan"] as Contract;
+
+
+                    if (chan.EmployeeDetails.Count > 0)
+                    {
+
+                        ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
+                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                        ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
+                        txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
+                        txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
+                        txtClass.Text = chan.EmployeeDetails[0].Class;
+                        txtHoursPerWeek.Text = chan.EmployeeDetails[0].HoursPerWeek;
+                        txtBaseCount.Text = chan.EmployeeDetails[0].BaseCountry;
+                        txtBaseCity.Text = chan.EmployeeDetails[0].BaseCity;
+                        txtBaseState.Text = chan.EmployeeDetails[0].BaseState;
+                        txtCountryTeam.Text = chan.EmployeeDetails[0].CountryTeam;
+                        ddlSuperVisor.SelectedValue = chan.EmployeeDetails[0].Supervisor.ToString();
+                        txtEffectDate.Text = chan.EmployeeDetails[0].EffectiveDateOfChange.ToShortDateString();
+                        pnlEMPHIST_ModalPopupExtender.Show();
+                    }
+
+                }
+
+                else if (Row == 6)
+                {
+                    int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 6].Value);
+                    if (TEMPChid > 0)
+                        Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
+                    else
+                        Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
+
+
+
+                    if (_presenter.CurrentEmployee.Id > 0)
+                    {
+                        hfDetailId.Value = TEMPChid.ToString();
+                    }
+                    else
+                    {
+                        hfDetailId.Value = dgChange.SelectedRow.DataItemIndex.ToString();
+                    }
+                    BindEmpDetail(chan);
+                    EmployeeDetail empdetail;
+
+
+
+
+                    chan = Session["chan"] as Contract;
+
+
+                    if (chan.EmployeeDetails.Count > 0)
+                    {
+
+                        ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
+                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                        ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
+                        txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
+                        txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
+                        txtClass.Text = chan.EmployeeDetails[0].Class;
+                        txtHoursPerWeek.Text = chan.EmployeeDetails[0].HoursPerWeek;
+                        txtBaseCount.Text = chan.EmployeeDetails[0].BaseCountry;
+                        txtBaseCity.Text = chan.EmployeeDetails[0].BaseCity;
+                        txtBaseState.Text = chan.EmployeeDetails[0].BaseState;
+                        txtCountryTeam.Text = chan.EmployeeDetails[0].CountryTeam;
+                        ddlSuperVisor.SelectedValue = chan.EmployeeDetails[0].Supervisor.ToString();
+                        txtEffectDate.Text = chan.EmployeeDetails[0].EffectiveDateOfChange.ToShortDateString();
+                        pnlEMPHIST_ModalPopupExtender.Show();
+                    }
+
+                }
+                else if (Row == 7)
+                {
+                    int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 7].Value);
+                    if (TEMPChid > 0)
+                        Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
+                    else
+                        Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
+
+
+
+                    if (_presenter.CurrentEmployee.Id > 0)
+                    {
+                        hfDetailId.Value = TEMPChid.ToString();
+                    }
+                    else
+                    {
+                        hfDetailId.Value = dgChange.SelectedRow.DataItemIndex.ToString();
+                    }
+                    BindEmpDetail(chan);
+                    EmployeeDetail empdetail;
+
+
+
+
+                    chan = Session["chan"] as Contract;
+
+
+
+                    if (chan.EmployeeDetails.Count > 0)
+                    {
+                        ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
+                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                        ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
+                        txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
+                        txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
+                        txtClass.Text = chan.EmployeeDetails[0].Class;
+                        txtHoursPerWeek.Text = chan.EmployeeDetails[0].HoursPerWeek;
+                        txtBaseCount.Text = chan.EmployeeDetails[0].BaseCountry;
+                        txtBaseCity.Text = chan.EmployeeDetails[0].BaseCity;
+                        txtBaseState.Text = chan.EmployeeDetails[0].BaseState;
+                        txtCountryTeam.Text = chan.EmployeeDetails[0].CountryTeam;
+                        ddlSuperVisor.SelectedValue = chan.EmployeeDetails[0].Supervisor.ToString();
+                        txtEffectDate.Text = chan.EmployeeDetails[0].EffectiveDateOfChange.ToShortDateString();
+                        pnlEMPHIST_ModalPopupExtender.Show();
+                    }
+
+                }
+                else if (Row == 8)
+                {
+                    int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 8].Value);
+                    if (TEMPChid > 0)
+                        Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
+                    else
+                        Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
+
+
+
+                    if (_presenter.CurrentEmployee.Id > 0)
+                    {
+                        hfDetailId.Value = TEMPChid.ToString();
+                    }
+                    else
+                    {
+                        hfDetailId.Value = dgChange.SelectedRow.DataItemIndex.ToString();
+                    }
+                    BindEmpDetail(chan);
+                    EmployeeDetail empdetail;
+
+
+
+
+                    chan = Session["chan"] as Contract;
+
+
+
+                    if (chan.EmployeeDetails.Count > 0)
+                    {
+                        ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
+                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                        ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
+                        txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
+                        txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
+                        txtClass.Text = chan.EmployeeDetails[0].Class;
+                        txtHoursPerWeek.Text = chan.EmployeeDetails[0].HoursPerWeek;
+                        txtBaseCount.Text = chan.EmployeeDetails[0].BaseCountry;
+                        txtBaseCity.Text = chan.EmployeeDetails[0].BaseCity;
+                        txtBaseState.Text = chan.EmployeeDetails[0].BaseState;
+                        txtCountryTeam.Text = chan.EmployeeDetails[0].CountryTeam;
+                        ddlSuperVisor.SelectedValue = chan.EmployeeDetails[0].Supervisor.ToString();
+                        txtEffectDate.Text = chan.EmployeeDetails[0].EffectiveDateOfChange.ToShortDateString();
+                        pnlEMPHIST_ModalPopupExtender.Show();
+                    }
+
+                }
+                else if (Row == 9)
+                {
+                    int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 9].Value);
+                    if (TEMPChid > 0)
+                        Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
+                    else
+                        Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
+
+
+
+                    if (_presenter.CurrentEmployee.Id > 0)
+                    {
+                        hfDetailId.Value = TEMPChid.ToString();
+                    }
+                    else
+                    {
+                        hfDetailId.Value = dgChange.SelectedRow.DataItemIndex.ToString();
+                    }
+                    BindEmpDetail(chan);
+                    EmployeeDetail empdetail;
+
+
+
+
+                    chan = Session["chan"] as Contract;
+
+
+                    if (chan.EmployeeDetails.Count > 0)
+                    {
+
+                        ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
+                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                        ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
+                        txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
+                        txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
+                        txtClass.Text = chan.EmployeeDetails[0].Class;
+                        txtHoursPerWeek.Text = chan.EmployeeDetails[0].HoursPerWeek;
+                        txtBaseCount.Text = chan.EmployeeDetails[0].BaseCountry;
+                        txtBaseCity.Text = chan.EmployeeDetails[0].BaseCity;
+                        txtBaseState.Text = chan.EmployeeDetails[0].BaseState;
+                        txtCountryTeam.Text = chan.EmployeeDetails[0].CountryTeam;
+                        ddlSuperVisor.SelectedValue = chan.EmployeeDetails[0].Supervisor.ToString();
+                        txtEffectDate.Text = chan.EmployeeDetails[0].EffectiveDateOfChange.ToShortDateString();
+                        pnlEMPHIST_ModalPopupExtender.Show();
+                    }
+
+                }
+                else if (Row == 10)
+                {
+                    int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 10].Value);
+                    if (TEMPChid > 0)
+                        Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
+                    else
+                        Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
+
+
+
+                    if (_presenter.CurrentEmployee.Id > 0)
+                    {
+                        hfDetailId.Value = TEMPChid.ToString();
+                    }
+                    else
+                    {
+                        hfDetailId.Value = dgChange.SelectedRow.DataItemIndex.ToString();
+                    }
+                    BindEmpDetail(chan);
+                    EmployeeDetail empdetail;
+
+
+
+
+                    chan = Session["chan"] as Contract;
+
+
+                    if (chan.EmployeeDetails.Count > 0)
+                    {
+
+                        ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
+                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                        ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
+                        txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
+                        txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
+                        txtClass.Text = chan.EmployeeDetails[0].Class;
+                        txtHoursPerWeek.Text = chan.EmployeeDetails[0].HoursPerWeek;
+                        txtBaseCount.Text = chan.EmployeeDetails[0].BaseCountry;
+                        txtBaseCity.Text = chan.EmployeeDetails[0].BaseCity;
+                        txtBaseState.Text = chan.EmployeeDetails[0].BaseState;
+                        txtCountryTeam.Text = chan.EmployeeDetails[0].CountryTeam;
+                        ddlSuperVisor.SelectedValue = chan.EmployeeDetails[0].Supervisor.ToString();
+                        txtEffectDate.Text = chan.EmployeeDetails[0].EffectiveDateOfChange.ToShortDateString();
+                        pnlEMPHIST_ModalPopupExtender.Show();
+                    }
+
+                }
+                else if (Row == 11)
+                {
+                    int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 11].Value);
+                    if (TEMPChid > 0)
+                        Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
+                    else
+                        Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
+
+
+
+                    if (_presenter.CurrentEmployee.Id > 0)
+                    {
+                        hfDetailId.Value = TEMPChid.ToString();
+                    }
+                    else
+                    {
+                        hfDetailId.Value = dgChange.SelectedRow.DataItemIndex.ToString();
+                    }
+                    BindEmpDetail(chan);
+                    EmployeeDetail empdetail;
+
+
+
+
+                    chan = Session["chan"] as Contract;
+
+
+
+                    if (chan.EmployeeDetails.Count > 0)
+                    {
+                        ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
+                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                        ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
+                        txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
+                        txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
+                        txtClass.Text = chan.EmployeeDetails[0].Class;
+                        txtHoursPerWeek.Text = chan.EmployeeDetails[0].HoursPerWeek;
+                        txtBaseCount.Text = chan.EmployeeDetails[0].BaseCountry;
+                        txtBaseCity.Text = chan.EmployeeDetails[0].BaseCity;
+                        txtBaseState.Text = chan.EmployeeDetails[0].BaseState;
+                        txtCountryTeam.Text = chan.EmployeeDetails[0].CountryTeam;
+                        ddlSuperVisor.SelectedValue = chan.EmployeeDetails[0].Supervisor.ToString();
+                        txtEffectDate.Text = chan.EmployeeDetails[0].EffectiveDateOfChange.ToShortDateString();
+                        pnlEMPHIST_ModalPopupExtender.Show();
+                    }
+
+                }
+                else if (Row == 12)
+                {
+                    int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 12].Value);
+                    if (TEMPChid > 0)
+                        Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
+                    else
+                        Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
+
+
+
+                    if (_presenter.CurrentEmployee.Id > 0)
+                    {
+                        hfDetailId.Value = TEMPChid.ToString();
+                    }
+                    else
+                    {
+                        hfDetailId.Value = dgChange.SelectedRow.DataItemIndex.ToString();
+                    }
+                    BindEmpDetail(chan);
+                    EmployeeDetail empdetail;
+
+
+
+
+                    chan = Session["chan"] as Contract;
+
+
+
+                    if (chan.EmployeeDetails.Count > 0)
+                    {
+                        ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
+                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                        ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
+                        txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
+                        txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
+                        txtClass.Text = chan.EmployeeDetails[0].Class;
+                        txtHoursPerWeek.Text = chan.EmployeeDetails[0].HoursPerWeek;
+                        txtBaseCount.Text = chan.EmployeeDetails[0].BaseCountry;
+                        txtBaseCity.Text = chan.EmployeeDetails[0].BaseCity;
+                        txtBaseState.Text = chan.EmployeeDetails[0].BaseState;
+                        txtCountryTeam.Text = chan.EmployeeDetails[0].CountryTeam;
+                        ddlSuperVisor.SelectedValue = chan.EmployeeDetails[0].Supervisor.ToString();
+                        txtEffectDate.Text = chan.EmployeeDetails[0].EffectiveDateOfChange.ToShortDateString();
+                        pnlEMPHIST_ModalPopupExtender.Show();
+                    }
+
+
+
+                }
 
             }
 
