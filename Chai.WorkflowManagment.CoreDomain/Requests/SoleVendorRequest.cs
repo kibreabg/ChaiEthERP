@@ -29,7 +29,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string ProgressStatus { get; set; }
         public virtual AppUser AppUser { get; set; }
         public virtual PurchaseRequest PurchaseRequest { get; set; }
-        public virtual PurchaseOrderSoleVendor PurchaseOrderSoleVendors { get; set; }
+        public virtual PurchaseOrderSoleVendor PurchaseOrderSoleVendor { get; set; }
         public virtual IList<SoleVendorRequestDetail> SoleVendorRequestDetails { get; set; }
         public virtual IList<SoleVendorRequestStatus> SoleVendorRequestStatuses { get; set; }
         public virtual IList<SVRAttachment> SVRAttachments { get; set; }

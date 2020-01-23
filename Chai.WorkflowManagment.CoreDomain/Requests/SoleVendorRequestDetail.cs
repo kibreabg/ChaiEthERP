@@ -26,7 +26,9 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public int Qty { get; set; }
         public string SoleVendorJustificationType { get; set; }
         public decimal UnitCost { get; set; }
-        public decimal TotalCost { get; set; } 
+        public decimal TotalCost { get; set; }
+        public decimal VAT { get; set; }
+        public decimal GrandTotal { get; set; }
         public string POStatus { get; set; }       
 
     }

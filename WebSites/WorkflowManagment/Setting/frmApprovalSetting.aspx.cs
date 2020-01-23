@@ -354,6 +354,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 approvalLevel.EmployeePosition = _presenter.GetEmployeePosition(Convert.ToInt32(ddlPositionName.SelectedValue));
                 DropDownList ddlWill = e.Item.FindControl("ddlWill") as DropDownList;
                 approvalLevel.Will = ddlWill.SelectedValue;
+                approvalLevel.WorkflowLevel = e.Item.ItemIndex + 1;
                 // approvalLevel.ApprovalSetting = _approvalsetting;
                 _presenter.SaveOrUpdateApprovalSetting(_presenter.CurrentApprovalSetting);
                 Master.ShowMessage(new AppMessage("Approval Level  Updated successfully.", RMessageType.Info));

@@ -163,12 +163,12 @@
                                                         <Columns>
                                                             <asp:TemplateColumn HeaderText="Account Code">
                                                                 <ItemTemplate>
-                                                                    <asp:TextBox ID="txtAccCode" runat="server" CssClass="form-control" Enabled="false" Text='<%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountCode")%>'></asp:TextBox>
+                                                                    <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountCode")%>
                                                                 </ItemTemplate>
                                                             </asp:TemplateColumn>
                                                             <asp:TemplateColumn HeaderText="Item Description">
                                                                 <ItemTemplate>
-                                                                    <asp:TextBox ID="txtItem" runat="server" CssClass="form-control" Enabled="false" Text='<%# DataBinder.Eval(Container.DataItem, "ItemDescription")%>'></asp:TextBox>
+                                                                    <%# DataBinder.Eval(Container.DataItem, "ItemDescription")%>
                                                                 </ItemTemplate>
                                                             </asp:TemplateColumn>
                                                             <asp:TemplateColumn HeaderText="Supplier">
@@ -218,7 +218,7 @@
                                                             </asp:TemplateColumn>
                                                             <asp:TemplateColumn HeaderText="Quantity">
                                                                 <ItemTemplate>
-                                                                    <asp:TextBox ID="txtQuantity" runat="server" CssClass="form-control" Enabled="false" Text='<%# DataBinder.Eval(Container.DataItem, "Qty")%>'></asp:TextBox>
+                                                                    <%# DataBinder.Eval(Container.DataItem, "Qty")%>
                                                                 </ItemTemplate>
                                                             </asp:TemplateColumn>
                                                             <asp:TemplateColumn HeaderText="Unit Cost">
@@ -237,6 +237,22 @@
                                                                 </ItemTemplate>
                                                                 <EditItemTemplate>
                                                                     <asp:TextBox ID="txtEdtTotalCost" runat="server" Enabled="false" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "TotalCost")%>'></asp:TextBox>
+                                                                </EditItemTemplate>
+                                                            </asp:TemplateColumn>
+                                                            <asp:TemplateColumn HeaderText="VAT">
+                                                                <ItemTemplate>
+                                                                    <%# DataBinder.Eval(Container.DataItem, "VAT")%>
+                                                                </ItemTemplate>
+                                                                <EditItemTemplate>
+                                                                    <asp:TextBox ID="txtEdtVAT" runat="server" Enabled="false" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "VAT")%>'></asp:TextBox>
+                                                                </EditItemTemplate>
+                                                            </asp:TemplateColumn>
+                                                            <asp:TemplateColumn HeaderText="Grand Total">
+                                                                <ItemTemplate>
+                                                                    <%# DataBinder.Eval(Container.DataItem, "GrandTotal")%>
+                                                                </ItemTemplate>
+                                                                <EditItemTemplate>
+                                                                    <asp:TextBox ID="txtEdtGrandTotal" runat="server" Enabled="false" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "GrandTotal")%>'></asp:TextBox>
                                                                 </EditItemTemplate>
                                                             </asp:TemplateColumn>
                                                             <asp:TemplateColumn HeaderText="Actions">

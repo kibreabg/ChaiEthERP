@@ -306,6 +306,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 _presenter.OnViewLoaded();
                 btnSave.Visible = true;
                 pnlInfo.Visible = false;
+                _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails = new List<SoleVendorRequestDetail>();
 
                 foreach (GridViewRow item in grvDetails.Rows)
                 {
@@ -324,7 +325,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                                 svDetail.PRDetailID = PRDetail.Id;
                                 svDetail.ItemAccount = PRDetail.ItemAccount;
                                 svDetail.ItemDescription = PRDetail.Item;
-                                svDetail.Qty = PRDetail.Qty;
+                                svDetail.Qty = PRDetail.ApprovedQuantity; //Make sure the approved quanity is the one to be used for purchase
                                 svDetail.Project = PRDetail.Project;
                                 svDetail.Grant = PRDetail.Grant;
                                 _presenter.CurrentSoleVendorRequest.SoleVendorRequestDetails.Add(svDetail);
@@ -441,6 +442,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 svDetail.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
                 TextBox txtTotalCost = e.Item.FindControl("txtEdtTotalCost") as TextBox;
                 svDetail.TotalCost = Convert.ToInt32(svDetail.Qty) * Convert.ToDecimal(txtUnitCost.Text);
+                TextBox txtEdtVAT = e.Item.FindControl("txtEdtVAT") as TextBox;
+                svDetail.VAT = Convert.ToDecimal(svDetail.TotalCost) * Convert.ToDecimal(0.15);
+                TextBox txtEdtGrandTotal = e.Item.FindControl("txtEdtGrandTotal") as TextBox;
+                svDetail.GrandTotal = svDetail.VAT + svDetail.TotalCost;
+
                 svDetail.POStatus = "InProgress";
 
                 //Change the status of the Purchase Request Detail so that the SoleVendor Item assosiated with it won't appear in the request page

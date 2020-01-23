@@ -39,7 +39,7 @@ namespace Chai.WorkflowManagment.Modules.Approval
         public AppUser Approver(int position)
         {
             return _workspace.Single<AppUser>(x => x.EmployeePosition.Id == position);
-        }
+        }     
         public AppUser GetSuperviser(int superviser)
         {
             return _workspace.Single<AppUser>(x => x.Id == superviser);
@@ -414,6 +414,10 @@ namespace Chai.WorkflowManagment.Modules.Approval
                 return _workspace.Last<PurchaseOrderSoleVendor>().Id;
             }
             else { return 0; }
+        }
+        public PurchaseOrderSoleVendor GetPurchaseOrderSoleVendor(int purchaseOrderSoleVendorId)
+        {
+            return _workspace.Single<PurchaseOrderSoleVendor>(x => x.Id == purchaseOrderSoleVendorId);
         }
         #endregion
         #region Employee

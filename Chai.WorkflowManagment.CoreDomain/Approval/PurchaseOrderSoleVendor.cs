@@ -2,6 +2,7 @@
 using Chai.WorkflowManagment.CoreDomain.Setting;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Chai.WorkflowManagment.CoreDomain.Approval
 {
@@ -25,6 +26,8 @@ namespace Chai.WorkflowManagment.CoreDomain.Approval
         public DateTime DeliveryDate { get; set; }
         public string DeliveryLocation { get; set; }
         public string DeliveryBy { get; set; }
+        [Required]
+        public virtual SoleVendorRequest SoleVendorRequest { get; set; }
         public virtual SoleVendorSupplier SoleVendorSupplier { get; set; }
         public virtual IList<PurchaseOrderSoleVendorDetail> PurchaseOrderSoleVendorDetails { get; set; }
 
