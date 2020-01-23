@@ -306,6 +306,10 @@ namespace Chai.WorkflowManagment.Modules.Approval
             return _workspace.SqlQuery<BidAnalysisRequest>(filterExpression).ToList();
 
         }
+        public Bidder GetBidderbyId(int Id)
+        {
+            return _workspace.Single<Bidder>(x => x.Id == Id);
+        }
         public IList<BidAnalysisRequest> ListBidReqInProgressById(int ReqId)
         {
             string filterExpression = "";
@@ -347,6 +351,8 @@ namespace Chai.WorkflowManagment.Modules.Approval
                 return _workspace.Last<PurchaseOrder>().Id;
             }
             else { return 0; }
+
+          
         }
         #endregion
         #region PurchaseApproval

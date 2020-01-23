@@ -924,8 +924,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             ItemBid.Bidders.Add(bidder);
 
 
-
-                                dgItemDetail.EditItemIndex = -1;
+                            dgItemDetail.EditItemIndex = -1;
 
                                 BindItemdetailGrid(bidder.BidderItemDetail);
 
@@ -977,9 +976,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                             ItemBid.Bidders.Add(bidder);
 
-
-
-                                dgItemDetail.EditItemIndex = -1;
+                          
+                            dgItemDetail.EditItemIndex = -1;
 
                                 BindItemdetailGrid(bidder.BidderItemDetail);
 
@@ -1030,9 +1028,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                             ItemBid.Bidders.Add(bidder);
 
+                          
 
-
-                                dgItemDetail.EditItemIndex = -1;
+                            dgItemDetail.EditItemIndex = -1;
 
                                 BindItemdetailGrid(bidder.BidderItemDetail);
 
@@ -1083,7 +1081,22 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                             ItemBid.Bidders.Add(bidder);
 
+                            if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails.Count > 0)
+                            {
 
+                                foreach (BidderItemDetail detail in _presenter.CurrentBidAnalysisRequest.BidderItemDetails)
+                                {
+
+                                    foreach (Bidder bidderdetail in detail.Bidders)
+                                    {
+                                        if (bidderdetail.Rank == 1)
+                                        {
+                                            totalamaount = totalamaount + bidderdetail.TotalCost;
+                                        }
+                                    }
+
+                                }
+                            }
 
                             dgItemDetail.EditItemIndex = -1;
 
@@ -1134,7 +1147,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
 
                             ItemBid.Bidders.Add(bidder);
-
 
 
                             dgItemDetail.EditItemIndex = -1;
@@ -1188,7 +1200,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                             ItemBid.Bidders.Add(bidder);
 
-
+                          
 
                             dgItemDetail.EditItemIndex = -1;
 
@@ -1228,9 +1240,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                         ItemBid.Bidders.Add(bidder);
 
+                       
 
-
-                                dgItemDetail.EditItemIndex = -1;
+                        dgItemDetail.EditItemIndex = -1;
 
                                 BindItemdetailGrid(bidder.BidderItemDetail);
 
@@ -1238,29 +1250,26 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         Master.ShowMessage(new AppMessage("Bidder Item Successfully Added", Chai.WorkflowManagment.Enums.RMessageType.Info));
 
                     }
-                    //if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails.Count > 0)
-                    //{
+                 
 
-                    //    foreach (BidderItemDetail detail in _presenter.CurrentBidAnalysisRequest.BidderItemDetails)
-                    //    {
+                    if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails.Count > 0)
+                    {
 
-                    //        foreach (Bidder bidderdetail in detail.Bidders)
-                    //        {
-                    //            if (bidderdetail.Rank == 1)
-                    //            {
-                    //                totalamaount = totalamaount + bidderdetail.TotalCost;
-                    //            }
-                    //        }
+                        foreach (BidderItemDetail detail in _presenter.CurrentBidAnalysisRequest.BidderItemDetails)
+                        {
 
-                    //    }
-                    //}
+                            foreach (Bidder bidderdetail in detail.Bidders)
+                            {
+                                if (bidderdetail.Rank == 1)
+                                {
+                                    totalamaount = totalamaount + bidderdetail.TotalCost;
+                                }
+                            }
 
-
-                    //     txtTotal.Text = totalamaount.ToString();
-
+                        }
+                    }
 
 
-                  
                 }
                 catch (Exception ex)
                 {
@@ -1609,22 +1618,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
 
 
-                if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails.Count > 0)
-                {
-
-                    foreach (BidderItemDetail detail in _presenter.CurrentBidAnalysisRequest.BidderItemDetails)
-                    {
-
-                        foreach (Bidder bidderdetail in detail.Bidders)
-                        {
-                            if (bidderdetail.Rank == 1)
-                            {
-                                totalamaount = totalamaount + bidderdetail.TotalCost;
-                            }
-                        }
-
-                    }
-                }
+             
 
 
                 //txtTotal.Text = totalamaount.ToString();
@@ -1811,7 +1805,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     if (_presenter.CurrentBidAnalysisRequest.BAAttachments.Count != 0)
 
                     {
-
+                        
                         foreach (BidderItemDetail detail in _presenter.CurrentBidAnalysisRequest.GetBidderItemDetailByPRDetailId())
                         {
                             if (detail.Bidders.Count != 0)
@@ -1820,14 +1814,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                                 PurchaseRequestDetail PD = _presenter.GetPurchaseRequestbyPuID(detail.PRDetailId);
                                 PD.Id = detail.PRDetailId;
-                                
+                                if (PD.BidAnalysisRequestStatus != "Pending")
+                                {
 
-                           
-                        
 
-                                int PRID = Convert.ToInt32(Session["prId"]);
-                                _presenter.SaveOrUpdateBidAnalysisRequest(PRID);
-                                PD.BidAnalysisRequestStatus = "Pending";
+
+
+                                    int PRID = Convert.ToInt32(Session["prId"]);
+                                    _presenter.SaveOrUpdateBidAnalysisRequest(PRID);
+                                    PD.BidAnalysisRequestStatus = "Pending";
+                                }
 
                             }
                             else

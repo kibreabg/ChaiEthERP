@@ -507,14 +507,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     e.Row.Cells[1].Text = _presenter.GetUser(pr.AppUser.Id).FullName;
                 }
 
-                if (e.Row.RowType == DataControlRowType.DataRow)
-                {
-                    e.Row.Cells[5].Text = _presenter.GetUser(pr.PurchaseRequest.Requester).FullName;
-                }
-                if (e.Row.RowType == DataControlRowType.DataRow)
-                {
-                    e.Row.Cells[6].Text = _presenter.GetUser(pr.PurchaseRequest.CurrentApprover).FullName;
-                }
+                //    //if (e.Row.RowType == DataControlRowType.DataRow)
+                //    //{
+                //    //    e.Row.Cells[5].Text = _presenter.GetUser(pr.PurchaseRequest.Requester).FullName;
+                //    //}
+                //    //if (e.Row.RowType == DataControlRowType.DataRow)
+                //    //{
+                //    //    e.Row.Cells[6].Text = _presenter.GetUser(pr.PurchaseRequest.CurrentApprover).FullName;
+                //    //}
             }
         }
         protected void grvPurchaseRequestList_PageIndexChanging(object sender, GridViewPageEventArgs e)
@@ -619,6 +619,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 foreach (Bidder biderdetail in bider.Bidders)
                 {
+
                     biddetail.Add(biderdetail);
                 }
 
