@@ -61,8 +61,18 @@ namespace Chai.WorkflowManagment.CoreDomain.Approval
             }
             return null;
         }
+        
+        public  IList<PurchaseOrderDetail> GetPurchaseOrderDetailByStatus()
+        {
+            IList<PurchaseOrderDetail> PODs = new List<PurchaseOrderDetail>();
+            foreach (PurchaseOrderDetail PODetail in PurchaseOrderDetails)
+            {
+                if (PODetail.Status== "Open")
+                    PODs.Add(PODetail);
 
-
+            }
+            return PODs;
+        }
         public virtual void RemovePurchaseOrderDetail(int Id)
         {
 
@@ -74,7 +84,20 @@ namespace Chai.WorkflowManagment.CoreDomain.Approval
             }
 
         }
+        public virtual void RemovePurchaseOrderAll()
+        {
 
+            foreach (PurchaseOrderDetail detail in PurchaseOrderDetails)
+            {
+                
+                    PurchaseOrderDetails.Remove(detail);
+                break;
+            }
+
+        }
+
+
+      
         #endregion
 
     }

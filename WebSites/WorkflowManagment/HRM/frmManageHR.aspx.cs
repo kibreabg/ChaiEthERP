@@ -386,7 +386,10 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         private void BindEmpDetail(Contract con)
         {
             chan = Session["chan"] as Contract;
-            chan.EmployeeDetails[0].Contract = _presenter.GetContract(chan.Id);
+            if (chan.EmployeeDetails.Count > 0)
+            {
+                chan.EmployeeDetails[0].Contract = _presenter.GetContract(chan.Id);
+            }
             dgChange.DataSource = chan.EmployeeDetails;
             dgChange.DataBind();
         }
@@ -1029,12 +1032,11 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             if (e.CommandName == "History")
             {
                 int Row = Convert.ToInt32(e.CommandArgument);
-                if (Row == 1)
-                {
+                if (Row == 0) {
 
-                    int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 1].Value);
+                    int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row].Value);
                     if (TEMPChid > 0)
-                        Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
+                        Session["chan"] = _presenter.CurrentEmployee.GetContract(TEMPChid);
                     else
                         Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
 
@@ -1049,7 +1051,62 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                         hfDetailId.Value = dgChange.SelectedRow.DataItemIndex.ToString();
                     }
                     BindEmpDetail(chan);
-                   ;
+                    ;
+                    EmployeeDetail empdetail;
+
+
+
+                    chan = Session["chan"] as Contract;
+
+
+                    if (chan.EmployeeDetails.Count == 0)
+                    {
+
+                        BindEmpDetail(chan);
+
+                        ClearEmpDetailFormFields();
+                       
+                        pnlEMPHIST_ModalPopupExtender.Show();
+                    }
+                    else if (chan.EmployeeDetails.Count >0)
+                        {
+                        ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
+                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                        ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
+                        txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
+                        txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
+                        txtClass.Text = chan.EmployeeDetails[0].Class;
+                        txtHoursPerWeek.Text = chan.EmployeeDetails[0].HoursPerWeek;
+                        txtBaseCount.Text = chan.EmployeeDetails[0].BaseCountry;
+                        txtBaseCity.Text = chan.EmployeeDetails[0].BaseCity;
+                        txtBaseState.Text = chan.EmployeeDetails[0].BaseState;
+                        txtCountryTeam.Text = chan.EmployeeDetails[0].CountryTeam;
+                        ddlSuperVisor.SelectedValue = chan.EmployeeDetails[0].Supervisor.ToString();
+                        txtEffectDate.Text = chan.EmployeeDetails[0].EffectiveDateOfChange.ToShortDateString();
+                        pnlEMPHIST_ModalPopupExtender.Show();
+                    }
+                }
+                else if (Row == 1)
+                {
+
+                    int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 1].Value);
+                    if (TEMPChid > 0)
+                        Session["chan"] = _presenter.CurrentEmployee.GetContract(TEMPChid);
+                    else
+                        Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
+
+
+
+                    if (_presenter.CurrentEmployee.Id > 0)
+                    {
+                        hfDetailId.Value = TEMPChid.ToString();
+                    }
+                    else
+                    {
+                        hfDetailId.Value = dgChange.SelectedRow.DataItemIndex.ToString();
+                    }
+                    BindEmpDetail(chan);
+                    
                     EmployeeDetail empdetail;
 
 
@@ -1128,7 +1185,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 {
                     int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 3].Value);
                     if (TEMPChid > 0)
-                        Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
+                        Session["chan"] = _presenter.CurrentEmployee.GetContract(TEMPChid);
                     else
                         Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
 
@@ -1175,7 +1232,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 {
                     int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 4].Value);
                     if (TEMPChid > 0)
-                        Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
+                        Session["chan"] = _presenter.CurrentEmployee.GetContract(TEMPChid);
                     else
                         Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
 
@@ -1221,7 +1278,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 {
                     int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 5].Value);
                     if (TEMPChid > 0)
-                        Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
+                        Session["chan"] = _presenter.CurrentEmployee.GetContract(TEMPChid);
                     else
                         Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
 
@@ -1269,7 +1326,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 {
                     int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 6].Value);
                     if (TEMPChid > 0)
-                        Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
+                        Session["chan"] = _presenter.CurrentEmployee.GetContract(TEMPChid);
                     else
                         Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
 
@@ -1316,7 +1373,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 {
                     int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 7].Value);
                     if (TEMPChid > 0)
-                        Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
+                        Session["chan"] = _presenter.CurrentEmployee.GetContract(TEMPChid);
                     else
                         Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
 
@@ -1363,7 +1420,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 {
                     int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 8].Value);
                     if (TEMPChid > 0)
-                        Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
+                        Session["chan"] = _presenter.CurrentEmployee.GetContract(TEMPChid);
                     else
                         Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
 
@@ -1410,7 +1467,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 {
                     int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 9].Value);
                     if (TEMPChid > 0)
-                        Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
+                        Session["chan"] = _presenter.CurrentEmployee.GetContract(TEMPChid);
                     else
                         Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
 
@@ -1457,7 +1514,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 {
                     int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 10].Value);
                     if (TEMPChid > 0)
-                        Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
+                        Session["chan"] = _presenter.CurrentEmployee.GetContract(TEMPChid);
                     else
                         Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
 
@@ -1504,7 +1561,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 {
                     int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 11].Value);
                     if (TEMPChid > 0)
-                        Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
+                        Session["chan"] = _presenter.CurrentEmployee.GetContract(TEMPChid);
                     else
                         Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
 
@@ -1551,7 +1608,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 {
                     int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row - 12].Value);
                     if (TEMPChid > 0)
-                        Session["chan"] = _presenter.CurrentEmployee.GetMyPrevContract(TEMPChid);
+                        Session["chan"] = _presenter.CurrentEmployee.GetContract(TEMPChid);
                     else
                         Session["chan"] = _presenter.CurrentEmployee.Contracts[dgChange.SelectedRow.DataItemIndex];
 
