@@ -527,6 +527,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     Detail.Item = txtFItem.Text;
                     TextBox txtFQty = e.Item.FindControl("txtFQty") as TextBox;
                     Detail.Qty = Convert.ToInt32(txtFQty.Text);
+                    Detail.ApprovedQuantity = Convert.ToInt32(txtFQty.Text);
                     DropDownList ddlFPurposeOfPurchase = e.Item.FindControl("ddlFPurposeOfPurchase") as DropDownList;
                     Detail.PurposeOfPurchase = ddlFPurposeOfPurchase.SelectedValue;
                     DropDownList ddlFUnitOfMeasurment = e.Item.FindControl("ddlFUnitOfMeasurment") as DropDownList;
@@ -642,6 +643,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 Detail.Item = txtItem.Text;
                 TextBox txtQty = e.Item.FindControl("txtQty") as TextBox;
                 Detail.Qty = Convert.ToInt32(txtQty.Text);
+                Detail.ApprovedQuantity = Convert.ToInt32(txtQty.Text);
                 DropDownList ddlPurposeOfPurchase = e.Item.FindControl("ddlPurposeOfPurchase") as DropDownList;
                 Detail.PurposeOfPurchase = ddlPurposeOfPurchase.SelectedValue;
                 DropDownList ddlUnitOfMeasurment = e.Item.FindControl("ddlUnitOfMeasurment") as DropDownList;
