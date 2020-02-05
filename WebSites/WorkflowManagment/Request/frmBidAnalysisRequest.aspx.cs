@@ -96,7 +96,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                  BindBidItem();
 
                BindItemdetailGrid(ItemBid);
-                  BindBidders(ItemBid);
+                //  BindBidders(ItemBid);
                                          
 
             }
@@ -315,9 +315,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         private void BindItemdetailGrid(BidderItemDetail Tad)
         {
             ItemBid = Session["bidditem"] as BidderItemDetail;
-            dgBidders.DataSource = ItemBid.Bidders;
-            dgBidders.DataBind();
-            
+            if (ItemBid != null)
+            {
+                dgBidders.DataSource = ItemBid.Bidders;
+                dgBidders.DataBind();
+            }
+
+
         }
 
         private void BindBidder(BidderItemDetail Bid)
@@ -1640,10 +1644,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void BindBidItem()
         {
-
-            ItemBid = Session["bidditem"] as BidderItemDetail;
-            dgBidders.DataSource = ItemBid.Bidders;
-            dgBidders.DataBind();
+            if (ItemBid != null)
+            {
+                ItemBid = Session["bidditem"] as BidderItemDetail;
+                dgBidders.DataSource = ItemBid.Bidders;
+                dgBidders.DataBind();
+            }
             
         }
       
