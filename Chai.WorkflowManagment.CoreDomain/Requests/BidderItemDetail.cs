@@ -24,6 +24,8 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public int Qty { get; set; }
         public decimal UnitCost { get; set; }
         public decimal TotalCost { get; set; }
+
+        public int PRDetailId { get; set; }
         public virtual Project Project { get; set; }
         public virtual Grant Grant { get; set; }
         public virtual IList<Bidder> Bidders { get; set; }
@@ -38,6 +40,18 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
             foreach (Bidder bidder in Bidders)
             {
                 if (bidder.Rank == 1)
+                    return bidder;
+
+            }
+            return null;
+        }
+
+        public virtual Bidder GetLastBidder()
+        {
+
+            foreach (Bidder bidder in Bidders)
+            {
+                Bidders.Last<Bidder>();
                     return bidder;
 
             }
@@ -59,6 +73,17 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
             foreach (Bidder BID in Bidders)
             {
                 if (BID.BidderItemDetail.Id == itemId)
+                    BIDs.Add(BID);
+            }
+            return BIDs;
+        }
+
+        public virtual IList<Bidder> GetBidders()
+        {
+            IList<Bidder> BIDs = new List<Bidder>();
+            foreach (Bidder BID in Bidders)
+            {
+               
                     BIDs.Add(BID);
             }
             return BIDs;

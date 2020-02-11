@@ -39,7 +39,7 @@ namespace Chai.WorkflowManagment.Modules.Approval
         public AppUser Approver(int position)
         {
             return _workspace.Single<AppUser>(x => x.EmployeePosition.Id == position);
-        }
+        }     
         public AppUser GetSuperviser(int superviser)
         {
             return _workspace.Single<AppUser>(x => x.Id == superviser);
@@ -306,6 +306,10 @@ namespace Chai.WorkflowManagment.Modules.Approval
             return _workspace.SqlQuery<BidAnalysisRequest>(filterExpression).ToList();
 
         }
+        public Bidder GetBidderbyId(int Id)
+        {
+            return _workspace.Single<Bidder>(x => x.Id == Id);
+        }
         public IList<BidAnalysisRequest> ListBidReqInProgressById(int ReqId)
         {
             string filterExpression = "";
@@ -332,6 +336,10 @@ namespace Chai.WorkflowManagment.Modules.Approval
             return _workspace.SqlQuery<Bidder>(filterExpression).ToList();
 
         }
+        public PurchaseRequestDetail GetPurchaseRequestbyPuID(int Id)
+        {
+            return _workspace.Single<PurchaseRequestDetail>(x => x.Id == Id, y => y.PurchaseRequest);
+        }
         public BAAttachment GetBAAttachment(int attachmentId)
         {
             return _workspace.Single<BAAttachment>(x => x.Id == attachmentId);
@@ -343,6 +351,8 @@ namespace Chai.WorkflowManagment.Modules.Approval
                 return _workspace.Last<PurchaseOrder>().Id;
             }
             else { return 0; }
+
+          
         }
         #endregion
         #region PurchaseApproval
@@ -386,13 +396,13 @@ namespace Chai.WorkflowManagment.Modules.Approval
             string filterExpression = "";
             if (ProgressStatus != "Completed")
             {
-                filterExpression = " SELECT  *  FROM SoleVendorRequests INNER JOIN SoleVendorRequestDetails on SoleVendorRequests.Id=SoleVendorRequestDetails.SoleVendorRequest_Id  INNER JOIN AppUsers on AppUsers.Id=SoleVendorRequests.CurrentApprover  Left JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When SoleVendorRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When SoleVendorRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND SoleVendorRequests.ProgressStatus='" + ProgressStatus + "' " +
-                                       " AND  ((SoleVendorRequests.CurrentApprover = '" + CurrentUser().Id + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) order by SoleVendorRequests.Id DESC ";
+                filterExpression = " SELECT * FROM SoleVendorRequests INNER JOIN AppUsers ON AppUsers.Id = SoleVendorRequests.CurrentApprover Left JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When SoleVendorRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When SoleVendorRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND SoleVendorRequests.ProgressStatus='" + ProgressStatus + "' " +
+                                       " AND ((SoleVendorRequests.CurrentApprover = '" + CurrentUser().Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) order by SoleVendorRequests.Id DESC ";
             }
             else
             {
-                filterExpression = " SELECT  *  FROM SoleVendorRequests INNER JOIN SoleVendorRequestDetails on SoleVendorRequests.Id=SoleVendorRequestDetails.SoleVendorRequest_Id inner join AppUsers on AppUsers.Id=SoleVendorRequests.CurrentApprover INNER JOIN SoleVendorRequestStatuses on SoleVendorRequestStatuses.SoleVendorRequest_Id = SoleVendorRequests.Id Left JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When SoleVendorRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When SoleVendorRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND SoleVendorRequests.ProgressStatus='" + ProgressStatus + "'  " +
-                                          " AND  ( SoleVendorRequestStatuses.ApprovalStatus Is not null AND (SoleVendorRequestStatuses.Approver = '" + CurrentUser().Id + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) order by SoleVendorRequests.Id DESC ";
+                filterExpression = " SELECT * FROM SoleVendorRequests INNER JOIN AppUsers ON AppUsers.Id = SoleVendorRequests.CurrentApprover INNER JOIN SoleVendorRequestStatuses ON SoleVendorRequestStatuses.SoleVendorRequest_Id = SoleVendorRequests.Id LEFT JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When SoleVendorRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When SoleVendorRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND SoleVendorRequests.ProgressStatus='" + ProgressStatus + "'  " +
+                                          " AND (SoleVendorRequestStatuses.ApprovalStatus IS NOT NULL AND (SoleVendorRequestStatuses.Approver = '" + CurrentUser().Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) ORDER BY SoleVendorRequests.Id DESC ";
             }
 
             return _workspace.SqlQuery<SoleVendorRequest>(filterExpression).ToList();
@@ -404,6 +414,10 @@ namespace Chai.WorkflowManagment.Modules.Approval
                 return _workspace.Last<PurchaseOrderSoleVendor>().Id;
             }
             else { return 0; }
+        }
+        public PurchaseOrderSoleVendor GetPurchaseOrderSoleVendor(int purchaseOrderSoleVendorId)
+        {
+            return _workspace.Single<PurchaseOrderSoleVendor>(x => x.Id == purchaseOrderSoleVendorId);
         }
         #endregion
         #region Employee

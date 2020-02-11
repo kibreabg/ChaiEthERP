@@ -88,7 +88,11 @@ namespace Chai.WorkflowManagment.Modules.Setting
         public IList<ItemAccount> GetItemAccounts()
         {
             return WorkspaceFactory.CreateReadOnly().Query<ItemAccount>(x => x.Status == "Active").OrderBy(x => x.AccountName).ToList();
-        }       
+        }
+        public IList<ItemAccount> GetAdvanceAccount()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<ItemAccount>(x => x.AccountName == "Account Receivable").ToList();
+        }
         public ItemAccount GetItemAccount(int ItemAccountId)
         {
             return _workspace.Single<ItemAccount>(x => x.Id == ItemAccountId);
@@ -97,7 +101,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             string filterExpression = "";
 
-            filterExpression = "SELECT  *  FROM ItemAccounts Where Status = 'Active' And 1 = Case when '" + ItemAccountName + "' = '' Then 1 When ItemAccounts.AccountName = '" + ItemAccountName + "'  Then 1 END AND 1 = Case when '" + ItemAccountCode + "' = '' Then 1 When ItemAccounts.AccountCode = '" + ItemAccountCode + "'  Then 1 END  ";
+            filterExpression = "SELECT * FROM ItemAccounts Where Status = 'Active' And 1 = Case when '" + ItemAccountName + "' = '' Then 1 When ItemAccounts.AccountName = '" + ItemAccountName + "'  Then 1 END AND 1 = Case when '" + ItemAccountCode + "' = '' Then 1 When ItemAccounts.AccountCode = '" + ItemAccountCode + "'  Then 1 END  ";
 
             return _workspace.SqlQuery<ItemAccount>(filterExpression).ToList();
 
@@ -143,7 +147,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             string filterExpression = "";
 
-            filterExpression = "SELECT  *  FROM Grants Where Status = 'Active' AND 1 = Case when '" + GrantName + "' = '' Then 1 When Grants.GrantName = '" + GrantName + "'  Then 1 END AND 1 = Case when '" + GrantCode + "' = '' Then 1 When Grants.GrantCode = '" + GrantCode + "'  Then 1 END  ";
+            filterExpression = "SELECT * FROM Grants Where Status = 'Active' AND 1 = Case when '" + GrantName + "' = '' Then 1 When Grants.GrantName = '" + GrantName + "'  Then 1 END AND 1 = Case when '" + GrantCode + "' = '' Then 1 When Grants.GrantCode = '" + GrantCode + "'  Then 1 END  ";
 
             return _workspace.SqlQuery<Grant>(filterExpression).ToList();
 

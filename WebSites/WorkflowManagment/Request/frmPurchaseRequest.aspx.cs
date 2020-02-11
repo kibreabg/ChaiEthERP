@@ -467,7 +467,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void dgPurchaseRequestDetail_CancelCommand(object source, DataGridCommandEventArgs e)
         {
-            this.dgPurchaseRequestDetail.EditItemIndex = -1;
+            dgPurchaseRequestDetail.EditItemIndex = -1;
             BindPurchaseRequestDetails();
         }
         protected void dgPurchaseRequestDetail_DeleteCommand(object source, DataGridCommandEventArgs e)
@@ -479,7 +479,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (PRDId > 0)
                 prd = _presenter.CurrentPurchaseRequest.GetPurchaseRequestDetail(PRDId);
             else
-                prd = (PurchaseRequestDetail)_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.ItemIndex];
+                prd = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.ItemIndex];
             try
             {
                 if (PRDId > 0)
@@ -498,11 +498,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
                 BindPurchaseRequestDetails();
 
-                Master.ShowMessage(new AppMessage("Purchase Request Detail was Removed Successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Purchase Request Detail was Removed Successfully", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to delete Purchase Request Detail. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to delete Purchase Request Detail. " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         protected void dgPurchaseRequestDetail_EditCommand(object source, DataGridCommandEventArgs e)
@@ -525,6 +527,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     Detail.Item = txtFItem.Text;
                     TextBox txtFQty = e.Item.FindControl("txtFQty") as TextBox;
                     Detail.Qty = Convert.ToInt32(txtFQty.Text);
+                    Detail.ApprovedQuantity = Convert.ToInt32(txtFQty.Text);
                     DropDownList ddlFPurposeOfPurchase = e.Item.FindControl("ddlFPurposeOfPurchase") as DropDownList;
                     Detail.PurposeOfPurchase = ddlFPurposeOfPurchase.SelectedValue;
                     DropDownList ddlFUnitOfMeasurment = e.Item.FindControl("ddlFUnitOfMeasurment") as DropDownList;
@@ -562,6 +565,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 catch (Exception ex)
                 {
                     Master.ShowMessage(new AppMessage("Error: Unable to Add Purchase Request Detail. " + ex.Message, RMessageType.Error));
+                    ExceptionUtility.LogException(ex, ex.Source);
+                    ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
                 }
             }
         }
@@ -585,7 +590,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     if (ddlItemAccount != null)
                     {
                         BindAccount(ddlItemAccount);
-                        if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].ItemAccount.Id != null)
+                        if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].ItemAccount != null)
                         {
                             ListItem liI = ddlItemAccount.Items.FindByValue(_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].ItemAccount.Id.ToString());
                             if (liI != null)
@@ -609,7 +614,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     if (ddlGrant != null)
                     {
                         BindGrant(ddlGrant, Convert.ToInt32(ddlProject.SelectedValue));
-                        if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].Grant.Id != null)
+                        if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].Grant != null)
                         {
                             ListItem liI = ddlGrant.Items.FindByValue(_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].Grant.Id.ToString());
                             if (liI != null)
@@ -638,6 +643,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 Detail.Item = txtItem.Text;
                 TextBox txtQty = e.Item.FindControl("txtQty") as TextBox;
                 Detail.Qty = Convert.ToInt32(txtQty.Text);
+                Detail.ApprovedQuantity = Convert.ToInt32(txtQty.Text);
                 DropDownList ddlPurposeOfPurchase = e.Item.FindControl("ddlPurposeOfPurchase") as DropDownList;
                 Detail.PurposeOfPurchase = ddlPurposeOfPurchase.SelectedValue;
                 DropDownList ddlUnitOfMeasurment = e.Item.FindControl("ddlUnitOfMeasurment") as DropDownList;
@@ -675,11 +681,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             catch (Exception ex)
             {
                 Master.ShowMessage(new AppMessage("Error: Unable to Update Purchase Request Detail. " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
-
-
-
-
         }
         #endregion
     }

@@ -70,6 +70,28 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             }
             return null;
         }
+
+       
+
+       public virtual Contract GetActiveContractForEmp()
+        {
+
+            foreach (Contract contt in Contracts)
+            {
+                if (contt.Status == "Active")
+                    return contt;
+
+            }
+            return null;
+        }
+
+        public virtual Contract GetMyPrevContract(int Id)
+        {
+            Contract con = Contracts.Last(y => y.Status=="In Active");
+           
+                return con;
+           
+        }
         public virtual Contract GetPreviousContract()
         {
             if (Contracts.Count >1)

@@ -117,6 +117,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _controller.GetBiddersByBidReq(id);
         }
+        public Bidder GetBidderbyId(int id)
+        {
+            return _controller.GetBidderbyId(id);
+        }
+
+        
         public BidAnalysisRequest GetPurchaseRequestById(int id)
          {
              return _controller.GetBidAnalysisRequest(id);

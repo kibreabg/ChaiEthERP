@@ -98,11 +98,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             for (int i = 0; i < s.Length; i++)
             {
-                if (GetWillStatus().Substring(0, 3) == s[i].Substring(0, 3))
+                if (GetWillStatus() != "")
                 {
-                    ddlApprovalStatus.Items.Add(new ListItem(s[i].Replace('_', ' '), s[i].Replace('_', ' ')));
+                    if (GetWillStatus().Substring(0, 3) == s[i].Substring(0, 3))
+                    {
+                        ddlApprovalStatus.Items.Add(new ListItem(s[i].Replace('_', ' '), s[i].Replace('_', ' ')));
+                    }
                 }
-
             }
             if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses.Count == _presenter.CurrentCashPaymentRequest.CurrentLevel)
             {
@@ -205,7 +207,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             foreach (CashPaymentRequestDetail detail in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
             {
                 attachments.AddRange(detail.CPRAttachments);
-                Session["attachments"] = attachments;                
+                Session["attachments"] = attachments;
             }
 
             grvdetailAttachments.DataSource = attachments;

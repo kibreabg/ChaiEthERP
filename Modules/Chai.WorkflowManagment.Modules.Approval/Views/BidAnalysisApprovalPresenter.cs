@@ -82,7 +82,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
          {
              return _controller.GetAssignedJobbycurrentuser();
          }
-         public void SaveOrUpdateBidAnalysisRequest(BidAnalysisRequest BidAnalysisRequest)
+
+
+        public PurchaseRequestDetail GetPurchaseRequestbyPuID(int Id)
+        {
+            return _controller.GetPurchaseRequestbyPuID(Id);
+        }
+        public void SaveOrUpdateBidAnalysisRequest(BidAnalysisRequest BidAnalysisRequest)
          {
              _controller.SaveOrUpdateEntity(BidAnalysisRequest);
          }

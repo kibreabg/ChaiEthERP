@@ -105,7 +105,7 @@
                 <RowStyle CssClass="rowstyle" />
             </asp:GridView>
              <footer>
-           <asp:Button ID="btnCreateBid" runat="server" CssClass="btn btn-primary" Text="Create Bid" OnClick="btnCreateBid_Click"/>
+           <asp:Button ID="btnCreateBid" runat="server" CssClass="btn btn-primary"  Text="Create Bid" OnClick="btnCreateBid_Click"/>
           </footer>
         </div>
   
@@ -141,7 +141,7 @@
 
                                         <asp:DataGrid ID="dgItemDetail" runat="server" CellPadding="0"
                                             CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id" AutoGenerateColumns="False"
-                                            GridLines="None" ShowFooter="True" OnSelectedIndexChanged="dgItemDetail_SelectedIndexChanged">
+                                            GridLines="None" ShowFooter="True" OnSelectedIndexChanged="dgItemDetail_SelectedIndexChanged" >
 
                                             <Columns>
 
@@ -417,7 +417,7 @@
 
                         <asp:DataGrid ID="dgBidders" runat="server" AutoGenerateColumns="False" CellPadding="0"
                             CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
-                            ShowFooter="True" GridLines="None" Height="30px" OnUpdateCommand="dgBidders_UpdateCommand" OnCancelCommand="dgBidders_CancelCommand1" OnDeleteCommand="dgBidders_DeleteCommand1" OnItemCommand="dgBidders_ItemCommand" OnItemDataBound="dgBidders_ItemDataBound1" OnEditCommand="dgBidders_EditCommand">
+                            ShowFooter="True" GridLines="None" Height="30px" OnUpdateCommand="dgBidders_UpdateCommand1" OnCancelCommand="dgBidders_CancelCommand1" OnDeleteCommand="dgBidders_DeleteCommand1" OnItemCommand="dgBidders_ItemCommand" OnItemDataBound="dgBidders_ItemDataBound1" OnEditCommand="dgBidders_EditCommand">
                             
                             <Columns>
                                 
@@ -462,7 +462,7 @@
                                     </FooterTemplate>
                                 </asp:TemplateColumn>
 
-                                <asp:TemplateColumn HeaderText="Qty">
+                               <%-- <asp:TemplateColumn HeaderText="Qty">
                                     <ItemTemplate>
                                         <%# DataBinder.Eval(Container.DataItem, "Qty")%>
                                         <asp:HiddenField ID="hfqty" runat="server" Value='<%# DataBinder.Eval(Container.DataItem, "Qty")%>'></asp:HiddenField>
@@ -485,33 +485,8 @@
                                     <FooterTemplate>
                                         <asp:TextBox ID="txtItem" runat="server" Enabled="false" CssClass="form-control"></asp:TextBox>
                                     </FooterTemplate>
-                                </asp:TemplateColumn>
-                                <asp:TemplateColumn HeaderText="Unit Cost">
-                                    <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "UnitCost")%>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <asp:TextBox ID="txtEdtUnitCost" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "UnitCost")%>'></asp:TextBox>
-                                        <asp:RequiredFieldValidator ID="rfvEdtUnitCost" runat="server" ControlToValidate="txtEdtUnitCost" CssClass="validator" Display="Dynamic" ErrorMessage="Unit Cost is required" SetFocusOnError="true" ValidationGroup="detailedit"></asp:RequiredFieldValidator>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:TextBox ID="txtUnitCost" runat="server" CssClass="form-control"></asp:TextBox>
-                                        <asp:RequiredFieldValidator ID="rfvUnitCost" runat="server" ControlToValidate="txtUnitCost" CssClass="validator" Display="Dynamic" ErrorMessage="Unit Cost is required" SetFocusOnError="true" ValidationGroup="detailadd"></asp:RequiredFieldValidator>
-                                    </FooterTemplate>
-                                </asp:TemplateColumn>
-                                <asp:TemplateColumn HeaderText="Total Cost">
-                                    <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "TotalCost")%>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <asp:TextBox ID="txtEdtTotalCost" runat="server" Enabled="false" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "TotalCost")%>'></asp:TextBox>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:TextBox ID="txtTotalCost" runat="server" CssClass="form-control" Enabled="false"></asp:TextBox>
-                                        <asp:RequiredFieldValidator ID="RfvTotalCost" runat="server" ControlToValidate="txtTotalCost" ErrorMessage="Total Cost Required" Enabled="false" ValidationGroup="detailadd">*</asp:RequiredFieldValidator>
-                                    </FooterTemplate>
-                                </asp:TemplateColumn>
-                                <asp:TemplateColumn HeaderText="Rank">
+                                </asp:TemplateColumn>--%>
+                                  <asp:TemplateColumn HeaderText="Rank">
                                     <ItemTemplate>
                                         <%# DataBinder.Eval(Container.DataItem, "Rank")%>
                                     </ItemTemplate>
@@ -528,6 +503,35 @@
                                         <cc1:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtFRank" ID="txtFRank_FilteredTextBoxExtender" FilterType="numbers"></cc1:FilteredTextBoxExtender>
                                     </FooterTemplate>
                                 </asp:TemplateColumn>
+                                <asp:TemplateColumn HeaderText="Unit Cost">
+                                    <ItemTemplate>
+                                        <%# DataBinder.Eval(Container.DataItem, "UnitCost")%>
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <asp:TextBox ID="txtEdtUnitCost" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "UnitCost")%>'></asp:TextBox>
+                                          <cc1:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtEdtUnitCost" ID="txtUnitCost_FilteredTextBoxExtender" FilterType="Custom, Numbers" ValidChars='"."'></cc1:FilteredTextBoxExtender>
+                                       
+                                        <asp:RequiredFieldValidator ID="rfvEdtUnitCost" runat="server" ControlToValidate="txtEdtUnitCost" CssClass="validator" Display="Dynamic" ErrorMessage="Unit Cost is required" SetFocusOnError="true" ValidationGroup="detailedit"></asp:RequiredFieldValidator>
+                                    </EditItemTemplate>
+                                    <FooterTemplate>
+                                        <asp:TextBox ID="txtUnitCost" runat="server" CssClass="form-control"></asp:TextBox>
+                                        <cc1:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtUnitCost" ID="txtUnitCost_FilteredTextBoxExtender" FilterType="Custom, Numbers" ValidChars='"."'></cc1:FilteredTextBoxExtender>
+                                        <asp:RequiredFieldValidator ID="rfvUnitCost" runat="server" ControlToValidate="txtUnitCost" CssClass="validator" Display="Dynamic" ErrorMessage="Unit Cost is required" SetFocusOnError="true" ValidationGroup="detailadd"></asp:RequiredFieldValidator>
+                                    </FooterTemplate>
+                                </asp:TemplateColumn>
+                                <asp:TemplateColumn HeaderText="Total Cost">
+                                    <ItemTemplate>
+                                        <%# DataBinder.Eval(Container.DataItem, "TotalCost")%>
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <asp:TextBox ID="txtEdtTotalCost" runat="server" Enabled="false" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "TotalCost")%>'></asp:TextBox>
+                                    </EditItemTemplate>
+                                    <FooterTemplate>
+                                        <asp:TextBox ID="txtTotalCost" runat="server" CssClass="form-control" Enabled="false"></asp:TextBox>
+                                        <asp:RequiredFieldValidator ID="RfvTotalCost" runat="server" ControlToValidate="txtTotalCost" ErrorMessage="Total Cost Required" Enabled="false" ValidationGroup="detailadd">*</asp:RequiredFieldValidator>
+                                    </FooterTemplate>
+                                </asp:TemplateColumn>
+                              
                                 <asp:TemplateColumn HeaderText="Reason For Selection">
                                     <ItemTemplate>
                                         <%# DataBinder.Eval(Container.DataItem, "ReasonForSelection")%>
