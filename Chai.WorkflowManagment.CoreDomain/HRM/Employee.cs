@@ -348,7 +348,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             {
                 while (wd > 365)
                 {
-                    if (count > 1)
+                    if (count <= 6 && count > 1 )
                         leaveEnti = leaveEnti + 2;
                     if (count >= 6)
                         Sumleave = Sumleave + 30;
@@ -363,14 +363,13 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                 }
                 if (wd <= 365)
                 {
-
-                   // leaveEnti = leaveEnti + Math.Round(wd / 365);
+              
                     Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti))) / 365);
                     
                 }
             }
             else { //leaveEnti = leaveEnti + Math.Round(wd / 365);
-                   Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365));
+                   Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti))) / 365);
             }
 
             return Sumleave;
@@ -389,7 +388,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             {
                 while (wd > 365)
                 {
-                    if (count > 1)
+                    if (count <= 6 && count > 1)
                         leaveEnti = leaveEnti + 2;
                     if (count >= 6)
                         Sumleave = Sumleave + 30;
@@ -426,7 +425,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             {
                 while (wd > 365)
                 {
-                    if (count > 1)
+                    if (count <= 6 && count > 1)
                         leaveEnti = leaveEnti + 2;
                     if (count >= 6)
                         Sumleave = Sumleave + 30;
@@ -459,7 +458,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             {
                 while (wd > 365)
                  {
-                    if (count > 1)
+                    if (count <= 6 && count > 1)
                         leaveEnti = leaveEnti + 2;
                     if (count >= 6)
                         Sumleave = Sumleave + 30;
@@ -496,7 +495,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             {
                 while (wd > 365)
                 {
-                    if (count > 1)
+                    if (count <= 6 && count > 1)
                         leaveEnti = leaveEnti + 2;
                     if (count >= 6)
                         Sumleave = Sumleave + 30;
