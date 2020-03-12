@@ -227,13 +227,13 @@
                                                  <section class="col col-4">
                                                         <label class="label">
                                                        Delivery Date:</label>
-                                                     
+                                                       <label class="input">
+                                    <i class="icon-append fa fa-calendar"></i>
+                                    <asp:TextBox ID="txtDeliveryDate" runat="server" Visible="true" CssClass="form-control datepicker"></asp:TextBox>                            
+
+                                                       </label>
                                                        
-                                                           <label class="input" style="position: relative; display: block; font-weight: 400;">
-                                    <i class="icon-append fa fa-calendar" style="position: absolute; top: 5px; width: 22px; height: 22px; font-size: 14px; line-height: 22px; text-align: center; right: 5px; padding-left: 3px; border-left-width: 1px; border-left-style: solid; color: #A2A2A2;"></i>
-                                    <asp:TextBox ID="txtDeliveryDate" CssClass="form-control datepicker"
-                                        data-dateformat="mm/dd/yy" ToolTip="Delivery Date" runat="server"></asp:TextBox>   
-                                                        </label>
+                                                         
                                                     </section>
                                                     
                                                   </div>
@@ -320,29 +320,34 @@
                         <td style="width: 25%;">
                             <asp:Label ID="lblPOCreatedDate" runat="server"></asp:Label>
                         </td>
-                      
+                      <td style="width: 25%;">Delivery Location: </td>
+                        <td style="width: 25%;">
+                            <asp:Label ID="lblDeliverLocation" runat="server"></asp:Label></td>
                     </tr>
                     <tr>
                         <td style="width: 25%;">Payment Terms</td>
                         <td style="width: 25%;">
                             <asp:Label ID="lblPaymentTerms" runat="server"></asp:Label>
                         </td>
-                      
+                        <td style="width: 25%;">Delivery Date: </td>
+                        <td style="width: 25%;">
+                            <asp:Label ID="lblDeliveryDate" runat="server"></asp:Label></td>
                     </tr>
                     <tr>
                         <td style="width: 25%;">Ship To</td>
                         <td style="width: 25%;">
                             <asp:Label ID="lblShipTo" runat="server"></asp:Label>
                         </td>
-                      
+                      <td style="width: 25%;">Total Cost</td>
+                        <td style="width: 25%;">
+                            <asp:Label ID="lblTotCost" runat="server"></asp:Label>
+                        </td>
                     </tr>
                     <tr>
                         <td style="width: 585px">Bill To</td>
                         <td style="width: 617px">
                             <asp:Label ID="lblBillToResult" runat="server"></asp:Label></td>
-                        <td style="width: 25%;">Delivery Location: </td>
-                        <td style="width: 25%;">
-                            <asp:Label ID="lblDeliverLocation" runat="server"></asp:Label></td>
+                        
                     </tr>
                     <tr>
                         <td style="width: 585px">Delivery Fees
@@ -350,9 +355,7 @@
                         <td style="width: 617px">
                             <asp:Label ID="lblDeliveryFees" runat="server"></asp:Label>
                         </td>
-                        <td style="width: 25%;">Delivery Date: </td>
-                        <td style="width: 25%;">
-                            <asp:Label ID="lblDeliveryDate" runat="server"></asp:Label></td>
+                      
                     </tr>
                 </table>
                 <br />

@@ -127,11 +127,12 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public IList<Bidder> GetBidderbyRankBIDID(int BIDID)
         {
             IList<Bidder> RankedItemDetals = new List<Bidder>();
-
+            
             foreach (BidderItemDetail detail in BidderItemDetails)
             {
                 foreach (Bidder bidder in detail.Bidders)
                     if (bidder.Rank == 1 && detail.BidAnalysisRequest.Id== BIDID && bidder.POStatus=="InProgress")
+                        
                     {
                         
                         RankedItemDetals.Add(bidder);

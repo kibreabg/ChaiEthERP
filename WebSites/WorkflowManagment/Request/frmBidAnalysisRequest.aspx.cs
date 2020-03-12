@@ -93,14 +93,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
             if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails.Count > 0 )
             {
-                BindBidItem();
+                 BindBidItem();
 
-               // BindItemdetailGrid(ItemBid);
-                 BindBidders(ItemBid);
-
-               
-
-                // BindBidder(bidditem);
+               BindItemdetailGrid(ItemBid);
+                //  BindBidders(ItemBid);
+                                         
 
             }
 
@@ -318,9 +315,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         private void BindItemdetailGrid(BidderItemDetail Tad)
         {
             ItemBid = Session["bidditem"] as BidderItemDetail;
-            dgBidders.DataSource = ItemBid.Bidders;
-            dgBidders.DataBind();
-            
+            if (ItemBid != null)
+            {
+                dgBidders.DataSource = ItemBid.Bidders;
+                dgBidders.DataBind();
+            }
+
+
         }
 
         private void BindBidder(BidderItemDetail Bid)
@@ -1290,6 +1291,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
         protected void dgBidders_UpdateCommand1(object source, DataGridCommandEventArgs e)
         {
+
+
+            ItemBid = Session["bidditem"] as BidderItemDetail;
+           
             ItemBid = Session["bidditem"] as BidderItemDetail;
             int id = (int)dgBidders.DataKeys[e.Item.ItemIndex];
             Bidder Bid;
@@ -1298,10 +1303,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
 
             if (id > 0)
-                bidder = ItemBid.GetTBidder(id);
+                Bid = ItemBid.GetTBidder(id);
             else
 
-                bidder = ItemBid.Bidders[e.Item.ItemIndex];
+                Bid = ItemBid.Bidders[e.Item.ItemIndex];
             try
             {
                 //DropDownList ddlSupplierType = e.Item.FindControl("ddlSupplierType") as DropDownList;
@@ -1346,7 +1351,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         bidder.POStatus = "InProgress";
                         dgBidders.EditItemIndex = -1;
 
-                        BindBidders(ItemBid);
+                        BindItemdetailGrid(bidder.BidderItemDetail);
 
                         pnlBidItem_ModalPopupExtender.Show();
                         Master.ShowMessage(new AppMessage("Bidder info Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
@@ -1392,7 +1397,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         bidder.POStatus = "InProgress";
                         dgBidders.EditItemIndex = -1;
 
-                        BindBidders(ItemBid);
+                        BindItemdetailGrid(bidder.BidderItemDetail);
 
                         pnlBidItem_ModalPopupExtender.Show();
                         Master.ShowMessage(new AppMessage("Bidder info Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
@@ -1437,7 +1442,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         bidder.POStatus = "InProgress";
                         dgBidders.EditItemIndex = -1;
 
-                        BindBidders(ItemBid);
+                        BindItemdetailGrid(bidder.BidderItemDetail);
 
                         pnlBidItem_ModalPopupExtender.Show();
                         Master.ShowMessage(new AppMessage("Bidder info Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
@@ -1483,7 +1488,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         bidder.POStatus = "InProgress";
                         dgBidders.EditItemIndex = -1;
 
-                        BindBidders(ItemBid);
+                        BindItemdetailGrid(bidder.BidderItemDetail);
 
                         pnlBidItem_ModalPopupExtender.Show();
                         Master.ShowMessage(new AppMessage("Bidder info Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
@@ -1531,8 +1536,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         bidder.POStatus = "InProgress";
                         dgBidders.EditItemIndex = -1;
 
-                        BindBidders(ItemBid);
-
+                        BindItemdetailGrid(bidder.BidderItemDetail);
                         pnlBidItem_ModalPopupExtender.Show();
                         Master.ShowMessage(new AppMessage("Bidder info Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
                     }
@@ -1579,8 +1583,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         bidder.ReasonForSelection = txtReas.Text;
                         bidder.POStatus = "InProgress";
                         dgBidders.EditItemIndex = -1;
-
-                        BindBidders(ItemBid);
+                        BindItemdetailGrid(bidder.BidderItemDetail);
 
                         pnlBidItem_ModalPopupExtender.Show();
                         Master.ShowMessage(new AppMessage("Bidder info Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
@@ -1641,11 +1644,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void BindBidItem()
         {
-
-            ItemBid = Session["bidditem"] as BidderItemDetail;
-
-            dgItemDetail.DataSource =_presenter.CurrentBidAnalysisRequest.BidderItemDetails;
-            dgItemDetail.DataBind();
+            if (ItemBid != null)
+            {
+                ItemBid = Session["bidditem"] as BidderItemDetail;
+                dgBidders.DataSource = ItemBid.Bidders;
+                dgBidders.DataBind();
+            }
             
         }
       

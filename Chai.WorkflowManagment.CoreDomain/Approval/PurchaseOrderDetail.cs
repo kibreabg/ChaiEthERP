@@ -26,6 +26,8 @@ namespace Chai.WorkflowManagment.CoreDomain.Approval
         public virtual Supplier Supplier { get; set; }
         public int Rank { get; set; }
         public string ItemDescription { get; set; }
+
+        public string Status { get; set; }
        
        
     }
