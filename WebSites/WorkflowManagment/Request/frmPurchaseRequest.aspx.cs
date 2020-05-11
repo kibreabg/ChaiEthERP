@@ -35,7 +35,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 BindSearchPurchaseRequestGrid();
                 BindPurchaseRequestDetails();
                 BindInitialValues();
+                PopInternalVehicles();
             }
+            lblPlate.Visible = false;
+            ddlPlate.Visible = false;
             this._presenter.OnViewLoaded();
 
 
@@ -115,9 +118,19 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 _presenter.CurrentPurchaseRequest.DeliverTo = txtDeliverto.Text;
                 _presenter.CurrentPurchaseRequest.Comment = "";
                 _presenter.CurrentPurchaseRequest.SuggestedSupplier = txtSuggestedSupplier.Text;
-
+               
                 _presenter.CurrentPurchaseRequest.Requireddateofdelivery = Convert.ToDateTime(txtdeliveryDate.Text);
+                _presenter.CurrentPurchaseRequest.IsVehicle = GetIsVehicle;
 
+
+                if (GetPlateNo != 0)
+                {
+                    _presenter.CurrentPurchaseRequest.Vehicle_Id = Convert.ToInt32(GetPlateNo);
+                }
+                else
+                {
+                    _presenter.CurrentPurchaseRequest.Vehicle_Id = 0;
+                }
                 //Determine total cost
                 /*       decimal cost = 0;
                        if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Count > 0)
@@ -223,6 +236,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
 
         }
+
+        private void PopInternalVehicles()
+        {
+            ddlPlate.DataSource = _presenter.GetVehicles();
+            ddlPlate.DataBind();
+
+
+        }
         public PurchaseRequest PurchaseRequest
         {
             get
@@ -241,6 +262,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public string RequestDate
         {
             get { return txtRequestDatesearch.Text; }
+        }
+
+        public bool GetIsVehicle
+        {
+            get { return ckIsVehicle.Checked; }
+        }
+        public int GetPlateNo
+        {
+
+            get { return Convert.ToInt32(ddlPlate.SelectedValue); }
         }
         public int PurchaseRequestId
         {
@@ -369,18 +400,66 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             DropDownList ddl = (DropDownList)sender;
             DropDownList ddlFGrant = ddl.FindControl("ddlFGrant") as DropDownList;
             BindGrant(ddlFGrant, Convert.ToInt32(ddl.SelectedValue));
+            if (ckIsVehicle.Checked == true)
+            {
+                lblPlate.Visible = true;
+
+
+                ddlPlate.Visible = true;
+                i.Visible = true;
+            }
+            else if (ckIsVehicle.Checked == false)
+            {
+                lblPlate.Visible = false;
+
+
+                ddlPlate.Visible = false;
+                i.Visible = false;
+            }
         }
         protected void ddlGrant_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
             DropDownList ddlGrant = ddl.FindControl("ddlGrant") as DropDownList;
             BindGrant(ddlGrant, Convert.ToInt32(ddl.SelectedValue));
+            if (ckIsVehicle.Checked == true)
+            {
+                lblPlate.Visible = true;
+
+
+                ddlPlate.Visible = true;
+                i.Visible = true;
+            }
+            else if (ckIsVehicle.Checked == false)
+            {
+                lblPlate.Visible = false;
+
+
+                ddlPlate.Visible = false;
+                i.Visible = false;
+            }
         }
         protected void ddlProject_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
             DropDownList ddlGrant = ddl.FindControl("ddlGrant") as DropDownList;
             BindGrant(ddlGrant, Convert.ToInt32(ddl.SelectedValue));
+            if (ckIsVehicle.Checked == true)
+            {
+                lblPlate.Visible = true;
+
+
+                ddlPlate.Visible = true;
+                i.Visible = true;
+            }
+            else if (ckIsVehicle.Checked == false)
+            {
+                lblPlate.Visible = false;
+
+
+                ddlPlate.Visible = false;
+                i.Visible = false;
+            }
         }
         protected void btnRequest_Click(object sender, EventArgs e)
         {
@@ -458,6 +537,22 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             DropDownList ddl = (DropDownList)sender;
             TextBox txtAccountCode = ddl.FindControl("txtFAccountCode") as TextBox;
             txtAccountCode.Text = _presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)).AccountCode;
+            if (ckIsVehicle.Checked == true)
+            {
+                lblPlate.Visible = true;
+
+
+                ddlPlate.Visible = true;
+                i.Visible = true;
+            }
+            else if (ckIsVehicle.Checked == false)
+            {
+                lblPlate.Visible = false;
+
+
+                ddlPlate.Visible = false;
+                i.Visible = false;
+            }
         }
         #region PurchaseRequestDetail
         private void BindPurchaseRequestDetails()
@@ -686,5 +781,27 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
         }
         #endregion
+
+
+
+        protected void ckIsVehicle_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ckIsVehicle.Checked == true)
+            {
+                lblPlate.Visible = true;
+
+
+                ddlPlate.Visible = true;
+                i.Visible = true;
+            }
+            else if (ckIsVehicle.Checked == false)
+            {
+                lblPlate.Visible = false;
+
+
+                ddlPlate.Visible = false;
+                i.Visible = false;
+            }
+        }
     }
 }

@@ -19,7 +19,9 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public DateTime RequestedDate { get; set; }
         public DateTime Requireddateofdelivery { get; set; }
         public string DeliverTo { get; set; }       
-        public string SuggestedSupplier { get; set; }       
+        public string SuggestedSupplier { get; set; }
+        public bool IsVehicle { get; set; }
+        public int Vehicle_Id { get; set; }
         // public Program Program { get; set; }
         public string Comment { get; set; }
         public int CurrentApprover { get; set; }

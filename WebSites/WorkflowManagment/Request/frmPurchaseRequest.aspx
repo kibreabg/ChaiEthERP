@@ -42,7 +42,27 @@
             <div class="widget-body no-padding">
                 <div class="smart-form">
                     <fieldset>
+                         <div class="row">
+                            <section class="col col-6">
+                                <div class="smart-form">
+                                    <div class="inline-group">
+                                        <label class="checkbox">
+                                            <asp:CheckBox ID="ckIsVehicle" runat="server" OnCheckedChanged="ckIsVehicle_CheckedChanged" AutoPostBack="True" />
+                                            <i></i>Is Vehicle?</label>
+                                    </div>
+                                </div>
+                            </section>
+                           
 
+                              <section class="col col-6">
+                                <asp:Label ID="lblPlate" runat="server" Text="Plate No" Visible="False"></asp:Label>
+                                <label class="select">
+                                    <asp:DropDownList ID="ddlPlate" AutoPostBack="true" runat="server" DataValueField="Id" DataTextField="PlateNo">
+                                    </asp:DropDownList><i id="i" runat="server"></i>
+                                   
+                                </label>
+                            </section>
+                        </div>
                         <div class="row">
                             <%--<section class="col col-4">
                                 <label class="label">
@@ -71,7 +91,7 @@
 
                         <div class="row">
 
-                            <section class="col col-4">
+                            <section class="col col-6">
                                 <label class="label">
                                     Required date of delivery</label>
                                 <label class="input">
@@ -81,7 +101,7 @@
                                     <asp:RequiredFieldValidator ID="RfvdeliveryDate" CssClass="validator" runat="server" ControlToValidate="txtdeliveryDate" ErrorMessage="Delivery Date Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Save"></asp:RequiredFieldValidator>
                                 </label>
                             </section>
-                            <section class="col col-4">
+                            <section class="col col-6">
                                 <label class="label">
                                     Deliver to</label>
                                 <label class="input">
@@ -91,14 +111,14 @@
                             </section>
                         </div>
                         <div class="row">
-                            <section class="col col-4">
+                            <section class="col col-6">
                                 <label class="label">
                                     Suggested Suppliers (if any)</label>
                                 <label class="input">
                                     <asp:TextBox ID="txtSuggestedSupplier" runat="server" Visible="true"></asp:TextBox>
                                 </label>
                             </section>
-                            <section class="col col-4">
+                            <section class="col col-6">
                                 <label id="lblapplyfor" runat="server" class="label" visible="false">
                                     Remark</label>
                                 <label class="input">
