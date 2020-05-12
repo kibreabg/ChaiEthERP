@@ -177,6 +177,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
              return _settingcontroller.GetProjectGrantsByprojectId(projectId);
 
          }
+        public IList<Vehicle> GetVehicles()
+        {
+            return _settingcontroller.GetVehicles();
+        }
     }
 }
 

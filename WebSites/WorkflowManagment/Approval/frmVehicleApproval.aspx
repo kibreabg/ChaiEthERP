@@ -423,7 +423,7 @@
                     <strong>
                         <asp:Label ID="lblProjectId" runat="server" Text="ProjectID:"></asp:Label>
                     </strong></td>
-                <td style="width: 490px; padding-left: 20%;">
+                <td style="width: 490px;" class="modal-sm">
                     <asp:Label ID="lblProjectIdResult" runat="server"></asp:Label>
                 </td>
                 <td style="width: 280px" class="modal-sm">
