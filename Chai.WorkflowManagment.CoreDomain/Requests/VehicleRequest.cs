@@ -39,7 +39,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public virtual AppUser AppUser { get; set; }
         public virtual Project Project { get; set; }
         public virtual Grant Grant { get; set; }
-
+        public virtual int LastKmReading { get; set; }
         public virtual TravelLog TravelLog { get; set; }
         public virtual IList<VehicleRequestStatus> VehicleRequestStatuses { get; set; }
         public virtual IList<VehicleRequestDetail> VehicleRequestDetails { get; set; }

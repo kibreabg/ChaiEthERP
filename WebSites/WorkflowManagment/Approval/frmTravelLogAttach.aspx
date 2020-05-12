@@ -142,6 +142,16 @@
                             <hr />
                             <fieldset>
                                 <div class="row">
+                                       <section class="col col-6">
+                                        <asp:Label ID="lblPlateNo" runat="server" Text="Plate No" CssClass="label"></asp:Label>
+                                        <label class="input">
+                                            <asp:TextBox ID="txtPlateNo" runat="server" Width="100%"></asp:TextBox>
+                                            <cc1:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtPlateNo" ID="txtPlateNo_FilteredTextBoxExtender" FilterType="Numbers"></cc1:FilteredTextBoxExtender>
+                                        </label>
+                                        <asp:RequiredFieldValidator
+                                            ID="rfvtxtPlateNo" runat="server" ErrorMessage="Please enter Plate No" Display="Dynamic"
+                                            CssClass="validator" ValidationGroup="approve" ControlToValidate="txtPlateNo"></asp:RequiredFieldValidator>
+                                    </section>
                                     <section class="col col-6">
                                         <asp:Label ID="lblActDaysTrav" runat="server" Text="Actual Days Travelled" CssClass="label"></asp:Label>
                                         <label class="input">
@@ -151,6 +161,16 @@
                                         <asp:RequiredFieldValidator
                                             ID="rfvActualDaysTrav" runat="server" ErrorMessage="Please enter actual days travelled" Display="Dynamic"
                                             CssClass="validator" ValidationGroup="approve" ControlToValidate="txtActualDaysTrav"></asp:RequiredFieldValidator>
+                                    </section>
+                                         <section class="col col-6">
+                                        <asp:Label ID="lblLastKmReading" runat="server" Text="Last Km Reading" CssClass="label"></asp:Label>
+                                        <label class="input">
+                                            <asp:TextBox ID="txtLastKmReading" runat="server" Width="100%"></asp:TextBox>
+                                            <cc1:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtLastKmReading" ID="txtLastKmReading_FilteredTextBoxExtender" FilterType="Numbers"></cc1:FilteredTextBoxExtender>
+                                        </label>
+                                        <asp:RequiredFieldValidator
+                                            ID="rfvtxtLastKmReading" runat="server" ErrorMessage="Please enter Last KM Reading" Display="Dynamic"
+                                            CssClass="validator" ValidationGroup="approve" ControlToValidate="txtLastKmReading"></asp:RequiredFieldValidator>
                                     </section>
                                     <section class="col col-6">
                                         <label class="col-md-6 control-label">Attach Travel Log</label>

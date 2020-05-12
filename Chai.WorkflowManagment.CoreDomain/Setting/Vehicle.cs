@@ -11,6 +11,6 @@ namespace Chai.WorkflowManagment.CoreDomain.Setting
         public int Id { get; set; }
         public string PlateNo { get; set; }
         public string Status { get; set; }
-       
+       public int LastKmReading { get; set; }
     }
 }

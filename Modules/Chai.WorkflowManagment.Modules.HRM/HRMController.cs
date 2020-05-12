@@ -91,7 +91,7 @@ namespace Chai.WorkflowManagment.Modules.HRM
         {
             string filterExpression = "";
             
-           filterExpression = "SELECT * FROM Employees left Join Contracts on Contracts.Employee_Id=Employees.Id Inner Join AppUsers on Appusers.Id = Employees.Id left Join EmployeeDetails on EmployeeDetails.Contract_Id = Contracts.Id and EmployeeDetails.Id = (SELECT MAX(Id) FROM EmployeeDetails)  Where 1 = Case when '" + FullName + "' = '' Then 1 When (Employees.FirstName + ' ' + Employees.lastName) like '%" + FullName + "%' Then 1 END And 1 = Case when '" + project + "' = '0' Then 1 When EmployeeDetails.Program_Id ='"+ project + "' Then 1 End And 1 = Case when '" + empstatus + "' = '' Then 1 When Appusers.IsActive ='" + empstatus + "' Then 1 End";
+           filterExpression = "SELECT * FROM Employees left Join Contracts on Contracts.Employee_Id=Employees.Id and Contracts.Id = (SELECT MAX(Id) FROM Contracts)  Inner Join AppUsers on Appusers.Id = Employees.Id left Join EmployeeDetails on EmployeeDetails.Contract_Id = Contracts.Id and EmployeeDetails.Id = (SELECT MAX(Id) FROM EmployeeDetails)  Where 1 = Case when '" + FullName + "' = '' Then 1 When (Employees.FirstName + ' ' + Employees.lastName) like '%" + FullName + "%' Then 1 END And 1 = Case when '" + project + "' = '0' Then 1 When EmployeeDetails.Program_Id ='"+ project + "' Then 1 End And 1 = Case when '" + empstatus + "' = '' Then 1 When Appusers.IsActive ='" + empstatus + "' Then 1 End";
             // return WorkspaceFactory.CreateReadOnly().Queryable<CashPaymentRequest>(filterExpression).ToList();
             return _workspace.SqlQuery<Employee>(filterExpression).ToList();
         }
