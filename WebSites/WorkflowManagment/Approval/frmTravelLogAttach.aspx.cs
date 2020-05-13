@@ -219,8 +219,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     fuTravelLog.PostedFile.SaveAs(Server.MapPath("~/TravelLog/") + fileName);
                 }
                 _presenter.CurrentVehicleRequest.ActualDaysTravelled = Convert.ToInt32(txtActualDaysTrav.Text);
+                _presenter.CurrentVehicleRequest.LastKmReading = Convert.ToInt32(txtLastKmReading.Text);
                 _presenter.CurrentVehicleRequest.TravelLogStatus = ProgressStatus.Completed.ToString();
                 _presenter.SaveOrUpdateVehicleRequest(_presenter.CurrentVehicleRequest);
+                Vehicle Vehicle = _presenter.GetVehiclebyPlateNo(txtPlateNo.Text);
+                if (Vehicle != null)
+                {
+                    Vehicle.LastKmReading = Convert.ToInt32(txtLastKmReading);
+                    _presenter.SaveOrUpdateVehicle(Vehicle);
+                }
                 //If there is an extension or reduction requested on this vehicle request update the extension or reduction
                 VehicleRequest extendedVehicleReq = _presenter.GetExtVehicleRequest(_presenter.CurrentVehicleRequest.Id);
                 if (extendedVehicleReq != null)
@@ -228,6 +235,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     extendedVehicleReq.ActualDaysTravelled = 0;
                     extendedVehicleReq.TravelLogStatus = ProgressStatus.Completed.ToString();
                     _presenter.SaveOrUpdateVehicleRequest(extendedVehicleReq);
+                    
                 }
                 Master.ShowMessage(new AppMessage("Travel Log Successfully Attached ", RMessageType.Info));
                 btnSave.Enabled = false;

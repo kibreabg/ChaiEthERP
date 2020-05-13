@@ -267,6 +267,10 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             return _workspace.Single<Vehicle>(x => x.Id == VehicleId);
         }
+        public Vehicle GetVehiclebyPlateNo(string plateno)
+        {
+            return _workspace.Single<Vehicle>(x => x.PlateNo == plateno);
+        }
         public IList<Vehicle> ListVehicles(string PlateNo)
         {
             string filterExpression = "";
