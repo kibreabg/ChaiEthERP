@@ -19,6 +19,7 @@ namespace Chai.WorkflowManagment.CoreDomain.TravelLogs
         public decimal EndKmReading { get; set; }
         public decimal FuelPrice { get; set; }
         public decimal FuelLitre { get; set; }
+        public int KmReadingOnFuelRefill { get; set; }
 
         [Required]
      

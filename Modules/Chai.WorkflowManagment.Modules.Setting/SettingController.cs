@@ -280,6 +280,35 @@ namespace Chai.WorkflowManagment.Modules.Setting
             return _workspace.SqlQuery<Vehicle>(filterExpression).ToList();
 
         }
+        public IList<AppUser> ListDrivers()
+        {
+            string filterExpression = "";
+
+            filterExpression = "select * from AppUsers where  AppUsers.EmployeePosition_Id = 6 ";
+
+            return _workspace.SqlQuery<AppUser>(filterExpression).ToList();
+
+        }
+        public AppUser GetAppuser(int AppId)
+        {
+            return _workspace.Single<AppUser>(x => x.Id == AppId);
+        }
+        public void SaveOrUpdateVehicle(Vehicle vehicle)
+        {
+            if (vehicle.Id <= 0)
+            {
+               
+
+                using (var wr = WorkspaceFactory.CreateReadOnly())
+                {
+                    if (wr.Single<Vehicle>(x => x.PlateNo == vehicle.PlateNo) != null)
+                        throw new Exception("Vehicle name already exists");
+                }
+            }
+           
+
+            SaveOrUpdateEntity<Vehicle>(vehicle);
+        }
         #endregion
         #region LeaveType
 
