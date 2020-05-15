@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chai.WorkflowManagment.CoreDomain.Setting;
+using System;
 using System.Collections.Generic;
 
 namespace Chai.WorkflowManagment.CoreDomain.Requests
@@ -21,8 +22,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string DeliverTo { get; set; }       
         public string SuggestedSupplier { get; set; }
         public bool IsVehicle { get; set; }
-        public int Vehicle_Id { get; set; }
-        // public Program Program { get; set; }
+        public string PlateNo { get; set; }
         public string Comment { get; set; }
         public int CurrentApprover { get; set; }
         public int CurrentLevel { get; set; }
@@ -32,7 +32,6 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public virtual IList<SoleVendorRequest> SoleVendorRequests { get; set; }
         public virtual IList<PurchaseRequestStatus> PurchaseRequestStatuses { get; set; }
         public virtual IList<PurchaseRequestDetail> PurchaseRequestDetails { get; set; }
-        // public virtual PurchaseOrder PurchaseOrders { get; set; }
         #region PurchaseRequestStatus
         public virtual PurchaseRequestStatus GetPurchaseRequestStatus(int Id)
         {

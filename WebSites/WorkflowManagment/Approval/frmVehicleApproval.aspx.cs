@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Web;
-using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Chai.WorkflowManagment.CoreDomain.Requests;
 using Chai.WorkflowManagment.CoreDomain.Setting;
-using Chai.WorkflowManagment.CoreDomain.Users;
 using Chai.WorkflowManagment.Enums;
-using Chai.WorkflowManagment.Modules.Approval.Views;
 using Chai.WorkflowManagment.Shared;
 using Chai.WorkflowManagment.Shared.MailSender;
 using log4net;
@@ -184,7 +177,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void BindVehicleRequestStatus()
         {
-            // VehicleApprovalPresenter _presenterm = new   VehicleApprovalPresenter;
             foreach (VehicleRequestStatus VRS in _presenter.CurrentVehicleRequest.VehicleRequestStatuses)
             {
                 if (VRS.WorkflowLevel == _presenter.CurrentVehicleRequest.CurrentLevel && _presenter.CurrentVehicleRequest.ProgressStatus != ProgressStatus.Completed.ToString())
@@ -358,16 +350,18 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
             txtRejectedReason.Visible = false;
             rfvRejectedReason.Enabled = false;
-            pnlApproval_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
             if (_presenter.CurrentVehicleRequest.CurrentLevel == _presenter.CurrentVehicleRequest.VehicleRequestStatuses.Count)
-                pnlApproverview.Visible = true;
-            if (_presenter.CurrentVehicleRequest.ProgressStatus == ProgressStatus.Completed.ToString())
             {
-
-                btnPrintTravellog.Visible = true;
+                pnlApproverview.Visible = true;
+                ddlProject.Enabled = false;
+                ddlGrant.Enabled = false;
             }
 
-
+            if (_presenter.CurrentVehicleRequest.ProgressStatus == ProgressStatus.Completed.ToString())
+            {
+                btnPrintTravellog.Visible = true;
+            }
         }
         protected void grvVehicleRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
         {
@@ -439,52 +433,72 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 ddlProject.SelectedValue = _presenter.CurrentVehicleRequest.Project.Id.ToString();
                 if (_presenter.CurrentVehicleRequest.Grant != null)
                     ddlGrant.SelectedValue = _presenter.CurrentVehicleRequest.Grant.Id.ToString();
-                pnlApproval_ModalPopupExtender.Show();
+                ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
 
-                Master.ShowMessage(new AppMessage("Vehicle Information was Removed Successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Vehicle Information was Removed Successfully", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to delete Vehicle Information. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to delete Vehicle Information. " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         protected void dgVehicles_ItemCommand(object source, DataGridCommandEventArgs e)
         {
-            VehicleRequestDetail Vehicle = new VehicleRequestDetail();
+            VehicleRequestDetail vehicleReqDetail = new VehicleRequestDetail();
             if (e.CommandName == "AddNew")
             {
                 try
                 {
                     DropDownList ddlAssignedVehicle = e.Item.FindControl("ddlAssignedVehicle") as DropDownList;
-                    Vehicle.AssignedVehicle = ddlAssignedVehicle.SelectedValue;
+                    vehicleReqDetail.AssignedVehicle = ddlAssignedVehicle.SelectedValue;
+                    TextBox txtFReasonHire = e.Item.FindControl("txtFReasonHire") as TextBox;
+                    vehicleReqDetail.ReasonForHire = txtFReasonHire.Text;
+                    if (ddlAssignedVehicle.SelectedValue == "carRental" && _presenter.GetVehicles().Count > 0)
+                    {
+                        //If Car hire is selected while there are available internal cars, then record the available cars in the backend
+                        foreach(Vehicle availableVehicle in _presenter.GetVehicles())
+                        {
+                            vehicleReqDetail.AvailableWhileHired += availableVehicle.PlateNo + ",";
+                        }
+                        
+                    }
                     DropDownList ddlFPlateNo = e.Item.FindControl("ddlFPlateNo") as DropDownList;
-                    Vehicle.PlateNo = ddlFPlateNo.SelectedItem.Text;
+                    vehicleReqDetail.PlateNo = ddlFPlateNo.SelectedItem.Text;
                     TextBox txtRate = e.Item.FindControl("txtFRate") as TextBox;
-                    Vehicle.Rate = Convert.ToDecimal(txtRate.Text);
+                    vehicleReqDetail.Rate = Convert.ToDecimal(txtRate.Text);
+                    TextBox txtFStartKmReading = e.Item.FindControl("txtFStartKmReading") as TextBox;
+                    vehicleReqDetail.StartKmReading = Convert.ToDecimal(txtFStartKmReading.Text);
+                    //Hidden in the code we assign the last KM reading from the Vehicle table to this Vehicle assignment object
+                    if (Convert.ToInt32(ddlFPlateNo.SelectedValue) != 0)
+                        vehicleReqDetail.PreEndKmReading = Convert.ToDecimal(_presenter.GetVehicle(Convert.ToInt32(ddlFPlateNo.SelectedValue)).LastKmReading);
                     DropDownList ddlCarRental = e.Item.FindControl("ddlCarRental") as DropDownList;
-                    Vehicle.CarRental = _presenter.GetCarRental(Convert.ToInt32(ddlCarRental.SelectedValue));
+                    vehicleReqDetail.CarRental = _presenter.GetCarRental(Convert.ToInt32(ddlCarRental.SelectedValue));
                     TextBox txtFDriverPhoneNo = e.Item.FindControl("txtFDriverPhoneNo") as TextBox;
-                    Vehicle.DriverPhoneNo = txtFDriverPhoneNo.Text;
+                    vehicleReqDetail.DriverPhoneNo = txtFDriverPhoneNo.Text;
                     TextBox txtFRentalDrName = e.Item.FindControl("txtFRentalDrName") as TextBox;
-                    Vehicle.RentalDriverName = txtFRentalDrName.Text;
+                    vehicleReqDetail.RentalDriverName = txtFRentalDrName.Text;
                     DropDownList ddlCarModel = e.Item.FindControl("ddlFCarModel") as DropDownList;
-                    Vehicle.CarModel = _presenter.GetCarModel(Convert.ToInt32(ddlCarModel.SelectedValue));
+                    vehicleReqDetail.CarModel = _presenter.GetCarModel(Convert.ToInt32(ddlCarModel.SelectedValue));
                     DropDownList ddlDriver = e.Item.FindControl("ddlDriver") as DropDownList;
-                    Vehicle.AppUser = _presenter.GetUser(Convert.ToInt32(ddlDriver.SelectedValue));
+                    vehicleReqDetail.AppUser = _presenter.GetUser(Convert.ToInt32(ddlDriver.SelectedValue));
 
-                    _presenter.CurrentVehicleRequest.VehicleRequestDetails.Add(Vehicle);
+                    _presenter.CurrentVehicleRequest.VehicleRequestDetails.Add(vehicleReqDetail);
 
                     dgVehicles.EditItemIndex = -1;
                     BindVehicles();
                     ddlProject.SelectedValue = _presenter.CurrentVehicleRequest.Project.Id.ToString();
                     if (_presenter.CurrentVehicleRequest.Grant != null)
                         ddlGrant.SelectedValue = _presenter.CurrentVehicleRequest.Grant.Id.ToString();
-                    pnlApproval_ModalPopupExtender.Show();
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
                     Master.ShowMessage(new AppMessage("Vehicle Information Successfully Added", RMessageType.Info));
                 }
                 catch (Exception ex)
                 {
                     Master.ShowMessage(new AppMessage("Error: Unable to Add Vehicle Information " + ex.Message, RMessageType.Error));
+                    ExceptionUtility.LogException(ex, ex.Source);
+                    ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
                 }
             }
         }
@@ -495,7 +509,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             ddlProject.SelectedValue = _presenter.CurrentVehicleRequest.Project.Id.ToString();
             if (_presenter.CurrentVehicleRequest.Grant != null)
                 ddlGrant.SelectedValue = _presenter.CurrentVehicleRequest.Grant.Id.ToString();
-            pnlApproval_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
         }
         protected void dgVehicles_ItemDataBound(object sender, DataGridItemEventArgs e)
         {
@@ -552,41 +566,59 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         protected void dgVehicles_UpdateCommand(object source, DataGridCommandEventArgs e)
         {
             int vehicleId = (int)dgVehicles.DataKeys[e.Item.ItemIndex];
-            VehicleRequestDetail vehicle;
+            VehicleRequestDetail vehicleReqDetail;
 
             if (vehicleId > 0)
-                vehicle = _presenter.CurrentVehicleRequest.GetVehicle(vehicleId);
+                vehicleReqDetail = _presenter.CurrentVehicleRequest.GetVehicle(vehicleId);
             else
-                vehicle = (VehicleRequestDetail)_presenter.CurrentVehicleRequest.VehicleRequestDetails[e.Item.ItemIndex];
+                vehicleReqDetail = _presenter.CurrentVehicleRequest.VehicleRequestDetails[e.Item.ItemIndex];
 
             try
             {
-                vehicle.VehicleRequest = _presenter.CurrentVehicleRequest;
+                vehicleReqDetail.VehicleRequest = _presenter.CurrentVehicleRequest;
                 DropDownList ddlEdtAssignedVehicle = e.Item.FindControl("ddlEdtAssignedVehicle") as DropDownList;
-                vehicle.AssignedVehicle = ddlEdtAssignedVehicle.SelectedValue;
-                DropDownList ddlPlateNo = e.Item.FindControl("ddlEdtPlateNo") as DropDownList;
-                vehicle.PlateNo = ddlPlateNo.SelectedItem.Text;
+                vehicleReqDetail.AssignedVehicle = ddlEdtAssignedVehicle.SelectedValue;
+                TextBox txtEdtReasonHire = e.Item.FindControl("txtEdtReasonHire") as TextBox;
+                vehicleReqDetail.ReasonForHire = txtEdtReasonHire.Text;
+                if (ddlEdtAssignedVehicle.SelectedValue == "carRental" && _presenter.GetVehicles().Count > 0)
+                {
+                    //If Car hire is selected while there are available internal cars, then record the available cars in the backend
+                    foreach (Vehicle availableVehicle in _presenter.GetVehicles())
+                    {
+                        vehicleReqDetail.AvailableWhileHired += availableVehicle.PlateNo + ",";
+                    }
+
+                }
+                DropDownList ddlEdtPlateNo = e.Item.FindControl("ddlEdtPlateNo") as DropDownList;
+                vehicleReqDetail.PlateNo = ddlEdtPlateNo.SelectedItem.Text;
                 TextBox txtEdtRate = e.Item.FindControl("txtEdtRate") as TextBox;
-                vehicle.Rate = Convert.ToDecimal(txtEdtRate.Text);
+                vehicleReqDetail.Rate = Convert.ToDecimal(txtEdtRate.Text);
+                TextBox txtEdtStartKmReading = e.Item.FindControl("txtEdtStartKmReading") as TextBox;
+                vehicleReqDetail.StartKmReading = Convert.ToDecimal(txtEdtStartKmReading.Text);
+                //Hidden in the code we assign the last KM reading from the Vehicle table to this Vehicle assignment object
+                if (Convert.ToInt32(ddlEdtPlateNo.SelectedValue) != 0)
+                    vehicleReqDetail.PreEndKmReading = Convert.ToDecimal(_presenter.GetVehicle(Convert.ToInt32(ddlEdtPlateNo.SelectedValue)).LastKmReading);
                 TextBox txtEdtDriverPhoneNo = e.Item.FindControl("txtEdtDriverPhoneNo") as TextBox;
-                vehicle.DriverPhoneNo = txtEdtDriverPhoneNo.Text;
+                vehicleReqDetail.DriverPhoneNo = txtEdtDriverPhoneNo.Text;
                 TextBox txtEdtRentalDrName = e.Item.FindControl("txtEdtRentalDrName") as TextBox;
-                vehicle.RentalDriverName = txtEdtRentalDrName.Text;
+                vehicleReqDetail.RentalDriverName = txtEdtRentalDrName.Text;
                 DropDownList ddlEdtCarRental = e.Item.FindControl("ddlEdtCarRental") as DropDownList;
-                vehicle.CarRental = _presenter.GetCarRental(Convert.ToInt32(ddlEdtCarRental.SelectedValue));
+                vehicleReqDetail.CarRental = _presenter.GetCarRental(Convert.ToInt32(ddlEdtCarRental.SelectedValue));
                 DropDownList ddlEdtCarModel = e.Item.FindControl("ddlEdtCarModel") as DropDownList;
-                vehicle.CarModel = _presenter.GetCarModel(Convert.ToInt32(ddlEdtCarModel.SelectedValue));
+                vehicleReqDetail.CarModel = _presenter.GetCarModel(Convert.ToInt32(ddlEdtCarModel.SelectedValue));
                 DropDownList ddlEdtDriver = e.Item.FindControl("ddlEdtDriver") as DropDownList;
-                vehicle.AppUser = _presenter.GetUser(Convert.ToInt32(ddlEdtDriver.SelectedValue));
+                vehicleReqDetail.AppUser = _presenter.GetUser(Convert.ToInt32(ddlEdtDriver.SelectedValue));
 
                 dgVehicles.EditItemIndex = -1;
                 BindVehicles();
-                pnlApproval_ModalPopupExtender.Show();
-                Master.ShowMessage(new AppMessage("Vehicle Information Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
+                Master.ShowMessage(new AppMessage("Vehicle Information Successfully Updated", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to Update Vehicle Information. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to Update Vehicle Information. " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         protected void btnFind_Click(object sender, EventArgs e)
@@ -615,7 +647,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         Master.ShowMessage(new AppMessage("Vehicle Request Approval Processed ", RMessageType.Info));
                         btnApprove.Enabled = false;
                         BindSearchVehicleRequestGrid();
-                        pnlApproval_ModalPopupExtender.Show();
+                        ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
                     }
                 }
                 PrintTransaction();
@@ -644,24 +676,25 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 lblRejectedReason.Visible = true;
                 txtRejectedReason.Visible = true;
                 rfvRejectedReason.Enabled = true;
-                pnlApproval_ModalPopupExtender.Show();
+                ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
             }
             else
             {
                 lblRejectedReason.Visible = false;
                 txtRejectedReason.Visible = false;
-                pnlApproval_ModalPopupExtender.Show();
+                ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
             }
         }
         protected void ddlProject_SelectedIndexChanged(object sender, EventArgs e)
         {
             PopGrants(Convert.ToInt32(ddlProject.SelectedValue));
-            pnlApproval_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
         }
         protected void ddlDriver_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddlDriver = (DropDownList)sender;
             TextBox txtPhoneNo = ddlDriver.FindControl("txtFDriverPhoneNo") as TextBox;
+            DropDownList ddlPlateNo = ddlDriver.FindControl("ddlFPlateNo") as DropDownList;
             if (_presenter.GetAssignDriver(Convert.ToInt32(ddlDriver.SelectedValue)) != null)
             {
                 if (_presenter.GetAssignDriver(Convert.ToInt32(ddlDriver.SelectedValue)).Employee != null)
@@ -671,12 +704,18 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
             else
                 txtPhoneNo.Text = String.Empty;
-            pnlApproval_ModalPopupExtender.Show();
+
+            if (_presenter.GetVehicleByDriver(Convert.ToInt32(ddlDriver.SelectedValue)) != null)
+            {
+                ddlPlateNo.SelectedValue = _presenter.GetVehicleByDriver(Convert.ToInt32(ddlDriver.SelectedValue)).Id.ToString();
+            }
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
         }
         protected void ddlEdtDriver_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddlEdtDriver = (DropDownList)sender;
             TextBox txtEdtPhoneNo = ddlEdtDriver.FindControl("txtEdtDriverPhoneNo") as TextBox;
+            DropDownList ddlEdtPlateNo = ddlEdtDriver.FindControl("ddlEdtPlateNo") as DropDownList;
             if (_presenter.GetAssignDriver(Convert.ToInt32(ddlEdtDriver.SelectedValue)) != null)
             {
                 if (_presenter.GetAssignDriver(Convert.ToInt32(ddlEdtDriver.SelectedValue)).Employee != null)
@@ -686,7 +725,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
             else
                 txtEdtPhoneNo.Text = String.Empty;
-            pnlApproval_ModalPopupExtender.Show();
+
+            if (_presenter.GetVehicleByDriver(Convert.ToInt32(ddlEdtDriver.SelectedValue)) != null)
+            {
+                ddlEdtPlateNo.SelectedValue = _presenter.GetVehicleByDriver(Convert.ToInt32(ddlEdtDriver.SelectedValue)).Id.ToString();
+            }
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
         }
         protected void ddlAssignedVehicle_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -695,6 +739,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             if (ddlAssignedVehicle.SelectedValue == "driver")
             {
                 PopDrivers(ddlDriver);
+                dgVehicles.Columns[1].Visible = false;
             }
             else if (ddlAssignedVehicle.SelectedValue == "carRental")
             {
@@ -703,9 +748,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 ddlDriver.Items.Insert(0, new ListItem("Select Driver", "-1"));
                 ddlDriver.Items.Insert(1, new ListItem("Hired Driver", "0"));
                 ddlDriver.SelectedIndex = 0;
+                //Check if there are available Internal Vehicles
+                //If there are available cars prompt Reason for selecting Hired Car
+                if (_presenter.GetVehicles().Count > 0)
+                    dgVehicles.Columns[1].Visible = true;
             }
 
-            pnlApproval_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
         }
         protected void ddlEdtAssignedVehicle_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -719,6 +768,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 ddlEdtDriver.DataBind();
 
                 ddlEdtDriver.Items.Insert(0, new ListItem("Select Driver", "0"));
+                dgVehicles.Columns[1].Visible = false;
             }
             else if (ddlEdtAssignedVehicle.SelectedValue == "carRental")
             {
@@ -727,13 +777,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 ddlEdtDriver.Items.Insert(0, new ListItem("Select Driver", "-1"));
                 ddlEdtDriver.Items.Insert(1, new ListItem("Hired Driver", "0"));
                 ddlEdtDriver.SelectedIndex = 0;
+                //Check if there are available Internal Vehicles
+                //If there are available cars prompt Reason for selecting Hired Car
+                if (_presenter.GetVehicles().Count > 0)
+                    dgVehicles.Columns[1].Visible = true;
             }
 
-            pnlApproval_ModalPopupExtender.Show();
-        }
-        protected void btnCancelPopup_Click(object sender, EventArgs e)
-        {
-            pnlApproval.Visible = false;
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
         }
         private void PrintTransaction()
         {
