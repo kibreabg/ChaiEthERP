@@ -70,7 +70,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
             this.txtEngineCapacity.Text = _presenter.CurrentVehicle.EngineCapacity;
             this.txtLastKmReading.Text = Convert.ToInt32(_presenter.CurrentVehicle.LastKmReading).ToString();
             this.txtBodyType.Text = _presenter.CurrentVehicle.BodyType;
-            txtFrameNumber.Text = _presenter.CurrentVehicle.FrameNumber;
+            txtFrameNumber.Text = _presenter.CurrentVehicle.FrameNo;
             this.ddlDriver.SelectedValue = _presenter.CurrentVehicle.AppUser != null ? _presenter.CurrentVehicle.AppUser.Id.ToString():"0";
            
             this.ddlStatus.SelectedValue = _presenter.CurrentVehicle.Status!= null? _presenter.CurrentVehicle.Status.ToString():"";
