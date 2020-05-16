@@ -246,6 +246,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     else
                     {
                         _presenter.CurrentPurchaseRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                        _presenter.CurrentPurchaseRequest.CurrentStatus = PRRS.ApprovalStatus;
                         SendEmailRejected(PRRS);
                     }
                     break;
@@ -278,10 +279,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         protected void btnFind_Click(object sender, EventArgs e)
         {
             BindSearchPurchaseRequestGrid();
-        }
-        protected void btnCancelPopup_Click(object sender, EventArgs e)
-        {
-            pnlApproval.Visible = false;
         }
         private void PrintTransaction()
         {
@@ -329,7 +326,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         //lnkBidRequest.Visible = true;
                        // lnkSoleVendor.Visible = true;
                     }
-                    pnlApproval_ModalPopupExtender.Show();
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);                    
                 }
             }
             catch (Exception ex)
@@ -363,7 +360,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             PrintTransaction();
             txtRejectedReason.Visible = false;
             rfvRejectedReason.Enabled = false;
-            pnlApproval_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
         }
         private void PopApprovalStatus()
         {
@@ -421,7 +418,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 txtRejectedReason.Visible = false;
                 rfvRejectedReason.Enabled = false;
             }
-            pnlApproval_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
         }
         protected void grvPurchaseRequestList_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {

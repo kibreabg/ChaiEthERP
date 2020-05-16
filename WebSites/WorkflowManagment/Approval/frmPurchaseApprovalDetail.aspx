@@ -5,6 +5,7 @@
 
 <%@ Register TagPrefix="asp" Namespace="AjaxControlToolkit" Assembly="AjaxControlToolkit" %>
 <asp:Content ID="Content2" ContentPlaceHolderID="DefaultContent" runat="Server">
+    <script src="../js/libs/jquery-2.0.2.min.js"></script>
     <script type="text/javascript">
         function Clickheretoprint(theid) {
             var disp_setting = "toolbar=yes,location=no,directories=yes,menubar=yes,";
@@ -19,6 +20,12 @@
             docprint.document.write('</center></body></html>');
             docprint.document.close();
             docprint.focus();
+        }
+
+        function showApprovalModal() {
+            $(document).ready(function () {
+                $('#approvalModal').modal('show');
+            });
         }
     </script>
     <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
@@ -64,42 +71,41 @@
                 </div>
             </div>
         </div>
-        <asp:GridView ID="grvPurchaseRequestList"
-            runat="server" AutoGenerateColumns="False" DataKeyNames="Id" OnRowCommand="grvPurchaseRequestList_RowCommand"
-            OnRowDataBound="grvPurchaseRequestList_RowDataBound" OnSelectedIndexChanged="grvPurchaseRequestList_SelectedIndexChanged"
-            AllowPaging="True" OnPageIndexChanging="grvPurchaseRequestList_PageIndexChanging"
-            CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" PageSize="30">
-            <RowStyle CssClass="rowstyle" />
-            <Columns>
-                <asp:BoundField DataField="RequestNo" HeaderText="Request No" SortExpression="RequestNo" />
-                <asp:BoundField DataField="Requester" HeaderText="Requester" SortExpression="Requester" />
-                <asp:TemplateField HeaderText="Request Date">
-                    <ItemTemplate>
-                        <asp:Label ID="lblDate" runat="server" Text='<%# Eval("RequestedDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText="Required Date of Delivery">
-                    <ItemTemplate>
-                        <asp:Label ID="lblDateDelivery" runat="server" Text='<%# Eval("Requireddateofdelivery", "{0:dd/MM/yyyy}")%>'></asp:Label>
-                    </ItemTemplate>
-                </asp:TemplateField>
-
-                <asp:BoundField DataField="SuggestedSupplier" HeaderText="Suggested Supplier" SortExpression="PurposeOfTravel" />
-
-
-                <asp:ButtonField ButtonType="Button" CommandName="ViewItem" Text="View Item Detail" />
-                <asp:CommandField ButtonType="Button" SelectText="Process Request" ShowSelectButton="True" />
-                <asp:TemplateField>
-                    <ItemTemplate>
-                        <asp:Button runat="server" ID="btnStatus" Text="" BorderStyle="None" />
-                    </ItemTemplate>
-                </asp:TemplateField>
-            </Columns>
-            <FooterStyle CssClass="FooterStyle" />
-            <HeaderStyle CssClass="headerstyle" />
-            <PagerStyle CssClass="PagerStyle" />
-            <RowStyle CssClass="rowstyle" />
-        </asp:GridView>
+        <div class="table-responsive">
+            <asp:GridView ID="grvPurchaseRequestList" Width="100%"
+                runat="server" AutoGenerateColumns="False" DataKeyNames="Id" OnRowCommand="grvPurchaseRequestList_RowCommand"
+                OnRowDataBound="grvPurchaseRequestList_RowDataBound" OnSelectedIndexChanged="grvPurchaseRequestList_SelectedIndexChanged"
+                AllowPaging="True" OnPageIndexChanging="grvPurchaseRequestList_PageIndexChanging"
+                CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" PageSize="30">
+                <RowStyle CssClass="rowstyle" />
+                <Columns>
+                    <asp:BoundField DataField="RequestNo" HeaderText="Request No" SortExpression="RequestNo" />
+                    <asp:BoundField DataField="Requester" HeaderText="Requester" SortExpression="Requester" />
+                    <asp:TemplateField HeaderText="Request Date">
+                        <ItemTemplate>
+                            <asp:Label ID="lblDate" runat="server" Text='<%# Eval("RequestedDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Required Date of Delivery">
+                        <ItemTemplate>
+                            <asp:Label ID="lblDateDelivery" runat="server" Text='<%# Eval("Requireddateofdelivery", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:BoundField DataField="SuggestedSupplier" HeaderText="Suggested Supplier" SortExpression="PurposeOfTravel" />
+                    <asp:ButtonField ButtonType="Button" CommandName="ViewItem" Text="View Item Detail" />
+                    <asp:CommandField ButtonType="Button" SelectText="Process Request" ShowSelectButton="True" />
+                    <asp:TemplateField>
+                        <ItemTemplate>
+                            <asp:Button runat="server" ID="btnStatus" Text="" BorderStyle="None" />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                </Columns>
+                <FooterStyle CssClass="FooterStyle" />
+                <HeaderStyle CssClass="headerstyle" />
+                <PagerStyle CssClass="PagerStyle" />
+                <RowStyle CssClass="rowstyle" />
+            </asp:GridView>
+        </div>
         <div>
             <asp:Button runat="server" ID="btnInProgress" Text="" BorderStyle="None" BackColor="#FFFF6C" />
             <b>In Progress</b><br />
@@ -109,65 +115,56 @@
         </div>
         <br />
     </div>
-    <asp:Panel ID="pnlApproval" runat="server">
+    <div class="modal fade" id="approvalModal" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Process Purchase Request</h4>
                 </div>
-                <div class="modal-body no-padding">
-                    <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
-                        <header>
-                            <span class="widget-icon"><i class="fa fa-edit"></i></span>
-                            <h2>Process Purchase Request</h2>
-                        </header>
-                        <div>
-                            <div class="jarviswidget-editbox"></div>
-                            <div class="widget-body no-padding">
-                                <div class="smart-form">
-                                    <fieldset>
-                                        <div class="row">
-                                            <section class="col col-6">
-                                                <asp:Label ID="lblApprovalStatus" runat="server" Text="Approval Status" CssClass="label"></asp:Label>
-                                                <label class="select">
-                                                    <asp:DropDownList ID="ddlApprovalStatus" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlApprovalStatus_SelectedIndexChanged">
-                                                        <asp:ListItem Value="0">Select Status</asp:ListItem>
-                                                    </asp:DropDownList><i></i>
-                                                    <asp:RequiredFieldValidator ID="RfvApprovalStatus" runat="server" ValidationGroup="save" ErrorMessage="Approval Status Required" InitialValue="0" ControlToValidate="ddlApprovalStatus"></asp:RequiredFieldValidator>
-                                                </label>
-                                            </section>
-                                            <section class="col col-6">
-                                                <asp:Label ID="lblRejectedReason" runat="server" Text="Rejected/Canceled Reason" Visible="false" CssClass="label"></asp:Label>
-                                                <label class="input">
-                                                    <asp:TextBox ID="txtRejectedReason" Visible="false" runat="server"></asp:TextBox>
-                                                    <asp:RequiredFieldValidator ID="rfvRejectedReason" runat="server" Enabled="false" CssClass="validator" ValidationGroup="save" ErrorMessage="Must Enter Rejection Reason" ControlToValidate="txtRejectedReason"></asp:RequiredFieldValidator>
-                                                </label>
-                                            </section>
-                                        </div>
-                                        <div class="row">
-                                            <section class="col col-6">
-                                                <asp:LinkButton runat="server" ID="lnkBidRequest" Visible="true" Text="Prepare Bid Analysis" OnClick="lnkBidRequest_Click" CssClass="btn btn-primary"></asp:LinkButton><br />
-                                                <br />
-                                                <asp:LinkButton runat="server" ID="lnkSoleVendor" Visible="true" Text="Prepare Sole Vendor Verification" OnClick="lnkSoleVendor_Click" CssClass="btn btn-primary"></asp:LinkButton>
-                                            </section>
-                                        </div>
-                                    </fieldset>
-                                    <footer>
-                                        <asp:Button ID="btnApprove" runat="server" ValidationGroup="save" Text="Save" OnClick="btnApprove_Click" Enabled="false" CssClass="btn btn-primary"></asp:Button>
-                                        <asp:Button ID="btnCancelPopup" runat="server" Text="Close" CssClass="btn btn-primary" OnClick="btnCancelPopup_Click"></asp:Button>
-                                        <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-primary" Enabled="false" OnClientClick="javascript:Clickheretoprint('divprint')"></asp:Button>
-                                    </footer>
+                <div class="modal-body">
+                    <div class="jarviswidget-editbox"></div>
+                    <div class="widget-body no-padding">
+                        <div class="smart-form">
+                            <fieldset>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <asp:Label ID="lblApprovalStatus" runat="server" Text="Approval Status" CssClass="label"></asp:Label>
+                                        <label class="select">
+                                            <asp:DropDownList ID="ddlApprovalStatus" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlApprovalStatus_SelectedIndexChanged">
+                                                <asp:ListItem Value="0">Select Status</asp:ListItem>
+                                            </asp:DropDownList><i></i>
+                                            <asp:RequiredFieldValidator ID="RfvApprovalStatus" runat="server" ValidationGroup="save" ErrorMessage="Approval Status Required" InitialValue="0" ControlToValidate="ddlApprovalStatus"></asp:RequiredFieldValidator>
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <asp:Label ID="lblRejectedReason" runat="server" Text="Rejected/Canceled Reason" Visible="false" CssClass="label"></asp:Label>
+                                        <label class="input">
+                                            <asp:TextBox ID="txtRejectedReason" Visible="false" runat="server"></asp:TextBox>
+                                            <asp:RequiredFieldValidator ID="rfvRejectedReason" runat="server" Enabled="false" CssClass="validator" ValidationGroup="save" ErrorMessage="Must Enter Rejection Reason" ControlToValidate="txtRejectedReason"></asp:RequiredFieldValidator>
+                                        </label>
+                                    </section>
                                 </div>
-                            </div>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <asp:LinkButton runat="server" ID="lnkBidRequest" Visible="true" Text="Prepare Bid Analysis" OnClick="lnkBidRequest_Click" CssClass="btn btn-primary"></asp:LinkButton><br />
+                                        <br />
+                                        <asp:LinkButton runat="server" ID="lnkSoleVendor" Visible="true" Text="Prepare Sole Vendor Verification" OnClick="lnkSoleVendor_Click" CssClass="btn btn-primary"></asp:LinkButton>
+                                    </section>
+                                </div>
+                            </fieldset>
+                            <footer>
+                                <asp:Button ID="btnApprove" runat="server" ValidationGroup="save" Text="Save" OnClick="btnApprove_Click" Enabled="false" CssClass="btn btn-primary"></asp:Button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-primary" Enabled="false" OnClientClick="javascript:Clickheretoprint('divprint')"></asp:Button>
+                            </footer>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- /.modal-content -->
-    </asp:Panel>
-    <asp:ModalPopupExtender runat="server" BackgroundCssClass="modalBackground" Enabled="True" PopupControlID="pnlApproval"
-        TargetControlID="btnPop" CancelControlID="btnCancelPopup" ID="pnlApproval_ModalPopupExtender">
-    </asp:ModalPopupExtender>
+    </div>
     <asp:Panel ID="pnlDetail" runat="server">
         <div class="modal-body no-padding">
             <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
@@ -179,7 +176,7 @@
                     <div class="jarviswidget-editbox"></div>
                     <div class="widget-body no-padding">
                         <div class="smart-form">
-                            <asp:DataGrid ID="dgPurchaseRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0" TextWrap = "Wrap"
+                            <asp:DataGrid ID="dgPurchaseRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0" TextWrap="Wrap"
                                 CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
                                 GridLines="None" OnCancelCommand="dgPurchaseRequestDetail_CancelCommand" OnEditCommand="dgPurchaseRequestDetail_EditCommand"
                                 OnItemDataBound="dgPurchaseRequestDetail_ItemDataBound" OnUpdateCommand="dgPurchaseRequestDetail_UpdateCommand"
