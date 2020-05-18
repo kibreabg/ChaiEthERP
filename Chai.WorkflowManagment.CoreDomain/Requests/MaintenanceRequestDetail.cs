@@ -12,7 +12,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
     {
         public int Id { get; set; }
            
-        public virtual PurchaseRequest PurchaseRequest { get; set; }
+        public virtual MaintenanceRequest MaintenanceRequest { get; set; }
         public virtual ServiceTypeDetail DriverServiceType { get; set; }
 
         public virtual ServiceTypeDetail MechanicServiceType { get; set; }

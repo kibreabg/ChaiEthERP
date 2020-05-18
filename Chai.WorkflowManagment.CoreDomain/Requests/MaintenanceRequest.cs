@@ -1,4 +1,5 @@
 ﻿using Chai.WorkflowManagment.CoreDomain.Setting;
+using Chai.WorkflowManagment.CoreDomain.Users;
 using System;
 using System.Collections.Generic;
 
@@ -22,12 +23,13 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string SuggestedSupplier { get; set; }
         public bool IsVehicle { get; set; }
         public int Vehicle_Id { get; set; }
-        // public Program Program { get; set; }
+        public string KmReading { get; set; }
         public string Comment { get; set; }
         public int CurrentApprover { get; set; }
         public int CurrentLevel { get; set; }
         public string CurrentStatus { get; set; }
         public string ProgressStatus { get; set; }
+        public virtual AppUser AppUser { get; set; }
         public virtual Vehicle Vehicles { get; set; }
 
         public virtual ServiceType ServiceTpes { get; set; }
@@ -99,7 +101,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
             IList<MaintenanceRequestDetail> MRS = new List<MaintenanceRequestDetail>();
             foreach (MaintenanceRequestDetail MR in MaintenanceRequestDetails)
             {
-                if (MR.PurchaseRequest.Id == MaintenanceId)
+                if (MR.MaintenanceRequest.Id == MaintenanceId)
                     MRS.Add(MR);
 
             }
