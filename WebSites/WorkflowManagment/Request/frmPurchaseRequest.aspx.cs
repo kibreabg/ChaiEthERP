@@ -131,6 +131,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     _presenter.CurrentPurchaseRequest.Vehicle_Id = 0;
                 }
+
                 //Determine total cost
                 /*       decimal cost = 0;
                        if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Count > 0)
