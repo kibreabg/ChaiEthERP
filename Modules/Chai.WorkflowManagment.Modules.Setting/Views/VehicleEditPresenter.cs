@@ -65,7 +65,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
             vehicle.BodyType = View.GetBodyType;
             vehicle.EngineCapacity = View.GetEngineCapacity;
             vehicle.EngineType = View.GetEngineType;
-            vehicle.FrameNumber = View.GetFrameNumber;
+            vehicle.FrameNo = View.GetFrameNumber;
             vehicle.LastKmReading = View.GetLastKmReading;
             vehicle.Transmission = View.GetTransmission;
             vehicle.AppUser = View.AppUser;
