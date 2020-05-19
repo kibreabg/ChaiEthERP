@@ -118,20 +118,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 _presenter.CurrentPurchaseRequest.DeliverTo = txtDeliverto.Text;
                 _presenter.CurrentPurchaseRequest.Comment = "";
                 _presenter.CurrentPurchaseRequest.SuggestedSupplier = txtSuggestedSupplier.Text;
-               
+
                 _presenter.CurrentPurchaseRequest.Requireddateofdelivery = Convert.ToDateTime(txtdeliveryDate.Text);
                 _presenter.CurrentPurchaseRequest.IsVehicle = GetIsVehicle;
-
-
-                if (GetPlateNo != 0)
-                {
-                    _presenter.CurrentPurchaseRequest.Vehicle_Id = Convert.ToInt32(GetPlateNo);
-                }
-                else
-                {
-                    _presenter.CurrentPurchaseRequest.Vehicle_Id = 0;
-                }
-
+                _presenter.CurrentPurchaseRequest.PlateNo = GetPlateNo;
                 //Determine total cost
                 /*       decimal cost = 0;
                        if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Count > 0)
@@ -157,7 +147,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         //AutoNumber();
                     }
                 }
-
             }
 
         }
@@ -190,7 +179,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             {
                                 PRS.Approver = _presenter.GetProject(_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[0].Project.Id).AppUser.Id;
                             }
-
                         }
                         else
                         {
@@ -199,12 +187,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         PRS.WorkflowLevel = i;
                         i++;
                         _presenter.CurrentPurchaseRequest.PurchaseRequestStatuses.Add(PRS);
-
                     }
                 }
                 else { pnlWarning.Visible = true; }
             }
-
         }
         private void GetCurrentApprover()
         {
@@ -217,33 +203,25 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     _presenter.CurrentPurchaseRequest.CurrentLevel = PRS.WorkflowLevel;
                     _presenter.CurrentPurchaseRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
                     break;
-
                 }
             }
         }
         private void SendEmail(PurchaseRequestStatus PRS)
         {
-
-
             if (_presenter.GetSuperviser(PRS.Approver).IsAssignedJob != true)
             {
                 EmailSender.Send(_presenter.GetSuperviser(PRS.Approver).Email, "Purchase Request", _presenter.GetUser(_presenter.CurrentPurchaseRequest.Requester).FullName + "' Request for Item procurment No. '" + _presenter.CurrentPurchaseRequest.RequestNo + "'");
             }
             else
             {
-
                 EmailSender.Send(_presenter.GetSuperviser(_presenter.GetAssignedJobbycurrentuser(PRS.Approver).AssignedTo).Email, "Purchase Request", _presenter.GetUser(_presenter.CurrentPurchaseRequest.Requester).FullName + "' Request for Item procurment No. '" + _presenter.CurrentPurchaseRequest.RequestNo + "'");
             }
-
-
         }
 
         private void PopInternalVehicles()
         {
             ddlPlate.DataSource = _presenter.GetVehicles();
             ddlPlate.DataBind();
-
-
         }
         public PurchaseRequest PurchaseRequest
         {
@@ -269,10 +247,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return ckIsVehicle.Checked; }
         }
-        public int GetPlateNo
+        public string GetPlateNo
         {
-
-            get { return Convert.ToInt32(ddlPlate.SelectedValue); }
+            get { return ddlPlate.SelectedValue; }
         }
         public int PurchaseRequestId
         {
