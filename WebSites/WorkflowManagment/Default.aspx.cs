@@ -255,12 +255,7 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
             lblSoleVendorStatus.ForeColor = System.Drawing.Color.Green;
 
         }
-        if (_presenter.GetPaymentReimbursementRequestMyRequest() != 0)
-        {
-            lblSoleVendorStatus.Text = ProgressStatus.InProgress.ToString();
-            lblSoleVendorStatus.ForeColor = System.Drawing.Color.Green;
 
-        }
     }
     private void ReimbersmentStatus()
     {

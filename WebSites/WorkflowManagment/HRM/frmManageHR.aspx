@@ -506,8 +506,9 @@
                                                         <asp:ListItem Value="">Select Class</asp:ListItem>
                                                         <asp:ListItem Value="Local National">Local National</asp:ListItem>
                                                         <asp:ListItem Value="Expat">Expat</asp:ListItem>
-                                                        <asp:ListItem Value="Seconedee">Seconedee</asp:ListItem>
+                                                        <asp:ListItem Value="Secondee">Secondee</asp:ListItem>
                                                         <asp:ListItem Value="Volunteer">Volunteer</asp:ListItem>
+                                                         <asp:ListItem Value="TCN">TCN</asp:ListItem>
                                                         <asp:ListItem Value="Independent Contractor">Independent Contractor</asp:ListItem>
 
                                                     </asp:DropDownList>

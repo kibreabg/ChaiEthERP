@@ -420,6 +420,30 @@ namespace Chai.WorkflowManagment.Modules.Approval
             return _workspace.Single<PurchaseOrderSoleVendor>(x => x.Id == purchaseOrderSoleVendorId);
         }
         #endregion
+        #region MaintenanceApproval
+        public MaintenanceRequest GetMaintenanceRequest(int MaintenanceRequestId)
+        {
+            return _workspace.Single<MaintenanceRequest>(x => x.Id == MaintenanceRequestId);
+        }
+        public IList<MaintenanceRequest> ListMaintenanceRequests(string RequestNo, string RequestDate, string ProgressStatus)
+        {
+            string filterExpression = "";
+            if (ProgressStatus != "Completed")
+            {
+                filterExpression = " SELECT * FROM MaintenanceRequests INNER JOIN AppUsers ON AppUsers.Id = MaintenanceRequests.CurrentApprover Left JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When MaintenanceRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When MaintenanceRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND MaintenanceRequests.ProgressStatus='" + ProgressStatus + "' " +
+                                       " AND ((MaintenanceRequests.CurrentApprover = '" + CurrentUser().Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) order by MaintenanceRequests.Id DESC ";
+            }
+            else
+            {
+                filterExpression = " SELECT * FROM MaintenanceRequests INNER JOIN AppUsers ON AppUsers.Id = MaintenanceRequests.CurrentApprover INNER JOIN MaintenanceRequestStatuses ON MaintenanceRequestStatuses.MaintenanceRequest_Id = MaintenanceRequests.Id LEFT JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When SoleVendorRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When MaintenanceRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND MaintenanceRequests.ProgressStatus='" + ProgressStatus + "'  " +
+                                          " AND (MaintenanceRequestStatuses.ApprovalStatus IS NOT NULL AND (MaintenanceRequestStatuses.Approver = '" + CurrentUser().Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) ORDER BY MaintenanceRequests.Id DESC ";
+            }
+
+            return _workspace.SqlQuery<MaintenanceRequest>(filterExpression).ToList();
+        }
+    
+     
+        #endregion
         #region Employee
         public Employee GetEmployee(int empid)
         {

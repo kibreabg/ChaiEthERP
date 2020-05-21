@@ -47,11 +47,11 @@ namespace Chai.WorkflowManagment.Modules.Setting
         #region User
         public IList<AppUser> GetProgramManagers()
         {
-            return WorkspaceFactory.CreateReadOnly().Query<AppUser>(x => x.EmployeePosition.PositionName.Contains("Program Manager") || x.EmployeePosition.PositionName == "Vice President & Country Director, Ethiopia" || x.EmployeePosition.PositionName == "Finance Manager" || x.EmployeePosition.PositionName == "Senior Deputy Country Director" || x.EmployeePosition.PositionName== "Coordinator, Program Operations" || x.EmployeePosition.PositionName == "M&E Manager" || x.EmployeePosition.PositionName == "Head, Administration & HR").ToList();
-        }     
+            return WorkspaceFactory.CreateReadOnly().Query<AppUser>(x => x.EmployeePosition.PositionName.Contains("Program Manager") || x.EmployeePosition.PositionName == "Vice President & Country Director, Ethiopia" || x.EmployeePosition.PositionName == "Finance Manager" || x.EmployeePosition.PositionName == "Senior Deputy Country Director" || x.EmployeePosition.PositionName == "Coordinator, Program Operations" || x.EmployeePosition.PositionName == "M&E Manager" || x.EmployeePosition.PositionName == "Head, Administration & HR").ToList();
+        }
         public IList<AppUser> GetEmployeeList()
         {
-            return WorkspaceFactory.CreateReadOnly().Query<AppUser>(x => x.IsActive == true).OrderBy(x=>x.FullName).ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<AppUser>(x => x.IsActive == true).OrderBy(x => x.FullName).ToList();
         }
         public IList<AppUser> GetAppUsersByEmployeePosition(int employeePosition)
         {
@@ -73,7 +73,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
         }
         public IList<Account> GetAccounts()
         {
-            return WorkspaceFactory.CreateReadOnly().Query<Account>(x=>x.Status =="Active").ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<Account>(x => x.Status == "Active").ToList();
         }
         public IList<Account> ListBankAccounts(string BankName)
         {
@@ -160,7 +160,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
         }
         public IList<Supplier> GetSuppliers(int SupplierTypeId)
         {
-            return WorkspaceFactory.CreateReadOnly().Query<Supplier>(x => x.SupplierType.Id == SupplierTypeId && x.Status =="Active").ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<Supplier>(x => x.SupplierType.Id == SupplierTypeId && x.Status == "Active").ToList();
         }
         public Supplier GetSupplier(int Id)
         {
@@ -301,7 +301,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             if (vehicle.Id <= 0)
             {
-               
+
 
                 using (var wr = WorkspaceFactory.CreateReadOnly())
                 {
@@ -309,9 +309,32 @@ namespace Chai.WorkflowManagment.Modules.Setting
                         throw new Exception("Vehicle name already exists");
                 }
             }
-           
+
 
             SaveOrUpdateEntity<Vehicle>(vehicle);
+        }
+        #endregion
+        #region ServiceType
+        public IList<ServiceType> GetServiceTypes()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<ServiceType>(null).ToList();
+        }
+        public ServiceType GetServiceType(int sTypeId)
+        {
+            return _workspace.Single<ServiceType>(x => x.Id == sTypeId);
+        }
+        public ServiceTypeDetail GetServiceTypeDetail(int sTypeDetailId)
+        {
+            return _workspace.Single<ServiceTypeDetail>(x => x.Id == sTypeDetailId);
+        }
+        public IList<ServiceType> ListServiceTypes(string stName)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM ServiceTypes WHERE 1 = CASE WHEN '" + stName + "' = '' THEN 1 WHEN ServiceTypes.Name = '" + stName + "'  THEN 1 END";
+
+            return _workspace.SqlQuery<ServiceType>(filterExpression).ToList();
+
         }
         #endregion
         #region LeaveType
@@ -413,7 +436,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
 
         public IList<Project> GetProjects()
         {
-            return WorkspaceFactory.CreateReadOnly().Query<Project>(x=>x.Status == "Active").ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<Project>(x => x.Status == "Active").ToList();
         }
         public IList<Project> GetProjectsByProgramId(int programID)
         {
@@ -421,7 +444,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
         }
         public Project GetProject(int ProjectId)
         {
-            return _workspace.Single<Project>(x => x.Id == ProjectId, x => x.ProGrants,x=>x.AppUser, x => x.ProGrants.Select(y => y.Grant));
+            return _workspace.Single<Project>(x => x.Id == ProjectId, x => x.ProGrants, x => x.AppUser, x => x.ProGrants.Select(y => y.Grant));
         }
         public Project GetProjectbyid(int ProjectId)
         {
@@ -429,7 +452,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
         }
         public Project GetProjectforCostSharing(int ProjectId)
         {
-            return _workspace.Single<Project>(x => x.Id == ProjectId && x.Status=="Active", x => x.ProGrants, x => x.AppUser, x => x.ProGrants.Select(y => y.Grant));
+            return _workspace.Single<Project>(x => x.Id == ProjectId && x.Status == "Active", x => x.ProGrants, x => x.AppUser, x => x.ProGrants.Select(y => y.Grant));
         }
         public ProGrant GetProjectGrant(int ProjectGrantId)
         {
@@ -447,7 +470,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
 
             return _workspace.SqlQuery<Grant>(filterExpression).ToList();
 
-        }        
+        }
         public IList<Project> ListProjects(string ProjectCode)
         {
             string filterExpression = "";
@@ -467,7 +490,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
             filterExpression = "SELECT  *  FROM CostSharingSettings Left join Projects on CostSharingSettings.ProjectId=Projects.Id";
 
             return _workspace.SqlQuery<CostSharingSetting>(filterExpression).ToList();
-            
+
         }
         public CostSharingSetting GetProjectfromCostSharingSettings(int projectId)
         {
@@ -541,28 +564,28 @@ namespace Chai.WorkflowManagment.Modules.Setting
 
             foreach (ApprovalSetting s in settinglist)
             {
-                
-                    if (value < s.Value && "<" == s.CriteriaCondition)
-                    {
-                        return s;
-                    }
-                    else if (value >= s.Value && value <= s.Value2 && "Between" == s.CriteriaCondition)
-                    {
-                        return s;
-                    }
-                    else if (value >= s.Value && ">" == s.CriteriaCondition)
-                    {
-                        return s;
-                    }
-                    else if (value == 0 && "None" == s.CriteriaCondition)
-                    {
-                        return s;
-                    }
+
+                if (value < s.Value && "<" == s.CriteriaCondition)
+                {
+                    return s;
                 }
-                
-                  return null;
-            
-           
+                else if (value >= s.Value && value <= s.Value2 && "Between" == s.CriteriaCondition)
+                {
+                    return s;
+                }
+                else if (value >= s.Value && ">" == s.CriteriaCondition)
+                {
+                    return s;
+                }
+                else if (value == 0 && "None" == s.CriteriaCondition)
+                {
+                    return s;
+                }
+            }
+
+            return null;
+
+
         }
         #endregion
         #region EmployeeSetting
@@ -574,11 +597,11 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             return _workspace.Single<EmployeeLeave>(x => x.Id == Id);
         }
-        public EmployeeLeave GetActiveEmployeeLeaveRequest(int UserId,bool Status)
+        public EmployeeLeave GetActiveEmployeeLeaveRequest(int UserId, bool Status)
         {
             //return WorkspaceFactory.CreateReadOnly().Query<EmployeeLeave>(x => x.AppUser.Id == UserId && x.Status == Status).SingleOrDefault();
             return _workspace.Single<EmployeeLeave>(x => x.AppUser.Id == UserId && x.Status == Status);
-               // .SingleOrDefault();
+            // .SingleOrDefault();
         }
         public EmployeeLeave GetActiveEmployeeLeave(int UserId, bool Status)
         {
@@ -586,9 +609,9 @@ namespace Chai.WorkflowManagment.Modules.Setting
         }
         public IList<EmployeeLeave> GetEmployeeLeaves(int UserId)
         {
-            return  WorkspaceFactory.CreateReadOnly().Query<EmployeeLeave>(x => x.AppUser.Id == UserId).OrderByDescending(x=>x.Id).ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<EmployeeLeave>(x => x.AppUser.Id == UserId).OrderByDescending(x => x.Id).ToList();
         }
-      
+
 
         #endregion
         #region Beneficiary
@@ -645,14 +668,14 @@ namespace Chai.WorkflowManagment.Modules.Setting
         }
         public decimal TotalleaveTaken(int EmpId, DateTime Leavedatesetting)
         {
-             string filterExpression = "";
+            string filterExpression = "";
 
             filterExpression = "SELECT *  FROM LeaveRequests Inner Join LeaveTypes on LeaveRequests.LeaveType_Id = LeaveTypes.Id "
-                               + " Where LeaveTypes.LeaveTypeName = 'Annual Leave' and LeaveRequests.CurrentStatus= 'Issued' and LeaveRequests.Requester = '" + EmpId + "' and LeaveRequests.RequestedDate >= '" + Leavedatesetting+"'";
+                               + " Where LeaveTypes.LeaveTypeName = 'Annual Leave' and LeaveRequests.CurrentStatus= 'Issued' and LeaveRequests.Requester = '" + EmpId + "' and LeaveRequests.RequestedDate >= '" + Leavedatesetting + "'";
             // return WorkspaceFactory.CreateReadOnly().Queryable<CashPaymentRequest>(filterExpression).ToList();
-           IList<LeaveRequest> EmpLeaverequest =  _workspace.SqlQuery<LeaveRequest>(filterExpression).ToList();
-           return EmpLeaverequest.Sum(x => x.RequestedDays);
-                            
+            IList<LeaveRequest> EmpLeaverequest = _workspace.SqlQuery<LeaveRequest>(filterExpression).ToList();
+            return EmpLeaverequest.Sum(x => x.RequestedDays);
+
 
 
         }
@@ -673,7 +696,6 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             _workspace.Delete<T>(item);
             _workspace.CommitChanges();
-            _workspace.Refresh(item);
         }
 
         public void Commit()

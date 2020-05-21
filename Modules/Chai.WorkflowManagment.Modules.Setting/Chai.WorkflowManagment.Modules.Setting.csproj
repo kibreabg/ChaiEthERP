@@ -82,6 +82,7 @@
     <Compile Include="Views\BeneficiaryPresenter.cs" />
     <Compile Include="Views\CarModelPresenter.cs" />
     <Compile Include="Views\EmpLeaveSettingPresenter.cs" />
+    <Compile Include="Views\IServiceTypeView.cs" />
     <Compile Include="Views\IVehicleEditView.cs" />
     <Compile Include="Views\IVehiclesView.cs" />
     <Compile Include="Views\ProgramPresenter.cs" />
@@ -93,8 +94,10 @@
     <Compile Include="Views\IHolidayView.cs" />
     <Compile Include="Views\HolidayPresenter.cs" />
     <Compile Include="Views\ISoleVendorSupplierView.cs" />
+    <Compile Include="Views\ServiceTypePresenter.cs" />
     <Compile Include="Views\SoleVendorSupplierPresenter.cs" />
     <Compile Include="Views\VehicleEditPresenter.cs" />
+    <Compile Include="Views\VehiclesPresenter.cs" />
     <Compile Include="Views\VehiclePresenter.cs" />
     <Compile Include="Views\CostSharingSettingPresenter.cs" />
     <Compile Include="Views\EmployeeLeavePresenter.cs" />
@@ -123,7 +126,6 @@
     <Compile Include="Views\DefaultPresenter.cs" />
     <Compile Include="Views\IGrantView.cs" />
     <Compile Include="Views\IDefaultView.cs" />
-    <Compile Include="Views\VehiclesPresenter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />

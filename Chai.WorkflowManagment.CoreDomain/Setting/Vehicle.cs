@@ -24,5 +24,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Setting
         public string Status { get; set; }
         public virtual AppUser AppUser { get; set; }
 
+       
+
     }
 }
