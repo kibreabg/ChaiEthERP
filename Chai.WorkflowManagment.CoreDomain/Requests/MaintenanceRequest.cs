@@ -19,10 +19,10 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         
         public DateTime RequestedDate { get; set; }
         public string MaintenanceType { get; set; }
-        
-        public string SuggestedSupplier { get; set; }
+
+        public int Requester { get; set; }
         public bool IsVehicle { get; set; }
-        public int Vehicle_Id { get; set; }
+        public string PlateNo { get; set; }
         public string KmReading { get; set; }
         public string Comment { get; set; }
         public int CurrentApprover { get; set; }
