@@ -15,7 +15,6 @@ namespace Chai.WorkflowManagment.CoreDomain.Setting
         public string Name { get; set; }
         public string Description { get; set; }
         public int KmForService { get; set; }
-
         public virtual IList<ServiceTypeDetail> ServiceTypeDetails { get; set; }
         #region ServiceTypeDetail
         public virtual ServiceTypeDetail GetServiceTypeDetail(int Id)
@@ -40,7 +39,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Setting
             }
             return STD;
         }
-     
+
         public virtual void RemoveServiceTypeDetail(int Id)
         {
 
