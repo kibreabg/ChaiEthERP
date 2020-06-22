@@ -233,7 +233,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private string AutoNumber()
         {
-            return "BP-" + (_presenter.GetLastOperationalControlRequestId() + 1).ToString();
+            return "BP-" + _presenter.CurrentUser().Id.ToString() + "-" + (_presenter.GetLastOperationalControlRequestId() + 1).ToString();
         }
         private void CheckApprovalSettings()
         {

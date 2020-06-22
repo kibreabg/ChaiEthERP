@@ -166,14 +166,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         #endregion
         private string AutoNumber()
         {
-            if (_presenter.CurrentVehicleRequest.Id > 0)
-            {
-                return "VR-" + (_presenter.GetLastVehicleRequestId()).ToString();
-            }
-            else
-            {
-                return "VR-" + (_presenter.GetLastVehicleRequestId() + 1).ToString();
-            }
+            return "VR-" + _presenter.CurrentUser().Id.ToString() + "-" + (_presenter.GetLastVehicleRequestId() + 1).ToString();
         }
         private void CheckApprovalSettings()
         {

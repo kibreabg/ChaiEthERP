@@ -33,7 +33,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
             txtRequestDate.Text = DateTime.Today.Date.ToShortDateString();
             this._presenter.OnViewLoaded();
-            
+
         }
 
         [CreateNew]
@@ -105,7 +105,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         #endregion
         private string AutoNumber()
         {
-           return  "CSV-" + (_presenter.GetLastCostSharingRequestId() + 1).ToString();
+            return "CSV-" + _presenter.CurrentUser().Id.ToString() + "-" + (_presenter.GetLastCostSharingRequestId() + 1).ToString();
         }
         private void CheckApprovalSettings()
         {
@@ -170,7 +170,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ddlAccountDescription.DataTextField = "AccountName";
             ddlAccountDescription.DataBind();
         }
-       
         protected void grvCashPaymentRequestList_SelectedIndexChanged(object sender, EventArgs e)
         {
             Session["CashPaymentRequest"] = true;
@@ -245,7 +244,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             BindCostSharingRequests();
             //pnlSearch_ModalPopupExtender.Show();
-            ScriptManager.RegisterStartupScript(this, GetType(), "showSearch", "showSearch();", true);   
+            ScriptManager.RegisterStartupScript(this, GetType(), "showSearch", "showSearch();", true);
         }
         protected void btnCancel_Click(object sender, EventArgs e)
         {
@@ -284,31 +283,31 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         private void UploadFile()
         {
             string fileName = Path.GetFileName(fuReciept.PostedFile.FileName);
-            
+
             if (fileName != String.Empty)
             {
 
-                
+
 
                 CSRAttachment attachment = new CSRAttachment();
                 attachment.FilePath = "~/CSUploads/" + fileName;
                 fuReciept.PostedFile.SaveAs(Server.MapPath("~/CSUploads/") + fileName);
                 //Response.Redirect(Request.Url.AbsoluteUri);
                 _presenter.CurrentCostSharingRequest.CSRAttachments.Add(attachment);
-            
+
                 grvAttachments.DataSource = _presenter.CurrentCostSharingRequest.CSRAttachments;
                 grvAttachments.DataBind();
-               
-               
+
+
             }
             else
             {
                 Master.ShowMessage(new AppMessage("Please select file ", Chai.WorkflowManagment.Enums.RMessageType.Error));
             }
 
-                
+
         }
-        #endregion 
-        
+        #endregion
+
     }
 }
