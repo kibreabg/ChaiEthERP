@@ -45,7 +45,8 @@
                                 <label class="select">
                                     <asp:DropDownList ID="ddlRequestType" runat="server">
                                         <asp:ListItem Value="">Select Request Type</asp:ListItem>
-                                        <asp:ListItem Value="Medical">Medical Expense</asp:ListItem>
+                                        <asp:ListItem Value="Medical">Medical Expense (In-Patient)</asp:ListItem>
+                                        <asp:ListItem Value="Medical">Medical Expense (Out-Patient)</asp:ListItem>
                                         <asp:ListItem Value="Other">Other Payment</asp:ListItem>
                                     </asp:DropDownList><i></i>
                                 </label>
