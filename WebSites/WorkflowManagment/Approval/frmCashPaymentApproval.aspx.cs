@@ -128,7 +128,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             string will = "";
             foreach (ApprovalLevel AL in AS.ApprovalLevels)
             {
-                if ((AL.EmployeePosition.PositionName == "Superviser/Line Manager" || AL.EmployeePosition.PositionName == "Program Manager") && _presenter.CurrentCashPaymentRequest.CurrentLevel == 1)
+                if ((AL.EmployeePosition.PositionName == "Superviser/Line Manager" || AL.EmployeePosition.PositionName == "Program Manager"))
                 {
                     will = "Approve";
                     break;
