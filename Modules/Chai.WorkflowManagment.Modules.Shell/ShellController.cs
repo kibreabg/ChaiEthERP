@@ -267,7 +267,17 @@ namespace Chai.WorkflowManagment.Modules.Shell
             return _workspace.SqlQuery<SoleVendorRequest>(filterExpression).Count();
         }
 
-    
+        public int GetMaintenanceTasks()
+        {
+            currentUser = GetCurrentUser().Id;
+            string filterExpression = "";
+
+            filterExpression = " SELECT * FROM MaintenanceRequests INNER JOIN AppUsers on AppUsers.Id = MaintenanceRequests.CurrentApprover Left JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where MaintenanceRequests.ProgressStatus='InProgress' " +
+                                  " AND  ((MaintenanceRequests.CurrentApprover = '" + currentUser + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) order by MaintenanceRequests.Id ";
+
+            return _workspace.SqlQuery<MaintenanceRequest>(filterExpression).Count();
+        }
+
         #endregion
         #region MyRequests
         public int GetLeaveMyRequest()
@@ -380,6 +390,17 @@ namespace Chai.WorkflowManagment.Modules.Shell
                 return 0;
 
         }
+        public int GetMaintenanceRequestsMyRequest()
+        {
+            currentUser = GetCurrentUser().Id;
+            int Count = 0;
+            Count = WorkspaceFactory.CreateReadOnly().Count<MaintenanceRequest>(x => x.AppUser.Id == currentUser && x.ProgressStatus == "InProgress");
+            if (Count != 0)
+                return Count;
+            else
+                return 0;
+
+        }
         #endregion
         #region MyProgresses
         public IList<VehicleRequest> GetVehicleInProgress()
@@ -440,6 +461,13 @@ namespace Chai.WorkflowManagment.Modules.Shell
             currentUser = GetCurrentUser().Id;
             IList<SoleVendorRequest> soleVendorRequests = WorkspaceFactory.CreateReadOnly().Query<SoleVendorRequest>(x => x.AppUser.Id == currentUser && x.ProgressStatus == "InProgress").ToList();
             return soleVendorRequests;
+        }
+
+        public IList<MaintenanceRequest> GetMaintenanceInProgress()
+        {
+            currentUser = GetCurrentUser().Id;
+            IList<MaintenanceRequest> maintenanceRequests = WorkspaceFactory.CreateReadOnly().Query<MaintenanceRequest>(x => x.AppUser.Id == currentUser && x.ProgressStatus == "InProgress").ToList();
+            return maintenanceRequests;
         }
 
         public IList<LeaveRequest> GetLeaveInProgress()
