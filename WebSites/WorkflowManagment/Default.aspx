@@ -154,6 +154,14 @@
                                     </p>
                                     <a data-toggle="modal" runat="server" id="A11" href="#soleVendorModal">Progress Detail</a>
                                 </li>
+                                  <li class="">
+                                    <span class="handle" style="display: none"></span>
+                                    <p>
+                                        <asp:Label ID="lblMaintenanceMyRequest" runat="server" Text="Maintenance Request" CssClass="label"></asp:Label>-
+                                            <asp:Label ID="lblMaintenanceStatus" runat="server" Text="No Request"></asp:Label>
+                                    </p>
+                                    <a data-toggle="modal" runat="server" id="A12" href="#maintenanceModal">Progress Detail</a>
+                                </li>
                             </ul>
 
                             <!-- end content -->
@@ -287,6 +295,13 @@
                                     <p>
                                         <asp:LinkButton ID="lnkSoleVendor" runat="server" Text="Sole Vendor Requests" Enabled="false"></asp:LinkButton>
                                         (<small class="num-of-tasks"><asp:Label ID="lblSolVendor" runat="server" Text=""></asp:Label></small>)
+                                    </p>
+                                </li>
+                                  <li class="">
+                                    <span class="handle" style="display: none"></span>
+                                    <p>
+                                        <asp:LinkButton ID="lnkMaintenance" runat="server" Text="Maintenance Requests" Enabled="false"></asp:LinkButton>
+                                        (<small class="num-of-tasks"><asp:Label ID="lblMaintenanc" runat="server" Text=""></asp:Label></small>)
                                     </p>
                                 </li>
                             </ul>
@@ -684,6 +699,46 @@
                                             <asp:TemplateField HeaderText="Request Date">
                                                 <ItemTemplate>
                                                     <asp:Label ID="lblRequestDate" runat="server" Text='<%# Eval("RequestDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:BoundField DataField="CurrentApprover" HeaderText="Current Approver" SortExpression="CurrentApprover" />
+                                        </Columns>
+                                        <FooterStyle CssClass="FooterStyle" />
+                                        <HeaderStyle CssClass="headerstyle" />
+                                        <PagerStyle CssClass="PagerStyle" />
+                                        <RowStyle CssClass="rowstyle" />
+                                    </asp:GridView>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+      <div class="modal fade" id="maintenanceModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        ×
+                    </button>
+                    <h4 class="modal-title" id="myMaintenanceModalLabel">Maintenance Approval Progress</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="well well-sm well-primary">
+                                    <asp:GridView ID="grvMaintenanceProgress"
+                                        runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                                        CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" OnRowDataBound="grvMaintenanceProgress_RowDataBound" >
+                                        <RowStyle CssClass="rowstyle" />
+                                        <Columns>
+                                            <asp:BoundField DataField="RequestNo" HeaderText="Request No" SortExpression="RequestNo" />
+                                            <asp:TemplateField HeaderText="Request Date">
+                                                <ItemTemplate>
+                                                    <asp:Label ID="lblRequestDate" runat="server" Text='<%# Eval("RequestedDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                             <asp:BoundField DataField="CurrentApprover" HeaderText="Current Approver" SortExpression="CurrentApprover" />

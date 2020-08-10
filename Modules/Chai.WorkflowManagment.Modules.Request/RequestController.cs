@@ -139,6 +139,16 @@ namespace Chai.WorkflowManagment.Modules.Request
             int currentUserId = GetCurrentUser().Id;
             return WorkspaceFactory.CreateReadOnly().Query<CashPaymentRequest>(x => x.IsLiquidated == false && x.AmountType == "Advanced" && x.ProgressStatus == "Completed" && currentUserId == x.AppUser.Id).ToList();
         }
+        public IList<CashPaymentRequest> GetAllOutPatMedCPReqsThisYear()
+        {
+            int currentUserId = GetCurrentUser().Id;
+            return WorkspaceFactory.CreateReadOnly().Query<CashPaymentRequest>(x => x.RequestType == "Medical Expense (Out-Patient)" && x.AppUser.Id == currentUserId && x.RequestDate.Value.Year == DateTime.Now.Year && (x.CurrentStatus != "Rejected" || x.CurrentStatus == null)).ToList();
+        }
+        public IList<CashPaymentRequest> GetAllInPatMedCPReqsThisYear()
+        {
+            int currentUserId = GetCurrentUser().Id;
+            return WorkspaceFactory.CreateReadOnly().Query<CashPaymentRequest>(x => x.RequestType == "Medical Expense (In-Patient)" && x.AppUser.Id == currentUserId && x.RequestDate.Value.Year == DateTime.Now.Year && (x.CurrentStatus != "Rejected" || x.CurrentStatus == null)).ToList();
+        }
         public CashPaymentRequestDetail GetCashPaymentRequestDetail(int CPRDId)
         {
             return _workspace.Single<CashPaymentRequestDetail>(x => x.Id == CPRDId);
@@ -419,9 +429,10 @@ namespace Chai.WorkflowManagment.Modules.Request
             return WorkspaceFactory.CreateReadOnly().Query<PurchaseRequest>(null).ToList();
 
         }
-        string filterExpression = "";
+      
         public IList<PurchaseRequest> GetPurchaseRequestsInProgress()
         {
+            string filterExpression = "";
             filterExpression = "SELECT DISTINCT PurchaseRequests.Id,RequestNo,Requester,RequestedDate,Requireddateofdelivery,TotalPrice,SpecialNeed,NeededFor, " +
                                       " DeliverTo,Comment,SuggestedSupplier,IsVehicle,PlateNo,CurrentApprover,CurrentLevel,ProgressStatus,CurrentStatus FROM " +
                                       " PurchaseRequests INNER JOIN PurchaseRequestDetails ON dbo.PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id" +
@@ -586,6 +597,112 @@ namespace Chai.WorkflowManagment.Modules.Request
 
 
         #endregion
+        #region MaintenanceRequest
+
+        public IList<MaintenanceRequest> GetMaintenanceRequests()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<MaintenanceRequest>(null).ToList();
+
+        }
+       
+        public IList<MaintenanceRequest> GetMaintenanceRequestsInProgress()
+        {
+            string filterExpression = "";
+            filterExpression = "SELECT DISTINCT MaintenanceRequests.Id,RequestNo,Requester,RequestedDate,Requireddateofdelivery,TotalPrice,SpecialNeed,NeededFor, " +
+                                      " DeliverTo,Comment,SuggestedSupplier,IsVehicle,PlateNo,CurrentApprover,CurrentLevel,ProgressStatus,CurrentStatus FROM " +
+                                      " MaintenanceRequests INNER JOIN MaintenanceRequestDetails ON dbo.MaintenanceRequestDetails.MaintenanceRequest_Id = MaintenanceRequests.Id" +
+                                       " WHERE MaintenanceRequestDetails.BidAnalysisRequestStatus = 'InProgress' AND MaintenanceRequests.ProgressStatus = 'Completed' ORDER BY MaintenanceRequests.Id DESC ";
+
+            return _workspace.SqlQuery<MaintenanceRequest>(filterExpression).ToList();
+        }
+        public IList<MaintenanceRequestDetail> ListMaintenanceReqInProgress()
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM MaintenanceRequestDetails INNER JOIN MaintenanceRequests on dbo.MaintenanceRequestDetails.MaintenanceRequest_Id = MaintenanceRequests.Id  Where MaintenanceRequestDetails.BidAnalysisRequestStatus = 'InProgress'  order by MaintenanceRequests.Id Desc ";
+
+            return _workspace.SqlQuery<MaintenanceRequestDetail>(filterExpression).ToList();
+
+        }
+        public IList<MaintenanceRequestDetail> ListMaintenanceReqInProgressById(int ReqId)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM MaintenanceRequestDetails INNER JOIN MaintenanceRequests on MaintenanceRequestDetails.MaintenanceRequest_Id = MaintenanceRequests.Id  Where  MaintenanceRequests.Id = '" + ReqId + "' AND MaintenanceRequestDetails.BidAnalysisRequestStatus='InProgress' order by MaintenanceRequests.Id Desc ";
+
+            return _workspace.SqlQuery<MaintenanceRequestDetail>(filterExpression).ToList();
+
+        }
+        //public IList<MaintenanceRequestDetail> ListPRDetailsInProgressById(int ReqId)
+        //{
+        //    string filterExpression = "";
+
+        //    filterExpression = "SELECT  *  FROM MaintenanceRequestDetails INNER JOIN MaintenanceRequests ON MaintenanceRequestDetails.MaintenanceRequest_Id = MaintenanceRequests.Id WHERE MaintenanceRequestDetails.BidAnalysisRequestStatus = 'InProgress' AND MaintenanceRequests.Id = '" + ReqId + "'  ORDER BY MaintenanceRequests.Id DESC";
+
+        //    return _workspace.SqlQuery<MaintenanceRequestDetail>(filterExpression).ToList();
+
+        //}
+        public IList<MaintenanceRequestDetail> ListMaintenanceReqById(int Id)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM MaintenanceRequestDetails INNER JOIN MaintenanceRequests on MaintenanceRequestDetails.MaintenanceRequest_Id = MaintenanceRequests.Id  Where 1 = Case when '" + Id + "' = '' Then 1 When MaintenanceRequestDetails.Id = '" + Id + "'  Then 1 END  order by MaintenanceRequestDetails.Id Desc ";
+
+            return _workspace.SqlQuery<MaintenanceRequestDetail>(filterExpression).ToList();
+
+        }
+        public MaintenanceRequest GetMaintenanceRequest(int MaintenanceRequestId)
+        {
+            return _workspace.Single<MaintenanceRequest>(x => x.Id == MaintenanceRequestId);
+        }
+
+        public MaintenanceRequestDetail GetMaintenanceRequestbyPuID(int Id)
+        {
+            return _workspace.Single<MaintenanceRequestDetail>(x => x.Id == Id, y => y.MaintenanceRequest);
+        }
+        public MaintenanceRequestDetail GetMaintenanceRequestDetail(int MaintenanceRequestDetailId)
+        {
+            return _workspace.Single<MaintenanceRequestDetail>(x => x.Id == MaintenanceRequestDetailId);
+        }
+        public IList<MaintenanceRequest> ListMaintenanceRequests(string RequestNo, string RequestDate)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM MaintenanceRequests Where 1 = Case when '" + RequestNo + "' = '' Then 1 When MaintenanceRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When MaintenanceRequests.RequestDate = '" + RequestDate + "'  Then 1 END and MaintenanceRequests.Requester='" + GetCurrentUser().Id + "' order by MaintenanceRequests.Id Desc ";
+
+            return _workspace.SqlQuery<MaintenanceRequest>(filterExpression).ToList();
+
+        }
+        public IList<MaintenanceRequest> ListMaintenanceRequestForBids(string RequestNo, string RequestDate, string ProgressStatus)
+        {
+            string filterExpression = "";
+
+            if (ProgressStatus != "Completed")
+            {
+                filterExpression = " SELECT  *  FROM MaintenanceRequests INNER JOIN AppUsers on AppUsers.Id=MaintenanceRequests.CurrentApprover  Left JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When MaintenanceRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When MaintenanceRequests.RequestedDate = '" + RequestDate + "'  Then 1 END AND MaintenanceRequests.ProgressStatus='" + ProgressStatus + "' " +
+                                       " AND  ((MaintenanceRequests.CurrentApprover = '" + CurrentUser().Id + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) order by MaintenanceRequests.Id DESC";
+            }
+            else
+            {
+                filterExpression = " SELECT  *  FROM MaintenanceRequests INNER JOIN AppUsers on AppUsers.Id=MaintenanceRequests.CurrentApprover INNER JOIN MaintenanceRequestStatuses on MaintenanceRequestStatuses.MaintenanceRequest_Id = MaintenanceRequests.Id Left JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When MaintenanceRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When MaintenanceRequests.RequestedDate = '" + RequestDate + "'  Then 1 END AND MaintenanceRequests.ProgressStatus='" + ProgressStatus + "' AND " +
+                                           "   (MaintenanceRequestStatuses.ApprovalStatus Is not null AND (MaintenanceRequestStatuses.Approver = '" + CurrentUser().Id + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) order by MaintenanceRequests.Id DESC ";
+            }
+            return _workspace.SqlQuery<MaintenanceRequest>(filterExpression).ToList();
+
+        }
+        public int GetLastMaintenanceRequestId()
+        {
+            if (_workspace.Last<MaintenanceRequest>() != null)
+            {
+                return _workspace.Last<MaintenanceRequest>().Id;
+            }
+            else
+            { return 0; }
+        }
+
+
+      
+        #endregion
         #region Employee
         public Employee GetEmployee(int empid)
         {
@@ -595,6 +712,7 @@ namespace Chai.WorkflowManagment.Modules.Request
         #region Entity Manipulation
         public void SaveOrUpdateEntity<T>(T item) where T : class
         {
+          
             IEntity entity = (IEntity)item;
             if (entity.Id == 0)
                 _workspace.Add<T>(item);
@@ -603,6 +721,7 @@ namespace Chai.WorkflowManagment.Modules.Request
 
             _workspace.CommitChanges();
             _workspace.Refresh(item);
+           
         }
         public void DeleteEntity<T>(T item) where T : class
         {

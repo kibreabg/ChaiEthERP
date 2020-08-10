@@ -78,8 +78,10 @@
                         <asp:Label ID="lblRequestedDate" runat="server" Text='<%# Eval("RequestDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:BoundField DataField="Comment" HeaderText="Comment" SortExpression="Comment" />
-                <asp:ButtonField ButtonType="Button" CommandName="ViewItem" Text="View Item Detail" />
+                 <asp:BoundField DataField="KmReading" HeaderText="Km Reading" SortExpression="KmReading" />
+                <asp:BoundField DataField="ActionTaken" HeaderText="Action Taken" SortExpression="ActionTaken" />     
+                <asp:BoundField DataField="Remark" HeaderText="Remark" SortExpression="Remark" />
+                <asp:ButtonField ButtonType="Button" CommandName="ViewItem" Text="Mechanic Update Detail" />
                 <asp:CommandField ShowSelectButton="True" SelectText="Process Request" ButtonType="Button" />
                 <asp:TemplateField>
                     <ItemTemplate>
@@ -166,7 +168,7 @@
                                         <asp:Button ID="btnApprove" runat="server" Text="Save" OnClick="btnApprove_Click" Enabled="false" CssClass="btn btn-primary" ValidationGroup="Approve"></asp:Button>
                                         <asp:Button ID="btnCancelPopup" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" OnClick="btnCancelPopup_Click"></asp:Button>
                                         <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-primary" OnClientClick="javascript:Clickheretoprint('divprint')" Enabled="False"></asp:Button>
-                                        <asp:Button ID="btnPurchaseOrder" runat="server" CssClass="btn btn-primary" Enabled="False" OnClick="btnPurchaseOrder_Click" Text="Purchase Order" />
+                                      <%--  <asp:Button ID="btnPurchaseOrder" runat="server" CssClass="btn btn-primary" Enabled="False" OnClick="btnPurchaseOrder_Click" Text="Purchase Order" />--%>
                                     </footer>
                                 </div>
                             </div>
@@ -214,21 +216,97 @@
                             <div class="tab-pane active" id="hr2">
                                 <ul class="nav nav-tabs">
                                     <li class="active">
-                                        <a href="#iss1" data-toggle="tab">Item Details</a>
+                                        <a href="#iss1" data-toggle="tab">Maintenance Request Details</a>
                                     </li>
                                 </ul>
                                 <div class="tab-content padding-10">
                                     <div class="tab-pane active" id="iss1">
                                         <asp:DataGrid ID="dgMaintenanceRequestDetail" runat="server"
                                             AutoGenerateColumns="False" CellPadding="0" CssClass="table table-striped table-bordered table-hover"
-                                            DataKeyField="Id" GridLines="None" PagerStyle-CssClass="paginate_button active" ShowFooter="True" TextWrap="Wrap">
-                                            <Columns>
-                                                <asp:TemplateColumn HeaderText="MaintenanceRquest">
+                                            DataKeyField="Id" GridLines="None" PagerStyle-CssClass="paginate_button active" ShowFooter="True" TextWrap="Wrap" OnEditCommand="dgMaintenanceRequestDetail_EditCommand" OnItemDataBound="dgMaintenanceRequestDetail_ItemDataBound" OnUpdateCommand="dgMaintenanceRequestDetail_UpdateCommand" OnItemCommand="dgMaintenanceRequestDetail_ItemCommand">
+                                           <Columns>
+                                                <asp:TemplateColumn HeaderText="Service Type">
                                                     <ItemTemplate>
-                                                        <%# DataBinder.Eval(Container.DataItem, "MaintenanceRquest.MaintenanceRquest_Id")%>
+                                                        <%# DataBinder.Eval(Container.DataItem, "ServiceType.Name")%>
                                                     </ItemTemplate>
+                                                     <EditItemTemplate>
+                                        <asp:DropDownList ID="ddlServiceTpe" runat="server" CssClass="form-control"
+                                            AppendDataBoundItems="True" DataTextField="Name" DataValueField="Id"
+                                            ValidationGroup="proedit">
+                                            <asp:ListItem Value="0">Select Service Type</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <asp:RequiredFieldValidator ID="RfvAccount" runat="server" CssClass="validator"
+                                            ControlToValidate="ddlServiceTpe" ErrorMessage="Service Type Required"
+                                            InitialValue="0" SetFocusOnError="True" ValidationGroup="proedit"></asp:RequiredFieldValidator>
+                                    </EditItemTemplate>
+                                             <FooterTemplate>
+                                            <asp:DropDownList ID="ddlFServiceTpe" runat="server" CssClass="form-control"
+                                            AppendDataBoundItems="True" DataTextField="Name" DataValueField="Id"
+                                            EnableViewState="true" ValidationGroup="proadd" AutoPostBack="True" OnSelectedIndexChanged="ddlFServiceTpe_SelectedIndexChanged">
+                                            <asp:ListItem Value="0">Select Service Type</asp:ListItem>
+                                           </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RfvFServiceType" runat="server" CssClass="validator"
+                                            ControlToValidate="ddlFServiceTpe" Display="Dynamic"
+                                            ErrorMessage="Service Type Required" InitialValue="0" SetFocusOnError="True"
+                                            ValidationGroup="proadd"></asp:RequiredFieldValidator>
+                                           </FooterTemplate>
                                                 </asp:TemplateColumn>
-                                               
+                                                <asp:TemplateColumn HeaderText="Driver Service Type Detail">
+                                                    <ItemTemplate>
+                                                        <%# DataBinder.Eval(Container.DataItem, "DriverServiceTypeDetail.Description")%>
+                                                    </ItemTemplate>
+                                                      <EditItemTemplate>
+                                          <asp:DropDownList ID="ddlEdtServiceTypeDet" runat="server"  CssClass="form-control" Enabled="true" DataValueField="Id" DataTextField="Description" AppendDataBoundItems="True">
+                                            <asp:ListItem Value="0">--Select Service Detail--</asp:ListItem>
+                                        </asp:DropDownList><i></i>
+                                     
+                                    </EditItemTemplate>
+                                                   
+                                                </asp:TemplateColumn>
+                                                <asp:TemplateColumn HeaderText="Mechanic Service Type Detail">
+                                                    <ItemTemplate>
+                                                        <%# DataBinder.Eval(Container.DataItem, "MechanicServiceTypeDetail.Description")%>
+                                                    </ItemTemplate>
+                                                     <EditItemTemplate>
+                                                        <asp:DropDownList ID="ddlEdtMechanicServiceTypeDetail" CssClass="form-control" runat="server"  AppendDataBoundItems="true" >
+                                                            <asp:ListItem Value="0">Select Mechanic Service Type Detail</asp:ListItem>
+                                                        </asp:DropDownList>
+                                                        <i></i>
+                                                        <asp:RequiredFieldValidator ID="rfvddlEdtMechanicServiceTypeDetail" runat="server" CssClass="validator" ControlToValidate="ddlEdtMechanicServiceTypeDetail" Display="Dynamic" ErrorMessage="Mechanic Service Type must be selected" InitialValue="0" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                                    </EditItemTemplate>
+                                                       <FooterTemplate>
+                                         <asp:DropDownList ID="ddlMecServiceTypeDet" runat="server"  CssClass="form-control" Enabled="true" DataValueField="Id" DataTextField="Description" AppendDataBoundItems="True">
+                                            <asp:ListItem Value="0">--Select Service Detail--</asp:ListItem>
+                                        </asp:DropDownList><i></i>
+                                    </FooterTemplate>
+                                                </asp:TemplateColumn>
+                                                <asp:TemplateColumn HeaderText="Mechanic Remark">
+                                                    <ItemTemplate>
+                                                        <%# DataBinder.Eval(Container.DataItem, "TechnicianRemark")%>
+                                                    </ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <asp:TextBox ID="txtEdtTechnicianRemark" ReadOnly="false" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "TechnicianRemark")%>'></asp:TextBox>
+                                                    </EditItemTemplate>
+                                                     <FooterTemplate>
+                                        <asp:TextBox ID="txtFRemark" runat="server" CssClass="form-control"></asp:TextBox>
+                                        <asp:RequiredFieldValidator ID="RfvFRemark" CssClass="validator" runat="server" ControlToValidate="txtFRemark" ErrorMessage="Remark Required" ValidationGroup="proadd"></asp:RequiredFieldValidator>
+                                    </FooterTemplate>
+                                                </asp:TemplateColumn>
+                                                 <asp:TemplateColumn HeaderText="Actions">
+                                    <EditItemTemplate>
+                                        <asp:LinkButton ID="lnkUpdate" runat="server" CommandName="Update" ValidationGroup="proedit" CssClass="btn btn-xs btn-default"><i class="fa fa-save"></i></asp:LinkButton>
+                                        <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default"><i class="fa fa-times"></i></asp:LinkButton>
+                                    </EditItemTemplate>
+                                    <FooterTemplate>
+                                        <asp:LinkButton ID="lnkAddNew" runat="server" CommandName="AddNew" ValidationGroup="proadd" CssClass="btn btn-sm btn-success"><i class="fa fa-save"></i></asp:LinkButton>
+                                    </FooterTemplate>
+                                    <ItemTemplate>
+                                        <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
+                                        <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default" OnClientClick="javascript:return confirm('Are you sure you want to delete this entry?');"><i class="fa fa-times"></i></asp:LinkButton>
+                                    </ItemTemplate>
+                                </asp:TemplateColumn>
+                                                
+                                             
                                             </Columns>
                                             <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
                                         </asp:DataGrid>
@@ -261,7 +339,7 @@
                     <td style="font-size: large; text-align: center;">
                         <strong>CHAI ETHIOPIA
                             <br />
-                            SOLE VENDOR REQUEST FORM</strong></td>
+                           MAINTENANCE REQUEST FORM</strong></td>
                 </tr>
             </table>
             <table style="width: 100%">
@@ -323,15 +401,11 @@
                 runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
                 CssClass="table table-striped table-bordered table-hover">
                 <Columns>
-                    <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="Account Description" SortExpression="ItemAccount.AccountName" />
-                    <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
-                    <asp:BoundField DataField="ItemDescription" HeaderText="Item" SortExpression="ItemDescription" />
-                    <asp:BoundField DataField="ReasonForSelection" HeaderText="Reason for Selection" SortExpression="ReasonForSelection" />
-                    <asp:BoundField DataField="SoleVendorSupplier.SupplierName" HeaderText="Supplier" SortExpression="SoleVendorSupplier.SupplierName" />
-                    <asp:BoundField DataField="UnitCost" HeaderText="Unit Cost" SortExpression="UnitCost" />
-                    <asp:BoundField DataField="TotalCost" HeaderText="Total Cost" SortExpression="TotalCost" />
-                    <asp:BoundField DataField="Project.ProjectCode" HeaderText="Project ID" SortExpression="Project.ProjectCode" />
-                    <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant ID" SortExpression="Grant.GrantCode" />
+                    <asp:BoundField DataField="ServiceType.Name" HeaderText="ServiceType" SortExpression="ServiceType.Name" />
+                    <asp:BoundField DataField="DriverServiceTypeDetail.Description" HeaderText="DriverServiceTypeDetail" SortExpression="DriverServiceTypeDetail.Description" />
+                    <asp:BoundField DataField="MechanicServiceTypeDetail.Description" HeaderText="MechanicServiceTypeDetail" SortExpression="MechanicServiceTypeDetail.Description" />
+                    <asp:BoundField DataField="TechnicianRemark" HeaderText="Mechanic Remark" SortExpression="TechnicianRemark" />
+                 
                 </Columns>
                 <FooterStyle CssClass="FooterStyle" />
                 <HeaderStyle CssClass="headerstyle" />
@@ -346,7 +420,7 @@
                 <Columns>
                     <asp:TemplateField HeaderText="Date">
                         <ItemTemplate>
-                            <asp:Label ID="lblDate" runat="server" Text='<%# Eval("ApprovalDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                            <asp:Label ID="lblDate" runat="server" Text='<%# Eval("Date", "{0:dd/MM/yyyy}")%>'></asp:Label>
                         </ItemTemplate>
                     </asp:TemplateField>
 

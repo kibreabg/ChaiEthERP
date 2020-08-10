@@ -16,7 +16,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string RejectedReason { get; set; }
         public int WorkflowLevel {get;set;}
         public Nullable<DateTime> Date { get; set; }
-        public MaintenanceRequest MaintenanceRequest { get; set; }
+        public virtual MaintenanceRequest MaintenanceRequest { get; set; }
 
     }
 }
