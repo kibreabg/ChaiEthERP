@@ -658,7 +658,7 @@ namespace Chai.WorkflowManagment.Modules.Request
         {
             string filterExpression = "";
 
-            filterExpression = "SELECT  *  FROM MaintenanceRequests Where 1 = Case when '" + RequestNo + "' = '' Then 1 When MaintenanceRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When MaintenanceRequests.RequestedDate = '" + RequestDate + "'  Then 1 END and MaintenanceRequests.Requester='" + GetCurrentUser().Id + "' order by MaintenanceRequests.Id Desc ";
+            filterExpression = "SELECT  *  FROM MaintenanceRequests Where 1 = Case when '" + RequestNo + "' = '' Then 1 When MaintenanceRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When MaintenanceRequests.RequestDate = '" + RequestDate + "'  Then 1 END and MaintenanceRequests.Requester='" + GetCurrentUser().Id + "' order by MaintenanceRequests.Id Desc ";
 
             return _workspace.SqlQuery<MaintenanceRequest>(filterExpression).ToList();
 
@@ -690,6 +690,8 @@ namespace Chai.WorkflowManagment.Modules.Request
             { return 0; }
         }
 
+
+      
         #endregion
         #region Employee
         public Employee GetEmployee(int empid)
@@ -700,6 +702,7 @@ namespace Chai.WorkflowManagment.Modules.Request
         #region Entity Manipulation
         public void SaveOrUpdateEntity<T>(T item) where T : class
         {
+          
             IEntity entity = (IEntity)item;
             if (entity.Id == 0)
                 _workspace.Add<T>(item);
@@ -708,6 +711,7 @@ namespace Chai.WorkflowManagment.Modules.Request
 
             _workspace.CommitChanges();
             _workspace.Refresh(item);
+           
         }
         public void DeleteEntity<T>(T item) where T : class
         {

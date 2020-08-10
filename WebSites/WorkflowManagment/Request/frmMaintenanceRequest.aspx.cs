@@ -23,7 +23,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         private MaintenaceRequestPresenter _presenter;
         private static readonly ILog Log = LogManager.GetLogger("AuditTrailLog");
         private MaintenanceRequest _maintenancerequest;
-        private int _leaverequestId = 0;
+        private int _maintenanceReqId = 0;
         private int _totalprice = 0;
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -34,11 +34,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 XmlConfigurator.Configure();
                 BindSearchMaintenanceRequestGrid();
                 BindMaintenanceRequestDetails();
+                PopProjects();
                 BindInitialValues();
                 PopInternalVehicles();
             }
-            lblPlate.Visible = false;
-            ddlPlate.Visible = false;
+           
             this._presenter.OnViewLoaded();
 
 
@@ -83,26 +83,27 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
             if (_presenter.CurrentMaintenanceRequest.Id <= 0)
             {
-                AutoNumber();
+               // AutoNumber();
                 txtRequestDate.Text = DateTime.Today.Date.ToShortDateString();
 
             }
         }
         private string AutoNumber()
         {
-            return "PR-" + (_presenter.GetLastMaintenanceRequestId() + 1).ToString();
+        //    if (_presenter.GetLastMaintenanceRequestId() == null)
+        //    {
+        //        return "MR-1";
+        //    }
+        //    else
+        //    {
+                return "MR-" + (_presenter.GetLastMaintenanceRequestId() + 1).ToString();
+            //}
         }
         private void BindMaintenanceRequest()
         {
 
-            if (_presenter.CurrentMaintenanceRequest.Id > 0)
-            {
-                // txtRequestNo.Text = _presenter.CurrentMaintenanceRequest.RequestNo;
-                txtRequestDate.Text = _presenter.CurrentMaintenanceRequest.RequestedDate.ToShortDateString();
-                txtKMReading.Text = "";
-              
-
-            }
+            grvMaintenanceRequestList.DataSource = _presenter.ListMaintenanceRequests(txtRequestNosearch.Text, txtRequestDatesearch.Text);
+            grvMaintenanceRequestList.DataBind();
         }
         private void SaveMaintenanceRequest()
         {
@@ -110,14 +111,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             try
             {
                 _presenter.CurrentMaintenanceRequest.Requester = CurrentUser.Id;
-                _presenter.CurrentMaintenanceRequest.RequestedDate = Convert.ToDateTime(txtRequestDate.Text);
-                _presenter.CurrentMaintenanceRequest.RequestNo = AutoNumber();
-                _presenter.CurrentMaintenanceRequest.KmReading = txtKMReading.Text;
-                _presenter.CurrentMaintenanceRequest.Comment = "";
+                _presenter.CurrentMaintenanceRequest.RequestDate = Convert.ToDateTime(txtRequestDate.Text);
+                //_presenter.CurrentMaintenanceRequest.RequestNo = AutoNumber();
+                _presenter.CurrentMaintenanceRequest.KmReading = Convert.ToInt32(txtKMReading.Text);
+                _presenter.CurrentMaintenanceRequest.Remark = "";
                 
 
                 
-                _presenter.CurrentMaintenanceRequest.IsVehicle = GetIsVehicle;
+               
                 _presenter.CurrentMaintenanceRequest.PlateNo = GetPlateNo;
                 //Determine total cost
                 /*       decimal cost = 0;
@@ -131,20 +132,37 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                        }
                        _presenter.CurrentMaintenanceRequest.TotalPrice = cost;*/
                 //Determine total cost end
-                SaveMaintenanceRequestStatus();
-                GetCurrentApprover();
+               
             }
-            catch (Exception ex)
+            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
             {
-                if (ex.InnerException != null)
+                Exception raise = dbEx;
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
                 {
-                    if (ex.InnerException.InnerException.Message.Contains("Violation of UNIQUE KEY"))
+                    foreach (var validationError in validationErrors.ValidationErrors)
                     {
-                        Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", Chai.WorkflowManagment.Enums.RMessageType.Error));
-                        //AutoNumber();
+                        string message = string.Format("{0}:{1}",
+                            validationErrors.Entry.Entity.ToString(),
+                            validationError.ErrorMessage);
+                        // raise a new exception nesting  
+                        // the current instance as InnerException  
+                        raise = new InvalidOperationException(message, raise);
                     }
                 }
+                throw raise;
             }
+            //}
+            //catch (Exception ex)
+            //{
+            //    if (ex.InnerException != null)
+            //    {
+            //        if (ex.InnerException.InnerException.Message.Contains("Violation of UNIQUE KEY"))
+            //        {
+            //            Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", Chai.WorkflowManagment.Enums.RMessageType.Error));
+            //            //AutoNumber();
+            //        }
+            //    }
+            //}
 
         }
         private void SaveMaintenanceRequestStatus()
@@ -172,15 +190,23 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         }
                         else if (AL.EmployeePosition.PositionName == "Program Manager")
                         {
-                            if (_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails[0].Project.Id != 0)
+                            if (_presenter.CurrentMaintenanceRequest.Project.Id != 0)
                             {
-                                PRS.Approver = _presenter.GetProject(_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails[0].Project.Id).AppUser.Id;
+                                PRS.Approver = _presenter.GetProject(_presenter.CurrentMaintenanceRequest.Project.Id).AppUser.Id;
                             }
                         }
                         else
                         {
-                            PRS.Approver = _presenter.Approver(AL.EmployeePosition.Id).Id;
+                            if (_presenter.Approver(AL.EmployeePosition.Id).Id != 0)
+                                PRS.Approver = _presenter.Approver(AL.EmployeePosition.Id).Id; 
+                            else
+                                PRS.Approver = 0;
                         }
+
+                        //else
+                        //{
+                        //    PRS.Approver = _presenter.Approver(AL.EmployeePosition.Id).Id;
+                        //}
                         PRS.WorkflowLevel = i;
                         i++;
                         _presenter.CurrentMaintenanceRequest.MaintenanceRequestStatuses.Add(PRS);
@@ -231,19 +257,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 _maintenancerequest = value;
             }
         }
+
+        
         public string RequestNo
         {
-            get { return txtRequestNosearch.Text; }
+            get { return AutoNumber(); }
         }
-        public string RequestDate
+        public DateTime RequestDate
         {
-            get { return txtRequestDatesearch.Text; }
+            get { return Convert.ToDateTime(txtRequestDate.Text); }
         }
 
-        public bool GetIsVehicle
-        {
-            get { return ckIsVehicle.Checked; }
-        }
         public string GetPlateNo
         {
             get { return ddlPlate.SelectedValue; }
@@ -252,9 +276,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get
             {
-                if (_leaverequestId != 0)
+                if (_maintenanceReqId != 0)
                 {
-                    return _leaverequestId;
+                    return _maintenanceReqId;
                 }
                 else
                 {
@@ -262,6 +286,54 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
             }
         }
+
+        public int GetProjectId
+        {
+            get { return Convert.ToInt32(ddlProject.SelectedValue); }
+        }
+        public int GetGrantId
+        {
+            get { return Convert.ToInt32(ddlGrant.SelectedValue); }
+        }
+
+        public int GetMaintenancetRequestId
+        {
+            get
+            {
+                if (grvMaintenanceRequestList.SelectedDataKey != null)
+                {
+                    return Convert.ToInt32(grvMaintenanceRequestList.SelectedDataKey.Value);
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+
+        public int GetKmReading
+        {
+            
+                get { return Convert.ToInt32(txtKMReading.Text); }
+           
+        }
+
+        public string GetActionTaken
+        {
+            get
+            {
+                return ActionTaken.Text;
+            }
+        }
+
+        public string GetRemark
+        {
+            get
+            {
+                return txtRemark.Text;
+            }
+        }
+
         private void BindAccount(DropDownList ddlItemAccount)
         {
             ddlItemAccount.DataSource = _presenter.GetItemAccounts();
@@ -273,6 +345,22 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ddlProject.DataSource = _presenter.GetProjects();
             ddlProject.DataBind();
 
+        }
+        private void PopProjects()
+        {
+            ddlProject.DataSource = _presenter.GetProjects();
+            ddlProject.DataBind();
+
+            ddlProject.Items.Insert(0, new ListItem("---Select Project---", "0"));
+            ddlProject.SelectedIndex = 0;
+        }
+        private void PopGrants(int ProjectId)
+        {
+            ddlGrant.DataSource = _presenter.GetGrantbyprojectId(ProjectId);
+            ddlGrant.DataBind();
+
+            ddlGrant.Items.Insert(0, new ListItem("---Select Grant---", "0"));
+            ddlGrant.SelectedIndex = 0;
         }
         private void BindGrant(DropDownList ddlGrant, int projectId)
         {
@@ -299,7 +387,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             lst.Text = "Select Service Type Details";
             lst.Value = "";
             ddlServiceTypeDet.Items.Add(lst);
-            ddlServiceTypeDet.DataSource = _presenter.GetServiceTypeDetails(serviceTypeId);
+            ddlServiceTypeDet.DataSource = _presenter.GetServiceTypeDetbyTypeId(serviceTypeId);
             ddlServiceTypeDet.DataBind();
 
         }
@@ -322,7 +410,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             Session["MaintenanceRequest"] = true;
             // ClearForm();
             //BindLeaveRequest();
-            _leaverequestId = Convert.ToInt32(grvMaintenanceRequestList.SelectedDataKey[0]);
+            _maintenanceReqId = Convert.ToInt32(grvMaintenanceRequestList.SelectedDataKey[0]);
             _presenter.OnViewLoaded();
             BindMaintenanceRequest();
             BindMaintenanceRequestDetails();
@@ -392,126 +480,80 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             DropDownList ddl = (DropDownList)sender;
             DropDownList ddlFGrant = ddl.FindControl("ddlFGrant") as DropDownList;
             BindGrant(ddlFGrant, Convert.ToInt32(ddl.SelectedValue));
-            if (ckIsVehicle.Checked == true)
-            {
-                lblPlate.Visible = true;
-
-
-                ddlPlate.Visible = true;
-                i.Visible = true;
-            }
-            else if (ckIsVehicle.Checked == false)
-            {
-                lblPlate.Visible = false;
-
-
-                ddlPlate.Visible = false;
-                i.Visible = false;
-            }
+            
         }
         protected void ddlGrant_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
             DropDownList ddlGrant = ddl.FindControl("ddlGrant") as DropDownList;
             BindGrant(ddlGrant, Convert.ToInt32(ddl.SelectedValue));
-            if (ckIsVehicle.Checked == true)
-            {
-                lblPlate.Visible = true;
-
-
-                ddlPlate.Visible = true;
-                i.Visible = true;
-            }
-            else if (ckIsVehicle.Checked == false)
-            {
-                lblPlate.Visible = false;
-
-
-                ddlPlate.Visible = false;
-                i.Visible = false;
-            }
+           
         }
         protected void ddlProject_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
             DropDownList ddlGrant = ddl.FindControl("ddlGrant") as DropDownList;
             BindGrant(ddlGrant, Convert.ToInt32(ddl.SelectedValue));
-            if (ckIsVehicle.Checked == true)
-            {
-                lblPlate.Visible = true;
-
-
-                ddlPlate.Visible = true;
-                i.Visible = true;
-            }
-            else if (ckIsVehicle.Checked == false)
-            {
-                lblPlate.Visible = false;
-
-
-                ddlPlate.Visible = false;
-                i.Visible = false;
-            }
+           
         }
 
-        protected void ddlServiceType_SelectedIndexChanged(object sender, EventArgs e)
+     
+        protected void ddlServiceTpe_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
-            DropDownList ddlServiceTypeDetail = ddl.FindControl("ddlServiceTypeDetail") as DropDownList;
-            BindGrant(ddlServiceTypeDetail, Convert.ToInt32(ddl.SelectedValue));
-           
+            DropDownList ddlServiceTypeDetail = ddl.FindControl("ddlEdtServiceTypeDet") as DropDownList;
+            BindServiceTypeDetails(ddlServiceTypeDetail, Convert.ToInt32(ddl.SelectedValue));
+        }
+
+        protected void ddlFServiceTpe_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DropDownList ddl = (DropDownList)sender;
+            DropDownList ddlServiceTypeDetail = ddl.FindControl("ddlServiceTypeDet") as DropDownList;
+            BindServiceTypeDetails(ddlServiceTypeDetail, Convert.ToInt32(ddl.SelectedValue));
         }
         protected void ddlServiceTypeDetail_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
-            DropDownList ddlServiceTypeDetail = ddl.FindControl("ddlServiceTypeDetail") as DropDownList;
-            BindGrant(ddlServiceTypeDetail, Convert.ToInt32(ddl.SelectedValue));
+            DropDownList ddlServiceTypeDetail = ddl.FindControl("ddlServiceTypeDet") as DropDownList;
+            BindServiceTypeDetails(ddlServiceTypeDetail, Convert.ToInt32(ddl.SelectedValue));
           
         }
         protected void btnRequest_Click(object sender, EventArgs e)
         {
+
+
             try
             {
-                SaveMaintenanceRequest();
                 if (_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails.Count != 0)
                 {
-                    if (_presenter.CurrentMaintenanceRequest.MaintenanceRequestStatuses.Count != 0)
-                    {
-                        _presenter.SaveOrUpdateLeaveMaintenance(_presenter.CurrentMaintenanceRequest);
-                        ClearForm();
-                        BindSearchMaintenanceRequestGrid();
-                        Master.ShowMessage(new AppMessage("Successfully did a Maintenance Request, Reference No - <b>'" + _presenter.CurrentMaintenanceRequest.RequestNo + "'</b> ", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                        // Log.Info(_presenter.CurrentUser().FullName + " has requested for a Purchase of Total Price " + _presenter.CurrentMaintenanceRequest.TotalPrice);
-                    }
-                    else
-                    {
-                        Master.ShowMessage(new AppMessage("There is an error constracting Approval Process", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
-                    }
-
+                    _presenter.SaveOrUpdateMaintenanceRequest();
+                    BindMaintenanceRequest();
+                   
+                    Master.ShowMessage(new AppMessage("Successfully did a Maintenance Request, Reference No - <b>'" + _presenter.CurrentMaintenanceRequest.RequestNo + "'</b> ", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                  btnRequest.Visible = false;
+                  
+                  
                 }
                 else
                 {
-                    Master.ShowMessage(new AppMessage("You have to insert at least one purchase item detail", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Please insert at least one  Detail", Chai.WorkflowManagment.Enums.RMessageType.Error));
                 }
             }
-            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            catch (Exception ex)
             {
-                Exception raise = dbEx;
-                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                if (ex.InnerException != null)
                 {
-                    foreach (var validationError in validationErrors.ValidationErrors)
+                    if (ex.InnerException.InnerException.Message.Contains("Violation of UNIQUE KEY"))
                     {
-                        string message = string.Format("{0}:{1}",
-                            validationErrors.Entry.Entity.ToString(),
-                            validationError.ErrorMessage);
-                        // raise a new exception nesting  
-                        // the current instance as InnerException  
-                        raise = new InvalidOperationException(message, raise);
+                        Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        AutoNumber();
                     }
                 }
-                throw raise;
             }
+
+
+
+
         }
         protected void btnDelete_Click(object sender, EventArgs e)
         {
@@ -604,18 +646,15 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                    
                     Detail.ServiceType = _presenter.GetServiceType(int.Parse(ddlFServiceTpe.SelectedValue));
                     DropDownList ddlFServiceTypeDetail = e.Item.FindControl("ddlServiceTypeDet") as DropDownList;
-                 //   Detail.DriverServiceType = _presenter.GetServiceTypeDetails(int.Parse(ddlFServiceTypeDetail.SelectedValue));
-                    DropDownList ddlFMeServiceTypeDetail = e.Item.FindControl("ddlMeServiceTypeDet") as DropDownList;
-                 //   Detail.MechanicServiceType = _presenter.GetServiceTypeDetails(int.Parse(ddlFMeServiceTypeDetail.SelectedValue));
-                    TextBox txtFRemark = e.Item.FindControl("txtFRemark") as TextBox;
-                    Detail.TechnicianRemark = txtFRemark.Text;                   
+                     Detail.DriverServiceTypeDetail = _presenter.GetServiceTypeDetail(int.Parse(ddlFServiceTypeDetail.SelectedValue));
+                    //DropDownList ddlFMeServiceTypeDetail = e.Item.FindControl("ddlMeServiceTypeDet") as DropDownList;
+                    //Detail.MechanicServiceType = _presenter.GetServiceTypeDetail(int.Parse(ddlFMeServiceTypeDetail.SelectedValue));
+                    //TextBox txtFRemark = e.Item.FindControl("txtFRemark") as TextBox;
+                    //Detail.TechnicianRemark = txtFRemark.Text;                   
                   
-                    DropDownList ddlFProject = e.Item.FindControl("ddlFProject") as DropDownList;
-                    Detail.Project = _presenter.GetProject(int.Parse(ddlFProject.SelectedValue));
-                    DropDownList ddlFGrant = e.Item.FindControl("ddlFGrant") as DropDownList;
-                    Detail.Grant = _presenter.GetGrant(int.Parse(ddlFGrant.SelectedValue));
+                 
                   
-                    Detail.MaintenanceRequest = _presenter.CurrentMaintenanceRequest;
+                   // Detail.MaintenanceRequest = _presenter.CurrentMaintenanceRequest;
                     _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails.Add(Detail);
                     Master.ShowMessage(new AppMessage("Maintenance Request Detail added successfully.", RMessageType.Info));
                     dgMaintenanceRequestDetail.EditItemIndex = -1;
@@ -623,7 +662,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
                 catch (Exception ex)
                 {
-                    Master.ShowMessage(new AppMessage("Error: Unable to Add Purchase Request Detail. " + ex.Message, RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Error: Unable to Add Maintenance Request Detail. " + ex.Message, RMessageType.Error));
                     ExceptionUtility.LogException(ex, ex.Source);
                     ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
                 }
@@ -635,43 +674,46 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 DropDownList ddlFServiceType = e.Item.FindControl("ddlFServiceTpe") as DropDownList;
                 BindServiceType(ddlFServiceType);
-                DropDownList ddlFServiceTypeDet = e.Item.FindControl("ddlFGrant") as DropDownList;
+                DropDownList ddlFServiceTypeDet = e.Item.FindControl("ddlServiceTypeDet") as DropDownList;
                 BindServiceTypeDetails(ddlFServiceTypeDet, Convert.ToInt32(ddlFServiceType.SelectedValue));
-                DropDownList ddlFProject = e.Item.FindControl("ddlFProject") as DropDownList;
-                BindProject(ddlFProject);
-                DropDownList ddlFGrant = e.Item.FindControl("ddlFGrant") as DropDownList;
-                BindGrant(ddlFGrant, Convert.ToInt32(ddlFProject.SelectedValue));
+                //DropDownList ddlFMecServiceTypeDet = e.Item.FindControl("ddlMecServiceTypeDet") as DropDownList;
+                //BindServiceTypeDetails(ddlFMecServiceTypeDet, Convert.ToInt32(ddlFServiceType.SelectedValue));
+                //DropDownList ddlFProject = e.Item.FindControl("ddlFProject") as DropDownList;
+                //BindProject(ddlFProject);
+                //DropDownList ddlFGrant = e.Item.FindControl("ddlFGrant") as DropDownList;
+                //BindGrant(ddlFGrant, Convert.ToInt32(ddlFProject.SelectedValue));
             }
             else
             {
                 if (_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails != null)
                 {
+                    DropDownList ddlServiceType= e.Item.FindControl("ddlServiceTpe") as DropDownList;
 
-                   
-                    DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
-
-                    if (ddlProject != null)
+                    if (ddlServiceType != null)
                     {
-                        BindProject(ddlProject);
+                        BindServiceType(ddlServiceType);
 
-                        if (_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails[e.Item.DataSetIndex].Project != null)
+                        if (_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails[e.Item.DataSetIndex].ServiceType != null)
                         {
-                            ListItem li = ddlProject.Items.FindByValue(_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails[e.Item.DataSetIndex].Project.Id.ToString());
+                            ListItem li = ddlServiceType.Items.FindByValue(_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails[e.Item.DataSetIndex].ServiceType.Id.ToString());
                             if (li != null)
                                 li.Selected = true;
                         }
                     }
-                    DropDownList ddlGrant = e.Item.FindControl("ddlGrant") as DropDownList;
-                    if (ddlGrant != null)
+
+                    DropDownList ddlServiceTypeDetail = e.Item.FindControl("ddlEdtServiceTypeDet") as DropDownList;
+                    if (ddlServiceTypeDetail != null)
                     {
-                        BindGrant(ddlGrant, Convert.ToInt32(ddlProject.SelectedValue));
-                        if (_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails[e.Item.DataSetIndex].Grant != null)
+                        BindGrant(ddlServiceTypeDetail, Convert.ToInt32(ddlServiceType.SelectedValue));
+                        if (_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails[e.Item.DataSetIndex].DriverServiceTypeDetail != null)
                         {
-                            ListItem liI = ddlGrant.Items.FindByValue(_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails[e.Item.DataSetIndex].Grant.Id.ToString());
+                            ListItem liI = ddlServiceTypeDetail.Items.FindByValue(_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails[e.Item.DataSetIndex].DriverServiceTypeDetail.Id.ToString());
                             if (liI != null)
                                 liI.Selected = true;
                         }
                     }
+
+                   
                 }
             }
         }
@@ -688,18 +730,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 DropDownList ddlFServiceTpe = e.Item.FindControl("ddlServiceTpe") as DropDownList;
 
+               
                 Detail.ServiceType = _presenter.GetServiceType(int.Parse(ddlFServiceTpe.SelectedValue));
-                DropDownList ddlFServiceTypeDetail = e.Item.FindControl("ddlEdtServiceTypeDet") as DropDownList;
-               // Detail.DriverServiceType = _presenter.GetServiceTypeDetails(int.Parse(ddlFServiceTypeDetail.SelectedValue));
-                DropDownList ddlFMeServiceTypeDetail = e.Item.FindControl("ddlEdtMeServiceTypeDet") as DropDownList;
-               // Detail.MechanicServiceType = _presenter.GetServiceTypeDetails(int.Parse(ddlFMeServiceTypeDetail.SelectedValue));
-                TextBox txtFRemark = e.Item.FindControl("txtRemark") as TextBox;
-                Detail.TechnicianRemark = txtFRemark.Text;
+                DropDownList ddlEdtServiceTypeDetail = e.Item.FindControl("ddlEdtServiceTypeDet") as DropDownList;
+                Detail.DriverServiceTypeDetail = _presenter.GetServiceTypeDetail(int.Parse(ddlFServiceTpe.SelectedValue));
+                //DropDownList ddlEdtMecServiceTypeDetail = e.Item.FindControl("ddlEdtMeServiceTypeDet") as DropDownList;
+                //TextBox txtFRemark = e.Item.FindControl("txtRemark") as TextBox;
+                //Detail.TechnicianRemark = txtFRemark.Text;
 
-                DropDownList ddlFProject = e.Item.FindControl("ddlProject") as DropDownList;
-                Detail.Project = _presenter.GetProject(int.Parse(ddlFProject.SelectedValue));
-                DropDownList ddlFGrant = e.Item.FindControl("ddlGrant") as DropDownList;
-                Detail.Grant = _presenter.GetGrant(int.Parse(ddlFGrant.SelectedValue));
 
         
                 Detail.MaintenanceRequest = _presenter.CurrentMaintenanceRequest;
@@ -718,24 +756,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
 
 
-        protected void ckIsVehicle_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ckIsVehicle.Checked == true)
-            {
-                lblPlate.Visible = true;
 
 
-                ddlPlate.Visible = true;
-                i.Visible = true;
-            }
-            else if (ckIsVehicle.Checked == false)
-            {
-                lblPlate.Visible = false;
-
-
-                ddlPlate.Visible = false;
-                i.Visible = false;
-            }
-        }
+    
     }
 }

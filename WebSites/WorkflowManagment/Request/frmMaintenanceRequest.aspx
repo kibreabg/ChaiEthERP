@@ -44,40 +44,33 @@
                     <fieldset>
                          <div class="row">
                             <section class="col col-6">
-                                <div class="smart-form">
-                                    <div class="inline-group">
-                                        <label class="checkbox">
-                                            <asp:CheckBox ID="ckIsVehicle" runat="server" OnCheckedChanged="ckIsVehicle_CheckedChanged" AutoPostBack="True" />
-                                            <i></i>Is Vehicle?</label>
-                                    </div>
-                                </div>
-                            </section>
-                           
-
-                              <section class="col col-6">
-                                <asp:Label ID="lblPlate" runat="server" Text="Plate No" Visible="False"></asp:Label>
-                                <label class="select">
-                                    <asp:DropDownList ID="ddlPlate" AutoPostBack="true" runat="server" DataValueField="Id" DataTextField="PlateNo">
-                                    </asp:DropDownList><i id="i" runat="server"></i>
-                                   
-                                </label>
-                            </section>
-                        </div>
-                        <div class="row">
-                            <%--<section class="col col-4">
-                                <label class="label">
-                                    Request No.</label>
-                                <label class="input">
-                                    <asp:TextBox ID="txtRequestNo" runat="server" Visible="true"></asp:TextBox>
-                                </label>
-                            </section>--%>
-                            <section class="col col-6">
                                 <label class="label">
                                     Requester</label>
                                 <label class="input">
                                     <asp:TextBox ID="txtRequester" runat="server" Visible="true"></asp:TextBox>
                                 </label>
                             </section>
+                            <section class="col col-6">
+                                <label class="label">
+                                    Plate No</label>
+                                <label class="select">
+                                    <asp:DropDownList ID="ddlPlate" AutoPostBack="true" runat="server" DataValueField="Id" DataTextField="PlateNo">
+                                    </asp:DropDownList><i id="i1" runat="server"></i>
+                                </label>
+                            </section>
+
+                              
+                        </div>
+                        <div class="row">
+                            <section class="col col-6">
+                                <label class="label">
+                                    Km Reading</label>
+                                <label class="input">
+                                    <asp:TextBox ID="txtKMReading" runat="server" Visible="true"></asp:TextBox>
+                                  <asp:RequiredFieldValidator ID="RfvKM" CssClass="validator" runat="server" ControlToValidate="txtKMReading" ErrorMessage="KM Reading To Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Save"></asp:RequiredFieldValidator>
+                                </label>
+                            </section>
+                           
                             <section class="col col-6">
                                 <label id="lblRequestDate" runat="server" class="label" visible="true">
                                     Request Date</label>
@@ -91,13 +84,7 @@
 
                         <div class="row">
 
-                           <section class="col col-6">
-                                <label class="label">
-                                    Km Reading</label>
-                                <label class="input">
-                                    <asp:TextBox ID="txtKMReading" runat="server" Visible="true"></asp:TextBox>
-                                </label>
-                            </section>
+                           
                             <section class="col col-6">
                                 <label class="label">
                                     Action Taken</label>
@@ -106,19 +93,43 @@
                                     <asp:RequiredFieldValidator ID="RfvActionTaken" CssClass="validator" runat="server" ControlToValidate="ActionTaken" ErrorMessage="Action Taken To Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Save"></asp:RequiredFieldValidator>
                                 </label>
                             </section>
-                        </div>
-                        <div class="row">
+                        
+                     
                             <section class="col col-6">
                                 <label class="label">
                                    Remark</label>
                                 <label class="input">
                                     <asp:TextBox ID="txtRemark" runat="server" Visible="true"></asp:TextBox>
                                 </label>
+                            </section></div>
+                              <div class="row">                            
+                            <section class="col col-6">
+                                <label class="label">Project</label>
+                                <label class="select">
+                                    <asp:DropDownList ID="ddlProject" AutoPostBack="true" runat="server" DataValueField="Id" DataTextField="ProjectCode" OnSelectedIndexChanged="ddlProject_SelectedIndexChanged">
+                                    </asp:DropDownList><i></i>
+                                    <asp:RequiredFieldValidator
+                                        ID="rfvddlProject" runat="server" ErrorMessage="Project is required" Display="Dynamic"
+                                        CssClass="validator" ValidationGroup="saveMain" InitialValue="0"
+                                        SetFocusOnError="true" ControlToValidate="ddlProject"></asp:RequiredFieldValidator>
+                                </label>
                             </section>
+                            <section class="col col-6">
+                                <label class="label">Grant</label>
+                                <label class="select">
+                                    <asp:DropDownList ID="ddlGrant" runat="server" DataValueField="Id" DataTextField="GrantCode">
+                                    </asp:DropDownList><i></i>
+                                    <asp:RequiredFieldValidator
+                                        ID="rfvGrant" runat="server" ErrorMessage="Grant is required" Display="Dynamic"
+                                        CssClass="validator" ValidationGroup="saveMain" InitialValue="0"
+                                        SetFocusOnError="true" ControlToValidate="ddlGrant"></asp:RequiredFieldValidator>
+                                </label>
+                            </section>
+                        </div>
                            
 
 
-                        </div>
+                       
                         <asp:DataGrid ID="dgMaintenanceRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
                             CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
                             GridLines="None"
@@ -131,17 +142,17 @@
                                     <EditItemTemplate>
                                         <asp:DropDownList ID="ddlServiceTpe" runat="server" CssClass="form-control"
                                             AppendDataBoundItems="True" DataTextField="Name" DataValueField="Id"
-                                            ValidationGroup="proedit">
+                                            ValidationGroup="proedit" OnSelectedIndexChanged="ddlServiceTpe_SelectedIndexChanged">
                                             <asp:ListItem Value="0">Select Service Type</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RfvAccount" runat="server" CssClass="validator"
-                                            ControlToValidate="ddlServiceTpe" ErrorMessage="Account Description Required"
+                                            ControlToValidate="ddlServiceTpe" ErrorMessage="Service Type Required"
                                             InitialValue="0" SetFocusOnError="True" ValidationGroup="proedit"></asp:RequiredFieldValidator>
                                     </EditItemTemplate>
                                     <FooterTemplate>
                                         <asp:DropDownList ID="ddlFServiceTpe" runat="server" CssClass="form-control"
                                             AppendDataBoundItems="True" DataTextField="Name" DataValueField="Id"
-                                            EnableViewState="true" ValidationGroup="proadd" AutoPostBack="True">
+                                            EnableViewState="true" ValidationGroup="proadd" AutoPostBack="True" OnSelectedIndexChanged="ddlFServiceTpe_SelectedIndexChanged">
                                             <asp:ListItem Value="0">Select Service Type</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RfvFServiceType" runat="server" CssClass="validator"
@@ -155,21 +166,21 @@
                                 </asp:TemplateColumn>
                                  <asp:TemplateColumn HeaderText="Driver Service Type Detail">
                                     <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "ServiceTypeDetail.Description")%>
+                                        <%# DataBinder.Eval(Container.DataItem, "DriverServiceTypeDetail.Description")%>
                                     </ItemTemplate>
                                     <EditItemTemplate>
-                                          <asp:DropDownList ID="ddlEdtServiceTypeDet" runat="server" Enabled="true" DataValueField="Id" DataTextField="Description" AppendDataBoundItems="True">
+                                          <asp:DropDownList ID="ddlEdtServiceTypeDet" runat="server"  CssClass="form-control" Enabled="true" DataValueField="Id" DataTextField="Description" AppendDataBoundItems="True">
                                             <asp:ListItem Value="0">--Select Service Detail--</asp:ListItem>
                                         </asp:DropDownList><i></i>
                                      
                                     </EditItemTemplate>
                                     <FooterTemplate>
-                                         <asp:DropDownList ID="ddlServiceTypeDet" runat="server" Enabled="true" DataValueField="Id" DataTextField="Description" AppendDataBoundItems="True">
+                                         <asp:DropDownList ID="ddlServiceTypeDet" runat="server"  CssClass="form-control" Enabled="true" DataValueField="Id" DataTextField="Description" AppendDataBoundItems="True">
                                             <asp:ListItem Value="0">--Select Service Detail--</asp:ListItem>
                                         </asp:DropDownList><i></i>
                                     </FooterTemplate>
                                 </asp:TemplateColumn>
-                               <asp:TemplateColumn HeaderText=" Mechanic Service Type Detail">
+                               <%--<asp:TemplateColumn HeaderText=" Mechanic Service Type Detail">
                                     <ItemTemplate>
                                         <%# DataBinder.Eval(Container.DataItem, "ServiceTypeDetail.Description")%>
                                     </ItemTemplate>
@@ -195,62 +206,11 @@
                                     </EditItemTemplate>
                                     <FooterTemplate>
                                         <asp:TextBox ID="txtFRemark" runat="server" CssClass="form-control"></asp:TextBox>
-                                        <asp:RequiredFieldValidator ID="RfvFRemark" CssClass="validator" runat="server" ControlToValidate="txtFQty" ErrorMessage="Remark Required" ValidationGroup="proadd"></asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="RfvFRemark" CssClass="validator" runat="server" ControlToValidate="txtFRemark" ErrorMessage="Remark Required" ValidationGroup="proadd"></asp:RequiredFieldValidator>
                                     </FooterTemplate>
-                                </asp:TemplateColumn>
+                                </asp:TemplateColumn>--%>
                                
-                                <asp:TemplateColumn HeaderText="Project ID">
-                                    <EditItemTemplate>
-                                        <asp:DropDownList ID="ddlProject" runat="server" CssClass="form-control"
-                                            AppendDataBoundItems="True" DataTextField="ProjectCode" DataValueField="Id"
-                                            ValidationGroup="proedit" AutoPostBack="True" OnSelectedIndexChanged="ddlProject_SelectedIndexChanged">
-                                            <asp:ListItem Value="0">Select Project</asp:ListItem>
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RfvProject" runat="server" CssClass="validator"
-                                            ControlToValidate="ddlProject" ErrorMessage="Project Required"
-                                            InitialValue="0" SetFocusOnError="True" ValidationGroup="proedit"></asp:RequiredFieldValidator>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:DropDownList ID="ddlFProject" runat="server" CssClass="form-control"
-                                            AppendDataBoundItems="True" DataTextField="ProjectCode" DataValueField="Id"
-                                            EnableViewState="true" ValidationGroup="proadd" AutoPostBack="True" OnSelectedIndexChanged="ddlFProject_SelectedIndexChanged">
-                                            <asp:ListItem Value="0">Select Project</asp:ListItem>
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RfvFProjectCode" runat="server" CssClass="validator"
-                                            ControlToValidate="ddlFProject" Display="Dynamic"
-                                            ErrorMessage="Project Required" InitialValue="0" SetFocusOnError="True"
-                                            ValidationGroup="proadd"></asp:RequiredFieldValidator>
-                                    </FooterTemplate>
-                                    <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "Project.ProjectCode")%>
-                                    </ItemTemplate>
-                                </asp:TemplateColumn>
-                                <asp:TemplateColumn HeaderText="Grant ID">
-                                    <EditItemTemplate>
-                                        <asp:DropDownList ID="ddlGrant" runat="server" CssClass="form-control"
-                                            AppendDataBoundItems="True" DataTextField="GrantCode" DataValueField="Id"
-                                            ValidationGroup="proedit" OnSelectedIndexChanged="ddlGrant_SelectedIndexChanged">
-                                            <asp:ListItem Value="0">Select Grant</asp:ListItem>
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RfvGrant" runat="server" CssClass="validator"
-                                            ControlToValidate="ddlGrant" ErrorMessage="Grant Required"
-                                            InitialValue="0" SetFocusOnError="True" ValidationGroup="proedit"></asp:RequiredFieldValidator>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:DropDownList ID="ddlFGrant" runat="server" CssClass="form-control"
-                                            AppendDataBoundItems="True" DataTextField="GrantCode" DataValueField="Id"
-                                            EnableViewState="true" ValidationGroup="proadd">
-                                            <asp:ListItem Value="0">Select Grant</asp:ListItem>
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RfvFGrantCode" runat="server" CssClass="validator"
-                                            ControlToValidate="ddlFGrant" Display="Dynamic"
-                                            ErrorMessage="Grant Required" InitialValue="0" SetFocusOnError="True"
-                                            ValidationGroup="proadd"></asp:RequiredFieldValidator>
-                                    </FooterTemplate>
-                                    <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "Grant.GrantCode")%>
-                                    </ItemTemplate>
-                                </asp:TemplateColumn>
+                               
                                 <asp:TemplateColumn HeaderText="Actions">
                                     <EditItemTemplate>
                                         <asp:LinkButton ID="lnkUpdate" runat="server" CommandName="Update" ValidationGroup="proedit" CssClass="btn btn-xs btn-default"><i class="fa fa-save"></i></asp:LinkButton>
@@ -347,7 +307,7 @@
                                 <asp:BoundField DataField="RequestNo" HeaderText="Request No" SortExpression="RequestNo" />
                                 <asp:TemplateField HeaderText="Request Date">
                                     <ItemTemplate>
-                                        <asp:Label ID="lblDate" runat="server" Text='<%# Eval("RequestedDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                                        <asp:Label ID="lblDate" runat="server" Text='<%# Eval("RequestDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                               

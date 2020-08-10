@@ -107,7 +107,31 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _controller.ListMaintenanceRequests(requestNo, RequestDate, ProgressStatus);
         }
+        public IList<ServiceTypeDetail> GetServiceTypeDetbyname(string serviceTypeName)
+        {
+            return _settingController.GetServiceTypeDetbyname(serviceTypeName);
 
+        }
+        public ServiceTypeDetail GetServiceTypeDetail(int Id)
+        {
+            return _settingController.GetServiceTypeDetail(Id);
+
+        }
+        public ServiceType GetServiceType(int Id)
+        {
+            return _settingController.GetServiceType(Id);
+
+        }
+        public IList<ServiceType> GetServiceTypes()
+        {
+            return _settingController.GetServiceTypes();
+
+        }
+        public IList<ServiceTypeDetail> GetServiceTypeDetbyTypeId(int serviceTypeId)
+        {
+            return _settingController.GetServiceTypeDetbyTypeId(serviceTypeId);
+
+        }
         public AssignJob GetAssignedJobbycurrentuser()
         {
             return _controller.GetAssignedJobbycurrentuser();

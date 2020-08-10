@@ -26,7 +26,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
     public class SettingController : ControllerBase
     {
         private IWorkspace _workspace;
-
+        private int currentUser;
         [InjectionConstructor]
         public SettingController([ServiceDependency] IHttpContextLocatorService httpContextLocatorService, [ServiceDependency]INavigationService navigationService)
             : base(httpContextLocatorService, navigationService)
@@ -261,7 +261,21 @@ namespace Chai.WorkflowManagment.Modules.Setting
         #region Vehicle
         public IList<Vehicle> GetVehicles()
         {
-            return WorkspaceFactory.CreateReadOnly().Query<Vehicle>(x => x.Status == "Active").ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<Vehicle>(x => x.Status == "Active").OrderBy(x => x.AppUser).ToList();
+          
+        }
+
+
+        public IList<Vehicle> GetVehiclesForInternal()
+        {
+
+            currentUser = GetCurrentUser().Id;
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM Vehicles Where Status = 'Active' Order by AppUser_Id ";
+
+            return _workspace.SqlQuery<Vehicle>(filterExpression).ToList();
+
         }
         public Vehicle GetVehicle(int VehicleId)
         {
@@ -471,6 +485,26 @@ namespace Chai.WorkflowManagment.Modules.Setting
             return _workspace.SqlQuery<Grant>(filterExpression).ToList();
 
         }
+
+        public IList<ServiceTypeDetail> GetServiceTypeDetbyTypeId(int serviceTypeId)
+        {
+            string filterExpression = "";
+
+            filterExpression = "select * from ServiceTypeDetails left join ServiceTypes on ServiceTypeDetails.ServiceType_Id=ServiceTypes.Id  Where ServiceTypes.Id = '" + serviceTypeId + "' ";
+
+            return _workspace.SqlQuery<ServiceTypeDetail>(filterExpression).ToList();
+
+        }
+        public IList<ServiceTypeDetail> GetServiceTypeDetbyname(string serviceTypename)
+        {
+            string filterExpression = "";
+            
+            filterExpression = "select * from ServiceTypeDetails left join ServiceTypes on ServiceTypeDetails.ServiceType_Id=ServiceTypes.Id  Where ServiceTypes.Name = '" + serviceTypename + "' ";
+
+            return _workspace.SqlQuery<ServiceTypeDetail>(filterExpression).ToList();
+
+        }
+
         public IList<Project> ListProjects(string ProjectCode)
         {
             string filterExpression = "";

@@ -8,6 +8,9 @@ using Chai.WorkflowManagment.Shared;
 using Chai.WorkflowManagment.CoreDomain.Users;
 using Chai.WorkflowManagment.CoreDomain.Setting;
 using Chai.WorkflowManagment.CoreDomain.Requests;
+using Chai.WorkflowManagment.Modules.Admin;
+using Chai.WorkflowManagment.Enums;
+using Chai.WorkflowManagment.Shared.MailSender;
 
 namespace Chai.WorkflowManagment.Modules.Request.Views
 {
@@ -19,12 +22,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         //
          private Chai.WorkflowManagment.Modules.Request.RequestController _controller;
          private Chai.WorkflowManagment.Modules.Setting.SettingController _settingcontroller;
-         private MaintenanceRequest _maintenancerequest;
-         public MaintenaceRequestPresenter([CreateNew] Chai.WorkflowManagment.Modules.Request.RequestController controller, [CreateNew] Chai.WorkflowManagment.Modules.Setting.SettingController settingcontroller)
+        private AdminController _adminController;
+        private MaintenanceRequest _maintenancerequest;
+         public MaintenaceRequestPresenter([CreateNew] Chai.WorkflowManagment.Modules.Request.RequestController controller, [CreateNew] Chai.WorkflowManagment.Modules.Setting.SettingController settingcontroller, AdminController adminController)
          {
          		_controller = controller;
                 _settingcontroller = settingcontroller;
-         }
+                _adminController = adminController;
+        }
 
          public override void OnViewLoaded()
          {
@@ -142,9 +147,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             return _settingcontroller.GetServiceType(Id);
 
         }
-        public IList<ServiceTypeDetail> GetServiceTypeDetails(int Id)
+        public ServiceTypeDetail GetServiceTypeDetail(int Id)
         {
-           return _settingcontroller.GetServiceTypeDetails(Id);
+           return _settingcontroller.GetServiceTypeDetail(Id);
 
         }
         //public IList<ServiceTypeDetail> GetServiceTypeDetails()
@@ -178,7 +183,106 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
              return _controller.GetMaintenanceRequestDetail(Id);
 
          }
-         public AppUser CurrentUser()
+        private void SaveMaintenanceRequestStatus()
+        {
+            if (GetApprovalSetting(RequestType.Maintenance_Request.ToString().Replace('_', ' '), 0) != null)
+            {
+                int i = 1;
+                foreach (ApprovalLevel AL in GetApprovalSetting(RequestType.Maintenance_Request.ToString().Replace('_', ' '), 0).ApprovalLevels)
+                {
+                    MaintenanceRequestStatus MRS = new MaintenanceRequestStatus();
+                    MRS.MaintenanceRequest = CurrentMaintenanceRequest;
+                    if (AL.EmployeePosition.PositionName == "Superviser/Line Manager")
+                    {
+                        if (CurrentUser().Superviser != 0)
+                            MRS.Approver = CurrentUser().Superviser.Value;
+                        else
+                        {
+                            MRS.ApprovalStatus = ApprovalStatus.Approved.ToString();
+                            MRS.Date = Convert.ToDateTime(DateTime.Today.Date.ToShortDateString());
+                        }
+
+                    }
+                    else if (AL.EmployeePosition.PositionName == "Program Manager")
+                    {
+                        if (CurrentMaintenanceRequest.Project.Id != 0)
+                        {
+                            MRS.Approver = GetProject(CurrentMaintenanceRequest.Project.Id).AppUser.Id;
+                        }
+                    }
+                    else
+                    {
+                        if (Approver(AL.EmployeePosition.Id).Id != 0)
+                            MRS.Approver = Approver(AL.EmployeePosition.Id).Id;
+                        else
+                            MRS.Approver = 0;
+                    }
+
+                    //else
+                    //{
+                    //    PRS.Approver = _presenter.Approver(AL.EmployeePosition.Id).Id;
+                    //}
+                    MRS.WorkflowLevel = i;
+                    i++;
+                    CurrentMaintenanceRequest.MaintenanceRequestStatuses.Add(MRS);
+                }
+            }
+           
+        }
+        private void GetCurrentApprover()
+        {
+            if (CurrentMaintenanceRequest.MaintenanceRequestStatuses != null)
+            {
+                foreach (MaintenanceRequestStatus MRS in CurrentMaintenanceRequest.MaintenanceRequestStatuses)
+                {
+                    if (MRS.ApprovalStatus == null)
+                    {
+                        SendEmail(MRS);
+                        CurrentMaintenanceRequest.CurrentApprover = MRS.Approver;
+                        CurrentMaintenanceRequest.CurrentLevel = MRS.WorkflowLevel;
+                        CurrentMaintenanceRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
+                        break;
+                    }
+                }
+            }
+        }
+        private void SendEmail(MaintenanceRequestStatus VRS)
+        {
+            if (GetSuperviser(VRS.Approver).IsAssignedJob != true)
+            {
+                EmailSender.Send(GetSuperviser(VRS.Approver).Email, "Car Maintenance Request", (CurrentMaintenanceRequest.AppUser.FullName).ToUpper() + " Requests for Car Maintenance with Request No. - " + (CurrentMaintenanceRequest.RequestNo).ToUpper() + "'");
+            }
+            else
+            {
+                EmailSender.Send(GetSuperviser(_controller.GetAssignedJobbycurrentuser(VRS.Approver).AssignedTo).Email, " Car Maintenance Request", (CurrentMaintenanceRequest.AppUser.FullName).ToUpper() + " Requests for Car Maintenance with Request No. - " + (CurrentMaintenanceRequest.RequestNo).ToUpper() + "'");
+            }
+        }
+        public void SaveOrUpdateMaintenanceRequest()
+        {
+            MaintenanceRequest MaintenanceRequest = CurrentMaintenanceRequest;
+            MaintenanceRequest.RequestNo = View.RequestNo;
+            MaintenanceRequest.RequestDate = Convert.ToDateTime(View.RequestDate);
+            MaintenanceRequest.PlateNo = View.GetPlateNo;
+            MaintenanceRequest.KmReading = Convert.ToInt32(View.GetKmReading);
+            MaintenanceRequest.Remark = View.GetRemark;
+            MaintenanceRequest.ActionTaken = View.GetActionTaken;
+            MaintenanceRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
+            MaintenanceRequest.Requester= Convert.ToInt32(CurrentMaintenanceRequest.AppUser.Id);
+            MaintenanceRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
+
+            if (View.GetProjectId != 0)
+                MaintenanceRequest.Project = _settingcontroller.GetProject(View.GetProjectId);
+            if (View.GetGrantId != 0)
+                MaintenanceRequest.Grant = _settingcontroller.GetGrant(View.GetGrantId);
+
+            if (CurrentMaintenanceRequest.MaintenanceRequestStatuses.Count == 0)
+
+                SaveMaintenanceRequestStatus();
+            GetCurrentApprover();
+            _controller.SaveOrUpdateEntity(MaintenanceRequest);
+            _controller.CurrentObject = null;
+        }
+        public AppUser CurrentUser()
          {
              return _controller.GetCurrentUser();
          }
@@ -196,9 +300,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
              return _settingcontroller.GetProjectGrantsByprojectId(projectId);
 
          }
+        public IList<ServiceTypeDetail> GetServiceTypeDetbyTypeId(int serviceTypeId)
+        {
+            return _settingcontroller.GetServiceTypeDetbyTypeId(serviceTypeId);
+
+        }
         public IList<Vehicle> GetVehicles()
         {
-            return _settingcontroller.GetVehicles();
+            return _settingcontroller.GetVehiclesForInternal();
         }
     }
 }

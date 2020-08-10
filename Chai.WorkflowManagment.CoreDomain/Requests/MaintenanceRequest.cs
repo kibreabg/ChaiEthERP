@@ -17,22 +17,26 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public int Id { get; set; }
         public string RequestNo { get; set; }
         
-        public DateTime RequestedDate { get; set; }
+        public DateTime RequestDate { get; set; }
         public string MaintenanceType { get; set; }
 
         public int Requester { get; set; }
-        public bool IsVehicle { get; set; }
+        public string ActionTaken { get; set; }
+        
         public string PlateNo { get; set; }
-        public string KmReading { get; set; }
-        public string Comment { get; set; }
+        public int KmReading { get; set; }
+        public string Remark { get; set; }
         public int CurrentApprover { get; set; }
         public int CurrentLevel { get; set; }
         public string CurrentStatus { get; set; }
         public string ProgressStatus { get; set; }
         public virtual AppUser AppUser { get; set; }
-        public virtual Vehicle Vehicles { get; set; }
+        public virtual Project Project { get; set; }
+    
+        public virtual Grant Grant { get; set; }
+      
 
-        public virtual ServiceType ServiceTpes { get; set; }
+     //   public virtual ServiceType ServiceType { get; set; }
        
         public virtual IList<MaintenanceRequestStatus> MaintenanceRequestStatuses { get; set; }
         public virtual IList<MaintenanceRequestDetail> MaintenanceRequestDetails { get; set; }

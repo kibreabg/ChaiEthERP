@@ -8,11 +8,19 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
     public interface IMaintenanceRequestView
     {
         MaintenanceRequest MaintenanceRequest { get; set; }
+        int GetMaintenancetRequestId { get; }
         string RequestNo { get; }
-        string RequestDate { get; }
+        DateTime RequestDate { get; }
         int MaintenanceRequestId { get; }
-        bool GetIsVehicle { get; }
+       
         string GetPlateNo{ get; }
+        int GetKmReading { get; }
+        string GetActionTaken { get; }
+
+        string GetRemark { get; }
+       
+        int GetProjectId { get; }
+        int GetGrantId { get; }
     }
 }
 
