@@ -150,6 +150,11 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         {
             return _controller.GetSoleVendorTasks();
         }
+
+        public int GetMaintenanceRequestsTasks()
+        {
+            return _controller.GetMaintenanceTasks();
+        }
         #endregion
         #region MyRequests
         public int GetLeaveMyRequest()
@@ -183,6 +188,11 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         public int GetSoleVendorRequestsMyRequest()
         {
             return _controller.GetSoleVendorRequestsMyRequest();
+
+        }
+        public int GetMaintenanceRequestsMyRequest()
+        {
+            return _controller.GetMaintenanceRequestsMyRequest();
 
         }
         public int GetBidAnalysisRequestsMyRequest()
@@ -238,6 +248,10 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         public IList<SoleVendorRequest> ListSoleVendorApprovalProgress()
         {
             return _controller.GetSoleVendorInProgress();
+        }
+        public IList<MaintenanceRequest> ListMaintenanceApprovalProgress()
+        {
+            return _controller.GetMaintenanceInProgress();
         }
         #endregion
         public AppUser GetUser(int UserId)

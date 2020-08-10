@@ -11,10 +11,12 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
     public partial class MaintenanceRequestDetail : IEntity
     {
         public int Id { get; set; }
-           
+        public virtual ServiceType ServiceType { get; set; }
         public virtual MaintenanceRequest MaintenanceRequest { get; set; }
-        public virtual ServiceTypeDetail DriverServiceType { get; set; }
+        public virtual ServiceTypeDetail DriverServiceTypeDetail  { get; set; }
 
-        public virtual ServiceTypeDetail MechanicServiceType { get; set; }
+        public virtual ServiceTypeDetail MechanicServiceTypeDetail { get; set; }
+        public string  TechnicianRemark { get; set; }
+       
     }
 }
