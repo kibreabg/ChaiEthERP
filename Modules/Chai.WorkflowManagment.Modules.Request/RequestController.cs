@@ -139,6 +139,16 @@ namespace Chai.WorkflowManagment.Modules.Request
             int currentUserId = GetCurrentUser().Id;
             return WorkspaceFactory.CreateReadOnly().Query<CashPaymentRequest>(x => x.IsLiquidated == false && x.AmountType == "Advanced" && x.ProgressStatus == "Completed" && currentUserId == x.AppUser.Id).ToList();
         }
+        public IList<CashPaymentRequest> GetAllOutPatMedCPReqsThisYear()
+        {
+            int currentUserId = GetCurrentUser().Id;
+            return WorkspaceFactory.CreateReadOnly().Query<CashPaymentRequest>(x => x.RequestType == "Medical Expense (Out-Patient)" && x.AppUser.Id == currentUserId && x.RequestDate.Value.Year == DateTime.Now.Year && (x.CurrentStatus != "Rejected" || x.CurrentStatus == null)).ToList();
+        }
+        public IList<CashPaymentRequest> GetAllInPatMedCPReqsThisYear()
+        {
+            int currentUserId = GetCurrentUser().Id;
+            return WorkspaceFactory.CreateReadOnly().Query<CashPaymentRequest>(x => x.RequestType == "Medical Expense (In-Patient)" && x.AppUser.Id == currentUserId && x.RequestDate.Value.Year == DateTime.Now.Year && (x.CurrentStatus != "Rejected" || x.CurrentStatus == null)).ToList();
+        }
         public CashPaymentRequestDetail GetCashPaymentRequestDetail(int CPRDId)
         {
             return _workspace.Single<CashPaymentRequestDetail>(x => x.Id == CPRDId);

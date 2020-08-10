@@ -13,6 +13,7 @@ using Chai.WorkflowManagment.Shared;
 using log4net;
 using log4net.Config;
 using Microsoft.Practices.ObjectBuilder;
+using System.Web.Configuration;
 
 namespace Chai.WorkflowManagment.Modules.Request.Views
 {
@@ -460,27 +461,59 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails.Count != 0)
                 {
-                    if (ddlAmountType.SelectedValue == "Actual Amount" && CheckReceiptsAttached())
+                    if ((ddlRequestType.SelectedValue == "Medical Expense (In-Patient)" || ddlRequestType.SelectedValue == "Medical Expense (Out-Patient)"))
                     {
-                        _presenter.SaveOrUpdateCashPaymentRequest();
-                        BindCashPaymentRequests();
-                        Master.ShowMessage(new AppMessage("Successfully did a Payment  Request, Reference No - <b>'" + _presenter.CurrentCashPaymentRequest.VoucherNo + "'</b>", RMessageType.Info));
-                        Log.Info(_presenter.CurrentUser().FullName + " has requested a Payment of Total Amount " + _presenter.CurrentCashPaymentRequest.TotalAmount.ToString());
-                        btnSave.Visible = false;
+                        //Validate Medical Expense limit from Web.Config before request is saved
+                        if (ValidateMedExpLimit())
+                        {
+                            if (ddlAmountType.SelectedValue == "Actual Amount" && CheckReceiptsAttached())
+                            {
+                                _presenter.SaveOrUpdateCashPaymentRequest();
+                                BindCashPaymentRequests();
+                                Master.ShowMessage(new AppMessage("Successfully did a Payment  Request, Reference No - <b>'" + _presenter.CurrentCashPaymentRequest.VoucherNo + "'</b>", RMessageType.Info));
+                                Log.Info(_presenter.CurrentUser().FullName + " has requested a Payment of Total Amount " + _presenter.CurrentCashPaymentRequest.TotalAmount.ToString());
+                                btnSave.Visible = false;
 
-                    }
-                    else if (ddlAmountType.SelectedValue == "Advanced")
-                    {
-                        _presenter.SaveOrUpdateCashPaymentRequest();
-                        BindCashPaymentRequests();
-                        Master.ShowMessage(new AppMessage("Successfully did a Payment  Request, Reference No - <b>'" + _presenter.CurrentCashPaymentRequest.VoucherNo + "'</b>", RMessageType.Info));
-                        Log.Info(_presenter.CurrentUser().FullName + " has requested a Payment of Total Amount " + _presenter.CurrentCashPaymentRequest.TotalAmount.ToString());
-                        btnSave.Visible = false;
+                            }
+                            else if (ddlAmountType.SelectedValue == "Advanced")
+                            {
+                                Master.ShowMessage(new AppMessage("Please select Actual Amount from Amount Type, as this is a Medical Expense!", RMessageType.Error));
+                            }
+                            else
+                            {
+                                Master.ShowMessage(new AppMessage("Please attach the required receipts!", RMessageType.Error));
+                            }
+                        }
+                        else
+                        {
+                            Master.ShowMessage(new AppMessage("You have exceeded your Medical Expense limit!", RMessageType.Error));
+                        }
                     }
                     else
                     {
-                        Master.ShowMessage(new AppMessage("Please attach the required receipts!", RMessageType.Error));
+                        if (ddlAmountType.SelectedValue == "Actual Amount" && CheckReceiptsAttached())
+                        {
+                            _presenter.SaveOrUpdateCashPaymentRequest();
+                            BindCashPaymentRequests();
+                            Master.ShowMessage(new AppMessage("Successfully did a Payment  Request, Reference No - <b>'" + _presenter.CurrentCashPaymentRequest.VoucherNo + "'</b>", RMessageType.Info));
+                            Log.Info(_presenter.CurrentUser().FullName + " has requested a Payment of Total Amount " + _presenter.CurrentCashPaymentRequest.TotalAmount.ToString());
+                            btnSave.Visible = false;
+
+                        }
+                        else if (ddlAmountType.SelectedValue == "Advanced")
+                        {
+                            _presenter.SaveOrUpdateCashPaymentRequest();
+                            BindCashPaymentRequests();
+                            Master.ShowMessage(new AppMessage("Successfully did a Payment  Request, Reference No - <b>'" + _presenter.CurrentCashPaymentRequest.VoucherNo + "'</b>", RMessageType.Info));
+                            Log.Info(_presenter.CurrentUser().FullName + " has requested a Payment of Total Amount " + _presenter.CurrentCashPaymentRequest.TotalAmount.ToString());
+                            btnSave.Visible = false;
+                        }
+                        else
+                        {
+                            Master.ShowMessage(new AppMessage("Please attach the required receipts!", RMessageType.Error));
+                        }
                     }
+
                 }
                 else
                 {
@@ -557,6 +590,72 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         protected void ddlProgram_SelectedIndexChanged(object sender, EventArgs e)
         {
             BindCashPaymentDetails();
+        }
+        protected bool ValidateMedExpLimit()
+        {
+            decimal previousAmounts = 0;
+            decimal totalAmount = 0;
+            if (_presenter.GetUser(_presenter.CurrentUser().Id).Employee.MaritalStatus == "Married")
+            {
+                if (ddlRequestType.SelectedValue == "Medical Expense (In-Patient)")
+                {
+                    foreach (CashPaymentRequest cpr in _presenter.GetAllInPatMedCPReqsThisYear())
+                    {
+                        previousAmounts += cpr.TotalAmount;
+                    }
+                    totalAmount = previousAmounts + _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Amount;
+
+                    if (totalAmount > Convert.ToDecimal(WebConfigurationManager.AppSettings["InPatientMarried"]))
+                    { return false; }
+                    else
+                    { return true; }
+
+                }
+                else if (ddlRequestType.SelectedValue == "Medical Expense (Out-Patient)")
+                {
+                    foreach (CashPaymentRequest cpr in _presenter.GetAllOutPatMedCPReqsThisYear())
+                    {
+                        previousAmounts += cpr.TotalAmount;
+                    }
+                    totalAmount = previousAmounts + _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Amount;
+
+                    if (totalAmount > Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]))
+                        return false;
+                    else
+                        return true;
+                }
+            }
+            else
+            {
+                if (ddlRequestType.SelectedValue == "Medical Expense (In-Patient)")
+                {
+                    foreach (CashPaymentRequest cpr in _presenter.GetAllInPatMedCPReqsThisYear())
+                    {
+                        previousAmounts += cpr.TotalAmount;
+                    }
+                    totalAmount = previousAmounts + _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Amount;
+
+                    if (totalAmount > Convert.ToDecimal(WebConfigurationManager.AppSettings["InPatientSingle"]))
+                        return false;
+                    else
+                        return true;
+
+                }
+                else if (ddlRequestType.SelectedValue == "Medical Expense (Out-Patient)")
+                {
+                    foreach (CashPaymentRequest cpr in _presenter.GetAllOutPatMedCPReqsThisYear())
+                    {
+                        previousAmounts += cpr.TotalAmount;
+                    }
+                    totalAmount = previousAmounts + _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Amount;
+
+                    if (totalAmount > Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientSingle"]))
+                        return false;
+                    else
+                        return true;
+                }
+            }
+            return false;
         }
         #region Attachments
         protected bool CheckReceiptsAttached()

@@ -73,7 +73,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void SaveCashPaymentRequestStatus()
         {
-            if (View.GetRequestType == "Medical")
+            if (View.GetRequestType == "Medical Expense (In-Patient)" || View.GetRequestType == "Medical Expense (Out-Patient)")
             {
                 int i = 1;
                 foreach (ApprovalLevel AL in GetApprovalSettingMedical().ApprovalLevels)
@@ -169,7 +169,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
             }
 
-        }   
+        }
         private void GetCurrentApprover()
         {
             if (CurrentCashPaymentRequest.CashPaymentRequestStatuses != null)
@@ -196,6 +196,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public void SaveOrUpdateCashPaymentRequest()
         {
             CashPaymentRequest cashPaymentRequest = CurrentCashPaymentRequest;
+            
             if (cashPaymentRequest.Id <= 0)
             {
                 cashPaymentRequest.RequestNo = View.GetRequestNo;
@@ -226,6 +227,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
             cashPaymentRequest.ExportStatus = "Not Exported";
             cashPaymentRequest.IsLiquidated = false;
+
             if (CurrentCashPaymentRequest.CashPaymentRequestStatuses.Count == 0)
                 SaveCashPaymentRequestStatus();
 
@@ -263,6 +265,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public IList<CashPaymentRequest> ListCashPaymentRequests(string RequestNo, string RequestDate)
         {
             return _controller.ListCashPaymentRequests(RequestNo, RequestDate);
+        }
+        public IList<CashPaymentRequest> GetAllInPatMedCPReqsThisYear()
+        {
+            return _controller.GetAllInPatMedCPReqsThisYear();
+        }
+        public IList<CashPaymentRequest> GetAllOutPatMedCPReqsThisYear()
+        {
+            return _controller.GetAllOutPatMedCPReqsThisYear();
         }
         public CashPaymentRequestDetail GetCashPaymentRequestDetail(int CPRDId)
         {
@@ -352,7 +362,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
             else
             {
-                foreach(AppUser accountant in _settingController.GetAppUsersByEmployeePosition(CPRS.ApproverPosition))
+                foreach (AppUser accountant in _settingController.GetAppUsersByEmployeePosition(CPRS.ApproverPosition))
                 {
                     if (accountant.IsAssignedJob != true)
                     {
@@ -362,7 +372,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     {
                         EmailSender.Send(GetSuperviser(_controller.GetAssignedJobbycurrentuser(accountant.Id).AssignedTo).Email, "Cash Payment Request", (CurrentCashPaymentRequest.AppUser.FullName).ToUpper() + " Requests for Cash Payment with Request No. - '" + (CurrentCashPaymentRequest.RequestNo).ToUpper() + "'");
                     }
-                    
+
                 }
             }
 
@@ -371,7 +381,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             _controller.Commit();
         }
-
+        
     }
 }
 
