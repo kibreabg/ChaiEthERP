@@ -44,7 +44,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
 
         }
-
         [CreateNew]
         public PurchaseRequestPresenter Presenter
         {
@@ -90,7 +89,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private string AutoNumber()
         {
-            return "PR-" + (_presenter.GetLastPurchaseRequestId() + 1).ToString();
+            return "PR-" + _presenter.CurrentUser().Id.ToString() + "-" + (_presenter.GetLastPurchaseRequestId() + 1).ToString();
         }
         private void BindPurchaseRequest()
         {
@@ -217,7 +216,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 EmailSender.Send(_presenter.GetSuperviser(_presenter.GetAssignedJobbycurrentuser(PRS.Approver).AssignedTo).Email, "Purchase Request", _presenter.GetUser(_presenter.CurrentPurchaseRequest.Requester).FullName + "' Request for Item procurment No. '" + _presenter.CurrentPurchaseRequest.RequestNo + "'");
             }
         }
-
         private void PopInternalVehicles()
         {
             ddlPlate.DataSource = _presenter.GetVehicles();
@@ -242,7 +240,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return txtRequestDatesearch.Text; }
         }
-
         public bool GetIsVehicle
         {
             get { return ckIsVehicle.Checked; }
@@ -531,6 +528,25 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 ddlPlate.Visible = false;
                 i.Visible = false;
             }
+        }        
+        protected void ckIsVehicle_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ckIsVehicle.Checked == true)
+            {
+                lblPlate.Visible = true;
+
+
+                ddlPlate.Visible = true;
+                i.Visible = true;
+            }
+            else if (ckIsVehicle.Checked == false)
+            {
+                lblPlate.Visible = false;
+
+
+                ddlPlate.Visible = false;
+                i.Visible = false;
+            }
         }
         #region PurchaseRequestDetail
         private void BindPurchaseRequestDetails()
@@ -759,27 +775,5 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
         }
         #endregion
-
-
-
-        protected void ckIsVehicle_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ckIsVehicle.Checked == true)
-            {
-                lblPlate.Visible = true;
-
-
-                ddlPlate.Visible = true;
-                i.Visible = true;
-            }
-            else if (ckIsVehicle.Checked == false)
-            {
-                lblPlate.Visible = false;
-
-
-                ddlPlate.Visible = false;
-                i.Visible = false;
-            }
-        }
     }
 }
