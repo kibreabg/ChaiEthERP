@@ -261,13 +261,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     PaymentReimbursementRequestDetail cprd = new PaymentReimbursementRequestDetail();
                     TextBox txtAmount = e.Item.FindControl("txtAmount") as TextBox;
-                    cprd.ActualExpendture = Convert.ToDecimal(txtAmount.Text);
+                    cprd.ActualExpenditure = Convert.ToDecimal(txtAmount.Text);
                     TextBox txtAccountCode = e.Item.FindControl("txtAccountCode") as TextBox;
                     DropDownList ddlAccountDescription = e.Item.FindControl("ddlAccountDescription") as DropDownList;
                     cprd.ItemAccount = _presenter.GetItemAccount(Convert.ToInt32(ddlAccountDescription.SelectedValue));
                     CheckBox ckSupDocAttached = e.Item.FindControl("ckSupDocAttached") as CheckBox;
                     cprd.SupportDocAttached = ckSupDocAttached.Checked;
-                    txtImbursement.Text  += cprd.ActualExpendture;
+                    txtImbursement.Text  += cprd.ActualExpenditure;
                                        
                     _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails.Add(cprd);
 
@@ -302,8 +302,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 
                 TextBox txtAmount = e.Item.FindControl("txtEdtAmount") as TextBox;
-                previousAmount = cprd.ActualExpendture; //This is the Total Amount of this request before any edit
-                cprd.ActualExpendture = Convert.ToDecimal(txtAmount.Text);
+                previousAmount = cprd.ActualExpenditure; //This is the Total Amount of this request before any edit
+                cprd.ActualExpenditure = Convert.ToDecimal(txtAmount.Text);
                 TextBox txtEdtAccountCode = e.Item.FindControl("txtEdtAccountCode") as TextBox;
                 //cprd.AccountCode = txtEdtAccountCode.Text;
                 DropDownList ddlAccountDescription = e.Item.FindControl("ddlEdtAccountDescription") as DropDownList;
@@ -311,8 +311,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 CheckBox ckEdtSupDocAttached = e.Item.FindControl("ckEdtSupDocAttached") as CheckBox;
                 cprd.SupportDocAttached = ckEdtSupDocAttached.Checked;
          
-                txtImbursement.Text += cprd.ActualExpendture -= previousAmount; //Subtract the previous Total amount
-                txtImbursement.Text += cprd.ActualExpendture += cprd.ActualExpendture; //Then add the new individual amounts to the Total amount
+                txtImbursement.Text += cprd.ActualExpenditure -= previousAmount; //Subtract the previous Total amount
+                txtImbursement.Text += cprd.ActualExpenditure += cprd.ActualExpenditure; //Then add the new individual amounts to the Total amount
 
 
 
@@ -446,11 +446,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
              _presenter.SaveOrUpdatePaymentReimbursementRequest(Convert.ToInt32(Session["tarId"]));
             BindPaymentReimbursementRequests();
-            Master.ShowMessage(new AppMessage("Payment Reimbursement Request Successfully Reimbursed!", Chai.WorkflowManagment.Enums.RMessageType.Info));
+            Master.ShowMessage(new AppMessage("Payment Reimbursement Request Successfully Reimbursed!", RMessageType.Info));
             btnSave.Visible = false;
             Session["tarId"] = null;
             }
-            else { Master.ShowMessage(new AppMessage("Please attach the required receipts!", Chai.WorkflowManagment.Enums.RMessageType.Error)); }
+            else { Master.ShowMessage(new AppMessage("Please attach the required receipts!", RMessageType.Error)); }
         }
         protected void btnDelete_Click(object sender, EventArgs e)
         {

@@ -15,7 +15,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         }
  
         public int Id { get; set; }
-        public decimal ActualExpendture { get; set; }
+        public decimal ActualExpenditure { get; set; }
         public bool SupportDocAttached { get; set; }
         public virtual ItemAccount ItemAccount { get; set; }
         public string AccountCode { get; set; }
