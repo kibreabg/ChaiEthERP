@@ -191,7 +191,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             lblRequestNoresult.Text = _presenter.CurrentMaintenanceRequest.RequestNo;
             lblRequestedDateresult.Text = _presenter.CurrentMaintenanceRequest.RequestDate.ToString();
-            lblRequesterres.Text = _presenter.GetUser(_presenter.CurrentMaintenanceRequest.AppUser.Id).FullName;
+            lblRequesterres.Text = _presenter.GetUser(_presenter.CurrentMaintenanceRequest.Requester).FullName;
 
             grvSoleDetailsPrint.DataSource = _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails;
             grvSoleDetailsPrint.DataBind();
@@ -518,11 +518,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     DropDownList ddlEdtMechanic = e.Item.FindControl("ddlEdtMechanicServiceTypeDetail") as DropDownList;
                     if (ddlEdtMechanic != null)
                     {
+                        DropDownList ddlServiceType = e.Item.FindControl("ddlServiceTpe") as DropDownList;
+                        BindServiceType(ddlServiceType);
                         BindServiceTypeDetails(ddlEdtMechanic, _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails[e.Item.DataSetIndex].ServiceType.Name);
                         //if (_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails[e.Item.DataSetIndex].MechanicServiceTypeDetail != null)
                         //{
                             
-                            ListItem liI = ddlEdtMechanic.Items.FindByValue(_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails[e.Item.DataSetIndex].DriverServiceTypeDetail.Description);
+                            ListItem liI = ddlEdtMechanic.Items.FindByValue(_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails[e.Item.DataSetIndex].MechanicServiceTypeDetail.Description);
                             if (liI != null)
                                 liI.Selected = true;
                         //}
@@ -626,6 +628,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             pnlDetail_ModalPopupExtender.Show();
         }
 
-      
+
+
+        protected void ddlServiceTpe_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DropDownList ddl = (DropDownList)sender;
+            DropDownList ddlServiceTypeDetail = ddl.FindControl("ddlEdtMechanicServiceTypeDetail") as DropDownList;
+            BindServiceTypeDetails(ddlServiceTypeDetail, Convert.ToInt32(ddl.SelectedValue));
+            pnlDetail_ModalPopupExtender.Show();
+        }
     }
 }
