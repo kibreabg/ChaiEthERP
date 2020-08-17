@@ -12,7 +12,7 @@ using Chai.WorkflowManagment.CoreDomain.TravelLogs;
 using Chai.WorkflowManagment.CoreDomain.Request;
 using Chai.WorkflowManagment.CoreDomain.Approval;
 using Chai.WorkflowManagment.CoreDomain.HRM;
-
+using Chai.WorkflowManagment.CoreDomain.Inventory;
 
 namespace Chai.WorkflowManagment.CoreDomain.DataAccess
 {
@@ -124,6 +124,19 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
         public DbSet<TerminationReason> TerminationReasons { get; set; }
         public DbSet<WorkExperience> WorkExperiences { get; set; }
         public DbSet<Holiday> Holidays { get; set; }
+
+        public DbSet<Issue> Issues { get; set; }
+        public DbSet<IssueDetail> IssueDetails { get; set; }
+        public DbSet<Item> Items { get; set; }
+        public DbSet<ItemCategory> ItemCategories { get; set; }
+        public DbSet<ItemSubCategory> ItemSubCategories { get; set; }
+        public DbSet<Receive> Receives { get; set; }
+        public DbSet<ReceiveDetail> ReceiveDetails { get; set; }
+        public DbSet<Section> Sections { get; set; }
+        public DbSet<Shelf> Shelfs { get; set; }
+        public DbSet<Store> Stores { get; set; }
+        public DbSet<UnitOfMeasurement> UnitOfMeasurements { get; set; }
+
 
         public DbSqlQuery UpdateTaskpanNodePosition { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

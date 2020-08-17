@@ -82,7 +82,9 @@
     <Compile Include="Views\BeneficiaryPresenter.cs" />
     <Compile Include="Views\CarModelPresenter.cs" />
     <Compile Include="Views\EmpLeaveSettingPresenter.cs" />
+    <Compile Include="Views\IItemCategoryView.cs" />
     <Compile Include="Views\IServiceTypeView.cs" />
+    <Compile Include="Views\ItemCategoryPresenter.cs" />
     <Compile Include="Views\IVehicleEditView.cs" />
     <Compile Include="Views\IVehiclesView.cs" />
     <Compile Include="Views\ProgramPresenter.cs" />

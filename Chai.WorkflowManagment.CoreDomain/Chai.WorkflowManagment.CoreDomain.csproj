@@ -103,6 +103,18 @@
     <Compile Include="HRM\Termination.cs" />
     <Compile Include="HRM\TerminationReason.cs" />
     <Compile Include="HRM\WorkExperience.cs" />
+    <Compile Include="Inventory\Stock.cs" />
+    <Compile Include="Inventory\UnitOfMeasurement.cs" />
+    <Compile Include="Inventory\Issue.cs" />
+    <Compile Include="Inventory\IssueDetail.cs" />
+    <Compile Include="Inventory\ReceiveDetail.cs" />
+    <Compile Include="Inventory\Receive.cs" />
+    <Compile Include="Inventory\Section.cs" />
+    <Compile Include="Inventory\Shelf.cs" />
+    <Compile Include="Inventory\Store.cs" />
+    <Compile Include="Inventory\ItemSubCategory.cs" />
+    <Compile Include="Inventory\ItemCategory.cs" />
+    <Compile Include="Inventory\Item.cs" />
     <Compile Include="Requests\PRAttachment.cs" />
     <Compile Include="Requests\MaintenanceRequest.cs" />
     <Compile Include="Requests\MaintenanceRequestDetail.cs" />
@@ -232,6 +244,7 @@
       <Name>Chai.WorkflowManagment.Shared</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

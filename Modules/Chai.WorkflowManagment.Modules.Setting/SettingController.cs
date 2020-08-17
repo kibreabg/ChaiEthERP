@@ -20,6 +20,7 @@ using System.Data;
 using Chai.WorkflowManagment.CoreDomain.Setting;
 using Chai.WorkflowManagment.CoreDomain.HRM;
 using Chai.WorkflowManagment.CoreDomain.Request;
+using Chai.WorkflowManagment.CoreDomain.Inventory;
 
 namespace Chai.WorkflowManagment.Modules.Setting
 {
@@ -712,6 +713,41 @@ namespace Chai.WorkflowManagment.Modules.Setting
 
 
 
+        }
+        #endregion
+        #region ItemCategory
+        public IList<ItemCategory> GetItemCategories()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<ItemCategory>(null).OrderBy(x => x.Name).ToList();
+        }
+        public ItemCategory GetItemCategory(int categoryId)
+        {
+            return _workspace.Single<ItemCategory>(x => x.Id == categoryId);
+        }
+        public IList<ItemCategory> ListItemCategories(string categoryName, string categoryCode)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM ItemCategories Where 1 = Case when '" + categoryName + "' = '' Then 1 When ItemCategories.Name = '" + categoryName + "'  Then 1 END AND 1 = Case when '" + categoryCode + "' = '' Then 1 When ItemCategories.Code = '" + categoryCode + "'  Then 1 END  ";
+
+            return _workspace.SqlQuery<ItemCategory>(filterExpression).ToList();
+
+        }
+        #endregion
+        #region Item
+        public IList<Item> GetItems()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<Item>(null).OrderBy(x => x.Name).ToList();
+        }
+        public Item GetItem(int itemId)
+        {
+            return _workspace.Single<Item>(x => x.Id == itemId);
+        }
+        public IList<Item> ListItems(string itemName, string itemCode)
+        {
+            string filterExpression = "";
+            filterExpression = "SELECT * FROM Items Where 1 = Case when '" + itemName + "' = '' Then 1 When Items.Name = '" + itemName + "'  Then 1 END AND 1 = Case when '" + itemCode + "' = '' Then 1 When Items.Code = '" + itemCode + "'  Then 1 END  ";
+            return _workspace.SqlQuery<Item>(filterExpression).ToList();
         }
         #endregion
         #region Entity Manipulation

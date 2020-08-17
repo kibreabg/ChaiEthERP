@@ -44,7 +44,7 @@
             <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
                 <div class="jarviswidget jarviswidget-color-blueDark jarviswidget-sortable" id="wid-id-0" data-widget-editbutton="false" role="widget" style="">
                     <header role="heading">
-                        <h2>Projects</h2>
+                        <h2>Chart of Accounts</h2>
                     </header>
                     <div role="content">
                         <div class="widget-body">
