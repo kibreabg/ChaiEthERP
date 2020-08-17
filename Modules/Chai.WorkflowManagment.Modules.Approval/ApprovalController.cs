@@ -435,7 +435,7 @@ namespace Chai.WorkflowManagment.Modules.Approval
             }
             else
             {
-                filterExpression = " SELECT * FROM MaintenanceRequests INNER JOIN AppUsers ON AppUsers.Id = MaintenanceRequests.CurrentApprover INNER JOIN MaintenanceRequestStatuses ON MaintenanceRequestStatuses.MaintenanceRequest_Id = MaintenanceRequests.Id LEFT JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When SoleVendorRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When MaintenanceRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND MaintenanceRequests.ProgressStatus='" + ProgressStatus + "'  " +
+                filterExpression = " SELECT * FROM MaintenanceRequests INNER JOIN AppUsers ON AppUsers.Id = MaintenanceRequests.CurrentApprover INNER JOIN MaintenanceRequestStatuses ON MaintenanceRequestStatuses.MaintenanceRequest_Id = MaintenanceRequests.Id LEFT JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When MaintenanceRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When MaintenanceRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND MaintenanceRequests.ProgressStatus='" + ProgressStatus + "'  " +
                                           " AND (MaintenanceRequestStatuses.ApprovalStatus IS NOT NULL AND (MaintenanceRequestStatuses.Approver = '" + CurrentUser().Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) ORDER BY MaintenanceRequests.Id DESC ";
             }
 
