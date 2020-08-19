@@ -734,6 +734,25 @@ namespace Chai.WorkflowManagment.Modules.Setting
 
         }
         #endregion
+        #region ItemSubCategory
+        public IList<ItemSubCategory> GetItemSubCategories()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<ItemSubCategory>(null).OrderBy(x => x.Name).ToList();
+        }
+        public ItemSubCategory GetItemSubCategory(int subCategoryId)
+        {
+            return _workspace.Single<ItemSubCategory>(x => x.Id == subCategoryId);
+        }
+        public IList<ItemSubCategory> ListItemSubCategories(string subCategoryName, string subCategoryCode)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM ItemSubCategories Where 1 = Case when '" + subCategoryName + "' = '' Then 1 When ItemSubCategories.Name = '" + subCategoryName + "'  Then 1 END AND 1 = Case when '" + subCategoryCode + "' = '' Then 1 When ItemSubCategories.Code = '" + subCategoryCode + "'  Then 1 END";
+
+            return _workspace.SqlQuery<ItemSubCategory>(filterExpression).ToList();
+
+        }
+        #endregion
         #region Item
         public IList<Item> GetItems()
         {
@@ -748,6 +767,22 @@ namespace Chai.WorkflowManagment.Modules.Setting
             string filterExpression = "";
             filterExpression = "SELECT * FROM Items Where 1 = Case when '" + itemName + "' = '' Then 1 When Items.Name = '" + itemName + "'  Then 1 END AND 1 = Case when '" + itemCode + "' = '' Then 1 When Items.Code = '" + itemCode + "'  Then 1 END  ";
             return _workspace.SqlQuery<Item>(filterExpression).ToList();
+        }
+        #endregion
+        #region Unit Of Measurement
+        public IList<UnitOfMeasurement> GetUnitOfMeasurements()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<UnitOfMeasurement>(null).OrderBy(x => x.Name).ToList();
+        }
+        public UnitOfMeasurement GetUnitOfMeasurement(int measurementId)
+        {
+            return _workspace.Single<UnitOfMeasurement>(x => x.Id == measurementId);
+        }
+        public IList<UnitOfMeasurement> ListUnitOfMeasurements(string measurementName, string measurementCode)
+        {
+            string filterExpression = "";
+            filterExpression = "SELECT * FROM UnitOfMeasurements WHERE 1 = CASE WHEN '" + measurementName + "' = '' THEN 1 WHEN UnitOfMeasurements.Name = '" + measurementName + "'  Then 1 END AND 1 = Case when '" + measurementCode + "' = '' Then 1 When UnitOfMeasurements.Code = '" + measurementCode + "'  Then 1 END  ";
+            return _workspace.SqlQuery<UnitOfMeasurement>(filterExpression).ToList();
         }
         #endregion
         #region Entity Manipulation
