@@ -750,6 +750,38 @@ namespace Chai.WorkflowManagment.Modules.Setting
             return _workspace.SqlQuery<Item>(filterExpression).ToList();
         }
         #endregion
+        #region Store
+        public IList<Store> GetStores()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<Store>(null).OrderBy(x => x.Name).ToList();
+        }
+        public Store GetStore(int storeId)
+        {
+            return _workspace.Single<Store>(x => x.Id == storeId);
+        }
+        public IList<Store> ListStores(string Name, string Location)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM Stores Where 1 = Case when '" + Name + "' = '' Then 1 When Stores.Name = '" + Name + "'  Then 1 END AND 1 = Case when '" + Location + "' = '' Then 1 When Stores.Location = '" + Location + "'  Then 1 END  ";
+
+            return _workspace.SqlQuery<Store>(filterExpression).ToList();
+
+        }
+
+
+        #endregion
+        #region Section
+        public IList<Section> ListSections(int storId)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM Sections  Where Status = 'Active' And 1 = Case when '" + storId + "' = '0' Then 1 When Sections.Store_Id = '" + storId + "'  Then 1 END";
+
+            return _workspace.SqlQuery<Section>(filterExpression).ToList();
+
+        }
+        #endregion
         #region Entity Manipulation
         public void SaveOrUpdateEntity<T>(T item) where T : class
         {
