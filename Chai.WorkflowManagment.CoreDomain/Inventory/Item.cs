@@ -12,8 +12,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Inventory
         public string Code { get; set; }
         public string Name { get; set; }
         public int ReOrderQuantity { get; set; }        
-        public bool Status { get; set; }
-        public string FilePath { get; set; }
+        public string Status { get; set; }
         public virtual ItemSubCategory ItemSubCategory { get; set; }
         public virtual UnitOfMeasurement UnitOfMeasurement { get; set; }
     }

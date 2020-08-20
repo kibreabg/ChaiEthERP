@@ -734,6 +734,25 @@ namespace Chai.WorkflowManagment.Modules.Setting
 
         }
         #endregion
+        #region ItemSubCategory
+        public IList<ItemSubCategory> GetItemSubCategories()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<ItemSubCategory>(null).OrderBy(x => x.Name).ToList();
+        }
+        public ItemSubCategory GetItemSubCategory(int subCategoryId)
+        {
+            return _workspace.Single<ItemSubCategory>(x => x.Id == subCategoryId);
+        }
+        public IList<ItemSubCategory> ListItemSubCategories(string subCategoryName, string subCategoryCode)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM ItemSubCategories Where 1 = Case when '" + subCategoryName + "' = '' Then 1 When ItemSubCategories.Name = '" + subCategoryName + "'  Then 1 END AND 1 = Case when '" + subCategoryCode + "' = '' Then 1 When ItemSubCategories.Code = '" + subCategoryCode + "'  Then 1 END";
+
+            return _workspace.SqlQuery<ItemSubCategory>(filterExpression).ToList();
+
+        }
+        #endregion
         #region Item
         public IList<Item> GetItems()
         {
