@@ -278,6 +278,16 @@ namespace Chai.WorkflowManagment.Modules.Shell
             return _workspace.SqlQuery<MaintenanceRequest>(filterExpression).Count();
         }
 
+        public int GetStoreTasks()
+        {
+            currentUser = GetCurrentUser().Id;
+            string filterExpression = "";
+
+            filterExpression = " SELECT * FROM StoreRequests INNER JOIN AppUsers on AppUsers.Id = StoreRequests.CurrentApprover Left JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where StoreRequests.ProgressStatus='InProgress' " +
+                                  " AND  ((StoreRequests.CurrentApprover = '" + currentUser + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) order by StoreRequests.Id ";
+
+            return _workspace.SqlQuery<StoreRequest>(filterExpression).Count();
+        }
         #endregion
         #region MyRequests
         public int GetLeaveMyRequest()
@@ -401,6 +411,17 @@ namespace Chai.WorkflowManagment.Modules.Shell
                 return 0;
 
         }
+        public int GetStoreRequestsMyRequest()
+        {
+            currentUser = GetCurrentUser().Id;
+            int Count = 0;
+            Count = WorkspaceFactory.CreateReadOnly().Count<StoreRequest>(x => x.Requester == currentUser && x.ProgressStatus == "InProgress");
+            if (Count != 0)
+                return Count;
+            else
+                return 0;
+
+        }
         #endregion
         #region MyProgresses
         public IList<VehicleRequest> GetVehicleInProgress()
@@ -468,6 +489,12 @@ namespace Chai.WorkflowManagment.Modules.Shell
             currentUser = GetCurrentUser().Id;
             IList<MaintenanceRequest> maintenanceRequests = WorkspaceFactory.CreateReadOnly().Query<MaintenanceRequest>(x => x.AppUser.Id == currentUser && x.ProgressStatus == "InProgress").ToList();
             return maintenanceRequests;
+        }
+        public IList<StoreRequest> GetStoreInProgress()
+        {
+            currentUser = GetCurrentUser().Id;
+            IList<StoreRequest> storeRequests = WorkspaceFactory.CreateReadOnly().Query<StoreRequest>(x => x.Requester == currentUser && x.ProgressStatus == "InProgress").ToList();
+            return storeRequests;
         }
 
         public IList<LeaveRequest> GetLeaveInProgress()
