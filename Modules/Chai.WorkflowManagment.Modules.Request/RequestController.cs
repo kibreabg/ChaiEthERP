@@ -701,7 +701,77 @@ namespace Chai.WorkflowManagment.Modules.Request
         }
 
 
+
+        #endregion
+        #region StoreRequest
+
+        public IList<StoreRequest> GetStoreRequests()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<StoreRequest>(null).ToList();
+
+        }
+
+        public IList<StoreRequest> GetStoreRequestsInProgress()
+        {
+            string filterExpression = "";
+            filterExpression = "SELECT DISTINCT StoreRequests.Id,RequestNo,Requester,RequestedDate,TotalPrice, " +
+                                      " DeliverTo,Comment,CurrentApprover,CurrentLevel,ProgressStatus,CurrentStatus FROM " +
+                                      " StoreRequests INNER JOIN StoreRequestDetails ON dbo.StoreRequestDetails.StoreRequest_Id = StoreRequests.Id" +
+                                       " WHERE  StoreRequests.ProgressStatus = 'Completed' ORDER BY StoreRequests.Id DESC ";
+
+            return _workspace.SqlQuery<StoreRequest>(filterExpression).ToList();
+        }
       
+      
+        public StoreRequest GetStoreRequest(int StoreRequestId)
+        {
+            return _workspace.Single<StoreRequest>(x => x.Id == StoreRequestId, x => x.StoreRequestDetails.Select(z => z.Project));
+        }
+
+        public StoreRequestDetail GetStoreRequestbyPuID(int Id)
+        {
+            return _workspace.Single<StoreRequestDetail>(x => x.Id == Id, y => y.StoreRequest);
+        }
+        public StoreRequestDetail GetStoreRequestDetail(int StoreRequestDetailId)
+        {
+            return _workspace.Single<StoreRequestDetail>(x => x.Id == StoreRequestDetailId);
+        }
+        public IList<StoreRequest> ListStoreRequests(string RequestNo, string RequestDate)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM StoreRequests Where 1 = Case when '" + RequestNo + "' = '' Then 1 When StoreRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When StoreRequests.RequestedDate = '" + RequestDate + "'  Then 1 END and StoreRequests.Requester='" + GetCurrentUser().Id + "' order by StoreRequests.Id Desc ";
+
+            return _workspace.SqlQuery<StoreRequest>(filterExpression).ToList();
+
+        }
+        public IList<StoreRequest> ListStoreRequestForBids(string RequestNo, string RequestDate, string ProgressStatus)
+        {
+            string filterExpression = "";
+
+            if (ProgressStatus != "Completed")
+            {
+                filterExpression = " SELECT  *  FROM StoreRequests INNER JOIN AppUsers on AppUsers.Id=StoreRequests.CurrentApprover  Left JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When StoreRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When StoreRequests.RequestedDate = '" + RequestDate + "'  Then 1 END AND StoreRequests.ProgressStatus='" + ProgressStatus + "' " +
+                                       " AND  ((StoreRequests.CurrentApprover = '" + CurrentUser().Id + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) order by StoreRequests.Id DESC";
+            }
+            else
+            {
+                filterExpression = " SELECT  *  FROM StoreRequests INNER JOIN AppUsers on AppUsers.Id=StoreRequests.CurrentApprover INNER JOIN StoreRequestStatuses on StoreRequestStatuses.StoreRequest_Id = StoreRequests.Id Left JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When StoreRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When StoreRequests.RequestedDate = '" + RequestDate + "'  Then 1 END AND StoreRequests.ProgressStatus='" + ProgressStatus + "' AND " +
+                                           "   (StoreRequestStatuses.ApprovalStatus Is not null AND (StoreRequestStatuses.Approver = '" + CurrentUser().Id + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) order by StoreRequests.Id DESC ";
+            }
+            return _workspace.SqlQuery<StoreRequest>(filterExpression).ToList();
+
+        }
+        public int GetLastStoreRequestId()
+        {
+            if (_workspace.Last<StoreRequest>() != null)
+            {
+                return _workspace.Last<StoreRequest>().Id;
+            }
+            else
+            { return 0; }
+        }
+
         #endregion
         #region Employee
         public Employee GetEmployee(int empid)
@@ -718,8 +788,26 @@ namespace Chai.WorkflowManagment.Modules.Request
                 _workspace.Add<T>(item);
             else
                 _workspace.Update<T>(item);
-
+            try { 
             _workspace.CommitChanges();
+        }
+            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            {
+                Exception raise = dbEx;
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        string message = string.Format("{0}:{1}",
+                            validationErrors.Entry.Entity.ToString(),
+                            validationError.ErrorMessage);
+        // raise a new exception nesting  
+        // the current instance as InnerException  
+        raise = new InvalidOperationException(message, raise);
+    }
+}
+                throw raise;
+            }
             _workspace.Refresh(item);
            
         }

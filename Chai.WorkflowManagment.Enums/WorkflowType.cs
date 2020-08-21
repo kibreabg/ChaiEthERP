@@ -20,6 +20,7 @@ namespace Chai.WorkflowManagment.Enums
         SoleVendor_Request,
         Bid_Analysis_Request,
         Maintenance_Request,
+        Store_Request,
     }
    public enum ProgressStatus
     {

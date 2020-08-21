@@ -155,6 +155,10 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         {
             return _controller.GetMaintenanceTasks();
         }
+        public int GetStoreRequestsTasks()
+        {
+            return _controller.GetStoreTasks();
+        }
         #endregion
         #region MyRequests
         public int GetLeaveMyRequest()
@@ -193,6 +197,11 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         public int GetMaintenanceRequestsMyRequest()
         {
             return _controller.GetMaintenanceRequestsMyRequest();
+
+        }
+        public int GetStoreRequestsMyRequest()
+        {
+            return _controller.GetStoreRequestsMyRequest();
 
         }
         public int GetBidAnalysisRequestsMyRequest()
@@ -252,6 +261,10 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         public IList<MaintenanceRequest> ListMaintenanceApprovalProgress()
         {
             return _controller.GetMaintenanceInProgress();
+        }
+        public IList<StoreRequest> ListStoreApprovalProgress()
+        {
+            return _controller.GetStoreInProgress();
         }
         #endregion
         public AppUser GetUser(int UserId)

@@ -119,6 +119,9 @@
     <Compile Include="Requests\MaintenanceRequest.cs" />
     <Compile Include="Requests\MaintenanceRequestDetail.cs" />
     <Compile Include="Requests\MaintenanceRequestStatus.cs" />
+    <Compile Include="Requests\StoreRequest.cs" />
+    <Compile Include="Requests\StoreRequestDetail.cs" />
+    <Compile Include="Requests\StoreRequestStatus.cs" />
     <Compile Include="Setting\ExpenseType.cs" />
     <Compile Include="Setting\Holiday.cs" />
     <Compile Include="Setting\ServiceTypeDetail.cs" />

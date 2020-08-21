@@ -33,6 +33,7 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
             BindBidAnalysisRequests();
             BindSoleVendorRequests();
             BindMaintenanceRequests();
+            BindStoreRequests();
             BindPaymentReimburesmentRequests();
         }
         this._presenter.OnViewLoaded();
@@ -208,6 +209,18 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         else
         {
             lblMaintenanc.Text = Convert.ToString(0);
+           
+        }
+        if (_presenter.GetStoreRequestsTasks() != 0)
+        {
+            lblStore.Text = _presenter.GetStoreRequestsTasks().ToString();
+            lnkStore.Enabled = true;
+            lnkStore.PostBackUrl = ResolveUrl("Approval/frmStoreApproval.aspx");
+
+        }
+        else
+        {
+            lblStore.Text = Convert.ToString(0);
         }
     }
     private void MyRequests()
@@ -272,6 +285,12 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         {
             lblMaintenanceStatus.Text = ProgressStatus.InProgress.ToString();
             lblMaintenanceStatus.ForeColor = System.Drawing.Color.Green;
+
+        }
+        if (_presenter.GetStoreRequestsMyRequest() != 0)
+        {
+            lblStoreStatus.Text = ProgressStatus.InProgress.ToString();
+            lblStoreStatus.ForeColor = System.Drawing.Color.Green;
 
         }
 
@@ -353,6 +372,11 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
     {
         grvMaintenanceProgress.DataSource = _presenter.ListMaintenanceApprovalProgress();
         grvMaintenanceProgress.DataBind();
+    }
+    private void BindStoreRequests()
+    {
+        grvStoreProgress.DataSource = _presenter.ListStoreApprovalProgress();
+        grvStoreProgress.DataBind();
     }
     protected void grvLeaveProgress_RowDataBound(object sender, GridViewRowEventArgs e)
     {
@@ -485,6 +509,17 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
             {
                 if (_presenter.ListMaintenanceApprovalProgress()[e.Row.RowIndex].CurrentApprover != 0)
                     e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListMaintenanceApprovalProgress()[e.Row.RowIndex].CurrentApprover).FullName;
+            }
+        }
+    }
+    protected void grvStoreProgress_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        if (_presenter.ListStoreApprovalProgress() != null)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                if (_presenter.ListStoreApprovalProgress()[e.Row.RowIndex].CurrentApprover != 0)
+                    e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListStoreApprovalProgress()[e.Row.RowIndex].CurrentApprover).FullName;
             }
         }
     }

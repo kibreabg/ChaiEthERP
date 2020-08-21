@@ -758,6 +758,14 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             return WorkspaceFactory.CreateReadOnly().Query<Item>(null).OrderBy(x => x.Name).ToList();
         }
+        public IList<UnitOfMeasurement> GetUnitOfMeasurements()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<UnitOfMeasurement>(null).OrderBy(x => x.Name).ToList();
+        }
+        public UnitOfMeasurement GetUnitOfMeasurement(int unitId)
+        {
+            return _workspace.Single<UnitOfMeasurement>(x => x.Id == unitId);
+        }
         public Item GetItem(int itemId)
         {
             return _workspace.Single<Item>(x => x.Id == itemId);
@@ -788,18 +796,59 @@ namespace Chai.WorkflowManagment.Modules.Setting
 
         }
 
+     
+
 
         #endregion
         #region Section
-        public IList<Section> ListSections(int storId)
+        public IList<Section> GetSections()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<Section>(null).OrderBy(x => x.Name).ToList();
+        }
+        public Store GetSection(int secId)
+        {
+            return _workspace.Single<Store>(x => x.Id == secId);
+        }
+        public Section GetSec(int secId)
+        {
+            return _workspace.Single<Section>(x => x.Id == secId);
+        }
+        public IList<Section> ListSections(string secName, string secCode)
         {
             string filterExpression = "";
 
-            filterExpression = "SELECT  *  FROM Sections  Where Status = 'Active' And 1 = Case when '" + storId + "' = '0' Then 1 When Sections.Store_Id = '" + storId + "'  Then 1 END";
+            filterExpression = "SELECT * FROM Sections Where 1 = Case when '" + secName + "' = '' Then 1 When Sections.Name = '" + secName + "'  Then 1 END AND 1 = Case when '" + secCode + "' = '' Then 1 When Sections.Code = '" + secCode + "'  Then 1 END";
 
             return _workspace.SqlQuery<Section>(filterExpression).ToList();
 
         }
+        public IList<Section> GetSectionBystoreId(int storeId)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM Sections Left Join Stores on Stores.Id = Sections.Store_Id  Where Stores.Id = '" + storeId + "' ";
+
+            return _workspace.SqlQuery<Section>(filterExpression).ToList();
+
+        }
+        #endregion
+        #region Shelf
+        public IList<Shelf> GetShelfs()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<Shelf>(null).OrderBy(x => x.Name).ToList();
+        }
+        public Shelf GetShelf(int shelfId)
+        {
+            return _workspace.Single<Shelf>(x => x.Id == shelfId);
+        }
+        public IList<Shelf> ListShelfs(string shelfName, string shelfCode)
+        {
+            string filterExpression = "";
+            filterExpression = "SELECT * FROM Shelves Where 1 = Case when '" + shelfName + "' = '' Then 1 When Shelves.Name = '" + shelfName + "'  Then 1 END AND 1 = Case when '" + shelfCode + "' = '' Then 1 When Shelves.Code = '" + shelfCode + "'  Then 1 END  ";
+            return _workspace.SqlQuery<Shelf>(filterExpression).ToList();
+        }
+
+    
         #endregion
         #region Entity Manipulation
         public void SaveOrUpdateEntity<T>(T item) where T : class

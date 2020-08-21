@@ -441,8 +441,39 @@ namespace Chai.WorkflowManagment.Modules.Approval
 
             return _workspace.SqlQuery<MaintenanceRequest>(filterExpression).ToList();
         }
-    
-     
+
+
+        #endregion
+        #region StoreApproval
+
+        public StoreRequest GetStoreRequest(int StoreId)
+        {
+            return _workspace.Single<StoreRequest>(x => x.Id == StoreId);
+            //x => x.Bidders.Select(y => y.ItemAccount), x => x.StoreRequestDetails.Select(z => z.project), x => x.Bidders.Select(z => z.Supplier), x => x.BidAnalysises.Bidders.Select(z => z.BidderItemDetails.Select(y => y.ItemAccount)), x => x.StoreOrders.StoreOrderDetails);
+        }
+        public IList<StoreRequest> ListStoreRequests(string RequestNo, string RequestDate, string ProgressStatus)
+        {
+            string filterExpression = "";
+
+            if (ProgressStatus != "Completed")
+            {
+                filterExpression = " SELECT  *  FROM StoreRequests INNER JOIN AppUsers on AppUsers.Id=StoreRequests.CurrentApprover  Left JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When StoreRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When StoreRequests.RequestedDate = '" + RequestDate + "'  Then 1 END AND StoreRequests.ProgressStatus='" + ProgressStatus + "' " +
+                                       " AND  ((StoreRequests.CurrentApprover = '" + CurrentUser().Id + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) order by StoreRequests.Id DESC";
+            }
+            else
+            {
+                filterExpression = " SELECT  *  FROM StoreRequests INNER JOIN AppUsers on AppUsers.Id=StoreRequests.CurrentApprover INNER JOIN StoreRequestStatuses on StoreRequestStatuses.StoreRequest_Id = StoreRequests.Id Left JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When StoreRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When StoreRequests.RequestedDate = '" + RequestDate + "'  Then 1 END AND StoreRequests.ProgressStatus='" + ProgressStatus + "' AND " +
+                                           "   (StoreRequestStatuses.ApprovalStatus Is not null AND (StoreRequestStatuses.Approver = '" + CurrentUser().Id + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) order by StoreRequests.Id DESC ";
+            }
+            return _workspace.SqlQuery<StoreRequest>(filterExpression).ToList();
+
+        }
+        public IList<StoreRequest> GetStoreRequestsInProgressPO()
+        {
+            string filterExpression = "SELECT  *  FROM BidAnalysisRequests INNER JOIN StoreRequests on StoreRequests.Id = BidAnalysisRequests.StoreRequest_Id  Where BidAnalysisRequests.ProgressStatus = 'Completed'  order by BidAnalysisRequests.Id Desc ";
+
+            return _workspace.SqlQuery<StoreRequest>(filterExpression).ToList();
+        }
         #endregion
         #region Employee
         public Employee GetEmployee(int empid)
