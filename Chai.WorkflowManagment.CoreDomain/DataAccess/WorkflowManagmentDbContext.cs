@@ -103,6 +103,9 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
         public DbSet<PurchaseRequest> PurchaseRequests { get; set; }
         public DbSet<PurchaseRequestDetail> PurchaseRequestDetail { get; set; }
         public DbSet<PurchaseRequestStatus> PurchaseRequestStatuses { get; set; }
+        public DbSet<StoreRequest> StoreRequests { get; set; }
+        public DbSet<StoreRequestDetail> StoreRequestDetail { get; set; }
+        public DbSet<StoreRequestStatus> StoreRequestStatuses { get; set; }
         public DbSet<BidAnalysisRequestDetail> BidAnalysisRequestDetail { get; set; }
         public DbSet<MaintenanceRequest> MaintenanceRequest { get; set; }
         public DbSet<MaintenanceRequestDetail> MaintenanceRequestDetail { get; set; }
