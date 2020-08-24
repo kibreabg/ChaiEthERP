@@ -190,7 +190,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         private void BindMaintenanceRequestforprint()
         {
             lblRequestNoresult.Text = _presenter.CurrentMaintenanceRequest.RequestNo;
-            lblRequestedDateresult.Text = _presenter.CurrentMaintenanceRequest.RequestDate.ToString();
+            lblRequestedDateresult.Text = _presenter.CurrentMaintenanceRequest.RequestDate.ToShortDateString();
             lblRequesterres.Text = _presenter.GetUser(_presenter.CurrentMaintenanceRequest.Requester).FullName;
 
             grvSoleDetailsPrint.DataSource = _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails;
@@ -524,7 +524,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         //if (_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails[e.Item.DataSetIndex].MechanicServiceTypeDetail != null)
                         //{
                             
-                            ListItem liI = ddlEdtMechanic.Items.FindByValue(_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails[e.Item.DataSetIndex].MechanicServiceTypeDetail.Description);
+                            ListItem liI = ddlEdtMechanic.Items.FindByValue(_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails[e.Item.DataSetIndex].DriverServiceTypeDetail.Description);
                             if (liI != null)
                                 liI.Selected = true;
                         //}
@@ -559,7 +559,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             try
             {
-               // cprd.MaintenanceRequest = _presenter.CurrentMaintenanceRequest;
+               
+
+               
+                // cprd.MaintenanceRequest = _presenter.CurrentMaintenanceRequest;
                 TextBox txtEdtTechRemark = e.Item.FindControl("txtEdtTechnicianRemark") as TextBox;
                 cprd.TechnicianRemark = txtEdtTechRemark.Text;
                 DropDownList ddlTechServiceTypeDetail = e.Item.FindControl("ddlEdtMechanicServiceTypeDetail") as DropDownList;
@@ -610,6 +613,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     dgMaintenanceRequestDetail.EditItemIndex = -1;
                     dgMaintenanceRequestDetail.DataSource = _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails;
                     dgMaintenanceRequestDetail.DataBind();
+                    pnlDetail_ModalPopupExtender.Show();
                 }
                 catch (Exception ex)
                 {

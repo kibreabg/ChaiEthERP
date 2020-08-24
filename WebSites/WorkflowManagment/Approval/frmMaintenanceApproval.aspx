@@ -398,10 +398,10 @@
                 runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
                 CssClass="table table-striped table-bordered table-hover">
                 <Columns>
-                    <asp:BoundField DataField="ServiceType.Name" HeaderText="ServiceType" SortExpression="ServiceType.Name" />
-                    <asp:BoundField DataField="DriverServiceTypeDetail.Description" HeaderText="DriverServiceTypeDetail" SortExpression="DriverServiceTypeDetail.Description" />
-                    <asp:BoundField DataField="MechanicServiceTypeDetail.Description" HeaderText="MechanicServiceTypeDetail" SortExpression="MechanicServiceTypeDetail.Description" />
-                    <asp:BoundField DataField="TechnicianRemark" HeaderText="Mechanic Remark" SortExpression="TechnicianRemark" />
+                    <asp:BoundField DataField="ServiceType.Name" HeaderText="Service Type" SortExpression="ServiceType.Name" />
+                    <asp:BoundField DataField="DriverServiceTypeDetail.Description" HeaderText="Driver's Service Type Request" SortExpression="DriverServiceTypeDetail.Description" />
+                    <asp:BoundField DataField="MechanicServiceTypeDetail.Description" HeaderText="Mechanic's Service Type Reccomendation" SortExpression="MechanicServiceTypeDetail.Description" />
+                    <asp:BoundField DataField="TechnicianRemark" HeaderText="Mechanic's Remark" SortExpression="TechnicianRemark" />
 
                 </Columns>
                 <FooterStyle CssClass="FooterStyle" />
