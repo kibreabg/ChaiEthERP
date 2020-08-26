@@ -18,12 +18,11 @@ namespace Chai.WorkflowManagment.CoreDomain.Inventory
         public string InvoiceNo { get; set; }      
         public Nullable<DateTime> ReceiveDate { get; set; }
         public int Receiver { get; set; }
-        public int DeliveredBy { get; set; }
+        public string DeliveredBy { get; set; }
         public virtual Program Program { get; set; }
         public virtual Project Project { get; set; }
         public virtual Grant Grant { get; set; }
         public virtual Supplier Supplier { get; set; }
-        public virtual Store Store { get; set; }
         public IList<ReceiveDetail> ReceiveDetails { get; set; }
         public virtual ReceiveDetail GetReceiveDetail(int Id)
         {

@@ -739,6 +739,10 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             return WorkspaceFactory.CreateReadOnly().Query<ItemSubCategory>(null).OrderBy(x => x.Name).ToList();
         }
+        public IList<ItemSubCategory> GetItemSubCatsByCategoryId(int catId)
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<ItemSubCategory>(x => x.ItemCategory.Id == catId).OrderBy(x => x.Name).ToList();
+        }
         public ItemSubCategory GetItemSubCategory(int subCategoryId)
         {
             return _workspace.Single<ItemSubCategory>(x => x.Id == subCategoryId);
@@ -757,6 +761,10 @@ namespace Chai.WorkflowManagment.Modules.Setting
         public IList<Item> GetItems()
         {
             return WorkspaceFactory.CreateReadOnly().Query<Item>(null).OrderBy(x => x.Name).ToList();
+        }
+        public IList<Item> GetItemsBySubCatId(int subCatId)
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<Item>(x => x.ItemSubCategory.Id == subCatId).OrderBy(x => x.Name).ToList();
         }
         public IList<UnitOfMeasurement> GetUnitOfMeasurements()
         {
@@ -805,9 +813,9 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             return WorkspaceFactory.CreateReadOnly().Query<Section>(null).OrderBy(x => x.Name).ToList();
         }
-        public Store GetSection(int secId)
+        public Section GetSection(int secId)
         {
-            return _workspace.Single<Store>(x => x.Id == secId);
+            return _workspace.Single<Section>(x => x.Id == secId);
         }
         public Section GetSec(int secId)
         {
@@ -836,6 +844,10 @@ namespace Chai.WorkflowManagment.Modules.Setting
         public IList<Shelf> GetShelfs()
         {
             return WorkspaceFactory.CreateReadOnly().Query<Shelf>(null).OrderBy(x => x.Name).ToList();
+        }
+        public IList<Shelf> GetShelvesBySectionId(int sectionId)
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<Shelf>(x => x.Section.Id == sectionId).OrderBy(x => x.Name).ToList();
         }
         public Shelf GetShelf(int shelfId)
         {

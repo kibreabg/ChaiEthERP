@@ -124,7 +124,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 try
                 {
                     DropDownList ddlStore = e.Item.FindControl("ddlStore") as DropDownList;
-                    Section.Store = _presenter.GetSectionById(Convert.ToInt32(ddlStore.SelectedValue));
+                    Section.Store = _presenter.GetStore(Convert.ToInt32(ddlStore.SelectedValue));
                     TextBox txtFName = e.Item.FindControl("txtFName") as TextBox;
                     Section.Name = txtFName.Text;
                     TextBox txtFCode = e.Item.FindControl("txtFCode") as TextBox;
@@ -198,7 +198,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
             try
             {
                 DropDownList ddlEdtStore = e.Item.FindControl("ddlEdtStore") as DropDownList;
-                Section.Store = _presenter.GetSectionById(Convert.ToInt32(ddlEdtStore.SelectedValue));
+                Section.Store = _presenter.GetStore(Convert.ToInt32(ddlEdtStore.SelectedValue));
                 TextBox txtEdtName = e.Item.FindControl("txtEdtName") as TextBox;
                 Section.Name = txtEdtName.Text;
                 TextBox txtEdtCode = e.Item.FindControl("txtEdtCode") as TextBox;

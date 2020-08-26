@@ -37,13 +37,17 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         {
             return _controller.GetSections();
         }
-        public Store GetSectionById(int id)
+        public Section GetSectionById(int id)
         {
             return _controller.GetSection(id);
         }
         public IList<Store> GetStores()
         {
             return _controller.GetStores();
+        }
+        public Store GetStore(int storeId)
+        {
+            return _controller.GetStore(storeId);
         }
         public Section GetSectById(int id)
         {

@@ -65,9 +65,12 @@ namespace Chai.WorkflowManagment.Modules.Inventory
         {
             return _workspace.Single<ReceiveDetail>(x => x.Id == Id);
         }
-        public IList<Receive> ListReceive(string InvoiceNo, DateTime ReceiveDate)
+        public IList<Receive> ListReceives(string ReceiveNo, string ReceiveDate)
         {
-            return WorkspaceFactory.CreateReadOnly().Query<Receive>(x => x.InvoiceNo == InvoiceNo && x.ReceiveDate == ReceiveDate).ToList();
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM Receives Where 1 = Case when '" + ReceiveNo + "' = '' Then 1 When Receives.ReceiveNo = '" + ReceiveNo + "' Then 1 END And  1 = CASE WHEN '" + ReceiveDate + "' = '' Then 1 When Receives.ReceiveDate = '" + ReceiveDate + "'  Then 1 END AND Receives.Receiver = '" + GetCurrentUser().Id + "' ORDER BY Receives.Id Desc";
+            return _workspace.SqlQuery<Receive>(filterExpression).ToList();
         }
 
         #endregion
