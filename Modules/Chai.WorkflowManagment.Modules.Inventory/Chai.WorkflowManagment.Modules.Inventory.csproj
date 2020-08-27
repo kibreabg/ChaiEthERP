@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{88B5EB9E-0FB5-4A23-99BD-F2B3C590F92D}</ProjectGuid>
+    <ProjectGuid>{6DE11E82-FE00-44E5-A6BC-43C794171EC4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Chai.WorkflowManagment.Modules.Request</RootNamespace>
-    <AssemblyName>Chai.WorkflowManagment.Modules.Request</AssemblyName>
+    <RootNamespace>Chai.WorkflowManagment.Modules.Inventory</RootNamespace>
+    <AssemblyName>Chai.WorkflowManagment.Modules.Inventory</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -76,44 +76,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RequestController.cs" />
-    <Compile Include="RequestModuleInitializer.cs" />
-    <Compile Include="Views\BankPaymentRequestPresenter.cs" />
-    <Compile Include="Views\BidAnalysisRequestPresenter.cs" />
-    <Compile Include="Views\CostSharingRequestPresenter.cs" />
-    <Compile Include="Views\IBankPaymentRequestView.cs" />
-    <Compile Include="Views\IBidAnalysisRequestView.cs" />
-    <Compile Include="Views\ICostSharingRequestView.cs" />
-    <Compile Include="Views\IMaintenanceRequestView.cs" />
-    <Compile Include="Views\IStoreRequestView.cs" />
-    <Compile Include="Views\ISoleVendorRequestView.cs" />
-    <Compile Include="Views\IStoreRequestView.cs" />
-    <Compile Include="Views\OperationalControlRequestPresenter.cs" />
-    <Compile Include="Views\ExpenseLiquidationRequestPresenter.cs" />
-    <Compile Include="Views\IOperationalControlRequestView.cs" />
-    <Compile Include="Views\ICashPaymentRequestView.cs" />
-    <Compile Include="Views\IDashboardRequestView.cs" />
-    <Compile Include="Views\IPaymentReimbursementRequestView.cs" />
-    <Compile Include="Views\ILeaveRequestView.cs" />
-    <Compile Include="Views\IPurchaseRequestView.cs" />
-    <Compile Include="Views\ITravelAdvanceRequestView.cs" />
-    <Compile Include="Views\IExpenseLiquidationRequestView.cs" />
-    <Compile Include="Views\DashboardPresenter.cs" />
-    <Compile Include="Views\LeaveRequestPresenter.cs" />
-    <Compile Include="Views\MaintenaceRequestPresenter.cs" />
-    <Compile Include="Views\StoreRequestPresenter.cs" />
-    <Compile Include="Views\PurchaseRequestPresenter.cs" />
-    <Compile Include="Views\SoleVendorRequestPresenter.cs" />
-    <Compile Include="Views\StoreRequestPresenter.cs" />
-    <Compile Include="Views\TravelLogPresenter.cs" />
-    <Compile Include="Views\ITravelLogView.cs" />
-    <Compile Include="Views\CashPaymentRequestPresenter.cs" />
-    <Compile Include="Views\TravelAdvanceRequestPresenter.cs" />
-    <Compile Include="Views\PaymentReimbursementRequestPresenter.cs" />
-    <Compile Include="Views\VehicleRequestPresenter.cs" />
+    <Compile Include="InventoryController.cs" />
+    <Compile Include="InventoryModuleInitializer.cs" />
+    <Compile Include="Views\IIssueListView.cs" />
+    <Compile Include="Views\IssuePresenter.cs" />
+    <Compile Include="Views\ReceivePresenter.cs" />
     <Compile Include="Views\DefaultPresenter.cs" />
-    <Compile Include="Views\IVehicleRequestView.cs" />
     <Compile Include="Views\IDefaultView.cs" />
+    <Compile Include="Views\IReceiveListView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />

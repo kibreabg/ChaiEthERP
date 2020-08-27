@@ -12,13 +12,13 @@ using Chai.WorkflowManagment.Modules.Admin;
 
 namespace Chai.WorkflowManagment.Modules.Inventory.Views
 {
-    public class IssuePresenter : Presenter<IIssueListView>
+    public class ReceivePresenter : Presenter<IReceiveListView>
     {
         private InventoryController _controller;
         private SettingController _settingController;
         private AdminController _adminController;
-        private Issue _Issue;
-        public IssuePresenter([CreateNew] InventoryController controller, [CreateNew] SettingController settingController, [CreateNew] AdminController adminController)
+        private Receive _receive;
+        public ReceivePresenter([CreateNew] InventoryController controller, [CreateNew] SettingController settingController, [CreateNew] AdminController adminController)
         {
             _controller = controller;
             _settingController = settingController;
@@ -27,43 +27,43 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
 
         public override void OnViewLoaded()
         {
-            if (View.GetIssueId > 0)
+            if (View.GetReceiveId > 0)
             {
-                _controller.CurrentObject = _controller.GetIssue(View.GetIssueId);
+                _controller.CurrentObject = _controller.GetReceive(View.GetReceiveId);
             }
-            CurrentIssue = _controller.CurrentObject as Issue;
+            CurrentReceive = _controller.CurrentObject as Receive;
         }
         public override void OnViewInitialized()
         {
-            if (_Issue == null)
+            if (_receive == null)
             {
-                int id = View.GetIssueId;
+                int id = View.GetReceiveId;
                 if (id > 0)
                 {
-                    _controller.CurrentObject = _controller.GetIssue(id);
+                    _controller.CurrentObject = _controller.GetReceive(id);
                 }
                 else
                 {
-                    _controller.CurrentObject = new Issue();
+                    _controller.CurrentObject = new Receive();
                 }
 
             }
         }
-        public Issue CurrentIssue
+        public Receive CurrentReceive
         {
             get
             {
-                if (_Issue == null)
+                if (_receive == null)
                 {
-                    int id = View.GetIssueId;
+                    int id = View.GetReceiveId;
                     if (id > 0)
-                        _Issue = _controller.GetIssue(id);
+                        _receive = _controller.GetReceive(id);
                     else
-                        _Issue = new Issue();
+                        _receive = new Receive();
                 }
-                return _Issue;
+                return _receive;
             }
-            set { _Issue = value; }
+            set { _receive = value; }
         }
         public IList<Program> GetPrograms()
         {
@@ -76,6 +76,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         public IList<Grant> GetGrantbyprojectId(int projectId)
         {
             return _settingController.GetProjectGrantsByprojectId(projectId);
+
         }
         public IList<Supplier> GetSuppliers()
         {
@@ -89,9 +90,9 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         {
             return _settingController.GetItem(Id);
         }
-        public int GetLastIssueId()
+        public int GetLastReceiveId()
         {
-            return _controller.GetLastIssueId();
+            return _controller.GetLastReceiveId();
         }
         public Stock GetStock(int ItemId)
         {
@@ -145,21 +146,17 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         {
             return _controller.GetCurrentUser();
         }
-        public IList<AppUser> GetUsers()
+        public Receive GetReceiveById(int id)
         {
-            return _adminController.GetUsers();
+            return _controller.GetReceive(id);
         }
-        public Issue GetIssueById(int id)
+        public IList<Receive> ListReceives(string ReceiveNo, string ReceiveDate)
         {
-            return _controller.GetIssue(id);
+            return _controller.ListReceives(ReceiveNo, ReceiveDate);
         }
-        public IList<Issue> ListIssues(string IssueNo, string IssueDate)
+        public ReceiveDetail GetReceiveDetailById(int id)
         {
-            return _controller.ListIssues(IssueNo, IssueDate);
-        }
-        public IssueDetail GetIssueDetailById(int id)
-        {
-            return _controller.GetIssueDetail(id);
+            return _controller.GetReceiveDetail(id);
         }
         public ApprovalSetting GetApprovalSetting(string RequestType, decimal value)
         {
@@ -169,32 +166,36 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         {
             return _controller.GetCurrentUser();
         }
-        public void SaveOrUpdateIssue()
+        public void SaveOrUpdateReceive()
         {
-            Issue issue = CurrentIssue;
+            Receive receive = CurrentReceive;
 
-            if (issue.Id <= 0)
+            if (receive.Id <= 0)
             {
-                issue.IssueNo = View.GetIssueNo;
+                receive.ReceiveNo = View.GetReceiveNo;
             }
-            issue.IssueDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
-            issue.HandedOverBy = View.GetHandedOverBy;
-            issue.IssuedTo = View.GetIssuedTo;
-            issue.Purpose = View.GetPurpose;
+            receive.ReceiveDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
+            receive.DeliveredBy = View.GetDeliveredBy;
+            receive.InvoiceNo = View.GetInvoiceNo;
+            receive.Program = _settingController.GetProgram(View.GetProgram);
+            receive.Project = _settingController.GetProject(View.GetProject);
+            receive.Grant = _settingController.GetGrant(View.GetGrant);
+            receive.Receiver = _adminController.GetUser(CurrentUser().Id).Id;
+            receive.Supplier = _settingController.GetSupplier(View.GetSupplier);
 
-            _controller.SaveOrUpdateEntity(issue);
+            _controller.SaveOrUpdateEntity(receive);
         }
         public void SaveOrUpdateStock(Stock stock)
         {
             _controller.SaveOrUpdateEntity(stock);
         }
-        public void DeleteIssue(Issue Issue)
+        public void DeleteReceive(Receive receive)
         {
-            _controller.DeleteEntity(Issue);
+            _controller.DeleteEntity(receive);
         }
-        public void DeleteIssueDetail(IssueDetail IssueDetail)
+        public void DeleteReceiveDetail(ReceiveDetail receiveDetail)
         {
-            _controller.DeleteEntity(IssueDetail);
+            _controller.DeleteEntity(receiveDetail);
         }
         public void CancelPage()
         {
