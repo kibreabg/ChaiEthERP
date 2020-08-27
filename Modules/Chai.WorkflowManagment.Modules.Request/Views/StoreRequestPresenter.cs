@@ -127,7 +127,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
              return _settingcontroller.GetItemAccounts();
 
          }
-         public ItemAccount GetItemAccount(int Id)
+        public IList<Project> ListProjects(int programID)
+        {
+            return _settingcontroller.GetProjectsByProgramId(programID);
+        }
+        public ItemAccount GetItemAccount(int Id)
          {
              return _settingcontroller.GetItemAccount(Id);
 
@@ -159,7 +163,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
              return _controller.GetStoreRequestDetail(Id);
 
          }
-         public AppUser CurrentUser()
+        public IList<Program> GetPrograms()
+        {
+            return _controller.GetPrograms();
+        }
+        public AppUser CurrentUser()
          {
              return _controller.GetCurrentUser();
          }

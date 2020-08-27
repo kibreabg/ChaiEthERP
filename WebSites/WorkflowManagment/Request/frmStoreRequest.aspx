@@ -81,16 +81,25 @@
                                 </label>
                             </section>
                         
-                            <section class="col col-6">
+                          <%--  <section class="col col-6">
                                 <label id="lblapplyfor" runat="server" class="label" visible="false">
                                     Remark</label>
                                 <label class="input">
                                     <asp:TextBox ID="txtComment" runat="server" Visible="false"></asp:TextBox>
                                 </label>
-                            </section>
+                            </section>--%>
 
 
-                        </div>
+                       
+                          <section class="col col-6">
+                                <label class="label">Program</label>
+                                <label class="select">
+                                    <asp:DropDownList ID="ddlProgram" AutoPostBack="true" DataTextField="ProgramName" DataValueField="Id" AppendDataBoundItems="true" runat="server" OnSelectedIndexChanged="ddlProgram_SelectedIndexChanged">
+                                        <asp:ListItem Value="0">Select Program</asp:ListItem>
+                                    </asp:DropDownList><i></i>
+                                </label>
+                                <asp:RequiredFieldValidator ID="rfvProgram" runat="server" ControlToValidate="ddlProgram" CssClass="validator" Display="Dynamic" ErrorMessage="Select Program" SetFocusOnError="true" ValidationGroup="request"></asp:RequiredFieldValidator>
+                            </section></div>
                         <asp:DataGrid ID="dgStoreRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
                             CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
                             GridLines="None"
