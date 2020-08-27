@@ -369,11 +369,6 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         {
             Response.Redirect("frmReceive.aspx");
         }
-        protected void btnCancelPopup_Click(object sender, EventArgs e)
-        {
-            pnlWarning.Visible = false;
-            _presenter.CancelPage();
-        }
         protected void ddlProject_SelectedIndexChanged(object sender, EventArgs e)
         {
             BindGrant(Convert.ToInt32(ddlProject.SelectedValue));

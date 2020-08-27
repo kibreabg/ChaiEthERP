@@ -87,9 +87,12 @@ namespace Chai.WorkflowManagment.Modules.Inventory
         {
             return _workspace.Single<Issue>(x => x.Id == Id, y => y.IssueDetails);
         }
-        public IList<Issue> ListIssue(string issueNo, DateTime issueDate)
+        public IList<Issue> ListIssues(string IssueNo, string IssueDate)
         {
-            return WorkspaceFactory.CreateReadOnly().Query<Issue>(x => x.IssueNo == issueNo && x.IssueDate == issueDate).ToList();
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM Issues WHERE 1 = CASE WHEN '" + IssueNo + "' = '' THEN 1 WHEN Issues.IssueNo = '" + IssueNo + "' THEN 1 END AND  1 = CASE WHEN '" + IssueDate + "' = '' THEN 1 WHEN Issues.IssueDate = '" + IssueDate + "'  Then 1 END AND Issues.HandedOverBy = '" + GetCurrentUser().Id + "' ORDER BY Issues.Id Desc";
+            return _workspace.SqlQuery<Issue>(filterExpression).ToList();
         }
         public IssueDetail GetIssueDetail(int Id)
         {

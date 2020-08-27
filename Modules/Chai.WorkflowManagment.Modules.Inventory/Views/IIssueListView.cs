@@ -6,9 +6,12 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
 {
     public interface IIssueListView
     {
-        int GetId { get; }
+        int GetIssueId { get; }
         DateTime GetIssueDate { get; }
+        string GetPurpose { get; }
         string GetIssueNo { get; }
+        int GetHandedOverBy { get; }
+        int GetIssuedTo { get; }
     }
 }
 

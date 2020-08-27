@@ -8,42 +8,36 @@ using Chai.WorkflowManagment.Shared;
 using Chai.WorkflowManagment.CoreDomain.Inventory;
 using Chai.WorkflowManagment.CoreDomain.Users;
 using Chai.WorkflowManagment.Modules.Setting;
+using Chai.WorkflowManagment.Modules.Admin;
 
 namespace Chai.WorkflowManagment.Modules.Inventory.Views
 {
     public class IssuePresenter : Presenter<IIssueListView>
     {
-
-
         private InventoryController _controller;
-        private SettingController _settingcontroller;
-        private Issue _issue;
-        public IssuePresenter([CreateNew] InventoryController controller, [CreateNew] SettingController settingcontroller)
+        private SettingController _settingController;
+        private AdminController _adminController;
+        private Issue _Issue;
+        public IssuePresenter([CreateNew] InventoryController controller, [CreateNew] SettingController settingController, [CreateNew] AdminController adminController)
         {
             _controller = controller;
-            _settingcontroller = settingcontroller;
+            _settingController = settingController;
+            _adminController = adminController;
         }
 
         public override void OnViewLoaded()
-        {            
-            if (View.GetId > 0)
+        {
+            if (View.GetIssueId > 0)
             {
-                _issue = _controller.GetIssue(View.GetId);
+                _controller.CurrentObject = _controller.GetIssue(View.GetIssueId);
             }
-            else
-            {
-                _issue = new Issue();
-            }
-
             CurrentIssue = _controller.CurrentObject as Issue;
-        
         }
-
         public override void OnViewInitialized()
         {
-            if (_issue == null)
+            if (_Issue == null)
             {
-                int id = View.GetId;
+                int id = View.GetIssueId;
                 if (id > 0)
                 {
                     _controller.CurrentObject = _controller.GetIssue(id);
@@ -52,75 +46,161 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                 {
                     _controller.CurrentObject = new Issue();
                 }
+
             }
         }
         public Issue CurrentIssue
         {
-
             get
             {
-                if (_issue == null)
+                if (_Issue == null)
                 {
-                    int id = View.GetId;
+                    int id = View.GetIssueId;
                     if (id > 0)
-                        _issue = _controller.GetIssue(id);
+                        _Issue = _controller.GetIssue(id);
                     else
-                        _issue = new Issue();
+                        _Issue = new Issue();
                 }
-                return _issue;
+                return _Issue;
             }
-            set { _issue = value; }
+            set { _Issue = value; }
         }
-               
+        public IList<Program> GetPrograms()
+        {
+            return _settingController.GetPrograms();
+        }
+        public IList<Project> ListProjects(int programID)
+        {
+            return _settingController.GetProjectsByProgramId(programID);
+        }
+        public IList<Grant> GetGrantbyprojectId(int projectId)
+        {
+            return _settingController.GetProjectGrantsByprojectId(projectId);
+        }
+        public IList<Supplier> GetSuppliers()
+        {
+            return _settingController.GetSuppliers();
+        }
+        public IList<Item> GetItemList()
+        {
+            return _settingController.GetItems();
+        }
+        public Item GetItem(int Id)
+        {
+            return _settingController.GetItem(Id);
+        }
+        public int GetLastIssueId()
+        {
+            return _controller.GetLastIssueId();
+        }
+        public Stock GetStock(int ItemId)
+        {
+            return _controller.GetStock(ItemId);
+        }
+        public ItemCategory GetItemCategory(int categoryId)
+        {
+            return _settingController.GetItemCategory(categoryId);
+        }
+        public IList<ItemCategory> GetItemCategories()
+        {
+            return _settingController.GetItemCategories();
+        }
+        public ItemSubCategory GetItemSubCategory(int subCategoryId)
+        {
+            return _settingController.GetItemSubCategory(subCategoryId);
+        }
+        public IList<ItemSubCategory> GetItemSubCatsByCategoryId(int catId)
+        {
+            return _settingController.GetItemSubCatsByCategoryId(catId);
+        }
+        public IList<Item> GetItemsBySubCatId(int subCatId)
+        {
+            return _settingController.GetItemsBySubCatId(subCatId);
+        }
+        public IList<Section> GetSectionsByStoreId(int storeId)
+        {
+            return _settingController.GetSectionBystoreId(storeId);
+        }
+        public Store GetStore(int storeId)
+        {
+            return _settingController.GetStore(storeId);
+        }
+        public IList<Store> GetStores()
+        {
+            return _settingController.GetStores();
+        }
+        public Section GetSection(int sectionId)
+        {
+            return _settingController.GetSection(sectionId);
+        }
+        public Shelf GetShelf(int shelfId)
+        {
+            return _settingController.GetShelf(shelfId);
+        }
+        public IList<Shelf> GetShelvesBySectionId(int sectionId)
+        {
+            return _settingController.GetShelvesBySectionId(sectionId);
+        }
         public AppUser GetUser()
         {
             return _controller.GetCurrentUser();
         }
-        public void SaveOrUpdateIssue(Issue issue)
+        public IList<AppUser> GetUsers()
         {
+            return _adminController.GetUsers();
+        }
+        public Issue GetIssueById(int id)
+        {
+            return _controller.GetIssue(id);
+        }
+        public IList<Issue> ListIssues(string IssueNo, string IssueDate)
+        {
+            return _controller.ListIssues(IssueNo, IssueDate);
+        }
+        public IssueDetail GetIssueDetailById(int id)
+        {
+            return _controller.GetIssueDetail(id);
+        }
+        public ApprovalSetting GetApprovalSetting(string RequestType, decimal value)
+        {
+            return _settingController.GetApprovalSettingforProcess(RequestType, value);
+        }
+        public AppUser CurrentUser()
+        {
+            return _controller.GetCurrentUser();
+        }
+        public void SaveOrUpdateIssue()
+        {
+            Issue issue = CurrentIssue;
+
+            if (issue.Id <= 0)
+            {
+                issue.IssueNo = View.GetIssueNo;
+            }
+            issue.IssueDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
+            issue.HandedOverBy = View.GetHandedOverBy;
+            issue.IssuedTo = View.GetIssuedTo;
+            issue.Purpose = View.GetPurpose;
+
             _controller.SaveOrUpdateEntity(issue);
         }
         public void SaveOrUpdateStock(Stock stock)
         {
             _controller.SaveOrUpdateEntity(stock);
         }
-        public int GetLastId()
+        public void DeleteIssue(Issue Issue)
         {
-            return _controller.GetLastIssueId();
+            _controller.DeleteEntity(Issue);
+        }
+        public void DeleteIssueDetail(IssueDetail IssueDetail)
+        {
+            _controller.DeleteEntity(IssueDetail);
         }
         public void CancelPage()
         {
-            _controller.Navigate(String.Format("~/ERP/Default.aspx?{0}=3", AppConstants.TABID));
+            _controller.Navigate(String.Format("~/WorkflowManagment/Default.aspx?{0}=3", AppConstants.TABID));
         }
-        public void DeleteIssue(Issue issue)
-        {
-            _controller.DeleteEntity(issue);
-        }
-        public void DeleteissueDetail(IssueDetail issuedetail)
-        {
-            _controller.DeleteEntity(issuedetail);
-        }
-        public Issue GetIssueById(int id)
-        {
-            return _controller.GetIssue(id);
-        }
-        public IssueDetail GetIssueDetailById(int id)
-        {
-            return _controller.GetIssueDetail(id);
-        }
-        public Stock GetStocks(int ItemId)
-        {
-            return _controller.GetStocks(ItemId);
-        }       
-        public IList<Item> GetItemList()
-        {
-            return _settingcontroller.GetItems();
-        }
-        public Item GetItem(int Id)
-        {
-            return _settingcontroller.GetItem(Id);
-        }
-         public void Commit()
+        public void Commit()
         {
             _controller.Commit();
         }
