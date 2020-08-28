@@ -8,7 +8,7 @@ using Microsoft.Practices.CompositeWeb.Configuration;
 using Microsoft.Practices.CompositeWeb.EnterpriseLibrary.Services;
 using Chai.WorkflowManagment.Services;
 
-namespace Chai.WorkflowManagment.Modules.ERP
+namespace Chai.WorkflowManagment.Modules.Inventory
 {
     public class RequestModuleInitializer : ModuleInitializer
     {
