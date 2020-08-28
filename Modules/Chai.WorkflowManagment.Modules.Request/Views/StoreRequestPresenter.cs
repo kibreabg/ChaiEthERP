@@ -165,7 +165,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
          }
         public IList<Program> GetPrograms()
         {
-            return _controller.GetPrograms();
+            return _settingcontroller.GetPrograms();
         }
         public AppUser CurrentUser()
          {

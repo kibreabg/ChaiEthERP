@@ -28,7 +28,6 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
             {
                 this._presenter.OnViewInitialized();
                 XmlConfigurator.Configure();
-                CheckApprovalSettings();
                 BindReceives();
                 BindReceiveDetails();
                 PopSuppliers();
@@ -115,13 +114,6 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         private string AutoNumber()
         {
             return "IR-" + _presenter.CurrentUser().Id.ToString() + "-" + (_presenter.GetLastReceiveId() + 1).ToString();
-        }
-        private void CheckApprovalSettings()
-        {
-            if (_presenter.GetApprovalSetting(RequestType.CashPayment_Request.ToString().Replace('_', ' '), 0) == null)
-            {
-                pnlWarning.Visible = true;
-            }
         }
         private void ClearFormFields()
         {
