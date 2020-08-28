@@ -35,7 +35,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 BindSearchStoreRequestGrid();
                 BindStoreRequestDetails();
                 BindInitialValues();
-               
+                BindPrograms();
             }
          
             this._presenter.OnViewLoaded();
@@ -97,7 +97,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 // txtRequestNo.Text = _presenter.CurrentStoreRequest.RequestNo;
                 txtRequestDate.Text = _presenter.CurrentStoreRequest.RequestedDate.ToShortDateString();
-                txtComment.Text = "";
+               
                 txtDeliverto.Text = _presenter.CurrentStoreRequest.DeliverTo.ToString();
                
 
@@ -142,6 +142,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
             }
 
+        }
+        private void BindPrograms()
+        {
+            ddlProgram.DataSource = _presenter.GetPrograms();
+            ddlProgram.DataBind();
         }
         private void SaveStoreRequestStatus()
         {
@@ -251,12 +256,19 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ddlItemAccount.DataBind();
 
         }
-        private void BindProject(DropDownList ddlProject)
+        private void BindProject(DropDownList ddlProject, int programID)
         {
-            ddlProject.DataSource = _presenter.GetProjects();
+            ddlProject.DataSource = _presenter.ListProjects(programID);
+            ddlProject.DataValueField = "Id";
+            ddlProject.DataTextField = "ProjectCode";
             ddlProject.DataBind();
-
         }
+        //private void BindProject(DropDownList ddlProject)
+        //{
+        //    ddlProject.DataSource = _presenter.GetProjects();
+        //    ddlProject.DataBind();
+
+        //}
         private void BindGrant(DropDownList ddlGrant, int projectId)
         {
             ddlGrant.Items.Clear();
@@ -272,7 +284,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             //txtRequestNo.Text = "";
             txtRequestDate.Text = "";
-            txtComment.Text = "";
+            
             txtDeliverto.Text = "";
          
 
@@ -551,43 +563,60 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             if (e.Item.ItemType == ListItemType.Footer)
             {
-               
-                DropDownList ddlFProject = e.Item.FindControl("ddlFProject") as DropDownList;
-                BindProject(ddlFProject);
-                DropDownList ddlFGrant = e.Item.FindControl("ddlFGrant") as DropDownList;
-                BindGrant(ddlFGrant, Convert.ToInt32(ddlFProject.SelectedValue));
+
+                DropDownList ddlProject = e.Item.FindControl("ddlFProject") as DropDownList;
+                int programID = Convert.ToInt32(ddlProgram.SelectedValue);
+                BindProject(ddlProject, programID);
+                DropDownList ddlGrant = e.Item.FindControl("ddlFGrant") as DropDownList;
+                BindGrant(ddlGrant, Convert.ToInt32(ddlProject.SelectedValue));
+
+             
             }
             else
             {
-                if (_presenter.CurrentStoreRequest.StoreRequestDetails != null)
+                DropDownList ddlProject = e.Item.FindControl("ddlEdtProject") as DropDownList;
+                int programID = Convert.ToInt32(ddlProgram.SelectedValue);
+                if (ddlProject != null)
                 {
-
-                  
-                    DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
-
-                    if (ddlProject != null)
+                    BindProject(ddlProject, programID);
+                    if (_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].Project.Id != 0)
                     {
-                        BindProject(ddlProject);
-
-                        if (_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].Project != null)
-                        {
-                            ListItem li = ddlProject.Items.FindByValue(_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].Project.Id.ToString());
-                            if (li != null)
-                                li.Selected = true;
-                        }
-                    }
-                    DropDownList ddlGrant = e.Item.FindControl("ddlGrant") as DropDownList;
-                    if (ddlGrant != null)
-                    {
-                        BindGrant(ddlGrant, Convert.ToInt32(ddlProject.SelectedValue));
-                        if (_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].Grant != null)
-                        {
-                            ListItem liI = ddlGrant.Items.FindByValue(_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].Grant.Id.ToString());
-                            if (liI != null)
-                                liI.Selected = true;
-                        }
+                        ListItem liI = ddlProject.Items.FindByValue(_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].Project.Id.ToString());
+                        if (liI != null)
+                            liI.Selected = true;
                     }
                 }
+
+
+                //if (_presenter.CurrentStoreRequest.StoreRequestDetails != null)
+                //{
+
+                  
+                //    DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
+
+                //    if (ddlProject != null)
+                //    {
+                //        BindProject(ddlProject);
+
+                //        if (_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].Project != null)
+                //        {
+                //            ListItem li = ddlProject.Items.FindByValue(_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].Project.Id.ToString());
+                //            if (li != null)
+                //                li.Selected = true;
+                //        }
+                //    }
+                //    DropDownList ddlGrant = e.Item.FindControl("ddlGrant") as DropDownList;
+                //    if (ddlGrant != null)
+                //    {
+                //        BindGrant(ddlGrant, Convert.ToInt32(ddlProject.SelectedValue));
+                //        if (_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].Grant != null)
+                //        {
+                //            ListItem liI = ddlGrant.Items.FindByValue(_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].Grant.Id.ToString());
+                //            if (liI != null)
+                //                liI.Selected = true;
+                //        }
+                //    }
+                //}
             }
         }
         protected void dgStoreRequestDetail_UpdateCommand(object source, DataGridCommandEventArgs e)
@@ -631,5 +660,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
         }
         #endregion
+
+        protected void ddlProgram_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            BindStoreRequestDetails();
+        }
+      
+   
     }
 }
