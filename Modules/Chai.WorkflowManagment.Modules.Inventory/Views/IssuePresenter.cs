@@ -161,10 +161,6 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         {
             return _controller.GetIssueDetail(id);
         }
-        public ApprovalSetting GetApprovalSetting(string RequestType, decimal value)
-        {
-            return _settingController.GetApprovalSettingforProcess(RequestType, value);
-        }
         public AppUser CurrentUser()
         {
             return _controller.GetCurrentUser();

@@ -144,7 +144,7 @@
 
                     </div>
                     <footer>
-                        <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" class="btn btn-primary" ValidationGroup="save"></asp:Button>
+                        <asp:Button ID="btnSave" runat="server" Text="Receive" OnClick="btnSave_Click" class="btn btn-primary" ValidationGroup="save"></asp:Button>
                         <a data-toggle="modal" runat="server" id="searchLink" href="#searchModal" class="btn btn-default"><i class="fa fa-circle-arrow-up fa-lg"></i>Search</a>
                         <asp:Button ID="btnDelete" runat="server" CausesValidation="False" class="btn btn-default"
                             Text="Delete" OnClick="btnDelete_Click" Visible="false"></asp:Button>

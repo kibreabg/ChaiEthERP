@@ -158,10 +158,6 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         {
             return _controller.GetReceiveDetail(id);
         }
-        public ApprovalSetting GetApprovalSetting(string RequestType, decimal value)
-        {
-            return _settingController.GetApprovalSettingforProcess(RequestType, value);
-        }
         public AppUser CurrentUser()
         {
             return _controller.GetCurrentUser();
@@ -182,6 +178,36 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
             receive.Grant = _settingController.GetGrant(View.GetGrant);
             receive.Receiver = _adminController.GetUser(CurrentUser().Id).Id;
             receive.Supplier = _settingController.GetSupplier(View.GetSupplier);
+
+            foreach (ReceiveDetail recDet in CurrentReceive.ReceiveDetails)
+            {
+                if (recDet.Item.ItemType == "Fixed Asset")
+                {
+                    for (int i = 1; i <= recDet.Quantity; i++)
+                    {
+                        FixedAsset fa = new FixedAsset();
+                        fa.Item = recDet.Item;
+                        fa.ReceiveDate = CurrentReceive.ReceiveDate;
+                        fa.Supplier = CurrentReceive.Supplier;
+                        fa.Store = recDet.Store;
+                        fa.Section = recDet.Section;
+                        fa.Shelf = recDet.Shelf;
+                        fa.ReceiveNo = CurrentReceive.ReceiveNo;
+                        fa.Custodian = "Store";
+                        fa.UnitCost = recDet.UnitCost;
+                        fa.AssetStatus = "Received";
+
+                        FixedAssetHistory fah = new FixedAssetHistory();
+                        fah.Custodian = "Store";
+                        fah.Operation = "Receive";
+                        fah.TransactionDate = DateTime.Now;
+
+                        fa.FixedAssetHistories.Add(fah);
+
+                        _controller.SaveOrUpdateEntity(fa);
+                    }
+                }
+            }
 
             _controller.SaveOrUpdateEntity(receive);
         }

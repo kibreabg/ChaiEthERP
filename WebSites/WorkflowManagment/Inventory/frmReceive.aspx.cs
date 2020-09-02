@@ -286,7 +286,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                 receiveDetail.Store = _presenter.GetStore(Convert.ToInt32(ddlStore.SelectedValue));
                 receiveDetail.Section = _presenter.GetSection(Convert.ToInt32(ddlSection.SelectedValue));
                 receiveDetail.Shelf = _presenter.GetShelf(Convert.ToInt32(ddlShelf.SelectedValue));
-                receiveDetail.Quantity = Convert.ToDecimal(txtQuantity.Text);
+                receiveDetail.Quantity = Convert.ToInt32(txtQuantity.Text);
                 receiveDetail.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
                 receiveDetail.TotalQuantity = receiveDetail.Quantity * receiveDetail.UnitCost;
                 receiveDetail.ExpiryDate = Convert.ToDateTime(txtExpiryDate.Text);

@@ -6,8 +6,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Inventory
     {
         public int Id { get; set; }
         public Item Item { get; set; }
-        public Nullable<decimal> UnitCost { get; set; }
-        public Nullable<int> Qty { get; set; }
+        public Nullable<int> Quantity { get; set; }
         public string Status { get; set; }
     }
 }
