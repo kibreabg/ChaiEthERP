@@ -72,9 +72,9 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         {
             return _settingController.GetItem(Id);
         }
-        public Stock GetStock(int ItemId)
+        public Stock GetStockByItem(int itemId)
         {
-            return _controller.GetStock(ItemId);
+            return _controller.GetStockByItem(itemId);
         }
         public AppUser GetUser()
         {

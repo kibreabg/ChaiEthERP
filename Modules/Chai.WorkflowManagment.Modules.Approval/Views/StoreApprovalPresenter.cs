@@ -11,6 +11,7 @@ using Chai.WorkflowManagment.CoreDomain.Approval;
 using Chai.WorkflowManagment.CoreDomain.Requests;
 using Chai.WorkflowManagment.Modules.Admin;
 using Chai.WorkflowManagment.Modules.Setting;
+using Chai.WorkflowManagment.CoreDomain.Inventory;
 
 namespace Chai.WorkflowManagment.Modules.Approval.Views
 {
@@ -64,6 +65,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 else
                     _controller.CurrentObject = new StoreRequest();
             }
+        }
+        public Item GetItem(int Id)
+        {
+            return _settingcontroller.GetItem(Id);
+        }
+        public IList<Item> GetItems()
+        {
+            return _settingcontroller.GetItems();
         }
         public IList<ItemAccount> GetItemAccounts()
         {

@@ -9,6 +9,9 @@ using Chai.WorkflowManagment.CoreDomain.Inventory;
 using Chai.WorkflowManagment.CoreDomain.Users;
 using Chai.WorkflowManagment.Modules.Setting;
 using Chai.WorkflowManagment.Modules.Admin;
+using Chai.WorkflowManagment.CoreDomain.Requests;
+using Chai.WorkflowManagment.Modules.Request;
+using Chai.WorkflowManagment.Enums;
 
 namespace Chai.WorkflowManagment.Modules.Inventory.Views
 {
@@ -17,12 +20,14 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         private InventoryController _controller;
         private SettingController _settingController;
         private AdminController _adminController;
-        private Issue _Issue;
-        public IssuePresenter([CreateNew] InventoryController controller, [CreateNew] SettingController settingController, [CreateNew] AdminController adminController)
+        private RequestController _requestController;
+        private Issue _issue;
+        public IssuePresenter([CreateNew] InventoryController controller, [CreateNew] SettingController settingController, [CreateNew] AdminController adminController, [CreateNew] RequestController requestController)
         {
             _controller = controller;
             _settingController = settingController;
             _adminController = adminController;
+            _requestController = requestController;
         }
 
         public override void OnViewLoaded()
@@ -31,11 +36,15 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
             {
                 _controller.CurrentObject = _controller.GetIssue(View.GetIssueId);
             }
+            if (CurrentIssue.IssueDetails.Count != 0)
+            {
+                _controller.CurrentObject = CurrentIssue;
+            }
             CurrentIssue = _controller.CurrentObject as Issue;
         }
         public override void OnViewInitialized()
         {
-            if (_Issue == null)
+            if (_issue == null)
             {
                 int id = View.GetIssueId;
                 if (id > 0)
@@ -53,17 +62,17 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         {
             get
             {
-                if (_Issue == null)
+                if (_issue == null)
                 {
                     int id = View.GetIssueId;
                     if (id > 0)
-                        _Issue = _controller.GetIssue(id);
+                        _issue = _controller.GetIssue(id);
                     else
-                        _Issue = new Issue();
+                        _issue = new Issue();
                 }
-                return _Issue;
+                return _issue;
             }
-            set { _Issue = value; }
+            set { _issue = value; }
         }
         public IList<Program> GetPrograms()
         {
@@ -96,6 +105,10 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         public Stock GetStock(int ItemId)
         {
             return _controller.GetStock(ItemId);
+        }
+        public StoreRequest GetStoreRequest(int id)
+        {
+            return _requestController.GetStoreRequest(id);
         }
         public ItemCategory GetItemCategory(int categoryId)
         {
@@ -141,9 +154,25 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         {
             return _settingController.GetShelvesBySectionId(sectionId);
         }
-        public AppUser GetUser()
+        public IList<FixedAsset> GetFixedAssets()
         {
-            return _controller.GetCurrentUser();
+            return _controller.GetFixedAssets();
+        }
+        public IList<FixedAsset> GetToBeIssuedFixedAssets()
+        {
+            return _controller.GetToBeIssuedFixedAssets();
+        }
+        public IList<FixedAsset> GetUpdatedFixedAssets()
+        {
+            return _controller.GetUpdatedFixedAssets();
+        }
+        public FixedAsset GetFixedAsset(int id)
+        {
+            return _controller.GetFixedAsset(id);
+        }
+        public AppUser GetUser(int id)
+        {
+            return _adminController.GetUser(id);
         }
         public IList<AppUser> GetUsers()
         {
@@ -161,6 +190,10 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         {
             return _controller.GetIssueDetail(id);
         }
+        public Stock GetStockByItem(int itemId)
+        {
+            return _controller.GetStockByItem(itemId);
+        }
         public AppUser CurrentUser()
         {
             return _controller.GetCurrentUser();
@@ -175,14 +208,33 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
             }
             issue.IssueDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
             issue.HandedOverBy = View.GetHandedOverBy;
-            issue.IssuedTo = View.GetIssuedTo;
             issue.Purpose = View.GetPurpose;
+
+            foreach (IssueDetail isDet in CurrentIssue.IssueDetails)
+            {
+                isDet.FixedAsset.AssetStatus = FixedAssetStatus.UpdatedInStore.ToString();
+                //Add the received quantity to the stock
+                Stock stock = GetStockByItem(isDet.Item.Id);
+                if (stock == null)
+                {
+                    stock = new Stock();
+                }
+                else
+                {
+                    stock.Quantity = stock.Quantity - isDet.Quantity;
+                    _controller.SaveOrUpdateEntity(stock);
+                }
+            }
 
             _controller.SaveOrUpdateEntity(issue);
         }
         public void SaveOrUpdateStock(Stock stock)
         {
             _controller.SaveOrUpdateEntity(stock);
+        }
+        public void SaveOrUpdateFixedAsset(FixedAsset fa)
+        {
+            _controller.SaveOrUpdateEntity(fa);
         }
         public void DeleteIssue(Issue Issue)
         {

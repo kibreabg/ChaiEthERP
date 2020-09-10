@@ -86,10 +86,11 @@
                             <asp:Label ID="lblDate" runat="server" Text='<%# Eval("RequestedDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
                         </ItemTemplate>
                     </asp:TemplateField>
-                  
-                  
+
+
                     <asp:ButtonField ButtonType="Button" CommandName="ViewItem" Text="View Item Detail" />
                     <asp:CommandField ButtonType="Button" SelectText="Process Request" ShowSelectButton="True" />
+                    <asp:ButtonField ButtonType="Button" CommandName="Issue" Text="Issue" />
                     <asp:TemplateField>
                         <ItemTemplate>
                             <asp:Button runat="server" ID="btnStatus" Text="" BorderStyle="None" />
@@ -142,7 +143,7 @@
                                         </label>
                                     </section>
                                 </div>
-                                
+
                             </fieldset>
                             <footer>
                                 <asp:Button ID="btnApprove" runat="server" ValidationGroup="save" Text="Save" OnClick="btnApprove_Click" Enabled="false" CssClass="btn btn-primary"></asp:Button>
@@ -173,13 +174,14 @@
                                 ShowFooter="True">
 
                                 <Columns>
-                                    
+
                                     <asp:TemplateColumn HeaderText="Item">
                                         <ItemTemplate>
-                                            <%# DataBinder.Eval(Container.DataItem, "Item")%>
+                                            <%# DataBinder.Eval(Container.DataItem, "Item.Name")%>
                                         </ItemTemplate>
                                         <EditItemTemplate>
-                                            <asp:TextBox ID="txtItem" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "Item")%>'></asp:TextBox>
+                                            <asp:DropDownList ID="ddlItem" DataTextField="Name" DataValueField="Id" runat="server" CssClass="form-control" AppendDataBoundItems="True">
+                                            </asp:DropDownList>
                                         </EditItemTemplate>
                                     </asp:TemplateColumn>
                                     <asp:TemplateColumn HeaderText="Requested Quantity">
@@ -216,7 +218,7 @@
                                             <%# DataBinder.Eval(Container.DataItem, "UnitOfMeasurment")%>
                                         </ItemTemplate>
                                     </asp:TemplateColumn>
-                                    
+
                                     <asp:TemplateColumn HeaderText="Remark">
                                         <ItemTemplate>
                                             <%# DataBinder.Eval(Container.DataItem, "Remark")%>
@@ -276,7 +278,8 @@
                     <img src="../img/CHAI%20Logo.png" width="70" height="50" /></td>
                 <td style="font-size: large; text-align: center;">
                     <strong>CHAI ETHIOPIA
-                            <br />
+                           
+                        <br />
                         STORE REQUEST FORM</strong></td>
             </tr>
         </table>
@@ -298,7 +301,7 @@
                     <asp:Label ID="lblRequestNoResult" runat="server"></asp:Label>
                 </td>
 
-               
+
                 <td>&nbsp;</td>
             </tr>
             <tr>
@@ -309,7 +312,7 @@
                 <td style="width: 490px" class="modal-sm">
                     <asp:Label ID="lblRequestedDateResult" runat="server"></asp:Label>
                 </td>
-                
+
             </tr>
             <tr>
                 <td style="width: 576px; height: 18px; padding-left: 15%;">
@@ -319,7 +322,7 @@
                 <td style="width: 490px" class="modal-sm">
                     <asp:Label ID="lblRemarkResult" runat="server"></asp:Label>
                 </td>
-               
+
                 <td style="width: 389px">
                     <asp:Label ID="lblDelivertoResult" runat="server"></asp:Label>
                 </td>
@@ -359,7 +362,7 @@
             CssClass="table table-striped table-bordered table-hover">
             <RowStyle CssClass="rowstyle" />
             <Columns>
-               <asp:BoundField DataField="Item" HeaderText="Item" SortExpression="Item" />
+                <asp:BoundField DataField="Item.Name" HeaderText="Item" SortExpression="Item.Name" />
                 <asp:BoundField DataField="Qty" HeaderText="Requested Quantity" SortExpression="Qty" />
                 <asp:BoundField DataField="QtyApproved" HeaderText="Approved Quantity" SortExpression="QtyApproved" />
                 <asp:BoundField DataField="Remark" HeaderText="Remark" SortExpression="Remark" />

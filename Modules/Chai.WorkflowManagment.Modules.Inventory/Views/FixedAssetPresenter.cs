@@ -46,6 +46,10 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         {
             return _settingController.GetShelvesBySectionId(sectionId);
         }
+        public Stock GetStockByItem(int itemId)
+        {
+            return _controller.GetStockByItem(itemId);
+        }
         public IList<FixedAsset> ListFixedAssets(string item, string assetStatus)
         {
             return _controller.ListFixedAssets(item, assetStatus);
@@ -57,6 +61,10 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         public void SaveOrUpdateFixedAsset(FixedAsset fa)
         {
             _controller.SaveOrUpdateEntity(fa);
+        }
+        public void SaveOrUpdateStock(Stock stock)
+        {
+            _controller.SaveOrUpdateEntity(stock);
         }
     }
 }

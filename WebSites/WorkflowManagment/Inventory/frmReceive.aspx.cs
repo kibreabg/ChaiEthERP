@@ -28,6 +28,8 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
             {
                 this._presenter.OnViewInitialized();
                 XmlConfigurator.Configure();
+                Session["receiveDetailId"] = null;
+                Session["detailIndex"] = null;
                 BindReceives();
                 BindReceiveDetails();
                 PopSuppliers();

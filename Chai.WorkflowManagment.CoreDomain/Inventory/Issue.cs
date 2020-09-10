@@ -12,8 +12,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Inventory
         }
         public int Id { get; set; }        
         public string IssueNo { get; set; }
-        public string Purpose { get; set; }
-        public int IssuedTo { get; set; }      
+        public string Purpose { get; set; }      
         public Nullable<DateTime> IssueDate { get; set; }
         public int HandedOverBy { get; set; }
         public IList<IssueDetail> IssueDetails { get; set; }

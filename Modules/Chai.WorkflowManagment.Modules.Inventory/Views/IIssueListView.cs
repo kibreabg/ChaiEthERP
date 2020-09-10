@@ -11,7 +11,6 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         string GetPurpose { get; }
         string GetIssueNo { get; }
         int GetHandedOverBy { get; }
-        int GetIssuedTo { get; }
     }
 }
 

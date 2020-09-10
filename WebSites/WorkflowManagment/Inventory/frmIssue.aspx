@@ -15,7 +15,13 @@
 
         function showDetailModal() {
             $(document).ready(function () {
-                $('#IssueDetailModal').modal('show');
+                $('#issueDetailModal').modal('show');
+            });
+        }
+
+        function showFixedAssetModal() {
+            $(document).ready(function () {
+                $('#fixedAssetModal').modal('show');
             });
         }
 
@@ -37,7 +43,7 @@
                                     <i class="icon-append fa fa-calendar"></i>
                                     <asp:TextBox ID="txtIssueDate" ReadOnly="true" runat="server"></asp:TextBox>
                                 </label>
-                            </section>      
+                            </section>
                             <section class="col col-6">
                                 <label class="label">Purpose of Issue</label>
                                 <label class="select">
@@ -46,17 +52,9 @@
                                         <asp:ListItem Value="Donation">Donation</asp:ListItem>
                                     </asp:DropDownList><i></i>
                                 </label>
-                            </section>                      
+                            </section>
                         </div>
                         <div class="row">
-                            <section class="col col-6">
-                                <label class="label">Issued To</label>
-                                <label class="select">
-                                    <asp:DropDownList ID="ddlIssuedTo" runat="server" AppendDataBoundItems="True" DataTextField="FullName" DataValueField="Id">
-                                        <asp:ListItem Value="0">Select Employee</asp:ListItem>
-                                    </asp:DropDownList><i></i>
-                                </label>
-                            </section>
                             <section class="col col-6">
                                 <label class="label">Handed Over By</label>
                                 <label class="select">
@@ -67,9 +65,6 @@
                             </section>
                         </div>
                     </fieldset>
-                    <footer>
-                        <asp:Button ID="btnNewDetail" Style="float: left;" runat="server" Text="Add Detail" OnClick="btnNewDetail_Click" CssClass="btn btn-default"></asp:Button>
-                    </footer>
                     <div role="content">
 
                         <!-- widget edit box -->
@@ -81,36 +76,31 @@
 
                         <!-- widget content -->
                         <div class="widget-body">
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="hr1">
-                                    <ul class="nav nav-tabs">
-                                        <li class="active">
-                                            <a href="#iss1" data-toggle="tab">Issue Details</a>
-                                        </li>
-                                    </ul>
-                                    <div class="tab-content padding-10">
-                                        <div class="tab-pane active" id="iss1">
-                                            <asp:GridView ID="grvIssueDetails"
-                                                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                                                OnSelectedIndexChanged="grvIssueDetails_SelectedIndexChanged"
-                                                AllowPaging="True" OnPageIndexChanging="grvIssueDetails_PageIndexChanging"
-                                                CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" PageSize="5" OnRowDataBound="grvIssueDetails_RowDataBound">
-                                                <RowStyle CssClass="rowstyle" />
-                                                <Columns>
-                                                    <asp:BoundField DataField="Item.Name" HeaderText="Item" SortExpression="Item.Name" />
-                                                    <asp:BoundField DataField="Shelf.Name" HeaderText="Shelf" SortExpression="Shelf.Name" />
-                                                    <asp:BoundField DataField="Quantity" HeaderText="Quantity" SortExpression="Quantity" />
-                                                    <asp:BoundField DataField="UnitCost" HeaderText="UnitCost" SortExpression="UnitCost" />
-                                                    <asp:BoundField DataField="TotalQuantity" HeaderText="TotalQuantity" SortExpression="TotalQuantity" />
-                                                    <asp:CommandField ShowSelectButton="True" />
-                                                </Columns>
-                                                <FooterStyle CssClass="FooterStyle" />
-                                                <HeaderStyle CssClass="headerstyle" />
-                                                <PagerStyle CssClass="PagerStyle" />
-                                                <RowStyle CssClass="rowstyle" />
-                                            </asp:GridView>
-                                        </div>
-                                    </div>
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a href="#iss1" data-toggle="tab">Issue Details</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content padding-10">
+                                <div class="tab-pane active" id="iss1">
+                                    <asp:GridView ID="grvIssueDetails" runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                                        OnSelectedIndexChanged="grvIssueDetails_SelectedIndexChanged" AllowPaging="True" OnPageIndexChanging="grvIssueDetails_PageIndexChanging"
+                                        CssClass="table  table-bordered table-hover" PagerStyle-CssClass="paginate_button active" PageSize="10" OnRowDataBound="grvIssueDetails_RowDataBound">
+                                        
+                                        <Columns>
+                                            <asp:BoundField DataField="Item.Name" HeaderText="Item" SortExpression="Item.Name" />
+                                            <asp:BoundField DataField="Shelf.Name" HeaderText="Shelf" SortExpression="Shelf.Name" />
+                                            <asp:BoundField DataField="Quantity" HeaderText="Quantity" SortExpression="Quantity" />
+                                            <asp:BoundField DataField="UnitCost" HeaderText="UnitCost" SortExpression="UnitCost" />
+                                            <asp:BoundField DataField="Custodian" HeaderText="Custodian" SortExpression="Custodian" />
+                                            <asp:CommandField ShowSelectButton="True" />
+                                        </Columns>
+                                        <FooterStyle CssClass="FooterStyle" />
+                                        <HeaderStyle CssClass="headerstyle" />
+                                        <PagerStyle CssClass="PagerStyle" />
+                                        <RowStyle CssClass="rowstyle" />
+                                        <AlternatingRowStyle CssClass="rowstyle" />
+                                    </asp:GridView>
                                 </div>
                             </div>
                         </div>
@@ -132,13 +122,13 @@
         </div>
 
     </div>
-    <div class="modal fade" id="IssueDetailModal" tabindex="-1" role="dialog">
+    <div class="modal fade" id="issueDetailModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" style="width: 800px;">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         &times;</button>
-                    <h4 class="modal-title" id="myDetailModalLabel">Add Item Issue Detail</h4>
+                    <h4 class="modal-title" id="myDetailModalLabel">Update Issue Details</h4>
                 </div>
                 <div class="modal-body">
                     <div class="jarviswidget-editbox"></div>
@@ -147,33 +137,6 @@
                             <fieldset>
                                 <div class="row">
                                     <section class="col col-6">
-                                        <label class="label">Item Category</label>
-                                        <label class="select">
-                                            <asp:DropDownList ID="ddlCategory" AutoPostBack="true" OnSelectedIndexChanged="ddlCategory_SelectedIndexChanged" DataTextField="Name" DataValueField="Id" AppendDataBoundItems="true" runat="server">
-                                                <asp:ListItem Value="0">Select Item Category</asp:ListItem>
-                                            </asp:DropDownList><i></i>
-                                        </label>
-                                    </section>
-                                    <section class="col col-6">
-                                        <label class="label">Item Sub-Category</label>
-                                        <label class="select">
-                                            <asp:DropDownList ID="ddlSubCategory" AutoPostBack="true" OnSelectedIndexChanged="ddlSubCategory_SelectedIndexChanged" DataTextField="Name" DataValueField="Id" AppendDataBoundItems="true" runat="server">
-                                                <asp:ListItem Value="0">Select Item Sub-Category</asp:ListItem>
-                                            </asp:DropDownList><i></i>
-                                        </label>
-                                    </section>
-                                </div>
-                                <div class="row">
-                                    <section class="col col-6">
-                                        <label class="label">Item</label>
-                                        <label class="select">
-                                            <asp:DropDownList ID="ddlItem" DataTextField="Name" DataValueField="Id" AppendDataBoundItems="true" runat="server">
-                                                <asp:ListItem Value="0">Select Item</asp:ListItem>
-                                            </asp:DropDownList><i></i>
-                                            <asp:RequiredFieldValidator ID="rfvItem" runat="server" ControlToValidate="ddlItem" CssClass="validator" Display="Dynamic" InitialValue="0" ErrorMessage="Item is mandatory" SetFocusOnError="true" ValidationGroup="detail"></asp:RequiredFieldValidator>
-                                        </label>
-                                    </section>
-                                    <section class="col col-6">
                                         <label class="label">Store</label>
                                         <label class="select">
                                             <asp:DropDownList ID="ddlStore" AutoPostBack="true" OnSelectedIndexChanged="ddlStore_SelectedIndexChanged" DataTextField="Name" DataValueField="Id" AppendDataBoundItems="true" runat="server">
@@ -181,8 +144,6 @@
                                             </asp:DropDownList><i></i>
                                         </label>
                                     </section>
-                                </div>
-                                <div class="row">
                                     <section class="col col-6">
                                         <label class="label">Section</label>
                                         <label class="select">
@@ -191,6 +152,8 @@
                                             </asp:DropDownList><i></i>
                                         </label>
                                     </section>
+                                </div>
+                                <div class="row">
                                     <section class="col col-6">
                                         <label class="label">Shelf</label>
                                         <label class="select">
@@ -200,8 +163,6 @@
                                             <asp:RequiredFieldValidator ID="rfvShelf" runat="server" ControlToValidate="ddlShelf" CssClass="validator" Display="Dynamic" InitialValue="0" ErrorMessage="Shelf is mandatory" SetFocusOnError="true" ValidationGroup="detail"></asp:RequiredFieldValidator>
                                         </label>
                                     </section>
-                                </div>
-                                <div class="row">
                                     <section class="col col-6">
                                         <label class="label">Quantity</label>
                                         <label class="input">
@@ -210,13 +171,6 @@
                                         <asp:RequiredFieldValidator ID="rfvQuantity" runat="server" ControlToValidate="txtQuantity" CssClass="validator" Display="Dynamic" InitialValue="" ErrorMessage="Quantity is mandatory" SetFocusOnError="true" ValidationGroup="detail"></asp:RequiredFieldValidator>
                                         <cc1:FilteredTextBoxExtender ID="ftbQuantity" runat="server" Enabled="True" FilterType="Custom, Numbers" TargetControlID="txtQuantity" ValidChars="&quot;.&quot;">
                                         </cc1:FilteredTextBoxExtender>
-                                    </section>
-                                    <section class="col col-6">
-                                        <asp:Label ID="Label7" runat="server" Text="Expiry Date" CssClass="label"></asp:Label>
-                                        <label class="input">
-                                            <i class="icon-append fa fa-calendar"></i>
-                                            <asp:TextBox ID="txtExpiryDate" CssClass="form-control datepicker" data-dateformat="mm/dd/yy" runat="server"></asp:TextBox>
-                                        </label>
                                     </section>
                                 </div>
                                 <div class="row">
@@ -237,7 +191,49 @@
                                 </div>
                             </fieldset>
                             <footer>
-                                <asp:Button ID="btnSaveDetail" runat="server" ValidationGroup="detail" Text="Save Detail" CssClass="btn btn-primary" OnClick="btnSaveDetail_Click"></asp:Button>
+                                <asp:Button ID="btnSaveDetail" runat="server" ValidationGroup="detail" Text="Update" CssClass="btn btn-primary" OnClick="btnSaveDetail_Click"></asp:Button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            </footer>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="fixedAssetModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" style="width: 800px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;</button>
+                    <h4 class="modal-title" id="myFAModalLabel">Update Fixed Asset Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="jarviswidget-editbox"></div>
+                    <div class="widget-body no-padding">
+                        <div class="smart-form">
+                            <fieldset>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="label">Asset Code (Tag)</label>
+                                        <label class="select">
+                                            <asp:DropDownList ID="ddlAssetCode" DataTextField="AssetCode" DataValueField="Id" AppendDataBoundItems="true" runat="server">
+                                                <asp:ListItem Value="0">Select Fixed Asset</asp:ListItem>
+                                            </asp:DropDownList><i></i>
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="label">Custodian</label>
+                                        <label class="select">
+                                            <asp:DropDownList ID="ddlCustodian" DataTextField="FullName" DataValueField="Id" AppendDataBoundItems="true" runat="server">
+                                                <asp:ListItem Value="0">Select Custodian</asp:ListItem>
+                                            </asp:DropDownList><i></i>
+                                        </label>
+                                    </section>
+                                </div>
+                            </fieldset>
+                            <footer>
+                                <asp:Button ID="btnFAIssue" runat="server" ValidationGroup="faissue" Text="Update" CssClass="btn btn-primary" OnClick="btnFAIssue_Click"></asp:Button>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                             </footer>
                         </div>

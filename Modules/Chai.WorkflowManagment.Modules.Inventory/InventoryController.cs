@@ -100,13 +100,17 @@ namespace Chai.WorkflowManagment.Modules.Inventory
         }
         #endregion        
         #region Stock
-        public Stock GetStocks(int ItemId)
+        public IList<Stock> GetStocks()
         {
-            return _workspace.Single<Stock>(x => x.Item.Id == ItemId);
+            return WorkspaceFactory.CreateReadOnly().Query<Stock>(null).OrderBy(x => x.Id).ToList();
         }
-        public Stock GetStock(int ItemId)
+        public Stock GetStockByItem(int itemId)
         {
-            return _workspace.Single<Stock>(x => x.Item.Id == ItemId, y => y.Item);
+            return _workspace.Single<Stock>(x => x.Item.Id == itemId, y => y.Item);
+        }
+        public Stock GetStock(int id)
+        {
+            return _workspace.Single<Stock>(x => x.Id == id, y => y.Item);
         }
         public IList<Stock> ListStocks(string item)
         {
@@ -117,6 +121,21 @@ namespace Chai.WorkflowManagment.Modules.Inventory
         }
         #endregion
         #region Fixed Asset
+        public IList<FixedAsset> GetUpdatedFixedAssets()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<FixedAsset>(x => x.AssetStatus == "UpdatedInStore").OrderBy(x => x.Id).ToList();
+        }
+        public IList<FixedAsset> GetToBeIssuedFixedAssets()
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM FixedAssets WHERE AssetStatus = 'ToBeIssued'";
+            return _workspace.SqlQuery<FixedAsset>(filterExpression).ToList();
+        }
+        public IList<FixedAsset> GetFixedAssets()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<FixedAsset>(null).OrderBy(x => x.Id).ToList();
+        }
         public IList<FixedAsset> ListFixedAssets(string item, string assetStatus)
         {
             string filterExpression = "";

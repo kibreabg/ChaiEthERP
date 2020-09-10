@@ -131,12 +131,12 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
             fa.Condition = txtCondition.Text;
             fa.TotalLife = Convert.ToInt32(txtTotalLife.Text);
             fa.Remark = txtRemark.Text;
-            fa.AssetStatus = "Updated";
+            fa.AssetStatus = FixedAssetStatus.UpdatedInStore.ToString();
 
             FixedAssetHistory fah = new FixedAssetHistory();
             fah.TransactionDate = DateTime.Now;
             fah.Custodian = "Store";
-            fah.Operation = "Updated";
+            fah.Operation = FixedAssetStatus.UpdatedInStore.ToString();
 
             fa.FixedAssetHistories.Add(fah);
 
@@ -196,6 +196,11 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                 fah.Operation = "Returned";
 
                 fa.FixedAssetHistories.Add(fah);
+
+                //Add the received quantity to the stock
+                Stock stock = _presenter.GetStockByItem(fa.Item.Id);
+                stock.Quantity = stock.Quantity + 1;
+                _presenter.SaveOrUpdateStock(stock);
 
                 _presenter.SaveOrUpdateFixedAsset(fa);
                 BindFixedAssets();

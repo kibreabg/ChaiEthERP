@@ -94,9 +94,13 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         {
             return _controller.GetLastReceiveId();
         }
-        public Stock GetStock(int ItemId)
+        public Stock GetStock(int id)
         {
-            return _controller.GetStock(ItemId);
+            return _controller.GetStock(id);
+        }
+        public Stock GetStockByItem(int itemId)
+        {
+            return _controller.GetStockByItem(itemId);
         }
         public ItemCategory GetItemCategory(int categoryId)
         {
@@ -207,6 +211,19 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                         _controller.SaveOrUpdateEntity(fa);
                     }
                 }
+
+                //Add the received quantity to the stock
+                Stock stock = GetStockByItem(recDet.Item.Id);
+                if (stock == null)
+                {
+                    stock = new Stock();
+                }
+                else
+                {
+                    stock.Quantity += recDet.Quantity;
+                    _controller.SaveOrUpdateEntity(stock);
+                }
+
             }
 
             _controller.SaveOrUpdateEntity(receive);
