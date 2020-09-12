@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chai.WorkflowManagment.CoreDomain.Requests;
+using System;
 
 namespace Chai.WorkflowManagment.CoreDomain.Inventory
 {
@@ -19,5 +20,6 @@ namespace Chai.WorkflowManagment.CoreDomain.Inventory
         public virtual Section Section { get; set; }
         public virtual Shelf Shelf { get; set; }
         public virtual FixedAsset FixedAsset { get; set; }
+        public virtual StoreRequestDetail StoreRequestDetail { get; set; }
     }
 }

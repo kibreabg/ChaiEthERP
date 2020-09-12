@@ -136,6 +136,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                         issueDet.ItemSubCategory = srDetail.Item.ItemSubCategory;
                         issueDet.Item = srDetail.Item;
                         issueDet.Quantity = srDetail.QtyApproved;
+                        issueDet.StoreRequestDetail = srDetail;
                         _presenter.CurrentIssue.IssueDetails.Add(issueDet);
                     }
                     else
@@ -145,6 +146,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                             IssueDetail issueDet = new IssueDetail();
                             issueDet.ItemCategory = srDetail.Item.ItemSubCategory.ItemCategory;
                             issueDet.ItemSubCategory = srDetail.Item.ItemSubCategory;
+                            issueDet.StoreRequestDetail = srDetail;
                             issueDet.Item = srDetail.Item;
                             issueDet.Quantity = 1;
                             _presenter.CurrentIssue.IssueDetails.Add(issueDet);
@@ -314,6 +316,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                 issueDetail.Shelf = _presenter.GetShelf(Convert.ToInt32(ddlShelf.SelectedValue));
                 issueDetail.Custodian = ddlCurAssetCustodian.SelectedValue;
                 issueDetail.Quantity = Convert.ToInt32(txtQuantity.Text);
+                issueDetail.StoreRequestDetail.IssuedQuantity += issueDetail.Quantity;
                 issueDetail.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
                 issueDetail.TotalQuantity = issueDetail.Quantity * issueDetail.UnitCost;
                 issueDetail.Remark = txtRemark.Text;
@@ -373,6 +376,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                 issueDetail.Shelf = fa.Shelf;
                 issueDetail.UnitCost = fa.UnitCost;
                 issueDetail.Quantity = 1;
+                issueDetail.StoreRequestDetail.IssuedQuantity += 1;
                 issueDetail.Custodian = _presenter.GetUser(Convert.ToInt32(ddlCustodian.SelectedValue)).FullName;
                 issueDetail.FixedAsset = fa;
 
