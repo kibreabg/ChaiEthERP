@@ -69,8 +69,7 @@
                                 <label class="select">
                                     <asp:DropDownList ID="ddlProject" AutoPostBack="true" DataTextField="ProjectDescription" DataValueField="Id" AppendDataBoundItems="true" runat="server" OnSelectedIndexChanged="ddlProject_SelectedIndexChanged">
                                         <asp:ListItem Value="0">Select Project</asp:ListItem>
-                                    </asp:DropDownList><i></i>
-                                    <asp:RequiredFieldValidator ID="rfvProject" runat="server" ControlToValidate="ddlProject" CssClass="validator" Display="Dynamic" InitialValue="0" ErrorMessage="Project Id is Mandatory" SetFocusOnError="true" ValidationGroup="save"></asp:RequiredFieldValidator>
+                                    </asp:DropDownList><i></i>                                    
                                 </label>
                             </section>
                             <section class="col col-6">
@@ -79,6 +78,7 @@
                                     <asp:DropDownList ID="ddlGrant" runat="server" AppendDataBoundItems="true">
                                         <asp:ListItem Value="0">Select Grant</asp:ListItem>
                                     </asp:DropDownList><i></i>
+                                    <asp:RequiredFieldValidator ID="rfvGrant" runat="server" ControlToValidate="ddlGrant" CssClass="validator" Display="Dynamic" InitialValue="0" ErrorMessage="Grant is Mandatory" SetFocusOnError="true" ValidationGroup="save"></asp:RequiredFieldValidator>
                                 </label>
                             </section>
                         </div>

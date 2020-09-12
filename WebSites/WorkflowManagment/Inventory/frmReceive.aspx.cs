@@ -156,31 +156,61 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         }
         private void PopStores()
         {
+            ddlStore.Items.Clear();
+            ListItem lst = new ListItem();
+            lst.Text = "Select Store";
+            lst.Value = "0";
+            ddlStore.Items.Add(lst);
             ddlStore.DataSource = _presenter.GetStores();
             ddlStore.DataBind();
         }
         private void PopItemCategories()
         {
+            ddlCategory.Items.Clear();
+            ListItem lst = new ListItem();
+            lst.Text = "Select Item Category";
+            lst.Value = "0";
+            ddlCategory.Items.Add(lst);
             ddlCategory.DataSource = _presenter.GetItemCategories();
             ddlCategory.DataBind();
         }
         private void PopItemSubCategories(int categoryId)
         {
+            ddlSubCategory.Items.Clear();
+            ListItem lst = new ListItem();
+            lst.Text = "Select Item Sub-Category";
+            lst.Value = "0";
+            ddlSubCategory.Items.Add(lst);
             ddlSubCategory.DataSource = _presenter.GetItemSubCatsByCategoryId(categoryId);
             ddlSubCategory.DataBind();
         }
         private void PopItems(int subCategoryId)
         {
+            ddlItem.Items.Clear();
+            ListItem lst = new ListItem();
+            lst.Text = "Select Item";
+            lst.Value = "0";
+            ddlItem.Items.Add(lst);
             ddlItem.DataSource = _presenter.GetItemsBySubCatId(subCategoryId);
             ddlItem.DataBind();
         }
         private void PopSections(int storeId)
         {
+            ddlSection.Items.Clear();
+            ListItem lst = new ListItem();
+            lst.Text = "Select Section";
+            lst.Value = "0";
+            ddlSection.Items.Add(lst);
             ddlSection.DataSource = _presenter.GetSectionsByStoreId(storeId);
             ddlSection.DataBind();
         }
         private void PopShelves(int sectionId)
         {
+            ddlShelf.Items.Clear();
+            ListItem lst = new ListItem();
+            lst.Text = "Select Shelf";
+            lst.Value = "0";
+            ddlShelf.Items.Add(lst);
             ddlShelf.DataSource = _presenter.GetShelvesBySectionId(sectionId);
             ddlShelf.DataBind();
         }
@@ -191,6 +221,19 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
             {
                 if (_presenter.CurrentReceive.Supplier != null)
                     ddlSupplier.SelectedValue = _presenter.CurrentReceive.Supplier.Id.ToString();
+                if (_presenter.CurrentReceive.Program != null)
+                {
+                    int programId = _presenter.CurrentReceive.Program.Id;
+                    int projectId = _presenter.CurrentReceive.Project.Id;
+                    int grantId = _presenter.CurrentReceive.Grant.Id;
+
+                    ddlProgram.SelectedValue = programId.ToString();
+                    BindProject(programId);
+                    ddlProject.SelectedValue = projectId.ToString();
+                    BindGrant(projectId);
+                    ddlGrant.SelectedValue = grantId.ToString();
+                }
+
                 txtInvoiceNo.Text = _presenter.CurrentReceive.InvoiceNo;
                 txtDeliveredBy.Text = _presenter.CurrentReceive.DeliveredBy;
                 BindReceiveDetails();
@@ -199,6 +242,11 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         }
         private void BindPrograms()
         {
+            ddlProgram.Items.Clear();
+            ListItem lst = new ListItem();
+            lst.Text = "Select Program";
+            lst.Value = "0";
+            ddlProgram.Items.Add(lst);
             ddlProgram.DataSource = _presenter.GetPrograms();
             ddlProgram.DataBind();
         }
@@ -206,6 +254,11 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         {
             if (programID != 0)
             {
+                ddlProject.Items.Clear();
+                ListItem lst = new ListItem();
+                lst.Text = "Select Project";
+                lst.Value = "0";
+                ddlProject.Items.Add(lst);
                 ddlProject.DataSource = _presenter.ListProjects(programID);
                 ddlProject.DataValueField = "Id";
                 ddlProject.DataTextField = "ProjectCode";
@@ -217,6 +270,11 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         {
             if (projectId != 0)
             {
+                ddlGrant.Items.Clear();
+                ListItem lst = new ListItem();
+                lst.Text = "Select Grant";
+                lst.Value = "0";
+                ddlGrant.Items.Add(lst);
                 ddlGrant.DataSource = _presenter.GetGrantbyprojectId(projectId);
                 ddlGrant.DataValueField = "Id";
                 ddlGrant.DataTextField = "GrantCode";
@@ -248,12 +306,37 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
             int receiveDetailId = Convert.ToInt32(grvReceiveDetails.SelectedDataKey.Value);
             Session["receiveDetailId"] = receiveDetailId;
             Session["detailIndex"] = grvReceiveDetails.SelectedIndex;
-            
+            ReceiveDetail theReceiveDetail;
 
-            txtQuantity.Text = _presenter.CurrentReceive.GetReceiveDetail(receiveDetailId).Quantity.ToString();
-            txtExpiryDate.Text = _presenter.CurrentReceive.GetReceiveDetail(receiveDetailId).ExpiryDate.Value.ToShortDateString();
-            txtUnitCost.Text = _presenter.CurrentReceive.GetReceiveDetail(receiveDetailId).UnitCost.ToString();
-            txtRemark.Text = _presenter.CurrentReceive.GetReceiveDetail(receiveDetailId).Remark.ToString();
+            if (receiveDetailId > 0)
+            {
+                theReceiveDetail = _presenter.CurrentReceive.GetReceiveDetail(receiveDetailId);
+            }
+            else
+                theReceiveDetail = _presenter.CurrentReceive.ReceiveDetails[grvReceiveDetails.SelectedIndex];
+
+            int catId = theReceiveDetail.ItemCategory.Id;
+            int subCatId = theReceiveDetail.ItemSubCategory.Id;
+            int itemId = theReceiveDetail.Item.Id;
+            int storeId = theReceiveDetail.Store.Id;
+            int sectionId = theReceiveDetail.Section.Id;
+            int shelfId = theReceiveDetail.Shelf.Id;
+
+            ddlCategory.SelectedValue = catId.ToString();
+            PopItemSubCategories(catId);
+            ddlSubCategory.SelectedValue = subCatId.ToString();
+            PopItems(subCatId);
+            ddlItem.SelectedValue = itemId.ToString();
+            ddlStore.SelectedValue = storeId.ToString();
+            PopSections(storeId);
+            ddlSection.SelectedValue = sectionId.ToString();
+            PopShelves(sectionId);
+            ddlShelf.SelectedValue = shelfId.ToString();
+
+            txtQuantity.Text = theReceiveDetail.Quantity.ToString();
+            txtExpiryDate.Text = theReceiveDetail.ExpiryDate.Value.ToShortDateString();
+            txtUnitCost.Text = theReceiveDetail.UnitCost.ToString();
+            txtRemark.Text = theReceiveDetail.Remark.ToString();
 
             ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
         }
@@ -270,18 +353,21 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                 ReceiveDetail receiveDetail;
                 if (Session["receiveDetailId"] != null)
                 {
-                    int recDetId = (int)Session["receiveDetailId"];                    
+                    int recDetId = (int)Session["receiveDetailId"];
 
                     if (recDetId > 0)
+                    {
                         receiveDetail = _presenter.CurrentReceive.GetReceiveDetail(recDetId);
+                        receiveDetail.PreviousQuantity = receiveDetail.Quantity; 
+                    }                        
                     else
                         receiveDetail = _presenter.CurrentReceive.ReceiveDetails[(int)Session["detailIndex"]];
                 }
                 else
                 {
                     receiveDetail = new ReceiveDetail();
-                }             
-                
+                }
+
                 receiveDetail.ItemCategory = _presenter.GetItemCategory(Convert.ToInt32(ddlCategory.SelectedValue));
                 receiveDetail.ItemSubCategory = _presenter.GetItemSubCategory(Convert.ToInt32(ddlSubCategory.SelectedValue));
                 receiveDetail.Item = _presenter.GetItem(Convert.ToInt32(ddlItem.SelectedValue));
@@ -302,7 +388,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                 {
                     _presenter.CurrentReceive.ReceiveDetails[(int)Session["detailIndex"]] = receiveDetail;
                 }
-                    
+
                 BindReceiveDetails();
                 Session["receiveDetailId"] = null;
                 Session["detailIndex"] = null;

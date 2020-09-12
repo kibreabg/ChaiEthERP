@@ -20,6 +20,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
             {
                 BindFixedAssets();
                 PopCustodians();
+                PopItems();
             }
             this._presenter.OnViewLoaded();
         }
@@ -45,6 +46,16 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
             {
                 return "{0398CC80-8F0A-449C-89F3-C36F6AEF4308}";
             }
+        }
+        private void PopItems()
+        {
+            ddlFilterItem.Items.Clear();
+            ListItem lst = new ListItem();
+            lst.Text = "Select Item";
+            lst.Value = "";
+            ddlFilterItem.Items.Add(lst);
+            ddlFilterItem.DataSource = _presenter.GetItems();
+            ddlFilterItem.DataBind();
         }
         private void PopCustodians()
         {

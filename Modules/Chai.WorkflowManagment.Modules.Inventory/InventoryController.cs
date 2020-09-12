@@ -121,9 +121,9 @@ namespace Chai.WorkflowManagment.Modules.Inventory
         }
         #endregion
         #region Fixed Asset
-        public IList<FixedAsset> GetUpdatedFixedAssets()
+        public IList<FixedAsset> GetUpdatedFixedAssetsByItem(int itemId)
         {
-            return WorkspaceFactory.CreateReadOnly().Query<FixedAsset>(x => x.AssetStatus == "UpdatedInStore").OrderBy(x => x.Id).ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<FixedAsset>(x => x.AssetStatus == "UpdatedInStore" && x.Item.Id == itemId).OrderBy(x => x.Id).ToList();
         }
         public IList<FixedAsset> GetToBeIssuedFixedAssets()
         {

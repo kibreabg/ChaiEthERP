@@ -166,25 +166,42 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
             ddlHandedOverBy.SelectedValue = _presenter.CurrentUser().Id.ToString();
             ddlCustodian.DataSource = _presenter.GetUsers();
             ddlCustodian.DataBind();
+            ddlCurAssetCustodian.DataSource = _presenter.GetUsers();
+            ddlCurAssetCustodian.DataBind();
         }
-        private void PopFixedAsset()
+        private void PopFixedAsset(int itemId)
         {
             ddlAssetCode.Items.Clear();
-            ddlAssetCode.DataSource = _presenter.GetUpdatedFixedAssets();
+            ddlAssetCode.DataSource = _presenter.GetUpdatedFixedAssetsByItem(itemId);
             ddlAssetCode.DataBind();
         }
         private void PopStores()
         {
+            ddlStore.Items.Clear();
+            ListItem lst = new ListItem();
+            lst.Text = "Select Store";
+            lst.Value = "0";
+            ddlStore.Items.Add(lst);
             ddlStore.DataSource = _presenter.GetStores();
             ddlStore.DataBind();
         }
         private void PopSections(int storeId)
         {
+            ddlSection.Items.Clear();
+            ListItem lst = new ListItem();
+            lst.Text = "Select Section";
+            lst.Value = "0";
+            ddlSection.Items.Add(lst);
             ddlSection.DataSource = _presenter.GetSectionsByStoreId(storeId);
             ddlSection.DataBind();
         }
         private void PopShelves(int sectionId)
         {
+            ddlShelf.Items.Clear();
+            ListItem lst = new ListItem();
+            lst.Text = "Select Shelf";
+            lst.Value = "0";
+            ddlShelf.Items.Add(lst);
             ddlShelf.DataSource = _presenter.GetShelvesBySectionId(sectionId);
             ddlShelf.DataBind();
         }
@@ -220,19 +237,38 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         }
         protected void grvIssueDetails_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int issueDetailId = grvIssueDetails.SelectedRow.RowIndex;
+            int issueDetailId = Convert.ToInt32(grvIssueDetails.SelectedDataKey.Value);
             Session["IssueDetailId"] = issueDetailId;
+            Session["detailIndex"] = grvIssueDetails.SelectedIndex;
+            IssueDetail theIssueDetail;
 
-            if (_presenter.CurrentIssue.IssueDetails[issueDetailId].Item.ItemType == "Fixed Asset")
+            if (issueDetailId > 0)
             {
-                PopFixedAsset();
+                theIssueDetail = _presenter.CurrentIssue.GetIssueDetail(issueDetailId);
+            }
+            else
+                theIssueDetail = _presenter.CurrentIssue.IssueDetails[grvIssueDetails.SelectedIndex];
+
+            if (theIssueDetail.Item.ItemType == "Fixed Asset")
+            {
+                PopFixedAsset(theIssueDetail.Item.Id);
                 ScriptManager.RegisterStartupScript(this, GetType(), "showFixedAssetModal", "showFixedAssetModal();", true);
             }
             else
             {
-                txtQuantity.Text = _presenter.CurrentIssue.IssueDetails[issueDetailId].Quantity.ToString();
-                txtUnitCost.Text = _presenter.CurrentIssue.IssueDetails[issueDetailId].UnitCost.ToString();
-                txtRemark.Text = _presenter.CurrentIssue.IssueDetails[issueDetailId].Remark;
+                int storeId = theIssueDetail.Store.Id;
+                int sectionId = theIssueDetail.Section.Id;
+                int shelfId = theIssueDetail.Shelf.Id;
+                
+                ddlStore.SelectedValue = storeId.ToString();
+                PopSections(storeId);
+                ddlSection.SelectedValue = sectionId.ToString();
+                PopShelves(sectionId);
+                ddlShelf.SelectedValue = shelfId.ToString();
+                txtQuantity.Text = theIssueDetail.Quantity.ToString();
+                txtUnitCost.Text = theIssueDetail.UnitCost.ToString();
+                txtRemark.Text = theIssueDetail.Remark;
+                ddlCurAssetCustodian.SelectedValue = theIssueDetail.Custodian;
 
                 ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
             }
@@ -254,27 +290,46 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                     e.Row.BackColor = System.Drawing.Color.LightGoldenrodYellow;
                     lb.Text = "Update Fixed Asset";
                 }
+                else
+                    lb.Text = "Update Current Asset";
             }
         }
         protected void btnSaveDetail_Click(object sender, EventArgs e)
         {
             try
             {
-                int recDetId = (int)Session["IssueDetailId"];
-                IssueDetail issueDetail = _presenter.CurrentIssue.IssueDetails[recDetId];
+                IssueDetail issueDetail;
+                int issDetId = (int)Session["IssueDetailId"];
+
+                if (issDetId > 0)
+                {
+                    issueDetail = _presenter.CurrentIssue.GetIssueDetail(issDetId);
+                    issueDetail.PreviousQuantity = issueDetail.Quantity;
+                }
+                else
+                    issueDetail = _presenter.CurrentIssue.IssueDetails[(int)Session["detailIndex"]];
 
                 issueDetail.Store = _presenter.GetStore(Convert.ToInt32(ddlStore.SelectedValue));
                 issueDetail.Section = _presenter.GetSection(Convert.ToInt32(ddlSection.SelectedValue));
                 issueDetail.Shelf = _presenter.GetShelf(Convert.ToInt32(ddlShelf.SelectedValue));
+                issueDetail.Custodian = ddlCurAssetCustodian.SelectedValue;
                 issueDetail.Quantity = Convert.ToInt32(txtQuantity.Text);
                 issueDetail.UnitCost = Convert.ToDecimal(txtUnitCost.Text);
                 issueDetail.TotalQuantity = issueDetail.Quantity * issueDetail.UnitCost;
                 issueDetail.Remark = txtRemark.Text;
 
-                _presenter.CurrentIssue.IssueDetails[recDetId] = issueDetail;
+                if (Session["IssueDetailId"] == null)
+                {
+                    _presenter.CurrentIssue.IssueDetails.Add(issueDetail);
+                }
+                else
+                {
+                    _presenter.CurrentIssue.IssueDetails[(int)Session["detailIndex"]] = issueDetail;
+                }
 
                 BindIssueDetails();
                 Session["IssueDetailId"] = null;
+                btnSave.Visible = true;
 
                 Master.ShowMessage(new AppMessage("Item Issue Detail Successfully Updated", RMessageType.Info));
             }
@@ -289,7 +344,16 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         {
             try
             {
-                int recDetId = (int)Session["IssueDetailId"];
+                IssueDetail issueDetail;
+                int issDetId = (int)Session["IssueDetailId"];
+
+                if (issDetId > 0)
+                {
+                    issueDetail = _presenter.CurrentIssue.GetIssueDetail(issDetId);
+                    issueDetail.PreviousQuantity = issueDetail.Quantity;
+                }
+                else
+                    issueDetail = _presenter.CurrentIssue.IssueDetails[issDetId];
 
                 FixedAsset fa = _presenter.GetFixedAsset(Convert.ToInt32(ddlAssetCode.SelectedValue));
                 fa.AssetStatus = FixedAssetStatus.ToBeIssued.ToString();
@@ -304,18 +368,18 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
 
                 fa.FixedAssetHistories.Add(fah);
 
-                IssueDetail issueDetail = _presenter.CurrentIssue.IssueDetails[recDetId];
-
                 issueDetail.Store = fa.Store;
                 issueDetail.Section = fa.Section;
                 issueDetail.Shelf = fa.Shelf;
                 issueDetail.UnitCost = fa.UnitCost;
+                issueDetail.Quantity = 1;
                 issueDetail.Custodian = _presenter.GetUser(Convert.ToInt32(ddlCustodian.SelectedValue)).FullName;
                 issueDetail.FixedAsset = fa;
 
-                _presenter.CurrentIssue.IssueDetails[recDetId] = issueDetail;
+                _presenter.CurrentIssue.IssueDetails[issDetId] = issueDetail;
 
                 BindIssueDetails();
+                btnSave.Visible = true;
                 Session["IssueDetailId"] = null;
 
                 Master.ShowMessage(new AppMessage("Issue Detail for Fixed Asset Updated!", RMessageType.Info));

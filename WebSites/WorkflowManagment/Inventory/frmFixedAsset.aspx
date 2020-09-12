@@ -36,7 +36,7 @@
                             <section class="col col-6">
                                 <label>Item</label>
                                 <label class="select">
-                                    <asp:DropDownList ID="ddlFilterItem" runat="server">
+                                    <asp:DropDownList ID="ddlFilterItem" AppendDataBoundItems="true" DataTextField="Name" DataValueField="Id" runat="server">
                                         <asp:ListItem Value="">Select Item</asp:ListItem>
                                     </asp:DropDownList><i></i>
                                 </label>
@@ -46,6 +46,8 @@
                                 <label class="select">
                                     <asp:DropDownList ID="ddlFilterStatus" runat="server">
                                         <asp:ListItem Value="">Select Asset Status</asp:ListItem>
+                                        <asp:ListItem Value="Active">Active</asp:ListItem>
+                                        <asp:ListItem Value="InActive">InActive</asp:ListItem>
                                     </asp:DropDownList><i></i>
                                 </label>
                             </section>

@@ -30,6 +30,10 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         public override void OnViewInitialized()
         {
         }
+        public IList<Item> GetItems()
+        {
+            return _settingController.GetItems();
+        }
         public IList<AppUser> GetUsers()
         {
             return _adminController.GetUsers();

@@ -162,9 +162,9 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         {
             return _controller.GetToBeIssuedFixedAssets();
         }
-        public IList<FixedAsset> GetUpdatedFixedAssets()
+        public IList<FixedAsset> GetUpdatedFixedAssetsByItem(int itemId)
         {
-            return _controller.GetUpdatedFixedAssets();
+            return _controller.GetUpdatedFixedAssetsByItem(itemId);
         }
         public FixedAsset GetFixedAsset(int id)
         {
@@ -212,16 +212,23 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
 
             foreach (IssueDetail isDet in CurrentIssue.IssueDetails)
             {
-                isDet.FixedAsset.AssetStatus = FixedAssetStatus.UpdatedInStore.ToString();
-                //Add the received quantity to the stock
-                Stock stock = GetStockByItem(isDet.Item.Id);
-                if (stock == null)
+                if (isDet.Item.ItemType == "Fixed Asset")
                 {
-                    stock = new Stock();
+                    isDet.FixedAsset.AssetStatus = FixedAssetStatus.Issued.ToString();
                 }
-                else
+
+                Stock stock = GetStockByItem(isDet.Item.Id);
+                if (stock != null)
                 {
-                    stock.Quantity = stock.Quantity - isDet.Quantity;
+                    if (issue.Id > 0)
+                    {
+                        stock.Quantity = stock.Quantity - (isDet.Quantity - isDet.PreviousQuantity);
+                    }
+                    else
+                    {
+                        stock.Quantity = stock.Quantity - isDet.Quantity;
+                    }
+
                     _controller.SaveOrUpdateEntity(stock);
                 }
             }

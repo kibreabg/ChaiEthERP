@@ -214,13 +214,25 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
 
                 //Add the received quantity to the stock
                 Stock stock = GetStockByItem(recDet.Item.Id);
-                if (stock == null)
+                if (stock != null)
                 {
-                    stock = new Stock();
+                    if (receive.Id > 0)
+                    {
+                        stock.Quantity = stock.Quantity + (recDet.Quantity - recDet.PreviousQuantity);
+                    }
+                    else
+                    {
+                        stock.Quantity += recDet.Quantity;
+                    }
+
+                    _controller.SaveOrUpdateEntity(stock);
                 }
                 else
                 {
-                    stock.Quantity += recDet.Quantity;
+                    stock = new Stock();
+                    stock.Item = recDet.Item;
+                    stock.Quantity = recDet.Quantity;
+                    stock.Status = "Active";
                     _controller.SaveOrUpdateEntity(stock);
                 }
 

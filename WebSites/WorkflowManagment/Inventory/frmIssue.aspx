@@ -86,7 +86,7 @@
                                     <asp:GridView ID="grvIssueDetails" runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
                                         OnSelectedIndexChanged="grvIssueDetails_SelectedIndexChanged" AllowPaging="True" OnPageIndexChanging="grvIssueDetails_PageIndexChanging"
                                         CssClass="table  table-bordered table-hover" PagerStyle-CssClass="paginate_button active" PageSize="10" OnRowDataBound="grvIssueDetails_RowDataBound">
-                                        
+
                                         <Columns>
                                             <asp:BoundField DataField="Item.Name" HeaderText="Item" SortExpression="Item.Name" />
                                             <asp:BoundField DataField="Shelf.Name" HeaderText="Shelf" SortExpression="Shelf.Name" />
@@ -108,7 +108,7 @@
 
                     </div>
                     <footer>
-                        <asp:Button ID="btnSave" runat="server" Text="Issue" OnClick="btnSave_Click" class="btn btn-primary" ValidationGroup="save"></asp:Button>
+                        <asp:Button ID="btnSave" runat="server" Text="Issue" Visible="false" OnClick="btnSave_Click" class="btn btn-primary" ValidationGroup="save"></asp:Button>
                         <a data-toggle="modal" runat="server" id="searchLink" href="#searchModal" class="btn btn-default"><i class="fa fa-circle-arrow-up fa-lg"></i>Search</a>
                         <asp:Button ID="btnDelete" runat="server" CausesValidation="False" class="btn btn-default"
                             Text="Delete" OnClick="btnDelete_Click" Visible="false"></asp:Button>
@@ -186,6 +186,16 @@
                                         <label class="label">Remark</label>
                                         <label class="input">
                                             <asp:TextBox ID="txtRemark" runat="server" Width="100%"></asp:TextBox>
+                                        </label>
+                                    </section>
+                                </div>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="label">Custodian</label>
+                                        <label class="select">
+                                            <asp:DropDownList ID="ddlCurAssetCustodian" AppendDataBoundItems="true" DataValueField="FullName" DataTextField="FullName" runat="server">
+                                                <asp:ListItem Value="">Select Custodian</asp:ListItem>
+                                            </asp:DropDownList><i></i>
                                         </label>
                                     </section>
                                 </div>
