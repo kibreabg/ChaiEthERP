@@ -127,10 +127,36 @@
                             </section>
                         </div>
                            
+                        <div class="widget-body">
+                            <div class="tab-content">
+                                <div class="tab-pane" id="hr1">
+                                    <div class="tabbable tabs-below">
+                                        <div class="tab-content padding-10">
+                                            <div class="tab-pane" id="AA">
+                                            </div>
+                                        </div>
+                                        <ul class="nav nav-tabs">
+                                            <li class="active">
+                                                <a data-toggle="tab" href="#AA">Tab 1</a>
+                                            </li>
+                                        </ul>
+                                    </div>
 
-
-                       
-                        <asp:DataGrid ID="dgMaintenanceRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
+                                </div>
+                                <div class="tab-pane active" id="hr2">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active">
+                                            <a href="#iss1" data-toggle="tab">Maintenance Request Detail</a>
+                                        </li>
+                                        <li class="">
+                                            <a href="#iss2" data-toggle="tab">Maintenance Sparepart</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content padding-10">
+                                        <div class="tab-pane active" id="iss1">
+                                            <fieldset>
+                                                <div class="row">
+                                                        <asp:DataGrid ID="dgMaintenanceRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
                             CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
                             GridLines="None"
                             OnCancelCommand="dgMaintenanceRequestDetail_CancelCommand" OnDeleteCommand="dgMaintenanceRequestDetail_DeleteCommand" OnEditCommand="dgMaintenanceRequestDetail_EditCommand"
@@ -227,6 +253,135 @@
                             </Columns>
                             <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
                         </asp:DataGrid>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="tab-pane" id="iss2">
+                                                <asp:DataGrid ID="dgSparepart" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
+                            CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
+                            GridLines="None" ShowFooter="True" OnCancelCommand="dgSparepart_CancelCommand" OnDeleteCommand="dgSparepart_DeleteCommand" OnEditCommand="dgSparepart_EditCommand" OnItemCommand="dgSparepart_ItemCommand" OnItemDataBound="dgSparepart_ItemDataBound" OnUpdateCommand="dgSparepart_UpdateCommand">
+
+                            <Columns>
+                                <asp:TemplateColumn HeaderText="Item">
+                                    <EditItemTemplate>
+                                        <asp:DropDownList ID="ddlItem" runat="server" CssClass="form-control"
+                                            AppendDataBoundItems="True" DataTextField="Name" DataValueField="Id"
+                                            ValidationGroup="proedit" >
+                                            <asp:ListItem Value="0">Select Item</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <asp:RequiredFieldValidator ID="RfvName" runat="server" CssClass="validator"
+                                            ControlToValidate="ddlItem" ErrorMessage="Item Required"
+                                            InitialValue="0" SetFocusOnError="True" ValidationGroup="proedit"></asp:RequiredFieldValidator>
+                                    </EditItemTemplate>
+                                    <FooterTemplate>
+                                        <asp:DropDownList ID="ddlFItem" runat="server" CssClass="form-control"
+                                            AppendDataBoundItems="True" DataTextField="Name" DataValueField="Id"
+                                            EnableViewState="true" ValidationGroup="proadd" AutoPostBack="True">
+                                            <asp:ListItem Value="0">Select Item</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <asp:RequiredFieldValidator ID="RfvFItem" runat="server" CssClass="validator"
+                                            ControlToValidate="ddlFItem" Display="Dynamic"
+                                            ErrorMessage="Item Required" InitialValue="0" SetFocusOnError="True"
+                                            ValidationGroup="proadd"></asp:RequiredFieldValidator>
+                                    </FooterTemplate>
+                                    <ItemTemplate>
+                                        <%# DataBinder.Eval(Container.DataItem, "Item.Name")%>
+                                    </ItemTemplate>
+                                </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="Returned">
+                                    <EditItemTemplate>
+                                        <asp:DropDownList ID="ddlEdtReturned" runat="server" CssClass="form-control"
+                                            AppendDataBoundItems="True"
+                                            ValidationGroup="3">
+                                            <asp:ListItem Value="">Select Return Status</asp:ListItem>
+                                            <asp:ListItem Value="Returned">Returned</asp:ListItem>
+                                            <asp:ListItem Value="Not Returned">Not Returned</asp:ListItem>
+                                          
+                                        </asp:DropDownList>
+                                        <asp:RequiredFieldValidator ID="RfvStatus" runat="server"
+                                            ControlToValidate="ddlEdtReturned" ErrorMessage="Return Status is required"
+                                            InitialValue="" SetFocusOnError="True" ValidationGroup="edit" CssClass="validator"></asp:RequiredFieldValidator>
+                                    </EditItemTemplate>
+                                    <FooterTemplate>
+                                        <asp:DropDownList ID="ddlReturned" runat="server" CssClass="form-control"
+                                            AppendDataBoundItems="True" EnableViewState="true" ValidationGroup="save">
+                                             <asp:ListItem Value="">Select Return Status</asp:ListItem>
+                                            <asp:ListItem Value="Returned">Returned</asp:ListItem>
+                                            <asp:ListItem Value="Not Returned">Not Returned</asp:ListItem>
+
+                                        </asp:DropDownList>
+                                        <asp:RequiredFieldValidator ID="RfvFStatus" runat="server"
+                                            ControlToValidate="ddlReturned" Display="Dynamic" CssClass="validator"
+                                            ErrorMessage="Return Status is required" InitialValue="" SetFocusOnError="True"
+                                            ValidationGroup="save"></asp:RequiredFieldValidator>
+                                    </FooterTemplate>
+                                    <ItemTemplate>
+                                        <%# DataBinder.Eval(Container.DataItem, "Returned")%>
+                                    </ItemTemplate>
+                                </asp:TemplateColumn>
+                                  <asp:TemplateColumn HeaderText="Returned Date">
+                                    <ItemTemplate>
+                                        <%# DataBinder.Eval(Container.DataItem, "ReturnedDate", "{0:M/d/yyyy}")%>
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <asp:TextBox ID="txtEdtReturnedDate" runat="server" CssClass="form-control datepicker"
+                                            data-dateformat="mm/dd/yy" Text=' <%# DataBinder.Eval(Container.DataItem, "ReturnedDate", "{0:M/d/yyyy}")%>' Width="81px"></asp:TextBox>
+                                        <asp:RequiredFieldValidator
+                                            ID="rfvEdtReturnedDate" runat="server" ErrorMessage="Returned Date is required" Display="Dynamic"
+                                            CssClass="validator" ValidationGroup="edit"
+                                            SetFocusOnError="true" ControlToValidate="txtEdtReturnedDate"></asp:RequiredFieldValidator><br />
+                                        
+                                    </EditItemTemplate>
+                                    <FooterTemplate>
+                                        <asp:TextBox ID="txtReturnedDate" runat="server" CssClass="form-control datepicker"
+                                            data-dateformat="mm/dd/yy" Width="81px"></asp:TextBox>
+                                        <asp:RequiredFieldValidator
+                                            ID="rfvtxtReturnedDate" runat="server" ErrorMessage="Returned Date is required" Display="Dynamic"
+                                            CssClass="validator" ValidationGroup="save"
+                                            SetFocusOnError="true" ControlToValidate="txtReturnedDate"></asp:RequiredFieldValidator><br />
+                                       
+                                    </FooterTemplate>
+                                </asp:TemplateColumn>
+                             
+                                <asp:TemplateColumn HeaderText="StoreKeeper Remark">
+                                    <ItemTemplate>
+                                        <%# DataBinder.Eval(Container.DataItem, "StoreKeeperRemark")%>
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <asp:TextBox ID="txtRemark" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "StoreKeeperRemark")%>'></asp:TextBox>
+                                     
+                                    </EditItemTemplate>
+                                    <FooterTemplate>
+                                        <asp:TextBox ID="txtFRemark" runat="server" CssClass="form-control"></asp:TextBox>
+                                        
+                                    </FooterTemplate>
+                                </asp:TemplateColumn>
+                               
+                               
+                                <asp:TemplateColumn HeaderText="Actions">
+                                    <EditItemTemplate>
+                                        <asp:LinkButton ID="lnkUpdate" runat="server" CommandName="Update" ValidationGroup="proedit" CssClass="btn btn-xs btn-default"><i class="fa fa-save"></i></asp:LinkButton>
+                                        <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default"><i class="fa fa-times"></i></asp:LinkButton>
+                                    </EditItemTemplate>
+                                    <FooterTemplate>
+                                        <asp:LinkButton ID="lnkAddNew" runat="server" CommandName="AddNew" ValidationGroup="proadd" CssClass="btn btn-sm btn-success"><i class="fa fa-save"></i></asp:LinkButton>
+                                    </FooterTemplate>
+                                    <ItemTemplate>
+                                        <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
+                                        <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default" OnClientClick="javascript:return confirm('Are you sure you want to delete this entry?');"><i class="fa fa-times"></i></asp:LinkButton>
+                                    </ItemTemplate>
+                                </asp:TemplateColumn>
+                            </Columns>
+                            <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
+                        </asp:DataGrid>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                       
+                    
                     </fieldset>
 
                     <footer>

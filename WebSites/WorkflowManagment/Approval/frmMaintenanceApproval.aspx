@@ -88,6 +88,11 @@
                         <asp:Button runat="server" ID="btnStatus" Text="" BorderStyle="None" />
                     </ItemTemplate>
                 </asp:TemplateField>
+                <asp:TemplateField>
+                    <ItemTemplate>
+                        <asp:LinkButton ID="lnkMaintain" runat="server" OnClick="lnkMaintain_Click">Maintained</asp:LinkButton>
+                    </ItemTemplate>
+                </asp:TemplateField>
             </Columns>
             <FooterStyle CssClass="FooterStyle" />
             <HeaderStyle CssClass="headerstyle" />
@@ -289,6 +294,31 @@
                                                         <asp:RequiredFieldValidator ID="RfvFRemark" CssClass="validator" runat="server" ControlToValidate="txtFRemark" ErrorMessage="Remark Required" ValidationGroup="proadd"></asp:RequiredFieldValidator>
                                                     </FooterTemplate>
                                                 </asp:TemplateColumn>
+                                                <%-- <asp:TemplateColumn HeaderText="Maintenance Status">
+                                    <EditItemTemplate>
+                                        <asp:DropDownList ID="ddlstatus" runat="server" CssClass="form-control"
+                                            AppendDataBoundItems="True"
+                                            ValidationGroup="proedit">
+                                             <asp:ListItem Value="In Progress">In Progress</asp:ListItem>
+                                            <asp:ListItem Value="Maintained">Maintained</asp:ListItem>
+                                                                                     
+                                        </asp:DropDownList>
+                                        
+                                    </EditItemTemplate>
+                                    <FooterTemplate>
+                                        <asp:DropDownList ID="ddlFstatus" runat="server" CssClass="form-control"
+                                            AppendDataBoundItems="True" 
+                                            EnableViewState="true" ValidationGroup="proadd">
+                                             <asp:ListItem Value="In Progress">In Progress</asp:ListItem>
+                                            <asp:ListItem Value="Maintained">Maintained</asp:ListItem>
+                                           
+                                        </asp:DropDownList>
+                                      
+                                    </FooterTemplate>
+                                    <ItemTemplate>
+                                        <%# DataBinder.Eval(Container.DataItem, "MaintenanceStatus")%>
+                                    </ItemTemplate>
+                                </asp:TemplateColumn>--%>
                                                 <asp:TemplateColumn HeaderText="Actions">
                                                     <EditItemTemplate>
                                                         <asp:LinkButton ID="lnkUpdate" runat="server" CommandName="Update" ValidationGroup="proedit" CssClass="btn btn-xs btn-default"><i class="fa fa-save"></i></asp:LinkButton>

@@ -36,9 +36,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 BindPurchaseRequestDetails();
                 BindInitialValues();
                 PopInternalVehicles();
+                PopMaintenanceRequestsDropDown();
             }
             lblPlate.Visible = false;
             ddlPlate.Visible = false;
+            lblMainReq.Visible = false;
+            ddlMaintenanceReq.Visible = false;
+            i.Visible = false;
             this._presenter.OnViewLoaded();
 
 
@@ -121,6 +125,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 _presenter.CurrentPurchaseRequest.Requireddateofdelivery = Convert.ToDateTime(txtdeliveryDate.Text);
                 _presenter.CurrentPurchaseRequest.IsVehicle = GetIsVehicle;
                 _presenter.CurrentPurchaseRequest.PlateNo = GetPlateNo;
+                _presenter.CurrentPurchaseRequest.MaintenanceRequestNo = GetMaintenanceRequestNo;
                 //Determine total cost
                 /*       decimal cost = 0;
                        if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Count > 0)
@@ -221,6 +226,15 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ddlPlate.DataSource = _presenter.GetVehicles();
             ddlPlate.DataBind();
         }
+
+        private void PopMaintenanceRequestsDropDown()
+        {
+           
+                ddlMaintenanceReq.DataSource = _presenter.GetMaintenanceRequestCompleted();
+                ddlMaintenanceReq.DataBind();
+           
+           
+        }
         public PurchaseRequest PurchaseRequest
         {
             get
@@ -247,6 +261,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public string GetPlateNo
         {
             get { return ddlPlate.SelectedValue; }
+        }
+        public string GetMaintenanceRequestNo
+        {
+            get { return ddlMaintenanceReq.SelectedValue; }
         }
         public int PurchaseRequestId
         {
@@ -378,17 +396,19 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (ckIsVehicle.Checked == true)
             {
                 lblPlate.Visible = true;
-
+                lblMainReq.Visible = true;
 
                 ddlPlate.Visible = true;
+                ddlMaintenanceReq.Visible = true;
                 i.Visible = true;
             }
             else if (ckIsVehicle.Checked == false)
             {
                 lblPlate.Visible = false;
-
+                lblMainReq.Visible = false;
 
                 ddlPlate.Visible = false;
+                ddlMaintenanceReq.Visible = false;
                 i.Visible = false;
             }
         }
@@ -400,17 +420,19 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (ckIsVehicle.Checked == true)
             {
                 lblPlate.Visible = true;
-
+                lblMainReq.Visible = true;
 
                 ddlPlate.Visible = true;
+                ddlMaintenanceReq.Visible = true;
                 i.Visible = true;
             }
             else if (ckIsVehicle.Checked == false)
             {
                 lblPlate.Visible = false;
-
+                lblMainReq.Visible = false;
 
                 ddlPlate.Visible = false;
+                ddlMaintenanceReq.Visible = false;
                 i.Visible = false;
             }
         }
@@ -422,17 +444,19 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (ckIsVehicle.Checked == true)
             {
                 lblPlate.Visible = true;
-
+                lblMainReq.Visible = true;
 
                 ddlPlate.Visible = true;
+                ddlMaintenanceReq.Visible = true;
                 i.Visible = true;
             }
             else if (ckIsVehicle.Checked == false)
             {
                 lblPlate.Visible = false;
-
+                lblMainReq.Visible = false;
 
                 ddlPlate.Visible = false;
+                ddlMaintenanceReq.Visible = false;
                 i.Visible = false;
             }
         }
@@ -515,17 +539,19 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (ckIsVehicle.Checked == true)
             {
                 lblPlate.Visible = true;
-
+                lblMainReq.Visible = true;
 
                 ddlPlate.Visible = true;
+                ddlMaintenanceReq.Visible = true;
                 i.Visible = true;
             }
             else if (ckIsVehicle.Checked == false)
             {
                 lblPlate.Visible = false;
-
+                lblMainReq.Visible = false;
 
                 ddlPlate.Visible = false;
+                ddlMaintenanceReq.Visible = false;
                 i.Visible = false;
             }
         }        
@@ -534,17 +560,19 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (ckIsVehicle.Checked == true)
             {
                 lblPlate.Visible = true;
-
+                lblMainReq.Visible = true;
 
                 ddlPlate.Visible = true;
+                ddlMaintenanceReq.Visible = true;
                 i.Visible = true;
             }
             else if (ckIsVehicle.Checked == false)
             {
                 lblPlate.Visible = false;
-
+                lblMainReq.Visible = false;
 
                 ddlPlate.Visible = false;
+                ddlMaintenanceReq.Visible = false;
                 i.Visible = false;
             }
         }

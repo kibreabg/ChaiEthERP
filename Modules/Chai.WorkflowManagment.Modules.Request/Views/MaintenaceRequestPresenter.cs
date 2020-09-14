@@ -11,6 +11,7 @@ using Chai.WorkflowManagment.CoreDomain.Requests;
 using Chai.WorkflowManagment.Modules.Admin;
 using Chai.WorkflowManagment.Enums;
 using Chai.WorkflowManagment.Shared.MailSender;
+using Chai.WorkflowManagment.CoreDomain.Inventory;
 
 namespace Chai.WorkflowManagment.Modules.Request.Views
 {
@@ -22,13 +23,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         //
          private Chai.WorkflowManagment.Modules.Request.RequestController _controller;
          private Chai.WorkflowManagment.Modules.Setting.SettingController _settingcontroller;
+        private Chai.WorkflowManagment.Modules.Inventory.InventoryController _inventorycontroller;
         private AdminController _adminController;
+        
         private MaintenanceRequest _maintenancerequest;
-         public MaintenaceRequestPresenter([CreateNew] Chai.WorkflowManagment.Modules.Request.RequestController controller, [CreateNew] Chai.WorkflowManagment.Modules.Setting.SettingController settingcontroller, AdminController adminController)
+         public MaintenaceRequestPresenter([CreateNew] Chai.WorkflowManagment.Modules.Request.RequestController controller, [CreateNew] Chai.WorkflowManagment.Modules.Setting.SettingController settingcontroller, AdminController adminController, [CreateNew] Chai.WorkflowManagment.Modules.Inventory.InventoryController inventorycontroller)
          {
          		_controller = controller;
                 _settingcontroller = settingcontroller;
                 _adminController = adminController;
+                _inventorycontroller = inventorycontroller;
         }
 
          public override void OnViewLoaded()
@@ -142,6 +146,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             return _settingcontroller.GetServiceTypes();
 
         }
+        public IList<Item> GetItems()
+        {
+            return _settingcontroller.GetItems();
+
+        }
         public ServiceType GetServiceType(int Id)
         {
             return _settingcontroller.GetServiceType(Id);
@@ -183,6 +192,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
              return _controller.GetMaintenanceRequestDetail(Id);
 
          }
+        public MaintenanceSparePart GetMaintenanceSparePart(int Id)
+        {
+            return _controller.GetMaintenanceSparePart(Id);
+
+        }
+        public Item GetItem(int Id)
+        {
+            return _inventorycontroller.GetItem(Id);
+
+        }
         private void SaveMaintenanceRequestStatus()
         {
             if (GetApprovalSetting(RequestType.Maintenance_Request.ToString().Replace('_', ' '), 0) != null)
@@ -290,7 +309,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
          {
              _controller.DeleteEntity(MaintenanceRequestDetail);
          }
-         public void Commit()
+        public void DeleteMaintenanceSparepart(MaintenanceSparePart MaintenanceSparePart)
+        {
+            _controller.DeleteEntity(MaintenanceSparePart);
+        }
+        public void Commit()
          {
              _controller.Commit();
          }

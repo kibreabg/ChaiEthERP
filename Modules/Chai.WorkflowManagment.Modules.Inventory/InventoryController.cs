@@ -72,7 +72,10 @@ namespace Chai.WorkflowManagment.Modules.Inventory
             filterExpression = "SELECT * FROM Receives Where 1 = Case when '" + ReceiveNo + "' = '' Then 1 When Receives.ReceiveNo = '" + ReceiveNo + "' Then 1 END And  1 = CASE WHEN '" + ReceiveDate + "' = '' Then 1 When Receives.ReceiveDate = '" + ReceiveDate + "'  Then 1 END AND Receives.Receiver = '" + GetCurrentUser().Id + "' ORDER BY Receives.Id Desc";
             return _workspace.SqlQuery<Receive>(filterExpression).ToList();
         }
-
+        public Item GetItem(int id)
+        {
+            return _workspace.Single<Item>(x => x.Id == id);
+        }
         #endregion
         #region Item Issuance
         public int GetLastIssueId()

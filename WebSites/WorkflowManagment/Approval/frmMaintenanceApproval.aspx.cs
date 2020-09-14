@@ -567,6 +567,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 cprd.TechnicianRemark = txtEdtTechRemark.Text;
                 DropDownList ddlTechServiceTypeDetail = e.Item.FindControl("ddlEdtMechanicServiceTypeDetail") as DropDownList;
                 cprd.MechanicServiceTypeDetail = _presenter.GetServiceTypeDetail(Convert.ToInt32(ddlTechServiceTypeDetail.SelectedValue));
+                DropDownList ddlStatus = e.Item.FindControl("ddlstatus") as DropDownList;
+               
                 cprd.MaintenanceRequest = _presenter.CurrentMaintenanceRequest;
                 dgMaintenanceRequestDetail.EditItemIndex = -1;
                 dgMaintenanceRequestDetail.DataSource = _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails;
@@ -640,6 +642,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             DropDownList ddlServiceTypeDetail = ddl.FindControl("ddlEdtMechanicServiceTypeDetail") as DropDownList;
             BindServiceTypeDetails(ddlServiceTypeDetail, Convert.ToInt32(ddl.SelectedValue));
             pnlDetail_ModalPopupExtender.Show();
+        }
+
+        protected void lnkMaintain_Click(object sender, EventArgs e)
+        {
+            int _maintenanceReqId = 0;
+            _maintenanceReqId = Convert.ToInt32(grvMaintenanceRequestList.SelectedDataKey[0]);
+            _presenter.CurrentMaintenanceRequest.MaintenanceStatus = "Maintained";
         }
     }
 }
