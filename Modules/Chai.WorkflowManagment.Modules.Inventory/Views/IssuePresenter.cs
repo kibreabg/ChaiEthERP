@@ -212,6 +212,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                 if (isDet.Item.ItemType == "Fixed Asset")
                 {
                     isDet.FixedAsset.AssetStatus = FixedAssetStatus.Issued.ToString();
+                    isDet.StoreRequestDetail.IssuedQuantity += 1;
                 }
 
                 Stock stock = GetStockByItem(isDet.Item.Id);

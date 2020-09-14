@@ -45,16 +45,13 @@
                                 <label>Asset Status</label>
                                 <label class="select">
                                     <asp:DropDownList ID="ddlFilterStatus" runat="server">
-                                        <asp:ListItem Value="">Select Asset Status</asp:ListItem>
-                                        <asp:ListItem Value="Active">Active</asp:ListItem>
-                                        <asp:ListItem Value="InActive">InActive</asp:ListItem>
                                     </asp:DropDownList><i></i>
                                 </label>
                             </section>
                         </div>
                     </fieldset>
                     <footer>
-                        <asp:Button ID="btnFilter" runat="server" Text="Filter" CssClass="btn btn-primary"></asp:Button>
+                        <asp:Button ID="btnFilter" OnClick="btnFilter_Click" runat="server" Text="Filter" CssClass="btn btn-primary"></asp:Button>
                     </footer>
                 </div>
             </div>
@@ -112,6 +109,11 @@
                             <asp:TemplateColumn HeaderText="Serial No.">
                                 <ItemTemplate>
                                     <%# DataBinder.Eval(Container.DataItem, "SerialNo") %>
+                                </ItemTemplate>
+                            </asp:TemplateColumn>
+                            <asp:TemplateColumn HeaderText="Shelf">
+                                <ItemTemplate>
+                                    <%# DataBinder.Eval(Container.DataItem, "Shelf.Name") %>
                                 </ItemTemplate>
                             </asp:TemplateColumn>
                             <asp:TemplateColumn HeaderText="Custodian">

@@ -332,6 +332,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
 
                 BindIssueDetails();
                 Session["IssueDetailId"] = null;
+                Session["detailIndex"] = null;
                 btnSave.Visible = true;
 
                 Master.ShowMessage(new AppMessage("Item Issue Detail Successfully Updated", RMessageType.Info));
@@ -356,7 +357,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                     issueDetail.PreviousQuantity = issueDetail.Quantity;
                 }
                 else
-                    issueDetail = _presenter.CurrentIssue.IssueDetails[issDetId];
+                    issueDetail = _presenter.CurrentIssue.IssueDetails[(int)Session["detailIndex"]];
 
                 FixedAsset fa = _presenter.GetFixedAsset(Convert.ToInt32(ddlAssetCode.SelectedValue));
                 fa.AssetStatus = FixedAssetStatus.ToBeIssued.ToString();
@@ -375,16 +376,23 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                 issueDetail.Section = fa.Section;
                 issueDetail.Shelf = fa.Shelf;
                 issueDetail.UnitCost = fa.UnitCost;
-                issueDetail.Quantity = 1;
-                issueDetail.StoreRequestDetail.IssuedQuantity += 1;
+                issueDetail.Quantity = 1;                
                 issueDetail.Custodian = _presenter.GetUser(Convert.ToInt32(ddlCustodian.SelectedValue)).FullName;
                 issueDetail.FixedAsset = fa;
 
-                _presenter.CurrentIssue.IssueDetails[issDetId] = issueDetail;
+                if (Session["IssueDetailId"] == null)
+                {
+                    _presenter.CurrentIssue.IssueDetails.Add(issueDetail);
+                }
+                else
+                {
+                    _presenter.CurrentIssue.IssueDetails[(int)Session["detailIndex"]] = issueDetail;
+                }
 
                 BindIssueDetails();
                 btnSave.Visible = true;
                 Session["IssueDetailId"] = null;
+                Session["detailIndex"] = null;
 
                 Master.ShowMessage(new AppMessage("Issue Detail for Fixed Asset Updated!", RMessageType.Info));
             }
