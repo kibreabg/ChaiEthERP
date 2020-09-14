@@ -42,7 +42,7 @@
             <div class="widget-body no-padding">
                 <div class="smart-form">
                     <fieldset>
-                       
+
                         <div class="row">
                             <%--<section class="col col-4">
                                 <label class="label">
@@ -71,7 +71,7 @@
 
                         <div class="row">
 
-                          
+
                             <section class="col col-6">
                                 <label class="label">
                                     Deliver to</label>
@@ -80,8 +80,8 @@
                                     <asp:RequiredFieldValidator ID="RfvDeliverto" CssClass="validator" runat="server" ControlToValidate="txtDeliverto" ErrorMessage="Deliver To Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Save"></asp:RequiredFieldValidator>
                                 </label>
                             </section>
-                        
-                          <%--  <section class="col col-6">
+
+                            <%--  <section class="col col-6">
                                 <label id="lblapplyfor" runat="server" class="label" visible="false">
                                     Remark</label>
                                 <label class="input">
@@ -90,8 +90,8 @@
                             </section>--%>
 
 
-                       
-                          <section class="col col-6">
+
+                            <section class="col col-6">
                                 <label class="label">Program</label>
                                 <label class="select">
                                     <asp:DropDownList ID="ddlProgram" AutoPostBack="true" DataTextField="ProgramName" DataValueField="Id" AppendDataBoundItems="true" runat="server" OnSelectedIndexChanged="ddlProgram_SelectedIndexChanged">
@@ -99,7 +99,8 @@
                                     </asp:DropDownList><i></i>
                                 </label>
                                 <asp:RequiredFieldValidator ID="rfvProgram" runat="server" ControlToValidate="ddlProgram" CssClass="validator" Display="Dynamic" ErrorMessage="Select Program" SetFocusOnError="true" ValidationGroup="request"></asp:RequiredFieldValidator>
-                            </section></div>
+                            </section>
+                        </div>
                         <asp:DataGrid ID="dgStoreRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
                             CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
                             GridLines="None"
@@ -108,16 +109,18 @@
                             ShowFooter="True">
 
                             <Columns>
-                                
+
                                 <asp:TemplateColumn HeaderText="Item Description">
                                     <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "Item")%>
+                                        <%# DataBinder.Eval(Container.DataItem, "Item.Name")%>
                                     </ItemTemplate>
                                     <EditItemTemplate>
-                                        <asp:TextBox ID="txtItem" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "Item")%>'></asp:TextBox>
+                                        <asp:DropDownList ID="ddlItem" DataTextField="Name" DataValueField="Id" runat="server" CssClass="form-control" AppendDataBoundItems="True">
+                                        </asp:DropDownList>
                                     </EditItemTemplate>
                                     <FooterTemplate>
-                                        <asp:TextBox ID="txtFItem" runat="server" CssClass="form-control"></asp:TextBox>
+                                        <asp:DropDownList ID="ddlFItem" DataTextField="Name" DataValueField="Id" runat="server" CssClass="form-control" AppendDataBoundItems="True">
+                                        </asp:DropDownList>
                                     </FooterTemplate>
                                 </asp:TemplateColumn>
                                 <asp:TemplateColumn HeaderText="Requested Quantity">
@@ -135,7 +138,7 @@
                                         <asp:RequiredFieldValidator ID="RfvFQty" CssClass="validator" runat="server" ControlToValidate="txtFQty" ErrorMessage="Qty Required" ValidationGroup="proadd"></asp:RequiredFieldValidator>
                                     </FooterTemplate>
                                 </asp:TemplateColumn>
-                                
+
                                 <asp:TemplateColumn HeaderText="Quantity Approved">
                                     <ItemTemplate>
                                         <%# DataBinder.Eval(Container.DataItem, "QtyApproved")%>
@@ -192,7 +195,7 @@
                                             <asp:ListItem Value="Liter (L)">Liter (L)</asp:ListItem>
                                             <asp:ListItem Value="Day (D)">Day (D)</asp:ListItem>
                                             <asp:ListItem Value="Hour (Hr)">Hour (Hr)</asp:ListItem>
-                                             <asp:ListItem Value="Pack (Pk)">Pack (Pk)</asp:ListItem>
+                                            <asp:ListItem Value="Pack (Pk)">Pack (Pk)</asp:ListItem>
                                             <asp:ListItem Value="Set (St)">Set (St)</asp:ListItem>
                                             <asp:ListItem Value="Other">Other</asp:ListItem>
                                         </asp:DropDownList>
@@ -205,7 +208,7 @@
                                         <%# DataBinder.Eval(Container.DataItem, "UnitOfMeasurment")%>
                                     </ItemTemplate>
                                 </asp:TemplateColumn>
-                               <asp:TemplateColumn HeaderText="Remark">
+                                <asp:TemplateColumn HeaderText="Remark">
                                     <ItemTemplate>
                                         <%# DataBinder.Eval(Container.DataItem, "Remark")%>
                                     </ItemTemplate>
@@ -369,10 +372,10 @@
                                         <asp:Label ID="lblDate" runat="server" Text='<%# Eval("RequestedDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
                                     </ItemTemplate>
                                 </asp:TemplateField>
-                               
+
 
                                 <asp:BoundField DataField="DeliverTo" HeaderText="Deliver To" SortExpression="DeliverTo" />
-                              
+
 
                                 <asp:CommandField ShowSelectButton="True" />
                                 <%-- <asp:CommandField ShowDeleteButton="True" />--%>
@@ -408,6 +411,7 @@
                                         <h4 class="alert-heading">Warning</h4>
                                         <p>
                                             The current Request has no Approval Settings defined. Please contact your administrator!
+                                       
                                         </p>
                                     </div>
                                     <footer>

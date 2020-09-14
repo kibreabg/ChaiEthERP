@@ -120,6 +120,16 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
             return will;
         }
+        private void BindItem(DropDownList ddlItem)
+        {
+            ddlItem.Items.Clear();
+            ListItem lst = new ListItem();
+            lst.Text = "Select Item";
+            lst.Value = "";
+            ddlItem.Items.Add(lst);
+            ddlItem.DataSource = _presenter.GetItems();
+            ddlItem.DataBind();
+        }
         private void BindAccount(DropDownList ddlItemAccount)
         {
             ddlItemAccount.DataSource = _presenter.GetItemAccounts();
@@ -325,15 +335,19 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void grvStoreRequestList_RowCommand(object sender, GridViewCommandEventArgs e)
         {
+            reqID = (int)grvStoreRequestList.DataKeys[Convert.ToInt32(e.CommandArgument)].Value;
             if (e.CommandName == "ViewItem")
-            {
-                reqID = (int)grvStoreRequestList.DataKeys[Convert.ToInt32(e.CommandArgument)].Value;
+            {                
                 Session["storeReqId"] = reqID;
                 _presenter.CurrentStoreRequest = _presenter.GetStoreRequestById(reqID);
                 //_presenter.OnViewLoaded();
                 dgStoreRequestDetail.DataSource = _presenter.CurrentStoreRequest.StoreRequestDetails;
                 dgStoreRequestDetail.DataBind();
                 pnlDetail_ModalPopupExtender.Show();
+            }
+            else if(e.CommandName == "Issue")
+            {
+                Response.Redirect("../Inventory/frmIssue.aspx?StoreReqId=" + reqID);
             }
         }
         protected void grvStoreRequestList_SelectedIndexChanged(object sender, EventArgs e)
@@ -447,8 +461,20 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             if (_presenter.CurrentStoreRequest.StoreRequestDetails != null)
             {
+                DropDownList ddlItem = e.Item.FindControl("ddlItem") as DropDownList;
 
-              
+                if (ddlItem != null)
+                {
+                    BindItem(ddlItem);
+
+                    if (_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].Item != null)
+                    {
+                        ListItem li = ddlItem.Items.FindByValue(_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].Item.Id.ToString());
+                        if (li != null)
+                            li.Selected = true;
+                    }
+                }
+
                 DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
 
                 if (ddlProject != null)
@@ -476,7 +502,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         protected void dgStoreRequestDetail_UpdateCommand(object source, DataGridCommandEventArgs e)
         {
             int id = (int)dgStoreRequestDetail.DataKeys[e.Item.ItemIndex];
-            _presenter.CurrentStoreRequest = _presenter.GetStoreRequestById((int)Session["purchaseReqId"]);
+            _presenter.CurrentStoreRequest = _presenter.GetStoreRequestById((int)Session["storeReqId"]);
             StoreRequestDetail Detail;
             if (id > 0)
                 Detail = _presenter.CurrentStoreRequest.GetStoreRequestDetail(id);
@@ -486,10 +512,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             try
             {
                 DropDownList ddlAccount = e.Item.FindControl("ddlAccount") as DropDownList;
-               
-                TextBox txtItem = e.Item.FindControl("txtItem") as TextBox;
-                Detail.Item = txtItem.Text;
-              
+
+                DropDownList ddlItem = e.Item.FindControl("ddlItem") as DropDownList;
+                Detail.Item = _presenter.GetItem(Convert.ToInt32(ddlItem.SelectedValue));
                 DropDownList ddlUnitOfMeasurment = e.Item.FindControl("ddlUnitOfMeasurment") as DropDownList;
                 Detail.UnitOfMeasurment = ddlUnitOfMeasurment.SelectedValue;
                 TextBox txtRemark = e.Item.FindControl("txtRemark") as TextBox;

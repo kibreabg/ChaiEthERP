@@ -5,7 +5,8 @@ namespace Chai.WorkflowManagment.CoreDomain.Inventory
     public partial class ReceiveDetail : IEntity
     {
         public int Id { get; set; }        
-        public decimal Quantity { get; set; }
+        public int Quantity { get; set; }
+        public int PreviousQuantity { get; set; }
         public decimal UnitCost { get; set; }
         public decimal TotalQuantity { get; set; }
         public string Remark { get; set; }      

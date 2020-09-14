@@ -33,7 +33,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory
         {
             _workspace = ZadsServices.Workspace;
         }
-        
+
         #region CurrenrObject
         public object CurrentObject
         {
@@ -47,7 +47,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory
             }
         }
         #endregion
-           
+
         #region Item Receive
         public int GetLastReceiveId()
         {
@@ -56,7 +56,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory
                 return _workspace.Last<Receive>().Id;
             }
             else { return 0; }
-        }      
+        }
         public Receive GetReceive(int Id)
         {
             return _workspace.Single<Receive>(x => x.Id == Id, y => y.ReceiveDetails);
@@ -101,16 +101,54 @@ namespace Chai.WorkflowManagment.Modules.Inventory
         {
             return _workspace.Single<IssueDetail>(x => x.Id == Id);
         }
-        #endregion
-        
+        #endregion        
         #region Stock
-        public Stock GetStocks(int ItemId)
+        public IList<Stock> GetStocks()
         {
-            return _workspace.Single<Stock>(x => x.Item.Id == ItemId);
+            return WorkspaceFactory.CreateReadOnly().Query<Stock>(null).OrderBy(x => x.Id).ToList();
         }
-        public Stock GetStock(int ItemId)
+        public Stock GetStockByItem(int itemId)
         {
-            return _workspace.Single<Stock>(x => x.Item.Id == ItemId, y => y.Item);
+            return _workspace.Single<Stock>(x => x.Item.Id == itemId, y => y.Item);
+        }
+        public Stock GetStock(int id)
+        {
+            return _workspace.Single<Stock>(x => x.Id == id, y => y.Item);
+        }
+        public IList<Stock> ListStocks(string item)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM Stocks WHERE 1 = CASE WHEN '" + item + "' = '' THEN 1 WHEN Stocks.Item_Id = '" + item + "' THEN 1 END ORDER BY Stocks.Id Desc";
+            return _workspace.SqlQuery<Stock>(filterExpression).ToList();
+        }
+        #endregion
+        #region Fixed Asset
+        public IList<FixedAsset> GetUpdatedFixedAssetsByItem(int itemId)
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<FixedAsset>(x => x.AssetStatus == "UpdatedInStore" && x.Item.Id == itemId).OrderBy(x => x.Id).ToList();
+        }
+        public IList<FixedAsset> GetToBeIssuedFixedAssets()
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM FixedAssets WHERE AssetStatus = 'ToBeIssued'";
+            return _workspace.SqlQuery<FixedAsset>(filterExpression).ToList();
+        }
+        public IList<FixedAsset> GetFixedAssets()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<FixedAsset>(null).OrderBy(x => x.Id).ToList();
+        }
+        public IList<FixedAsset> ListFixedAssets(string item, string assetStatus)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM FixedAssets WHERE 1 = CASE WHEN '" + item + "' = '' THEN 1 WHEN FixedAssets.Item_Id = '" + item + "' THEN 1 END AND  1 = CASE WHEN '" + assetStatus + "' = '' THEN 1 WHEN FixedAssets.AssetStatus = '" + assetStatus + "'  Then 1 END ORDER BY FixedAssets.Id Desc";
+            return _workspace.SqlQuery<FixedAsset>(filterExpression).ToList();
+        }
+        public FixedAsset GetFixedAsset(int faId)
+        {
+            return _workspace.Single<FixedAsset>(x => x.Id == faId, y => y.FixedAssetHistories);
         }
         #endregion
         #region Entity Manipulation

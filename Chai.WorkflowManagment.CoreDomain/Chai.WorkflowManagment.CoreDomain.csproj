@@ -103,6 +103,8 @@
     <Compile Include="HRM\Termination.cs" />
     <Compile Include="HRM\TerminationReason.cs" />
     <Compile Include="HRM\WorkExperience.cs" />
+    <Compile Include="Inventory\FixedAsset.cs" />
+    <Compile Include="Inventory\FixedAssetHistory.cs" />
     <Compile Include="Inventory\Stock.cs" />
     <Compile Include="Inventory\UnitOfMeasurement.cs" />
     <Compile Include="Inventory\Issue.cs" />

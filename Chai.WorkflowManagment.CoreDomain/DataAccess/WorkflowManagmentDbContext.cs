@@ -138,8 +138,10 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
         public DbSet<Section> Sections { get; set; }
         public DbSet<Shelf> Shelfs { get; set; }
         public DbSet<Store> Stores { get; set; }
+        public DbSet<Stock> Stocks { get; set; }
         public DbSet<UnitOfMeasurement> UnitOfMeasurements { get; set; }
-
+        public DbSet<FixedAsset> FixedAssets { get; set; }
+        public DbSet<FixedAssetHistory> FixedAssetHistories { get; set; }
 
         public DbSqlQuery UpdateTaskpanNodePosition { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -149,7 +151,6 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
             //modelBuilder.Entity<Tab>().HasMany(p => p.TabRoles).WithMany();
             //modelBuilder.Entity<Tab>().HasMany(p => p.TaskPans).WithMany();
             //modelBuilder.Entity<TaskPan>().HasMany(p => p.TaskPanNodes).WithMany();
-
 
             base.OnModelCreating(modelBuilder);
         }

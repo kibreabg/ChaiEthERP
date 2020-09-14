@@ -280,6 +280,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ddlGrant.DataBind();
 
         }
+        private void BindItems(DropDownList ddlItem)
+        {
+            ddlItem.Items.Clear();
+            ListItem lst = new ListItem();
+            lst.Text = "Select Item";
+            lst.Value = "";
+            ddlItem.Items.Add(lst);
+            ddlItem.DataSource = _presenter.GetItems();
+            ddlItem.DataBind();
+        }
         private void ClearForm()
         {
             //txtRequestNo.Text = "";
@@ -524,9 +534,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 try
                 {
                     StoreRequestDetail Detail = new StoreRequestDetail();
-                    
-                    TextBox txtFItem = e.Item.FindControl("txtFItem") as TextBox;
-                    Detail.Item = txtFItem.Text;
+
+                    DropDownList ddlFItem = e.Item.FindControl("ddlFItem") as DropDownList;
+                    Detail.Item = _presenter.GetItem(Convert.ToInt32(ddlFItem.SelectedValue));
                     TextBox txtFQty = e.Item.FindControl("txtFQty") as TextBox;
                     Detail.Qty = Convert.ToInt32(txtFQty.Text);
                     TextBox txtFQtyApp = e.Item.FindControl("txtFQtyApp") as TextBox;
@@ -535,11 +545,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     Detail.UnitOfMeasurment = ddlFUnitOfMeasurment.SelectedValue;
                     TextBox txtFRemark = e.Item.FindControl("txtFRemark") as TextBox;
                     Detail.Remark = txtFRemark.Text;
-                   
-                  
-                 
-                    
-                 
                     DropDownList ddlFProject = e.Item.FindControl("ddlFProject") as DropDownList;
                     Detail.Project = _presenter.GetProject(int.Parse(ddlFProject.SelectedValue));
                     DropDownList ddlFGrant = e.Item.FindControl("ddlFGrant") as DropDownList;
@@ -569,7 +574,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 BindProject(ddlProject, programID);
                 DropDownList ddlGrant = e.Item.FindControl("ddlFGrant") as DropDownList;
                 BindGrant(ddlGrant, Convert.ToInt32(ddlProject.SelectedValue));
-
+                DropDownList ddlItem = e.Item.FindControl("ddlFItem") as DropDownList;
+                BindItems(ddlItem);
              
             }
             else
@@ -630,9 +636,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
             try
             {
-              
-                TextBox txtItem = e.Item.FindControl("txtItem") as TextBox;
-                Detail.Item = txtItem.Text;
+
+                DropDownList ddlItem = e.Item.FindControl("ddlItem") as DropDownList;
+                Detail.Item = _presenter.GetItem(Convert.ToInt32(ddlItem.SelectedValue));
                 TextBox txtQty = e.Item.FindControl("txtQty") as TextBox;
                 Detail.Qty = Convert.ToInt32(txtQty.Text);
                 TextBox txtQtyApp = e.Item.FindControl("txtQtyApp") as TextBox;
@@ -641,8 +647,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 Detail.UnitOfMeasurment = ddlUnitOfMeasurment.SelectedValue;
                 TextBox txtRemark = e.Item.FindControl("txtRemark") as TextBox;
                 Detail.Remark = txtRemark.Text;
-                
-               
                 DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
                 Detail.Project = _presenter.GetProject(int.Parse(ddlProject.SelectedValue));
                 DropDownList ddlGrant = e.Item.FindControl("ddlGrant") as DropDownList;
