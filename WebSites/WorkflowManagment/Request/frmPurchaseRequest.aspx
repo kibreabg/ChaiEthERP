@@ -63,6 +63,16 @@
                                 </label>
                             </section>
                         </div>
+                    <div class="row">
+                          <section class="col col-6">
+                                <asp:Label ID="lblMainReq" runat="server" Text="Maintenance Request No" Visible="False"></asp:Label>
+                                <label class="select">
+                                    <asp:DropDownList ID="ddlMaintenanceReq"  runat="server" DataValueField="Id" DataTextField="RequestNo">
+                                    </asp:DropDownList><i id="i1" runat="server"></i>
+                                   
+                                </label>
+                            </section>
+                        </div>
                         <div class="row">
                             <%--<section class="col col-4">
                                 <label class="label">

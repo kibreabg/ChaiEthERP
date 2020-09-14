@@ -12,6 +12,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         {
             this.MaintenanceRequestStatuses = new List<MaintenanceRequestStatus>();
             this.MaintenanceRequestDetails = new List<MaintenanceRequestDetail>();
+            this.MaintenanceSpareParts = new List<MaintenanceSparePart>();
             
         }
         public int Id { get; set; }
@@ -24,7 +25,11 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string ActionTaken { get; set; }
         
         public string PlateNo { get; set; }
+     
+        
         public int KmReading { get; set; }
+
+        public string MaintenanceStatus { get; set; }
         public string Remark { get; set; }
         public int CurrentApprover { get; set; }
         public int CurrentLevel { get; set; }
@@ -40,6 +45,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
        
         public virtual IList<MaintenanceRequestStatus> MaintenanceRequestStatuses { get; set; }
         public virtual IList<MaintenanceRequestDetail> MaintenanceRequestDetails { get; set; }
+        public virtual IList<MaintenanceSparePart> MaintenanceSpareParts { get; set; }
         // public virtual PurchaseOrder PurchaseOrders { get; set; }
         #region MaintenanceRequestStatus
         public virtual MaintenanceRequestStatus GetMaintenanceRequestStatus(int Id)
@@ -124,7 +130,42 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
 
         }
         #endregion
-       
+        #region MaintenanceSparepart
+        public virtual MaintenanceSparePart GetMaintenanceSparePart(int Id)
+        {
+
+            foreach (MaintenanceSparePart MRS in MaintenanceSpareParts)
+            {
+                if (MRS.Id == Id)
+                    return MRS;
+
+            }
+            return null;
+        }
+        public virtual IList<MaintenanceSparePart> GetMMaintenanceSparePartByMaintenanceId(int MaintenanceId)
+        {
+            IList<MaintenanceSparePart> MRS = new List<MaintenanceSparePart>();
+            foreach (MaintenanceSparePart MR in MaintenanceSpareParts)
+            {
+                if (MR.MaintenanceRequest.Id == MaintenanceId)
+                    MRS.Add(MR);
+
+            }
+            return MRS;
+        }
+
+        public virtual void RemoveMaintenanceSparePart(int Id)
+        {
+
+            foreach (MaintenanceSparePart MRS in MaintenanceSpareParts)
+            {
+                if (MRS.Id == Id)
+                    MaintenanceSpareParts.Remove(MRS);
+                break;
+            }
+
+        }
+        #endregion
 
 
     }

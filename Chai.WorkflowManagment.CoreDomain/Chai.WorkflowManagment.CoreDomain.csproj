@@ -117,6 +117,7 @@
     <Compile Include="Inventory\ItemSubCategory.cs" />
     <Compile Include="Inventory\ItemCategory.cs" />
     <Compile Include="Inventory\Item.cs" />
+    <Compile Include="Requests\MaintenanceSparePart.cs" />
     <Compile Include="Requests\PRAttachment.cs" />
     <Compile Include="Requests\MaintenanceRequest.cs" />
     <Compile Include="Requests\MaintenanceRequestDetail.cs" />

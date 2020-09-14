@@ -23,6 +23,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string SuggestedSupplier { get; set; }
         public bool IsVehicle { get; set; }
         public string PlateNo { get; set; }
+        public string MaintenanceRequestNo { get; set; }
         public string Comment { get; set; }
         public int CurrentApprover { get; set; }
         public int CurrentLevel { get; set; }

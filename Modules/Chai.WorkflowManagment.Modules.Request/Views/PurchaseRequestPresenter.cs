@@ -181,6 +181,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _settingcontroller.GetVehicles();
         }
+
+        public IList<MaintenanceRequest> GetMaintenanceRequestCompleted()
+        {
+            return _controller.GetMaintenanceRequestsCompleted();
+        }
     }
 }
 

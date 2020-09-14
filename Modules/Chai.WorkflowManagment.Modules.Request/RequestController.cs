@@ -515,6 +515,18 @@ namespace Chai.WorkflowManagment.Modules.Request
             return _workspace.SqlQuery<PurchaseRequest>(filterExpression).ToList();
 
         }
+        public IList<MaintenanceRequest> GetMaintenanceRequestsCompleted()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<MaintenanceRequest>(x => x.ProgressStatus == "Completed").ToList();
+        }
+        //public IList<MaintenanceRequest> GetMaintenanceRequestsCompleted()
+        //{
+        //    string filterExpression = "";
+        //    filterExpression = "SELECT DISTINCT RequestNo FROM MaintenanceRequests " +
+        //                               " WHERE MaintenanceRequests.ProgressStatus = 'Completed' Group BY RequestNo";
+
+        //    return _workspace.SqlQuery<MaintenanceRequest>(filterExpression).ToList();
+        //}
         public int GetLastPurchaseRequestId()
         {
             if (_workspace.Last<PurchaseRequest>() != null)
@@ -663,6 +675,10 @@ namespace Chai.WorkflowManagment.Modules.Request
         public MaintenanceRequestDetail GetMaintenanceRequestDetail(int MaintenanceRequestDetailId)
         {
             return _workspace.Single<MaintenanceRequestDetail>(x => x.Id == MaintenanceRequestDetailId);
+        }
+        public MaintenanceSparePart GetMaintenanceSparePart(int MaintenanceSparePartId)
+        {
+            return _workspace.Single<MaintenanceSparePart>(x => x.Id == MaintenanceSparePartId);
         }
         public IList<MaintenanceRequest> ListMaintenanceRequests(string RequestNo, string RequestDate)
         {
