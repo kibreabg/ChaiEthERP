@@ -19,7 +19,7 @@ using Chai.WorkflowManagment.Shared.Navigation;
 using System.Data;
 using Chai.WorkflowManagment.CoreDomain.Inventory;
 using Chai.WorkflowManagment.CoreDomain.Setting;
-
+using Chai.WorkflowManagment.CoreDomain.Requests;
 
 namespace Chai.WorkflowManagment.Modules.Inventory
 {
@@ -100,6 +100,10 @@ namespace Chai.WorkflowManagment.Modules.Inventory
         public IssueDetail GetIssueDetail(int Id)
         {
             return _workspace.Single<IssueDetail>(x => x.Id == Id);
+        }
+        public StoreRequest GetStoreRequest(int StoreRequestId)
+        {
+            return _workspace.Single<StoreRequest>(x => x.Id == StoreRequestId, x => x.StoreRequestDetails.Select(z => z.Project));
         }
         #endregion        
         #region Stock

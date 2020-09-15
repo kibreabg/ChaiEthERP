@@ -21,6 +21,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                 BindFixedAssets();
                 PopCustodians();
                 PopItems();
+                PopAssetStatuses();
             }
             this._presenter.OnViewLoaded();
         }
@@ -56,6 +57,26 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
             ddlFilterItem.Items.Add(lst);
             ddlFilterItem.DataSource = _presenter.GetItems();
             ddlFilterItem.DataBind();
+        }
+        private void PopAssetStatuses()
+        {
+            ddlFilterStatus.Items.Clear();
+            ListItem lst = new ListItem();
+            lst.Text = "Select Asset Status";
+            lst.Value = "";
+            ddlFilterStatus.Items.Add(lst);
+
+            var statuses = Enum.GetValues(typeof(FixedAssetStatus));
+
+            foreach (var status in statuses)
+            {
+                ListItem list = new ListItem();
+                list.Text = status.ToString();
+                list.Value = status.ToString();
+                ddlFilterStatus.Items.Add(list);
+            }
+            ddlFilterStatus.DataBind();
+            
         }
         private void PopCustodians()
         {
@@ -96,6 +117,10 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         {
             PopShelves(Convert.ToInt32(ddlSection.SelectedValue));
             ScriptManager.RegisterStartupScript(this, GetType(), "showReturnFAModal", "showReturnFAModal();", true);
+        }
+        protected void btnFilter_Click(object sender, EventArgs e)
+        {
+            BindFixedAssets();
         }
         protected void ddlOperation_SelectedIndexChanged(object sender, EventArgs e)
         {

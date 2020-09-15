@@ -10,7 +10,6 @@ using Chai.WorkflowManagment.CoreDomain.Users;
 using Chai.WorkflowManagment.Modules.Setting;
 using Chai.WorkflowManagment.Modules.Admin;
 using Chai.WorkflowManagment.CoreDomain.Requests;
-using Chai.WorkflowManagment.Modules.Request;
 using Chai.WorkflowManagment.Enums;
 
 namespace Chai.WorkflowManagment.Modules.Inventory.Views
@@ -20,14 +19,12 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         private InventoryController _controller;
         private SettingController _settingController;
         private AdminController _adminController;
-        private RequestController _requestController;
         private Issue _issue;
-        public IssuePresenter([CreateNew] InventoryController controller, [CreateNew] SettingController settingController, [CreateNew] AdminController adminController, [CreateNew] RequestController requestController)
+        public IssuePresenter([CreateNew] InventoryController controller, [CreateNew] SettingController settingController, [CreateNew] AdminController adminController)
         {
             _controller = controller;
             _settingController = settingController;
             _adminController = adminController;
-            _requestController = requestController;
         }
 
         public override void OnViewLoaded()
@@ -108,7 +105,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         }
         public StoreRequest GetStoreRequest(int id)
         {
-            return _requestController.GetStoreRequest(id);
+            return _controller.GetStoreRequest(id);
         }
         public ItemCategory GetItemCategory(int categoryId)
         {
@@ -215,6 +212,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                 if (isDet.Item.ItemType == "Fixed Asset")
                 {
                     isDet.FixedAsset.AssetStatus = FixedAssetStatus.Issued.ToString();
+                    isDet.StoreRequestDetail.IssuedQuantity += 1;
                 }
 
                 Stock stock = GetStockByItem(isDet.Item.Id);
