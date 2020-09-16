@@ -85,16 +85,31 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         }
         private void PopStores()
         {
+            ddlStore.Items.Clear();
+            ListItem lst = new ListItem();
+            lst.Text = "Select Store";
+            lst.Value = "0";
+            ddlStore.Items.Add(lst);
             ddlStore.DataSource = _presenter.GetStores();
             ddlStore.DataBind();
         }
         private void PopSections(int storeId)
         {
+            ddlSection.Items.Clear();
+            ListItem lst = new ListItem();
+            lst.Text = "Select Section";
+            lst.Value = "0";
+            ddlSection.Items.Add(lst);
             ddlSection.DataSource = _presenter.GetSectionsByStoreId(storeId);
             ddlSection.DataBind();
         }
         private void PopShelves(int sectionId)
         {
+            ddlShelf.Items.Clear();
+            ListItem lst = new ListItem();
+            lst.Text = "Select Shelf";
+            lst.Value = "0";
+            ddlShelf.Items.Add(lst);
             ddlShelf.DataSource = _presenter.GetShelvesBySectionId(sectionId);
             ddlShelf.DataBind();
         }
@@ -225,6 +240,10 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
             else
             {
                 fa.Custodian = "Store";
+                fa.Store = _presenter.GetStore(Convert.ToInt32(ddlStore.SelectedValue));
+                fa.Section = _presenter.GetSection(Convert.ToInt32(ddlSection.SelectedValue));
+                fa.Shelf = _presenter.GetShelf(Convert.ToInt32(ddlSection.SelectedValue));
+                fa.AssetStatus = FixedAssetStatus.UpdatedInStore.ToString();
 
                 FixedAssetHistory fah = new FixedAssetHistory();
                 fah.TransactionDate = DateTime.Now;

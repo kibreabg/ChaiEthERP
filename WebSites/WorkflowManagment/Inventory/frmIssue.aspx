@@ -89,6 +89,7 @@
 
                                         <Columns>
                                             <asp:BoundField DataField="Item.Name" HeaderText="Item" SortExpression="Item.Name" />
+                                            <asp:BoundField DataField="FixedAsset.AssetCode" HeaderText="Fixed Asset (Tag)" SortExpression="FixedAsset.AssetCode" />
                                             <asp:BoundField DataField="Shelf.Name" HeaderText="Shelf" SortExpression="Shelf.Name" />
                                             <asp:BoundField DataField="Quantity" HeaderText="Quantity" SortExpression="Quantity" />
                                             <asp:BoundField DataField="UnitCost" HeaderText="UnitCost" SortExpression="UnitCost" />

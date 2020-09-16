@@ -42,13 +42,25 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         {
             return _settingController.GetStores();
         }
+        public Store GetStore(int storeId)
+        {
+            return _settingController.GetStore(storeId);
+        }
         public IList<Section> GetSectionsByStoreId(int storeId)
         {
             return _settingController.GetSectionBystoreId(storeId);
         }
+        public Section GetSection(int sectionId)
+        {
+            return _settingController.GetSection(sectionId);
+        }
         public IList<Shelf> GetShelvesBySectionId(int sectionId)
         {
             return _settingController.GetShelvesBySectionId(sectionId);
+        }
+        public Shelf GetShelf(int shelfId)
+        {
+            return _settingController.GetShelf(shelfId);
         }
         public Stock GetStockByItem(int itemId)
         {

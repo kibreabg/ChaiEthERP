@@ -261,7 +261,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                 int storeId = theIssueDetail.Store.Id;
                 int sectionId = theIssueDetail.Section.Id;
                 int shelfId = theIssueDetail.Shelf.Id;
-                
+
                 ddlStore.SelectedValue = storeId.ToString();
                 PopSections(storeId);
                 ddlSection.SelectedValue = sectionId.ToString();
@@ -284,7 +284,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
                 IssueDetail issueDetail = e.Row.DataItem as IssueDetail;
-                LinkButton lb = e.Row.Cells[5].Controls[0] as LinkButton;
+                LinkButton lb = e.Row.Cells[6].Controls[0] as LinkButton;
 
                 //If the row contains a fixed item, change the operation link
                 if (issueDetail.Item.ItemType == "Fixed Asset")
@@ -360,6 +360,9 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                     issueDetail = _presenter.CurrentIssue.IssueDetails[(int)Session["detailIndex"]];
 
                 FixedAsset fa = _presenter.GetFixedAsset(Convert.ToInt32(ddlAssetCode.SelectedValue));
+                fa.Store = null;
+                fa.Section = null;
+                fa.Shelf = null;
                 fa.AssetStatus = FixedAssetStatus.ToBeIssued.ToString();
                 _presenter.SaveOrUpdateFixedAsset(fa);
 
@@ -376,7 +379,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                 issueDetail.Section = fa.Section;
                 issueDetail.Shelf = fa.Shelf;
                 issueDetail.UnitCost = fa.UnitCost;
-                issueDetail.Quantity = 1;                
+                issueDetail.Quantity = 1;
                 issueDetail.Custodian = _presenter.GetUser(Convert.ToInt32(ddlCustodian.SelectedValue)).FullName;
                 issueDetail.FixedAsset = fa;
 
@@ -408,14 +411,22 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
             try
             {
                 bool allDetailsUpdated = true;
+                bool availableToIssue = true;
                 foreach (IssueDetail isDet in _presenter.CurrentIssue.IssueDetails)
                 {
                     if (string.IsNullOrEmpty(isDet.Custodian))
                     {
                         allDetailsUpdated = false;
                     }
+                    if (isDet.Item.ItemType == "Fixed Asset")
+                    {
+                        if (isDet.FixedAsset.AssetStatus != FixedAssetStatus.UpdatedInStore.ToString())
+                        {
+                            availableToIssue = false;
+                        }
+                    }
                 }
-                if (allDetailsUpdated)
+                if (allDetailsUpdated && availableToIssue)
                 {
                     _presenter.SaveOrUpdateIssue();
                     BindIssues();
@@ -424,7 +435,14 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                 }
                 else
                 {
-                    Master.ShowMessage(new AppMessage("Please update all items in the Issue Detail!", RMessageType.Error));
+                    if (allDetailsUpdated == false)
+                    {
+                        Master.ShowMessage(new AppMessage("Please update all items in the Issue Detail!", RMessageType.Error));
+                    }
+                    else
+                    {
+                        Master.ShowMessage(new AppMessage("One or more of the items are already issued!", RMessageType.Error));
+                    }
                 }
             }
             catch (Exception ex)
