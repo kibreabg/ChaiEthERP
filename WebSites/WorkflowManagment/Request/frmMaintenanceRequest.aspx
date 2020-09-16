@@ -15,6 +15,12 @@
     <asp:ValidationSummary ID="VSPurchaseRequest" runat="server"
         CssClass="alert alert-danger fade in" DisplayMode="SingleParagraph"
         ValidationGroup="Save" ForeColor="" />
+       <asp:ValidationSummary ID="VSMR" runat="server"
+        CssClass="alert alert-danger fade in" DisplayMode="SingleParagraph"
+        ValidationGroup="proaddspare" ForeColor="" />
+       <asp:ValidationSummary ID="VSMS" runat="server"
+        CssClass="alert alert-danger fade in" DisplayMode="SingleParagraph"
+        ValidationGroup="proeditspare" ForeColor="" />
     <asp:ValidationSummary ID="VSDetailAdd" runat="server"
         CssClass="alert alert-danger fade in" DisplayMode="SingleParagraph"
         ValidationGroup="proadd" ForeColor="" />
@@ -266,23 +272,23 @@
                                     <EditItemTemplate>
                                         <asp:DropDownList ID="ddlItem" runat="server" CssClass="form-control"
                                             AppendDataBoundItems="True" DataTextField="Name" DataValueField="Id"
-                                            ValidationGroup="proedit" >
+                                            ValidationGroup="proeditspare" >
                                             <asp:ListItem Value="0">Select Item</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RfvName" runat="server" CssClass="validator"
                                             ControlToValidate="ddlItem" ErrorMessage="Item Required"
-                                            InitialValue="0" SetFocusOnError="True" ValidationGroup="proedit"></asp:RequiredFieldValidator>
+                                            InitialValue="0" SetFocusOnError="True" ValidationGroup="proeditspare"></asp:RequiredFieldValidator>
                                     </EditItemTemplate>
                                     <FooterTemplate>
                                         <asp:DropDownList ID="ddlFItem" runat="server" CssClass="form-control"
                                             AppendDataBoundItems="True" DataTextField="Name" DataValueField="Id"
-                                            EnableViewState="true" ValidationGroup="proadd" AutoPostBack="True">
+                                            EnableViewState="true" ValidationGroup="proaddspare" AutoPostBack="True">
                                             <asp:ListItem Value="0">Select Item</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RfvFItem" runat="server" CssClass="validator"
                                             ControlToValidate="ddlFItem" Display="Dynamic"
                                             ErrorMessage="Item Required" InitialValue="0" SetFocusOnError="True"
-                                            ValidationGroup="proadd"></asp:RequiredFieldValidator>
+                                            ValidationGroup="proaddspare"></asp:RequiredFieldValidator>
                                     </FooterTemplate>
                                     <ItemTemplate>
                                         <%# DataBinder.Eval(Container.DataItem, "Item.Name")%>
@@ -360,11 +366,11 @@
                                
                                 <asp:TemplateColumn HeaderText="Actions">
                                     <EditItemTemplate>
-                                        <asp:LinkButton ID="lnkUpdate" runat="server" CommandName="Update" ValidationGroup="proedit" CssClass="btn btn-xs btn-default"><i class="fa fa-save"></i></asp:LinkButton>
+                                        <asp:LinkButton ID="lnkUpdate" runat="server" CommandName="Update" ValidationGroup="proeditspare" CssClass="btn btn-xs btn-default"><i class="fa fa-save"></i></asp:LinkButton>
                                         <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default"><i class="fa fa-times"></i></asp:LinkButton>
                                     </EditItemTemplate>
                                     <FooterTemplate>
-                                        <asp:LinkButton ID="lnkAddNew" runat="server" CommandName="AddNew" ValidationGroup="proadd" CssClass="btn btn-sm btn-success"><i class="fa fa-save"></i></asp:LinkButton>
+                                        <asp:LinkButton ID="lnkAddNew" runat="server" CommandName="AddNew" ValidationGroup="proaddspare" CssClass="btn btn-sm btn-success"><i class="fa fa-save"></i></asp:LinkButton>
                                     </FooterTemplate>
                                     <ItemTemplate>
                                         <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
