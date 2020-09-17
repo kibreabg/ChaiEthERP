@@ -345,6 +345,17 @@ namespace Chai.WorkflowManagment.Modules.Shell
                 return 0;
 
         }
+        public int GetExpenseLiquidationMyRequest()
+        {
+            currentUser = GetCurrentUser().Id;
+            int Count = 0;
+            Count = WorkspaceFactory.CreateReadOnly().Count<ExpenseLiquidationRequest>(x => x.TravelAdvanceRequest.AppUser.Id == currentUser && x.ProgressStatus == "InProgress");
+            if (Count != 0)
+                return Count;
+            else
+                return 0;
+
+        }
         public int GetPurchaseRequestsMyRequest()
         {
             currentUser = GetCurrentUser().Id;
@@ -456,7 +467,12 @@ namespace Chai.WorkflowManagment.Modules.Shell
             IList<TravelAdvanceRequest> travelAdvanceRequests = WorkspaceFactory.CreateReadOnly().Query<TravelAdvanceRequest>(x => x.AppUser.Id == currentUser && x.ProgressStatus == "InProgress").ToList();
             return travelAdvanceRequests;
         }
-
+        public IList<ExpenseLiquidationRequest> GetExpenseLiquidationInProgress()
+        {
+            currentUser = GetCurrentUser().Id;
+            IList<ExpenseLiquidationRequest> expenseLiquidationRequests = WorkspaceFactory.CreateReadOnly().Query<ExpenseLiquidationRequest>(x => x.TravelAdvanceRequest.AppUser.Id == currentUser && x.ProgressStatus == "InProgress").ToList();
+            return expenseLiquidationRequests;
+        }
         public IList<PurchaseRequest> GetPurchaseInProgress()
         {
             currentUser = GetCurrentUser().Id;

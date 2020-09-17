@@ -28,6 +28,7 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
             BindVehicleRequests();
             BindCostSharingRequests();
             BindTravelAdvanceRequests();
+            BindExpenseLiquidationRequests();
             BindPurchaseRequests();
             BindBankPaymentRequests();
             BindBidAnalysisRequests();
@@ -254,15 +255,17 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         {
             lblTravelStatus.Text = ProgressStatus.InProgress.ToString();
             lblTravelStatus.ForeColor = System.Drawing.Color.Green;
-
+        }
+        if (_presenter.GetExpenseLiquidationMyRequest() != 0)
+        {
+            lblExpenseLiquidation.Text = ProgressStatus.InProgress.ToString();
+            lblExpenseStatus.ForeColor = System.Drawing.Color.Green;
         }
         if (_presenter.GetPurchaseRequestsMyRequest() != 0)
         {
             lblPurchaseStatus.Text = ProgressStatus.InProgress.ToString();
             lblPurchaseStatus.ForeColor = System.Drawing.Color.Green;
-
         }
-
         if (_presenter.GetBankRequestsMyRequest() != 0)
         {
             lblBankRequestStatus.Text = ProgressStatus.InProgress.ToString();
@@ -341,6 +344,11 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
     {
         grvTravelProgress.DataSource = _presenter.ListTravelApprovalProgress();
         grvTravelProgress.DataBind();
+    }
+    private void BindExpenseLiquidationRequests()
+    {
+        grvExpenseProgress.DataSource = _presenter.ListExpenseLiquidationProgress();
+        grvExpenseProgress.DataBind();
     }
     private void BindPurchaseRequests()
     {
@@ -438,6 +446,17 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
             }
         }
     }
+    protected void grvExpenseProgress_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        if (_presenter.ListExpenseLiquidationProgress() != null)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                if (_presenter.ListExpenseLiquidationProgress()[e.Row.RowIndex].CurrentApprover != 0)
+                    e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListExpenseLiquidationProgress()[e.Row.RowIndex].CurrentApprover).FullName;
+            }
+        }
+    }
     protected void grvPurchaseProgress_RowDataBound(object sender, GridViewRowEventArgs e)
     {
         if (_presenter.ListPurchaseApprovalProgress() != null)
@@ -498,9 +517,6 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
             }
         }
     }
-
-  
-
     protected void grvMaintenanceProgress_RowDataBound(object sender, GridViewRowEventArgs e)
     {
         if (_presenter.ListMaintenanceApprovalProgress() != null)

@@ -117,6 +117,14 @@
                                 <li class="">
                                     <span class="handle" style="display: none"></span>
                                     <p>
+                                        <asp:Label ID="lblExpenseLiquidationMyRequest" runat="server" Text="Expense Liquidation Request" CssClass="label"></asp:Label>-
+                                            <asp:Label ID="lblExpenseStatus" runat="server" Text="No Request"></asp:Label>
+                                    </p>
+                                    <a data-toggle="modal" runat="server" id="A14" href="#expenseModal">Progress Detail</a>
+                                </li>
+                                <li class="">
+                                    <span class="handle" style="display: none"></span>
+                                    <p>
                                         <asp:Label ID="lblPurchaseMyRequest" runat="server" Text="Purchase Request" CssClass="label"></asp:Label>-
                                             <asp:Label ID="lblPurchaseStatus" runat="server" Text="No Request"></asp:Label>
                                     </p>
@@ -146,7 +154,7 @@
                                     </p>
                                     <a data-toggle="modal" runat="server" id="A10" href="#soleVendorModal">Progress Detail</a>
                                 </li>
-                                    <li class="">
+                                <li class="">
                                     <span class="handle" style="display: none"></span>
                                     <p>
                                         <asp:Label ID="lblPaymentReimburesmentMyRequest" runat="server" Text="Settlement Request" CssClass="label"></asp:Label>-
@@ -154,7 +162,7 @@
                                     </p>
                                     <a data-toggle="modal" runat="server" id="A11" href="#soleVendorModal">Progress Detail</a>
                                 </li>
-                                  <li class="">
+                                <li class="">
                                     <span class="handle" style="display: none"></span>
                                     <p>
                                         <asp:Label ID="lblMaintenanceMyRequest" runat="server" Text="Maintenance Request" CssClass="label"></asp:Label>-
@@ -162,7 +170,7 @@
                                     </p>
                                     <a data-toggle="modal" runat="server" id="A12" href="#maintenanceModal">Progress Detail</a>
                                 </li>
-                                 <li class="">
+                                <li class="">
                                     <span class="handle" style="display: none"></span>
                                     <p>
                                         <asp:Label ID="lblStoreMyRequest" runat="server" Text="Store Request" CssClass="label"></asp:Label>-
@@ -277,7 +285,7 @@
                                         (<small class="num-of-tasks"><asp:Label ID="lblExpenseLiquidation" runat="server" Text=""></asp:Label></small>)
                                     </p>
                                 </li>
-                                       <li class="">
+                                <li class="">
                                     <span class="handle" style="display: none"></span>
                                     <p>
                                         <asp:LinkButton ID="lnkPaymentReimbursement" runat="server" Text="Payment Settlement" Enabled="false"></asp:LinkButton>
@@ -291,21 +299,21 @@
                                         (<small class="num-of-tasks"><asp:Label ID="lblbankpayment" runat="server" Text=""></asp:Label></small>)
                                     </p>
                                 </li>
-                                 <li class="">
+                                <li class="">
                                     <span class="handle" style="display: none"></span>
                                     <p>
                                         <asp:LinkButton ID="lnkBidAnalysis" runat="server" Text="Bid Analysis Requests" Enabled="false"></asp:LinkButton>
                                         (<small class="num-of-tasks"><asp:Label ID="lblBidAnalysis" runat="server" Text=""></asp:Label></small>)
                                     </p>
                                 </li>
-                                 <li class="">
+                                <li class="">
                                     <span class="handle" style="display: none"></span>
                                     <p>
                                         <asp:LinkButton ID="lnkSoleVendor" runat="server" Text="Sole Vendor Requests" Enabled="false"></asp:LinkButton>
                                         (<small class="num-of-tasks"><asp:Label ID="lblSolVendor" runat="server" Text=""></asp:Label></small>)
                                     </p>
                                 </li>
-                                  <li class="">
+                                <li class="">
                                     <span class="handle" style="display: none"></span>
                                     <p>
                                         <asp:LinkButton ID="lnkMaintenance" runat="server" Text="Maintenance Requests" Enabled="false"></asp:LinkButton>
@@ -531,6 +539,46 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="expenseModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        ×
+                    </button>
+                    <h4 class="modal-title" id="myExpenseModalLabel">Expense Liquidation Approval Progress</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="well well-sm well-primary">
+                                    <asp:GridView ID="grvExpenseProgress"
+                                        runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                                        CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" OnRowDataBound="grvExpenseProgress_RowDataBound">
+                                        <RowStyle CssClass="rowstyle" />
+                                        <Columns>
+                                            <asp:BoundField DataField="TravelAdvanceRequest.TravelAdvanceNo" HeaderText="Travel Advance No" SortExpression="TravelAdvanceRequest.TravelAdvanceNo" />
+                                            <asp:TemplateField HeaderText="Request Date">
+                                                <ItemTemplate>
+                                                    <asp:Label ID="lblRequestDate" runat="server" Text='<%# Eval("RequestDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:BoundField DataField="CurrentApprover" HeaderText="Current Approver" SortExpression="CurrentApprover" />
+                                        </Columns>
+                                        <FooterStyle CssClass="FooterStyle" />
+                                        <HeaderStyle CssClass="headerstyle" />
+                                        <PagerStyle CssClass="PagerStyle" />
+                                        <RowStyle CssClass="rowstyle" />
+                                    </asp:GridView>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="purchaseModal" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -731,7 +779,7 @@
             </div>
         </div>
     </div>
-      <div class="modal fade" id="maintenanceModal" tabindex="-1" role="dialog">
+    <div class="modal fade" id="maintenanceModal" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -747,7 +795,7 @@
                                 <div class="well well-sm well-primary">
                                     <asp:GridView ID="grvMaintenanceProgress"
                                         runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                                        CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" OnRowDataBound="grvMaintenanceProgress_RowDataBound" >
+                                        CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" OnRowDataBound="grvMaintenanceProgress_RowDataBound">
                                         <RowStyle CssClass="rowstyle" />
                                         <Columns>
                                             <asp:BoundField DataField="RequestNo" HeaderText="Request No" SortExpression="RequestNo" />
@@ -787,7 +835,7 @@
                                 <div class="well well-sm well-primary">
                                     <asp:GridView ID="grvStoreProgress"
                                         runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                                        CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" OnRowDataBound="grvStoreProgress_RowDataBound" >
+                                        CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" OnRowDataBound="grvStoreProgress_RowDataBound">
                                         <RowStyle CssClass="rowstyle" />
                                         <Columns>
                                             <asp:BoundField DataField="RequestNo" HeaderText="Request No" SortExpression="RequestNo" />
