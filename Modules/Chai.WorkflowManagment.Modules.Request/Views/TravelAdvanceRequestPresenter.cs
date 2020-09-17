@@ -99,7 +99,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     {
                         if (Approver(AL.EmployeePosition.Id) != null)
                         {
-                            if (AL.EmployeePosition.PositionName == "Finance Officer")
+                            if (AL.EmployeePosition.PositionName == "Accountant")
                             {
                                 TARS.ApproverPosition = AL.EmployeePosition.Id; //So that we can entertain more than one finance manager to handle the request
                             }

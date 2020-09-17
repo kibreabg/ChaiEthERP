@@ -375,7 +375,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             BindAccounts();
             txtRejectedReason.Visible = false;
             rfvRejectedReason.Enabled = false;
-            pnlApproval_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
         }
         protected void grvTravelAdvanceRequestList_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
@@ -414,7 +414,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         Master.ShowMessage(new AppMessage("Travel Advance  Approval Rejected", Chai.WorkflowManagment.Enums.RMessageType.Info));
                     btnApprove.Enabled = false;
                     BindSearchTravelAdvanceRequestGrid();
-                    pnlApproval_ModalPopupExtender.Show();
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
                 }
                 PrintTransaction();
             }
@@ -422,10 +422,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
 
             }
-        }
-        protected void btnCancelPopup_Click(object sender, EventArgs e)
-        {
-            pnlApproval_ModalPopupExtender.Hide();
         }
         protected void btnCancelPopup2_Click(object sender, EventArgs e)
         {
@@ -443,7 +439,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 txtRejectedReason.Visible = true;
                 rfvRejectedReason.Enabled = true;
             }
-            pnlApproval_ModalPopupExtender.Show();
+            else
+            {
+                lblRejectedReason.Visible = false;
+                txtRejectedReason.Visible = false;
+                rfvRejectedReason.Enabled = false;
+            }
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
         }
         protected void dgTravelAdvanceRequestDetail_SelectedIndexChanged(object sender, EventArgs e)
         {
