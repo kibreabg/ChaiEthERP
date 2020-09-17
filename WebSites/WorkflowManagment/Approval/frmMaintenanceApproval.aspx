@@ -18,7 +18,11 @@
             docprint.document.close();
             docprint.focus();
         }
+
+       
     </script>
+   
+      
     <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
         <header>
             <span class="widget-icon"><i class="fa fa-edit"></i></span>
@@ -64,7 +68,7 @@
                 </div>
             </div>
         </div>
-
+       
         <asp:GridView ID="grvMaintenanceRequestList"
             runat="server" AutoGenerateColumns="False" DataKeyNames="ID"
             OnRowDataBound="grvMaintenanceRequestList_RowDataBound" OnRowDeleting="grvMaintenanceRequestList_RowDeleting"
@@ -89,10 +93,8 @@
                     </ItemTemplate>
                 </asp:TemplateField>
                 <asp:TemplateField>
-                    <ItemTemplate>
-                        <asp:LinkButton ID="lnkMaintain" runat="server" OnClick="lnkMaintain_Click">Maintained</asp:LinkButton>
-                    </ItemTemplate>
                 </asp:TemplateField>
+                <asp:ButtonField CommandName="Maintained" Text="Maintained" />
             </Columns>
             <FooterStyle CssClass="FooterStyle" />
             <HeaderStyle CssClass="headerstyle" />

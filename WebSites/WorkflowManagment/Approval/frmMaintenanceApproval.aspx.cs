@@ -105,7 +105,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     return 0;
                 }
             }
-          
+
         }
         private void PopApprovalStatus()
         {
@@ -138,8 +138,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
                 }
 
-               
-                   
+
+
                 else if (_presenter.GetUser(_presenter.CurrentMaintenanceRequest.CurrentApprover).EmployeePosition.PositionName == AL.EmployeePosition.PositionName)
                 {
                     will = AL.Will;
@@ -174,14 +174,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 if (_presenter.CurrentMaintenanceRequest.CurrentLevel == _presenter.CurrentMaintenanceRequest.MaintenanceRequestStatuses.Count && MRS.ApprovalStatus != null)
                 {
                     btnPrint.Enabled = true;
-                   // btnPurchaseOrder.Enabled = true;
+                    // btnPurchaseOrder.Enabled = true;
                     btnApprove.Enabled = false;
-                    
+
                 }
                 else
                 {
                     btnPrint.Enabled = false;
-                  //  btnPurchaseOrder.Enabled = false;
+                    //  btnPurchaseOrder.Enabled = false;
                     btnApprove.Enabled = true;
                 }
 
@@ -209,7 +209,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             if (_presenter.CurrentMaintenanceRequest.CurrentLevel == _presenter.CurrentMaintenanceRequest.MaintenanceRequestStatuses.Count && _presenter.CurrentMaintenanceRequest.ProgressStatus == ProgressStatus.Completed.ToString())
             {
                 btnPrint.Enabled = true;
-              //  btnPurchaseOrder.Enabled = true;
+                //  btnPurchaseOrder.Enabled = true;
                 SendEmailToRequester();
 
             }
@@ -229,14 +229,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         private void SendEmailRejected(MaintenanceRequestStatus MRS)
         {
             EmailSender.Send(_presenter.GetUser(_presenter.CurrentMaintenanceRequest.AppUser.Id).Email, "Maintenance Request Rejection", "Your Maintenance Request with Sole Vendor Request No. " + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (MRS.RejectedReason).ToUpper() + "'");
-            
+
 
             if (MRS.WorkflowLevel > 1)
             {
                 for (int i = 0; i + 1 < MRS.WorkflowLevel; i++)
                 {
                     EmailSender.Send(_presenter.GetUser(_presenter.CurrentMaintenanceRequest.MaintenanceRequestStatuses[i].Approver).Email, "Maintenance Request Rejection", "Maintenance  Request with Maintenance Request No. - " + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + " made by " + (_presenter.GetUser(_presenter.CurrentMaintenanceRequest.AppUser.Id).FullName).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (MRS.RejectedReason).ToUpper() + "'");
-                   
+
                 }
             }
         }
@@ -270,7 +270,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     MRS.ApprovalStatus = ddlApprovalStatus.SelectedValue;
                     MRS.RejectedReason = txtRejectedReason.Text;
                     MRS.AssignedBy = _presenter.GetAssignedJobbycurrentuser(MRS.Approver) != null ? _presenter.GetAssignedJobbycurrentuser(MRS.Approver).AppUser.FullName : "";
-                 
+
                     if (MRS.ApprovalStatus != ApprovalStatus.Rejected.ToString())
                     {
                         if (_presenter.CurrentMaintenanceRequest.CurrentLevel == _presenter.CurrentMaintenanceRequest.MaintenanceRequestStatuses.Count)
@@ -290,7 +290,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         // _presenter.CurrentMaintenanceRequest.CurrentStatus = MRS.ApprovalStatus;
                         //GetNextApprover();
                     }
-                 
+
                     else
                     {
                         _presenter.CurrentMaintenanceRequest.ProgressStatus = ProgressStatus.Completed.ToString();
@@ -300,9 +300,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     }
                     break;
                 }
-            
 
-        }
+
+            }
 
         }
         protected void btnApprove_Click(object sender, EventArgs e)
@@ -327,7 +327,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     BindSearchMaintenanceGrid();
                     pnlApproval_ModalPopupExtender.Show();
                 }
-              
+
             }
             catch (Exception ex)
             {
@@ -391,11 +391,19 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             _presenter.OnViewLoaded();
             PopApprovalStatus();
             BindMaintenanceRequestStatus();
-           
-            
+
+
             txtRejectedReason.Visible = false;
             rfvRejectedReason.Enabled = false;
             pnlApproval_ModalPopupExtender.Show();
+
+
+
+
+
+
+
+
 
         }
         protected void grvMaintenanceRequestList_RowDeleting(object sender, GridViewDeleteEventArgs e)
@@ -405,34 +413,37 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void grvMaintenanceRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            /* Button btnStatus = e.Row.FindControl("btnStatus") as Button;
-             LeaveRequest LR = e.Row.DataItem as LeaveRequest;
-             if (LR != null)
-             {
-                 if (e.Row.RowType == DataControlRowType.DataRow)
-                 {
-
-                     if (e.Row.RowType == DataControlRowType.DataRow)
-                     {
-                         e.Row.Cells[1].Text = _presenter.GetUser(LR.Requester).FullName;
-                     }
-                 }
-                 if (LR.ProgressStatus == ProgressStatus.InProgress.ToString())
-                 {
-                     btnStatus.BackColor = System.Drawing.ColorTranslator.FromHtml("#FFFF6C");
-
-                 }
-                 else if (LR.ProgressStatus == ProgressStatus.Completed.ToString())
-                 {
-                     btnStatus.BackColor = System.Drawing.ColorTranslator.FromHtml("#FF7251");
-
-                 }
-             }*/
 
 
-           // BindServiceTypeDetails
 
-        }
+            if (_presenter.CurrentMaintenanceRequest.MaintenanceRequestStatuses != null)
+            {
+                if (e.Row.RowType == DataControlRowType.DataRow)
+                {
+                   
+                        if (_presenter.CurrentUser().EmployeePosition.PositionName == "Driver / Mechanic")
+                        {
+                            foreach (GridViewRow item in grvMaintenanceRequestList.Rows)
+                            {
+                                item.Cells[9].Visible = true;
+                            }
+
+                        }
+                        else
+                        {
+                            foreach (GridViewRow item in grvMaintenanceRequestList.Rows)
+                            {
+                                item.Cells[9].Visible = false;
+                            }
+                        }
+                    }
+                }
+            }
+
+                      
+
+
+            
 
         private void BindServiceTypeDetails(DropDownList ddlServiceTypeDet, string serviceTypename)
         {
@@ -466,7 +477,43 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     dgMaintenanceRequestDetail.DataBind();
                     pnlDetail_ModalPopupExtender.Show();
                 }
+                if (e.CommandName == "Maintained")
+                {
+                    if (_presenter.CurrentMaintenanceRequest.MaintenanceStatus != "Maintained")
+                    {
+                        _presenter.CurrentMaintenanceRequest.MaintenanceStatus = "Maintained";
+                        _presenter.SaveOrUpdateMaintenanceRequest(_presenter.CurrentMaintenanceRequest);
+                        LoadData(Convert.ToInt32(e.CommandArgument));
+                    }
+                    else
+                    {
+                        LoadData(Convert.ToInt32(e.CommandArgument));
+                    }
+
+                }
             }
+        }
+
+        private void LoadData(int? rowNumber = null)
+        {
+            //if rowNumber is null use GridView1.SelectedIndex
+            var index = rowNumber ?? grvMaintenanceRequestList.SelectedIndex;
+
+            //Populate the input box with the value of selected row.
+            GridViewRow gr = grvMaintenanceRequestList.Rows[index];
+          
+            gr.Cells[9].Visible  =false;
+        }
+
+        private void LoadDataforMech(int? rowNumber = null)
+        {
+            //if rowNumber is null use GridView1.SelectedIndex
+            var index = rowNumber ?? grvMaintenanceRequestList.SelectedIndex;
+
+            //Populate the input box with the value of selected row.
+            GridViewRow gr = grvMaintenanceRequestList.Rows[index];
+
+            gr.Cells[9].Visible = true;
         }
         protected void grvStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
         {
@@ -514,7 +561,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
                 if (_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails != null)
                 {
-                   
+
                     DropDownList ddlEdtMechanic = e.Item.FindControl("ddlEdtMechanicServiceTypeDetail") as DropDownList;
                     if (ddlEdtMechanic != null)
                     {
@@ -523,10 +570,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         BindServiceTypeDetails(ddlEdtMechanic, _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails[e.Item.DataSetIndex].ServiceType.Name);
                         //if (_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails[e.Item.DataSetIndex].MechanicServiceTypeDetail != null)
                         //{
-                            
-                            ListItem liI = ddlEdtMechanic.Items.FindByValue(_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails[e.Item.DataSetIndex].DriverServiceTypeDetail.Description);
-                            if (liI != null)
-                                liI.Selected = true;
+
+                        ListItem liI = ddlEdtMechanic.Items.FindByValue(_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails[e.Item.DataSetIndex].DriverServiceTypeDetail.Description);
+                        if (liI != null)
+                            liI.Selected = true;
                         //}
                         //else
                         //{
@@ -559,16 +606,16 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             try
             {
-               
 
-               
+
+
                 // cprd.MaintenanceRequest = _presenter.CurrentMaintenanceRequest;
                 TextBox txtEdtTechRemark = e.Item.FindControl("txtEdtTechnicianRemark") as TextBox;
                 cprd.TechnicianRemark = txtEdtTechRemark.Text;
                 DropDownList ddlTechServiceTypeDetail = e.Item.FindControl("ddlEdtMechanicServiceTypeDetail") as DropDownList;
                 cprd.MechanicServiceTypeDetail = _presenter.GetServiceTypeDetail(Convert.ToInt32(ddlTechServiceTypeDetail.SelectedValue));
                 DropDownList ddlStatus = e.Item.FindControl("ddlstatus") as DropDownList;
-               
+
                 cprd.MaintenanceRequest = _presenter.CurrentMaintenanceRequest;
                 dgMaintenanceRequestDetail.EditItemIndex = -1;
                 dgMaintenanceRequestDetail.DataSource = _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails;
@@ -609,7 +656,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     // cprd.MaintenanceRequest = _presenter.CurrentMaintenanceRequest;
                     TextBox txtEdtTechRemark = e.Item.FindControl("txtFRemark") as TextBox;
                     Detail.TechnicianRemark = txtEdtTechRemark.Text;
-                  
+
                     _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails.Add(Detail);
                     Master.ShowMessage(new AppMessage("Maintenance Request Detail added successfully.", RMessageType.Info));
                     dgMaintenanceRequestDetail.EditItemIndex = -1;
@@ -644,11 +691,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             pnlDetail_ModalPopupExtender.Show();
         }
 
-        protected void lnkMaintain_Click(object sender, EventArgs e)
-        {
-            int _maintenanceReqId = 0;
-            _maintenanceReqId = Convert.ToInt32(grvMaintenanceRequestList.SelectedDataKey[0]);
-            _presenter.CurrentMaintenanceRequest.MaintenanceStatus = "Maintained";
-        }
+       
     }
+    
 }
