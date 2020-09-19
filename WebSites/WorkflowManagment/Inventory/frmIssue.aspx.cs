@@ -420,7 +420,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                     }
                     if (isDet.Item.ItemType == "Fixed Asset")
                     {
-                        if (isDet.FixedAsset.AssetStatus != FixedAssetStatus.UpdatedInStore.ToString())
+                        if (isDet.FixedAsset.AssetStatus != FixedAssetStatus.ToBeIssued.ToString())
                         {
                             availableToIssue = false;
                         }

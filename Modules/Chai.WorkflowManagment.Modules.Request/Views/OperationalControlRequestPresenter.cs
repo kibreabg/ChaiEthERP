@@ -143,27 +143,33 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         public void SaveOrUpdateOperationalControlRequest()
         {
-            OperationalControlRequest OperationalControlRequest = CurrentOperationalControlRequest;
-            OperationalControlRequest.RequestNo = View.GetRequestNo;
-            OperationalControlRequest.RequestDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
-            OperationalControlRequest.Account = _settingController.GetAccount(View.GetBankAccountId);
-            //OperationalControlRequest.Payee = View.GetPayee;
-            OperationalControlRequest.Description = View.GetDescription;
-            OperationalControlRequest.Beneficiary = _settingController.GetBeneficiary(View.GetBeneficiaryId);
-            OperationalControlRequest.BranchCode = View.GetBranchCode;
-            OperationalControlRequest.BankName = View.GetBankName;
-            OperationalControlRequest.VoucherNo = View.GetVoucherNo;
-            OperationalControlRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
-            OperationalControlRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
-            OperationalControlRequest.PaymentReimbursementStatus = "Retired";
-            OperationalControlRequest.ExportStatus = "Not Exported";
-            OperationalControlRequest.TotalActualExpendture = OperationalControlRequest.TotalActualExpendture;
-            OperationalControlRequest.PageType = View.GetPageType;
+            OperationalControlRequest operationalControlRequest = CurrentOperationalControlRequest;
+            operationalControlRequest.RequestNo = View.GetRequestNo;
+            operationalControlRequest.RequestDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
+            operationalControlRequest.Account = _settingController.GetAccount(View.GetBankAccountId);
+            if(View.GetBeneficiaryId > 0)
+            {
+                operationalControlRequest.Beneficiary = _settingController.GetBeneficiary(View.GetBeneficiaryId);
+            }
+            else
+            {
+                operationalControlRequest.Payee = View.GetPayee;
+                operationalControlRequest.TelephoneNo = View.GetTelephoneNo;
+            }
+            
+            operationalControlRequest.BankName = View.GetBankName;
+            operationalControlRequest.VoucherNo = View.GetVoucherNo;
+            operationalControlRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
+            operationalControlRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
+            operationalControlRequest.PaymentReimbursementStatus = "Retired";
+            operationalControlRequest.ExportStatus = "Not Exported";
+            operationalControlRequest.TotalActualExpendture = operationalControlRequest.TotalActualExpendture;
+            operationalControlRequest.PaymentType = View.GetPaymentType;
             if (CurrentOperationalControlRequest.OperationalControlRequestStatuses.Count == 0)
                 SaveOperationalControlRequestStatus();
             GetCurrentApprover();
 
-            _controller.SaveOrUpdateEntity(OperationalControlRequest);
+            _controller.SaveOrUpdateEntity(operationalControlRequest);
         }
         public void SaveOrUpdateOperationalControlRequest(OperationalControlRequest OperationalControlRequest)
         {

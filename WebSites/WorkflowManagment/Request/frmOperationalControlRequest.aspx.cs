@@ -93,21 +93,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return Convert.ToInt32(ddlBankAccount.SelectedValue); }
         }
-        //public string GetPayee
-        //{
-        //    get { return txtPayee.Text; }
-        //}
-        public string GetDescription
-        {
-            get { return txtDescription.Text; }
-        }
         public int GetBeneficiaryId
         {
             get { return int.Parse(ddlBeneficiary.SelectedValue); }
         }
-        public string GetBranchCode
+        public string GetPayee
         {
-            get { return txtBranchCode.Text; }
+            get { return txtPayee.Text; }
+        }
+        public string GetTelephoneNo
+        {
+            get { return txtTelephoneNo.Text; }
         }
         public string GetBankName
         {
@@ -117,118 +113,54 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return AutoNumber(); }
         }
-        public string GetPageType
+        public string GetPaymentType
         {
-            get { if (Request.QueryString["Page"] != null) { return Request.QueryString["Page"]; } else return "BankPayment"; }
+            get
+            {
+                if (rbAccount.Checked)
+                    return "Account";
+                else if (rbCheque.Checked)
+                    return "Cheque";
+                else
+                    return "Telegrpahic";
+            }
         }
         #endregion
         private void PopulateBankPaymentDetail()
         {
-            if (Request.QueryString["Page"] != null)
+            if (Request.QueryString["PaymentId"] != null)
             {
-                if (Request.QueryString["Page"].Contains("CashPayment"))
+                CashPaymentRequest CPR = _presenter.GetCashPaymentRequest(Convert.ToInt32(Request.QueryString["PaymentId"]));
+                if (CPR != null)
                 {
-                    CashPaymentRequest CPR = _presenter.GetCashPaymentRequest(Convert.ToInt32(Request.QueryString["PaymentId"]));
-                    if (CPR != null)
+                    foreach (CashPaymentRequestDetail CPRD in CPR.CashPaymentRequestDetails)
                     {
-
-
-                        foreach (CashPaymentRequestDetail CPRD in CPR.CashPaymentRequestDetails)
-                        {
-                            OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
-                            OCRD.ItemAccount = CPRD.ItemAccount;
-                            OCRD.Project = CPRD.Project;
-                            OCRD.Grant = CPRD.Grant;
-                            OCRD.Amount = CPRD.Amount;
-                            OCRD.ActualExpendture = CPRD.Amount;
-                            OCRD.AccountCode = CPRD.AccountCode;
-                            _presenter.CurrentOperationalControlRequest.TotalAmount += OCRD.Amount;
-                            _presenter.CurrentOperationalControlRequest.TotalActualExpendture += OCRD.Amount;
-                            OCRD.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
-                            _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails.Add(OCRD);
-                        }
-                        /*Attachments should be edited
-                        if (CPR.CPRAttachments.Count > 0)
-                        {
-                            foreach (CPRAttachment CP in CPR.CPRAttachments)
-                            {
-                                OCRAttachment OPA = new OCRAttachment();
-
-                                OPA.FilePath = CP.FilePath;
-                                OPA.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
-                                _presenter.CurrentOperationalControlRequest.OCRAttachments.Add(OPA);
-                            }
-                        }*/
-
+                        OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
+                        OCRD.ItemAccount = CPRD.ItemAccount;
+                        OCRD.Project = CPRD.Project;
+                        OCRD.Grant = CPRD.Grant;
+                        OCRD.Amount = CPRD.Amount;
+                        OCRD.ActualExpendture = CPRD.Amount;
+                        OCRD.AccountCode = CPRD.AccountCode;
+                        _presenter.CurrentOperationalControlRequest.TotalAmount += OCRD.Amount;
+                        _presenter.CurrentOperationalControlRequest.TotalActualExpendture += OCRD.Amount;
+                        OCRD.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
+                        _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails.Add(OCRD);
                     }
+                    /*Attachments should be edited
+                    if (CPR.CPRAttachments.Count > 0)
+                    {
+                        foreach (CPRAttachment CP in CPR.CPRAttachments)
+                        {
+                            OCRAttachment OPA = new OCRAttachment();
+
+                            OPA.FilePath = CP.FilePath;
+                            OPA.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
+                            _presenter.CurrentOperationalControlRequest.OCRAttachments.Add(OPA);
+                        }
+                    }*/
+
                 }
-
-                else if (Request.QueryString["Page"].Contains("CostSharing"))
-                {
-                    CostSharingRequest CPR = _presenter.GetCostSharingPaymentRequest(Convert.ToInt32(Request.QueryString["PaymentId"]));
-                    if (CPR != null)
-                    {
-
-
-                        foreach (CostSharingRequestDetail CPRD in CPR.CostSharingRequestDetails)
-                        {
-                            OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
-                            OCRD.ItemAccount = CPRD.CostSharingRequest.ItemAccount;
-                            OCRD.Project = CPRD.Project;
-                            OCRD.Grant = CPRD.Grant;
-                            OCRD.Amount = CPRD.SharedAmount;
-                            OCRD.ActualExpendture = CPRD.SharedAmount;
-                            OCRD.AccountCode = CPRD.CostSharingRequest.ItemAccount.AccountCode;
-                            _presenter.CurrentOperationalControlRequest.TotalAmount += OCRD.Amount;
-                            _presenter.CurrentOperationalControlRequest.TotalActualExpendture += OCRD.Amount;
-                            OCRD.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
-                            _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails.Add(OCRD);
-                        }
-                        if (CPR.CSRAttachments.Count > 0)
-                        {
-                            foreach (CSRAttachment CP in CPR.CSRAttachments)
-                            {
-                                OCRAttachment OPA = new OCRAttachment();
-                                OPA.FilePath = CP.FilePath;
-                                OPA.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
-                                _presenter.CurrentOperationalControlRequest.OCRAttachments.Add(OPA);
-                            }
-                        }
-                    }
-                }
-                /*else if (Request.QueryString["Page"].Contains("TravelAdvance"))
-                {
-                    CostSharingRequest CPR = _presenter.GetCostSharingPaymentRequest(Convert.ToInt32(Request.QueryString["PaymentId"]));
-                    if (CPR != null)
-                    {
-
-
-                        foreach (CostSharingRequestDetail CPRD in CPR.CostSharingRequestDetails)
-                        {
-                            OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
-                            OCRD.ItemAccount = CPRD.CostSharingRequest.ItemAccount;
-                            OCRD.Project = CPRD.Project;
-                            OCRD.Grant = CPRD.Grant;
-                            OCRD.Amount = CPRD.SharedAmount;
-                            OCRD.ActualExpendture = CPRD.SharedAmount;
-                            OCRD.AccountCode = CPRD.CostSharingRequest.ItemAccount.AccountCode;
-                            _presenter.CurrentOperationalControlRequest.TotalAmount += OCRD.Amount;
-                            _presenter.CurrentOperationalControlRequest.TotalActualExpendture += OCRD.Amount;
-                            OCRD.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
-                            _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails.Add(OCRD);
-                        }
-                        if (CPR.CSRAttachments.Count > 0)
-                        {
-                            foreach (CSRAttachment CP in CPR.CSRAttachments)
-                            {
-                                OCRAttachment OPA = new OCRAttachment();
-                                OPA.FilePath = CP.FilePath;
-                                OPA.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
-                                _presenter.CurrentOperationalControlRequest.OCRAttachments.Add(OPA);
-                            }
-                        }
-                    }
-                }*/
             }
         }
         private string AutoNumber()
@@ -283,13 +215,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             _presenter.OnViewLoaded();
             if (_presenter.CurrentOperationalControlRequest != null)
             {
-                // txtRequestNo.Text = _presenter.CurrentOperationalControlRequest.RequestNo.ToString();
-                //txtPayee.Text = _presenter.CurrentOperationalControlRequest.Payee;
-                ddlBeneficiary.SelectedValue = _presenter.CurrentOperationalControlRequest.Beneficiary.Id.ToString();
-                txtBranchCode.Text = _presenter.CurrentOperationalControlRequest.BranchCode;
+                if (_presenter.CurrentOperationalControlRequest.Beneficiary != null)
+                    ddlBeneficiary.SelectedValue = _presenter.CurrentOperationalControlRequest.Beneficiary.Id.ToString();
+                txtPayee.Text = _presenter.CurrentOperationalControlRequest.Payee;
+                txtTelephoneNo.Text = _presenter.CurrentOperationalControlRequest.TelephoneNo;
                 txtBankName.Text = _presenter.CurrentOperationalControlRequest.BankName;
-                txtDescription.Text = _presenter.CurrentOperationalControlRequest.Description;
-                // txtVoucherNo.Text = _presenter.CurrentOperationalControlRequest.VoucherNo.ToString();
                 ddlBankAccount.SelectedValue = _presenter.CurrentOperationalControlRequest.Account.Id.ToString();
                 txtBankAccountNo.Text = _presenter.GetBankAccount(_presenter.CurrentOperationalControlRequest.Account.Id).AccountNo;
                 BindOperationalControlDetails();
@@ -344,11 +274,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 else { _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails.Remove(cprd); }
                 BindOperationalControlDetails();
 
-                Master.ShowMessage(new AppMessage("Bank Payment Request Detail was Removed Successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Bank Payment Request Detail was Removed Successfully", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to delete Bank Payment Request Detail. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to delete Bank Payment Request Detail. " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         protected void dgOperationalControlDetail_ItemCommand(object source, DataGridCommandEventArgs e)
@@ -376,11 +308,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                     dgOperationalControlDetail.EditItemIndex = -1;
                     BindOperationalControlDetails();
-                    Master.ShowMessage(new AppMessage("Bank Payment Detail Successfully Added!", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    Master.ShowMessage(new AppMessage("Bank Payment Detail Successfully Added!", RMessageType.Info));
                 }
                 catch (Exception ex)
                 {
-                    Master.ShowMessage(new AppMessage("Error: Unable to Save Bank Payment " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Error: Unable to Save Bank Payment " + ex.Message, RMessageType.Error));
+                    ExceptionUtility.LogException(ex, ex.Source);
+                    ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
                 }
             }
         }
@@ -418,11 +352,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                 dgOperationalControlDetail.EditItemIndex = -1;
                 BindOperationalControlDetails();
-                Master.ShowMessage(new AppMessage("Bank Payment Detail Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Bank Payment Detail Successfully Updated", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to Update Bank Payment. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to Update Bank Payment. " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         protected void dgOperationalControlDetail_ItemDataBound(object sender, DataGridItemEventArgs e)
@@ -511,29 +447,29 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     {
                         _presenter.SaveOrUpdateOperationalControlRequest();
                         BindOperationalControlRequests();
-                        Master.ShowMessage(new AppMessage("Successfully did a Bank Payment  Request, Reference No - <b>'" + _presenter.CurrentOperationalControlRequest.VoucherNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                        Master.ShowMessage(new AppMessage("Successfully did a Bank Payment  Request, with Reference No - <b>'" + _presenter.CurrentOperationalControlRequest.VoucherNo + "'</b>", RMessageType.Info));
                         Log.Info(_presenter.CurrentUser().FullName + " has requested a Bank Payment for a total amount of " + _presenter.CurrentOperationalControlRequest.TotalAmount.ToString());
                         btnSave.Visible = false;
                     }
                     else
                     {
-                        Master.ShowMessage(new AppMessage("Please Attach Receipt", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        Master.ShowMessage(new AppMessage("Please attach Receipt", RMessageType.Error));
                     }
                 }
-
-
                 else
                 {
-                    Master.ShowMessage(new AppMessage("Please insert at least one Item Detail", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Please insert payable amount", RMessageType.Error));
                 }
             }
             catch (Exception ex)
             {
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
                 if (ex.InnerException != null)
                 {
                     if (ex.InnerException.InnerException.Message.Contains("Violation of UNIQUE KEY"))
                     {
-                        Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", RMessageType.Error));
                         //AutoNumber();
                     }
                 }
@@ -547,7 +483,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             BindOperationalControlRequests();
             BindOperationalControlDetails();
             btnDelete.Visible = false;
-            Master.ShowMessage(new AppMessage("Bank Payment Request Successfully Deleted!", Chai.WorkflowManagment.Enums.RMessageType.Info));
+            Master.ShowMessage(new AppMessage("Bank Payment Request Successfully Deleted!", RMessageType.Info));
         }
         protected void btnFind_Click(object sender, EventArgs e)
         {
@@ -588,18 +524,49 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (Convert.ToInt32(ddlAccount.SelectedValue) != 0)
                 txtBankAccountNo.Text = _presenter.GetBankAccount(Convert.ToInt32(ddlAccount.SelectedValue)).AccountNo;
         }
-
         protected void ddlBeneficiary_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Beneficiary Benef = _presenter.GetBeneficiary(Convert.ToInt32(ddlBeneficiary.SelectedValue));
-            if (Benef != null)
+            Beneficiary beneficiary = _presenter.GetBeneficiary(Convert.ToInt32(ddlBeneficiary.SelectedValue));
+            if (beneficiary != null)
             {
-
-                txtBranchCode.Text = Benef.BranchName;
-                txtBankName.Text = Benef.BankName;
+                txtBankName.Text = beneficiary.BankName;
+                txtBenAccountNo.Text = beneficiary.AccountNumber;
             }
-
-
+            else
+            {
+                txtBankName.Text = "";
+                txtBenAccountNo.Text = "";
+            }
+        }
+        protected void rbCheque_CheckedChanged(object sender, EventArgs e)
+        {
+            pnlBeneficiaries.Visible = false;
+            pnlChequeTelegraphic.Visible = true;
+            txtBankName.Text = "";
+            txtBenAccountNo.Text = "";
+            ddlBeneficiary.SelectedValue = "0";
+            rfvddlBeneficiary.Enabled = false;
+            rfvtxtPayee.Enabled = true;
+            rfvtxtTelephoneNo.Enabled = true;
+        }
+        protected void rbAccount_CheckedChanged(object sender, EventArgs e)
+        {
+            pnlBeneficiaries.Visible = true;
+            pnlChequeTelegraphic.Visible = false;
+            rfvtxtPayee.Enabled = false;
+            rfvtxtTelephoneNo.Enabled = false;
+            rfvddlBeneficiary.Enabled = true;
+        }
+        protected void rbTelegraphic_CheckedChanged(object sender, EventArgs e)
+        {
+            pnlBeneficiaries.Visible = false;
+            pnlChequeTelegraphic.Visible = true;
+            txtBankName.Text = "";
+            txtBenAccountNo.Text = "";
+            ddlBeneficiary.SelectedValue = "0";
+            rfvddlBeneficiary.Enabled = false;
+            rfvtxtPayee.Enabled = true;
+            rfvtxtTelephoneNo.Enabled = true;
         }
         #region Attachments
         protected void btnUpload_Click(object sender, EventArgs e)
@@ -631,9 +598,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
             if (fileName != String.Empty)
             {
-
-
-
                 OCRAttachment attachment = new OCRAttachment();
                 attachment.FilePath = "~/OCUploads/" + fileName;
                 fuReciept.PostedFile.SaveAs(Server.MapPath("~/OCUploads/") + fileName);
@@ -642,20 +606,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                 grvAttachments.DataSource = _presenter.CurrentOperationalControlRequest.OCRAttachments;
                 grvAttachments.DataBind();
-
+                Master.ShowMessage(new AppMessage("Successfully uploaded the attachment", RMessageType.Info));
 
             }
             else
             {
-                Master.ShowMessage(new AppMessage("Please select file ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Please select file ", RMessageType.Error));
             }
-
-
         }
-
-
         #endregion
-        #region Beneficaries
+        #region Beneficiaries
         void BindBeneficiaries()
         {
             dgBeneficiary.DataSource = _presenter.ListBeneficiaries("");
@@ -665,7 +625,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         protected void dgBeneficiary_CancelCommand(object source, DataGridCommandEventArgs e)
         {
             this.dgBeneficiary.EditItemIndex = -1;
-            pnlBeneficary_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "receiveBeneficiaryModal", "showBeneficiaryModal();", true);
         }
         protected void dgBeneficiary_DeleteCommand(object source, DataGridCommandEventArgs e)
         {
@@ -676,13 +636,15 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 _presenter.DeleteBeneficiary(beneficiary);
                 BindBeneficiaries();
 
-                Master.ShowMessage(new AppMessage("beneficiary was Removed Successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("beneficiary was Removed Successfully", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to delete beneficiary. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to delete beneficiary. " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
-            pnlBeneficary_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "receiveBeneficiaryModal", "showBeneficiaryModal();", true);
         }
         protected void dgBeneficiary_ItemCommand(object source, DataGridCommandEventArgs e)
         {
@@ -691,27 +653,25 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 try
                 {
-
                     TextBox txtName = e.Item.FindControl("txtBeneficiaryName") as TextBox;
                     beneficiary.BeneficiaryName = txtName.Text;
-                    TextBox txtBranchName = e.Item.FindControl("txtBranchName") as TextBox;
-                    beneficiary.BranchName = txtBranchName.Text;
                     TextBox txtBankName = e.Item.FindControl("txtBankName") as TextBox;
                     beneficiary.BankName = txtBankName.Text;
-                    TextBox txtSortCode = e.Item.FindControl("txtSortCode") as TextBox;
-                    beneficiary.SortCode = txtSortCode.Text;
                     TextBox txtAccountNumber = e.Item.FindControl("txtAccountNumber") as TextBox;
                     beneficiary.AccountNumber = txtAccountNumber.Text;
+                    beneficiary.Status = "Active";
                     SaveBeneficiary(beneficiary);
                     dgBeneficiary.EditItemIndex = -1;
                     BindBeneficiaries();
                 }
                 catch (Exception ex)
                 {
-                    Master.ShowMessage(new AppMessage("Error: Unable to Add Beneficiary " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Error: Unable to Add Beneficiary " + ex.Message, RMessageType.Error));
+                    ExceptionUtility.LogException(ex, ex.Source);
+                    ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
                 }
             }
-            pnlBeneficary_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "receiveBeneficiaryModal", "showBeneficiaryModal();", true);
         }
         private void SaveBeneficiary(Beneficiary beneficiary)
         {
@@ -720,27 +680,26 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 if (beneficiary.Id <= 0)
                 {
                     _presenter.SaveOrUpdateBeneficiary(beneficiary);
-                    Master.ShowMessage(new AppMessage("Beneficiary saved", RMessageType.Info));
-                    //_presenter.CancelPage();
+                    Master.ShowMessage(new AppMessage("Beneficiary Saved", RMessageType.Info));
                 }
                 else
                 {
                     _presenter.SaveOrUpdateBeneficiary(beneficiary);
                     Master.ShowMessage(new AppMessage("Beneficiary Updated", RMessageType.Info));
-                    // _presenter.CancelPage();
                 }
             }
             catch (Exception ex)
             {
                 Master.ShowMessage(new AppMessage(ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         protected void dgBeneficiary_EditCommand(object source, DataGridCommandEventArgs e)
         {
             this.dgBeneficiary.EditItemIndex = e.Item.ItemIndex;
-
             BindBeneficiaries();
-            pnlBeneficary_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "receiveBeneficiaryModal", "showBeneficiaryModal();", true);
         }
         protected void dgBeneficiary_ItemDataBound(object sender, DataGridItemEventArgs e)
         {
@@ -756,30 +715,30 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 TextBox txtName = e.Item.FindControl("txtEdtBeneficiaryName") as TextBox;
                 beneficiary.BeneficiaryName = txtName.Text;
-                TextBox txtBranchName = e.Item.FindControl("txtEdtBranchName") as TextBox;
-                beneficiary.BranchName = txtBranchName.Text;
                 TextBox txtBankName = e.Item.FindControl("txtEdtBankName") as TextBox;
                 beneficiary.BankName = txtBankName.Text;
-                TextBox txtSortCode = e.Item.FindControl("txtEdtSortCode") as TextBox;
-                beneficiary.SortCode = txtSortCode.Text;
                 TextBox txtAccountNumber = e.Item.FindControl("txtEdtAccountNumber") as TextBox;
                 beneficiary.AccountNumber = txtAccountNumber.Text;
+                beneficiary.Status = "Active";
                 SaveBeneficiary(beneficiary);
                 dgBeneficiary.EditItemIndex = -1;
                 BindBeneficiaries();
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to Update Beneficiary. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to Update Beneficiary. " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
-            pnlBeneficary_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "receiveBeneficiaryModal", "showBeneficiaryModal();", true);
         }
-        protected void btnpop_Click(object sender, EventArgs e)
+        protected void lnkAddBeneficiary_Click(object sender, EventArgs e)
         {
             BindBeneficiaries();
-            pnlBeneficary_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "receiveBeneficiaryModal", "showBeneficiaryModal();", true);
         }
         #endregion
+
     }
 
 }
