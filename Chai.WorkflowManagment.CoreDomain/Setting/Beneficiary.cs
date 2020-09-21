@@ -11,8 +11,6 @@ namespace Chai.WorkflowManagment.CoreDomain.Setting
         public int Id { get; set; }
         public string BeneficiaryName { get; set; }
         public string BankName { get; set; }
-        public string BranchName { get; set; }
-        public string SortCode { get; set; }
         public string AccountNumber { get; set; }
         public string Status { get; set; }
         

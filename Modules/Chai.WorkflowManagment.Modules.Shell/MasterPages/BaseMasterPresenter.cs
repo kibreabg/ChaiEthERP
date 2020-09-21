@@ -182,7 +182,10 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         public int GetTravelAdvanceRequestMyRequest()
         {
             return _controller.GetTravelAdvanceRequestMyRequest();
-
+        }
+        public int GetExpenseLiquidationMyRequest()
+        {
+            return _controller.GetExpenseLiquidationMyRequest();
         }
         public int GetPurchaseRequestsMyRequest()
         {
@@ -241,6 +244,10 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         public IList<TravelAdvanceRequest> ListTravelApprovalProgress()
         {
             return _controller.GetTravelAdvanceInProgress();
+        }
+        public IList<ExpenseLiquidationRequest> ListExpenseLiquidationProgress()
+        {
+            return _controller.GetExpenseLiquidationInProgress();
         }
         public IList<PurchaseRequest> ListPurchaseApprovalProgress()
         {

@@ -270,18 +270,17 @@
 
                     <footer>
                         <asp:Button ID="btnSave" ValidationGroup="saveMain" runat="server" Text="Request" OnClick="btnSave_Click" CssClass="btn btn-primary"></asp:Button>
-                        <%--<asp:Button ID="btnSearch" runat="server" Text="Search" CssClass="btn btn-primary" />--%>
-                        <a data-toggle="modal" runat="server" id="searchLink" href="#searchModal" class="btn btn-primary"><i class="fa fa-circle-arrow-up fa-lg"></i>Search</a>
-                        <asp:Button ID="btnDelete" runat="server" CausesValidation="False" CssClass="btn btn-primary"
+                        <a data-toggle="modal" runat="server" id="searchLink" href="#searchModal" class="btn btn-default"><i class="fa fa-circle-arrow-up fa-lg"></i>Search</a>
+                        <asp:Button ID="btnDelete" runat="server" CausesValidation="False" CssClass="btn btn-default"
                             Text="Delete" OnClick="btnDelete_Click" Visible="false"></asp:Button>
                         <cc1:ConfirmButtonExtender ID="btnDelete_ConfirmButtonExtender" runat="server"
                             ConfirmText="Are you sure" Enabled="True" TargetControlID="btnDelete">
                         </cc1:ConfirmButtonExtender>
-                        <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-primary" OnClick="btnCancel_Click" Text="New" />
-                          <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" PostBackUrl="../Default.aspx"></asp:Button>
+                        <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-default" OnClick="btnCancel_Click" Text="New" />
+                          <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-default" PostBackUrl="../Default.aspx"></asp:Button>
                         <asp:Button ID="btnHiddenPopupp" runat="server" />
                         <asp:HiddenField ID="hfDetailId" runat="server" />
-                        <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-primary" Enabled="false" OnClientClick="javascript:Clickheretoprint('divprint')"></asp:Button>
+                        <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-default" Enabled="false" OnClientClick="javascript:Clickheretoprint('divprint')"></asp:Button>
 
                     </footer>
                 </div>

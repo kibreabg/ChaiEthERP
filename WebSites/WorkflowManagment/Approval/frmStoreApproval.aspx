@@ -86,8 +86,6 @@
                             <asp:Label ID="lblDate" runat="server" Text='<%# Eval("RequestedDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
                         </ItemTemplate>
                     </asp:TemplateField>
-
-
                     <asp:ButtonField ButtonType="Button" CommandName="ViewItem" Text="View Item Detail" />
                     <asp:CommandField ButtonType="Button" SelectText="Process Request" ShowSelectButton="True" />
                     <asp:ButtonField ButtonType="Button" CommandName="Issue" Text="Issue" />

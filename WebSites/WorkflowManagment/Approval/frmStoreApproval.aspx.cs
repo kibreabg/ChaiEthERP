@@ -387,19 +387,21 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void grvStoreRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            Button btnStatus = e.Row.FindControl("btnStatus") as Button;
+            Button btnStatus = e.Row.FindControl("btnStatus") as Button;            
             StoreRequest CSR = e.Row.DataItem as StoreRequest;
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
+                Button btnIssue = e.Row.Cells[5].Controls[0] as Button;
+                btnIssue.Visible = false;
+
                 if (CSR.ProgressStatus == ProgressStatus.InProgress.ToString())
                 {
                     btnStatus.BackColor = System.Drawing.ColorTranslator.FromHtml("#FFFF6C");
-
                 }
                 else if (CSR.ProgressStatus == ProgressStatus.Completed.ToString())
                 {
                     btnStatus.BackColor = System.Drawing.ColorTranslator.FromHtml("#FF7251");
-
+                    btnIssue.Visible = true;
                 }
                 e.Row.Cells[1].Text = _presenter.GetUser(CSR.Requester).FullName;
 
