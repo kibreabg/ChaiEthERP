@@ -320,6 +320,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         //SendEmailToFinanceOfficers;
                         _presenter.CurrentCashPaymentRequest.CurrentApproverPosition = CPRS.ApproverPosition;
                     }
+                    else
+                    {
+                        _presenter.CurrentCashPaymentRequest.CurrentApproverPosition = 0;
+                    }
                     SendEmail(CPRS);
                     _presenter.CurrentCashPaymentRequest.CurrentApprover = CPRS.Approver;
                     _presenter.CurrentCashPaymentRequest.CurrentLevel = CPRS.WorkflowLevel;
