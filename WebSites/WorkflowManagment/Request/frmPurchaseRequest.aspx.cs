@@ -229,8 +229,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
         private void PopMaintenanceRequestsDropDown()
         {
-           
-                ddlMaintenanceReq.DataSource = _presenter.GetMaintenanceRequestCompleted();
+            ddlMaintenanceReq.Items.Clear();
+            ListItem lst = new ListItem();
+            lst.Text = "None";
+            lst.Value = "None";
+            ddlMaintenanceReq.DataSource = _presenter.GetMaintenanceRequestCompleted();
                 ddlMaintenanceReq.DataBind();
            
            
@@ -397,6 +400,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 lblPlate.Visible = true;
                 lblMainReq.Visible = true;
+                
 
                 ddlPlate.Visible = true;
                 ddlMaintenanceReq.Visible = true;
@@ -559,12 +563,21 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             if (ckIsVehicle.Checked == true)
             {
+
                 lblPlate.Visible = true;
                 lblMainReq.Visible = true;
 
                 ddlPlate.Visible = true;
                 ddlMaintenanceReq.Visible = true;
                 i.Visible = true;
+
+                foreach (DataGridItem dgi in dgPurchaseRequestDetail.Items)
+                {
+                   // if(dgi.)
+                    DropDownList ddlFItem = dgi.FindControl("ddlFItem") as DropDownList;
+                    ddlFItem.Visible = true;
+                    BindItem(ddlFItem);
+                }
             }
             else if (ckIsVehicle.Checked == false)
             {
@@ -574,6 +587,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 ddlPlate.Visible = false;
                 ddlMaintenanceReq.Visible = false;
                 i.Visible = false;
+                foreach (DataGridItem dgi in dgPurchaseRequestDetail.Items)
+                {                 
+                   
+                    TextBox txtFItem = dgi.FindControl("txtFItem") as TextBox;
+                    txtFItem.Visible = true;
+                   
+                }
             }
         }
         #region PurchaseRequestDetail
@@ -640,8 +660,20 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     Detail.ItemAccount = _presenter.GetItemAccount(int.Parse(ddlFAccount.SelectedValue));
                     TextBox txtFAccountCode = e.Item.FindControl("txtFAccountCode") as TextBox;
                     Detail.AccountCode = txtFAccountCode.Text;
-                    TextBox txtFItem = e.Item.FindControl("txtFItem") as TextBox;
-                    Detail.Item = txtFItem.Text;
+                    if (ckIsVehicle.Checked == true)
+                    {
+                        DropDownList ddlFItem = e.Item.FindControl("ddlFItem") as DropDownList;
+                        Detail.Item = _presenter.GetItemByName(ddlFItem.SelectedItem.Text).ToString();
+                        TextBox txtFItem = e.Item.FindControl("txtFItem") as TextBox;
+                        txtFItem.Visible = false;
+                    }
+                    else
+                    {
+                        DropDownList ddlFItem = e.Item.FindControl("ddlFItem") as DropDownList;
+                        ddlFItem.Visible = false;
+                        TextBox txtFItem = e.Item.FindControl("txtFItem") as TextBox;
+                        Detail.Item = txtFItem.Text;
+                    }
                     TextBox txtFQty = e.Item.FindControl("txtFQty") as TextBox;
                     Detail.Qty = Convert.ToInt32(txtFQty.Text);
                     Detail.ApprovedQuantity = Convert.ToInt32(txtFQty.Text);
@@ -697,6 +729,18 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 BindProject(ddlFProject);
                 DropDownList ddlFGrant = e.Item.FindControl("ddlFGrant") as DropDownList;
                 BindGrant(ddlFGrant, Convert.ToInt32(ddlFProject.SelectedValue));
+                if (ckIsVehicle.Checked == true)
+                {
+
+                    DropDownList ddlFItem = e.Item.FindControl("ddlFItem") as DropDownList;
+                    ddlFItem.Visible = true;
+                    BindItem(ddlFItem);
+                }
+                else
+                {
+                    TextBox txtFItem = e.Item.FindControl("txtFItem") as TextBox;
+                    txtFItem.Visible = true;
+                }
             }
             else
             {
@@ -738,8 +782,29 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                                 liI.Selected = true;
                         }
                     }
+
+                    DropDownList ddlItem = e.Item.FindControl("ddlItem") as DropDownList;
+
+                    if (ddlItem != null)
+                    {
+                        ddlItem.Visible = true;
+                        BindItem(ddlItem);
+
+                        if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].Item != null)
+                        {
+                            ListItem li = ddlItem.Items.FindByValue(_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].Item.ToString());
+                            if (li != null)
+                                li.Selected = true;
+                        }
+                    }
                 }
             }
+        }
+        private void BindItem(DropDownList ddlItem)
+        {
+            ddlItem.DataSource = _presenter.GetItems();
+            ddlItem.DataBind();
+
         }
         protected void dgPurchaseRequestDetail_UpdateCommand(object source, DataGridCommandEventArgs e)
         {
@@ -756,8 +821,20 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 Detail.ItemAccount = _presenter.GetItemAccount(int.Parse(ddlAccount.SelectedValue));
                 TextBox txtAccountCode = e.Item.FindControl("txtAccountCode") as TextBox;
                 Detail.AccountCode = txtAccountCode.Text;
-                TextBox txtItem = e.Item.FindControl("txtItem") as TextBox;
-                Detail.Item = txtItem.Text;
+                if (ckIsVehicle.Checked == true)
+                {
+                    DropDownList ddlItem = e.Item.FindControl("ddlItem") as DropDownList;
+                    Detail.Item = _presenter.GetItemByName(ddlItem.SelectedItem.Text).ToString();
+                    TextBox txtItem = e.Item.FindControl("txtItem") as TextBox;
+                    txtItem.Visible = false;
+                }
+                else
+                {
+                    DropDownList ddlItem = e.Item.FindControl("ddlItem") as DropDownList;
+                    ddlItem.Visible = false;
+                    TextBox txtItem = e.Item.FindControl("txtItem") as TextBox;
+                    Detail.Item = txtItem.Text;
+                }
                 TextBox txtQty = e.Item.FindControl("txtQty") as TextBox;
                 Detail.Qty = Convert.ToInt32(txtQty.Text);
                 Detail.ApprovedQuantity = Convert.ToInt32(txtQty.Text);
@@ -803,5 +880,19 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
         }
         #endregion
+
+        protected void ddlMaintenanceReq_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            foreach (DataGridItem dgi in dgPurchaseRequestDetail.Items)
+            {
+                int id = (int)dgPurchaseRequestDetail.DataKeys[dgi.ItemIndex];
+                // if(dgi.)
+                DropDownList ddlFItem = dgi.FindControl("ddlFItem") as DropDownList;
+                ddlFItem.Visible = true;
+                BindItem(ddlFItem);
+            }
+
+          
+        }
     }
 }

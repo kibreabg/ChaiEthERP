@@ -21,6 +21,7 @@ using Chai.WorkflowManagment.CoreDomain.Setting;
 using Chai.WorkflowManagment.CoreDomain.HRM;
 using Chai.WorkflowManagment.CoreDomain.Request;
 using Chai.WorkflowManagment.CoreDomain.Inventory;
+using Chai.WorkflowManagment.CoreDomain.Requests;
 
 namespace Chai.WorkflowManagment.Modules.Setting
 {
@@ -281,6 +282,10 @@ namespace Chai.WorkflowManagment.Modules.Setting
         public Vehicle GetVehicle(int VehicleId)
         {
             return _workspace.Single<Vehicle>(x => x.Id == VehicleId);
+        }
+        public MaintenanceRequest GetMaintenanceRequestById(int MaintenanceId)
+        {
+            return _workspace.Single<MaintenanceRequest>(x => x.Id == MaintenanceId);
         }
         public Vehicle GetVehicleByPlateNo(int driverId)
         {

@@ -441,7 +441,10 @@ namespace Chai.WorkflowManagment.Modules.Approval
 
             return _workspace.SqlQuery<MaintenanceRequest>(filterExpression).ToList();
         }
-
+        public MaintenanceSparePart GetMaintenanceSparePart(int MaintenanceSparePartId)
+        {
+            return _workspace.Single<MaintenanceSparePart>(x => x.Id == MaintenanceSparePartId);
+        }
 
         #endregion
         #region StoreApproval
