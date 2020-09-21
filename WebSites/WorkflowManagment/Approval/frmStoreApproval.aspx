@@ -191,6 +191,11 @@
                                         <ItemTemplate>
                                             <%# DataBinder.Eval(Container.DataItem, "QtyApproved")%>
                                         </ItemTemplate>
+                                         <EditItemTemplate>
+                                        <asp:TextBox ID="txtQtyApp" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "QtyApproved")%>'></asp:TextBox>
+                                        <asp:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtQtyApp" ID="txtQtyApp_FilteredTextBoxExtender" FilterType="Numbers"></asp:FilteredTextBoxExtender>
+                                        <asp:RequiredFieldValidator ID="RfvQtyApp" CssClass="validator" runat="server" ControlToValidate="txtQtyApp" ErrorMessage="Qty Required" ValidationGroup="proedit"></asp:RequiredFieldValidator>
+                                    </EditItemTemplate>
                                     </asp:TemplateColumn>
                                     <asp:TemplateColumn HeaderText="Unit of Measurment">
                                         <EditItemTemplate>
