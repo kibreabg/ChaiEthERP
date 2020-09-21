@@ -139,7 +139,7 @@
                                     </FooterTemplate>
                                 </asp:TemplateColumn>
 
-                                <asp:TemplateColumn HeaderText="Quantity Approved">
+                               <%-- <asp:TemplateColumn HeaderText="Quantity Approved">
                                     <ItemTemplate>
                                         <%# DataBinder.Eval(Container.DataItem, "QtyApproved")%>
                                     </ItemTemplate>
@@ -153,7 +153,7 @@
                                         <asp:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtFQtyApp" ID="txtFQtyApp_FilteredTextBoxExtender" FilterType="Numbers"></asp:FilteredTextBoxExtender>
                                         <asp:RequiredFieldValidator ID="RfvFQtyApp" CssClass="validator" runat="server" ControlToValidate="txtFQtyApp" ErrorMessage="Qty Required" ValidationGroup="proadd"></asp:RequiredFieldValidator>
                                     </FooterTemplate>
-                                </asp:TemplateColumn>
+                                </asp:TemplateColumn>--%>
                                 <asp:TemplateColumn HeaderText="Unit of Measurment">
                                     <EditItemTemplate>
                                         <asp:DropDownList ID="ddlUnitOfMeasurment" runat="server" CssClass="form-control"
