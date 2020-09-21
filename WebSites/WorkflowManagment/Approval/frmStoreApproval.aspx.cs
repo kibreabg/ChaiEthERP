@@ -497,7 +497,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     if (liI != null)
                         liI.Selected = true;
                 }
-              
+
+                TextBox txtApproved = e.Item.FindControl("txtQtyApp") as TextBox;
+                txtApproved.Text = Convert.ToInt32(_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].Qty).ToString();
+
             }
 
         }
