@@ -22,22 +22,19 @@
                         <div class="row">
                             <section class="col col-6">
                                 <asp:Label ID="lblBeneficiaryName" runat="server" Text="Beneficiary Name" CssClass="label"></asp:Label>
-
                                 <label class="input">
-
                                     <asp:TextBox ID="txtSrchBeneficiaryName" runat="server"></asp:TextBox></label>
                             </section>
                         </div>
                     </fieldset>
                     <footer>
                         <asp:Button ID="btnFind" runat="server" Text="Find" OnClick="btnFind_Click" CssClass="btn btn-primary"></asp:Button>
-                                                <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" PostBackUrl="../Default.aspx"></asp:Button>
-                    
+                        <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" PostBackUrl="../Default.aspx"></asp:Button>
+
                     </footer>
                 </div>
             </div>
         </div>
-
 
         <asp:DataGrid ID="dgBeneficiary" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
             CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
@@ -73,33 +70,7 @@
                         <asp:RequiredFieldValidator ID="rfvfBankName" runat="server" CssClass="validator" ControlToValidate="txtBankName" ErrorMessage="Bank Name Required" ValidationGroup="2">*</asp:RequiredFieldValidator>
                     </FooterTemplate>
                 </asp:TemplateColumn>
-                                 <asp:TemplateColumn HeaderText="Branch Name">
-                    <ItemTemplate>
-                        <%# DataBinder.Eval(Container.DataItem, "BranchName")%>
-                    </ItemTemplate>
-                    <EditItemTemplate>
-                        <asp:TextBox ID="txtEdtBranchName" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "BranchName")%>'></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="rfvBranchName" runat="server" CssClass="validator" ControlToValidate="txtEdtBranchName" ErrorMessage="Branch Name Required" ValidationGroup="1">*</asp:RequiredFieldValidator>
-                    </EditItemTemplate>
-                    <FooterTemplate>
-                        <asp:TextBox ID="txtBranchName" runat="server" CssClass="form-control"></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="rfvfBranchName" runat="server" CssClass="validator" ControlToValidate="txtBranchName" ErrorMessage="Branch Name Required" ValidationGroup="2">*</asp:RequiredFieldValidator>
-                    </FooterTemplate>
-                </asp:TemplateColumn>
-                                 <asp:TemplateColumn HeaderText="Sort Code">
-                    <ItemTemplate>
-                        <%# DataBinder.Eval(Container.DataItem, "SortCode")%>
-                    </ItemTemplate>
-                    <EditItemTemplate>
-                        <asp:TextBox ID="txtEdtSortCode" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "SortCode")%>'></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="rfvsortCode" runat="server" CssClass="validator" ControlToValidate="txtEdtSortCode" ErrorMessage="Sort Code Required" ValidationGroup="1">*</asp:RequiredFieldValidator>
-                    </EditItemTemplate>
-                    <FooterTemplate>
-                        <asp:TextBox ID="txtSortCode" runat="server" CssClass="form-control"></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="rfvfSortCode" runat="server" CssClass="validator" ControlToValidate="txtSortCode" ErrorMessage="Sort Code Required" ValidationGroup="2">*</asp:RequiredFieldValidator>
-                    </FooterTemplate>
-                </asp:TemplateColumn>
-                 <asp:TemplateColumn HeaderText="Account Number">
+                <asp:TemplateColumn HeaderText="Account Number">
                     <ItemTemplate>
                         <%# DataBinder.Eval(Container.DataItem, "AccountNumber")%>
                     </ItemTemplate>

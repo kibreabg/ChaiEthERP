@@ -58,7 +58,10 @@ namespace Chai.WorkflowManagment.CoreDomain.Infrastructure
         {
             return _context.Set<T>().SingleOrDefault(expression);
         }
-
+        public T First<T>(Expression<Func<T, bool>> expression) where T : class
+        {
+            return _context.Set<T>().FirstOrDefault(expression);
+        }
         public T Single<T>(Expression<Func<T, bool>> expression, params Expression<Func<T, object>>[] includes) where T : class
         {
             if (includes == null || includes.Length < 1)

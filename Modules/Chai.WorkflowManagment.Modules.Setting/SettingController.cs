@@ -284,7 +284,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
         }
         public Vehicle GetVehicleByPlateNo(int driverId)
         {
-            return _workspace.Single<Vehicle>(x => x.AppUser.Id == driverId);
+            return _workspace.First<Vehicle>(x => x.AppUser.Id == driverId);
         }
         public Vehicle GetVehiclebyPlateNo(string plateno)
         {
