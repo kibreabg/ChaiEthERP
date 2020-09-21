@@ -252,6 +252,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         //SendEmailToFinanceOfficers;
                         _presenter.CurrentTravelAdvanceRequest.CurrentApproverPosition = TARS.ApproverPosition;
                     }
+                    else
+                    {
+                        _presenter.CurrentTravelAdvanceRequest.CurrentApproverPosition = 0;
+                    }
                     SendEmail(TARS);
                     _presenter.CurrentTravelAdvanceRequest.CurrentApprover = TARS.Approver;
                     _presenter.CurrentTravelAdvanceRequest.CurrentLevel = TARS.WorkflowLevel;

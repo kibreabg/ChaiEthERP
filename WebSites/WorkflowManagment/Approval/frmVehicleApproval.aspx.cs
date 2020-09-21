@@ -458,11 +458,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     if (ddlAssignedVehicle.SelectedValue == "carRental" && _presenter.GetVehicles().Count > 0)
                     {
                         //If Car hire is selected while there are available internal cars, then record the available cars in the backend
-                        foreach(Vehicle availableVehicle in _presenter.GetVehicles())
+                        foreach (Vehicle availableVehicle in _presenter.GetVehicles())
                         {
                             vehicleReqDetail.AvailableWhileHired += availableVehicle.PlateNo + ",";
                         }
-                        
+
                     }
                     DropDownList ddlFPlateNo = e.Item.FindControl("ddlFPlateNo") as DropDownList;
                     vehicleReqDetail.PlateNo = ddlFPlateNo.SelectedItem.Text;
@@ -705,10 +705,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             else
                 txtPhoneNo.Text = String.Empty;
 
-            if (_presenter.GetVehicleByDriver(Convert.ToInt32(ddlDriver.SelectedValue)) != null)
+            if (Convert.ToInt32(ddlDriver.SelectedValue) > 0)
             {
-                ddlPlateNo.SelectedValue = _presenter.GetVehicleByDriver(Convert.ToInt32(ddlDriver.SelectedValue)).Id.ToString();
+                if (_presenter.GetVehicleByDriver(Convert.ToInt32(ddlDriver.SelectedValue)) != null)
+                {
+                    ddlPlateNo.SelectedValue = _presenter.GetVehicleByDriver(Convert.ToInt32(ddlDriver.SelectedValue)).Id.ToString();
+                }
             }
+
             ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
         }
         protected void ddlEdtDriver_SelectedIndexChanged(object sender, EventArgs e)
