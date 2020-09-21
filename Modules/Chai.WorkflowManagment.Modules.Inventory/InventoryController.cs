@@ -76,6 +76,12 @@ namespace Chai.WorkflowManagment.Modules.Inventory
         {
             return _workspace.Single<Item>(x => x.Id == id);
         }
+
+        public Item GetItemByName(string Name)
+        {
+            return _workspace.Single<Item>(x => x.Name == Name);
+        }
+        
         #endregion
         #region Item Issuance
         public int GetLastIssueId()

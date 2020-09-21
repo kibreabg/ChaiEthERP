@@ -33,6 +33,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 XmlConfigurator.Configure();
                 PopProgressStatus();
                 BindMaintenanceRequestDetails();
+                BindMaintenanceSpareparts();
                 BindSearchMaintenanceGrid();
             }
             this._presenter.OnViewLoaded();
@@ -186,6 +187,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
 
             }
+        }
+        private void BindItem(DropDownList ddlItem)
+        {
+            ddlItem.DataSource = _presenter.GetItems();
+            ddlItem.DataBind();
+
         }
         private void BindMaintenanceRequestforprint()
         {
@@ -691,7 +698,157 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             pnlDetail_ModalPopupExtender.Show();
         }
 
-       
+        #region MaintenanceSparepart
+        private void BindMaintenanceSpareparts()
+        {
+            dgSparepart.DataSource = _presenter.CurrentMaintenanceRequest.MaintenanceSpareParts;
+            dgSparepart.DataBind();
+        }
+        protected void dgSparepart_CancelCommand(object source, DataGridCommandEventArgs e)
+        {
+            dgSparepart.EditItemIndex = -1;
+            BindMaintenanceSpareparts();
+        }
+
+        protected void dgSparepart_DeleteCommand(object source, DataGridCommandEventArgs e)
+        {
+            int id = (int)dgSparepart.DataKeys[e.Item.ItemIndex];
+            int PRDId = (int)dgSparepart.DataKeys[e.Item.ItemIndex];
+            MaintenanceSparePart prd;
+
+            if (PRDId > 0)
+                prd = _presenter.CurrentMaintenanceRequest.GetMaintenanceSparePart(PRDId);
+            else
+                prd = _presenter.CurrentMaintenanceRequest.MaintenanceSpareParts[e.Item.ItemIndex];
+            try
+            {
+                if (PRDId > 0)
+                {
+                    _presenter.CurrentMaintenanceRequest.RemoveMaintenanceSparePart(id);
+                    _presenter.DeleteMaintenanceSparepart(_presenter.GetMaintenanceSparePart(id));
+                    //  _presenter.CurrentMaintenanceRequest.TotalPrice = _presenter.CurrentMaintenanceRequest.TotalPrice - prd.EstimatedCost;
+                    //  txtTotal.Text = (_presenter.CurrentMaintenanceRequest.TotalPrice).ToString();
+                    _presenter.SaveOrUpdateMaintenanceRequest(_presenter.CurrentMaintenanceRequest);
+                }
+                else
+                {
+                    _presenter.CurrentMaintenanceRequest.MaintenanceSpareParts.Remove(prd);
+                    //  _presenter.CurrentMaintenanceRequest.TotalPrice = _presenter.CurrentMaintenanceRequest.TotalPrice - prd.EstimatedCost;
+                    //  txtTotal.Text = (_presenter.CurrentMaintenanceRequest.TotalPrice).ToString();
+                }
+                BindMaintenanceSpareparts();
+
+                Master.ShowMessage(new AppMessage("Maintenance Sparepart was Removed Successfully", RMessageType.Info));
+            }
+            catch (Exception ex)
+            {
+                Master.ShowMessage(new AppMessage("Error: Unable to delete Maintenance Sparepart. " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
+            }
+        }
+
+        protected void dgSparepart_EditCommand(object source, DataGridCommandEventArgs e)
+        {
+            this.dgSparepart.EditItemIndex = e.Item.ItemIndex;
+            BindMaintenanceSpareparts();
+        }
+
+        protected void dgSparepart_ItemDataBound(object sender, DataGridItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Footer)
+            {
+                DropDownList ddlFItem = e.Item.FindControl("ddlFItem") as DropDownList;
+                BindItem(ddlFItem);
+
+
+            }
+            else
+            {
+                if (_presenter.CurrentMaintenanceRequest.MaintenanceSpareParts != null)
+                {
+                    DropDownList ddlItem = e.Item.FindControl("ddlItem") as DropDownList;
+
+                    if (ddlItem != null)
+                    {
+                        BindItem(ddlItem);
+
+                        if (_presenter.CurrentMaintenanceRequest.MaintenanceSpareParts[e.Item.DataSetIndex].Item != null)
+                        {
+                            ListItem li = ddlItem.Items.FindByValue(_presenter.CurrentMaintenanceRequest.MaintenanceSpareParts[e.Item.DataSetIndex].Item.Id.ToString());
+                            if (li != null)
+                                li.Selected = true;
+                        }
+                    }
+
+
+
+                }
+            }
+        }
+        protected void dgSparepart_UpdateCommand(object source, DataGridCommandEventArgs e)
+        {
+            int id = (int)dgSparepart.DataKeys[e.Item.ItemIndex];
+            MaintenanceSparePart Spare;
+            if (id > 0)
+                Spare = _presenter.CurrentMaintenanceRequest.GetMaintenanceSparePart(id);
+            else
+                Spare = _presenter.CurrentMaintenanceRequest.MaintenanceSpareParts[e.Item.ItemIndex];
+            try
+            {
+
+                DropDownList ddlFItem = e.Item.FindControl("ddlItem") as DropDownList;
+                Spare.Item = _presenter.GetItem(int.Parse(ddlFItem.SelectedValue));
+                //DropDownList ddlReturned = e.Item.FindControl("ddlEdtReturned") as DropDownList;
+                //Spare.Returned = ddlReturned.SelectedValue;
+                //TextBox txtDate = e.Item.FindControl("txtEdtReturnedDate") as TextBox;
+                //Spare.ReturnedDate = Convert.ToDateTime(txtDate.Text);
+                //TextBox txtFRemark = e.Item.FindControl("txtRemark") as TextBox;
+                //Spare.StoreKeeperRemark = txtFRemark.Text;
+                Spare.MaintenanceRequest = _presenter.CurrentMaintenanceRequest;
+                Master.ShowMessage(new AppMessage("Maintenance Sparepart  Updated successfully.", RMessageType.Info));
+                dgSparepart.EditItemIndex = -1;
+                BindMaintenanceSpareparts();
+            }
+
+            catch (Exception ex)
+            {
+                Master.ShowMessage(new AppMessage("Error: Unable to Update Maintenance Sparepart. " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
+            }
+        }
+        protected void dgSparepart_ItemCommand(object source, DataGridCommandEventArgs e)
+        {
+            if (e.CommandName == "AddNew")
+            {
+                try
+                {
+                    MaintenanceSparePart Spare = new MaintenanceSparePart();
+                    DropDownList ddlFItem = e.Item.FindControl("ddlFItem") as DropDownList;
+                    Spare.Item = _presenter.GetItem(int.Parse(ddlFItem.SelectedValue));
+                    //DropDownList ddlReturned = e.Item.FindControl("ddlReturned") as DropDownList;
+                    //Spare.Returned = ddlReturned.SelectedValue;
+                    //TextBox txtDate = e.Item.FindControl("txtReturnedDate") as TextBox;
+                    //Spare.ReturnedDate = Convert.ToDateTime(txtDate.Text);
+                    //TextBox txtFRemark = e.Item.FindControl("txtFRemark") as TextBox;
+                    //Spare.StoreKeeperRemark = txtFRemark.Text;
+                    _presenter.CurrentMaintenanceRequest.MaintenanceSpareParts.Add(Spare);
+                    Master.ShowMessage(new AppMessage("Maintenance Sparepart  added successfully.", RMessageType.Info));
+                    dgSparepart.EditItemIndex = -1;
+                    BindMaintenanceSpareparts();
+                }
+                catch (Exception ex)
+                {
+                    Master.ShowMessage(new AppMessage("Error: Unable to Add Maintenance Sparepart. " + ex.Message, RMessageType.Error));
+                    ExceptionUtility.LogException(ex, ex.Source);
+                    ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
+                }
+            }
+        }
+        #endregion
+
+
     }
-    
+
 }

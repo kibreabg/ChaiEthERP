@@ -540,7 +540,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     TextBox txtFQty = e.Item.FindControl("txtFQty") as TextBox;
                     Detail.Qty = Convert.ToInt32(txtFQty.Text);
                     //TextBox txtFQtyApp = e.Item.FindControl("txtFQtyApp") as TextBox;
-                    //Detail.QtyApproved = Convert.ToInt32(txtFQtyApp.Text);
+                    Detail.QtyApproved = Convert.ToInt32(0);
                     DropDownList ddlFUnitOfMeasurment = e.Item.FindControl("ddlFUnitOfMeasurment") as DropDownList;
                     Detail.UnitOfMeasurment = ddlFUnitOfMeasurment.SelectedValue;
                     TextBox txtFRemark = e.Item.FindControl("txtFRemark") as TextBox;
@@ -642,7 +642,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 TextBox txtQty = e.Item.FindControl("txtQty") as TextBox;
                 Detail.Qty = Convert.ToInt32(txtQty.Text);
                 //TextBox txtQtyApp = e.Item.FindControl("txtQtyApp") as TextBox;
-                //Detail.QtyApproved = Convert.ToInt32(txtQtyApp.Text);
+                Detail.QtyApproved = Convert.ToInt32(0);
                 DropDownList ddlUnitOfMeasurment = e.Item.FindControl("ddlUnitOfMeasurment") as DropDownList;
                 Detail.UnitOfMeasurment = ddlUnitOfMeasurment.SelectedValue;
                 TextBox txtRemark = e.Item.FindControl("txtRemark") as TextBox;

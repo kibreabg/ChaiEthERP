@@ -8,6 +8,7 @@ using Chai.WorkflowManagment.Shared;
 using Chai.WorkflowManagment.CoreDomain.Users;
 using Chai.WorkflowManagment.CoreDomain.Setting;
 using Chai.WorkflowManagment.CoreDomain.Requests;
+using Chai.WorkflowManagment.CoreDomain.Inventory;
 
 namespace Chai.WorkflowManagment.Modules.Request.Views
 {
@@ -19,12 +20,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         //
          private Chai.WorkflowManagment.Modules.Request.RequestController _controller;
          private Chai.WorkflowManagment.Modules.Setting.SettingController _settingcontroller;
-         private PurchaseRequest _purchaserequest;
-         public PurchaseRequestPresenter([CreateNew] Chai.WorkflowManagment.Modules.Request.RequestController controller, [CreateNew] Chai.WorkflowManagment.Modules.Setting.SettingController settingcontroller)
+        private Chai.WorkflowManagment.Modules.Inventory.InventoryController _inventorycontroller;
+        private PurchaseRequest _purchaserequest;
+         public PurchaseRequestPresenter([CreateNew] Chai.WorkflowManagment.Modules.Request.RequestController controller, [CreateNew] Chai.WorkflowManagment.Modules.Setting.SettingController settingcontroller, [CreateNew] Chai.WorkflowManagment.Modules.Inventory.InventoryController inventorycontroller)
          {
          		_controller = controller;
                 _settingcontroller = settingcontroller;
-         }
+            _inventorycontroller = inventorycontroller;
+        }
 
          public override void OnViewLoaded()
          {
@@ -148,8 +151,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
              return _settingcontroller.GetGrants();
 
          }
-       
-         public Grant GetGrant(int Id)
+        public IList<Item> GetItems()
+        {
+            return _settingcontroller.GetItems();
+
+        }
+        public Item GetItemByName(string Name)
+        {
+            return _inventorycontroller.GetItemByName(Name);
+
+        }
+        public Grant GetGrant(int Id)
          {
              return _settingcontroller.GetGrant(Id);
 
@@ -185,6 +197,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public IList<MaintenanceRequest> GetMaintenanceRequestCompleted()
         {
             return _controller.GetMaintenanceRequestsCompleted();
+        }
+
+        public MaintenanceRequest GetMaintenanceRequestById(int Id)
+        {
+            return _settingcontroller.GetMaintenanceRequestById(Id);
+
         }
     }
 }

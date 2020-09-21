@@ -67,7 +67,8 @@
                           <section class="col col-6">
                                 <asp:Label ID="lblMainReq" runat="server" Text="Maintenance Request No" Visible="False"></asp:Label>
                                 <label class="select">
-                                    <asp:DropDownList ID="ddlMaintenanceReq"  runat="server" DataValueField="Id" DataTextField="RequestNo">
+                                    <asp:DropDownList ID="ddlMaintenanceReq"  runat="server" DataValueField="Id" DataTextField="RequestNo" AutoPostBack="True" OnSelectedIndexChanged="ddlMaintenanceReq_SelectedIndexChanged">
+                                         <asp:ListItem Value="0">None</asp:ListItem>
                                     </asp:DropDownList><i id="i1" runat="server"></i>
                                    
                                 </label>
@@ -189,9 +190,19 @@
                                     </ItemTemplate>
                                     <EditItemTemplate>
                                         <asp:TextBox ID="txtItem" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "Item")%>'></asp:TextBox>
+                                         <asp:DropDownList ID="ddlItem" runat="server" CssClass="form-control" Visible="false"
+                                            AppendDataBoundItems="True" DataTextField="Name" DataValueField="Id"
+                                            ValidationGroup="proedit" >
+                                            <asp:ListItem Value="0">Select Item</asp:ListItem>
+                                        </asp:DropDownList>
                                     </EditItemTemplate>
                                     <FooterTemplate>
                                         <asp:TextBox ID="txtFItem" runat="server" CssClass="form-control"></asp:TextBox>
+                                         <asp:DropDownList ID="ddlFItem" runat="server" CssClass="form-control" Visible="false"
+                                            AppendDataBoundItems="True" DataTextField="Name" DataValueField="Id"
+                                            EnableViewState="true" ValidationGroup="proaddspare" AutoPostBack="True">
+                                            <asp:ListItem Value="0">Select Item</asp:ListItem>
+                                        </asp:DropDownList>
                                     </FooterTemplate>
                                 </asp:TemplateColumn>
                                 <asp:TemplateColumn HeaderText="Requested Quantity">

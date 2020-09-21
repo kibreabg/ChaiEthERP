@@ -225,6 +225,9 @@
                                     <li class="active">
                                         <a href="#iss1" data-toggle="tab">Maintenance Request Details</a>
                                     </li>
+                                     <li class="">
+                                            <a href="#iss2" data-toggle="tab">Maintenance Sparepart</a>
+                                        </li>
                                 </ul>
                                 <div class="tab-content padding-10">
                                     <div class="tab-pane active" id="iss1">
@@ -340,6 +343,62 @@
                                             <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
                                         </asp:DataGrid>
                                     </div>
+
+
+                                     <div class="tab-pane" id="iss2">
+                                                <asp:DataGrid ID="dgSparepart" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
+                            CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
+                            GridLines="None" ShowFooter="True" OnCancelCommand="dgSparepart_CancelCommand" OnDeleteCommand="dgSparepart_DeleteCommand" OnEditCommand="dgSparepart_EditCommand" OnItemCommand="dgSparepart_ItemCommand" OnItemDataBound="dgSparepart_ItemDataBound" OnUpdateCommand="dgSparepart_UpdateCommand">
+
+                            <Columns>
+                                <asp:TemplateColumn HeaderText="Item">
+                                    <EditItemTemplate>
+                                        <asp:DropDownList ID="ddlItem" runat="server" CssClass="form-control"
+                                            AppendDataBoundItems="True" DataTextField="Name" DataValueField="Id"
+                                            ValidationGroup="proeditspare" >
+                                            <asp:ListItem Value="0">Select Item</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <asp:RequiredFieldValidator ID="RfvName" runat="server" CssClass="validator"
+                                            ControlToValidate="ddlItem" ErrorMessage="Item Required"
+                                            InitialValue="0" SetFocusOnError="True" ValidationGroup="proeditspare"></asp:RequiredFieldValidator>
+                                    </EditItemTemplate>
+                                    <FooterTemplate>
+                                        <asp:DropDownList ID="ddlFItem" runat="server" CssClass="form-control"
+                                            AppendDataBoundItems="True" DataTextField="Name" DataValueField="Id"
+                                            EnableViewState="true" ValidationGroup="proaddspare" AutoPostBack="True">
+                                            <asp:ListItem Value="0">Select Item</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <asp:RequiredFieldValidator ID="RfvFItem" runat="server" CssClass="validator"
+                                            ControlToValidate="ddlFItem" Display="Dynamic"
+                                            ErrorMessage="Item Required" InitialValue="0" SetFocusOnError="True"
+                                            ValidationGroup="proaddspare"></asp:RequiredFieldValidator>
+                                    </FooterTemplate>
+                                    <ItemTemplate>
+                                        <%# DataBinder.Eval(Container.DataItem, "Item.Name")%>
+                                    </ItemTemplate>
+                                </asp:TemplateColumn>
+                            
+                               
+                               
+                                <asp:TemplateColumn HeaderText="Actions">
+                                    <EditItemTemplate>
+                                        <asp:LinkButton ID="lnkUpdate" runat="server" CommandName="Update" ValidationGroup="proeditspare" CssClass="btn btn-xs btn-default"><i class="fa fa-save"></i></asp:LinkButton>
+                                        <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default"><i class="fa fa-times"></i></asp:LinkButton>
+                                    </EditItemTemplate>
+                                    <FooterTemplate>
+                                        <asp:LinkButton ID="lnkAddNew" runat="server" CommandName="AddNew" ValidationGroup="proaddspare" CssClass="btn btn-sm btn-success"><i class="fa fa-save"></i></asp:LinkButton>
+                                    </FooterTemplate>
+                                    <ItemTemplate>
+                                        <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
+                                        <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default" OnClientClick="javascript:return confirm('Are you sure you want to delete this entry?');"><i class="fa fa-times"></i></asp:LinkButton>
+                                    </ItemTemplate>
+                                </asp:TemplateColumn>
+                            </Columns>
+                            <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
+                        </asp:DataGrid>
+                                        </div>
+
+
                                 </div>
                             </div>
                             <footer>

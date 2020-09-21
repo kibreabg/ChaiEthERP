@@ -10,6 +10,8 @@ using Chai.WorkflowManagment.CoreDomain.Setting;
 using Chai.WorkflowManagment.CoreDomain.Requests;
 using Chai.WorkflowManagment.Modules.Setting;
 using Chai.WorkflowManagment.Modules.Admin;
+using Chai.WorkflowManagment.Modules.Inventory;
+using Chai.WorkflowManagment.CoreDomain.Inventory;
 
 namespace Chai.WorkflowManagment.Modules.Approval.Views
 {
@@ -23,11 +25,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         private SettingController _settingController;
         private AdminController _admincontroller;
         private MaintenanceRequest _maintenanceRequest;
-        public MaintenanceApprovalPresenter([CreateNew] ApprovalController controller, [CreateNew] SettingController settingcontroller, [CreateNew] AdminController admincontroller)
+        private InventoryController _inventorycontroller;
+        public MaintenanceApprovalPresenter([CreateNew] ApprovalController controller, [CreateNew] SettingController settingcontroller, [CreateNew] AdminController admincontroller, [CreateNew] InventoryController inventorycontroller)
         {
             _controller = controller;
             _settingController = settingcontroller;
             _admincontroller = admincontroller;
+            _inventorycontroller = inventorycontroller;
         }
 
         public override void OnViewLoaded()
@@ -147,6 +151,25 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         public int GetAssignedUserbycurrentuser()
         {
             return _controller.GetAssignedUserbycurrentuser();
+        }
+        public IList<Item> GetItems()
+        {
+            return _settingController.GetItems();
+
+        }
+        public MaintenanceSparePart GetMaintenanceSparePart(int Id)
+        {
+            return _controller.GetMaintenanceSparePart(Id);
+
+        }
+        public Item GetItem(int Id)
+        {
+            return _inventorycontroller.GetItem(Id);
+
+        }
+        public void DeleteMaintenanceSparepart(MaintenanceSparePart MaintenanceSparePart)
+        {
+            _controller.DeleteEntity(MaintenanceSparePart);
         }
         public void Commit()
         {

@@ -517,6 +517,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
                 DropDownList ddlItem = e.Item.FindControl("ddlItem") as DropDownList;
                 Detail.Item = _presenter.GetItem(Convert.ToInt32(ddlItem.SelectedValue));
+                TextBox txtQtyApp = e.Item.FindControl("txtQtyApp") as TextBox;
+                Detail.QtyApproved = Convert.ToInt32(txtQtyApp.Text);
                 DropDownList ddlUnitOfMeasurment = e.Item.FindControl("ddlUnitOfMeasurment") as DropDownList;
                 Detail.UnitOfMeasurment = ddlUnitOfMeasurment.SelectedValue;
                 TextBox txtRemark = e.Item.FindControl("txtRemark") as TextBox;
