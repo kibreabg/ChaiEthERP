@@ -15,6 +15,7 @@ namespace Chai.WorkflowManagment.CoreDomain
         void Delete<T>(T item) where T : class;
         void DeleteAll<T>() where T : class;
         T Single<T>(Expression<Func<T, bool>> expression) where T : class;
+        T First<T>(Expression<Func<T, bool>> expression) where T : class;
         T Single<T>(Expression<Func<T, bool>> expression, params Expression<Func<T, object>>[] includes) where T : class;
         T Last<T>() where T : class, IEntity;
         IEnumerable<T> All<T>() where T : class;

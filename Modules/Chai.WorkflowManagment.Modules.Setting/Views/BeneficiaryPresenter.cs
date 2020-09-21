@@ -5,6 +5,7 @@ using Microsoft.Practices.ObjectBuilder;
 using Microsoft.Practices.CompositeWeb;
 using Chai.WorkflowManagment.CoreDomain.Setting;
 using Chai.WorkflowManagment.Shared;
+using Chai.WorkflowManagment.CoreDomain.Users;
 
 namespace Chai.WorkflowManagment.Modules.Setting.Views
 {
@@ -38,7 +39,10 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         {
             _controller.SaveOrUpdateEntity(beneficiary);
         }
-
+        public AppUser CurrentUser()
+        {
+            return _controller.GetCurrentUser();
+        }
         public void CancelPage()
         {
             _controller.Navigate(String.Format("~/Setting/Default.aspx?{0}=3", AppConstants.TABID));
