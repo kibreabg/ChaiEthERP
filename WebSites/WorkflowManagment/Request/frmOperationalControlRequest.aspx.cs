@@ -146,20 +146,19 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         _presenter.CurrentOperationalControlRequest.TotalActualExpendture += OCRD.Amount;
                         OCRD.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
                         _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails.Add(OCRD);
-                    }
-                    /*Attachments should be edited
-                    if (CPR.CPRAttachments.Count > 0)
-                    {
-                        foreach (CPRAttachment CP in CPR.CPRAttachments)
+                        
+                        if (CPRD.CPRAttachments.Count > 0)
                         {
-                            OCRAttachment OPA = new OCRAttachment();
+                            foreach (CPRAttachment CP in CPRD.CPRAttachments)
+                            {
+                                OCRAttachment OPA = new OCRAttachment();
 
-                            OPA.FilePath = CP.FilePath;
-                            OPA.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
-                            _presenter.CurrentOperationalControlRequest.OCRAttachments.Add(OPA);
+                                OPA.FilePath = CP.FilePath;
+                                OPA.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
+                                _presenter.CurrentOperationalControlRequest.OCRAttachments.Add(OPA);
+                            }
                         }
-                    }*/
-
+                    }       
                 }
             }
         }

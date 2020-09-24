@@ -116,7 +116,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         private string GetWillStatus()
         {
             ApprovalSetting AS = null;
-            if (_presenter.CurrentCashPaymentRequest.RequestType == "Medical")
+            if (_presenter.CurrentCashPaymentRequest.RequestType == "Medical Expense (In-Patient)" || _presenter.CurrentCashPaymentRequest.RequestType == "Medical Expense (Out-Patient)")
             {
                 AS = _presenter.GetApprovalSettingMedical();
             }

@@ -222,6 +222,16 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (OCRS.ApprovalStatus == null)
                 {
+                    if (OCRS.Approver == 0)
+                    {
+                        //This is to handle multiple Finance Officers responding to this request
+                        //SendEmailToFinanceOfficers;
+                        _presenter.CurrentOperationalControlRequest.CurrentApproverPosition = OCRS.ApproverPosition;
+                    }
+                    else
+                    {
+                        _presenter.CurrentOperationalControlRequest.CurrentApproverPosition = 0;
+                    }
                     SendEmail(OCRS);
                     _presenter.CurrentOperationalControlRequest.CurrentApprover = OCRS.Approver;
                     _presenter.CurrentOperationalControlRequest.CurrentLevel = OCRS.WorkflowLevel;
