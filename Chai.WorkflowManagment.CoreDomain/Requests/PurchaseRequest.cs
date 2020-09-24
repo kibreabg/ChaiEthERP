@@ -21,8 +21,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public DateTime Requireddateofdelivery { get; set; }
         public string DeliverTo { get; set; }       
         public string SuggestedSupplier { get; set; }
-        public bool IsVehicle { get; set; }
-        public string PlateNo { get; set; }
+        public bool IsVehicle { get; set; }    
         public string MaintenanceRequestNo { get; set; }
         public string Comment { get; set; }
         public int CurrentApprover { get; set; }
