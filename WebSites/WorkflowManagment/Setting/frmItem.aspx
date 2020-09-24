@@ -119,17 +119,28 @@
                                             <i></i>
                                         </FooterTemplate>
                                     </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="Is Spare Part?" FooterStyle-Width="100px">
+                                        <ItemTemplate>
+                                            <%# DataBinder.Eval(Container.DataItem, "IsSparePart") %>
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:CheckBox ID="ckEdtIsSparePart" runat="server" />
+                                        </EditItemTemplate>
+                                        <FooterTemplate>
+                                            <asp:CheckBox ID="ckIsSparePart" runat="server" />
+                                        </FooterTemplate>
+                                    </asp:TemplateColumn>
                                     <asp:TemplateColumn HeaderText="Re-Order Quantity">
                                         <ItemTemplate>
                                             <%# DataBinder.Eval(Container.DataItem, "ReOrderQuantity") %>
                                         </ItemTemplate>
                                         <EditItemTemplate>
                                             <asp:TextBox ID="txtEdtReOrderQty" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "ReOrderQuantity")%>'></asp:TextBox>
-                                            <cc1:filteredtextboxextender id="txtEdtReOrderQty_FilteredTextBoxExtender" runat="server" enabled="True" filtertype="Custom, Numbers" targetcontrolid="txtEdtReOrderQty" validchars="&quot;.&quot;"></cc1:filteredtextboxextender>
+                                            <cc1:FilteredTextBoxExtender ID="txtEdtReOrderQty_FilteredTextBoxExtender" runat="server" Enabled="True" FilterType="Custom, Numbers" TargetControlID="txtEdtReOrderQty" ValidChars="&quot;.&quot;"></cc1:FilteredTextBoxExtender>
                                         </EditItemTemplate>
                                         <FooterTemplate>
                                             <asp:TextBox ID="txtFReOrderQty" runat="server" CssClass="form-control"></asp:TextBox>
-                                            <cc1:filteredtextboxextender id="txtFReOrderQty_FilteredTextBoxExtender" runat="server" enabled="True" filtertype="Custom, Numbers" targetcontrolid="txtFReOrderQty" validchars="&quot;.&quot;"></cc1:filteredtextboxextender>
+                                            <cc1:FilteredTextBoxExtender ID="txtFReOrderQty_FilteredTextBoxExtender" runat="server" Enabled="True" FilterType="Custom, Numbers" TargetControlID="txtFReOrderQty" ValidChars="&quot;.&quot;"></cc1:FilteredTextBoxExtender>
                                         </FooterTemplate>
                                     </asp:TemplateColumn>
                                     <asp:TemplateColumn HeaderText="Unit Of Measurement">

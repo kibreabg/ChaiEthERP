@@ -143,6 +143,8 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                     item.Code = txtFCode.Text;
                     DropDownList ddlItemType = e.Item.FindControl("ddlItemType") as DropDownList;
                     item.ItemType = ddlItemType.SelectedValue;
+                    CheckBox ckIsSparePart = e.Item.FindControl("ckIsSparePart") as CheckBox;
+                    item.IsSparePart = ckIsSparePart.Checked;
                     TextBox txtFReOrderQty = e.Item.FindControl("txtFReOrderQty") as TextBox;
                     item.ReOrderQuantity = Convert.ToInt32(txtFReOrderQty.Text);
                     DropDownList ddlUnitOfMeas = e.Item.FindControl("ddlUnitOfMeas") as DropDownList;
@@ -249,6 +251,8 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 item.Code = txtEdtCode.Text;
                 DropDownList ddlEdtItemType = e.Item.FindControl("ddlEdtItemType") as DropDownList;
                 item.ItemType = ddlEdtItemType.SelectedValue;
+                CheckBox ckEdtIsSparePart = e.Item.FindControl("ckEdtIsSparePart") as CheckBox;
+                item.IsSparePart = ckEdtIsSparePart.Checked;
                 TextBox txtEdtReOrderQty = e.Item.FindControl("txtEdtReOrderQty") as TextBox;
                 item.ReOrderQuantity = Convert.ToInt32(txtEdtReOrderQty.Text);
                 DropDownList ddlEdtUnitOfMeas = e.Item.FindControl("ddlEdtUnitOfMeas") as DropDownList;

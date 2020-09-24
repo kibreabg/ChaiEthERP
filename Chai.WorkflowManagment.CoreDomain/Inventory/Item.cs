@@ -9,6 +9,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Inventory
     {
         public int Id { get; set; }        
         public string ItemType { get; set; }
+        public bool IsSparePart { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public int ReOrderQuantity { get; set; }        
