@@ -35,14 +35,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 BindSearchPurchaseRequestGrid();
                 BindPurchaseRequestDetails();
                 BindInitialValues();
-                PopInternalVehicles();
                 PopMaintenanceRequestsDropDown();
             }
-            lblPlate.Visible = false;
-            ddlPlate.Visible = false;
+
             lblMainReq.Visible = false;
             ddlMaintenanceReq.Visible = false;
-            i.Visible = false;
+
             this._presenter.OnViewLoaded();
 
 
@@ -124,7 +122,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                 _presenter.CurrentPurchaseRequest.Requireddateofdelivery = Convert.ToDateTime(txtdeliveryDate.Text);
                 _presenter.CurrentPurchaseRequest.IsVehicle = GetIsVehicle;
-                _presenter.CurrentPurchaseRequest.PlateNo = GetPlateNo;
+
                 _presenter.CurrentPurchaseRequest.MaintenanceRequestNo = GetMaintenanceRequestNo;
                 //Determine total cost
                 /*       decimal cost = 0;
@@ -221,22 +219,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 EmailSender.Send(_presenter.GetSuperviser(_presenter.GetAssignedJobbycurrentuser(PRS.Approver).AssignedTo).Email, "Purchase Request", _presenter.GetUser(_presenter.CurrentPurchaseRequest.Requester).FullName + "' Request for Item procurment No. '" + _presenter.CurrentPurchaseRequest.RequestNo + "'");
             }
         }
-        private void PopInternalVehicles()
-        {
-            ddlPlate.DataSource = _presenter.GetVehicles();
-            ddlPlate.DataBind();
-        }
-
         private void PopMaintenanceRequestsDropDown()
         {
             ddlMaintenanceReq.Items.Clear();
             ListItem lst = new ListItem();
-            lst.Text = "None";
-            lst.Value = "None";
+            lst.Text = "Select Maintenance Request";
+            lst.Value = "";
+            ddlMaintenanceReq.Items.Add(lst);
             ddlMaintenanceReq.DataSource = _presenter.GetMaintenanceRequestCompleted();
-                ddlMaintenanceReq.DataBind();
-           
-           
+            ddlMaintenanceReq.DataBind();
+
+
         }
         public PurchaseRequest PurchaseRequest
         {
@@ -261,10 +254,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return ckIsVehicle.Checked; }
         }
-        public string GetPlateNo
-        {
-            get { return ddlPlate.SelectedValue; }
-        }
+
         public string GetMaintenanceRequestNo
         {
             get { return ddlMaintenanceReq.SelectedValue; }
@@ -398,22 +388,22 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             BindGrant(ddlFGrant, Convert.ToInt32(ddl.SelectedValue));
             if (ckIsVehicle.Checked == true)
             {
-                lblPlate.Visible = true;
-                lblMainReq.Visible = true;
-                
 
-                ddlPlate.Visible = true;
+                lblMainReq.Visible = true;
+
+
+
                 ddlMaintenanceReq.Visible = true;
-                i.Visible = true;
+
             }
             else if (ckIsVehicle.Checked == false)
             {
-                lblPlate.Visible = false;
+
                 lblMainReq.Visible = false;
 
-                ddlPlate.Visible = false;
+
                 ddlMaintenanceReq.Visible = false;
-                i.Visible = false;
+
             }
         }
         protected void ddlGrant_SelectedIndexChanged(object sender, EventArgs e)
@@ -423,21 +413,21 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             BindGrant(ddlGrant, Convert.ToInt32(ddl.SelectedValue));
             if (ckIsVehicle.Checked == true)
             {
-                lblPlate.Visible = true;
+
                 lblMainReq.Visible = true;
 
-                ddlPlate.Visible = true;
+
                 ddlMaintenanceReq.Visible = true;
-                i.Visible = true;
+
             }
             else if (ckIsVehicle.Checked == false)
             {
-                lblPlate.Visible = false;
+
                 lblMainReq.Visible = false;
 
-                ddlPlate.Visible = false;
+
                 ddlMaintenanceReq.Visible = false;
-                i.Visible = false;
+
             }
         }
         protected void ddlProject_SelectedIndexChanged(object sender, EventArgs e)
@@ -447,21 +437,20 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             BindGrant(ddlGrant, Convert.ToInt32(ddl.SelectedValue));
             if (ckIsVehicle.Checked == true)
             {
-                lblPlate.Visible = true;
+
                 lblMainReq.Visible = true;
 
-                ddlPlate.Visible = true;
+
                 ddlMaintenanceReq.Visible = true;
-                i.Visible = true;
+
             }
             else if (ckIsVehicle.Checked == false)
             {
-                lblPlate.Visible = false;
+
                 lblMainReq.Visible = false;
 
-                ddlPlate.Visible = false;
                 ddlMaintenanceReq.Visible = false;
-                i.Visible = false;
+
             }
         }
         protected void btnRequest_Click(object sender, EventArgs e)
@@ -540,60 +529,24 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             DropDownList ddl = (DropDownList)sender;
             TextBox txtAccountCode = ddl.FindControl("txtFAccountCode") as TextBox;
             txtAccountCode.Text = _presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)).AccountCode;
-            if (ckIsVehicle.Checked == true)
-            {
-                lblPlate.Visible = true;
-                lblMainReq.Visible = true;
-
-                ddlPlate.Visible = true;
-                ddlMaintenanceReq.Visible = true;
-                i.Visible = true;
-            }
-            else if (ckIsVehicle.Checked == false)
-            {
-                lblPlate.Visible = false;
-                lblMainReq.Visible = false;
-
-                ddlPlate.Visible = false;
-                ddlMaintenanceReq.Visible = false;
-                i.Visible = false;
-            }
-        }        
+        }
+        protected void ddlAccount_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DropDownList ddl = (DropDownList)sender;
+            TextBox txtAccountCode = ddl.FindControl("txtAccountCode") as TextBox;
+            txtAccountCode.Text = _presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)).AccountCode;
+        }
         protected void ckIsVehicle_CheckedChanged(object sender, EventArgs e)
         {
             if (ckIsVehicle.Checked == true)
             {
-
-                lblPlate.Visible = true;
                 lblMainReq.Visible = true;
-
-                ddlPlate.Visible = true;
                 ddlMaintenanceReq.Visible = true;
-                i.Visible = true;
-
-                foreach (DataGridItem dgi in dgPurchaseRequestDetail.Items)
-                {
-                   // if(dgi.)
-                    DropDownList ddlFItem = dgi.FindControl("ddlFItem") as DropDownList;
-                    ddlFItem.Visible = true;
-                    BindItem(ddlFItem);
-                }
             }
             else if (ckIsVehicle.Checked == false)
             {
-                lblPlate.Visible = false;
                 lblMainReq.Visible = false;
-
-                ddlPlate.Visible = false;
                 ddlMaintenanceReq.Visible = false;
-                i.Visible = false;
-                foreach (DataGridItem dgi in dgPurchaseRequestDetail.Items)
-                {                 
-                   
-                    TextBox txtFItem = dgi.FindControl("txtFItem") as TextBox;
-                    txtFItem.Visible = true;
-                   
-                }
             }
         }
         #region PurchaseRequestDetail
@@ -660,20 +613,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     Detail.ItemAccount = _presenter.GetItemAccount(int.Parse(ddlFAccount.SelectedValue));
                     TextBox txtFAccountCode = e.Item.FindControl("txtFAccountCode") as TextBox;
                     Detail.AccountCode = txtFAccountCode.Text;
-                    if (ckIsVehicle.Checked == true)
-                    {
-                        DropDownList ddlFItem = e.Item.FindControl("ddlFItem") as DropDownList;
-                        Detail.Item = _presenter.GetItemByName(ddlFItem.SelectedItem.Text).ToString();
-                        TextBox txtFItem = e.Item.FindControl("txtFItem") as TextBox;
-                        txtFItem.Visible = false;
-                    }
-                    else
-                    {
-                        DropDownList ddlFItem = e.Item.FindControl("ddlFItem") as DropDownList;
-                        ddlFItem.Visible = false;
-                        TextBox txtFItem = e.Item.FindControl("txtFItem") as TextBox;
-                        Detail.Item = txtFItem.Text;
-                    }
+                    TextBox txtFItem = e.Item.FindControl("txtFItem") as TextBox;
+                    Detail.ItemDescription = txtFItem.Text;
                     TextBox txtFQty = e.Item.FindControl("txtFQty") as TextBox;
                     Detail.Qty = Convert.ToInt32(txtFQty.Text);
                     Detail.ApprovedQuantity = Convert.ToInt32(txtFQty.Text);
@@ -683,23 +624,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     Detail.UnitOfMeasurment = ddlFUnitOfMeasurment.SelectedValue;
                     TextBox txtFRemark = e.Item.FindControl("txtFRemark") as TextBox;
                     Detail.Remark = txtFRemark.Text;
-                    /*TextBox txtFPriceperunit = e.Item.FindControl("txtFPriceperunit") as TextBox;
-                    Detail.Priceperunit = Convert.ToDecimal(txtFPriceperunit.Text);
-                    Detail.EstimatedCost = Convert.ToInt32(txtFQty.Text) * Convert.ToDecimal(txtFPriceperunit.Text);
-                    Determine total cost
-                      decimal cost = 0;
-                      if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Count > 0)
-                      {
-
-                          foreach (PurchaseRequestDetail detail in _presenter.CurrentPurchaseRequest.PurchaseRequestDetails)
-                          {
-                              cost = cost + detail.EstimatedCost;
-                          }
-                      }
-                    _presenter.CurrentPurchaseRequest.TotalPrice = cost;
-                    Determine total cost end
-                      _presenter.CurrentPurchaseRequest.TotalPrice = _presenter.CurrentPurchaseRequest.TotalPrice + Detail.EstimatedCost;
-                    txtTotal.Text = (_presenter.CurrentPurchaseRequest.TotalPrice).ToString();*/
                     DropDownList ddlFProject = e.Item.FindControl("ddlFProject") as DropDownList;
                     Detail.Project = _presenter.GetProject(int.Parse(ddlFProject.SelectedValue));
                     DropDownList ddlFGrant = e.Item.FindControl("ddlFGrant") as DropDownList;
@@ -729,18 +653,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 BindProject(ddlFProject);
                 DropDownList ddlFGrant = e.Item.FindControl("ddlFGrant") as DropDownList;
                 BindGrant(ddlFGrant, Convert.ToInt32(ddlFProject.SelectedValue));
-                if (ckIsVehicle.Checked == true)
-                {
-
-                    DropDownList ddlFItem = e.Item.FindControl("ddlFItem") as DropDownList;
-                    ddlFItem.Visible = true;
-                    BindItem(ddlFItem);
-                }
-                else
-                {
-                    TextBox txtFItem = e.Item.FindControl("txtFItem") as TextBox;
-                    txtFItem.Visible = true;
-                }
             }
             else
             {
@@ -782,29 +694,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                                 liI.Selected = true;
                         }
                     }
-
-                    DropDownList ddlItem = e.Item.FindControl("ddlItem") as DropDownList;
-
-                    if (ddlItem != null)
-                    {
-                        ddlItem.Visible = true;
-                        BindItem(ddlItem);
-
-                        if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].Item != null)
-                        {
-                            ListItem li = ddlItem.Items.FindByValue(_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].Item.ToString());
-                            if (li != null)
-                                li.Selected = true;
-                        }
-                    }
                 }
             }
-        }
-        private void BindItem(DropDownList ddlItem)
-        {
-            ddlItem.DataSource = _presenter.GetItems();
-            ddlItem.DataBind();
-
         }
         protected void dgPurchaseRequestDetail_UpdateCommand(object source, DataGridCommandEventArgs e)
         {
@@ -821,20 +712,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 Detail.ItemAccount = _presenter.GetItemAccount(int.Parse(ddlAccount.SelectedValue));
                 TextBox txtAccountCode = e.Item.FindControl("txtAccountCode") as TextBox;
                 Detail.AccountCode = txtAccountCode.Text;
-                if (ckIsVehicle.Checked == true)
-                {
-                    DropDownList ddlItem = e.Item.FindControl("ddlItem") as DropDownList;
-                    Detail.Item = _presenter.GetItemByName(ddlItem.SelectedItem.Text).ToString();
-                    TextBox txtItem = e.Item.FindControl("txtItem") as TextBox;
-                    txtItem.Visible = false;
-                }
-                else
-                {
-                    DropDownList ddlItem = e.Item.FindControl("ddlItem") as DropDownList;
-                    ddlItem.Visible = false;
-                    TextBox txtItem = e.Item.FindControl("txtItem") as TextBox;
-                    Detail.Item = txtItem.Text;
-                }
+                TextBox txtItem = e.Item.FindControl("txtItem") as TextBox;
+                Detail.ItemDescription = txtItem.Text;
                 TextBox txtQty = e.Item.FindControl("txtQty") as TextBox;
                 Detail.Qty = Convert.ToInt32(txtQty.Text);
                 Detail.ApprovedQuantity = Convert.ToInt32(txtQty.Text);
@@ -844,31 +723,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 Detail.UnitOfMeasurment = ddlUnitOfMeasurment.SelectedValue;
                 TextBox txtRemark = e.Item.FindControl("txtRemark") as TextBox;
                 Detail.Remark = txtRemark.Text;
-                /*TextBox txtPriceperunit = e.Item.FindControl("txtPriceperunit") as TextBox;
-                Detail.Priceperunit = Convert.ToDecimal(txtPriceperunit.Text);
-
-                TextBox txtEstimatedCost = e.Item.FindControl("txtEstimatedCost") as TextBox;
-                Detail.EstimatedCost = Convert.ToInt32(txtQty.Text) * Convert.ToDecimal(txtPriceperunit.Text);
-                Determine total cost
-                decimal cost = 0;
-                if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Count > 0)
-                {
-
-                    foreach (PurchaseRequestDetail detail in _presenter.CurrentPurchaseRequest.PurchaseRequestDetails)
-                    {
-                        cost = cost + detail.EstimatedCost;
-                    }
-                }
-                _presenter.CurrentPurchaseRequest.TotalPrice = cost;
-                Determine total cost end
-                _presenter.CurrentPurchaseRequest.TotalPrice = _presenter.CurrentPurchaseRequest.TotalPrice + Detail.EstimatedCost;
-                txtTotal.Text = (_presenter.CurrentPurchaseRequest.TotalPrice).ToString();*/
                 DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
                 Detail.Project = _presenter.GetProject(int.Parse(ddlProject.SelectedValue));
                 DropDownList ddlGrant = e.Item.FindControl("ddlGrant") as DropDownList;
                 Detail.Grant = _presenter.GetGrant(int.Parse(ddlGrant.SelectedValue));
+                Detail.BidAnalysisRequestStatus = "InProgress";
                 Detail.PurchaseRequest = _presenter.CurrentPurchaseRequest;
-                Master.ShowMessage(new AppMessage("Purchase Request Detail  Updated successfully.", RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Purchase Request Detail successfully updated.", RMessageType.Info));
                 dgPurchaseRequestDetail.EditItemIndex = -1;
                 BindPurchaseRequestDetails();
             }
@@ -880,19 +741,29 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
         }
         #endregion
-
         protected void ddlMaintenanceReq_SelectedIndexChanged(object sender, EventArgs e)
         {
-            foreach (DataGridItem dgi in dgPurchaseRequestDetail.Items)
+            MaintenanceRequest maintenance = null;
+
+            if (_presenter.GetMaintenanceRequestById(Convert.ToInt32(ddlMaintenanceReq.SelectedValue)) != null)
             {
-                int id = (int)dgPurchaseRequestDetail.DataKeys[dgi.ItemIndex];
-                // if(dgi.)
-                DropDownList ddlFItem = dgi.FindControl("ddlFItem") as DropDownList;
-                ddlFItem.Visible = true;
-                BindItem(ddlFItem);
+                maintenance = _presenter.GetMaintenanceRequestById(Convert.ToInt32(ddlMaintenanceReq.SelectedValue));
             }
 
-          
+            foreach (MaintenanceSparePart msp in maintenance.MaintenanceSpareParts)
+            {
+                PurchaseRequestDetail prd = new PurchaseRequestDetail();
+                prd.Item = msp.Item;
+                prd.ItemDescription = msp.Item.Name;
+                prd.Project = msp.MaintenanceRequest.Project;
+                prd.Grant = msp.MaintenanceRequest.Grant;
+
+                _presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Add(prd);
+            }
+
+            dgPurchaseRequestDetail.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails;
+            dgPurchaseRequestDetail.DataBind();
+
         }
     }
 }

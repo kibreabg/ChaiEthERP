@@ -12,7 +12,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         string RequestDate { get; }
         int PurchaseRequestId { get; }
         bool GetIsVehicle { get; }
-        string GetPlateNo{ get; }
+       
         string GetMaintenanceRequestNo { get; }
     }
 }

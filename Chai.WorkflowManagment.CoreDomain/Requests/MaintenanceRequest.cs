@@ -2,6 +2,7 @@
 using Chai.WorkflowManagment.CoreDomain.Users;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Chai.WorkflowManagment.CoreDomain.Requests
 {
@@ -16,19 +17,13 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
             
         }
         public int Id { get; set; }
-        public string RequestNo { get; set; }
-        
+        public string RequestNo { get; set; }        
         public DateTime RequestDate { get; set; }
         public string MaintenanceType { get; set; }
-
         public int Requester { get; set; }
-        public string ActionTaken { get; set; }
-        
-        public string PlateNo { get; set; }
-     
-        
+        public string ActionTaken { get; set; }        
+        public string PlateNo { get; set; }    
         public int KmReading { get; set; }
-
         public string MaintenanceStatus { get; set; }
         public string Remark { get; set; }
         public int CurrentApprover { get; set; }
@@ -37,20 +32,19 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string ProgressStatus { get; set; }
         public virtual AppUser AppUser { get; set; }
         public virtual Project Project { get; set; }
-    
         public virtual Grant Grant { get; set; }
-      
-
-     //   public virtual ServiceType ServiceType { get; set; }
-       
         public virtual IList<MaintenanceRequestStatus> MaintenanceRequestStatuses { get; set; }
         public virtual IList<MaintenanceRequestDetail> MaintenanceRequestDetails { get; set; }
         public virtual IList<MaintenanceSparePart> MaintenanceSpareParts { get; set; }
-        // public virtual PurchaseOrder PurchaseOrders { get; set; }
+        [NotMapped]
+        public string ReqPlateNo
+        {
+            get { return this.RequestNo + " - " + this.MaintenanceType + " - " + this.PlateNo; }
+        }
+
         #region MaintenanceRequestStatus
         public virtual MaintenanceRequestStatus GetMaintenanceRequestStatus(int Id)
         {
-
             foreach (MaintenanceRequestStatus MRS in MaintenanceRequestStatuses)
             {
                 if (MRS.Id == Id)

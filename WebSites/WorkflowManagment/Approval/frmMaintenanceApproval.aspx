@@ -365,7 +365,7 @@
                                     <FooterTemplate>
                                         <asp:DropDownList ID="ddlFItem" runat="server" CssClass="form-control"
                                             AppendDataBoundItems="True" DataTextField="Name" DataValueField="Id"
-                                            EnableViewState="true" ValidationGroup="proaddspare" AutoPostBack="True">
+                                            EnableViewState="true" ValidationGroup="proaddspare">
                                             <asp:ListItem Value="0">Select Item</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RfvFItem" runat="server" CssClass="validator"

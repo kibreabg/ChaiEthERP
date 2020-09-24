@@ -74,7 +74,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.GetStoreRequests();
         }
-
         public AppUser Approver(int Position)
         {
             return _controller.Approver(Position);
@@ -99,17 +98,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             _controller.Navigate(String.Format("~/Setting/Default.aspx?{0}=3", AppConstants.TABID));
         }
-
         public void DeleteStoreRequest(StoreRequest StoreRequest)
         {
             _controller.DeleteEntity(StoreRequest);
         }
-
         public StoreRequest GetStoreRequestById(int id)
         {
             return _controller.GetStoreRequest(id);
         }
-
         public ApprovalSetting GetApprovalSetting(string RequestType, decimal value)
         {
             return _settingcontroller.GetApprovalSettingforProcess(RequestType, value);
@@ -140,12 +136,15 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _settingcontroller.GetProjectsByProgramId(programID);
         }
+        public PurchaseRequestDetail GetPurchaseRequestDetail(int Id)
+        {
+            return _controller.GetPurchaseRequestDetail(Id);
+        }
         public ItemAccount GetItemAccount(int Id)
         {
             return _settingcontroller.GetItemAccount(Id);
 
         }
-
         public IList<Project> GetProjects()
         {
             return _settingcontroller.GetProjects();
@@ -161,7 +160,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             return _settingcontroller.GetGrants();
 
         }
-
         public Grant GetGrant(int Id)
         {
             return _settingcontroller.GetGrant(Id);
@@ -171,6 +169,18 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.GetStoreRequestDetail(Id);
 
+        }
+        public IList<PurchaseRequestDetail> ListPRDetailsCompletedById(int id)
+        {
+            return _controller.ListPRDetailsCompletedById(id);
+        }
+        public IList<PurchaseRequest> GetDistinctCompletedPurchaseReqs()
+        {
+            return _controller.GetDistinctCompletedPurchaseReqs();
+        }
+        public PurchaseRequestDetail GetCompletedPurchaseDetail(int Id)
+        {
+            return _controller.GetPurchaseRequestbyPuID(Id);
         }
         public IList<Program> GetPrograms()
         {
@@ -188,7 +198,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             _controller.Commit();
         }
-
         public IList<Grant> GetGrantbyprojectId(int projectId)
         {
             return _settingcontroller.GetProjectGrantsByprojectId(projectId);

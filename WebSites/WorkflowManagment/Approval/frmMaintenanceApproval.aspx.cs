@@ -837,6 +837,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     Master.ShowMessage(new AppMessage("Maintenance Sparepart  added successfully.", RMessageType.Info));
                     dgSparepart.EditItemIndex = -1;
                     BindMaintenanceSpareparts();
+                    pnlDetail_ModalPopupExtender.Show();
                 }
                 catch (Exception ex)
                 {

@@ -42,38 +42,25 @@
             <div class="widget-body no-padding">
                 <div class="smart-form">
                     <fieldset>
-                         <div class="row">
+                        <div class="row">
                             <section class="col col-6">
                                 <div class="smart-form">
                                     <div class="inline-group">
                                         <label class="checkbox">
                                             <asp:CheckBox ID="ckIsVehicle" runat="server" OnCheckedChanged="ckIsVehicle_CheckedChanged" AutoPostBack="True" />
-                                            <i></i>Is Vehicle?</label>
+                                            <i></i>Is Vehicle Spare Part?</label>
                                     </div>
                                 </div>
                             </section>
-                           
-
-                              <section class="col col-6">
-                                <asp:Label ID="lblPlate" runat="server" Text="Plate No" Visible="False"></asp:Label>
-                                <label class="select">
-                                    <asp:DropDownList ID="ddlPlate" AutoPostBack="true" runat="server" DataValueField="Id" DataTextField="PlateNo">
-                                    </asp:DropDownList><i id="i" runat="server"></i>
-                                   
-                                </label>
-                            </section>
-                        </div>
-                    <div class="row">
-                          <section class="col col-6">
+                            <section class="col col-6">
                                 <asp:Label ID="lblMainReq" runat="server" Text="Maintenance Request No" Visible="False"></asp:Label>
                                 <label class="select">
-                                    <asp:DropDownList ID="ddlMaintenanceReq"  runat="server" DataValueField="Id" DataTextField="RequestNo" AutoPostBack="True" OnSelectedIndexChanged="ddlMaintenanceReq_SelectedIndexChanged">
-                                         <asp:ListItem Value="0">None</asp:ListItem>
-                                    </asp:DropDownList><i id="i1" runat="server"></i>
-                                   
+                                    <asp:DropDownList ID="ddlMaintenanceReq" AppendDataBoundItems="true" runat="server" DataValueField="Id" DataTextField="ReqPlateNo" AutoPostBack="True" OnSelectedIndexChanged="ddlMaintenanceReq_SelectedIndexChanged">
+                                    </asp:DropDownList><i></i>
                                 </label>
                             </section>
                         </div>
+
                         <div class="row">
                             <%--<section class="col col-4">
                                 <label class="label">
@@ -151,7 +138,7 @@
                                     <EditItemTemplate>
                                         <asp:DropDownList ID="ddlAccount" runat="server" CssClass="form-control"
                                             AppendDataBoundItems="True" DataTextField="AccountName" DataValueField="Id"
-                                            ValidationGroup="proedit">
+                                            ValidationGroup="proedit" AutoPostBack="True" OnSelectedIndexChanged="ddlAccount_SelectedIndexChanged">
                                             <asp:ListItem Value="0">Select Account</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RfvAccount" runat="server" CssClass="validator"
@@ -186,23 +173,13 @@
                                 </asp:TemplateColumn>
                                 <asp:TemplateColumn HeaderText="Item">
                                     <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "Item")%>
+                                        <%# DataBinder.Eval(Container.DataItem, "ItemDescription")%>
                                     </ItemTemplate>
                                     <EditItemTemplate>
-                                        <asp:TextBox ID="txtItem" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "Item")%>'></asp:TextBox>
-                                         <asp:DropDownList ID="ddlItem" runat="server" CssClass="form-control" Visible="false"
-                                            AppendDataBoundItems="True" DataTextField="Name" DataValueField="Id"
-                                            ValidationGroup="proedit" >
-                                            <asp:ListItem Value="0">Select Item</asp:ListItem>
-                                        </asp:DropDownList>
+                                        <asp:TextBox ID="txtItem" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "ItemDescription")%>'></asp:TextBox>
                                     </EditItemTemplate>
                                     <FooterTemplate>
                                         <asp:TextBox ID="txtFItem" runat="server" CssClass="form-control"></asp:TextBox>
-                                         <asp:DropDownList ID="ddlFItem" runat="server" CssClass="form-control" Visible="false"
-                                            AppendDataBoundItems="True" DataTextField="Name" DataValueField="Id"
-                                            EnableViewState="true" ValidationGroup="proaddspare" AutoPostBack="True">
-                                            <asp:ListItem Value="0">Select Item</asp:ListItem>
-                                        </asp:DropDownList>
                                     </FooterTemplate>
                                 </asp:TemplateColumn>
                                 <asp:TemplateColumn HeaderText="Requested Quantity">
@@ -274,7 +251,7 @@
                                             <asp:ListItem Value="Liter (L)">Liter (L)</asp:ListItem>
                                             <asp:ListItem Value="Day (D)">Day (D)</asp:ListItem>
                                             <asp:ListItem Value="Hour (Hr)">Hour (Hr)</asp:ListItem>
-                                             <asp:ListItem Value="Pack (Pk)">Pack (Pk)</asp:ListItem>
+                                            <asp:ListItem Value="Pack (Pk)">Pack (Pk)</asp:ListItem>
                                             <asp:ListItem Value="Set (St)">Set (St)</asp:ListItem>
                                             <asp:ListItem Value="Other">Other</asp:ListItem>
                                         </asp:DropDownList>

@@ -250,7 +250,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     {
                         BidderItemDetail detail = new BidderItemDetail();
                         detail.ItemAccount = PD.ItemAccount;
-                        detail.ItemDescription = PD.Item;
+                        detail.ItemDescription = PD.ItemDescription;
                         detail.Qty = PD.Qty;
                         detail.Project = PD.Project;
                         detail.Grant = PD.Grant;
@@ -1904,7 +1904,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 
                     BidderItemDetail detail = new BidderItemDetail();
                     detail.ItemAccount = PD.ItemAccount;
-                    detail.ItemDescription = PD.Item;
+                    detail.ItemDescription = PD.ItemDescription;
                     detail.Qty = PD.Qty;
                     detail.Project= PD.Project;
                     detail.Grant = PD.Grant;
@@ -2025,7 +2025,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                                 BidderItemDetail detail = new BidderItemDetail();
                               
                                     detail.ItemAccount = PD.ItemAccount;
-                                    detail.ItemDescription = PD.Item;
+                                    detail.ItemDescription = PD.ItemDescription;
                                     detail.Qty = PD.Qty;
                                     detail.Project = PD.Project;
                                     detail.Grant = PD.Grant;

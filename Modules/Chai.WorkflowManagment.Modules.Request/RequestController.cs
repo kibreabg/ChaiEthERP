@@ -427,14 +427,27 @@ namespace Chai.WorkflowManagment.Modules.Request
         public IList<PurchaseRequest> GetPurchaseRequests()
         {
             return WorkspaceFactory.CreateReadOnly().Query<PurchaseRequest>(null).ToList();
-
+        }
+        public IList<PurchaseRequest> GetDistinctCompletedPurchaseReqs()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<PurchaseRequest>(x => x.ProgressStatus == "Completed").Distinct().ToList();
         }
       
         public IList<PurchaseRequest> GetPurchaseRequestsInProgress()
         {
             string filterExpression = "";
             filterExpression = "SELECT DISTINCT PurchaseRequests.Id,RequestNo,Requester,RequestedDate,Requireddateofdelivery,TotalPrice,SpecialNeed,NeededFor, " +
-                                      " DeliverTo,Comment,SuggestedSupplier,IsVehicle,PlateNo,CurrentApprover,CurrentLevel,ProgressStatus,CurrentStatus FROM " +
+                                      " DeliverTo,Comment,SuggestedSupplier,IsVehicle,MaintenanceRequestNo,CurrentApprover,CurrentLevel,ProgressStatus,CurrentStatus FROM " +
+                                      " PurchaseRequests INNER JOIN PurchaseRequestDetails ON dbo.PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id" +
+                                       " WHERE PurchaseRequestDetails.BidAnalysisRequestStatus = 'InProgress' AND PurchaseRequests.ProgressStatus = 'Completed' ORDER BY PurchaseRequests.Id DESC ";
+
+            return _workspace.SqlQuery<PurchaseRequest>(filterExpression).ToList();
+        }
+        public IList<PurchaseRequest> GetPurchaseRequestsCompleted()
+        {
+            string filterExpression = "";
+            filterExpression = "SELECT DISTINCT PurchaseRequests.Id,RequestNo,Requester,RequestedDate,Requireddateofdelivery,TotalPrice,SpecialNeed,NeededFor, " +
+                                      " DeliverTo,Comment,SuggestedSupplier,IsVehicle,MaintenanceRequestNo,CurrentApprover,CurrentLevel,ProgressStatus,CurrentStatus FROM " +
                                       " PurchaseRequests INNER JOIN PurchaseRequestDetails ON dbo.PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id" +
                                        " WHERE PurchaseRequestDetails.BidAnalysisRequestStatus = 'InProgress' AND PurchaseRequests.ProgressStatus = 'Completed' ORDER BY PurchaseRequests.Id DESC ";
 
@@ -445,6 +458,15 @@ namespace Chai.WorkflowManagment.Modules.Request
             string filterExpression = "";
 
             filterExpression = "SELECT  *  FROM PurchaseRequestDetails INNER JOIN PurchaseRequests on dbo.PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id  Where PurchaseRequestDetails.BidAnalysisRequestStatus = 'InProgress'  order by PurchaseRequests.Id Desc ";
+
+            return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
+
+        }
+        public IList<PurchaseRequestDetail> ListPurchaseReqCompleted()
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM PurchaseRequestDetails INNER JOIN PurchaseRequests on dbo.PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id  Where PurchaseRequestDetails.BidAnalysisRequestStatus = 'Completed'  order by PurchaseRequests.Id Desc ";
 
             return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
 
@@ -467,6 +489,17 @@ namespace Chai.WorkflowManagment.Modules.Request
             return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
 
         }
+
+        public IList<PurchaseRequestDetail> ListPRDetailsCompletedById(int ReqId)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM PurchaseRequestDetails INNER JOIN PurchaseRequests ON PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id WHERE PurchaseRequestDetails.BidAnalysisRequestStatus = 'Completed' AND PurchaseRequests.Id = '" + ReqId + "'  ORDER BY PurchaseRequests.Id DESC";
+
+            return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
+
+        }
+        
         public IList<PurchaseRequestDetail> ListPurchaseReqById(int Id)
         {
             string filterExpression = "";

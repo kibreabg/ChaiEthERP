@@ -21,6 +21,70 @@
     <asp:ValidationSummary ID="VSEdit" runat="server"
         CssClass="alert alert-danger fade in" DisplayMode="SingleParagraph"
         ValidationGroup="proedit" ForeColor="" />
+
+    <div class="jarviswidget" id="wid-id-8" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header>
+            <span class="widget-icon"><i class="fa fa-edit"></i></span>
+            <h2>Choose the Item for Store Request</h2>
+        </header>
+        <div>
+            <div class="jarviswidget-editbox"></div>
+            <div class="widget-body no-padding">
+                <div class="smart-form">
+                    <fieldset>
+                        <div class="row">
+                            <section class="col col-4">
+                                <label id="lblPurchaseReq" runat="server" class="label" visible="true">
+                                    Completed Purchase Request
+                                </label>
+                                <label class="select">
+                                    <asp:DropDownList ID="ddlPurchaseReq" AppendDataBoundItems="true" AutoPostBack="true" runat="server" DataValueField="Id" DataTextField="RequestNo" OnSelectedIndexChanged="ddlPurchaseReq_SelectedIndexChanged">
+                                    </asp:DropDownList><i></i>
+                                </label>
+                            </section>
+                        </div>
+                    </fieldset>
+                    <asp:Panel ID="pnlInfo" runat="server">
+                        <div class="alert alert-info fade in">
+                            <button class="close" data-dismiss="alert">
+                                ×
+                            </button>
+                            <i class="fa-fw fa fa-info"></i>
+                            <strong>Info!</strong> Please select the Purchase Request Transaction to perform Store Request Form
+                        </div>
+                    </asp:Panel>
+                    <asp:GridView ID="grvDetails" Visible="False"
+                        runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                        CssClass="table table-striped table-bordered table-hover" AllowPaging="True" OnPageIndexChanging="grvDetails_PageIndexChanging" PageSize="15">
+                        <RowStyle CssClass="rowstyle" />
+                        <Columns>
+                            <asp:BoundField DataField="PurchaseRequest.RequestNo" HeaderText="Purchase Request No" SortExpression="PurchaseRequest.RequestNo" />
+                            <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="AccountName" SortExpression="ItemAccount.AccountName" />
+                            <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
+                            <asp:BoundField DataField="ItemDescription" HeaderText="Item Description" SortExpression="ItemDescription"></asp:BoundField>
+                            <asp:BoundField DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
+                            <asp:TemplateField>
+                                <ItemTemplate>
+                                    <asp:CheckBox ID="chkSelect" runat="server" />
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                        </Columns>
+                        <FooterStyle CssClass="FooterStyle" />
+                        <HeaderStyle CssClass="headerstyle" />
+                        <PagerStyle CssClass="PagerStyle" />
+                        <RowStyle CssClass="rowstyle" />
+                    </asp:GridView>
+
+                    <footer>
+                        <asp:Button ID="btnCreateStoreItem" runat="server" CssClass="btn btn-primary" Text="Prepare Store Requisition" OnClick="btnCreateStoreItem_Click"  />
+                    </footer>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div id="wid-id-0" class="jarviswidget" data-widget-custombutton="false" data-widget-editbutton="false">
         <header>
             <span class="widget-icon"><i class="fa fa-edit"></i></span>

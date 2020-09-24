@@ -519,7 +519,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 TextBox txtAccountCode = e.Item.FindControl("txtAccountCode") as TextBox;
                 Detail.AccountCode = txtAccountCode.Text;
                 TextBox txtItem = e.Item.FindControl("txtItem") as TextBox;
-                Detail.Item = txtItem.Text;
+                Detail.ItemDescription = txtItem.Text;
                 TextBox txtApprovedQuantity = e.Item.FindControl("txtApprovedQuantity") as TextBox;
                 Detail.ApprovedQuantity = Convert.ToInt32(txtApprovedQuantity.Text);
                 DropDownList ddlPurposeOfPurchase = e.Item.FindControl("ddlPurposeOfPurchase") as DropDownList;

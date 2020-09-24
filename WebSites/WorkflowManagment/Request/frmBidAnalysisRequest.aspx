@@ -87,7 +87,7 @@
                      <asp:BoundField DataField="PurchaseRequest.RequestNo" HeaderText="Purchase Request No" SortExpression="PurchaseRequest.RequestNo" />
                     <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="AccountName" SortExpression="ItemAccount.AccountName" />
                     <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
-                    <asp:BoundField DataField="Item" HeaderText="Item Description" SortExpression="Item"></asp:BoundField>
+                    <asp:BoundField DataField="ItemDescription" HeaderText="Item Description" SortExpression="ItemDescription"></asp:BoundField>
                     <asp:BoundField DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
                     <%--<asp:BoundField DataField="Project.ProjectCode" HeaderText="Project Code" />
                     <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant Code" />     --%>

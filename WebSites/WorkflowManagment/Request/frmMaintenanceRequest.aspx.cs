@@ -33,17 +33,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 this._presenter.OnViewInitialized();
                 XmlConfigurator.Configure();
                 BindSearchMaintenanceRequestGrid();
-                BindMaintenanceRequestDetails();
-               
+                BindMaintenanceRequestDetails();               
                 PopProjects();
                 BindInitialValues();
                 PopInternalVehicles();
             }
            
             this._presenter.OnViewLoaded();
-
-
-
         }
 
         [CreateNew]

@@ -60,7 +60,7 @@
                                 <label class="label">
                                     Plate No</label>
                                 <label class="select">
-                                    <asp:DropDownList ID="ddlPlate" AutoPostBack="true" runat="server" DataValueField="Id" DataTextField="PlateNo">
+                                    <asp:DropDownList ID="ddlPlate" AutoPostBack="true" runat="server" DataValueField="PlateNo" DataTextField="PlateNo">
                                     </asp:DropDownList><i id="i1" runat="server"></i>
                                 </label>
                             </section>
