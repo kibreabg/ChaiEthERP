@@ -430,7 +430,7 @@ namespace Chai.WorkflowManagment.Modules.Request
         }
         public IList<PurchaseRequest> GetDistinctCompletedPurchaseReqs()
         {
-            return WorkspaceFactory.CreateReadOnly().Query<PurchaseRequest>(x => x.ProgressStatus == "Completed").Distinct().ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<PurchaseRequest>(x => x.ProgressStatus == "Completed" && x.IsVehicle == true).Distinct().ToList();
         }
       
         public IList<PurchaseRequest> GetPurchaseRequestsInProgress()
@@ -776,7 +776,10 @@ namespace Chai.WorkflowManagment.Modules.Request
         {
             return _workspace.Single<StoreRequest>(x => x.Id == StoreRequestId, x => x.StoreRequestDetails.Select(z => z.Project));
         }
-
+        public StoreRequest GetStoreRequestByPurchaseId(int purchaseId)
+        {
+            return _workspace.First<StoreRequest>(x => x.purchaseId == purchaseId);
+        }
         public StoreRequestDetail GetStoreRequestbyPuID(int Id)
         {
             return _workspace.Single<StoreRequestDetail>(x => x.Id == Id, y => y.StoreRequest);

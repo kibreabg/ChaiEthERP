@@ -176,7 +176,7 @@
                                         <%# DataBinder.Eval(Container.DataItem, "ItemDescription")%>
                                     </ItemTemplate>
                                     <EditItemTemplate>
-                                        <asp:TextBox ID="txtItem" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "ItemDescription")%>'></asp:TextBox>
+                                        <asp:TextBox ID="txtItem" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "ItemDescription")%>'></asp:TextBox>
                                     </EditItemTemplate>
                                     <FooterTemplate>
                                         <asp:TextBox ID="txtFItem" runat="server" CssClass="form-control"></asp:TextBox>

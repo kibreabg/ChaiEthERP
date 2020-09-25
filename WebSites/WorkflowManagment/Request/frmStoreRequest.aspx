@@ -22,68 +22,69 @@
         CssClass="alert alert-danger fade in" DisplayMode="SingleParagraph"
         ValidationGroup="proedit" ForeColor="" />
 
-    <div class="jarviswidget" id="wid-id-8" data-widget-editbutton="false" data-widget-custombutton="false">
-        <header>
-            <span class="widget-icon"><i class="fa fa-edit"></i></span>
-            <h2>Choose the Item for Store Request</h2>
-        </header>
-        <div>
-            <div class="jarviswidget-editbox"></div>
-            <div class="widget-body no-padding">
-                <div class="smart-form">
-                    <fieldset>
-                        <div class="row">
-                            <section class="col col-4">
-                                <label id="lblPurchaseReq" runat="server" class="label" visible="true">
-                                    Completed Purchase Request
-                                </label>
-                                <label class="select">
-                                    <asp:DropDownList ID="ddlPurchaseReq" AppendDataBoundItems="true" AutoPostBack="true" runat="server" DataValueField="Id" DataTextField="RequestNo" OnSelectedIndexChanged="ddlPurchaseReq_SelectedIndexChanged">
-                                    </asp:DropDownList><i></i>
-                                </label>
-                            </section>
-                        </div>
-                    </fieldset>
-                    <asp:Panel ID="pnlInfo" runat="server">
-                        <div class="alert alert-info fade in">
-                            <button class="close" data-dismiss="alert">
-                                ×
-                            </button>
-                            <i class="fa-fw fa fa-info"></i>
-                            <strong>Info!</strong> Please select the Purchase Request Transaction to perform Store Request Form
-                        </div>
-                    </asp:Panel>
-                    <asp:GridView ID="grvDetails" Visible="False"
-                        runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                        CssClass="table table-striped table-bordered table-hover" AllowPaging="True" OnPageIndexChanging="grvDetails_PageIndexChanging" PageSize="15">
-                        <RowStyle CssClass="rowstyle" />
-                        <Columns>
-                            <asp:BoundField DataField="PurchaseRequest.RequestNo" HeaderText="Purchase Request No" SortExpression="PurchaseRequest.RequestNo" />
-                            <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="AccountName" SortExpression="ItemAccount.AccountName" />
-                            <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
-                            <asp:BoundField DataField="ItemDescription" HeaderText="Item Description" SortExpression="ItemDescription"></asp:BoundField>
-                            <asp:BoundField DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
-                            <asp:TemplateField>
-                                <ItemTemplate>
-                                    <asp:CheckBox ID="chkSelect" runat="server" />
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                        </Columns>
-                        <FooterStyle CssClass="FooterStyle" />
-                        <HeaderStyle CssClass="headerstyle" />
-                        <PagerStyle CssClass="PagerStyle" />
-                        <RowStyle CssClass="rowstyle" />
-                    </asp:GridView>
+    <asp:Panel ID="pnlPurchaseSpareParts" Visible="false" runat="server">
+        <div class="jarviswidget" id="wid-id-8" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                <h2>Spare Part related Purchases</h2>
+            </header>
+            <div>
+                <div class="jarviswidget-editbox"></div>
+                <div class="widget-body no-padding">
+                    <div class="smart-form">
+                        <fieldset>
+                            <div class="row">
+                                <section class="col col-4">
+                                    <label id="lblPurchaseReq" runat="server" class="label" visible="true">
+                                        Purchase Requests
+                                    </label>
+                                    <label class="select">
+                                        <asp:DropDownList ID="ddlPurchaseReq" AppendDataBoundItems="true" AutoPostBack="true" runat="server" DataValueField="Id" DataTextField="RequestNo" OnSelectedIndexChanged="ddlPurchaseReq_SelectedIndexChanged">
+                                        </asp:DropDownList><i></i>
+                                    </label>
+                                </section>
+                            </div>
+                        </fieldset>
+                        <asp:Panel ID="pnlInfo" runat="server">
+                            <div class="alert alert-info fade in">
+                                <button class="close" data-dismiss="alert">
+                                    ×
+                                </button>
+                                <i class="fa-fw fa fa-info"></i>
+                                <strong>Info!</strong> Please select the Purchase Request Transaction you used to buy the Spare Parts
+                            </div>
+                        </asp:Panel>
+                        <asp:GridView ID="grvDetails" Visible="False"
+                            runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                            CssClass="table table-striped table-bordered table-hover" AllowPaging="True" OnPageIndexChanging="grvDetails_PageIndexChanging" PageSize="15">
+                            <RowStyle CssClass="rowstyle" />
+                            <Columns>
+                                <asp:BoundField DataField="PurchaseRequest.RequestNo" HeaderText="Purchase Request No" SortExpression="PurchaseRequest.RequestNo" />
+                                <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="AccountName" SortExpression="ItemAccount.AccountName" />
+                                <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
+                                <asp:BoundField DataField="Item.Name" HeaderText="Item Description" SortExpression="Item.Name"></asp:BoundField>
+                                <asp:BoundField DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
+                                <asp:TemplateField>
+                                    <ItemTemplate>
+                                        <asp:CheckBox ID="chkSelect" runat="server" />
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                            </Columns>
+                            <FooterStyle CssClass="FooterStyle" />
+                            <HeaderStyle CssClass="headerstyle" />
+                            <PagerStyle CssClass="PagerStyle" />
+                            <RowStyle CssClass="rowstyle" />
+                        </asp:GridView>
 
-                    <footer>
-                        <asp:Button ID="btnCreateStoreItem" runat="server" CssClass="btn btn-primary" Text="Prepare Store Requisition" OnClick="btnCreateStoreItem_Click"  />
-                    </footer>
+                        <footer>
+                            <asp:Button ID="btnCreateStoreItem" runat="server" CssClass="btn btn-primary" Text="Prepare Store Requisition" OnClick="btnCreateStoreItem_Click" />
+                        </footer>
 
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
+    </asp:Panel>
 
     <div id="wid-id-0" class="jarviswidget" data-widget-custombutton="false" data-widget-editbutton="false">
         <header>
@@ -106,15 +107,18 @@
             <div class="widget-body no-padding">
                 <div class="smart-form">
                     <fieldset>
-
                         <div class="row">
-                            <%--<section class="col col-4">
-                                <label class="label">
-                                    Request No.</label>
-                                <label class="input">
-                                    <asp:TextBox ID="txtRequestNo" runat="server" Visible="true"></asp:TextBox>
-                                </label>
-                            </section>--%>
+                            <section class="col col-6">
+                                <div class="smart-form">
+                                    <div class="inline-group">
+                                        <label class="checkbox">
+                                            <asp:CheckBox ID="ckIsSparePart" runat="server" OnCheckedChanged="ckIsSparePart_CheckedChanged" AutoPostBack="True" />
+                                            <i></i>Is Vehicle Spare Part?</label>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="row">
                             <section class="col col-6">
                                 <label class="label">
                                     Requester</label>
@@ -130,12 +134,8 @@
                                     <asp:TextBox ID="txtRequestDate" ReadOnly="true" runat="server" Visible="true"></asp:TextBox>
                                 </label>
                             </section>
-
                         </div>
-
                         <div class="row">
-
-
                             <section class="col col-6">
                                 <label class="label">
                                     Deliver to</label>
@@ -144,17 +144,6 @@
                                     <asp:RequiredFieldValidator ID="RfvDeliverto" CssClass="validator" runat="server" ControlToValidate="txtDeliverto" ErrorMessage="Deliver To Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Save"></asp:RequiredFieldValidator>
                                 </label>
                             </section>
-
-                            <%--  <section class="col col-6">
-                                <label id="lblapplyfor" runat="server" class="label" visible="false">
-                                    Remark</label>
-                                <label class="input">
-                                    <asp:TextBox ID="txtComment" runat="server" Visible="false"></asp:TextBox>
-                                </label>
-                            </section>--%>
-
-
-
                             <section class="col col-6">
                                 <label class="label">Program</label>
                                 <label class="select">
@@ -167,13 +156,11 @@
                         </div>
                         <asp:DataGrid ID="dgStoreRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
                             CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
-                            GridLines="None"
-                            OnCancelCommand="dgStoreRequestDetail_CancelCommand" OnDeleteCommand="dgStoreRequestDetail_DeleteCommand" OnEditCommand="dgStoreRequestDetail_EditCommand"
+                            GridLines="None" OnCancelCommand="dgStoreRequestDetail_CancelCommand" OnDeleteCommand="dgStoreRequestDetail_DeleteCommand" OnEditCommand="dgStoreRequestDetail_EditCommand"
                             OnItemCommand="dgStoreRequestDetail_ItemCommand" OnItemDataBound="dgStoreRequestDetail_ItemDataBound" OnUpdateCommand="dgStoreRequestDetail_UpdateCommand"
                             ShowFooter="True">
 
                             <Columns>
-
                                 <asp:TemplateColumn HeaderText="Item Description">
                                     <ItemTemplate>
                                         <%# DataBinder.Eval(Container.DataItem, "Item.Name")%>
@@ -202,22 +189,6 @@
                                         <asp:RequiredFieldValidator ID="RfvFQty" CssClass="validator" runat="server" ControlToValidate="txtFQty" ErrorMessage="Qty Required" ValidationGroup="proadd"></asp:RequiredFieldValidator>
                                     </FooterTemplate>
                                 </asp:TemplateColumn>
-
-                               <%-- <asp:TemplateColumn HeaderText="Quantity Approved">
-                                    <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "QtyApproved")%>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <asp:TextBox ID="txtQtyApp" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "QtyApproved")%>'></asp:TextBox>
-                                        <asp:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtQtyApp" ID="txtQtyApp_FilteredTextBoxExtender" FilterType="Numbers"></asp:FilteredTextBoxExtender>
-                                        <asp:RequiredFieldValidator ID="RfvQtyApp" CssClass="validator" runat="server" ControlToValidate="txtQtyApp" ErrorMessage="Qty Required" ValidationGroup="proedit"></asp:RequiredFieldValidator>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:TextBox ID="txtFQtyApp" runat="server" CssClass="form-control"></asp:TextBox>
-                                        <asp:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtFQtyApp" ID="txtFQtyApp_FilteredTextBoxExtender" FilterType="Numbers"></asp:FilteredTextBoxExtender>
-                                        <asp:RequiredFieldValidator ID="RfvFQtyApp" CssClass="validator" runat="server" ControlToValidate="txtFQtyApp" ErrorMessage="Qty Required" ValidationGroup="proadd"></asp:RequiredFieldValidator>
-                                    </FooterTemplate>
-                                </asp:TemplateColumn>--%>
                                 <asp:TemplateColumn HeaderText="Unit of Measurment">
                                     <EditItemTemplate>
                                         <asp:DropDownList ID="ddlUnitOfMeasurment" runat="server" CssClass="form-control"
@@ -357,13 +328,13 @@
 
                     <footer>
                         <asp:Button ID="btnRequest" runat="server" CssClass="btn btn-primary" OnClick="btnRequest_Click" Text="Request" ValidationGroup="Save" />
-                        <a data-toggle="modal" runat="server" id="searchLink" href="#searchModal" class="btn btn-primary"><i class="fa fa-circle-arrow-up fa-lg"></i>Search</a>
+                        <a data-toggle="modal" runat="server" id="searchLink" href="#searchModal" class="btn btn-default"><i class="fa fa-circle-arrow-up fa-lg"></i>Search</a>
                         <%--<asp:Button ID="btnsearch2" runat="server" CssClass="btn btn-primary" Text="Search" />--%>
-                        <asp:Button ID="btnDelete" runat="server" CssClass="btn btn-primary" Text="Delete" OnClick="btnDelete_Click" OnClientClick="javascript:return confirm('Are you sure you want to delete this entry?');" TabIndex="9" Visible="False" />
+                        <asp:Button ID="btnDelete" runat="server" CssClass="btn btn-default" Text="Delete" OnClick="btnDelete_Click" OnClientClick="javascript:return confirm('Are you sure you want to delete this entry?');" TabIndex="9" Visible="False" />
 
                         <%--<asp:Button ID="btnSearch" data-toggle="modal" runat="server" OnClientClick="#myModal" Text="Search" ></asp:Button>--%>
-                        <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-primary" OnClick="btnCancel_Click" Text="New" />
-                        <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" PostBackUrl="../Default.aspx"></asp:Button>
+                        <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-default" OnClick="btnCancel_Click" Text="New" />
+                        <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-default" PostBackUrl="../Default.aspx"></asp:Button>
 
                     </footer>
 
@@ -373,9 +344,7 @@
 
         </div>
         <!-- end widget div -->
-
     </div>
-
     <div class="modal fade" id="searchModal" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -436,30 +405,19 @@
                                         <asp:Label ID="lblDate" runat="server" Text='<%# Eval("RequestedDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
                                     </ItemTemplate>
                                 </asp:TemplateField>
-
-
                                 <asp:BoundField DataField="DeliverTo" HeaderText="Deliver To" SortExpression="DeliverTo" />
-
-
                                 <asp:CommandField ShowSelectButton="True" />
-                                <%-- <asp:CommandField ShowDeleteButton="True" />--%>
                             </Columns>
                             <FooterStyle CssClass="FooterStyle" />
                             <HeaderStyle CssClass="headerstyle" />
                             <PagerStyle CssClass="PagerStyle" />
                             <RowStyle CssClass="rowstyle" />
-
                         </asp:GridView>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- /.modal-content -->
-    <%--<asp:ModalPopupExtender runat="server" Enabled="True" PopupControlID="pnlSearch"
-        TargetControlID="btnsearch2" CancelControlID="Button1" BackgroundCssClass="modalBackground" ID="pnlSearch_ModalPopupExtender">
-    </asp:ModalPopupExtender>--%>
-
     <asp:Panel ID="pnlWarning" Visible="false" Style="position: absolute; top: 370px; left: 84px;" runat="server">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -488,7 +446,6 @@
                 </div>
             </div>
         </div>
-        <!-- /.modal-content -->
     </asp:Panel>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="menuContent" runat="Server">

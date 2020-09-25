@@ -33,12 +33,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 this._presenter.OnViewInitialized();
                 XmlConfigurator.Configure();
                 BindSearchMaintenanceRequestGrid();
-                BindMaintenanceRequestDetails();               
+                BindMaintenanceRequestDetails();
                 PopProjects();
                 BindInitialValues();
                 PopInternalVehicles();
             }
-           
+
             this._presenter.OnViewLoaded();
         }
 
@@ -80,21 +80,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
             if (_presenter.CurrentMaintenanceRequest.Id <= 0)
             {
-               // AutoNumber();
+                // AutoNumber();
                 txtRequestDate.Text = DateTime.Today.Date.ToShortDateString();
 
             }
         }
         private string AutoNumber()
         {
-        //    if (_presenter.GetLastMaintenanceRequestId() == null)
-        //    {
-        //        return "MR-1";
-        //    }
-        //    else
-        //    {
-                return "MR-" + (_presenter.GetLastMaintenanceRequestId() + 1).ToString();
-            //}
+            return "MR-" + (_presenter.GetLastMaintenanceRequestId() + 1).ToString();
         }
         private void BindMaintenanceRequest()
         {
@@ -112,24 +105,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 //_presenter.CurrentMaintenanceRequest.RequestNo = AutoNumber();
                 _presenter.CurrentMaintenanceRequest.KmReading = Convert.ToInt32(txtKMReading.Text);
                 _presenter.CurrentMaintenanceRequest.Remark = "";
-                
-
-                
-               
                 _presenter.CurrentMaintenanceRequest.PlateNo = GetPlateNo;
-                //Determine total cost
-                /*       decimal cost = 0;
-                       if (_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails.Count > 0)
-                       {
-
-                           foreach (MaintenanceRequestDetail detail in _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails)
-                           {
-                               cost = cost + detail.EstimatedCost;
-                           }
-                       }
-                       _presenter.CurrentMaintenanceRequest.TotalPrice = cost;*/
-                //Determine total cost end
-               
             }
             catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
             {
@@ -148,18 +124,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
                 throw raise;
             }
-            //}
-            //catch (Exception ex)
-            //{
-            //    if (ex.InnerException != null)
-            //    {
-            //        if (ex.InnerException.InnerException.Message.Contains("Violation of UNIQUE KEY"))
-            //        {
-            //            Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", Chai.WorkflowManagment.Enums.RMessageType.Error));
-            //            //AutoNumber();
-            //        }
-            //    }
-            //}
 
         }
         private void SaveMaintenanceRequestStatus()
@@ -195,7 +159,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         else
                         {
                             if (_presenter.Approver(AL.EmployeePosition.Id).Id != 0)
-                                PRS.Approver = _presenter.Approver(AL.EmployeePosition.Id).Id; 
+                                PRS.Approver = _presenter.Approver(AL.EmployeePosition.Id).Id;
                             else
                                 PRS.Approver = 0;
                         }
@@ -255,7 +219,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
         }
 
-        
+
         public string RequestNo
         {
             get { return AutoNumber(); }
@@ -310,9 +274,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
         public int GetKmReading
         {
-            
-                get { return Convert.ToInt32(txtKMReading.Text); }
-           
+            get { return Convert.ToInt32(txtKMReading.Text); }
         }
 
         public string GetActionTaken
@@ -400,9 +362,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             txtRequestDate.Text = "";
             txtKMReading.Text = "";
             txtRemark.Text = "";
-          
-
-
         }
         protected void btnCancel_Click(object sender, EventArgs e)
         {
@@ -435,25 +394,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             _presenter.DeleteMaintenanceRequest(_presenter.GetMaintenanceRequestById(Convert.ToInt32(grvMaintenanceRequestList.DataKeys[e.RowIndex].Value)));
 
             btnFind_Click(sender, e);
-            Master.ShowMessage(new AppMessage("Maintenance Request Successfully Deleted", Chai.WorkflowManagment.Enums.RMessageType.Info));
+            Master.ShowMessage(new AppMessage("Maintenance Request Successfully Deleted", RMessageType.Info));
 
         }
         protected void grvMaintenanceRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            //LeaveRequest leaverequest = e.Row.DataItem as LeaveRequest;
-            //if (leaverequest != null)
-            //{
-            //    if (leaverequest.GetLeaveRequestStatusworkflowLevel(1).ApprovalStatus != null)
-            //    {
-            //        e.Row.Cells[5].Enabled = false;
-            //        e.Row.Cells[6].Enabled = false;
-            //    }
-
-            //}
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                //LinkButton db = (LinkButton)e.Row.Cells[5].Controls[0];
-                //db.OnClientClick = "return confirm('Are you sure you want to delete this Recieve?');";
             }
         }
         protected void grvMaintenanceRequestList_PageIndexChanging(object sender, GridViewPageEventArgs e)
@@ -461,13 +408,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             grvMaintenanceRequestList.PageIndex = e.NewPageIndex;
             btnFind_Click(sender, e);
             ScriptManager.RegisterStartupScript(this, GetType(), "showSearch", "showSearch();", true);
-            //pnlSearch_ModalPopupExtender.Show();
         }
         protected void btnFind_Click(object sender, EventArgs e)
         {
             BindSearchMaintenanceRequestGrid();
             ScriptManager.RegisterStartupScript(this, GetType(), "showSearch", "showSearch();", true);
-            //pnlSearch_ModalPopupExtender.Show();
         }
         private void BindSearchMaintenanceRequestGrid()
         {
@@ -483,31 +428,27 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             DropDownList ddl = (DropDownList)sender;
             DropDownList ddlFGrant = ddl.FindControl("ddlFGrant") as DropDownList;
             BindGrant(ddlFGrant, Convert.ToInt32(ddl.SelectedValue));
-            
+
         }
         protected void ddlGrant_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
             DropDownList ddlGrant = ddl.FindControl("ddlGrant") as DropDownList;
             BindGrant(ddlGrant, Convert.ToInt32(ddl.SelectedValue));
-           
+
         }
         protected void ddlProject_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
             DropDownList ddlGrant = ddl.FindControl("ddlGrant") as DropDownList;
             BindGrant(ddlGrant, Convert.ToInt32(ddl.SelectedValue));
-           
         }
-
-     
         protected void ddlServiceTpe_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
             DropDownList ddlServiceTypeDetail = ddl.FindControl("ddlEdtServiceTypeDet") as DropDownList;
             BindServiceTypeDetails(ddlServiceTypeDetail, Convert.ToInt32(ddl.SelectedValue));
         }
-
         protected void ddlFServiceTpe_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
@@ -519,72 +460,52 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             DropDownList ddl = (DropDownList)sender;
             DropDownList ddlServiceTypeDetail = ddl.FindControl("ddlServiceTypeDet") as DropDownList;
             BindServiceTypeDetails(ddlServiceTypeDetail, Convert.ToInt32(ddl.SelectedValue));
-          
         }
         protected void btnRequest_Click(object sender, EventArgs e)
         {
-
-
             try
             {
                 if (_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails.Count != 0)
                 {
                     _presenter.SaveOrUpdateMaintenanceRequest();
                     BindMaintenanceRequest();
-                   
-                    Master.ShowMessage(new AppMessage("Successfully did a Maintenance Request, Reference No - <b>'" + _presenter.CurrentMaintenanceRequest.RequestNo + "'</b> ", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                  btnRequest.Visible = false;
-                  
-                  
+
+                    Master.ShowMessage(new AppMessage("Successfully did a Maintenance Request, Reference No - <b>'" + _presenter.CurrentMaintenanceRequest.RequestNo + "'</b> ", RMessageType.Info));
+                    btnRequest.Visible = false;
                 }
                 else
                 {
-                    Master.ShowMessage(new AppMessage("Please insert at least one  Detail", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Please insert at least one  Detail", RMessageType.Error));
                 }
             }
             catch (Exception ex)
             {
-                if (ex.InnerException != null)
-                {
-                    if (ex.InnerException.InnerException.Message.Contains("Violation of UNIQUE KEY"))
-                    {
-                        Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", Chai.WorkflowManagment.Enums.RMessageType.Error));
-                        AutoNumber();
-                    }
-                }
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
-
-
-
-
         }
         protected void btnDelete_Click(object sender, EventArgs e)
         {
-
-
-
-
-
             try
             {
                 if (_presenter.CurrentMaintenanceRequest.CurrentStatus == null)
                 {
                     _presenter.DeleteMaintenanceRequest(_presenter.CurrentMaintenanceRequest);
                     ClearForm();
-                    Master.ShowMessage(new AppMessage("Maintenance Request Deleted ", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    Master.ShowMessage(new AppMessage("Maintenance Request Deleted ", RMessageType.Info));
                     BindSearchMaintenanceRequestGrid();
                     BindMaintenanceRequestDetails();
                     btnDelete.Visible = false;
                 }
                 else
-                    Master.ShowMessage(new AppMessage("Warning: Unable to Delete Maintenance Request ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Warning: Unable to Delete Maintenance Request ", RMessageType.Error));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Warning: Unable to Delete Maintenance Request " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Warning: Unable to Delete Maintenance Request " + ex.Message, RMessageType.Error));
             }
         }
-      
+
         #region MaintenanceRequestDetail
         private void BindMaintenanceRequestDetails()
         {
@@ -646,18 +567,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     MaintenanceRequestDetail Detail = new MaintenanceRequestDetail();
                     DropDownList ddlFServiceTpe = e.Item.FindControl("ddlFServiceTpe") as DropDownList;
-                   
                     Detail.ServiceType = _presenter.GetServiceType(int.Parse(ddlFServiceTpe.SelectedValue));
                     DropDownList ddlFServiceTypeDetail = e.Item.FindControl("ddlServiceTypeDet") as DropDownList;
-                     Detail.DriverServiceTypeDetail = _presenter.GetServiceTypeDetail(int.Parse(ddlFServiceTypeDetail.SelectedValue));
-                    //DropDownList ddlFMeServiceTypeDetail = e.Item.FindControl("ddlMeServiceTypeDet") as DropDownList;
-                    //Detail.MechanicServiceType = _presenter.GetServiceTypeDetail(int.Parse(ddlFMeServiceTypeDetail.SelectedValue));
-                    //TextBox txtFRemark = e.Item.FindControl("txtFRemark") as TextBox;
-                    //Detail.TechnicianRemark = txtFRemark.Text;                   
-                  
-                 
-                  
-                   // Detail.MaintenanceRequest = _presenter.CurrentMaintenanceRequest;
+                    Detail.DriverServiceTypeDetail = _presenter.GetServiceTypeDetail(int.Parse(ddlFServiceTypeDetail.SelectedValue));
                     _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails.Add(Detail);
                     Master.ShowMessage(new AppMessage("Maintenance Request Detail added successfully.", RMessageType.Info));
                     dgMaintenanceRequestDetail.EditItemIndex = -1;
@@ -679,18 +591,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 BindServiceType(ddlFServiceType);
                 DropDownList ddlFServiceTypeDet = e.Item.FindControl("ddlServiceTypeDet") as DropDownList;
                 BindServiceTypeDetails(ddlFServiceTypeDet, Convert.ToInt32(ddlFServiceType.SelectedValue));
-                //DropDownList ddlFMecServiceTypeDet = e.Item.FindControl("ddlMecServiceTypeDet") as DropDownList;
-                //BindServiceTypeDetails(ddlFMecServiceTypeDet, Convert.ToInt32(ddlFServiceType.SelectedValue));
-                //DropDownList ddlFProject = e.Item.FindControl("ddlFProject") as DropDownList;
-                //BindProject(ddlFProject);
-                //DropDownList ddlFGrant = e.Item.FindControl("ddlFGrant") as DropDownList;
-                //BindGrant(ddlFGrant, Convert.ToInt32(ddlFProject.SelectedValue));
             }
             else
             {
                 if (_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails != null)
                 {
-                    DropDownList ddlServiceType= e.Item.FindControl("ddlServiceTpe") as DropDownList;
+                    DropDownList ddlServiceType = e.Item.FindControl("ddlServiceTpe") as DropDownList;
 
                     if (ddlServiceType != null)
                     {
@@ -715,8 +621,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                                 liI.Selected = true;
                         }
                     }
-
-                   
                 }
             }
         }
@@ -732,17 +636,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             try
             {
                 DropDownList ddlFServiceTpe = e.Item.FindControl("ddlServiceTpe") as DropDownList;
-
-               
                 Detail.ServiceType = _presenter.GetServiceType(int.Parse(ddlFServiceTpe.SelectedValue));
                 DropDownList ddlEdtServiceTypeDetail = e.Item.FindControl("ddlEdtServiceTypeDet") as DropDownList;
                 Detail.DriverServiceTypeDetail = _presenter.GetServiceTypeDetail(int.Parse(ddlFServiceTpe.SelectedValue));
-                //DropDownList ddlEdtMecServiceTypeDetail = e.Item.FindControl("ddlEdtMeServiceTypeDet") as DropDownList;
-                //TextBox txtFRemark = e.Item.FindControl("txtRemark") as TextBox;
-                //Detail.TechnicianRemark = txtFRemark.Text;
-
-
-        
                 Detail.MaintenanceRequest = _presenter.CurrentMaintenanceRequest;
                 Master.ShowMessage(new AppMessage("Maintenance Request Detail  Updated successfully.", RMessageType.Info));
                 dgMaintenanceRequestDetail.EditItemIndex = -1;
@@ -756,13 +652,5 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
         }
         #endregion
-
-
-
-
-
-        
-
-      
     }
 }

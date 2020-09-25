@@ -11,21 +11,18 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         {
             this.StoreRequestStatuses = new List<StoreRequestStatus>();
             this.StoreRequestDetails = new List<StoreRequestDetail>();
-           
         }
         public int Id { get; set; }
         public string RequestNo { get; set; }
         public int Requester { get; set; }
+        public int purchaseId { get; set; }
         public DateTime RequestedDate { get; set; }
-       
-        public string DeliverTo { get; set; }       
-      
+        public string DeliverTo { get; set; }
         public string Comment { get; set; }
         public int CurrentApprover { get; set; }
         public int CurrentLevel { get; set; }
         public string CurrentStatus { get; set; }
         public string ProgressStatus { get; set; }
-    
         public virtual IList<StoreRequestStatus> StoreRequestStatuses { get; set; }
         public virtual IList<StoreRequestDetail> StoreRequestDetails { get; set; }
         #region StoreRequestStatus
@@ -101,15 +98,15 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public virtual IList<StoreRequestDetail> GetPurchaseReqDetails(int StoreRequestId)
         {
             IList<StoreRequestDetail> LRS = new List<StoreRequestDetail>();
-            
-                foreach (StoreRequestDetail AR in StoreRequestDetails)
-                {
-                    if ( AR.StoreRequest.Id == StoreRequestId)
-                        LRS.Add(AR);
 
-                }
-                return LRS;
-            
+            foreach (StoreRequestDetail AR in StoreRequestDetails)
+            {
+                if (AR.StoreRequest.Id == StoreRequestId)
+                    LRS.Add(AR);
+
+            }
+            return LRS;
+
         }
         public virtual void RemoveStoreRequestDetail(int Id)
         {
@@ -123,9 +120,17 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
 
         }
         #endregion
-        
-        
-
+        #region Public Methods
+        public virtual bool IsItemAlreadyRequested(int itemId)
+        {
+            foreach (StoreRequestDetail SRD in StoreRequestDetails)
+            {
+                if (SRD.Item.Id == itemId)
+                    return true;
+            }
+            return false;
+        }
+        #endregion
 
     }
 }

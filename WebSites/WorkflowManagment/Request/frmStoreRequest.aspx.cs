@@ -38,11 +38,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 BindInitialValues();
                 BindPrograms();
             }
-         
             this._presenter.OnViewLoaded();
-
-
-
         }
         [CreateNew]
         public StoreRequestPresenter Presenter
@@ -98,9 +94,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 // txtRequestNo.Text = _presenter.CurrentStoreRequest.RequestNo;
                 txtRequestDate.Text = _presenter.CurrentStoreRequest.RequestedDate.ToShortDateString();
-               
+
                 txtDeliverto.Text = _presenter.CurrentStoreRequest.DeliverTo.ToString();
-               
+
 
 
             }
@@ -115,29 +111,19 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 _presenter.CurrentStoreRequest.RequestNo = AutoNumber();
                 _presenter.CurrentStoreRequest.DeliverTo = txtDeliverto.Text;
                 _presenter.CurrentStoreRequest.Comment = "";
-             
-                //Determine total cost
-                /*       decimal cost = 0;
-                       if (_presenter.CurrentStoreRequest.StoreRequestDetails.Count > 0)
-                       {
-
-                           foreach (StoreRequestDetail detail in _presenter.CurrentStoreRequest.StoreRequestDetails)
-                           {
-                               cost = cost + detail.EstimatedCost;
-                           }
-                       }
-                       _presenter.CurrentStoreRequest.TotalPrice = cost;*/
-                //Determine total cost end
                 SaveStoreRequestStatus();
                 GetCurrentApprover();
             }
             catch (Exception ex)
             {
+                Master.ShowMessage(new AppMessage(ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
                 if (ex.InnerException != null)
                 {
                     if (ex.InnerException.InnerException.Message.Contains("Violation of UNIQUE KEY"))
                     {
-                        Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", RMessageType.Error));
                         //AutoNumber();
                     }
                 }
@@ -153,18 +139,30 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             if (Convert.ToInt32(ddlPurchaseReq.SelectedValue) > 0 || Convert.ToInt32(ddlPurchaseReq.SelectedValue).ToString() != null)
             {
-                grvDetails.DataSource = _presenter.ListPRDetailsCompletedById(Convert.ToInt32(ddlPurchaseReq.SelectedValue));
-                //grvDetails.DataSource = _presenter.ListPurchaseReqInProgress();
+                int purchaseId = Convert.ToInt32(ddlPurchaseReq.SelectedValue);
+                _presenter.CurrentStoreRequest.purchaseId = purchaseId;
+                IList<PurchaseRequestDetail> prDetails = _presenter.ListPRDetailsCompletedById(purchaseId);
+                StoreRequest storeReq = _presenter.GetStoreRequestByPurchaseId(purchaseId);
+                foreach (PurchaseRequestDetail purchaseReqDetail in prDetails.ToList())
+                {
+                    if (storeReq != null)
+                    {
+                        if (storeReq.IsItemAlreadyRequested(purchaseReqDetail.Item.Id))
+                        {
+                            prDetails.Remove(purchaseReqDetail);
+                        }
+                    }
+
+                }
+                grvDetails.DataSource = prDetails;
                 grvDetails.DataBind();
             }
         }
-
-
         private void PopPurchaseRequestsDropDown()
         {
             ddlPurchaseReq.Items.Clear();
             ListItem lst = new ListItem();
-            lst.Text = " Select Request No ";
+            lst.Text = "Select the Purchase Request";
             lst.Value = "0";
             ddlPurchaseReq.Items.Add(lst);
             ddlPurchaseReq.DataSource = _presenter.GetDistinctCompletedPurchaseReqs();
@@ -237,7 +235,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 EmailSender.Send(_presenter.GetSuperviser(_presenter.GetAssignedJobbycurrentuser(PRS.Approver).AssignedTo).Email, "Purchase Request", _presenter.GetUser(_presenter.CurrentStoreRequest.Requester).FullName + "' Request for  Store Requisition. '" + _presenter.CurrentStoreRequest.RequestNo + "'");
             }
         }
-       
         public StoreRequest StoreRequest
         {
             get
@@ -257,7 +254,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return txtRequestDatesearch.Text; }
         }
-      
         public int StoreRequestId
         {
             get
@@ -285,12 +281,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ddlProject.DataTextField = "ProjectCode";
             ddlProject.DataBind();
         }
-        //private void BindProject(DropDownList ddlProject)
-        //{
-        //    ddlProject.DataSource = _presenter.GetProjects();
-        //    ddlProject.DataBind();
-
-        //}
+        private void BindAllProjects(DropDownList ddlProject)
+        {
+            ddlProject.DataSource = _presenter.ListAllProjects();
+            ddlProject.DataValueField = "Id";
+            ddlProject.DataTextField = "ProjectCode";
+            ddlProject.DataBind();
+        }
         private void BindGrant(DropDownList ddlGrant, int projectId)
         {
             ddlGrant.Items.Clear();
@@ -300,7 +297,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ddlGrant.Items.Add(lst);
             ddlGrant.DataSource = _presenter.GetGrantbyprojectId(projectId);
             ddlGrant.DataBind();
-
+        }
+        private void BindAllGrants(DropDownList ddlGrant)
+        {
+            ddlGrant.DataSource = _presenter.ListAllGrants();
+            ddlGrant.DataValueField = "Id";
+            ddlGrant.DataTextField = "GrantCode";
+            ddlGrant.DataBind();
         }
         private void BindItems(DropDownList ddlItem)
         {
@@ -316,9 +319,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             //txtRequestNo.Text = "";
             txtRequestDate.Text = "";
-            
+
             txtDeliverto.Text = "";
-         
+
 
 
         }
@@ -353,10 +356,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             _presenter.DeleteStoreRequest(_presenter.GetStoreRequestById(Convert.ToInt32(grvStoreRequestList.DataKeys[e.RowIndex].Value)));
 
             btnFind_Click(sender, e);
-            Master.ShowMessage(new AppMessage("Store Request Successfully Deleted", Chai.WorkflowManagment.Enums.RMessageType.Info));
+            Master.ShowMessage(new AppMessage("Store Request Successfully Deleted", RMessageType.Info));
 
         }
-
         protected void ddlPurchaseReq_SelectedIndexChanged(object sender, EventArgs e)
         {
             PopPurchaseRequest();
@@ -413,21 +415,21 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             DropDownList ddl = (DropDownList)sender;
             DropDownList ddlFGrant = ddl.FindControl("ddlFGrant") as DropDownList;
             BindGrant(ddlFGrant, Convert.ToInt32(ddl.SelectedValue));
-           
+
         }
         protected void ddlGrant_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
             DropDownList ddlGrant = ddl.FindControl("ddlGrant") as DropDownList;
             BindGrant(ddlGrant, Convert.ToInt32(ddl.SelectedValue));
-          
+
         }
         protected void ddlProject_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
             DropDownList ddlGrant = ddl.FindControl("ddlGrant") as DropDownList;
             BindGrant(ddlGrant, Convert.ToInt32(ddl.SelectedValue));
-           
+
         }
         protected void btnRequest_Click(object sender, EventArgs e)
         {
@@ -441,19 +443,18 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         _presenter.SaveOrUpdateStoreRequest(_presenter.CurrentStoreRequest);
                         ClearForm();
                         BindSearchStoreRequestGrid();
-                        Master.ShowMessage(new AppMessage("Successfully did a Store Request, Reference No - <b>'" + _presenter.CurrentStoreRequest.RequestNo + "'</b> ", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                        // Log.Info(_presenter.CurrentUser().FullName + " has requested for a Purchase of Total Price " + _presenter.CurrentStoreRequest.TotalPrice);
+                        Master.ShowMessage(new AppMessage("Successfully did a Store Request, Reference No - <b>'" + _presenter.CurrentStoreRequest.RequestNo + "'</b> ", RMessageType.Info));
+                        btnRequest.Visible = false;
                     }
                     else
                     {
-                        Master.ShowMessage(new AppMessage("There is an error constracting Approval Process", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
+                        Master.ShowMessage(new AppMessage("There is an error constracting Approval Process", RMessageType.Error));
                     }
 
                 }
                 else
                 {
-                    Master.ShowMessage(new AppMessage("You have to insert at least one Store item detail", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("You have to insert at least one Store item detail", RMessageType.Error));
                 }
             }
             catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
@@ -476,28 +477,25 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void btnDelete_Click(object sender, EventArgs e)
         {
-
-
-
-
-
             try
             {
                 if (_presenter.CurrentStoreRequest.CurrentStatus == null)
                 {
                     _presenter.DeleteStoreRequest(_presenter.CurrentStoreRequest);
                     ClearForm();
-                    Master.ShowMessage(new AppMessage("Store Request Deleted ", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    Master.ShowMessage(new AppMessage("Store Request Deleted ", RMessageType.Info));
                     BindSearchStoreRequestGrid();
                     BindStoreRequestDetails();
                     btnDelete.Visible = false;
                 }
                 else
-                    Master.ShowMessage(new AppMessage("Warning: Unable to Delete Store Request ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Warning: Unable to Delete Store Request ", RMessageType.Error));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Warning: Unable to Delete Store Request " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Warning: Unable to Delete Store Request " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         protected void ddlFAccount_SelectedIndexChanged(object sender, EventArgs e)
@@ -505,9 +503,56 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             DropDownList ddl = (DropDownList)sender;
             TextBox txtAccountCode = ddl.FindControl("txtFAccountCode") as TextBox;
             txtAccountCode.Text = _presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)).AccountCode;
-           
-        }        
-      
+        }
+        private void BindItem(DropDownList ddlItem)
+        {
+            ddlItem.DataSource = _presenter.GetItems();
+            ddlItem.DataBind();
+
+        }
+        protected void ddlProgram_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            BindStoreRequestDetails();
+        }
+        protected void ckIsSparePart_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ckIsSparePart.Checked == true)
+            {
+                pnlPurchaseSpareParts.Visible = true;
+            }
+            else
+            {
+                pnlPurchaseSpareParts.Visible = false;
+            }
+        }
+        protected void btnCreateStoreItem_Click(object sender, EventArgs e)
+        {
+            _presenter.CurrentStoreRequest.StoreRequestDetails.Clear();
+            foreach (GridViewRow item in grvDetails.Rows)
+            {
+                int prId = (int)grvDetails.DataKeys[item.RowIndex].Value;
+                if (item.RowType == DataControlRowType.DataRow)
+                {
+                    CheckBox chk = (CheckBox)item.FindControl("chkSelect");
+                    if (chk.Checked)
+                    {
+                        if (_presenter.GetPurchaseRequestDetail(prId) != null)
+                        {
+                            PurchaseRequestDetail prd = _presenter.GetPurchaseRequestDetail(prId);
+
+                            StoreRequestDetail srd = new StoreRequestDetail();
+                            srd.Item = prd.Item;
+                            srd.Project = prd.Project;
+                            srd.Grant = prd.Grant;
+
+                            _presenter.CurrentStoreRequest.StoreRequestDetails.Add(srd);
+                        }
+                    }
+                }
+            }
+            dgStoreRequestDetail.DataSource = _presenter.CurrentStoreRequest.StoreRequestDetails;
+            dgStoreRequestDetail.DataBind();
+        }
         #region StoreRequestDetail
         private void BindStoreRequestDetails()
         {
@@ -583,7 +628,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     Detail.Project = _presenter.GetProject(int.Parse(ddlFProject.SelectedValue));
                     DropDownList ddlFGrant = e.Item.FindControl("ddlFGrant") as DropDownList;
                     Detail.Grant = _presenter.GetGrant(int.Parse(ddlFGrant.SelectedValue));
-                    
+
                     Detail.StoreRequest = _presenter.CurrentStoreRequest;
                     _presenter.CurrentStoreRequest.StoreRequestDetails.Add(Detail);
                     Master.ShowMessage(new AppMessage("Store Request Detail added successfully.", RMessageType.Info));
@@ -610,18 +655,28 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 BindGrant(ddlGrant, Convert.ToInt32(ddlProject.SelectedValue));
                 DropDownList ddlItem = e.Item.FindControl("ddlFItem") as DropDownList;
                 BindItems(ddlItem);
-             
+
             }
             else
             {
-                DropDownList ddlProject = e.Item.FindControl("ddlEdtProject") as DropDownList;
-                int programID = Convert.ToInt32(ddlProgram.SelectedValue);
+                DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
                 if (ddlProject != null)
                 {
-                    BindProject(ddlProject, programID);
+                    BindAllProjects(ddlProject);
                     if (_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].Project.Id != 0)
                     {
                         ListItem liI = ddlProject.Items.FindByValue(_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].Project.Id.ToString());
+                        if (liI != null)
+                            liI.Selected = true;
+                    }
+                }
+                DropDownList ddlGrant = e.Item.FindControl("ddlGrant") as DropDownList;
+                if (ddlGrant != null)
+                {
+                    BindAllGrants(ddlGrant);
+                    if (_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].Grant.Id != 0)
+                    {
+                        ListItem liI = ddlGrant.Items.FindByValue(_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].Grant.Id.ToString());
                         if (liI != null)
                             liI.Selected = true;
                     }
@@ -637,37 +692,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             liI.Selected = true;
                     }
                 }
-
-
-                //if (_presenter.CurrentStoreRequest.StoreRequestDetails != null)
-                //{
-
-
-                //    DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
-
-                //    if (ddlProject != null)
-                //    {
-                //        BindProject(ddlProject);
-
-                //        if (_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].Project != null)
-                //        {
-                //            ListItem li = ddlProject.Items.FindByValue(_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].Project.Id.ToString());
-                //            if (li != null)
-                //                li.Selected = true;
-                //        }
-                //    }
-                //    DropDownList ddlGrant = e.Item.FindControl("ddlGrant") as DropDownList;
-                //    if (ddlGrant != null)
-                //    {
-                //        BindGrant(ddlGrant, Convert.ToInt32(ddlProject.SelectedValue));
-                //        if (_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].Grant != null)
-                //        {
-                //            ListItem liI = ddlGrant.Items.FindByValue(_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].Grant.Id.ToString());
-                //            if (liI != null)
-                //                liI.Selected = true;
-                //        }
-                //    }
-                //}
             }
         }
         protected void dgStoreRequestDetail_UpdateCommand(object source, DataGridCommandEventArgs e)
@@ -709,42 +733,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
         }
         #endregion
-        private void BindItem(DropDownList ddlItem)
-        {
-            ddlItem.DataSource = _presenter.GetItems();
-            ddlItem.DataBind();
 
-        }
-        protected void ddlProgram_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            BindStoreRequestDetails();
-        }
-        protected void btnCreateStoreItem_Click(object sender, EventArgs e)
-        {
-            _presenter.CurrentStoreRequest.StoreRequestDetails.Clear();
-            foreach (GridViewRow item in grvDetails.Rows)
-            {
-                int prId = (int)grvDetails.DataKeys[item.RowIndex].Value;
-                if (item.RowType == DataControlRowType.DataRow)
-                {
-                    CheckBox chk = (CheckBox)item.FindControl("chkSelect");
-                    if (chk.Checked)
-                    {
-                        if (_presenter.GetPurchaseRequestDetail(prId) != null)
-                        {
-                            PurchaseRequestDetail prd = _presenter.GetPurchaseRequestDetail(prId);
-
-                            StoreRequestDetail srd = new StoreRequestDetail();
-
-                            srd.Item = prd.Item;
-
-                            _presenter.CurrentStoreRequest.StoreRequestDetails.Add(srd);                            
-                        }
-                    }
-                }
-            }
-            dgStoreRequestDetail.DataSource = _presenter.CurrentStoreRequest.StoreRequestDetails;
-            dgStoreRequestDetail.DataBind();
-        }
     }
 }

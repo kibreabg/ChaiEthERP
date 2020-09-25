@@ -9,19 +9,16 @@ using Chai.WorkflowManagment.CoreDomain.Users;
 using Chai.WorkflowManagment.CoreDomain.Setting;
 using Chai.WorkflowManagment.CoreDomain.Requests;
 using Chai.WorkflowManagment.CoreDomain.Inventory;
+using Chai.WorkflowManagment.Modules.Setting;
 
 namespace Chai.WorkflowManagment.Modules.Request.Views
 {
     public class StoreRequestPresenter : Presenter<IStoreRequestView>
     {
-
-        // NOTE: Uncomment the following code if you want ObjectBuilder to inject the module controller
-        //       The code will not work in the Shell module, as a module controller is not created by default
-        //
-        private Chai.WorkflowManagment.Modules.Request.RequestController _controller;
-        private Chai.WorkflowManagment.Modules.Setting.SettingController _settingcontroller;
+        private RequestController _controller;
+        private SettingController _settingcontroller;
         private StoreRequest _StoreRequest;
-        public StoreRequestPresenter([CreateNew] Chai.WorkflowManagment.Modules.Request.RequestController controller, [CreateNew] Chai.WorkflowManagment.Modules.Setting.SettingController settingcontroller)
+        public StoreRequestPresenter([CreateNew] RequestController controller, [CreateNew] SettingController settingcontroller)
         {
             _controller = controller;
             _settingcontroller = settingcontroller;
@@ -125,16 +122,22 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public IList<StoreRequest> ListStoreRequests(string requestNo, string RequestDate)
         {
             return _controller.ListStoreRequests(requestNo, RequestDate);
-
         }
         public IList<ItemAccount> GetItemAccounts()
         {
             return _settingcontroller.GetItemAccounts();
-
         }
         public IList<Project> ListProjects(int programID)
         {
             return _settingcontroller.GetProjectsByProgramId(programID);
+        }
+        public IList<Project> ListAllProjects()
+        {
+            return _settingcontroller.GetProjects();
+        }
+        public IList<Grant> ListAllGrants()
+        {
+            return _settingcontroller.GetGrants();
         }
         public PurchaseRequestDetail GetPurchaseRequestDetail(int Id)
         {
@@ -143,32 +146,30 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public ItemAccount GetItemAccount(int Id)
         {
             return _settingcontroller.GetItemAccount(Id);
-
         }
         public IList<Project> GetProjects()
         {
             return _settingcontroller.GetProjects();
-
         }
         public Project GetProject(int Id)
         {
             return _settingcontroller.GetProject(Id);
-
         }
         public IList<Grant> GetGrants()
         {
             return _settingcontroller.GetGrants();
-
+        }
+        public StoreRequest GetStoreRequestByPurchaseId(int purchaseId)
+        {
+            return _controller.GetStoreRequestByPurchaseId(purchaseId);
         }
         public Grant GetGrant(int Id)
         {
             return _settingcontroller.GetGrant(Id);
-
         }
         public StoreRequestDetail GetStoreRequestDetail(int Id)
         {
             return _controller.GetStoreRequestDetail(Id);
-
         }
         public IList<PurchaseRequestDetail> ListPRDetailsCompletedById(int id)
         {
