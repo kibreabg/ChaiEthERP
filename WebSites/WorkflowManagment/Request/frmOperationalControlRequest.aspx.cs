@@ -146,7 +146,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         _presenter.CurrentOperationalControlRequest.TotalActualExpendture += OCRD.Amount;
                         OCRD.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
                         _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails.Add(OCRD);
-                        
+
                         if (CPRD.CPRAttachments.Count > 0)
                         {
                             foreach (CPRAttachment CP in CPRD.CPRAttachments)
@@ -158,7 +158,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                                 _presenter.CurrentOperationalControlRequest.OCRAttachments.Add(OPA);
                             }
                         }
-                    }       
+                    }
                 }
             }
         }
@@ -442,18 +442,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 if (_presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails.Count != 0)
                 {
-                    if (_presenter.CurrentOperationalControlRequest.OCRAttachments.Count != 0)
-                    {
-                        _presenter.SaveOrUpdateOperationalControlRequest();
-                        BindOperationalControlRequests();
-                        Master.ShowMessage(new AppMessage("Successfully did a Bank Payment  Request, with Reference No - <b>'" + _presenter.CurrentOperationalControlRequest.VoucherNo + "'</b>", RMessageType.Info));
-                        Log.Info(_presenter.CurrentUser().FullName + " has requested a Bank Payment for a total amount of " + _presenter.CurrentOperationalControlRequest.TotalAmount.ToString());
-                        btnSave.Visible = false;
-                    }
-                    else
-                    {
-                        Master.ShowMessage(new AppMessage("Please attach Receipt", RMessageType.Error));
-                    }
+                    _presenter.SaveOrUpdateOperationalControlRequest();
+                    BindOperationalControlRequests();
+                    Master.ShowMessage(new AppMessage("Successfully did a Bank Payment  Request, with Reference No - <b>'" + _presenter.CurrentOperationalControlRequest.VoucherNo + "'</b>", RMessageType.Info));
+                    Log.Info(_presenter.CurrentUser().FullName + " has requested a Bank Payment for a total amount of " + _presenter.CurrentOperationalControlRequest.TotalAmount.ToString());
+                    btnSave.Visible = false;
                 }
                 else
                 {
