@@ -480,10 +480,10 @@ namespace Chai.WorkflowManagment.Modules.Shell
             return purchaseRequests;
         }
 
-        public IList<BankPaymentRequest> GetBankPaymentInProgress()
+        public IList<OperationalControlRequest> GetBankPaymentInProgress()
         {
             currentUser = GetCurrentUser().Id;
-            IList<BankPaymentRequest> bankPaymentRequests = WorkspaceFactory.CreateReadOnly().Query<BankPaymentRequest>(x => x.AppUser.Id == currentUser && x.ProgressStatus == "InProgress").ToList();
+            IList<OperationalControlRequest> bankPaymentRequests = WorkspaceFactory.CreateReadOnly().Query<OperationalControlRequest>(x => x.AppUser.Id == currentUser && x.ProgressStatus == "InProgress").ToList();
             return bankPaymentRequests;
         }
 

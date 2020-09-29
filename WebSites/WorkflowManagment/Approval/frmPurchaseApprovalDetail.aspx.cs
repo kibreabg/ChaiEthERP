@@ -267,14 +267,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             DropDownList ddl = (DropDownList)sender;
             TextBox txtGrant = ddl.FindControl("txtGrant") as TextBox;
             BindGrant(txtGrant, Convert.ToInt32(ddl.SelectedValue));
-            pnlDetail_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
         }
         protected void ddlAccount_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
             TextBox txtAccountCode = ddl.FindControl("txtAccountCode") as TextBox;
             txtAccountCode.Text = _presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)).AccountCode;
-            pnlDetail_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
         }
         protected void btnFind_Click(object sender, EventArgs e)
         {
@@ -346,7 +346,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 //_presenter.OnViewLoaded();
                 dgPurchaseRequestDetail.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails;
                 dgPurchaseRequestDetail.DataBind();
-                pnlDetail_ModalPopupExtender.Show();
+                ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
             }
         }
         protected void grvPurchaseRequestList_SelectedIndexChanged(object sender, EventArgs e)
@@ -454,7 +454,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             this.dgPurchaseRequestDetail.EditItemIndex = e.Item.ItemIndex;
             BindPurchaseRequestDetails();
-            pnlDetail_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
         }
         protected void dgPurchaseRequestDetail_ItemDataBound(object sender, DataGridItemEventArgs e)
         {
@@ -536,7 +536,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 Master.ShowMessage(new AppMessage("Purchase Request Detail  Updated successfully.", RMessageType.Info));
                 dgPurchaseRequestDetail.EditItemIndex = -1;
                 BindPurchaseRequestDetails();
-                pnlDetail_ModalPopupExtender.Show();
+                ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
             }
             catch (Exception ex)
             {

@@ -253,7 +253,7 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         {
             return _controller.GetPurchaseInProgress();
         }
-        public IList<BankPaymentRequest> ListBankPaymentApprovalProgress()
+        public IList<OperationalControlRequest> ListBankPaymentApprovalProgress()
         {
             return _controller.GetBankPaymentInProgress();
         }

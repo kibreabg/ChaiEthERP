@@ -155,7 +155,7 @@
                                     <div class="tab-content padding-10">
                                         <div class="tab-pane active" id="iss1">
                                             <fieldset>
-                                                <div class="row">
+                                                <div class="row" style="overflow-x: auto">
                                                     <asp:DataGrid ID="dgSoleVenderDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
                                                         CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
                                                         GridLines="None" OnItemDataBound="dgSoleVenderDetail_ItemDataBound" ShowFooter="True" OnDeleteCommand="dgSoleVenderDetail_DeleteCommand"

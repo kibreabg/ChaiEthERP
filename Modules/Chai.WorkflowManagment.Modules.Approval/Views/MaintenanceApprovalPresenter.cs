@@ -155,7 +155,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         public IList<Item> GetItems()
         {
             return _settingController.GetItems();
-
+        }
+        public IList<Item> GetSpareParts()
+        {
+            return _settingController.GetSpareParts();
         }
         public MaintenanceSparePart GetMaintenanceSparePart(int Id)
         {

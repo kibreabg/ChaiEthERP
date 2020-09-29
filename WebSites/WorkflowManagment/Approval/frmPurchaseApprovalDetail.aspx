@@ -27,6 +27,11 @@
                 $('#approvalModal').modal('show');
             });
         }
+        function showDetailModal() {
+            $(document).ready(function () {
+                $('#detailModal').modal('show');
+            });
+        }
     </script>
     <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
         <header>
@@ -165,163 +170,162 @@
             </div>
         </div>
     </div>
-    <asp:Panel ID="pnlDetail" runat="server">
-        <div class="modal-body no-padding">
-            <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
-                <header>
-                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
-                    <h2>Purchase Request Details</h2>
-                </header>
-                <div>
+    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" style="width: 100%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;</button>
+                    <h4 class="modal-title">Process Purchase Request</h4>
+                </div>
+                <div class="modal-body">
                     <div class="jarviswidget-editbox"></div>
                     <div class="widget-body no-padding">
                         <div class="smart-form">
-                            <asp:DataGrid ID="dgPurchaseRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0" TextWrap="Wrap"
-                                CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
-                                GridLines="None" OnCancelCommand="dgPurchaseRequestDetail_CancelCommand" OnEditCommand="dgPurchaseRequestDetail_EditCommand"
-                                OnItemDataBound="dgPurchaseRequestDetail_ItemDataBound" OnUpdateCommand="dgPurchaseRequestDetail_UpdateCommand"
-                                ShowFooter="True">
+                            <div style="overflow-x: auto;">
+                                <asp:DataGrid ID="dgPurchaseRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0" TextWrap="Wrap"
+                                    CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
+                                    GridLines="None" OnCancelCommand="dgPurchaseRequestDetail_CancelCommand" OnEditCommand="dgPurchaseRequestDetail_EditCommand"
+                                    OnItemDataBound="dgPurchaseRequestDetail_ItemDataBound" OnUpdateCommand="dgPurchaseRequestDetail_UpdateCommand"
+                                    ShowFooter="True">
 
-                                <Columns>
-                                    <asp:TemplateColumn HeaderText="Account Name">
-                                        <ItemTemplate>
-                                            <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountName")%>
-                                        </ItemTemplate>
-                                        <EditItemTemplate>
-                                            <asp:DropDownList ID="ddlAccount" runat="server" CssClass="form-control"
-                                                AppendDataBoundItems="True" DataTextField="AccountName" DataValueField="Id" AutoPostBack="True" OnSelectedIndexChanged="ddlAccount_SelectedIndexChanged">
-                                                <asp:ListItem Value="0">Select Account</asp:ListItem>
-                                            </asp:DropDownList>
-                                        </EditItemTemplate>
-                                    </asp:TemplateColumn>
-                                    <asp:TemplateColumn HeaderText="Account Code">
-                                        <ItemTemplate>
-                                            <%# DataBinder.Eval(Container.DataItem, "AccountCode")%>
-                                        </ItemTemplate>
-                                        <EditItemTemplate>
-                                            <asp:TextBox ID="txtAccountCode" runat="server" CssClass="form-control" Enabled="false" Text=' <%# DataBinder.Eval(Container.DataItem, "AccountCode")%>'></asp:TextBox>
-                                        </EditItemTemplate>
-                                    </asp:TemplateColumn>
-                                    <asp:TemplateColumn HeaderText="Item">
-                                        <ItemTemplate>
-                                            <%# DataBinder.Eval(Container.DataItem, "Item")%>
-                                        </ItemTemplate>
-                                        <EditItemTemplate>
-                                            <asp:TextBox ID="txtItem" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "Item")%>'></asp:TextBox>
-                                        </EditItemTemplate>
-                                    </asp:TemplateColumn>
-                                    <asp:TemplateColumn HeaderText="Requested Quantity">
-                                        <ItemTemplate>
-                                            <%# DataBinder.Eval(Container.DataItem, "Qty")%>
-                                        </ItemTemplate>
-                                    </asp:TemplateColumn>
-                                    <asp:TemplateColumn HeaderText="Approved Quantity">
-                                        <ItemTemplate>
-                                            <%# DataBinder.Eval(Container.DataItem, "ApprovedQuantity")%>
-                                        </ItemTemplate>
-                                        <EditItemTemplate>
-                                            <asp:TextBox ID="txtApprovedQuantity" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "ApprovedQuantity")%>'></asp:TextBox>
-                                        </EditItemTemplate>
-                                    </asp:TemplateColumn>
-                                    <asp:TemplateColumn HeaderText="Unit of Measurment">
-                                        <EditItemTemplate>
-                                            <asp:DropDownList ID="ddlUnitOfMeasurment" runat="server" CssClass="form-control"
-                                                AppendDataBoundItems="True"
-                                                ValidationGroup="proedit">
-                                                <asp:ListItem Value="0">Select Unit</asp:ListItem>
-                                                <asp:ListItem Value="Pieces (Pcs)">Pieces (Pcs)</asp:ListItem>
-                                                <asp:ListItem Value="Ream">Ream</asp:ListItem>
-                                                <asp:ListItem Value="Grams (g)">Grams (g)</asp:ListItem>
-                                                <asp:ListItem Value="Kilogram (kg)">Kilogram (kg)</asp:ListItem>
-                                                <asp:ListItem Value="Tons (ton)">Tons (ton)</asp:ListItem>
-                                                <asp:ListItem Value="Meter (m)">Meter (m)</asp:ListItem>
-                                                <asp:ListItem Value="Square Meter (m2)">Square Meter (m2)</asp:ListItem>
-                                                <asp:ListItem Value="Cubic meter (m3)">Cubic meter (m3)</asp:ListItem>
-                                                <asp:ListItem Value="Liter (L)">Liter (L)</asp:ListItem>
-                                                <asp:ListItem Value="Day (D)">Day (D)</asp:ListItem>
-                                                <asp:ListItem Value="Hour (Hr)">Hour (Hr)</asp:ListItem>
-                                                <asp:ListItem Value="Other">Other</asp:ListItem>
-                                            </asp:DropDownList>
-                                        </EditItemTemplate>
-                                        <ItemTemplate>
-                                            <%# DataBinder.Eval(Container.DataItem, "UnitOfMeasurment")%>
-                                        </ItemTemplate>
-                                    </asp:TemplateColumn>
-                                    <asp:TemplateColumn HeaderText="Purpose of Purchase">
-                                        <EditItemTemplate>
-                                            <asp:DropDownList ID="ddlPurposeOfPurchase" runat="server" CssClass="form-control"
-                                                AppendDataBoundItems="True" ValidationGroup="proedit">
-                                                <asp:ListItem Value="0">Select Purpose</asp:ListItem>
-                                                <asp:ListItem Value="Office Use">Office Use</asp:ListItem>
-                                                <asp:ListItem Value="Training">Training</asp:ListItem>
-                                                <asp:ListItem Value="Donation">Donation</asp:ListItem>
-                                            </asp:DropDownList>
-                                        </EditItemTemplate>
-                                        <ItemTemplate>
-                                            <%# DataBinder.Eval(Container.DataItem, "PurposeOfPurchase")%>
-                                        </ItemTemplate>
-                                        <EditItemTemplate>
-                                            <asp:DropDownList ID="ddlPurposeOfPurchase" runat="server" CssClass="form-control"
-                                                AppendDataBoundItems="True" ValidationGroup="proedit">
-                                                <asp:ListItem Value="0">Select Purpose</asp:ListItem>
-                                                <asp:ListItem Value="Office Use">Office Use</asp:ListItem>
-                                                <asp:ListItem Value="Training">Training</asp:ListItem>
-                                                <asp:ListItem Value="Donation">Donation</asp:ListItem>
-                                            </asp:DropDownList>
-                                        </EditItemTemplate>
-                                    </asp:TemplateColumn>
-                                    <asp:TemplateColumn HeaderText="Remark">
-                                        <ItemTemplate>
-                                            <%# DataBinder.Eval(Container.DataItem, "Remark")%>
-                                        </ItemTemplate>
-                                        <EditItemTemplate>
-                                            <asp:TextBox ID="txtRemark" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "Remark")%>'></asp:TextBox>
-                                        </EditItemTemplate>
-                                    </asp:TemplateColumn>
-                                    <asp:TemplateColumn HeaderText="Project ID">
-                                        <ItemTemplate>
-                                            <%# DataBinder.Eval(Container.DataItem, "Project.ProjectCode")%>
-                                        </ItemTemplate>
-                                        <EditItemTemplate>
-                                            <asp:DropDownList ID="ddlProject" runat="server" CssClass="form-control"
-                                                AppendDataBoundItems="True" DataTextField="ProjectCode" DataValueField="Id"
-                                                ValidationGroup="proedit" AutoPostBack="True" OnSelectedIndexChanged="ddlProject_SelectedIndexChanged">
-                                                <asp:ListItem Value="0">Select Project</asp:ListItem>
-                                            </asp:DropDownList>
-                                        </EditItemTemplate>
-                                    </asp:TemplateColumn>
-                                    <asp:TemplateColumn HeaderText="Grant ID">
-                                        <ItemTemplate>
-                                            <%# DataBinder.Eval(Container.DataItem, "Grant.GrantCode")%>
-                                        </ItemTemplate>
-                                        <EditItemTemplate>
-                                            <asp:TextBox ID="txtGrant" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "Grant.GrantCode")%>'></asp:TextBox>
-                                        </EditItemTemplate>
-                                    </asp:TemplateColumn>
-                                    <asp:TemplateColumn HeaderText="Actions">
-                                        <EditItemTemplate>
-                                            <asp:LinkButton ID="lnkUpdate" runat="server" CommandName="Update" ValidationGroup="proedit" CssClass="btn btn-xs btn-default"><i class="fa fa-save"></i></asp:LinkButton>
-                                        </EditItemTemplate>
-                                        <ItemTemplate>
-                                            <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
-                                        </ItemTemplate>
-                                    </asp:TemplateColumn>
-                                </Columns>
-                                <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
-                            </asp:DataGrid>
+                                    <Columns>
+                                        <asp:TemplateColumn HeaderText="Account Name">
+                                            <ItemTemplate>
+                                                <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountName")%>
+                                            </ItemTemplate>
+                                            <EditItemTemplate>
+                                                <asp:DropDownList ID="ddlAccount" runat="server" CssClass="form-control"
+                                                    AppendDataBoundItems="True" DataTextField="AccountName" DataValueField="Id" AutoPostBack="True" OnSelectedIndexChanged="ddlAccount_SelectedIndexChanged">
+                                                    <asp:ListItem Value="0">Select Account</asp:ListItem>
+                                                </asp:DropDownList>
+                                            </EditItemTemplate>
+                                        </asp:TemplateColumn>
+                                        <asp:TemplateColumn HeaderText="Account Code">
+                                            <ItemTemplate>
+                                                <%# DataBinder.Eval(Container.DataItem, "AccountCode")%>
+                                            </ItemTemplate>
+                                            <EditItemTemplate>
+                                                <asp:TextBox ID="txtAccountCode" runat="server" CssClass="form-control" Enabled="false" Text=' <%# DataBinder.Eval(Container.DataItem, "AccountCode")%>'></asp:TextBox>
+                                            </EditItemTemplate>
+                                        </asp:TemplateColumn>
+                                        <asp:TemplateColumn HeaderText="Item">
+                                            <ItemTemplate>
+                                                <%# DataBinder.Eval(Container.DataItem, "Item")%>
+                                            </ItemTemplate>
+                                            <EditItemTemplate>
+                                                <asp:TextBox ID="txtItem" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "Item")%>'></asp:TextBox>
+                                            </EditItemTemplate>
+                                        </asp:TemplateColumn>
+                                        <asp:TemplateColumn HeaderText="Requested Quantity">
+                                            <ItemTemplate>
+                                                <%# DataBinder.Eval(Container.DataItem, "Qty")%>
+                                            </ItemTemplate>
+                                        </asp:TemplateColumn>
+                                        <asp:TemplateColumn HeaderText="Approved Quantity">
+                                            <ItemTemplate>
+                                                <%# DataBinder.Eval(Container.DataItem, "ApprovedQuantity")%>
+                                            </ItemTemplate>
+                                            <EditItemTemplate>
+                                                <asp:TextBox ID="txtApprovedQuantity" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "ApprovedQuantity")%>'></asp:TextBox>
+                                            </EditItemTemplate>
+                                        </asp:TemplateColumn>
+                                        <asp:TemplateColumn HeaderText="Unit of Measurment">
+                                            <EditItemTemplate>
+                                                <asp:DropDownList ID="ddlUnitOfMeasurment" runat="server" CssClass="form-control"
+                                                    AppendDataBoundItems="True"
+                                                    ValidationGroup="proedit">
+                                                    <asp:ListItem Value="0">Select Unit</asp:ListItem>
+                                                    <asp:ListItem Value="Pieces (Pcs)">Pieces (Pcs)</asp:ListItem>
+                                                    <asp:ListItem Value="Ream">Ream</asp:ListItem>
+                                                    <asp:ListItem Value="Grams (g)">Grams (g)</asp:ListItem>
+                                                    <asp:ListItem Value="Kilogram (kg)">Kilogram (kg)</asp:ListItem>
+                                                    <asp:ListItem Value="Tons (ton)">Tons (ton)</asp:ListItem>
+                                                    <asp:ListItem Value="Meter (m)">Meter (m)</asp:ListItem>
+                                                    <asp:ListItem Value="Square Meter (m2)">Square Meter (m2)</asp:ListItem>
+                                                    <asp:ListItem Value="Cubic meter (m3)">Cubic meter (m3)</asp:ListItem>
+                                                    <asp:ListItem Value="Liter (L)">Liter (L)</asp:ListItem>
+                                                    <asp:ListItem Value="Day (D)">Day (D)</asp:ListItem>
+                                                    <asp:ListItem Value="Hour (Hr)">Hour (Hr)</asp:ListItem>
+                                                    <asp:ListItem Value="Other">Other</asp:ListItem>
+                                                </asp:DropDownList>
+                                            </EditItemTemplate>
+                                            <ItemTemplate>
+                                                <%# DataBinder.Eval(Container.DataItem, "UnitOfMeasurment")%>
+                                            </ItemTemplate>
+                                        </asp:TemplateColumn>
+                                        <asp:TemplateColumn HeaderText="Purpose of Purchase">
+                                            <EditItemTemplate>
+                                                <asp:DropDownList ID="ddlPurposeOfPurchase" runat="server" CssClass="form-control"
+                                                    AppendDataBoundItems="True" ValidationGroup="proedit">
+                                                    <asp:ListItem Value="0">Select Purpose</asp:ListItem>
+                                                    <asp:ListItem Value="Office Use">Office Use</asp:ListItem>
+                                                    <asp:ListItem Value="Training">Training</asp:ListItem>
+                                                    <asp:ListItem Value="Donation">Donation</asp:ListItem>
+                                                </asp:DropDownList>
+                                            </EditItemTemplate>
+                                            <ItemTemplate>
+                                                <%# DataBinder.Eval(Container.DataItem, "PurposeOfPurchase")%>
+                                            </ItemTemplate>
+                                            <EditItemTemplate>
+                                                <asp:DropDownList ID="ddlPurposeOfPurchase" runat="server" CssClass="form-control"
+                                                    AppendDataBoundItems="True" ValidationGroup="proedit">
+                                                    <asp:ListItem Value="0">Select Purpose</asp:ListItem>
+                                                    <asp:ListItem Value="Office Use">Office Use</asp:ListItem>
+                                                    <asp:ListItem Value="Training">Training</asp:ListItem>
+                                                    <asp:ListItem Value="Donation">Donation</asp:ListItem>
+                                                </asp:DropDownList>
+                                            </EditItemTemplate>
+                                        </asp:TemplateColumn>
+                                        <asp:TemplateColumn HeaderText="Remark">
+                                            <ItemTemplate>
+                                                <%# DataBinder.Eval(Container.DataItem, "Remark")%>
+                                            </ItemTemplate>
+                                            <EditItemTemplate>
+                                                <asp:TextBox ID="txtRemark" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "Remark")%>'></asp:TextBox>
+                                            </EditItemTemplate>
+                                        </asp:TemplateColumn>
+                                        <asp:TemplateColumn HeaderText="Project ID">
+                                            <ItemTemplate>
+                                                <%# DataBinder.Eval(Container.DataItem, "Project.ProjectCode")%>
+                                            </ItemTemplate>
+                                            <EditItemTemplate>
+                                                <asp:DropDownList ID="ddlProject" runat="server" CssClass="form-control"
+                                                    AppendDataBoundItems="True" DataTextField="ProjectCode" DataValueField="Id"
+                                                    ValidationGroup="proedit" AutoPostBack="True" OnSelectedIndexChanged="ddlProject_SelectedIndexChanged">
+                                                    <asp:ListItem Value="0">Select Project</asp:ListItem>
+                                                </asp:DropDownList>
+                                            </EditItemTemplate>
+                                        </asp:TemplateColumn>
+                                        <asp:TemplateColumn HeaderText="Grant ID">
+                                            <ItemTemplate>
+                                                <%# DataBinder.Eval(Container.DataItem, "Grant.GrantCode")%>
+                                            </ItemTemplate>
+                                            <EditItemTemplate>
+                                                <asp:TextBox ID="txtGrant" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "Grant.GrantCode")%>'></asp:TextBox>
+                                            </EditItemTemplate>
+                                        </asp:TemplateColumn>
+                                        <asp:TemplateColumn HeaderText="Actions">
+                                            <EditItemTemplate>
+                                                <asp:LinkButton ID="lnkUpdate" runat="server" CommandName="Update" ValidationGroup="proedit" CssClass="btn btn-xs btn-default"><i class="fa fa-save"></i></asp:LinkButton>
+                                            </EditItemTemplate>
+                                            <ItemTemplate>
+                                                <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
+                                            </ItemTemplate>
+                                        </asp:TemplateColumn>
+                                    </Columns>
+                                    <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
+                                </asp:DataGrid>
+                            </div>
                             <footer>
-                                <asp:Button ID="btnCancelPopup2" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary"></asp:Button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                             </footer>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </asp:Panel>
-    <asp:ModalPopupExtender runat="server" BackgroundCssClass="modalBackground"
-        Enabled="True" TargetControlID="btnPop2" PopupControlID="pnlDetail" CancelControlID="btnCancelPopup2"
-        ID="pnlDetail_ModalPopupExtender">
-    </asp:ModalPopupExtender>
+    </div>
     <div id="divprint" style="display: none;">
         <table style="width: 100%;">
             <tr>

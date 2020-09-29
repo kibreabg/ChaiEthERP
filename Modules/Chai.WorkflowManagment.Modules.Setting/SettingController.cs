@@ -767,6 +767,10 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             return WorkspaceFactory.CreateReadOnly().Query<Item>(null).OrderBy(x => x.Name).ToList();
         }
+        public IList<Item> GetSpareParts()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<Item>(x => x.IsSparePart == true).OrderBy(x => x.Name).ToList();
+        }
         public IList<Item> GetItemsBySubCatId(int subCatId)
         {
             return WorkspaceFactory.CreateReadOnly().Query<Item>(x => x.ItemSubCategory.Id == subCatId).OrderBy(x => x.Name).ToList();

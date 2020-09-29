@@ -64,7 +64,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         public override string PageID
         {
-
             get
             {
                 return "{282224A8-DCCA-4FED-AAB1-BEB6A5AA0653}";
@@ -190,9 +189,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void BindItem(DropDownList ddlItem)
         {
-            ddlItem.DataSource = _presenter.GetItems();
+            ddlItem.DataSource = _presenter.GetSpareParts();
             ddlItem.DataBind();
-
         }
         private void BindMaintenanceRequestforprint()
         {
@@ -210,6 +208,19 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             grvMaintenanceRequestList.DataSource = _presenter.ListMaintenanceRequests(txtRequestNosearch.Text, txtRequestDatesearch.Text, ddlProgressStatus.SelectedValue);
             grvMaintenanceRequestList.DataBind();
+        }
+        private void BindServiceTypeDetails(DropDownList ddlServiceTypeDet, string serviceTypename)
+        {
+            ddlServiceTypeDet.Items.Clear();
+            ListItem lst = new ListItem();
+            lst.Text = "Select Service Type Details";
+            lst.Value = "";
+            ddlServiceTypeDet.DataValueField = "Id";
+            ddlServiceTypeDet.DataTextField = "Description";
+            ddlServiceTypeDet.Items.Add(lst);
+            ddlServiceTypeDet.DataSource = _presenter.GetServiceTypeDetbyname(serviceTypename);
+            ddlServiceTypeDet.DataBind();
+
         }
         private void ShowPrint()
         {
@@ -316,23 +327,43 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             try
             {
+                bool mechanicApproved = true;
                 if (_presenter.CurrentMaintenanceRequest.ProgressStatus != ProgressStatus.Completed.ToString())
                 {
-                    SaveMaintenanceRequestStatus();
-                    _presenter.SaveOrUpdateMaintenanceRequest(_presenter.CurrentMaintenanceRequest);
-                    ShowPrint();
-                    if (ddlApprovalStatus.SelectedValue != "Rejected")
+                    if (_presenter.CurrentUser().EmployeePosition.PositionName == "Driver / Mechanic")
                     {
-                        Master.ShowMessage(new AppMessage("Maintenance Approval Processed", RMessageType.Info));
+                        foreach (MaintenanceRequestDetail mrd in _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails)
+                        {
+                            if (mrd.MechanicServiceTypeDetail == null)
+                            {
+                                mechanicApproved = false;
+                            }
+                        }
+                    }
+
+                    if (mechanicApproved)
+                    {
+                        SaveMaintenanceRequestStatus();
+                        _presenter.SaveOrUpdateMaintenanceRequest(_presenter.CurrentMaintenanceRequest);
+                        ShowPrint();
+                        if (ddlApprovalStatus.SelectedValue != "Rejected")
+                        {
+                            Master.ShowMessage(new AppMessage("Maintenance Approval Processed", RMessageType.Info));
+                        }
+                        else
+                        {
+                            Master.ShowMessage(new AppMessage("Maintenance Approval Rejected", RMessageType.Info));
+                        }
+
+                        btnApprove.Enabled = false;
+                        BindSearchMaintenanceGrid();
+                        pnlApproval_ModalPopupExtender.Show();
                     }
                     else
                     {
-                        Master.ShowMessage(new AppMessage("Maintenance Approval Rejected", RMessageType.Info));
+                        Master.ShowMessage(new AppMessage("Please update the Mechanic Review Section!", RMessageType.Error));
                     }
 
-                    btnApprove.Enabled = false;
-                    BindSearchMaintenanceGrid();
-                    pnlApproval_ModalPopupExtender.Show();
                 }
 
             }
@@ -358,10 +389,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             pnlApproval.Visible = false;
             pnlApproval_ModalPopupExtender.Hide();
         }
-        protected void btnCancelPopup2_Click(object sender, EventArgs e)
-        {
-            pnlDetail.Visible = false;
-        }
         protected void btnPurchaseOrder_Click(object sender, EventArgs e)
         {
             int purchaseID = _presenter.CurrentMaintenanceRequest.Id;
@@ -382,7 +409,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             DropDownList ddl = (DropDownList)sender;
             TextBox txtAccountCode = ddl.FindControl("txtEdtAccountCode") as TextBox;
             txtAccountCode.Text = _presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)).AccountCode;
-            pnlDetail_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showMechanicDetail", "showMechanicDetail();", true);
         }
         protected void DownloadFile(object sender, EventArgs e)
         {
@@ -420,50 +447,21 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void grvMaintenanceRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-
-
-
+            MaintenanceRequest MR = e.Row.DataItem as MaintenanceRequest;
             if (_presenter.CurrentMaintenanceRequest.MaintenanceRequestStatuses != null)
             {
                 if (e.Row.RowType == DataControlRowType.DataRow)
                 {
-                   
-                        if (_presenter.CurrentUser().EmployeePosition.PositionName == "Driver / Mechanic")
-                        {
-                            foreach (GridViewRow item in grvMaintenanceRequestList.Rows)
-                            {
-                                item.Cells[9].Visible = true;
-                            }
-
-                        }
-                        else
-                        {
-                            foreach (GridViewRow item in grvMaintenanceRequestList.Rows)
-                            {
-                                item.Cells[9].Visible = false;
-                            }
-                        }
+                    if (_presenter.CurrentUser().EmployeePosition.PositionName == "Driver / Mechanic" && MR.ProgressStatus == ProgressStatus.Completed.ToString() && String.IsNullOrEmpty(MR.MaintenanceStatus))
+                    {
+                        e.Row.Cells[8].Visible = true;
+                    }
+                    else
+                    {
+                        e.Row.Cells[8].Visible = false;
                     }
                 }
             }
-
-                      
-
-
-            
-
-        private void BindServiceTypeDetails(DropDownList ddlServiceTypeDet, string serviceTypename)
-        {
-            ddlServiceTypeDet.Items.Clear();
-            ListItem lst = new ListItem();
-            lst.Text = "Select Service Type Details";
-            lst.Value = "";
-            ddlServiceTypeDet.DataValueField = "Id";
-            ddlServiceTypeDet.DataTextField = "Description";
-            ddlServiceTypeDet.Items.Add(lst);
-            ddlServiceTypeDet.DataSource = _presenter.GetServiceTypeDetbyname(serviceTypename);
-            ddlServiceTypeDet.DataBind();
-
         }
         protected void grvMaintenanceRequestList_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
@@ -479,10 +477,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 _presenter.CurrentMaintenanceRequest = _presenter.GetMaintenanceRequestById(reqID);
                 if (e.CommandName == "ViewItem")
                 {
-
                     dgMaintenanceRequestDetail.DataSource = _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails;
                     dgMaintenanceRequestDetail.DataBind();
-                    pnlDetail_ModalPopupExtender.Show();
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showMechanicDetail", "showMechanicDetail();", true);
                 }
                 if (e.CommandName == "Maintained")
                 {
@@ -500,7 +497,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
             }
         }
-
         private void LoadData(int? rowNumber = null)
         {
             //if rowNumber is null use GridView1.SelectedIndex
@@ -508,10 +504,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             //Populate the input box with the value of selected row.
             GridViewRow gr = grvMaintenanceRequestList.Rows[index];
-          
-            gr.Cells[9].Visible  =false;
-        }
 
+            gr.Cells[8].Visible = false;
+        }
         private void LoadDataforMech(int? rowNumber = null)
         {
             //if rowNumber is null use GridView1.SelectedIndex
@@ -520,7 +515,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             //Populate the input box with the value of selected row.
             GridViewRow gr = grvMaintenanceRequestList.Rows[index];
 
-            gr.Cells[9].Visible = true;
+            gr.Cells[8].Visible = true;
         }
         protected void grvStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
         {
@@ -592,15 +587,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
             }
         }
-
         protected void dgMaintenanceRequestDetail_EditCommand(object source, DataGridCommandEventArgs e)
         {
             this.dgMaintenanceRequestDetail.EditItemIndex = e.Item.ItemIndex;
             dgMaintenanceRequestDetail.DataSource = _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails;
             dgMaintenanceRequestDetail.DataBind();
-            pnlDetail_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showMechanicDetail", "showMechanicDetail();", true);
         }
-
         protected void dgMaintenanceRequestDetail_UpdateCommand(object source, DataGridCommandEventArgs e)
         {
             int CPRDId = (int)dgMaintenanceRequestDetail.DataKeys[e.Item.ItemIndex];
@@ -627,7 +620,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 dgMaintenanceRequestDetail.EditItemIndex = -1;
                 dgMaintenanceRequestDetail.DataSource = _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails;
                 dgMaintenanceRequestDetail.DataBind();
-                pnlDetail_ModalPopupExtender.Show();
+                ScriptManager.RegisterStartupScript(this, GetType(), "showMechanicDetail", "showMechanicDetail();", true);
                 Master.ShowMessage(new AppMessage("Car Maintenance Request Detail Successfully Updated", RMessageType.Info));
             }
             catch (Exception ex)
@@ -669,7 +662,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     dgMaintenanceRequestDetail.EditItemIndex = -1;
                     dgMaintenanceRequestDetail.DataSource = _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails;
                     dgMaintenanceRequestDetail.DataBind();
-                    pnlDetail_ModalPopupExtender.Show();
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showMechanicDetail", "showMechanicDetail();", true);
                 }
                 catch (Exception ex)
                 {
@@ -679,25 +672,20 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
             }
         }
-
         protected void ddlFServiceTpe_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
             DropDownList ddlServiceTypeDetail = ddl.FindControl("ddlMecServiceTypeDet") as DropDownList;
             BindServiceTypeDetails(ddlServiceTypeDetail, Convert.ToInt32(ddl.SelectedValue));
-            pnlDetail_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showMechanicDetail", "showMechanicDetail();", true);
         }
-
-
-
         protected void ddlServiceTpe_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
             DropDownList ddlServiceTypeDetail = ddl.FindControl("ddlEdtMechanicServiceTypeDetail") as DropDownList;
             BindServiceTypeDetails(ddlServiceTypeDetail, Convert.ToInt32(ddl.SelectedValue));
-            pnlDetail_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showMechanicDetail", "showMechanicDetail();", true);
         }
-
         #region MaintenanceSparepart
         private void BindMaintenanceSpareparts()
         {
@@ -837,7 +825,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     Master.ShowMessage(new AppMessage("Maintenance Sparepart  added successfully.", RMessageType.Info));
                     dgSparepart.EditItemIndex = -1;
                     BindMaintenanceSpareparts();
-                    pnlDetail_ModalPopupExtender.Show();
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showMechanicDetail", "showMechanicDetail();", true);
                 }
                 catch (Exception ex)
                 {
@@ -848,8 +836,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
         }
         #endregion
-
-
     }
 
 }

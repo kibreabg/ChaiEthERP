@@ -641,7 +641,7 @@
                                             <asp:BoundField DataField="RequestNo" HeaderText="Request No" SortExpression="RequestNo" />
                                             <asp:TemplateField HeaderText="Request Date">
                                                 <ItemTemplate>
-                                                    <asp:Label ID="lblRequestDate" runat="server" Text='<%# Eval("ProcessDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                                                    <asp:Label ID="lblRequestDate" runat="server" Text='<%# Eval("RequestDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                             <asp:BoundField DataField="CurrentApprover" HeaderText="Current Approver" SortExpression="CurrentApprover" />

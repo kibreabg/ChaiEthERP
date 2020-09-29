@@ -41,7 +41,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
             this._presenter.OnViewLoaded();
         }
-
         [CreateNew]
         public MaintenaceRequestPresenter Presenter
         {
@@ -87,7 +86,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private string AutoNumber()
         {
-            return "MR-" + (_presenter.GetLastMaintenanceRequestId() + 1).ToString();
+            return "MR-" + _presenter.CurrentUser().Id.ToString() + "-" + (_presenter.GetLastMaintenanceRequestId() + 1).ToString();
         }
         private void BindMaintenanceRequest()
         {
@@ -201,7 +200,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 EmailSender.Send(_presenter.GetSuperviser(_presenter.GetAssignedJobbycurrentuser(PRS.Approver).AssignedTo).Email, "Maintenance Request", _presenter.GetUser(_presenter.CurrentMaintenanceRequest.Requester).FullName + "' Request for Car Maintenance Request No. '" + _presenter.CurrentMaintenanceRequest.RequestNo + "'");
             }
         }
-
         private void PopInternalVehicles()
         {
             ddlPlate.DataSource = _presenter.GetVehicles();
@@ -218,8 +216,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 _maintenancerequest = value;
             }
         }
-
-
         public string RequestNo
         {
             get { return AutoNumber(); }
@@ -228,7 +224,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return Convert.ToDateTime(txtRequestDate.Text); }
         }
-
         public string GetPlateNo
         {
             get { return ddlPlate.SelectedValue; }
@@ -247,7 +242,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
             }
         }
-
         public int GetProjectId
         {
             get { return Convert.ToInt32(ddlProject.SelectedValue); }
@@ -256,7 +250,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return Convert.ToInt32(ddlGrant.SelectedValue); }
         }
-
         public int GetMaintenancetRequestId
         {
             get
@@ -271,12 +264,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
             }
         }
-
         public int GetKmReading
         {
             get { return Convert.ToInt32(txtKMReading.Text); }
         }
-
         public string GetActionTaken
         {
             get
@@ -284,7 +275,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 return ActionTaken.Text;
             }
         }
-
         public string GetRemark
         {
             get
@@ -292,7 +282,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 return txtRemark.Text;
             }
         }
-
         private void BindAccount(DropDownList ddlItemAccount)
         {
             ddlItemAccount.DataSource = _presenter.GetItemAccounts();
@@ -332,7 +321,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ddlGrant.DataBind();
 
         }
-
         private void BindServiceType(DropDownList ddlServiceType)
         {
             ddlServiceType.DataSource = _presenter.GetServiceTypes();
@@ -480,6 +468,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
             catch (Exception ex)
             {
+                Master.ShowMessage(new AppMessage(ex.Message, RMessageType.Error));
                 ExceptionUtility.LogException(ex, ex.Source);
                 ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
