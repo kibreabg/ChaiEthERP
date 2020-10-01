@@ -8,7 +8,7 @@
     <div class="jarviswidget" id="wid-id-8" data-widget-editbutton="false" data-widget-custombutton="false">
         <header>
             <span class="widget-icon"><i class="fa fa-edit"></i></span>
-            <h2>Payment Reimbursement</h2>
+            <h2>Payment Settlement</h2>
         </header>
         <div class="row">
             <div class="col-md-12">
@@ -42,7 +42,7 @@
                     ×
                 </button>
                 <i class="fa-fw fa fa-info"></i>
-                <strong>Info!</strong> Please select the Cash Payment Transaction to perform Payment Reimbursement for!
+                <strong>Info!</strong> Please select the Cash Payment Transaction to perform Payment Settlement for!
             </div>
         </asp:Panel>
         <div>
