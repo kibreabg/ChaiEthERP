@@ -638,16 +638,32 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     }
                     else
                     {
-                        SaveVehicleRequestStatus();
-                        _presenter.CurrentVehicleRequest.Project = _presenter.GetProject(Convert.ToInt32(ddlProject.SelectedValue));
-                        _presenter.CurrentVehicleRequest.Grant = _presenter.GetGrant(Convert.ToInt32(ddlGrant.SelectedValue));
-                        _presenter.SaveOrUpdateVehicleRequest(_presenter.CurrentVehicleRequest);
-                        ShowPrint();
+                        bool vehicleAssigned = true;
+                        foreach (VehicleRequestDetail vrd in _presenter.CurrentVehicleRequest.VehicleRequestDetails)
+                        {
+                            if (String.IsNullOrEmpty(vrd.AssignedVehicle))
+                            {
+                                vehicleAssigned = false;
+                            }
+                        }
 
-                        Master.ShowMessage(new AppMessage("Vehicle Request Approval Processed ", RMessageType.Info));
-                        btnApprove.Enabled = false;
-                        BindSearchVehicleRequestGrid();
-                        ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
+                        if (vehicleAssigned)
+                        {
+                            SaveVehicleRequestStatus();
+                            _presenter.CurrentVehicleRequest.Project = _presenter.GetProject(Convert.ToInt32(ddlProject.SelectedValue));
+                            _presenter.CurrentVehicleRequest.Grant = _presenter.GetGrant(Convert.ToInt32(ddlGrant.SelectedValue));
+                            _presenter.SaveOrUpdateVehicleRequest(_presenter.CurrentVehicleRequest);
+                            ShowPrint();
+
+                            Master.ShowMessage(new AppMessage("Vehicle Request Approval Processed ", RMessageType.Info));
+                            btnApprove.Enabled = false;
+                            BindSearchVehicleRequestGrid();
+                            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
+                        }
+                        else
+                        {
+                            Master.ShowMessage(new AppMessage("Please assign a Vehicle before procedding!", RMessageType.Error));
+                        }
                     }
                 }
                 PrintTransaction();
