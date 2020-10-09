@@ -181,11 +181,33 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 if (PRS.ApprovalStatus == null)
                 {
-                    SendEmail(PRS);
+                    if (_presenter.CurrentMaintenanceRequest.CurrentLevel == 2)
+                    {
+                        SendEmailtoMechanic(PRS);
+                    }
+                    else
+                    {
+                        SendEmail(PRS);
+                    }
                     _presenter.CurrentMaintenanceRequest.CurrentApprover = PRS.Approver;
                     _presenter.CurrentMaintenanceRequest.CurrentLevel = PRS.WorkflowLevel;
                     _presenter.CurrentMaintenanceRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
                     break;
+                }
+            }
+        }
+
+        private void SendEmailtoMechanic(MaintenanceRequestStatus MRS)
+        {
+            if (_presenter.GetUser(MRS.Approver).EmployeePosition.PositionName == "Driver/Mechanic")
+            {
+                if (_presenter.GetUser(MRS.Approver).IsAssignedJob != true)
+                {
+                    EmailSender.Send(_presenter.GetUser(MRS.Approver).Email, "Maintenance Request", (_presenter.GetUser(_presenter.CurrentMaintenanceRequest.AppUser.Id).FullName).ToUpper() + " Maintenance Request No. - '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + "'" + "Need Maintenance");
+                }
+                else
+                {
+                    EmailSender.Send(_presenter.GetUser(_presenter.GetAssignedJobbycurrentuser(MRS.Approver).AssignedTo).Email, "Maintenance Request", (_presenter.GetUser(_presenter.CurrentMaintenanceRequest.AppUser.Id).FullName).ToUpper() + " Requests for Maintenance with  Request No. - '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + "'");
                 }
             }
         }
@@ -455,6 +477,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 if (_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails.Count != 0)
                 {
+                    _presenter.CurrentMaintenanceRequest.MaintenanceStatus = "InProgress";
                     _presenter.SaveOrUpdateMaintenanceRequest();
                     BindMaintenanceRequest();
 
@@ -562,6 +585,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails.Add(Detail);
                     Master.ShowMessage(new AppMessage("Maintenance Request Detail added successfully.", RMessageType.Info));
                     dgMaintenanceRequestDetail.EditItemIndex = -1;
+                 
                     BindMaintenanceRequestDetails();
                 }
                 catch (Exception ex)

@@ -233,6 +233,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
 
         }
+
+        private void SendEmailtoMechanic()
+        {
+                   string message = "You are assigned to Maintain Car With Request By " + (_presenter.CurrentMaintenanceRequest.AppUser.FullName).ToUpper() + " and Car Maintenance Request Number is  '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + "'";
+                    EmailSender.Send(_presenter.GetMechanic().Email, "Maintenance Request ", message);
+                    Log.Info((_presenter.GetMechanic().FullName).ToUpper() + " has Maintained a Maintenance Request made by " + _presenter.CurrentMaintenanceRequest.AppUser.FullName);
+             
+        }
         private void SendEmail(MaintenanceRequestStatus MRS)
         {
             if (_presenter.GetUser(MRS.Approver).IsAssignedJob != true)
@@ -298,6 +306,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                             MRS.Approver = _presenter.CurrentUser().Id;
                             _presenter.CurrentMaintenanceRequest.CurrentLevel = MRS.WorkflowLevel;
                             SendEmailToRequester();
+                           
                             //  SendCompletedEmail(MRS);
                             break;
                         }
@@ -330,7 +339,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 bool mechanicApproved = true;
                 if (_presenter.CurrentMaintenanceRequest.ProgressStatus != ProgressStatus.Completed.ToString())
                 {
-                    if (_presenter.CurrentUser().EmployeePosition.PositionName == "Driver / Mechanic")
+                    if (_presenter.CurrentUser().EmployeePosition.PositionName == "Driver/Mechanic")
                     {
                         foreach (MaintenanceRequestDetail mrd in _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails)
                         {
@@ -344,10 +353,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     if (mechanicApproved)
                     {
                         SaveMaintenanceRequestStatus();
+
                         _presenter.SaveOrUpdateMaintenanceRequest(_presenter.CurrentMaintenanceRequest);
+                        SendEmailtoMechanic();
                         ShowPrint();
                         if (ddlApprovalStatus.SelectedValue != "Rejected")
                         {
+                           
                             Master.ShowMessage(new AppMessage("Maintenance Approval Processed", RMessageType.Info));
                         }
                         else
@@ -452,13 +464,24 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (e.Row.RowType == DataControlRowType.DataRow)
                 {
-                    if (_presenter.CurrentUser().EmployeePosition.PositionName == "Driver / Mechanic" && MR.ProgressStatus == ProgressStatus.Completed.ToString() && String.IsNullOrEmpty(MR.MaintenanceStatus))
+                    if (_presenter.CurrentUser().EmployeePosition.PositionName == "Driver/Mechanic" && MR.ProgressStatus != ProgressStatus.Completed.ToString())
                     {
-                        e.Row.Cells[8].Visible = true;
+                        if (MR.MaintenanceStatus != "Maintained")
+                        {
+                            // (String.IsNullOrEmpty(MR.MaintenanceStatus))
+                            e.Row.Cells[8].Visible = true;
+                            e.Row.Cells[5].Visible = true;
+                        }
+                        else
+                        {
+                            e.Row.Cells[8].Visible = false;
+                            e.Row.Cells[5].Visible = true;
+                        }
                     }
                     else
                     {
                         e.Row.Cells[8].Visible = false;
+                        e.Row.Cells[5].Visible = false;
                     }
                 }
             }

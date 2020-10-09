@@ -144,6 +144,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _controller.GetCurrentUser();
         }
+
+        public AppUser GetMechanic()
+        {
+            return _controller.GetMechanic();
+        }
         public AssignJob GetAssignedJobbycurrentuser(int userId)
         {
             return _controller.GetAssignedJobbycurrentuser(userId);

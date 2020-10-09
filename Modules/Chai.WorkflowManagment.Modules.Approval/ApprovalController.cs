@@ -445,6 +445,10 @@ namespace Chai.WorkflowManagment.Modules.Approval
         {
             return _workspace.Single<MaintenanceSparePart>(x => x.Id == MaintenanceSparePartId);
         }
+        public AppUser GetMechanic()
+        {
+            return _workspace.Single<AppUser>(x => x.EmployeePosition.PositionName== "Driver/Mechanic");
+        }
 
         #endregion
         #region StoreApproval
