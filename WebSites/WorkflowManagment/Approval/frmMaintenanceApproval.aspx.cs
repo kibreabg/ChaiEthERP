@@ -236,7 +236,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
         private void SendEmailtoMechanic()
         {
-                   string message = "You are assigned to Maintain Car With Request By " + (_presenter.CurrentMaintenanceRequest.AppUser.FullName).ToUpper() + " and Car Maintenance Request Number is  '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + "'";
+                   string message = "You are assigned to Maintain Car Maintenance Request By " + (_presenter.CurrentMaintenanceRequest.AppUser.FullName).ToUpper() + " and Request Number :   '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + "'";
                     EmailSender.Send(_presenter.GetMechanic().Email, "Maintenance Request ", message);
                     Log.Info((_presenter.GetMechanic().FullName).ToUpper() + " has Maintained a Maintenance Request made by " + _presenter.CurrentMaintenanceRequest.AppUser.FullName);
              
@@ -270,13 +270,25 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             EmailSender.Send(_presenter.GetUser(_presenter.CurrentMaintenanceRequest.AppUser.Id).Email, "Maintenance Request ", "Your Maintenance Request with Maintenance Request No. - '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + "' was Completed.");
         }
+
+        private void SendEmailToRequesterForPurchase()
+        {
+            foreach (MaintenanceSparePart toBePurchased in _presenter.CurrentMaintenanceRequest.MaintenanceSpareParts)
+            {
+
+                EmailSender.Send(_presenter.GetUser(_presenter.CurrentMaintenanceRequest.AppUser.Id).Email, "Maintenance Request For Purchase",  "Your Car Maintenance Request with Maintenance Request No.- '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + "' is Completed and You have to Request for Purchase Item '" + (toBePurchased.Item.Name));
+            }
+        }
         private void GetNextApprover()
         {
             foreach (MaintenanceRequestStatus MRS in _presenter.CurrentMaintenanceRequest.MaintenanceRequestStatuses)
             {
                 if (MRS.ApprovalStatus == null)
                 {
-                    SendEmail(MRS);
+                   
+                        SendEmailtoMechanic();
+                   
+                  
                     _presenter.CurrentMaintenanceRequest.CurrentApprover = MRS.Approver;
                     _presenter.CurrentMaintenanceRequest.CurrentLevel = MRS.WorkflowLevel;
                     _presenter.CurrentMaintenanceRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
@@ -305,14 +317,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                             _presenter.CurrentMaintenanceRequest.CurrentStatus = MRS.ApprovalStatus;
                             MRS.Approver = _presenter.CurrentUser().Id;
                             _presenter.CurrentMaintenanceRequest.CurrentLevel = MRS.WorkflowLevel;
-                            SendEmailToRequester();
-                           
+                            //SendEmailToRequester();
+                            SendEmailToRequesterForPurchase();
                             //  SendCompletedEmail(MRS);
                             break;
                         }
                         else
                         {
                             GetNextApprover();
+                           // SendEmail(MRS);
                         }
                         // _presenter.CurrentMaintenanceRequest.CurrentStatus = MRS.ApprovalStatus;
                         //GetNextApprover();
@@ -353,9 +366,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     if (mechanicApproved)
                     {
                         SaveMaintenanceRequestStatus();
-
+                      
                         _presenter.SaveOrUpdateMaintenanceRequest(_presenter.CurrentMaintenanceRequest);
-                        SendEmailtoMechanic();
+                       // SendEmailtoMechanic();
                         ShowPrint();
                         if (ddlApprovalStatus.SelectedValue != "Rejected")
                         {
@@ -459,32 +472,35 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void grvMaintenanceRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
         {
+            //e.Row.Cells[8].Visible = false;
             MaintenanceRequest MR = e.Row.DataItem as MaintenanceRequest;
             if (_presenter.CurrentMaintenanceRequest.MaintenanceRequestStatuses != null)
             {
                 if (e.Row.RowType == DataControlRowType.DataRow)
                 {
-                    if (_presenter.CurrentUser().EmployeePosition.PositionName == "Driver/Mechanic" && MR.ProgressStatus != ProgressStatus.Completed.ToString())
+                    if(_presenter.CurrentUser().EmployeePosition.PositionName == "Driver/Mechanic" && MR.ProgressStatus == ProgressStatus.Completed.ToString())
                     {
-                        if (MR.MaintenanceStatus != "Maintained")
-                        {
-                            // (String.IsNullOrEmpty(MR.MaintenanceStatus))
-                            e.Row.Cells[8].Visible = true;
-                            e.Row.Cells[5].Visible = true;
-                        }
-                        else
+                        if (MR.MaintenanceStatus == "Maintained")
                         {
                             e.Row.Cells[8].Visible = false;
                             e.Row.Cells[5].Visible = true;
                         }
+                        else
+                        {
+                            e.Row.Cells[8].Visible = true;
+                            e.Row.Cells[5].Visible = true;
+                        }
                     }
+                   
                     else
                     {
                         e.Row.Cells[8].Visible = false;
                         e.Row.Cells[5].Visible = false;
                     }
+                    e.Row.Cells[1].Text = _presenter.GetUser(MR.Requester).FullName;
                 }
             }
+           
         }
         protected void grvMaintenanceRequestList_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {

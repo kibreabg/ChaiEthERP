@@ -79,6 +79,7 @@
             <RowStyle CssClass="rowstyle" />
             <Columns>
                 <asp:BoundField DataField="RequestNo" HeaderText="Request No" SortExpression="RequestNo" />
+                 <asp:BoundField DataField="Requester" HeaderText="Requester" SortExpression="Requester" />
                 <asp:TemplateField HeaderText="Request Date">
                     <ItemTemplate>
                         <asp:Label ID="lblRequestedDate" runat="server" Text='<%# Eval("RequestDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
@@ -94,7 +95,7 @@
                         <asp:Button runat="server" ID="btnStatus" Text="" BorderStyle="None" />
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:ButtonField CommandName="Maintained" Text="Maintained" />
+                <asp:ButtonField CommandName="Maintained" Text="Maintained"/>
             </Columns>
             <FooterStyle CssClass="FooterStyle" />
             <HeaderStyle CssClass="headerstyle" />
