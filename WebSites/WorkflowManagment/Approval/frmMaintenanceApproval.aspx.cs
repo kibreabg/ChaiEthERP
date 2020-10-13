@@ -268,16 +268,35 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void SendEmailToRequester()
         {
-            EmailSender.Send(_presenter.GetUser(_presenter.CurrentMaintenanceRequest.AppUser.Id).Email, "Maintenance Request ", "Your Maintenance Request with Maintenance Request No. - '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + "' was Completed.");
+            EmailSender.Send(_presenter.GetUser(_presenter.CurrentMaintenanceRequest.AppUser.Id).Email, "Maintenance Request ", "Your Maintenance Request with Maintenance Request No. - '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + "' is Completed.");
         }
 
         private void SendEmailToRequesterForPurchase()
         {
-            foreach (MaintenanceSparePart toBePurchased in _presenter.CurrentMaintenanceRequest.MaintenanceSpareParts)
-            {
 
-                EmailSender.Send(_presenter.GetUser(_presenter.CurrentMaintenanceRequest.AppUser.Id).Email, "Maintenance Request For Purchase",  "Your Car Maintenance Request with Maintenance Request No.- '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + "' is Completed and You have to Request for Purchase Item '" + (toBePurchased.Item.Name));
+            int x = _presenter.CurrentMaintenanceRequest.MaintenanceSpareParts.Count;
+
+            if (x > 0)
+            {
+                string itemsPurchased = string.Empty;
+                foreach (MaintenanceSparePart toBePurchased in _presenter.CurrentMaintenanceRequest.MaintenanceSpareParts)
+                {
+
+                    itemsPurchased = toBePurchased.Item.Name + "," + itemsPurchased;
+
+
+
+                }
+                EmailSender.Send(_presenter.GetUser(_presenter.CurrentMaintenanceRequest.AppUser.Id).Email, "Maintenance Request For Purchase", "Your Car Maintenance Request with Maintenance Request No.- '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + "' is Completed and You have to Request for Purchase Item '" + itemsPurchased.ToString() + "'");
             }
+
+            else
+            {
+                EmailSender.Send(_presenter.GetUser(_presenter.CurrentMaintenanceRequest.AppUser.Id).Email, "Maintenance Request ", "Your Maintenance Request with Maintenance Request No. - '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + "' is in a review Process.");
+            }
+
+
+            
         }
         private void GetNextApprover()
         {
@@ -482,20 +501,28 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     {
                         if (MR.MaintenanceStatus == "Maintained")
                         {
-                            e.Row.Cells[8].Visible = false;
-                            e.Row.Cells[5].Visible = true;
+                            e.Row.Cells[9].Enabled = false;
+                            e.Row.Cells[6].Visible = false;
                         }
-                        else
+                        else if(MR.MaintenanceStatus!= "Maintained")
                         {
-                            e.Row.Cells[8].Visible = true;
-                            e.Row.Cells[5].Visible = true;
+                            e.Row.Cells[9].Visible = true;
+                            e.Row.Cells[6].Visible = false;
                         }
+                       
                     }
-                   
+                    else if (_presenter.CurrentUser().EmployeePosition.PositionName == "Driver/Mechanic" && MR.ProgressStatus != ProgressStatus.Completed.ToString())
+                    {
+                        
+                            e.Row.Cells[9].Visible = false;
+                            e.Row.Cells[6].Visible = true;
+                       
+
+                    }
                     else
                     {
-                        e.Row.Cells[8].Visible = false;
-                        e.Row.Cells[5].Visible = false;
+                        e.Row.Cells[9].Visible = false;
+                        e.Row.Cells[6].Visible = false;
                     }
                     e.Row.Cells[1].Text = _presenter.GetUser(MR.Requester).FullName;
                 }
@@ -526,6 +553,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     {
                         _presenter.CurrentMaintenanceRequest.MaintenanceStatus = "Maintained";
                         _presenter.SaveOrUpdateMaintenanceRequest(_presenter.CurrentMaintenanceRequest);
+                        SendEmailToRequester();
                         LoadData(Convert.ToInt32(e.CommandArgument));
                     }
                     else

@@ -461,6 +461,22 @@
                 <RowStyle CssClass="rowstyle" />
             </asp:GridView>
         </fieldset>
+         <asp:GridView ID="grvSpare" CellPadding="5" CellSpacing="3"
+                runat="server" AutoGenerateColumns="False" DataKeyNames="Id" 
+                CssClass="table table-striped table-bordered table-hover">
+                <RowStyle CssClass="rowstyle" />
+                <Columns>
+                    
+
+                   
+                    <asp:BoundField DataField="Name" HeaderText="Item" SortExpression="Name" />
+                   
+                </Columns>
+                <FooterStyle CssClass="FooterStyle" />
+                <HeaderStyle CssClass="headerstyle" />
+                <PagerStyle CssClass="PagerStyle" />
+                <RowStyle CssClass="rowstyle" />
+            </asp:GridView>
     </div>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="menuContent" runat="Server">
