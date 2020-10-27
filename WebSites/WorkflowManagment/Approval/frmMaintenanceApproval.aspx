@@ -24,6 +24,12 @@
                 $('#mechanicModal').modal('show');
             });
         }
+
+        function showApproverDetail() {
+            $(document).ready(function () {
+                $('#approverModal').modal('show');
+            });
+        }
     </script>
     <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
         <header>
@@ -89,12 +95,8 @@
                 <asp:BoundField DataField="ActionTaken" HeaderText="Action Taken" SortExpression="ActionTaken" />
                 <asp:BoundField DataField="Remark" HeaderText="Remark" SortExpression="Remark" />
                 <asp:ButtonField ButtonType="Button" CommandName="ViewItem" Text="Mechanic Review" />
+                <asp:ButtonField ButtonType="Button" CommandName="ViewItemPrev" Text="Preview" />
                 <asp:CommandField ShowSelectButton="True" SelectText="Process Request" ButtonType="Button" />
-                <asp:TemplateField>
-                    <ItemTemplate>
-                        <asp:Button runat="server" ID="btnStatus" Text="" BorderStyle="None" />
-                    </ItemTemplate>
-                </asp:TemplateField>
                 <asp:ButtonField CommandName="Maintained" Text="Maintained"/>
             </Columns>
             <FooterStyle CssClass="FooterStyle" />
@@ -190,6 +192,41 @@
         Enabled="True" TargetControlID="btnPop" PopupControlID="pnlApproval" CancelControlID="btnCancelPopup"
         ID="pnlApproval_ModalPopupExtender">
     </asp:ModalPopupExtender>
+     
+        <div class="modal fade" id="approverModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" style="width: 80%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;</button>
+                    <h4 class="modal-title">Preview Section</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="jarviswidget-editbox"></div>
+                    <div class="widget-body no-padding">
+                        <div class="smart-form">
+                            
+                                         <asp:GridView ID="grvPreviewDetail" CellPadding="5" CellSpacing="3"
+                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                CssClass="table table-striped table-bordered table-hover">
+                <Columns>
+                    <asp:BoundField DataField="ServiceType.Name" HeaderText="Service Type" SortExpression="ServiceType.Name" />
+                    <asp:BoundField DataField="DriverServiceTypeDetail.Description" HeaderText="Driver's Service Type Request" SortExpression="DriverServiceTypeDetail.Description" />
+                    <asp:BoundField DataField="MechanicServiceTypeDetail.Description" HeaderText="Mechanic's Service Type Reccomendation" SortExpression="MechanicServiceTypeDetail.Description" />
+                    <asp:BoundField DataField="TechnicianRemark" HeaderText="Mechanic's Remark" SortExpression="TechnicianRemark" />
+
+                </Columns>
+                <FooterStyle CssClass="FooterStyle" />
+                <HeaderStyle CssClass="headerstyle" />
+                <PagerStyle CssClass="PagerStyle" />
+                <RowStyle CssClass="rowstyle" />
+            </asp:GridView>
+                                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div></div>
     <div class="modal fade" id="mechanicModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" style="width: 80%;">
             <div class="modal-content">

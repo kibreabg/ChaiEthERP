@@ -499,30 +499,44 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     if(_presenter.CurrentUser().EmployeePosition.PositionName == "Driver/Mechanic" && MR.ProgressStatus == ProgressStatus.Completed.ToString())
                     {
+
                         if (MR.MaintenanceStatus == "Maintained")
                         {
-                            e.Row.Cells[9].Enabled = false;
-                            e.Row.Cells[6].Visible = false;
+                           
+                                e.Row.Cells[9].Visible = false;
+                                e.Row.Cells[6].Visible = true;
+                                e.Row.Cells[7].Visible = false;
+                           
                         }
-                        else if(MR.MaintenanceStatus!= "Maintained")
+                        else if (MR.MaintenanceStatus != "Maintained")
                         {
+
+
                             e.Row.Cells[9].Visible = true;
-                            e.Row.Cells[6].Visible = false;
+                            e.Row.Cells[6].Visible = true;
+                            e.Row.Cells[7].Visible = false;
                         }
                        
                     }
                     else if (_presenter.CurrentUser().EmployeePosition.PositionName == "Driver/Mechanic" && MR.ProgressStatus != ProgressStatus.Completed.ToString())
                     {
-                        
+                       
+
                             e.Row.Cells[9].Visible = false;
                             e.Row.Cells[6].Visible = true;
+                            e.Row.Cells[7].Visible = false;
                        
 
                     }
                     else
                     {
-                        e.Row.Cells[9].Visible = false;
-                        e.Row.Cells[6].Visible = false;
+                      
+
+                            e.Row.Cells[9].Visible = false;
+                            e.Row.Cells[6].Visible = false;
+                            e.Row.Cells[7].Visible = true;
+                        
+
                     }
                     e.Row.Cells[1].Text = _presenter.GetUser(MR.Requester).FullName;
                 }
@@ -547,11 +561,18 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     dgMaintenanceRequestDetail.DataBind();
                     ScriptManager.RegisterStartupScript(this, GetType(), "showMechanicDetail", "showMechanicDetail();", true);
                 }
+                if (e.CommandName == "ViewItemPrev")
+                {
+                    grvPreviewDetail.DataSource = _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails;
+                    grvPreviewDetail.DataBind();
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showApproverDetail", "showApproverDetail();", true);
+                }
                 if (e.CommandName == "Maintained")
                 {
                     if (_presenter.CurrentMaintenanceRequest.MaintenanceStatus != "Maintained")
                     {
                         _presenter.CurrentMaintenanceRequest.MaintenanceStatus = "Maintained";
+                        grvPreviewDetail.DataBind();
                         _presenter.SaveOrUpdateMaintenanceRequest(_presenter.CurrentMaintenanceRequest);
                         SendEmailToRequester();
                         LoadData(Convert.ToInt32(e.CommandArgument));
