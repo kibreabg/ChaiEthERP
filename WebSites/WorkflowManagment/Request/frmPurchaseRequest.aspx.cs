@@ -760,7 +760,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                 _presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Add(prd);
             }
-
+            lblMainReq.Visible = true;
+            ddlMaintenanceReq.Visible = true;
             dgPurchaseRequestDetail.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails;
             dgPurchaseRequestDetail.DataBind();
 
