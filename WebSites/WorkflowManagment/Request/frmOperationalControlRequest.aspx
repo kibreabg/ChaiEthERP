@@ -37,6 +37,12 @@
                                     <asp:TextBox ID="txtRequestDate" ReadOnly="true" runat="server"></asp:TextBox>
                                 </label>
                             </section>
+                            <section class="col col-6">
+                                <label class="label">Description</label>
+                                <label class="input">
+                                    <asp:TextBox ID="txtDescription" TextMode="MultiLine" Width="100%" runat="server"></asp:TextBox>
+                                </label>
+                            </section>
                         </div>
                         <div class="row">
                             <section class="col col-6">

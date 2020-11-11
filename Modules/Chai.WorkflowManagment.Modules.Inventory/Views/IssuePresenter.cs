@@ -159,9 +159,9 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         {
             return _controller.GetToBeIssuedFixedAssets();
         }
-        public IList<FixedAsset> GetUpdatedFixedAssetsByItem(int itemId)
+        public IList<FixedAsset> GetUpdatedFixedAssetsByItem(int itemId, int progId)
         {
-            return _controller.GetUpdatedFixedAssetsByItem(itemId);
+            return _controller.GetUpdatedFixedAssetsByItem(itemId, progId);
         }
         public FixedAsset GetFixedAsset(int id)
         {

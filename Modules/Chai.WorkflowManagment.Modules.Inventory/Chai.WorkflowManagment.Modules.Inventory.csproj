@@ -78,6 +78,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="InventoryController.cs" />
     <Compile Include="InventoryModuleInitializer.cs" />
+    <Compile Include="Views\FixedAssetHistoriesPresenter.cs" />
+    <Compile Include="Views\IFixedAssetHistoriesView.cs" />
     <Compile Include="Views\IFixedAssetView.cs" />
     <Compile Include="Views\IIssueListView.cs" />
     <Compile Include="Views\FixedAssetPresenter.cs" />

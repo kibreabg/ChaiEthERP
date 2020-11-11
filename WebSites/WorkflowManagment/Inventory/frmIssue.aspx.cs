@@ -171,10 +171,10 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
             ddlCurAssetCustodian.DataSource = _presenter.GetUsers();
             ddlCurAssetCustodian.DataBind();
         }
-        private void PopFixedAsset(int itemId)
+        private void PopFixedAsset(int itemId, int progId)
         {
             ddlAssetCode.Items.Clear();
-            ddlAssetCode.DataSource = _presenter.GetUpdatedFixedAssetsByItem(itemId);
+            ddlAssetCode.DataSource = _presenter.GetUpdatedFixedAssetsByItem(itemId, progId);
             ddlAssetCode.DataBind();
         }
         private void PopStores()
@@ -253,7 +253,12 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
 
             if (theIssueDetail.Item.ItemType == "Fixed Asset")
             {
-                PopFixedAsset(theIssueDetail.Item.Id);
+                int storeReqId = Convert.ToInt32(Request.QueryString["StoreReqId"]);
+                if (storeReqId != 0)
+                {
+                    StoreRequest storeReq = _presenter.GetStoreRequest(storeReqId);
+                    PopFixedAsset(theIssueDetail.Item.Id, storeReq.Program.Id);
+                }
                 ScriptManager.RegisterStartupScript(this, GetType(), "showFixedAssetModal", "showFixedAssetModal();", true);
             }
             else
@@ -359,6 +364,12 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                 else
                     issueDetail = _presenter.CurrentIssue.IssueDetails[(int)Session["detailIndex"]];
 
+                string issuedTo = "";
+                if (rbChaiEmp.Checked)
+                    issuedTo = _presenter.GetUser(Convert.ToInt32(ddlCustodian.SelectedValue)).FullName;
+                else if (rbOther.Checked)
+                    issuedTo = txtOtherCustodian.Text;
+
                 FixedAsset fa = _presenter.GetFixedAsset(Convert.ToInt32(ddlAssetCode.SelectedValue));
                 fa.Store = null;
                 fa.Section = null;
@@ -366,11 +377,11 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                 fa.AssetStatus = FixedAssetStatus.ToBeIssued.ToString();
                 _presenter.SaveOrUpdateFixedAsset(fa);
 
-                fa.Custodian = _presenter.GetUser(Convert.ToInt32(ddlCustodian.SelectedValue)).FullName;
+                fa.Custodian = issuedTo;
 
                 FixedAssetHistory fah = new FixedAssetHistory();
                 fah.TransactionDate = DateTime.Now;
-                fah.Custodian = _presenter.GetUser(Convert.ToInt32(ddlCustodian.SelectedValue)).FullName;
+                fah.Custodian = issuedTo;
                 fah.Operation = "Issue";
 
                 fa.FixedAssetHistories.Add(fah);
@@ -380,7 +391,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                 issueDetail.Shelf = fa.Shelf;
                 issueDetail.UnitCost = fa.UnitCost;
                 issueDetail.Quantity = 1;
-                issueDetail.Custodian = _presenter.GetUser(Convert.ToInt32(ddlCustodian.SelectedValue)).FullName;
+                issueDetail.Custodian = issuedTo;
                 issueDetail.FixedAsset = fa;
 
                 if (Session["IssueDetailId"] == null)
@@ -479,6 +490,18 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         {
             PopShelves(Convert.ToInt32(ddlSection.SelectedValue));
             ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
+        }
+        protected void rbChaiEmp_CheckedChanged(object sender, EventArgs e)
+        {
+            pnlChaiEmp.Visible = true;
+            pnlOther.Visible = false;
+            ScriptManager.RegisterStartupScript(this, GetType(), "showFixedAssetModal", "showFixedAssetModal();", true);
+        }
+        protected void rbOther_CheckedChanged(object sender, EventArgs e)
+        {
+            pnlChaiEmp.Visible = false;
+            pnlOther.Visible = true;
+            ScriptManager.RegisterStartupScript(this, GetType(), "showFixedAssetModal", "showFixedAssetModal();", true);
         }
     }
 }

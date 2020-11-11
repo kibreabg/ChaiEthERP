@@ -37,6 +37,7 @@
                                 <label class="input">
                                     <asp:TextBox ID="txtDescription" TextMode="MultiLine" Width="100%" runat="server"></asp:TextBox>
                                 </label>
+                                <asp:RequiredFieldValidator ID="rfvDescription" runat="server" ControlToValidate="txtDescription" CssClass="validator" Display="Dynamic" ErrorMessage="Description is Required" SetFocusOnError="true" ValidationGroup="request"></asp:RequiredFieldValidator>
                             </section>
                         </div>
                         <div class="row">
