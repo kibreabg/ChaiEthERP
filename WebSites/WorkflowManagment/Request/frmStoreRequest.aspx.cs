@@ -110,6 +110,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 _presenter.CurrentStoreRequest.RequestedDate = Convert.ToDateTime(txtRequestDate.Text);
                 _presenter.CurrentStoreRequest.RequestNo = AutoNumber();
                 _presenter.CurrentStoreRequest.DeliverTo = txtDeliverto.Text;
+                _presenter.CurrentStoreRequest.Program = _presenter.GetProgram(Convert.ToInt32(ddlProgram.SelectedValue));
                 _presenter.CurrentStoreRequest.Comment = "";
                 SaveStoreRequestStatus();
                 GetCurrentApprover();

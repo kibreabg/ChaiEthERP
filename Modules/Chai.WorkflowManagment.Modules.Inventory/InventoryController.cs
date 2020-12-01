@@ -81,7 +81,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory
         {
             return _workspace.Single<Item>(x => x.Name == Name);
         }
-        
+
         #endregion
         #region Item Issuance
         public int GetLastIssueId()
@@ -134,9 +134,9 @@ namespace Chai.WorkflowManagment.Modules.Inventory
         }
         #endregion
         #region Fixed Asset
-        public IList<FixedAsset> GetUpdatedFixedAssetsByItem(int itemId)
+        public IList<FixedAsset> GetUpdatedFixedAssetsByItem(int itemId, int progId)
         {
-            return WorkspaceFactory.CreateReadOnly().Query<FixedAsset>(x => x.AssetStatus == "UpdatedInStore" && x.Item.Id == itemId).OrderBy(x => x.Id).ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<FixedAsset>(x => x.AssetStatus == "UpdatedInStore" && x.Item.Id == itemId && x.Receive.Program.Id == progId).OrderBy(x => x.Id).ToList();
         }
         public IList<FixedAsset> GetToBeIssuedFixedAssets()
         {
@@ -149,16 +149,35 @@ namespace Chai.WorkflowManagment.Modules.Inventory
         {
             return WorkspaceFactory.CreateReadOnly().Query<FixedAsset>(null).OrderBy(x => x.Id).ToList();
         }
-        public IList<FixedAsset> ListFixedAssets(string item, string assetStatus)
+        public IList<FixedAsset> ListFixedAssets(string item, string assetStatus, int progId)
         {
             string filterExpression = "";
 
-            filterExpression = "SELECT * FROM FixedAssets WHERE 1 = CASE WHEN '" + item + "' = '' THEN 1 WHEN FixedAssets.Item_Id = '" + item + "' THEN 1 END AND  1 = CASE WHEN '" + assetStatus + "' = '' THEN 1 WHEN FixedAssets.AssetStatus = '" + assetStatus + "'  Then 1 END ORDER BY FixedAssets.Id Desc";
+            filterExpression = "SELECT * FROM FixedAssets " +
+                "INNER JOIN Receives ON Receives.Id = FixedAssets.Receive_Id " +
+                "WHERE 1 = CASE WHEN '" + item + "' = '' THEN 1 WHEN FixedAssets.Item_Id = '" + item + "' THEN 1 END " +
+                "AND  1 = CASE WHEN '" + assetStatus + "' = '' THEN 1 WHEN FixedAssets.AssetStatus = '" + assetStatus + "'  Then 1 END " + 
+                "AND  1 = CASE WHEN '" + progId + "' = '0' THEN 1 WHEN Receives.Program_Id = '" + progId + "'  Then 1 END " + 
+                "ORDER BY FixedAssets.Id Desc";
             return _workspace.SqlQuery<FixedAsset>(filterExpression).ToList();
         }
         public FixedAsset GetFixedAsset(int faId)
         {
             return _workspace.Single<FixedAsset>(x => x.Id == faId, y => y.FixedAssetHistories);
+        }
+        #endregion
+        #region Fixed Asset History
+        public IList<FixedAssetHistory> ListFixedAssetHistories(string assetCode, string serialNo)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM FixedAssetHistories " +
+                "INNER JOIN FixedAssets ON FixedAssets.Id = FixedAssetHistories.FixedAsset_Id " +
+                "WHERE " +
+                "1 = CASE WHEN '" + assetCode + "' = '' THEN 1 WHEN FixedAssets.AssetCode = '" + assetCode + "' THEN 1 END " +
+                "AND 1 = CASE WHEN '" + serialNo + "' = '' THEN 1 WHEN FixedAssets.SerialNo = '" + serialNo + "'  THEN 1 END " +
+                "ORDER BY FixedAssetHistories.Id DESC";
+            return _workspace.SqlQuery<FixedAssetHistory>(filterExpression).ToList();
         }
         #endregion
         #region Entity Manipulation

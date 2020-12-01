@@ -34,6 +34,10 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         {
             return _settingController.GetItems();
         }
+        public IList<Program> GetPrograms()
+        {
+            return _settingController.GetPrograms();
+        }
         public IList<AppUser> GetUsers()
         {
             return _adminController.GetUsers();
@@ -66,9 +70,9 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         {
             return _controller.GetStockByItem(itemId);
         }
-        public IList<FixedAsset> ListFixedAssets(string item, string assetStatus)
+        public IList<FixedAsset> ListFixedAssets(string item, string assetStatus, int progId)
         {
-            return _controller.ListFixedAssets(item, assetStatus);
+            return _controller.ListFixedAssets(item, assetStatus, progId);
         }
         public FixedAsset GetFixedAsset(int fixedAssetId)
         {

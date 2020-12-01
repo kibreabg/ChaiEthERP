@@ -33,7 +33,7 @@
                 <div class="smart-form">
                     <fieldset>
                         <div class="row">
-                            <section class="col col-6">
+                            <section class="col col-3">
                                 <label>Item</label>
                                 <label class="select">
                                     <asp:DropDownList ID="ddlFilterItem" AppendDataBoundItems="true" DataTextField="Name" DataValueField="Id" runat="server">
@@ -41,10 +41,17 @@
                                     </asp:DropDownList><i></i>
                                 </label>
                             </section>
-                            <section class="col col-6">
+                            <section class="col col-3">
                                 <label>Asset Status</label>
                                 <label class="select">
                                     <asp:DropDownList ID="ddlFilterStatus" runat="server">
+                                    </asp:DropDownList><i></i>
+                                </label>
+                            </section>
+                            <section class="col col-3">
+                                <label>Program</label>
+                                <label class="select">
+                                    <asp:DropDownList ID="ddlFilterProgram" AppendDataBoundItems="true" DataTextField="ProgramName" DataValueField="Id" runat="server">
                                     </asp:DropDownList><i></i>
                                 </label>
                             </section>
@@ -299,6 +306,19 @@
                                                 <asp:ListItem Value="0">Select Shelf</asp:ListItem>
                                             </asp:DropDownList><i></i>
                                             <asp:RequiredFieldValidator ID="rfvShelf" runat="server" ControlToValidate="ddlShelf" CssClass="validator" Display="Dynamic" InitialValue="0" ErrorMessage="Shelf is mandatory" SetFocusOnError="true" ValidationGroup="return"></asp:RequiredFieldValidator>
+                                        </label>
+                                    </section>
+                                </div>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="checkbox">
+                                            <asp:CheckBox ID="ckCheckedByIt" runat="server" />
+                                            <i></i>Checked By IT?</label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="label">Remark</label>
+                                        <label class="input">
+                                            <asp:TextBox ID="txtReturnRemark" runat="server" Width="100%"></asp:TextBox>
                                         </label>
                                     </section>
                                 </div>

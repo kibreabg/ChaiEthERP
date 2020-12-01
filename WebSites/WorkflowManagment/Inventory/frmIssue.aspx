@@ -234,13 +234,36 @@
                                         </label>
                                     </section>
                                     <section class="col col-6">
-                                        <label class="label">Custodian</label>
-                                        <label class="select">
-                                            <asp:DropDownList ID="ddlCustodian" DataTextField="FullName" DataValueField="Id" AppendDataBoundItems="true" runat="server">
-                                                <asp:ListItem Value="0">Select Custodian</asp:ListItem>
-                                            </asp:DropDownList><i></i>
-                                        </label>
+                                        <label class="label">Issued To</label>
+                                        <div class="inline-group">
+                                            <label class="radio">
+                                                <asp:RadioButton ID="rbChaiEmp" AutoPostBack="true" OnCheckedChanged="rbChaiEmp_CheckedChanged" GroupName="IssuedTo" runat="server" />
+                                                <i></i>Chai Employee</label>
+                                            <label class="radio">
+                                                <asp:RadioButton ID="rbOther" AutoPostBack="true" OnCheckedChanged="rbOther_CheckedChanged" GroupName="IssuedTo" runat="server" />
+                                                <i></i>Other</label>
+                                        </div>
                                     </section>
+                                </div>
+                                <div class="row">
+                                    <asp:Panel ID="pnlOther" Visible="false" runat="server">
+                                        <section class="col col-6">
+                                            <label class="label">Custodian</label>
+                                            <label class="input">
+                                                <asp:TextBox ID="txtOtherCustodian" runat="server" Width="100%"></asp:TextBox>
+                                            </label>
+                                        </section>
+                                    </asp:Panel>
+                                    <asp:Panel ID="pnlChaiEmp" Visible="false" runat="server">
+                                        <section class="col col-6">
+                                            <label class="label">Custodian</label>
+                                            <label class="select">
+                                                <asp:DropDownList ID="ddlCustodian" DataTextField="FullName" DataValueField="Id" AppendDataBoundItems="true" runat="server">
+                                                    <asp:ListItem Value="0">Select Custodian</asp:ListItem>
+                                                </asp:DropDownList><i></i>
+                                            </label>
+                                        </section>
+                                    </asp:Panel>
                                 </div>
                             </fieldset>
                             <footer>

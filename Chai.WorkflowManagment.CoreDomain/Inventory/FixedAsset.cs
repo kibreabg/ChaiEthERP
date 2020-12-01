@@ -13,9 +13,9 @@ namespace Chai.WorkflowManagment.CoreDomain.Inventory
         {
             FixedAssetHistories = new List<FixedAssetHistory>();
         }
-        public int Id { get; set; }        
+        public int Id { get; set; }
         public string CPVNo { get; set; }
-        public string ReceiveNo { get; set; }      
+        public string ReceiveNo { get; set; }
         public Nullable<DateTime> ReceiveDate { get; set; }
         public string AssetCode { get; set; }
         public string AssetStatus { get; set; }
@@ -26,6 +26,9 @@ namespace Chai.WorkflowManagment.CoreDomain.Inventory
         public string Condition { get; set; }
         public int TotalLife { get; set; }
         public string Remark { get; set; }
+        public bool CheckedByIt { get; set; }
+        public string ReturnRemark { get; set; }
+        public virtual Receive Receive { get; set; }
         public virtual Item Item { get; set; }
         public virtual Store Store { get; set; }
         public virtual Section Section { get; set; }

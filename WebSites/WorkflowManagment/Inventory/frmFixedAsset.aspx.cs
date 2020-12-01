@@ -18,10 +18,11 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         {
             if (!this.IsPostBack)
             {
-                BindFixedAssets();
                 PopCustodians();
                 PopItems();
                 PopAssetStatuses();
+                PopPrograms();
+                BindFixedAssets();
             }
             this._presenter.OnViewLoaded();
         }
@@ -58,6 +59,16 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
             ddlFilterItem.DataSource = _presenter.GetItems();
             ddlFilterItem.DataBind();
         }
+        private void PopPrograms()
+        {
+            ddlFilterProgram.Items.Clear();
+            ListItem lst = new ListItem();
+            lst.Text = "Select Program";
+            lst.Value = "0";
+            ddlFilterProgram.Items.Add(lst);
+            ddlFilterProgram.DataSource = _presenter.GetPrograms();
+            ddlFilterProgram.DataBind();
+        }
         private void PopAssetStatuses()
         {
             ddlFilterStatus.Items.Clear();
@@ -76,7 +87,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                 ddlFilterStatus.Items.Add(list);
             }
             ddlFilterStatus.DataBind();
-            
+
         }
         private void PopCustodians()
         {
@@ -115,7 +126,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
         }
         protected void BindFixedAssets()
         {
-            dgFixedAsset.DataSource = _presenter.ListFixedAssets(ddlFilterItem.SelectedValue, ddlFilterStatus.SelectedValue);
+            dgFixedAsset.DataSource = _presenter.ListFixedAssets(ddlFilterItem.SelectedValue, ddlFilterStatus.SelectedValue, Convert.ToInt32(ddlFilterProgram.SelectedValue));
             dgFixedAsset.DataBind();
         }
         protected void dgFixedAsset_PageIndexChanged(object source, DataGridPageChangedEventArgs e)
@@ -198,7 +209,6 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
             Master.ShowMessage(new AppMessage("Fixed Asset successfully updated!", RMessageType.Info));
 
         }
-
         protected void btnTransferFA_Click(object sender, EventArgs e)
         {
             int fixedAssetId = (int)Session["fixedAssetId"];
@@ -244,6 +254,8 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                 fa.Section = _presenter.GetSection(Convert.ToInt32(ddlSection.SelectedValue));
                 fa.Shelf = _presenter.GetShelf(Convert.ToInt32(ddlSection.SelectedValue));
                 fa.AssetStatus = FixedAssetStatus.UpdatedInStore.ToString();
+                fa.CheckedByIt = ckCheckedByIt.Checked;
+                fa.ReturnRemark = txtReturnRemark.Text;
 
                 FixedAssetHistory fah = new FixedAssetHistory();
                 fah.TransactionDate = DateTime.Now;

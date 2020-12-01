@@ -41,10 +41,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 BindOperationalControlDetails();
                 Bindattachments();
             }
-            //if (_presenter.CurrentOperationalControlRequest.Id <= 0)
-            //{
-            //    AutoNumber();
-            //}
         }
 
         [CreateNew]
@@ -133,6 +129,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 CashPaymentRequest CPR = _presenter.GetCashPaymentRequest(Convert.ToInt32(Request.QueryString["PaymentId"]));
                 if (CPR != null)
                 {
+                    _presenter.CurrentOperationalControlRequest.Description = CPR.Description;
                     foreach (CashPaymentRequestDetail CPRD in CPR.CashPaymentRequestDetails)
                     {
                         OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
@@ -196,6 +193,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void BindOperationalControlDetails()
         {
+            txtDescription.Text = _presenter.CurrentOperationalControlRequest.Description;
             dgOperationalControlDetail.DataSource = _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails;
             dgOperationalControlDetail.DataBind();
         }

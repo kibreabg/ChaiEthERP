@@ -18,6 +18,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public int Id { get; set; }
         public string RequestNo { get; set; }
         public Nullable<DateTime> RequestDate { get; set; }
+        public string Description { get; set; }
         public string Payee { get; set; }
         public string TelephoneNo { get; set; }
         public string VoucherNo { get; set; }

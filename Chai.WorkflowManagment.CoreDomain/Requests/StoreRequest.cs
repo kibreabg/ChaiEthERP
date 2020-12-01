@@ -23,6 +23,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public int CurrentLevel { get; set; }
         public string CurrentStatus { get; set; }
         public string ProgressStatus { get; set; }
+        public virtual Program Program { get; set; }
         public virtual IList<StoreRequestStatus> StoreRequestStatuses { get; set; }
         public virtual IList<StoreRequestDetail> StoreRequestDetails { get; set; }
         #region StoreRequestStatus

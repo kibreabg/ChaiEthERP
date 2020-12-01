@@ -187,6 +187,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _settingcontroller.GetPrograms();
         }
+        public Program GetProgram(int programId)
+        {
+            return _settingcontroller.GetProgram(programId);
+        }
         public AppUser CurrentUser()
         {
             return _controller.GetCurrentUser();

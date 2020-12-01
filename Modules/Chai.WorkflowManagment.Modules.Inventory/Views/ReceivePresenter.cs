@@ -197,6 +197,7 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
                         fa.Section = recDet.Section;
                         fa.Shelf = recDet.Shelf;
                         fa.ReceiveNo = CurrentReceive.ReceiveNo;
+                        fa.Receive = CurrentReceive;
                         fa.Custodian = "Store";
                         fa.UnitCost = recDet.UnitCost;
                         fa.AssetStatus = "Received";
