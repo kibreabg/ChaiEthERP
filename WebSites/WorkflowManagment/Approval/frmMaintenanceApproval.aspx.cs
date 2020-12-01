@@ -140,9 +140,30 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
 
 
-                else if (_presenter.GetUser(_presenter.CurrentMaintenanceRequest.CurrentApprover).EmployeePosition.PositionName == AL.EmployeePosition.PositionName)
+                //else if (_presenter.GetUser(_presenter.CurrentMaintenanceRequest.CurrentApprover).EmployeePosition.PositionName == AL.EmployeePosition.PositionName)
+                //{
+                //    will = AL.Will;
+                //}
+
+
+                else
                 {
-                    will = AL.Will;
+                    try
+                    {
+                        if (_presenter.GetUser(_presenter.CurrentMaintenanceRequest.CurrentApprover).EmployeePosition.PositionName == AL.EmployeePosition.PositionName && AL.WorkflowLevel == _presenter.CurrentMaintenanceRequest.CurrentLevel)
+                        {
+                            will = AL.Will;
+                            break;
+                        }
+                    }
+                    catch
+                    {
+                        if (_presenter.GetUser(_presenter.CurrentMaintenanceRequest.CurrentApprover).EmployeePosition.Id == AL.EmployeePosition.Id && AL.WorkflowLevel == _presenter.CurrentMaintenanceRequest.CurrentLevel)
+                        {
+                            will = AL.Will;
+                            break;
+                        }
+                    }
                 }
 
             }
