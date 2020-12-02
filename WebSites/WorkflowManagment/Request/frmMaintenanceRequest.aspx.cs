@@ -462,6 +462,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     _presenter.CurrentMaintenanceRequest.MaintenanceStatus = "InProgress";
                     _presenter.SaveOrUpdateMaintenanceRequest();
+                    SendEmailtoMechanic();
                     BindMaintenanceRequest();
 
                     Master.ShowMessage(new AppMessage("Successfully did a Maintenance Request, Reference No - <b>'" + _presenter.CurrentMaintenanceRequest.RequestNo + "'</b> ", RMessageType.Info));
@@ -478,6 +479,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 ExceptionUtility.LogException(ex, ex.Source);
                 ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
+        }
+
+        private void SendEmailtoMechanic()
+        {
+            string message = "Car Maintenance Request By " + (_presenter.CurrentMaintenanceRequest.AppUser.FullName).ToUpper() + " and Request Number is :   '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + " Please Review :   '";
+            EmailSender.Send(_presenter.GetMechanic().Email, "Maintenance Request ", message);
+            Log.Info((_presenter.GetMechanic().FullName).ToUpper() + " has Maintained a Maintenance Request made by " + _presenter.CurrentMaintenanceRequest.AppUser.FullName);
+
         }
         protected void btnDelete_Click(object sender, EventArgs e)
         {

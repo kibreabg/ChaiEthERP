@@ -678,15 +678,10 @@ namespace Chai.WorkflowManagment.Modules.Request
             return _workspace.SqlQuery<MaintenanceRequestDetail>(filterExpression).ToList();
 
         }
-        //public IList<MaintenanceRequestDetail> ListPRDetailsInProgressById(int ReqId)
-        //{
-        //    string filterExpression = "";
-
-        //    filterExpression = "SELECT  *  FROM MaintenanceRequestDetails INNER JOIN MaintenanceRequests ON MaintenanceRequestDetails.MaintenanceRequest_Id = MaintenanceRequests.Id WHERE MaintenanceRequestDetails.BidAnalysisRequestStatus = 'InProgress' AND MaintenanceRequests.Id = '" + ReqId + "'  ORDER BY MaintenanceRequests.Id DESC";
-
-        //    return _workspace.SqlQuery<MaintenanceRequestDetail>(filterExpression).ToList();
-
-        //}
+        public AppUser GetMechanic()
+        {
+            return _workspace.Single<AppUser>(x => x.EmployeePosition.PositionName == "Driver/Mechanic");
+        }
         public IList<MaintenanceRequestDetail> ListMaintenanceReqById(int Id)
         {
             string filterExpression = "";
