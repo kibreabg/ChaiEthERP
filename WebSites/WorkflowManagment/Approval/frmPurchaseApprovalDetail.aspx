@@ -211,10 +211,10 @@
                                         </asp:TemplateColumn>
                                         <asp:TemplateColumn HeaderText="Item">
                                             <ItemTemplate>
-                                                <%# DataBinder.Eval(Container.DataItem, "Item")%>
+                                                <%# DataBinder.Eval(Container.DataItem, "ItemDescription")%>
                                             </ItemTemplate>
                                             <EditItemTemplate>
-                                                <asp:TextBox ID="txtItem" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "Item")%>'></asp:TextBox>
+                                                <asp:TextBox ID="txtItem" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "ItemDescription")%>'></asp:TextBox>
                                             </EditItemTemplate>
                                         </asp:TemplateColumn>
                                         <asp:TemplateColumn HeaderText="Requested Quantity">

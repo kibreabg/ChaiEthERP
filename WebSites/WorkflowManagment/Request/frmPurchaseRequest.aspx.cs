@@ -744,7 +744,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         protected void ddlMaintenanceReq_SelectedIndexChanged(object sender, EventArgs e)
         {
             MaintenanceRequest maintenance = null;
-
+            dgPurchaseRequestDetail.DataSource = null;
             if (_presenter.GetMaintenanceRequestById(Convert.ToInt32(ddlMaintenanceReq.SelectedValue)) != null)
             {
                 maintenance = _presenter.GetMaintenanceRequestById(Convert.ToInt32(ddlMaintenanceReq.SelectedValue));
@@ -762,6 +762,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
             lblMainReq.Visible = true;
             ddlMaintenanceReq.Visible = true;
+            
             dgPurchaseRequestDetail.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails;
             dgPurchaseRequestDetail.DataBind();
 

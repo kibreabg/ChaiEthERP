@@ -365,7 +365,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         else
                         {
                             GetNextApprover();
-                           // SendEmail(MRS);
+                            SendEmail(MRS);
                         }
                         // _presenter.CurrentMaintenanceRequest.CurrentStatus = MRS.ApprovalStatus;
                         //GetNextApprover();
@@ -420,6 +420,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                                 SendEmailtoMechanic();
                                 // SendEmailToRequester();
                                 SendEmailToRequesterForPurchase();
+                            }
+                            else if (ddlApprovalStatus.SelectedValue == "Reviewed")
+                            {
+                                Master.ShowMessage(new AppMessage("Maintenance Approval Processed", RMessageType.Info));
+                               
+                                // SendEmailToRequester();
+                                
                             }
                             else
                             {
@@ -597,6 +604,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     grvPreviewDetail.DataSource = _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails;
                     grvPreviewDetail.DataBind();
+
+                    grvSparepart.DataSource = _presenter.CurrentMaintenanceRequest.MaintenanceSpareParts;
+                    grvSparepart.DataBind();
                     ScriptManager.RegisterStartupScript(this, GetType(), "showApproverDetail", "showApproverDetail();", true);
                 }
                 if (e.CommandName == "Maintained")
@@ -956,6 +966,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
         }
         #endregion
+
+        protected void btnCancelPopup2_Click(object sender, EventArgs e)
+        {
+            pnlApproval.Visible = false;
+        }
     }
 
 }
