@@ -179,7 +179,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             foreach (VehicleRequestStatus VRS in _presenter.CurrentVehicleRequest.VehicleRequestStatuses)
             {
-                if (VRS.WorkflowLevel == _presenter.CurrentVehicleRequest.CurrentLevel && _presenter.CurrentVehicleRequest.ProgressStatus != ProgressStatus.Completed.ToString())
+                if (VRS.WorkflowLevel == _presenter.CurrentVehicleRequest.CurrentLevel && _presenter.CurrentVehicleRequest.CurrentLevel != _presenter.CurrentVehicleRequest.VehicleRequestStatuses.Count && _presenter.CurrentVehicleRequest.ProgressStatus != ProgressStatus.Completed.ToString())
                 {
                     btnApprove.Enabled = true;
                 }
@@ -488,6 +488,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
                     dgVehicles.EditItemIndex = -1;
                     BindVehicles();
+                    btnApprove.Enabled = true;
                     ddlProject.SelectedValue = _presenter.CurrentVehicleRequest.Project.Id.ToString();
                     if (_presenter.CurrentVehicleRequest.Grant != null)
                         ddlGrant.SelectedValue = _presenter.CurrentVehicleRequest.Grant.Id.ToString();
@@ -639,11 +640,19 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     else
                     {
                         bool vehicleAssigned = true;
-                        foreach (VehicleRequestDetail vrd in _presenter.CurrentVehicleRequest.VehicleRequestDetails)
+                        //Check if Vehicle is assigned before proceeding at the last approval stage. (Asres's page)
+                        if (_presenter.CurrentVehicleRequest.CurrentLevel == _presenter.CurrentVehicleRequest.VehicleRequestStatuses.Count)
                         {
-                            if (String.IsNullOrEmpty(vrd.AssignedVehicle))
+                            if (_presenter.CurrentVehicleRequest.VehicleRequestDetails.Count == 0)
                             {
                                 vehicleAssigned = false;
+                            }
+                            foreach (VehicleRequestDetail vrd in _presenter.CurrentVehicleRequest.VehicleRequestDetails)
+                            {
+                                if (String.IsNullOrEmpty(vrd.AssignedVehicle))
+                                {
+                                    vehicleAssigned = false;
+                                }
                             }
                         }
 
@@ -662,7 +671,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         }
                         else
                         {
-                            Master.ShowMessage(new AppMessage("Please assign a Vehicle before procedding!", RMessageType.Error));
+                            Master.ShowMessage(new AppMessage("Please assign a Vehicle before proceeding!", RMessageType.Error));
                         }
                     }
                 }
