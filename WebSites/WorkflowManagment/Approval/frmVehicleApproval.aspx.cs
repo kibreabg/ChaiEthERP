@@ -263,7 +263,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (assignedVehicle.AppUser != null)
                 {
-                    string message = "You are assigned to give a drive to " + (_presenter.CurrentVehicleRequest.AppUser.FullName).ToUpper() + " and your assigned Car Plate Number is " + (assignedVehicle.PlateNo).ToUpper() + ". Your Destination is " + _presenter.CurrentVehicleRequest.Destination + ". Your Departure Date is " + _presenter.CurrentVehicleRequest.DepartureDate.ToString() + " and Return Date is " + _presenter.CurrentVehicleRequest.ReturningDate.ToString();
+                    string message = "You are assigned to give a drive to " + (_presenter.CurrentVehicleRequest.AppUser.FullName).ToUpper() + " and your assigned Car Plate Number is " + (assignedVehicle.PlateNo).ToUpper() + ". Please use Project ID of " + _presenter.CurrentVehicleRequest.Project.ProjectCode + ". Your Destination is " + _presenter.CurrentVehicleRequest.Destination + ". Your Departure Date is " + _presenter.CurrentVehicleRequest.DepartureDate.ToString() + " and Return Date is " + _presenter.CurrentVehicleRequest.ReturningDate.ToString();
                     EmailSender.Send(_presenter.GetUser(assignedVehicle.AppUser.Id).Email, "Vehicle Request ", message);
                     Log.Info(_presenter.GetUser(VRS.Approver).FullName + " has approved a Vehicle Request made by " + _presenter.CurrentVehicleRequest.AppUser.FullName);
                 }
