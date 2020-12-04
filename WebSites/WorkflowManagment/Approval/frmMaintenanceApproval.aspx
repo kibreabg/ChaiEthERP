@@ -206,7 +206,19 @@
                     <div class="widget-body no-padding">
                         <div class="smart-form">
                             
-                                         <asp:GridView ID="grvPreviewDetail" CellPadding="5" CellSpacing="3"
+                             <div class="tab-content">
+                                <div class="tab-pane active" id="hr2">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active">
+                                            <a href="#iss3" data-toggle="tab"> ServiceTypes Requested and Recommended</a>
+                                        </li>
+                                        <li class="">
+                                            <a href="#iss4" data-toggle="tab">SpareParts to be purchased?</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content padding-10">
+                                        <div class="tab-pane active" id="iss3">
+                                              <asp:GridView ID="grvPreviewDetail" CellPadding="5" CellSpacing="3"
                 runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
                 CssClass="table table-striped table-bordered table-hover">
                 <Columns>
@@ -221,6 +233,36 @@
                 <PagerStyle CssClass="PagerStyle" />
                 <RowStyle CssClass="rowstyle" />
             </asp:GridView>
+                                            
+                                        </div>
+                                        <div class="tab-pane" id="iss4">
+                                            <asp:GridView ID="grvSparepart" CellPadding="5" CellSpacing="3"
+                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                CssClass="table table-striped table-bordered table-hover">
+                <Columns>
+                    <asp:BoundField DataField="Item.Name" HeaderText="Item" SortExpression="Item.Name" />
+                    
+
+                </Columns>
+                <FooterStyle CssClass="FooterStyle" />
+                <HeaderStyle CssClass="headerstyle" />
+                <PagerStyle CssClass="PagerStyle" />
+                <RowStyle CssClass="rowstyle" />
+            </asp:GridView>
+                                        </div>
+                                    </div>
+                                </div>
+                                 <footer>
+                                <asp:Button ID="btnCancelPopup2" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" OnClick="btnCancelPopup2_Click"></asp:Button>
+                            </footer>
+                            </div>
+
+
+
+
+
+
+                                       
                                         
                     </div>
                 </div>
