@@ -632,7 +632,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (_presenter.CurrentVehicleRequest.ProgressStatus != ProgressStatus.Completed.ToString())
                 {
-                    if (ddlApprovalStatus.SelectedValue == "Rejected" && txtRejectedReason.Text == "")
+                    if (ddlApprovalStatus.SelectedValue == ApprovalStatus.Rejected.ToString() && txtRejectedReason.Text == "")
                     {
                         Master.ShowMessage(new AppMessage("Please Insert Rejected/Canceled Reason ", RMessageType.Error));
 
@@ -649,7 +649,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                             }
                             foreach (VehicleRequestDetail vrd in _presenter.CurrentVehicleRequest.VehicleRequestDetails)
                             {
-                                if (String.IsNullOrEmpty(vrd.AssignedVehicle))
+                                if (String.IsNullOrEmpty(vrd.AssignedVehicle) && ddlApprovalStatus.SelectedValue != ApprovalStatus.Rejected.ToString())
                                 {
                                     vehicleAssigned = false;
                                 }
