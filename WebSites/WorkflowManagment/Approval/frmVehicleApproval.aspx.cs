@@ -641,7 +641,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     {
                         bool vehicleAssigned = true;
                         //Check if Vehicle is assigned before proceeding at the last approval stage. (Asres's page)
-                        if (_presenter.CurrentVehicleRequest.CurrentLevel == _presenter.CurrentVehicleRequest.VehicleRequestStatuses.Count)
+                        if (_presenter.CurrentVehicleRequest.CurrentLevel == _presenter.CurrentVehicleRequest.VehicleRequestStatuses.Count && ddlApprovalStatus.SelectedValue != ApprovalStatus.Rejected.ToString())
                         {
                             if (_presenter.CurrentVehicleRequest.VehicleRequestDetails.Count == 0)
                             {
@@ -649,7 +649,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                             }
                             foreach (VehicleRequestDetail vrd in _presenter.CurrentVehicleRequest.VehicleRequestDetails)
                             {
-                                if (String.IsNullOrEmpty(vrd.AssignedVehicle) && ddlApprovalStatus.SelectedValue != ApprovalStatus.Rejected.ToString())
+                                if (String.IsNullOrEmpty(vrd.AssignedVehicle))
                                 {
                                     vehicleAssigned = false;
                                 }
