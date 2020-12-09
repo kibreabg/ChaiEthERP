@@ -179,7 +179,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             foreach (VehicleRequestStatus VRS in _presenter.CurrentVehicleRequest.VehicleRequestStatuses)
             {
-                if (VRS.WorkflowLevel == _presenter.CurrentVehicleRequest.CurrentLevel && _presenter.CurrentVehicleRequest.CurrentLevel != _presenter.CurrentVehicleRequest.VehicleRequestStatuses.Count && _presenter.CurrentVehicleRequest.ProgressStatus != ProgressStatus.Completed.ToString())
+                if (VRS.WorkflowLevel == _presenter.CurrentVehicleRequest.CurrentLevel && _presenter.CurrentVehicleRequest.ProgressStatus != ProgressStatus.Completed.ToString())
                 {
                     btnApprove.Enabled = true;
                 }
@@ -263,7 +263,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (assignedVehicle.AppUser != null)
                 {
-                    string message = "You are assigned to give a drive to " + (_presenter.CurrentVehicleRequest.AppUser.FullName).ToUpper() + " and your assigned Car Plate Number is " + (assignedVehicle.PlateNo).ToUpper() + ". Your Destination is " + _presenter.CurrentVehicleRequest.Destination + ". Your Departure Date is " + _presenter.CurrentVehicleRequest.DepartureDate.ToString() + " and Return Date is " + _presenter.CurrentVehicleRequest.ReturningDate.ToString();
+                    string message = "You are assigned to give a drive to " + (_presenter.CurrentVehicleRequest.AppUser.FullName).ToUpper() + " and your assigned Car Plate Number is " + (assignedVehicle.PlateNo).ToUpper() + ". Please use Project ID of " + _presenter.CurrentVehicleRequest.Project.ProjectCode + ". Your Destination is " + _presenter.CurrentVehicleRequest.Destination + ". Your Departure Date is " + _presenter.CurrentVehicleRequest.DepartureDate.ToString() + " and Return Date is " + _presenter.CurrentVehicleRequest.ReturningDate.ToString();
                     EmailSender.Send(_presenter.GetUser(assignedVehicle.AppUser.Id).Email, "Vehicle Request ", message);
                     Log.Info(_presenter.GetUser(VRS.Approver).FullName + " has approved a Vehicle Request made by " + _presenter.CurrentVehicleRequest.AppUser.FullName);
                 }
@@ -632,7 +632,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (_presenter.CurrentVehicleRequest.ProgressStatus != ProgressStatus.Completed.ToString())
                 {
-                    if (ddlApprovalStatus.SelectedValue == "Rejected" && txtRejectedReason.Text == "")
+                    if (ddlApprovalStatus.SelectedValue == ApprovalStatus.Rejected.ToString() && txtRejectedReason.Text == "")
                     {
                         Master.ShowMessage(new AppMessage("Please Insert Rejected/Canceled Reason ", RMessageType.Error));
 
@@ -641,7 +641,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     {
                         bool vehicleAssigned = true;
                         //Check if Vehicle is assigned before proceeding at the last approval stage. (Asres's page)
-                        if (_presenter.CurrentVehicleRequest.CurrentLevel == _presenter.CurrentVehicleRequest.VehicleRequestStatuses.Count)
+                        if (_presenter.CurrentVehicleRequest.CurrentLevel == _presenter.CurrentVehicleRequest.VehicleRequestStatuses.Count && ddlApprovalStatus.SelectedValue != ApprovalStatus.Rejected.ToString())
                         {
                             if (_presenter.CurrentVehicleRequest.VehicleRequestDetails.Count == 0)
                             {
