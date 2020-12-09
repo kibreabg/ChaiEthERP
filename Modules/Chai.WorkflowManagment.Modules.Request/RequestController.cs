@@ -550,7 +550,11 @@ namespace Chai.WorkflowManagment.Modules.Request
         }
         public IList<MaintenanceRequest> GetMaintenanceRequestsCompleted()
         {
-            return WorkspaceFactory.CreateReadOnly().Query<MaintenanceRequest>(x => x.ProgressStatus == "Completed").ToList();
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM MaintenanceRequests Where MaintenanceRequests.ProgressStatus ='InProgress' and  MaintenanceRequests.CurrentLevel=3 order by MaintenanceRequests.Id Desc ";
+
+            return _workspace.SqlQuery<MaintenanceRequest>(filterExpression).ToList();
         }
         //public IList<MaintenanceRequest> GetMaintenanceRequestsCompleted()
         //{
