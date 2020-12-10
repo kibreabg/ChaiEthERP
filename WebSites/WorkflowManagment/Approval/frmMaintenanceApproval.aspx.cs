@@ -257,7 +257,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
         private void SendEmailtoMechanic()
         {
-                   string message = "Your Reviewed Car Maintenance Request By " + (_presenter.CurrentMaintenanceRequest.AppUser.FullName).ToUpper() + " and Request Number :   '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + " is Approved :   '";
+                   string message = "Your Reviewed Car Maintenance Request By " + (_presenter.CurrentMaintenanceRequest.AppUser.FullName).ToUpper() + " and Request Number :   '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + " is Approved: and Please Maintain the Requested Car for Maintenance.   '";
                     EmailSender.Send(_presenter.GetMechanic().Email, "Maintenance Request ", message);
                     Log.Info((_presenter.GetMechanic().FullName).ToUpper() + " has Maintained a Maintenance Request made by " + _presenter.CurrentMaintenanceRequest.AppUser.FullName);
              
