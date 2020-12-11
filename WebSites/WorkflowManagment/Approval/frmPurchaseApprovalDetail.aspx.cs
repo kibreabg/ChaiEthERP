@@ -387,20 +387,20 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         protected void grvPurchaseRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             Button btnStatus = e.Row.FindControl("btnStatus") as Button;
-            PurchaseRequest CSR = e.Row.DataItem as PurchaseRequest;
+            Label lblMaintReqPlateNo = e.Row.FindControl("lblMaintReqPlateNo") as Label;
+            PurchaseRequest PR = e.Row.DataItem as PurchaseRequest;
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                if (CSR.ProgressStatus == ProgressStatus.InProgress.ToString())
+                lblMaintReqPlateNo.Text = _presenter.GetMaintenanceRequestById(Convert.ToInt32(PR.MaintenanceRequestNo)).ReqPlateNo;
+                if (PR.ProgressStatus == ProgressStatus.InProgress.ToString())
                 {
                     btnStatus.BackColor = System.Drawing.ColorTranslator.FromHtml("#FFFF6C");
-
                 }
-                else if (CSR.ProgressStatus == ProgressStatus.Completed.ToString())
+                else if (PR.ProgressStatus == ProgressStatus.Completed.ToString())
                 {
                     btnStatus.BackColor = System.Drawing.ColorTranslator.FromHtml("#FF7251");
-
                 }
-                e.Row.Cells[1].Text = _presenter.GetUser(CSR.Requester).FullName;
+                e.Row.Cells[1].Text = _presenter.GetUser(PR.Requester).FullName;
 
             }
         }
