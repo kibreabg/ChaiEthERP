@@ -96,6 +96,11 @@
                             <asp:Label ID="lblDateDelivery" runat="server" Text='<%# Eval("Requireddateofdelivery", "{0:dd/MM/yyyy}")%>'></asp:Label>
                         </ItemTemplate>
                     </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Maint Req No - Plate No">
+                        <ItemTemplate>
+                            <asp:Label ID="lblMaintReqPlateNo" runat="server"></asp:Label>
+                        </ItemTemplate>
+                    </asp:TemplateField>
                     <asp:BoundField DataField="SuggestedSupplier" HeaderText="Suggested Supplier" SortExpression="PurposeOfTravel" />
                     <asp:ButtonField ButtonType="Button" CommandName="ViewItem" Text="View Item Detail" />
                     <asp:CommandField ButtonType="Button" SelectText="Process Request" ShowSelectButton="True" />
