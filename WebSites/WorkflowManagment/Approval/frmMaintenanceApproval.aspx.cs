@@ -257,7 +257,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
         private void SendEmailtoMechanic()
         {
-                   string message = "You are assigned to Maintain Car Maintenance Request By " + (_presenter.CurrentMaintenanceRequest.AppUser.FullName).ToUpper() + " and Request Number :   '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + "'";
+                   string message = "Your Reviewed Car Maintenance Request By " + (_presenter.CurrentMaintenanceRequest.AppUser.FullName).ToUpper() + " and Request Number :   '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + " is Approved: and Please Maintain the Requested Car for Maintenance.   '";
                     EmailSender.Send(_presenter.GetMechanic().Email, "Maintenance Request ", message);
                     Log.Info((_presenter.GetMechanic().FullName).ToUpper() + " has Maintained a Maintenance Request made by " + _presenter.CurrentMaintenanceRequest.AppUser.FullName);
              
@@ -308,7 +308,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
 
                 }
-                EmailSender.Send(_presenter.GetUser(_presenter.CurrentMaintenanceRequest.AppUser.Id).Email, "Maintenance Request For Purchase", "Your Car Maintenance Request with Maintenance Request No.- '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + "' is Completed and You have to Request for Purchase Item '" + itemsPurchased.ToString() + "'");
+                EmailSender.Send(_presenter.GetUser(_presenter.CurrentMaintenanceRequest.AppUser.Id).Email, "Maintenance Request For Purchase", "Your Car Maintenance Request with Maintenance Request No.- '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + "' is In Progress and You have to Request for Purchase Item '" + itemsPurchased.ToString() + "'");
             }
 
             else
@@ -326,7 +326,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 if (MRS.ApprovalStatus == null)
                 {
                    
-                        SendEmailtoMechanic();
+                       // SendEmailtoMechanic();
                    
                   
                     _presenter.CurrentMaintenanceRequest.CurrentApprover = MRS.Approver;
@@ -357,19 +357,21 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                             _presenter.CurrentMaintenanceRequest.CurrentStatus = MRS.ApprovalStatus;
                             MRS.Approver = _presenter.CurrentUser().Id;
                             _presenter.CurrentMaintenanceRequest.CurrentLevel = MRS.WorkflowLevel;
-                            //SendEmailToRequester();
-                            SendEmailToRequesterForPurchase();
+                            SendEmailToRequester();
+                           // SendEmailToRequesterForPurchase();
                             //  SendCompletedEmail(MRS);
                             break;
                         }
                         else
                         {
                             GetNextApprover();
-                           // SendEmail(MRS);
+                            SendEmail(MRS);
                         }
                         // _presenter.CurrentMaintenanceRequest.CurrentStatus = MRS.ApprovalStatus;
                         //GetNextApprover();
                     }
+
+                   
 
                     else
                     {
@@ -412,8 +414,24 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         ShowPrint();
                         if (ddlApprovalStatus.SelectedValue != "Rejected")
                         {
-                           
-                            Master.ShowMessage(new AppMessage("Maintenance Approval Processed", RMessageType.Info));
+                            if (ddlApprovalStatus.SelectedValue == "Approved")
+                            {
+                                Master.ShowMessage(new AppMessage("Maintenance Approval Processed", RMessageType.Info));
+                                SendEmailtoMechanic();
+                                // SendEmailToRequester();
+                                SendEmailToRequesterForPurchase();
+                            }
+                            else if (ddlApprovalStatus.SelectedValue == "Reviewed")
+                            {
+                                Master.ShowMessage(new AppMessage("Maintenance Approval Processed", RMessageType.Info));
+                               
+                                // SendEmailToRequester();
+                                
+                            }
+                            else
+                            {
+                                Master.ShowMessage(new AppMessage("Maintenance Approval Processed", RMessageType.Info));
+                            }
                         }
                         else
                         {
@@ -586,6 +604,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     grvPreviewDetail.DataSource = _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails;
                     grvPreviewDetail.DataBind();
+
+                    grvSparepart.DataSource = _presenter.CurrentMaintenanceRequest.MaintenanceSpareParts;
+                    grvSparepart.DataBind();
                     ScriptManager.RegisterStartupScript(this, GetType(), "showApproverDetail", "showApproverDetail();", true);
                 }
                 if (e.CommandName == "Maintained")
@@ -945,6 +966,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
         }
         #endregion
+
+        protected void btnCancelPopup2_Click(object sender, EventArgs e)
+        {
+            pnlApproval.Visible = false;
+        }
     }
 
 }
