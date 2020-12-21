@@ -221,11 +221,14 @@ namespace Chai.WorkflowManagment.Modules.Report
             ReportDao re = new ReportDao();
             return re.EmployeeBirthReport(month);
         }
-        public IList<Employee> ListEmployees(string FullName)
+        public IList<Employee> ListEmployees(string FullName,int programId)
         {
             string filterExpression = "";
 
-            filterExpression = "SELECT * FROM Employees left Join Contracts on Contracts.Employee_Id=Employees.Id Inner Join AppUsers on Appusers.Id = Employees.Id left Join EmployeeDetails on EmployeeDetails.Contract_Id = Contracts.Id and EmployeeDetails.Id = (SELECT MAX(Id) FROM EmployeeDetails)  Where 1 = Case when '" + FullName + "' = '' Then 1 When (Employees.FirstName + ' ' + Employees.lastName) like '%" + FullName + "%' Then 1 END ";
+            filterExpression = "SELECT * FROM Employees left Join Contracts on Contracts.Employee_Id=Employees.Id and Contracts.Status = 'Active' Inner Join AppUsers on Appusers.Id = Employees.Id " +
+                " left Join EmployeeDetails on EmployeeDetails.Contract_Id = Contracts.Id  "  +
+                " Where 1 = Case when '" + FullName + "' = '' Then 1 When (Employees.FirstName + ' ' + Employees.lastName) like '%" + FullName + "%' Then 1 END AND " +
+                " 1 = Case when '" + programId + "' = '0' Then 1 When EmployeeDetails.Program_Id = '" + programId + "' Then 1 End ";
             // return WorkspaceFactory.CreateReadOnly().Queryable<CashPaymentRequest>(filterExpression).ToList();
             return _workspace.SqlQuery<Employee>(filterExpression).ToList();
         }
@@ -234,7 +237,7 @@ namespace Chai.WorkflowManagment.Modules.Report
             string filterExpression = "";
 
             filterExpression = "SELECT *  FROM LeaveRequests Inner Join LeaveTypes on LeaveRequests.LeaveType_Id = LeaveTypes.Id "
-                               + " Where LeaveTypes.LeaveTypeName = 'Annual Leave' and LeaveRequests.CurrentStatus= 'Issued' and LeaveRequests.Requester = '" + EmpId + "' and LeaveRequests.RequestedDate >= '" + Leavedatesetting + "'";
+                               + " Where LeaveTypes.LeaveTypeName = 'Annual Leave' and (LeaveRequests.CurrentStatus != 'Rejected' or LeaveRequests.CurrentStatus is NULL) and LeaveRequests.Requester = '" + EmpId + "' and LeaveRequests.RequestedDate >= '" + Leavedatesetting + "'";
             // return WorkspaceFactory.CreateReadOnly().Queryable<CashPaymentRequest>(filterExpression).ToList();
             IList<LeaveRequest> EmpLeaverequest = _workspace.SqlQuery<LeaveRequest>(filterExpression).ToList();
             return EmpLeaverequest.Sum(x => x.RequestedDays);

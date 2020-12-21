@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Payment Reimbursement Request Approval Form" Language="C#" MasterPageFile="~/Shared/ModuleMaster.master" AutoEventWireup="true" CodeFile="frmPaymentReimbursementApproval.aspx.cs" Inherits="Chai.WorkflowManagment.Modules.Approval.Views.frmPaymentReimbursementApproval" EnableEventValidation="false" %>
+﻿<%@ Page Title="Payment Settlement Request Approval Form" Language="C#" MasterPageFile="~/Shared/ModuleMaster.master" AutoEventWireup="true" CodeFile="frmPaymentReimbursementApproval.aspx.cs" Inherits="Chai.WorkflowManagment.Modules.Approval.Views.frmPaymentReimbursementApproval" EnableEventValidation="false" %>
 
 <%@ MasterType TypeName="Chai.WorkflowManagment.Modules.Shell.BaseMaster" %>
 
@@ -24,7 +24,7 @@
     <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
         <header>
             <span class="widget-icon"><i class="fa fa-edit"></i></span>
-            <h2>Search Payment Reimbursement</h2>
+            <h2>Search Payment Settlement</h2>
         </header>
         <div>
             <div class="jarviswidget-editbox"></div>
@@ -92,7 +92,7 @@
                     <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-edit"></i></span>
-                            <h2>Process Payment Reimbursement Request</h2>
+                            <h2>Process Payment Settlement Request</h2>
                         </header>
                         <div>
                             <div class="jarviswidget-editbox"></div>
@@ -189,7 +189,7 @@
                                 
                                         <asp:TemplateColumn HeaderText="Actual Expenditure">
                                             <ItemTemplate>
-                                                <%# DataBinder.Eval(Container.DataItem, "ActualExpendture")%>
+                                                <%# DataBinder.Eval(Container.DataItem, "ActualExpenditure")%>
                                             </ItemTemplate>
                                         </asp:TemplateColumn>
                                         
@@ -223,7 +223,7 @@
                     <td style="font-size: large; text-align: center;">
                         <strong>CHAI Ethiopia ERP
                             <br />
-                            CASH PAYMENT REIMBURSEMENT TRANSACTION FORM</strong></td>
+                            CASH PAYMENT SETTLEMENT TRANSACTION FORM</strong></td>
                 </tr>
             </table>
             <table style="width: 100%;">

@@ -55,10 +55,14 @@ namespace Chai.WorkflowManagment.Modules.Report.Views
         {
             return _controller.GetLeaveReport(EmployeeName, LeaveType);
         }
-        public IList<Employee> ListEmployees(string FullName)
+        public IList<Employee> ListEmployees(string FullName,int programId)
         {
-            return _controller.ListEmployees(FullName);
+            return _controller.ListEmployees(FullName, programId);
             // TODO: Handle other view events and set state in the view
+        }
+        public IList<Program> GetPrograms()
+        {
+            return _settingController.GetPrograms();
         }
         public decimal EmpLeaveTaken(int empid, DateTime LeaveSettingDate)
         {

@@ -169,6 +169,16 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         {
             lblExpenseLiquidation.Text = Convert.ToString(0);
         }
+        if (_presenter.GetReviewPaymentReimbursementTasks() != 0)
+        {
+            lblreviewsettlemnt.Text = _presenter.GetReviewPaymentReimbursementTasks().ToString();
+            if (_presenter.GetReviewPaymentReimbursementTasks() > 0)
+                lblreviewsettlemnt.ForeColor = System.Drawing.Color.Red;
+            lnkReviewpaymentsettlemnt.Enabled = true;
+            lnkReviewpaymentsettlemnt.PostBackUrl = ResolveUrl("Approval/frmPaymentReimbursementApproval.aspx");
+        }
+        else
+        { lblreviewsettlemnt.Text = Convert.ToString(0); }
         if (_presenter.GetPaymentReimbursementTasks() != 0)
         {
             lblReimbursement.Text = _presenter.GetPaymentReimbursementTasks().ToString();
@@ -281,6 +291,11 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         {
             lblExpenseLiquidation.Text = ProgressStatus.InProgress.ToString();
             lblExpenseStatus.ForeColor = System.Drawing.Color.Green;
+        }
+        if (_presenter.GetPaymentReimbursementRequestMyRequest() != 0)
+        {
+            lblPaymentReimburesment.Text = ProgressStatus.InProgress.ToString();
+            lblPaymentReimburesment.ForeColor = System.Drawing.Color.Green;
         }
         if (_presenter.GetPurchaseRequestsMyRequest() != 0)
         {

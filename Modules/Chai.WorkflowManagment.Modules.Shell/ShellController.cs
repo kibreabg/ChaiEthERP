@@ -205,18 +205,18 @@ namespace Chai.WorkflowManagment.Modules.Shell
                 return 0;
 
         }
-        //public int GetPaymentReimbursementTasks()
-        //{
-        //    currentUser = GetCurrentUser().Id;
-        //    int Count = 0;
-        //    Count = WorkspaceFactory.CreateReadOnly().Count<PaymentReimbursementRequest>(x => x.CashPaymentRequest.AppUser.Id == currentUser && x..RequestDate == null);
-        //    if (Count != 0)
-        //        return Count;
-        //    else
-        //        return 0;
-
-        //}
         public int GetPaymentReimbursementTasks()
+        {
+            currentUser = GetCurrentUser().Id;
+            int Count = 0;
+            Count = WorkspaceFactory.CreateReadOnly().Count<CashPaymentRequest>(x => x.AppUser.Id == currentUser && x.IsLiquidated == false);
+            if (Count != 0)
+                return Count;
+            else
+                return 0;
+
+        }
+        public int GetReviewPaymentReimbursementTasks()
         {
             currentUser = GetCurrentUser().Id;
             string filterExpression = "";
@@ -451,7 +451,7 @@ namespace Chai.WorkflowManagment.Modules.Shell
         public IList<PaymentReimbursementRequest> GetPaymentReimbursementRequestInProgress()
         {
             currentUser = GetCurrentUser().Id;
-            IList<PaymentReimbursementRequest> paymentReimbursementRequest = WorkspaceFactory.CreateReadOnly().Query<PaymentReimbursementRequest>(x => x.CashPaymentRequest.AppUser.Id == currentUser && x.ProgressStatus == "InProgress").ToList();
+            IList<PaymentReimbursementRequest> paymentReimbursementRequest = WorkspaceFactory.CreateReadOnly().Query<PaymentReimbursementRequest>(x => x.CashPaymentRequest.AppUser.Id == currentUser && x.ProgressStatus == "InProgress", y=>y.CashPaymentRequest).ToList();
             return paymentReimbursementRequest;
         }
         public IList<CostSharingRequest> GetCostSharingInProgress()
