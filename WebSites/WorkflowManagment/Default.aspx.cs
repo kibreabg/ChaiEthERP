@@ -289,7 +289,7 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         }
         if (_presenter.GetExpenseLiquidationMyRequest() != 0)
         {
-            lblExpenseLiquidation.Text = ProgressStatus.InProgress.ToString();
+            lblExpenseStatus.Text = ProgressStatus.InProgress.ToString();
             lblExpenseStatus.ForeColor = System.Drawing.Color.Green;
         }
         if (_presenter.GetPaymentReimbursementRequestMyRequest() != 0)
@@ -477,8 +477,13 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                if (_presenter.ListTravelApprovalProgress()[e.Row.RowIndex].CurrentApprover != 0)
-                    e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListTravelApprovalProgress()[e.Row.RowIndex].CurrentApprover).FullName;
+                if (_presenter.ListTravelApprovalProgress().Count != 0)
+                {
+                    if (_presenter.ListTravelApprovalProgress()[e.Row.RowIndex].CurrentApprover != 0)
+                        e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListTravelApprovalProgress()[e.Row.RowIndex].CurrentApprover).FullName;
+                    else
+                        e.Row.Cells[2].Text = "Accountant";
+                }
             }
         }
     }
@@ -488,8 +493,13 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                if (_presenter.ListExpenseLiquidationProgress()[e.Row.RowIndex].CurrentApprover != 0)
-                    e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListExpenseLiquidationProgress()[e.Row.RowIndex].CurrentApprover).FullName;
+                if (_presenter.ListExpenseLiquidationProgress().Count != 0)
+                {
+                    if (_presenter.ListExpenseLiquidationProgress()[e.Row.RowIndex].CurrentApprover != 0)
+                        e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListExpenseLiquidationProgress()[e.Row.RowIndex].CurrentApprover).FullName;
+                    else
+                        e.Row.Cells[2].Text = "Accountant";
+                }                
             }
         }
     }

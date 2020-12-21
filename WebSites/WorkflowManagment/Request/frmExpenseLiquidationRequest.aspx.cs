@@ -262,10 +262,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             ExpenseLiquidationRequest liquidation = e.Row.DataItem as ExpenseLiquidationRequest;
             if (e.Row.RowType == DataControlRowType.DataRow)
-            {               
+            {
                 e.Row.Cells[0].Text = liquidation.TravelAdvanceRequest.TravelAdvanceNo;
                 //The Rejected Expense Liquidation appears on the search grid of the requester as a Red colored row
-                if(liquidation.CurrentStatus == ApprovalStatus.Rejected.ToString())
+                if (liquidation.CurrentStatus == ApprovalStatus.Rejected.ToString())
                 {
                     e.Row.ForeColor = System.Drawing.Color.Red;
                 }
@@ -401,11 +401,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     SetLiquidationDetails();
                     dgExpenseLiquidationDetail.EditItemIndex = -1;
                     BindExpenseLiquidationDetails();
-                    Master.ShowMessage(new AppMessage("Expense Liquidation Detail Successfully Added!", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    Master.ShowMessage(new AppMessage("Expense Liquidation Detail Successfully Added!", RMessageType.Info));
                 }
                 catch (Exception ex)
                 {
-                    Master.ShowMessage(new AppMessage("Error: Unable to Add Expense Liquidation Detail " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Error: Unable to Add Expense Liquidation Detail " + ex.Message, RMessageType.Error));
                 }
             }
         }
@@ -474,12 +474,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
                 else
                 {
-                    Master.ShowMessage(new AppMessage("Please select file ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Please select file ", RMessageType.Error));
                 }
             }
             catch (HttpException ex)
             {
-                Master.ShowMessage(new AppMessage("Unable to upload the file,The file is to big or The internet is too slow " + ex.InnerException.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Unable to upload the file,The file is to big or The internet is too slow " + ex.InnerException.Message, RMessageType.Error));
             }
         }
         protected void btnSave_Click(object sender, EventArgs e)
@@ -503,13 +503,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 _presenter.SaveOrUpdateExpenseLiquidationRequest(tarID);
                 BindExpenseLiquidationRequests();
                 PrintTransaction();
-                Master.ShowMessage(new AppMessage("Expense Successfully Liquidated", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Expense Successfully Liquidated", RMessageType.Info));
                 Log.Info(_presenter.CurrentUser().FullName + " has requested an Expense Liquidation for a total amount of " + _presenter.CurrentTravelAdvanceRequest.TotalTravelAdvance.ToString());
                 btnSave.Visible = false;
                 btnPrint.Enabled = true;
                 Session["tarId"] = null;
             }
-            else { Master.ShowMessage(new AppMessage("Please attach Receipt", Chai.WorkflowManagment.Enums.RMessageType.Error)); }
+            else { Master.ShowMessage(new AppMessage("Please attach Receipt", RMessageType.Error)); }
         }
         protected void btnDelete_Click(object sender, EventArgs e)
         {
