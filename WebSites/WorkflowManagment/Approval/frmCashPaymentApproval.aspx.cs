@@ -98,11 +98,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             for (int i = 0; i < s.Length; i++)
             {
-                if (GetWillStatus().Substring(0, 3) == s[i].Substring(0, 3))
+                if (GetWillStatus() != "")
                 {
-                    ddlApprovalStatus.Items.Add(new ListItem(s[i].Replace('_', ' '), s[i].Replace('_', ' ')));
+                    if (GetWillStatus().Substring(0, 3) == s[i].Substring(0, 3))
+                    {
+                        ddlApprovalStatus.Items.Add(new ListItem(s[i].Replace('_', ' '), s[i].Replace('_', ' ')));
+                    }
                 }
-
             }
             if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses.Count == _presenter.CurrentCashPaymentRequest.CurrentLevel)
             {
@@ -113,11 +115,20 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private string GetWillStatus()
         {
-            ApprovalSetting AS = _presenter.GetApprovalSettingforProcess(RequestType.CashPayment_Request.ToString().Replace('_', ' ').ToString(), _presenter.CurrentCashPaymentRequest.TotalAmount);
+            ApprovalSetting AS = null;
+            if (_presenter.CurrentCashPaymentRequest.RequestType == "Medical Expense (In-Patient)" || _presenter.CurrentCashPaymentRequest.RequestType == "Medical Expense (Out-Patient)")
+            {
+                AS = _presenter.GetApprovalSettingMedical();
+            }
+            else
+            {
+                AS = _presenter.GetApprovalSettingforProcess(RequestType.CashPayment_Request.ToString().Replace('_', ' ').ToString(), _presenter.CurrentCashPaymentRequest.TotalAmount);
+            }
+
             string will = "";
             foreach (ApprovalLevel AL in AS.ApprovalLevels)
             {
-                if (AL.EmployeePosition.PositionName == "Superviser/Line Manager" || AL.EmployeePosition.PositionName == "Program Manager" && _presenter.CurrentCashPaymentRequest.CurrentLevel == 1)
+                if ((AL.EmployeePosition.PositionName == "Superviser/Line Manager" || AL.EmployeePosition.PositionName == "Program Manager"))
                 {
                     will = "Approve";
                     break;
@@ -130,16 +141,18 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     try
                     {
-                        if (_presenter.GetUser(_presenter.CurrentCashPaymentRequest.CurrentApprover).EmployeePosition.PositionName == AL.EmployeePosition.PositionName)
+                        if (_presenter.GetUser(_presenter.CurrentCashPaymentRequest.CurrentApprover).EmployeePosition.PositionName == AL.EmployeePosition.PositionName && AL.WorkflowLevel == _presenter.CurrentCashPaymentRequest.CurrentLevel)
                         {
                             will = AL.Will;
+                            break;
                         }
                     }
                     catch
                     {
-                        if (_presenter.CurrentCashPaymentRequest.CurrentApproverPosition == AL.EmployeePosition.Id)
+                        if (_presenter.CurrentCashPaymentRequest.CurrentApproverPosition == AL.EmployeePosition.Id && AL.WorkflowLevel == _presenter.CurrentCashPaymentRequest.CurrentLevel)
                         {
                             will = AL.Will;
+                            break;
                         }
                     }
                 }
@@ -188,25 +201,44 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             }
         }
+        private void BindAttachments()
+        {
+            List<CPRAttachment> attachments = new List<CPRAttachment>();
+            foreach (CashPaymentRequestDetail detail in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
+            {
+                attachments.AddRange(detail.CPRAttachments);
+                Session["attachments"] = attachments;
+            }
+
+            grvdetailAttachments.DataSource = attachments;
+            grvdetailAttachments.DataBind();
+        }
         private void BindAccounts()
         {
-            if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses.Count == _presenter.CurrentCashPaymentRequest.CurrentLevel && (_presenter.CurrentUser().EmployeePosition.PositionName == "Finance Officer" || _presenter.GetUser(_presenter.CurrentCashPaymentRequest.CurrentApprover).IsAssignedJob == true))
+            if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses.Count == _presenter.CurrentCashPaymentRequest.CurrentLevel && (_presenter.CurrentUser().EmployeePosition.PositionName == "Accountant"))
             {
                 lblAccount.Visible = true;
                 lblAccountdd.Visible = true;
             }
-
-
         }
-        private void BindProject(DropDownList ddlProject)
+        private void BindProgram(DropDownList ddlProgram)
         {
-            ddlProject.DataSource = _presenter.ListProjects();
+            ddlProgram.DataSource = _presenter.GetPrograms();
+            ddlProgram.DataValueField = "Id";
+            ddlProgram.DataTextField = "ProgramName";
+            ddlProgram.DataBind();
+        }
+        private void BindProject(DropDownList ddlProject, int programID)
+        {
+            ddlProject.Items.Clear();
+            ddlProject.DataSource = _presenter.ListProjects(programID);
             ddlProject.DataValueField = "Id";
             ddlProject.DataTextField = "ProjectCode";
             ddlProject.DataBind();
         }
         private void BindGrant(DropDownList ddlGrant, int ProjectId)
         {
+            ddlGrant.Items.Clear();
             ddlGrant.DataSource = _presenter.GetGrantbyprojectId(ProjectId);
             ddlGrant.DataValueField = "Id";
             ddlGrant.DataTextField = "GrantCode";
@@ -245,9 +277,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
             else
             {
-                foreach(AppUser Payer in _presenter.GetAppUsersByEmployeePosition(CPRS.ApproverPosition))
+                foreach (AppUser Payer in _presenter.GetAppUsersByEmployeePosition(CPRS.ApproverPosition))
                 {
-                    if(Payer.IsAssignedJob != true)
+                    if (Payer.IsAssignedJob != true)
                     {
                         EmailSender.Send(Payer.Email, "Payment Approval", (_presenter.CurrentCashPaymentRequest.AppUser.FullName).ToUpper() + " Requests for Payment with Request No. " + (_presenter.CurrentCashPaymentRequest.RequestNo).ToUpper());
                     }
@@ -267,7 +299,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 for (int i = 0; i + 1 < CPRS.WorkflowLevel; i++)
                 {
-                    EmailSender.Send(_presenter.GetUser(_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses[i].Approver).Email, "Payment Request Rejection", "Payment Request with Voucher No. " + (_presenter.CurrentCashPaymentRequest.VoucherNo).ToUpper()+ " made by " + (_presenter.GetUser(_presenter.CurrentCashPaymentRequest.AppUser.Id).FullName).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (CPRS.RejectedReason).ToUpper() + "'");
+                    EmailSender.Send(_presenter.GetUser(_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses[i].Approver).Email, "Payment Request Rejection", "Payment Request with Voucher No. " + (_presenter.CurrentCashPaymentRequest.VoucherNo).ToUpper() + " made by " + (_presenter.GetUser(_presenter.CurrentCashPaymentRequest.AppUser.Id).FullName).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (CPRS.RejectedReason).ToUpper() + "'");
                 }
             }
         }
@@ -287,6 +319,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         //This is to handle multiple Finance Officers responding to this request
                         //SendEmailToFinanceOfficers;
                         _presenter.CurrentCashPaymentRequest.CurrentApproverPosition = CPRS.ApproverPosition;
+                    }
+                    else
+                    {
+                        _presenter.CurrentCashPaymentRequest.CurrentApproverPosition = 0;
                     }
                     SendEmail(CPRS);
                     _presenter.CurrentCashPaymentRequest.CurrentApprover = CPRS.Approver;
@@ -349,16 +385,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     dgCashPaymentRequestDetail.DataSource = _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails;
                     dgCashPaymentRequestDetail.DataBind();
-                    grvdetailAttachments.DataSource = _presenter.CurrentCashPaymentRequest.CPRAttachments;
-                    grvdetailAttachments.DataBind();
+                    BindAttachments();
                     pnlDetail_ModalPopupExtender.Show();
                 }
                 else if (e.CommandName == "Retire")
                 {
                     lblEstimatedAmountresult.Text = _presenter.CurrentCashPaymentRequest.TotalAmount.ToString();
                     txtActualExpenditure.Text = _presenter.CurrentCashPaymentRequest.TotalActualExpendture != 0 ? _presenter.CurrentCashPaymentRequest.TotalActualExpendture.ToString() : "";
-                    grvAttachments.DataSource = _presenter.CurrentCashPaymentRequest.CPRAttachments;
-                    grvAttachments.DataBind();
+                    BindAttachments();
                     grvReimbursementdetail.DataSource = _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails;
                     grvReimbursementdetail.DataBind();
                     GetActualAmount();
@@ -372,33 +406,31 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void btnUpload_Click(object sender, EventArgs e)
         {
-            UploadFile();
-            pnlReimbursement_ModalPopupExtender.Show();
-        }
-        private void UploadFile()
-        {
+            Button uploadBtn = (Button)sender;
+            GridViewRow attachmentRow = (GridViewRow)uploadBtn.NamingContainer;
+            FileUpload fuReciept = attachmentRow.FindControl("fuReciept") as FileUpload;
             string fileName = Path.GetFileName(fuReciept.PostedFile.FileName);
-
             if (fileName != String.Empty)
             {
+                List<CPRAttachment> attachments = (List<CPRAttachment>)Session["attachments"];
+                foreach (CPRAttachment attachment in attachments)
+                {
+                    if (attachment.ItemAccountChecklists[0].ChecklistName == attachmentRow.Cells[2].Text)
+                    {
+                        attachment.FilePath = "~/CPUploads/" + fileName;
+                        fuReciept.PostedFile.SaveAs(Server.MapPath("~/CPUploads/") + fileName);
+                    }
+                }
 
-
-
-                CPRAttachment attachment = new CPRAttachment();
-                attachment.FilePath = "~/CPUploads/" + fileName;
-                fuReciept.PostedFile.SaveAs(Server.MapPath("~/CPUploads/") + fileName);
-                //Response.Redirect(Request.Url.AbsoluteUri);
-                _presenter.CurrentCashPaymentRequest.CPRAttachments.Add(attachment);
-
-                grvAttachments.DataSource = _presenter.CurrentCashPaymentRequest.CPRAttachments;
-                grvAttachments.DataBind();
-
+                BindAttachments();
+                Master.ShowMessage(new AppMessage("Successfully uploaded the attachment", RMessageType.Info));
 
             }
             else
             {
-                Master.ShowMessage(new AppMessage("Please select file ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Please select file ", RMessageType.Error));
             }
+            pnlReimbursement_ModalPopupExtender.Show();
         }
         protected void DownloadFile(object sender, EventArgs e)
         {
@@ -421,10 +453,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         protected void DeleteFile(object sender, EventArgs e)
         {
             string filePath = (sender as LinkButton).CommandArgument;
-            _presenter.CurrentCashPaymentRequest.RemoveCPAttachment(filePath);
+            //_presenter.CurrentCashPaymentRequest.RemoveCPAttachment(filePath);
             File.Delete(Server.MapPath(filePath));
-            grvAttachments.DataSource = _presenter.CurrentCashPaymentRequest.CPRAttachments;
-            grvAttachments.DataBind();
+            BindAttachments();
             pnlReimbursement_ModalPopupExtender.Show();
         }
         protected void grvCashPaymentRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -491,11 +522,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     ShowPrint();
                     if (ddlApprovalStatus.SelectedValue != "Rejected")
                     {
-                        Master.ShowMessage(new AppMessage("Payment Approval Processed", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                        Master.ShowMessage(new AppMessage("Payment Approval Processed", RMessageType.Info));
                     }
                     else
                     {
-                        Master.ShowMessage(new AppMessage("Payment Approval Rejected", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                        Master.ShowMessage(new AppMessage("Payment Approval Rejected", RMessageType.Info));
                     }
 
                     btnApprove.Enabled = false;
@@ -506,7 +537,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
             catch (Exception ex)
             {
-
+                Master.ShowMessage(new AppMessage(ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         private void PrintTransaction()
@@ -518,7 +551,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 lblPayeeResult.Text = _presenter.CurrentCashPaymentRequest.Supplier.SupplierName.ToString() != null ? _presenter.CurrentCashPaymentRequest.Supplier.SupplierName.ToString() : "";
             }
-            
+
             lblVoucherNoResult.Text = _presenter.CurrentCashPaymentRequest.VoucherNo;
             lblTotalAmountResult.Text = _presenter.CurrentCashPaymentRequest.TotalAmount.ToString();
             lblApprovalStatusResult.Text = _presenter.CurrentCashPaymentRequest.ProgressStatus.ToString();
@@ -571,12 +604,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails != null)
                 {
-                    //For the last level (usually the finance officer) only allow editing of the accounts 
+                    //For the last level (usually for the accountant) only allow editing of the accounts 
                     if ((_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses.Count == _presenter.CurrentCashPaymentRequest.CurrentLevel) && (_presenter.CurrentUser().Id == _presenter.CurrentCashPaymentRequest.CurrentApprover))
                     {
                         TextBox txtEdtAmount = e.Item.FindControl("txtEdtAmount") as TextBox;
                         if (txtEdtAmount != null)
                             txtEdtAmount.ReadOnly = true;
+                        DropDownList ddlEditProgram = e.Item.FindControl("ddlEdtProgram") as DropDownList;
+                        if (ddlEditProgram != null)
+                            ddlEditProgram.Enabled = false;
                         DropDownList ddlEditProject = e.Item.FindControl("ddlEdtProject") as DropDownList;
                         if (ddlEditProject != null)
                             ddlEditProject.Enabled = false;
@@ -585,10 +621,22 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                             ddlEditGrant.Enabled = false;
                     }
 
+                    DropDownList ddlProgram = e.Item.FindControl("ddlEdtProgram") as DropDownList;
+                    if (ddlProgram != null)
+                    {
+                        BindProgram(ddlProgram);
+                        if (_presenter.CurrentCashPaymentRequest.Program != null)
+                        {
+                            ListItem liI = ddlProgram.Items.FindByValue(_presenter.CurrentCashPaymentRequest.Program.Id.ToString());
+                            if (liI != null)
+                                liI.Selected = true;
+                        }
+                    }
+
                     DropDownList ddlProject = e.Item.FindControl("ddlEdtProject") as DropDownList;
                     if (ddlProject != null)
                     {
-                        BindProject(ddlProject);
+                        BindProject(ddlProject, Convert.ToInt32(ddlProgram.SelectedValue));
                         if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[e.Item.DataSetIndex].Project.Id != 0)
                         {
                             ListItem liI = ddlProject.Items.FindByValue(_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[e.Item.DataSetIndex].Project.Id.ToString());
@@ -682,25 +730,32 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             BindGrant(ddlEdtGrant, Convert.ToInt32(ddl.SelectedValue));
             pnlDetail_ModalPopupExtender.Show();
         }
+        protected void ddlEdtProgram_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DropDownList ddl = (DropDownList)sender;
+            DropDownList ddlEdtProject = ddl.FindControl("ddlEdtProject") as DropDownList;
+            BindProject(ddlEdtProject, Convert.ToInt32(ddl.SelectedValue));
+            pnlDetail_ModalPopupExtender.Show();
+        }
         protected void btnCancel_Click(object sender, EventArgs e)
         {
             Response.Redirect("../Default.aspx");
         }
         protected void btnBankPayment_Click(object sender, EventArgs e)
         {
-            Response.Redirect(String.Format("../Request/frmOperationalControlRequest.aspx?paymentId={0}&Page={1}", Convert.ToInt32(Session["PaymentId"]), "CashPayment"));
+            Response.Redirect(String.Format("../Request/frmOperationalControlRequest.aspx?paymentId={0}", Convert.ToInt32(Session["PaymentId"])));
         }
         protected void btnReimburse_Click(object sender, EventArgs e)
         {
             try
             {
-                if (_presenter.CurrentCashPaymentRequest.CPRAttachments.Count != 0)
+                if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[0].CPRAttachments.Count != 0)
                 {
                     _presenter.CurrentCashPaymentRequest.TotalActualExpendture = Convert.ToDecimal(txtActualExpenditure.Text);
                     _presenter.CurrentCashPaymentRequest.PaymentReimbursementStatus = "Retired";
                     _presenter.SaveOrUpdateCashPaymentRequest(_presenter.CurrentCashPaymentRequest);
                     btnPrintReimburse.Enabled = true;
-                    Master.ShowMessage(new AppMessage("Payment Retired Successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    Master.ShowMessage(new AppMessage("Payment Retired Successfully", RMessageType.Info));
                     BindSearchCashPaymentRequestGrid();
                     //btnReimburse.Enabled = false;
                     pnlReimbursement_ModalPopupExtender.Show();
@@ -765,11 +820,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 grvReimbursementdetail.EditItemIndex = -1;
                 grvReimbursementdetail.DataSource = _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails;
                 grvReimbursementdetail.DataBind();
-                Master.ShowMessage(new AppMessage("Payment Detail Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Payment Detail Successfully Updated", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to Update Payment Detail. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to Update Payment Detail. " + ex.Message, RMessageType.Error));
             }
             pnlReimbursement_ModalPopupExtender.Show();
         }

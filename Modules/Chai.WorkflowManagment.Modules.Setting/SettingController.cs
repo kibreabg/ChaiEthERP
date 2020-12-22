@@ -20,13 +20,15 @@ using System.Data;
 using Chai.WorkflowManagment.CoreDomain.Setting;
 using Chai.WorkflowManagment.CoreDomain.HRM;
 using Chai.WorkflowManagment.CoreDomain.Request;
+using Chai.WorkflowManagment.CoreDomain.Inventory;
+using Chai.WorkflowManagment.CoreDomain.Requests;
 
 namespace Chai.WorkflowManagment.Modules.Setting
 {
     public class SettingController : ControllerBase
     {
         private IWorkspace _workspace;
-
+        private int currentUser;
         [InjectionConstructor]
         public SettingController([ServiceDependency] IHttpContextLocatorService httpContextLocatorService, [ServiceDependency]INavigationService navigationService)
             : base(httpContextLocatorService, navigationService)
@@ -47,11 +49,11 @@ namespace Chai.WorkflowManagment.Modules.Setting
         #region User
         public IList<AppUser> GetProgramManagers()
         {
-            return WorkspaceFactory.CreateReadOnly().Query<AppUser>(x => x.EmployeePosition.PositionName.Contains("Program Manager") || x.EmployeePosition.PositionName == "Vice President & Country Director, Ethiopia" || x.EmployeePosition.PositionName == "Finance Manager" || x.EmployeePosition.PositionName == "Senior Deputy Country Director" || x.EmployeePosition.PositionName== "Coordinator, Program Operations" || x.EmployeePosition.PositionName == "M&E Manager" || x.EmployeePosition.PositionName == "Head, Administration & HR").ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<AppUser>(x => x.EmployeePosition.PositionName.Contains("Program Manager") || x.EmployeePosition.PositionName == "Vice President & Country Director, Ethiopia" || x.EmployeePosition.PositionName == "Finance Manager" || x.EmployeePosition.PositionName == "Senior Deputy Country Director" || x.EmployeePosition.PositionName == "Coordinator, Program Operations" || x.EmployeePosition.PositionName == "M&E Manager" || x.EmployeePosition.PositionName == "Head, Administration & HR").ToList();
         }
         public IList<AppUser> GetEmployeeList()
         {
-            return WorkspaceFactory.CreateReadOnly().Query<AppUser>(x => x.IsActive == true).OrderBy(x=>x.FullName).ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<AppUser>(x => x.IsActive == true).OrderBy(x => x.FullName).ToList();
         }
         public IList<AppUser> GetAppUsersByEmployeePosition(int employeePosition)
         {
@@ -73,7 +75,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
         }
         public IList<Account> GetAccounts()
         {
-            return WorkspaceFactory.CreateReadOnly().Query<Account>(x=>x.Status =="Active").ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<Account>(x => x.Status == "Active").ToList();
         }
         public IList<Account> ListBankAccounts(string BankName)
         {
@@ -89,8 +91,10 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             return WorkspaceFactory.CreateReadOnly().Query<ItemAccount>(x => x.Status == "Active").OrderBy(x => x.AccountName).ToList();
         }
-
-       
+        public IList<ItemAccount> GetAdvanceAccount()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<ItemAccount>(x => x.AccountName == "Account Receivable").ToList();
+        }
         public ItemAccount GetItemAccount(int ItemAccountId)
         {
             return _workspace.Single<ItemAccount>(x => x.Id == ItemAccountId);
@@ -99,7 +103,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             string filterExpression = "";
 
-            filterExpression = "SELECT  *  FROM ItemAccounts Where Status = 'Active' And 1 = Case when '" + ItemAccountName + "' = '' Then 1 When ItemAccounts.AccountName = '" + ItemAccountName + "'  Then 1 END AND 1 = Case when '" + ItemAccountCode + "' = '' Then 1 When ItemAccounts.AccountCode = '" + ItemAccountCode + "'  Then 1 END  ";
+            filterExpression = "SELECT * FROM ItemAccounts Where Status = 'Active' And 1 = Case when '" + ItemAccountName + "' = '' Then 1 When ItemAccounts.AccountName = '" + ItemAccountName + "'  Then 1 END AND 1 = Case when '" + ItemAccountCode + "' = '' Then 1 When ItemAccounts.AccountCode = '" + ItemAccountCode + "'  Then 1 END  ";
 
             return _workspace.SqlQuery<ItemAccount>(filterExpression).ToList();
 
@@ -109,8 +113,26 @@ namespace Chai.WorkflowManagment.Modules.Setting
             return _workspace.Single<ItemAccount>(x => x.AccountCode == "13110");
         }
         #endregion
-        #region Grant
+        #region ItemAccountChecklist
+        public IList<ItemAccountChecklist> GetItemAccountChecklists()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<ItemAccountChecklist>(x => x.Status == "Active").OrderBy(x => x.ChecklistName).ToList();
+        }
+        public ItemAccountChecklist GetItemAccountChecklist(int checklistId)
+        {
+            return _workspace.Single<ItemAccountChecklist>(x => x.Id == checklistId);
+        }
+        public IList<ItemAccountChecklist> ListItemAccountChecklists(string checkListName)
+        {
+            string filterExpression = "";
 
+            filterExpression = "SELECT * FROM ItemAccountChecklists Where Status = 'Active' And 1 = Case when '" + checkListName + "' = '' Then 1 When ItemAccountChecklists.ChecklistName = '" + checkListName + "'  Then 1 END";
+
+            return _workspace.SqlQuery<ItemAccountChecklist>(filterExpression).ToList();
+
+        }
+        #endregion
+        #region Grant
         public IList<Grant> GetGrants()
         {
             return WorkspaceFactory.CreateReadOnly().Query<Grant>(x => x.Status == "Active").ToList();
@@ -127,7 +149,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             string filterExpression = "";
 
-            filterExpression = "SELECT  *  FROM Grants Where Status = 'Active' AND 1 = Case when '" + GrantName + "' = '' Then 1 When Grants.GrantName = '" + GrantName + "'  Then 1 END AND 1 = Case when '" + GrantCode + "' = '' Then 1 When Grants.GrantCode = '" + GrantCode + "'  Then 1 END  ";
+            filterExpression = "SELECT * FROM Grants Where Status = 'Active' AND 1 = Case when '" + GrantName + "' = '' Then 1 When Grants.GrantName = '" + GrantName + "'  Then 1 END AND 1 = Case when '" + GrantCode + "' = '' Then 1 When Grants.GrantCode = '" + GrantCode + "'  Then 1 END  ";
 
             return _workspace.SqlQuery<Grant>(filterExpression).ToList();
 
@@ -136,15 +158,15 @@ namespace Chai.WorkflowManagment.Modules.Setting
         #region Supplier
         public IList<Supplier> GetSuppliers()
         {
-            return WorkspaceFactory.CreateReadOnly().Query<Supplier>(x => x.Status == "Active").OrderBy(x => x.SupplierName).ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<Supplier>(x => x.Status == "Active").OrderByDescending(x => x.SupplierName).ToList();
         }
         public IList<Supplier> GetSuppliers(int SupplierTypeId)
         {
-            return WorkspaceFactory.CreateReadOnly().Query<Supplier>(x => x.SupplierType.Id == SupplierTypeId && x.Status =="Active").ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<Supplier>(x => x.SupplierType.Id == SupplierTypeId && x.Status == "Active").ToList();
         }
-        public Supplier GetSupplier(int SupplierId)
+        public Supplier GetSupplier(int Id)
         {
-            return _workspace.Single<Supplier>(x => x.Id == SupplierId);
+            return _workspace.Single<Supplier>(x => x.Id == Id);
         }
         public IList<Supplier> ListSuppliers(string SupplierName)
         {
@@ -241,11 +263,37 @@ namespace Chai.WorkflowManagment.Modules.Setting
         #region Vehicle
         public IList<Vehicle> GetVehicles()
         {
-            return WorkspaceFactory.CreateReadOnly().Query<Vehicle>(x => x.Status == "Active").ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<Vehicle>(x => x.Status == "Active").OrderBy(x => x.AppUser).ToList();
+          
+        }
+
+
+        public IList<Vehicle> GetVehiclesForInternal()
+        {
+
+            currentUser = GetCurrentUser().Id;
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM Vehicles Where Status = 'Active' Order by AppUser_Id ";
+
+            return _workspace.SqlQuery<Vehicle>(filterExpression).ToList();
+
         }
         public Vehicle GetVehicle(int VehicleId)
         {
             return _workspace.Single<Vehicle>(x => x.Id == VehicleId);
+        }
+        public MaintenanceRequest GetMaintenanceRequestById(int MaintenanceId)
+        {
+            return _workspace.Single<MaintenanceRequest>(x => x.Id == MaintenanceId);
+        }
+        public Vehicle GetVehicleByPlateNo(int driverId)
+        {
+            return _workspace.First<Vehicle>(x => x.AppUser.Id == driverId);
+        }
+        public Vehicle GetVehiclebyPlateNo(string plateno)
+        {
+            return _workspace.Single<Vehicle>(x => x.PlateNo == plateno);
         }
         public IList<Vehicle> ListVehicles(string PlateNo)
         {
@@ -254,6 +302,58 @@ namespace Chai.WorkflowManagment.Modules.Setting
             filterExpression = "SELECT * FROM Vehicles Where Status = 'Active' AND 1 = Case when '" + PlateNo + "' = '' Then 1 When Vehicles.PlateNo LIKE '%" + PlateNo + "%'  Then 1 END  ";
 
             return _workspace.SqlQuery<Vehicle>(filterExpression).ToList();
+
+        }
+        public IList<AppUser> ListDrivers()
+        {
+            string filterExpression = "";
+
+            filterExpression = "select * from AppUsers where  AppUsers.EmployeePosition_Id = 6 ";
+
+            return _workspace.SqlQuery<AppUser>(filterExpression).ToList();
+
+        }
+        public AppUser GetAppuser(int AppId)
+        {
+            return _workspace.Single<AppUser>(x => x.Id == AppId);
+        }
+        public void SaveOrUpdateVehicle(Vehicle vehicle)
+        {
+            if (vehicle.Id <= 0)
+            {
+
+
+                using (var wr = WorkspaceFactory.CreateReadOnly())
+                {
+                    if (wr.Single<Vehicle>(x => x.PlateNo == vehicle.PlateNo) != null)
+                        throw new Exception("Vehicle name already exists");
+                }
+            }
+
+
+            SaveOrUpdateEntity<Vehicle>(vehicle);
+        }
+        #endregion
+        #region ServiceType
+        public IList<ServiceType> GetServiceTypes()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<ServiceType>(null).ToList();
+        }
+        public ServiceType GetServiceType(int sTypeId)
+        {
+            return _workspace.Single<ServiceType>(x => x.Id == sTypeId);
+        }
+        public ServiceTypeDetail GetServiceTypeDetail(int sTypeDetailId)
+        {
+            return _workspace.Single<ServiceTypeDetail>(x => x.Id == sTypeDetailId);
+        }
+        public IList<ServiceType> ListServiceTypes(string stName)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM ServiceTypes WHERE 1 = CASE WHEN '" + stName + "' = '' THEN 1 WHEN ServiceTypes.Name = '" + stName + "'  THEN 1 END";
+
+            return _workspace.SqlQuery<ServiceType>(filterExpression).ToList();
 
         }
         #endregion
@@ -334,20 +434,19 @@ namespace Chai.WorkflowManagment.Modules.Setting
         }
         #endregion
         #region Program
-
         public IList<Program> GetPrograms()
         {
-            return WorkspaceFactory.CreateReadOnly().Query<Program>(null).OrderBy(x => x.ProgramName).ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<Program>(x => x.Status == "Active").OrderBy(x => x.ProgramName).ToList();
         }
         public Program GetProgram(int progId)
         {
             return _workspace.Single<Program>(x => x.Id == progId);
         }
-        public IList<Program> ListPrograms()
+        public IList<Program> ListPrograms(string ProgramName, string ProgramCode)
         {
             string filterExpression = "";
 
-            filterExpression = "SELECT  *  FROM Programs ";
+            filterExpression = "SELECT * FROM Programs Where Status = 'Active' AND 1 = Case when '" + ProgramName + "' = '' Then 1 When Programs.ProgramName = '" + ProgramName + "'  Then 1 END AND 1 = Case when '" + ProgramCode + "' = '' Then 1 When Programs.ProgramCode = '" + ProgramCode + "'  Then 1 END  ";
 
             return _workspace.SqlQuery<Program>(filterExpression).ToList();
 
@@ -357,15 +456,23 @@ namespace Chai.WorkflowManagment.Modules.Setting
 
         public IList<Project> GetProjects()
         {
-            return WorkspaceFactory.CreateReadOnly().Query<Project>(x=>x.Status == "Active").ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<Project>(x => x.Status == "Active").ToList();
+        }
+        public IList<Project> GetProjectsByProgramId(int programID)
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<Project>(x => x.Status == "Active" && x.Program.Id == programID).ToList();
         }
         public Project GetProject(int ProjectId)
         {
-            return _workspace.Single<Project>(x => x.Id == ProjectId, x => x.ProGrants,x=>x.AppUser, x => x.ProGrants.Select(y => y.Grant));
+            return _workspace.Single<Project>(x => x.Id == ProjectId, x => x.ProGrants, x => x.AppUser, x => x.ProGrants.Select(y => y.Grant));
+        }
+        public Project GetProjectbyid(int ProjectId)
+        {
+            return _workspace.Single<Project>(x => x.Id == ProjectId);
         }
         public Project GetProjectforCostSharing(int ProjectId)
         {
-            return _workspace.Single<Project>(x => x.Id == ProjectId && x.Status=="Active", x => x.ProGrants, x => x.AppUser, x => x.ProGrants.Select(y => y.Grant));
+            return _workspace.Single<Project>(x => x.Id == ProjectId && x.Status == "Active", x => x.ProGrants, x => x.AppUser, x => x.ProGrants.Select(y => y.Grant));
         }
         public ProGrant GetProjectGrant(int ProjectGrantId)
         {
@@ -383,7 +490,27 @@ namespace Chai.WorkflowManagment.Modules.Setting
 
             return _workspace.SqlQuery<Grant>(filterExpression).ToList();
 
-        }        
+        }
+
+        public IList<ServiceTypeDetail> GetServiceTypeDetbyTypeId(int serviceTypeId)
+        {
+            string filterExpression = "";
+
+            filterExpression = "select * from ServiceTypeDetails left join ServiceTypes on ServiceTypeDetails.ServiceType_Id=ServiceTypes.Id  Where ServiceTypes.Id = '" + serviceTypeId + "' ";
+
+            return _workspace.SqlQuery<ServiceTypeDetail>(filterExpression).ToList();
+
+        }
+        public IList<ServiceTypeDetail> GetServiceTypeDetbyname(string serviceTypename)
+        {
+            string filterExpression = "";
+            
+            filterExpression = "select * from ServiceTypeDetails left join ServiceTypes on ServiceTypeDetails.ServiceType_Id=ServiceTypes.Id  Where ServiceTypes.Name = '" + serviceTypename + "' ";
+
+            return _workspace.SqlQuery<ServiceTypeDetail>(filterExpression).ToList();
+
+        }
+
         public IList<Project> ListProjects(string ProjectCode)
         {
             string filterExpression = "";
@@ -403,7 +530,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
             filterExpression = "SELECT  *  FROM CostSharingSettings Left join Projects on CostSharingSettings.ProjectId=Projects.Id";
 
             return _workspace.SqlQuery<CostSharingSetting>(filterExpression).ToList();
-            
+
         }
         public CostSharingSetting GetProjectfromCostSharingSettings(int projectId)
         {
@@ -459,11 +586,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
                 {
                     return s;
                 }
-                else if (value == 0 && "None" == s.CriteriaCondition)
-                {
-                    return s;
-                }
-                else if (value == 0 && "MedicalExpense" == s.CriteriaCondition)
+                else if (s.Value == 0 && "None" == s.CriteriaCondition)
                 {
                     return s;
                 }
@@ -481,28 +604,28 @@ namespace Chai.WorkflowManagment.Modules.Setting
 
             foreach (ApprovalSetting s in settinglist)
             {
-                
-                    if (value < s.Value && "<" == s.CriteriaCondition)
-                    {
-                        return s;
-                    }
-                    else if (value >= s.Value && value <= s.Value2 && "Between" == s.CriteriaCondition)
-                    {
-                        return s;
-                    }
-                    else if (value >= s.Value && ">" == s.CriteriaCondition)
-                    {
-                        return s;
-                    }
-                    else if (value == 0 && "None" == s.CriteriaCondition)
-                    {
-                        return s;
-                    }
+
+                if (value < s.Value && "<" == s.CriteriaCondition)
+                {
+                    return s;
                 }
-                
-                  return null;
-            
-           
+                else if (value >= s.Value && value <= s.Value2 && "Between" == s.CriteriaCondition)
+                {
+                    return s;
+                }
+                else if (value >= s.Value && ">" == s.CriteriaCondition)
+                {
+                    return s;
+                }
+                else if (value == 0 && "None" == s.CriteriaCondition)
+                {
+                    return s;
+                }
+            }
+
+            return null;
+
+
         }
         #endregion
         #region EmployeeSetting
@@ -514,11 +637,11 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             return _workspace.Single<EmployeeLeave>(x => x.Id == Id);
         }
-        public EmployeeLeave GetActiveEmployeeLeaveRequest(int UserId,bool Status)
+        public EmployeeLeave GetActiveEmployeeLeaveRequest(int UserId, bool Status)
         {
             //return WorkspaceFactory.CreateReadOnly().Query<EmployeeLeave>(x => x.AppUser.Id == UserId && x.Status == Status).SingleOrDefault();
             return _workspace.Single<EmployeeLeave>(x => x.AppUser.Id == UserId && x.Status == Status);
-               // .SingleOrDefault();
+            // .SingleOrDefault();
         }
         public EmployeeLeave GetActiveEmployeeLeave(int UserId, bool Status)
         {
@@ -526,9 +649,9 @@ namespace Chai.WorkflowManagment.Modules.Setting
         }
         public IList<EmployeeLeave> GetEmployeeLeaves(int UserId)
         {
-            return  WorkspaceFactory.CreateReadOnly().Query<EmployeeLeave>(x => x.AppUser.Id == UserId).OrderByDescending(x=>x.Id).ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<EmployeeLeave>(x => x.AppUser.Id == UserId).OrderByDescending(x => x.Id).ToList();
         }
-      
+
 
         #endregion
         #region Beneficiary
@@ -585,17 +708,168 @@ namespace Chai.WorkflowManagment.Modules.Setting
         }
         public decimal TotalleaveTaken(int EmpId, DateTime Leavedatesetting)
         {
-             string filterExpression = "";
+            string filterExpression = "";
 
             filterExpression = "SELECT *  FROM LeaveRequests Inner Join LeaveTypes on LeaveRequests.LeaveType_Id = LeaveTypes.Id "
-                               + " Where LeaveTypes.LeaveTypeName = 'Annual Leave' and LeaveRequests.CurrentStatus= 'Issued' and LeaveRequests.Requester = '" + EmpId + "' and LeaveRequests.RequestedDate >= '" + Leavedatesetting+"'";
+                               + " Where LeaveTypes.LeaveTypeName = 'Annual Leave' and (LeaveRequests.CurrentStatus != 'Rejected' or LeaveRequests.CurrentStatus is NULL)  and LeaveRequests.Requester = '" + EmpId + "' and LeaveRequests.RequestedDate >= '" + Leavedatesetting + "'";
             // return WorkspaceFactory.CreateReadOnly().Queryable<CashPaymentRequest>(filterExpression).ToList();
-           IList<LeaveRequest> EmpLeaverequest =  _workspace.SqlQuery<LeaveRequest>(filterExpression).ToList();
-           return EmpLeaverequest.Sum(x => x.RequestedDays);
-                            
+            IList<LeaveRequest> EmpLeaverequest = _workspace.SqlQuery<LeaveRequest>(filterExpression).ToList();
+            return EmpLeaverequest.Sum(x => x.RequestedDays);
+
 
 
         }
+        #endregion
+        #region ItemCategory
+        public IList<ItemCategory> GetItemCategories()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<ItemCategory>(null).OrderBy(x => x.Name).ToList();
+        }
+        public ItemCategory GetItemCategory(int categoryId)
+        {
+            return _workspace.Single<ItemCategory>(x => x.Id == categoryId);
+        }
+        public IList<ItemCategory> ListItemCategories(string categoryName, string categoryCode)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM ItemCategories Where 1 = Case when '" + categoryName + "' = '' Then 1 When ItemCategories.Name = '" + categoryName + "'  Then 1 END AND 1 = Case when '" + categoryCode + "' = '' Then 1 When ItemCategories.Code = '" + categoryCode + "'  Then 1 END  ";
+
+            return _workspace.SqlQuery<ItemCategory>(filterExpression).ToList();
+
+        }
+        #endregion
+        #region ItemSubCategory
+        public IList<ItemSubCategory> GetItemSubCategories()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<ItemSubCategory>(null).OrderBy(x => x.Name).ToList();
+        }
+        public IList<ItemSubCategory> GetItemSubCatsByCategoryId(int catId)
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<ItemSubCategory>(x => x.ItemCategory.Id == catId).OrderBy(x => x.Name).ToList();
+        }
+        public ItemSubCategory GetItemSubCategory(int subCategoryId)
+        {
+            return _workspace.Single<ItemSubCategory>(x => x.Id == subCategoryId);
+        }
+        public IList<ItemSubCategory> ListItemSubCategories(string subCategoryName, string subCategoryCode)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM ItemSubCategories Where 1 = Case when '" + subCategoryName + "' = '' Then 1 When ItemSubCategories.Name = '" + subCategoryName + "'  Then 1 END AND 1 = Case when '" + subCategoryCode + "' = '' Then 1 When ItemSubCategories.Code = '" + subCategoryCode + "'  Then 1 END";
+
+            return _workspace.SqlQuery<ItemSubCategory>(filterExpression).ToList();
+
+        }
+        #endregion
+        #region Item
+        public IList<Item> GetItems()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<Item>(null).OrderBy(x => x.Name).ToList();
+        }
+        public IList<Item> GetSpareParts()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<Item>(x => x.IsSparePart == true).OrderBy(x => x.Name).ToList();
+        }
+        public IList<Item> GetItemsBySubCatId(int subCatId)
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<Item>(x => x.ItemSubCategory.Id == subCatId).OrderBy(x => x.Name).ToList();
+        }
+        public IList<UnitOfMeasurement> GetUnitOfMeasurements()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<UnitOfMeasurement>(null).OrderBy(x => x.Name).ToList();
+        }
+        public UnitOfMeasurement GetUnitOfMeasurement(int unitId)
+        {
+            return _workspace.Single<UnitOfMeasurement>(x => x.Id == unitId);
+        }
+        public Item GetItem(int itemId)
+        {
+            return _workspace.Single<Item>(x => x.Id == itemId);
+        }
+        public IList<Item> ListItems(string itemName, string itemCode)
+        {
+            string filterExpression = "";
+            filterExpression = "SELECT * FROM Items Where 1 = Case when '" + itemName + "' = '' Then 1 When Items.Name = '" + itemName + "'  Then 1 END AND 1 = Case when '" + itemCode + "' = '' Then 1 When Items.Code = '" + itemCode + "'  Then 1 END  ";
+            return _workspace.SqlQuery<Item>(filterExpression).ToList();
+        }
+        #endregion
+        #region Store
+        public IList<Store> GetStores()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<Store>(null).OrderBy(x => x.Name).ToList();
+        }
+        public Store GetStore(int storeId)
+        {
+            return _workspace.Single<Store>(x => x.Id == storeId);
+        }
+        public IList<Store> ListStores(string Name, string Location)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM Stores Where 1 = Case when '" + Name + "' = '' Then 1 When Stores.Name = '" + Name + "'  Then 1 END AND 1 = Case when '" + Location + "' = '' Then 1 When Stores.Location = '" + Location + "'  Then 1 END  ";
+
+            return _workspace.SqlQuery<Store>(filterExpression).ToList();
+
+        }
+
+     
+
+
+        #endregion
+        #region Section
+        public IList<Section> GetSections()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<Section>(null).OrderBy(x => x.Name).ToList();
+        }
+        public Section GetSection(int secId)
+        {
+            return _workspace.Single<Section>(x => x.Id == secId);
+        }
+        public Section GetSec(int secId)
+        {
+            return _workspace.Single<Section>(x => x.Id == secId);
+        }
+        public IList<Section> ListSections(string secName, string secCode)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT * FROM Sections Where 1 = Case when '" + secName + "' = '' Then 1 When Sections.Name = '" + secName + "'  Then 1 END AND 1 = Case when '" + secCode + "' = '' Then 1 When Sections.Code = '" + secCode + "'  Then 1 END";
+
+            return _workspace.SqlQuery<Section>(filterExpression).ToList();
+
+        }
+        public IList<Section> GetSectionBystoreId(int storeId)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM Sections Left Join Stores on Stores.Id = Sections.Store_Id  Where Stores.Id = '" + storeId + "' ";
+
+            return _workspace.SqlQuery<Section>(filterExpression).ToList();
+
+        }
+        #endregion
+        #region Shelf
+        public IList<Shelf> GetShelfs()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<Shelf>(null).OrderBy(x => x.Name).ToList();
+        }
+        public IList<Shelf> GetShelvesBySectionId(int sectionId)
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<Shelf>(x => x.Section.Id == sectionId).OrderBy(x => x.Name).ToList();
+        }
+        public Shelf GetShelf(int shelfId)
+        {
+            return _workspace.Single<Shelf>(x => x.Id == shelfId);
+        }
+        public IList<Shelf> ListShelfs(string shelfName, string shelfCode)
+        {
+            string filterExpression = "";
+            filterExpression = "SELECT * FROM Shelves Where 1 = Case when '" + shelfName + "' = '' Then 1 When Shelves.Name = '" + shelfName + "'  Then 1 END AND 1 = Case when '" + shelfCode + "' = '' Then 1 When Shelves.Code = '" + shelfCode + "'  Then 1 END  ";
+            return _workspace.SqlQuery<Shelf>(filterExpression).ToList();
+        }
+
+    
         #endregion
         #region Entity Manipulation
         public void SaveOrUpdateEntity<T>(T item) where T : class
@@ -613,7 +887,6 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             _workspace.Delete<T>(item);
             _workspace.CommitChanges();
-            _workspace.Refresh(item);
         }
 
         public void Commit()

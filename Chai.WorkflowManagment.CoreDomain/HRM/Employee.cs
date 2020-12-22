@@ -41,7 +41,8 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public string Photo { get; set; }
         public Nullable<decimal> SDLeaveBalance { get; set; }
         public Nullable<decimal> ExpiredLeave { get; set; }
-        
+
+        public string FullName { get { return FirstName + " " + LastName; } }
         public DateTime? LeaveSettingDate { get; set; }
         public Nullable<Boolean> Status { get; set; }
         [Required]
@@ -68,6 +69,28 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                     return CD;
             }
             return null;
+        }
+
+       
+
+       public virtual Contract GetActiveContractForEmp()
+        {
+
+            foreach (Contract contt in Contracts)
+            {
+                if (contt.Status == "Active")
+                    return contt;
+
+            }
+            return null;
+        }
+
+        public virtual Contract GetMyPrevContract(int Id)
+        {
+            Contract con = Contracts.Last(y => y.Status=="In Active");
+           
+                return con;
+           
         }
         public virtual Contract GetPreviousContract()
         {
@@ -347,7 +370,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             {
                 while (wd > 365)
                 {
-                    if (count > 1)
+                    if (count <= 6 && count > 1 )
                         leaveEnti = leaveEnti + 2;
                     if (count >= 6)
                         Sumleave = Sumleave + 30;
@@ -362,14 +385,13 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                 }
                 if (wd <= 365)
                 {
-
-                   // leaveEnti = leaveEnti + Math.Round(wd / 365);
+              
                     Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti))) / 365);
                     
                 }
             }
             else { //leaveEnti = leaveEnti + Math.Round(wd / 365);
-                   Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti)) / 365));
+                   Sumleave = Sumleave + ((wd * (20 + Convert.ToInt32(leaveEnti))) / 365);
             }
 
             return Sumleave;
@@ -388,7 +410,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             {
                 while (wd > 365)
                 {
-                    if (count > 1)
+                    if (count <= 6 && count > 1)
                         leaveEnti = leaveEnti + 2;
                     if (count >= 6)
                         Sumleave = Sumleave + 30;
@@ -425,7 +447,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             {
                 while (wd > 365)
                 {
-                    if (count > 1)
+                    if (count <= 6 && count > 1)
                         leaveEnti = leaveEnti + 2;
                     if (count >= 6)
                         Sumleave = Sumleave + 30;
@@ -458,7 +480,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             {
                 while (wd > 365)
                  {
-                    if (count > 1)
+                    if (count <= 6 && count > 1)
                         leaveEnti = leaveEnti + 2;
                     if (count >= 6)
                         Sumleave = Sumleave + 30;
@@ -495,7 +517,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             {
                 while (wd > 365)
                 {
-                    if (count > 1)
+                    if (count <= 6 && count > 1)
                         leaveEnti = leaveEnti + 2;
                     if (count >= 6)
                         Sumleave = Sumleave + 30;
@@ -526,7 +548,14 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
 
         public virtual decimal EmployeeLeaveBalance()
         {
-            return (Leavefromhiredtonow() - LeavefromhiredtoSettingDate()) + SDLeaveBalance.Value;
+
+            if ((Leavefromhiredtonow() - LeavefromhiredtoSettingDate()) + SDLeaveBalance.Value > 50)
+            {
+                return 50;
+            }
+            else
+            { return (Leavefromhiredtonow() - LeavefromhiredtoSettingDate()) + SDLeaveBalance.Value; }
+            
         }
         public virtual decimal EmployeeLeaveBalanceCED(DateTime CED)
         {

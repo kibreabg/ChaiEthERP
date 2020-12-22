@@ -22,27 +22,20 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public int Id { get; set; }
         public string RequestNo { get; set; }
         public Nullable<DateTime> RequestDate { get; set; }
-        public string ContactPersonNumber { get; set; }
-        public decimal ProposedPurchasedPrice { get; set; }
-        public string SoleSourceJustificationPreparedBy { get; set; }        
         public string Comment { get; set; }
         public int CurrentApprover { get; set; }
         public Nullable<int> CurrentLevel { get; set; }
         public string CurrentStatus { get; set; }
         public string ProgressStatus { get; set; }
         public virtual AppUser AppUser { get; set; }
-        public virtual Project Project { get; set; }
-        public virtual Grant Grant { get; set; }
-        public virtual Supplier Supplier { get; set; }
-
         public virtual PurchaseRequest PurchaseRequest { get; set; }
-        public virtual PurchaseOrderSoleVendor PurchaseOrderSoleVendors { get; set; }
+        public virtual PurchaseOrderSoleVendor PurchaseOrderSoleVendor { get; set; }
         public virtual IList<SoleVendorRequestDetail> SoleVendorRequestDetails { get; set; }
         public virtual IList<SoleVendorRequestStatus> SoleVendorRequestStatuses { get; set; }
         public virtual IList<SVRAttachment> SVRAttachments { get; set; }
 
         #region SoleVendorRequestDetail
-        public virtual SoleVendorRequestDetail GetSoleVendorRequestDetailDetail(int Id)
+        public virtual SoleVendorRequestDetail GetSoleVendorRequestDetail(int Id)
         {
             foreach (SoleVendorRequestDetail TARD in SoleVendorRequestDetails)
             {
@@ -51,8 +44,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
             }
             return null;
         }
-
-        public virtual IList<SoleVendorRequestDetail> GetSoleVendorRequestDetailsByTARId(int tarId)
+        public virtual IList<SoleVendorRequestDetail> GetSRDetailBySoleVendorId(int tarId)
         {
             IList<SoleVendorRequestDetail> TARDs = new List<SoleVendorRequestDetail>();
             foreach (SoleVendorRequestDetail TARD in SoleVendorRequestDetails)
@@ -61,6 +53,16 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
                     TARDs.Add(TARD);
             }
             return TARDs;
+        }
+        public virtual IList<SoleVendorRequestDetail> GetPendingPurchaseOrderDetails()
+        {
+            IList<SoleVendorRequestDetail> PendingPOSVRDs = new List<SoleVendorRequestDetail>();
+            foreach (SoleVendorRequestDetail SVRD in SoleVendorRequestDetails)
+            {
+                if (SVRD.POStatus == "InProgress")
+                    PendingPOSVRDs.Add(SVRD);
+            }
+            return PendingPOSVRDs;
         }
         public virtual void RemoveSoleVendorRequestDetail(int Id)
         {

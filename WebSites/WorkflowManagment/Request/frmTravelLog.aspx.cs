@@ -126,6 +126,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     TravelLog.StartKmReading = Convert.ToDecimal(txtStartKmReading.Text);
                     TextBox txtEndKmReading = e.Item.FindControl("txtEndKmReading") as TextBox;
                     TravelLog.EndKmReading = Convert.ToDecimal(txtEndKmReading.Text);
+                    TextBox txtKmReadingOnFuelRefill = e.Item.FindControl("txtKmReadingOnFuelRefill") as TextBox;
+                    TravelLog.KmReadingOnFuelRefill = Convert.ToInt32(txtKmReadingOnFuelRefill.Text);
                     TextBox txtFuelPrice = e.Item.FindControl("txtFuelPrice") as TextBox;
                     TravelLog.FuelPrice = Convert.ToInt32(txtFuelPrice.Text);
 
@@ -193,6 +195,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 TextBox txtStartKmReading = e.Item.FindControl("txtEdtStartKmReading") as TextBox;
                 TravelLog.StartKmReading = Convert.ToDecimal(txtStartKmReading.Text);
                 TextBox txtEndKmReading = e.Item.FindControl("txtEdtEndKmReading") as TextBox;
+                TextBox txtEdtKmReadingOnFuelRefill = e.Item.FindControl("txtEdtKmReadingOnFuelRefill") as TextBox;
+                TravelLog.KmReadingOnFuelRefill = Convert.ToInt32(txtEdtKmReadingOnFuelRefill.Text);
                 TravelLog.EndKmReading = Convert.ToDecimal(txtEndKmReading.Text);
                 TextBox txtFuelPrice = e.Item.FindControl("txtEdtFuelPrice") as TextBox;
                 TravelLog.FuelPrice = Convert.ToInt32(txtFuelPrice.Text);

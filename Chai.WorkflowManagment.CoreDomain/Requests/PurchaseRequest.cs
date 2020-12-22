@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chai.WorkflowManagment.CoreDomain.Setting;
+using System;
 using System.Collections.Generic;
 
 namespace Chai.WorkflowManagment.CoreDomain.Requests
@@ -19,8 +20,9 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public DateTime RequestedDate { get; set; }
         public DateTime Requireddateofdelivery { get; set; }
         public string DeliverTo { get; set; }       
-        public string SuggestedSupplier { get; set; }       
-        // public Program Program { get; set; }
+        public string SuggestedSupplier { get; set; }
+        public bool IsVehicle { get; set; }    
+        public string MaintenanceRequestNo { get; set; }
         public string Comment { get; set; }
         public int CurrentApprover { get; set; }
         public int CurrentLevel { get; set; }
@@ -30,7 +32,6 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public virtual IList<SoleVendorRequest> SoleVendorRequests { get; set; }
         public virtual IList<PurchaseRequestStatus> PurchaseRequestStatuses { get; set; }
         public virtual IList<PurchaseRequestDetail> PurchaseRequestDetails { get; set; }
-        // public virtual PurchaseOrder PurchaseOrders { get; set; }
         #region PurchaseRequestStatus
         public virtual PurchaseRequestStatus GetPurchaseRequestStatus(int Id)
         {
@@ -100,6 +101,29 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
 
             }
             return LRS;
+        }
+        public virtual IList<PurchaseRequestDetail> GetPurchaseReqDetails(int PurchaseRequestId)
+        {
+            IList<PurchaseRequestDetail> LRS = new List<PurchaseRequestDetail>();
+            if (PurchaseRequestId != 0)
+            {
+                foreach (PurchaseRequestDetail AR in PurchaseRequestDetails)
+                {
+                    if (AR.BidAnalysisRequestStatus == "InProgress" && AR.PurchaseRequest.Id == PurchaseRequestId)
+                        LRS.Add(AR);
+
+                }
+                return LRS;
+            }
+            else
+                foreach (PurchaseRequestDetail AR in PurchaseRequestDetails)
+                {
+                    if (AR.BidAnalysisRequestStatus == "InProgress")
+                        LRS.Add(AR);
+
+                }
+            return LRS;
+           
         }
         public virtual void RemovePurchaseRequestDetail(int Id)
         {

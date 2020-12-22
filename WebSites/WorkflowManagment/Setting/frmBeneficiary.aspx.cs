@@ -111,12 +111,8 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
 
                     TextBox txtName = e.Item.FindControl("txtBeneficiaryName") as TextBox;
                     beneficiary.BeneficiaryName = txtName.Text;
-                    TextBox txtBranchName = e.Item.FindControl("txtBranchName") as TextBox;
-                    beneficiary.BranchName = txtBranchName.Text;
                     TextBox txtBankName = e.Item.FindControl("txtBankName") as TextBox;
                     beneficiary.BankName = txtBankName.Text;
-                    TextBox txtSortCode = e.Item.FindControl("txtSortCode") as TextBox;
-                    beneficiary.SortCode = txtSortCode.Text;
                     TextBox txtAccountNumber = e.Item.FindControl("txtAccountNumber") as TextBox;
                     beneficiary.AccountNumber = txtAccountNumber.Text;
                     beneficiary.Status = "Active";
@@ -172,12 +168,8 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
             {
                 TextBox txtName = e.Item.FindControl("txtEdtBeneficiaryName") as TextBox;
                 beneficiary.BeneficiaryName = txtName.Text;
-                TextBox txtBranchName = e.Item.FindControl("txtEdtBranchName") as TextBox;
-                beneficiary.BranchName = txtBranchName.Text;
                 TextBox txtBankName = e.Item.FindControl("txtEdtBankName") as TextBox;
                 beneficiary.BankName = txtBankName.Text;
-                TextBox txtSortCode = e.Item.FindControl("txtEdtSortCode") as TextBox;
-                beneficiary.SortCode = txtSortCode.Text;
                 TextBox txtAccountNumber = e.Item.FindControl("txtEdtAccountNumber") as TextBox;
                 beneficiary.AccountNumber = txtAccountNumber.Text;
                 SaveBeneficiary(beneficiary);
@@ -187,6 +179,8 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
             catch (Exception ex)
             {
                 Master.ShowMessage(new AppMessage("Error: Unable to Update Beneficiary. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }        
     }

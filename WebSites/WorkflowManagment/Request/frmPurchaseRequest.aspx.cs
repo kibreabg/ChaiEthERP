@@ -35,13 +35,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 BindSearchPurchaseRequestGrid();
                 BindPurchaseRequestDetails();
                 BindInitialValues();
+                PopMaintenanceRequestsDropDown();
             }
+
+            lblMainReq.Visible = false;
+            ddlMaintenanceReq.Visible = false;
+
             this._presenter.OnViewLoaded();
 
 
 
         }
-
         [CreateNew]
         public PurchaseRequestPresenter Presenter
         {
@@ -87,7 +91,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private string AutoNumber()
         {
-            return "PR-" + (_presenter.GetLastPurchaseRequestId() + 1).ToString();
+            return "PR-" + _presenter.CurrentUser().Id.ToString() + "-" + (_presenter.GetLastPurchaseRequestId() + 1).ToString();
         }
         private void BindPurchaseRequest()
         {
@@ -96,7 +100,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 // txtRequestNo.Text = _presenter.CurrentPurchaseRequest.RequestNo;
                 txtRequestDate.Text = _presenter.CurrentPurchaseRequest.RequestedDate.ToShortDateString();
-                txtComment.Text = _presenter.CurrentPurchaseRequest.Comment.ToString();
+                txtComment.Text = "";
                 txtDeliverto.Text = _presenter.CurrentPurchaseRequest.DeliverTo.ToString();
                 txtdeliveryDate.Text = _presenter.CurrentPurchaseRequest.Requireddateofdelivery.ToShortDateString();
                 txtSuggestedSupplier.Text = _presenter.CurrentPurchaseRequest.SuggestedSupplier.ToString();
@@ -113,11 +117,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 _presenter.CurrentPurchaseRequest.RequestedDate = Convert.ToDateTime(txtRequestDate.Text);
                 _presenter.CurrentPurchaseRequest.RequestNo = AutoNumber();
                 _presenter.CurrentPurchaseRequest.DeliverTo = txtDeliverto.Text;
-                _presenter.CurrentPurchaseRequest.Comment = txtComment.Text;
+                _presenter.CurrentPurchaseRequest.Comment = "";
                 _presenter.CurrentPurchaseRequest.SuggestedSupplier = txtSuggestedSupplier.Text;
 
                 _presenter.CurrentPurchaseRequest.Requireddateofdelivery = Convert.ToDateTime(txtdeliveryDate.Text);
+                _presenter.CurrentPurchaseRequest.IsVehicle = GetIsVehicle;
 
+                _presenter.CurrentPurchaseRequest.MaintenanceRequestNo = GetMaintenanceRequestNo;
                 //Determine total cost
                 /*       decimal cost = 0;
                        if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Count > 0)
@@ -143,7 +149,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         //AutoNumber();
                     }
                 }
-
             }
 
         }
@@ -176,7 +181,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             {
                                 PRS.Approver = _presenter.GetProject(_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[0].Project.Id).AppUser.Id;
                             }
-
                         }
                         else
                         {
@@ -185,12 +189,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         PRS.WorkflowLevel = i;
                         i++;
                         _presenter.CurrentPurchaseRequest.PurchaseRequestStatuses.Add(PRS);
-
                     }
                 }
                 else { pnlWarning.Visible = true; }
             }
-
         }
         private void GetCurrentApprover()
         {
@@ -203,23 +205,29 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     _presenter.CurrentPurchaseRequest.CurrentLevel = PRS.WorkflowLevel;
                     _presenter.CurrentPurchaseRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
                     break;
-
                 }
             }
         }
         private void SendEmail(PurchaseRequestStatus PRS)
         {
-
-
             if (_presenter.GetSuperviser(PRS.Approver).IsAssignedJob != true)
             {
                 EmailSender.Send(_presenter.GetSuperviser(PRS.Approver).Email, "Purchase Request", _presenter.GetUser(_presenter.CurrentPurchaseRequest.Requester).FullName + "' Request for Item procurment No. '" + _presenter.CurrentPurchaseRequest.RequestNo + "'");
             }
             else
             {
-
                 EmailSender.Send(_presenter.GetSuperviser(_presenter.GetAssignedJobbycurrentuser(PRS.Approver).AssignedTo).Email, "Purchase Request", _presenter.GetUser(_presenter.CurrentPurchaseRequest.Requester).FullName + "' Request for Item procurment No. '" + _presenter.CurrentPurchaseRequest.RequestNo + "'");
             }
+        }
+        private void PopMaintenanceRequestsDropDown()
+        {
+            ddlMaintenanceReq.Items.Clear();
+            ListItem lst = new ListItem();
+            lst.Text = "Select Maintenance Request";
+            lst.Value = "";
+            ddlMaintenanceReq.Items.Add(lst);
+            ddlMaintenanceReq.DataSource = _presenter.GetMaintenanceRequestCompleted();
+            ddlMaintenanceReq.DataBind();
 
 
         }
@@ -241,6 +249,15 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public string RequestDate
         {
             get { return txtRequestDatesearch.Text; }
+        }
+        public bool GetIsVehicle
+        {
+            get { return ckIsVehicle.Checked; }
+        }
+
+        public string GetMaintenanceRequestNo
+        {
+            get { return ddlMaintenanceReq.SelectedValue; }
         }
         public int PurchaseRequestId
         {
@@ -369,18 +386,72 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             DropDownList ddl = (DropDownList)sender;
             DropDownList ddlFGrant = ddl.FindControl("ddlFGrant") as DropDownList;
             BindGrant(ddlFGrant, Convert.ToInt32(ddl.SelectedValue));
+            if (ckIsVehicle.Checked == true)
+            {
+
+                lblMainReq.Visible = true;
+
+
+
+                ddlMaintenanceReq.Visible = true;
+
+            }
+            else if (ckIsVehicle.Checked == false)
+            {
+
+                lblMainReq.Visible = false;
+
+
+                ddlMaintenanceReq.Visible = false;
+
+            }
         }
         protected void ddlGrant_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
             DropDownList ddlGrant = ddl.FindControl("ddlGrant") as DropDownList;
             BindGrant(ddlGrant, Convert.ToInt32(ddl.SelectedValue));
+            if (ckIsVehicle.Checked == true)
+            {
+
+                lblMainReq.Visible = true;
+
+
+                ddlMaintenanceReq.Visible = true;
+
+            }
+            else if (ckIsVehicle.Checked == false)
+            {
+
+                lblMainReq.Visible = false;
+
+
+                ddlMaintenanceReq.Visible = false;
+
+            }
         }
         protected void ddlProject_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
             DropDownList ddlGrant = ddl.FindControl("ddlGrant") as DropDownList;
             BindGrant(ddlGrant, Convert.ToInt32(ddl.SelectedValue));
+            if (ckIsVehicle.Checked == true)
+            {
+
+                lblMainReq.Visible = true;
+
+
+                ddlMaintenanceReq.Visible = true;
+
+            }
+            else if (ckIsVehicle.Checked == false)
+            {
+
+                lblMainReq.Visible = false;
+
+                ddlMaintenanceReq.Visible = false;
+
+            }
         }
         protected void btnRequest_Click(object sender, EventArgs e)
         {
@@ -459,6 +530,25 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             TextBox txtAccountCode = ddl.FindControl("txtFAccountCode") as TextBox;
             txtAccountCode.Text = _presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)).AccountCode;
         }
+        protected void ddlAccount_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DropDownList ddl = (DropDownList)sender;
+            TextBox txtAccountCode = ddl.FindControl("txtAccountCode") as TextBox;
+            txtAccountCode.Text = _presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)).AccountCode;
+        }
+        protected void ckIsVehicle_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ckIsVehicle.Checked == true)
+            {
+                lblMainReq.Visible = true;
+                ddlMaintenanceReq.Visible = true;
+            }
+            else if (ckIsVehicle.Checked == false)
+            {
+                lblMainReq.Visible = false;
+                ddlMaintenanceReq.Visible = false;
+            }
+        }
         #region PurchaseRequestDetail
         private void BindPurchaseRequestDetails()
         {
@@ -467,7 +557,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void dgPurchaseRequestDetail_CancelCommand(object source, DataGridCommandEventArgs e)
         {
-            this.dgPurchaseRequestDetail.EditItemIndex = -1;
+            dgPurchaseRequestDetail.EditItemIndex = -1;
             BindPurchaseRequestDetails();
         }
         protected void dgPurchaseRequestDetail_DeleteCommand(object source, DataGridCommandEventArgs e)
@@ -479,7 +569,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (PRDId > 0)
                 prd = _presenter.CurrentPurchaseRequest.GetPurchaseRequestDetail(PRDId);
             else
-                prd = (PurchaseRequestDetail)_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.ItemIndex];
+                prd = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.ItemIndex];
             try
             {
                 if (PRDId > 0)
@@ -498,11 +588,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
                 BindPurchaseRequestDetails();
 
-                Master.ShowMessage(new AppMessage("Purchase Request Detail was Removed Successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Purchase Request Detail was Removed Successfully", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to delete Purchase Request Detail. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to delete Purchase Request Detail. " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         protected void dgPurchaseRequestDetail_EditCommand(object source, DataGridCommandEventArgs e)
@@ -522,34 +614,21 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     TextBox txtFAccountCode = e.Item.FindControl("txtFAccountCode") as TextBox;
                     Detail.AccountCode = txtFAccountCode.Text;
                     TextBox txtFItem = e.Item.FindControl("txtFItem") as TextBox;
-                    Detail.Item = txtFItem.Text;
+                    Detail.ItemDescription = txtFItem.Text;
                     TextBox txtFQty = e.Item.FindControl("txtFQty") as TextBox;
                     Detail.Qty = Convert.ToInt32(txtFQty.Text);
+                    Detail.ApprovedQuantity = Convert.ToInt32(txtFQty.Text);
                     DropDownList ddlFPurposeOfPurchase = e.Item.FindControl("ddlFPurposeOfPurchase") as DropDownList;
                     Detail.PurposeOfPurchase = ddlFPurposeOfPurchase.SelectedValue;
                     DropDownList ddlFUnitOfMeasurment = e.Item.FindControl("ddlFUnitOfMeasurment") as DropDownList;
                     Detail.UnitOfMeasurment = ddlFUnitOfMeasurment.SelectedValue;
-                    // TextBox txtFPriceperunit = e.Item.FindControl("txtFPriceperunit") as TextBox;
-                    // Detail.Priceperunit = Convert.ToDecimal(txtFPriceperunit.Text);
-                    //Detail.EstimatedCost = Convert.ToInt32(txtFQty.Text) * Convert.ToDecimal(txtFPriceperunit.Text);
-                    //Determine total cost
-                    /*  decimal cost = 0;
-                      if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Count > 0)
-                      {
-
-                          foreach (PurchaseRequestDetail detail in _presenter.CurrentPurchaseRequest.PurchaseRequestDetails)
-                          {
-                              cost = cost + detail.EstimatedCost;
-                          }
-                      }*/
-                    //  _presenter.CurrentPurchaseRequest.TotalPrice = cost;
-                    //Determine total cost end
-                    //  _presenter.CurrentPurchaseRequest.TotalPrice = _presenter.CurrentPurchaseRequest.TotalPrice + Detail.EstimatedCost;
-                    // txtTotal.Text = (_presenter.CurrentPurchaseRequest.TotalPrice).ToString();
+                    TextBox txtFRemark = e.Item.FindControl("txtFRemark") as TextBox;
+                    Detail.Remark = txtFRemark.Text;
                     DropDownList ddlFProject = e.Item.FindControl("ddlFProject") as DropDownList;
                     Detail.Project = _presenter.GetProject(int.Parse(ddlFProject.SelectedValue));
                     DropDownList ddlFGrant = e.Item.FindControl("ddlFGrant") as DropDownList;
                     Detail.Grant = _presenter.GetGrant(int.Parse(ddlFGrant.SelectedValue));
+                    Detail.BidAnalysisRequestStatus = "InProgress";
                     Detail.PurchaseRequest = _presenter.CurrentPurchaseRequest;
                     _presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Add(Detail);
                     Master.ShowMessage(new AppMessage("Purchase Request Detail added successfully.", RMessageType.Info));
@@ -559,6 +638,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 catch (Exception ex)
                 {
                     Master.ShowMessage(new AppMessage("Error: Unable to Add Purchase Request Detail. " + ex.Message, RMessageType.Error));
+                    ExceptionUtility.LogException(ex, ex.Source);
+                    ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
                 }
             }
         }
@@ -582,7 +663,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     if (ddlItemAccount != null)
                     {
                         BindAccount(ddlItemAccount);
-                        if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].ItemAccount.Id != null)
+                        if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].ItemAccount != null)
                         {
                             ListItem liI = ddlItemAccount.Items.FindByValue(_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].ItemAccount.Id.ToString());
                             if (liI != null)
@@ -606,7 +687,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     if (ddlGrant != null)
                     {
                         BindGrant(ddlGrant, Convert.ToInt32(ddlProject.SelectedValue));
-                        if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].Grant.Id != null)
+                        if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].Grant != null)
                         {
                             ListItem liI = ddlGrant.Items.FindByValue(_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].Grant.Id.ToString());
                             if (liI != null)
@@ -632,51 +713,59 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 TextBox txtAccountCode = e.Item.FindControl("txtAccountCode") as TextBox;
                 Detail.AccountCode = txtAccountCode.Text;
                 TextBox txtItem = e.Item.FindControl("txtItem") as TextBox;
-                Detail.Item = txtItem.Text;
+                Detail.ItemDescription = txtItem.Text;
                 TextBox txtQty = e.Item.FindControl("txtQty") as TextBox;
                 Detail.Qty = Convert.ToInt32(txtQty.Text);
+                Detail.ApprovedQuantity = Convert.ToInt32(txtQty.Text);
                 DropDownList ddlPurposeOfPurchase = e.Item.FindControl("ddlPurposeOfPurchase") as DropDownList;
                 Detail.PurposeOfPurchase = ddlPurposeOfPurchase.SelectedValue;
                 DropDownList ddlUnitOfMeasurment = e.Item.FindControl("ddlUnitOfMeasurment") as DropDownList;
                 Detail.UnitOfMeasurment = ddlUnitOfMeasurment.SelectedValue;
-
-                //     TextBox txtPriceperunit = e.Item.FindControl("txtPriceperunit") as TextBox;
-                //   Detail.Priceperunit = Convert.ToDecimal(txtPriceperunit.Text);
-
-                //TextBox txtEstimatedCost = e.Item.FindControl("txtEstimatedCost") as TextBox;
-                //    Detail.EstimatedCost = Convert.ToInt32(txtQty.Text) * Convert.ToDecimal(txtPriceperunit.Text);
-                //Determine total cost
-                /*    decimal cost = 0;
-                    if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Count > 0)
-                    {
-
-                        foreach (PurchaseRequestDetail detail in _presenter.CurrentPurchaseRequest.PurchaseRequestDetails)
-                        {
-                            cost = cost + detail.EstimatedCost;
-                        }
-                    }
-                    _presenter.CurrentPurchaseRequest.TotalPrice = cost;*/
-                //Determine total cost end
-                //_presenter.CurrentPurchaseRequest.TotalPrice = _presenter.CurrentPurchaseRequest.TotalPrice + Detail.EstimatedCost;
-                //  txtTotal.Text = (_presenter.CurrentPurchaseRequest.TotalPrice).ToString();
+                TextBox txtRemark = e.Item.FindControl("txtRemark") as TextBox;
+                Detail.Remark = txtRemark.Text;
                 DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
                 Detail.Project = _presenter.GetProject(int.Parse(ddlProject.SelectedValue));
                 DropDownList ddlGrant = e.Item.FindControl("ddlGrant") as DropDownList;
                 Detail.Grant = _presenter.GetGrant(int.Parse(ddlGrant.SelectedValue));
+                Detail.BidAnalysisRequestStatus = "InProgress";
                 Detail.PurchaseRequest = _presenter.CurrentPurchaseRequest;
-                Master.ShowMessage(new AppMessage("Purchase Request Detail  Updated successfully.", RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Purchase Request Detail successfully updated.", RMessageType.Info));
                 dgPurchaseRequestDetail.EditItemIndex = -1;
                 BindPurchaseRequestDetails();
             }
             catch (Exception ex)
             {
                 Master.ShowMessage(new AppMessage("Error: Unable to Update Purchase Request Detail. " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
-
-
-
-
         }
         #endregion
+        protected void ddlMaintenanceReq_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            MaintenanceRequest maintenance = null;
+            dgPurchaseRequestDetail.DataSource = null;
+            if (_presenter.GetMaintenanceRequestById(Convert.ToInt32(ddlMaintenanceReq.SelectedValue)) != null)
+            {
+                maintenance = _presenter.GetMaintenanceRequestById(Convert.ToInt32(ddlMaintenanceReq.SelectedValue));
+            }
+
+            foreach (MaintenanceSparePart msp in maintenance.MaintenanceSpareParts)
+            {
+                PurchaseRequestDetail prd = new PurchaseRequestDetail();
+                prd.Item = msp.Item;
+                prd.ItemDescription = msp.Item.Name;
+                prd.Project = msp.MaintenanceRequest.Project;
+                prd.Grant = msp.MaintenanceRequest.Grant;
+
+                _presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Add(prd);
+            }
+            lblMainReq.Visible = true;
+            ddlMaintenanceReq.Visible = true;
+            
+            dgPurchaseRequestDetail.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails;
+            dgPurchaseRequestDetail.DataBind();
+
+        }
     }
 }

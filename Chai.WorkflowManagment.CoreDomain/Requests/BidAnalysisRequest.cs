@@ -27,22 +27,24 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
       
         public string RequestNo { get; set; }
         public Nullable<DateTime> RequestDate { get; set; }
-        public DateTime AnalyzedDate { get; set; }
+      //  public DateTime AnalyzedDate { get; set; }
   
-        public string SpecialNeed { get; set; }
+       //  public string SpecialNeed { get; set; }
         
-        public virtual Supplier Supplier { get; set; }
+     //   public virtual Supplier Supplier { get; set; }
+
+
         public decimal TotalPrice { get; set; }
-        public string ReasonforSelection { get; set; }
-        public int SelectedBy { get; set; }
-        public string Status { get; set; }
+        // public string ReasonforSelection { get; set; }
+     //   public int SelectedBy { get; set; }
+      //  public string Status { get; set; }
         public int CurrentApprover { get; set; }
         public Nullable<int> CurrentLevel { get; set; }
         public string  CurrentStatus { get; set; }
         public string ProgressStatus { get; set; }        
         public virtual AppUser AppUser { get; set; }
-        public virtual Project Project { get; set; }
-        public virtual Grant Grant { get; set; }
+        //public virtual Project Project { get; set; }
+        //public virtual Grant Grant { get; set; }
    
         public virtual PurchaseRequest PurchaseRequest { get; set; }
       
@@ -63,17 +65,22 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
             }
             return null;
         }
-     /*   public virtual Bidder GetBidderbyRank()
+
+
+      
+        public virtual BidderItemDetail GetBidderItemDetailbyItem(int ItemId)
         {
 
-            foreach (Bidder bidder in Bidders)
+            foreach (BidderItemDetail bidderItemDetail in BidderItemDetails)
             {
-                if (bidder.Rank == 1)
-                    return bidder;
+                if (bidderItemDetail.ItemAccount.Id == ItemId)
+                    return bidderItemDetail;
 
             }
             return null;
-        }*/
+        }
+
+
         public virtual IList<BidderItemDetail> GetBidderItemDetailByBidAnalysisId(int AnalisisId)
         {
             IList<BidderItemDetail> BidderItemDetails = new List<BidderItemDetail>();
@@ -85,18 +92,78 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
             }
             return BidderItemDetails;
         }
-        public virtual void RemoveBidderItemDetail(int Id)
+        public  IList<Bidder> GetBidderbyRank()
         {
+            IList<Bidder> RankedItemDetals = new List<Bidder>();
 
-            foreach (BidderItemDetail bidderItemDetail in BidderItemDetails)
+            foreach (BidderItemDetail detail in BidderItemDetails)
             {
-                if (bidderItemDetail.Id == Id)
-                    BidderItemDetails.Remove(bidderItemDetail);
-                break;
+                foreach (Bidder bidder in detail.Bidders)
+                    if (bidder.Rank == 1)
+                    {
+                        RankedItemDetals.Add(bidder);
+                    }
+
+
             }
 
+            return RankedItemDetals;
         }
 
+
+        public virtual IList<BidderItemDetail> GetBidderItemDetailByPRDetailId()
+        {
+            IList<BidderItemDetail>BItemDetails = new List<BidderItemDetail>();
+            foreach (BidderItemDetail bidderItemDetail in BidderItemDetails)
+            {
+                if (bidderItemDetail.PRDetailId !=0)
+                    BItemDetails.Add(bidderItemDetail);
+
+            }
+            return BItemDetails;
+        }
+
+      
+        public IList<Bidder> GetBidderbyRankBIDID(int BIDID)
+        {
+            IList<Bidder> RankedItemDetals = new List<Bidder>();
+            
+            foreach (BidderItemDetail detail in BidderItemDetails)
+            {
+                foreach (Bidder bidder in detail.Bidders)
+                    if (bidder.Rank == 1 && detail.BidAnalysisRequest.Id== BIDID && bidder.POStatus=="InProgress")
+                        
+                    {
+                        
+                        RankedItemDetals.Add(bidder);
+                    }
+
+
+            }
+
+            return RankedItemDetals;
+        }
+        public virtual Bidder GetBidderbySelectedItem(int Id)
+        {
+
+           
+            IList<Bidder> RankedItemDetals = new List<Bidder>();
+
+            foreach (BidderItemDetail detail in BidderItemDetails)
+            {
+                foreach (Bidder bidder in detail.Bidders)
+                    if (bidder.Id==Id )
+                    {
+                        return bidder;
+                    }
+
+
+            }
+
+            return null;
+      
+
+    }
         public IList<Bidder> GetAllBidders()
         {
             IList<Bidder> details = new List<Bidder>();
@@ -109,6 +176,20 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
             }
             return details;
         }
+
+       
+        public virtual void RemoveBidderItemDetail(int Id)
+        {
+
+            foreach (BidderItemDetail bidderItemDetail in BidderItemDetails)
+            {
+                if (bidderItemDetail.Id == Id)
+                    BidderItemDetails.Remove(bidderItemDetail);
+                break;
+            }
+
+        }
+
         #endregion
         #region BidAnalysisRequestDetail
         public virtual BidAnalysisRequestDetail GetBidAnalysisRequestDetail(int Id)

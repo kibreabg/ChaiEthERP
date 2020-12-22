@@ -106,6 +106,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             _controller.SaveOrUpdateEntity(VehicleRequest);
             _controller.CurrentObject = null;
         }
+        public Vehicle GetVehiclebyPlateNo(string plateno)
+        {
+           return _settingController.GetVehiclebyPlateNo(plateno);
+        }
+        public void SaveOrUpdateVehicle(Vehicle Vehicle)
+        {
+            _controller.SaveOrUpdateEntity(Vehicle);
+            
+        }
         public IList<VehicleRequest> ListPendingVehicleRequests(string RequestNo, string RequestDate)
         {
             return _controller.ListPendingVehicleRequests(RequestNo, RequestDate);

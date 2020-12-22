@@ -68,7 +68,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         public IList<ItemAccount> GetItemAccounts()
         {
             return _settingcontroller.GetItemAccounts();
-
         }
         public ItemAccount GetItemAccount(int Id)
         {
@@ -126,6 +125,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _controller.GetPurchaseRequest(id);
         }
+        public MaintenanceRequest GetMaintenanceRequestById(int maintReqId)
+        {
+            return _controller.GetMaintenanceRequest(maintReqId);
+        }
         public ApprovalSetting GetApprovalSetting(string RequestType, int value)
         {
             return _settingcontroller.GetApprovalSettingforProcess(RequestType, value);
@@ -133,7 +136,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         public IList<PurchaseRequest> ListPurchaseRequests(string requestNo, string RequestDate, string ProgressStatus)
         {
             return _controller.ListPurchaseRequests(requestNo, RequestDate, ProgressStatus);
-
         }
         public IList<Supplier> GetSuppliers()
         {
@@ -162,7 +164,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         public void Commit()
         {
             _controller.Commit();
-        }
+        }        
     }
 }
 

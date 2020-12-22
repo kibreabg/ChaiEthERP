@@ -12,7 +12,7 @@
 
             var docprint = window.open("", "", disp_setting);
             docprint.document.open();
-            docprint.document.write('<html><head><title>CHAI Zimbabwe</title>');
+            docprint.document.write('<html><head><title>CHAI Ethiopia</title>');
             docprint.document.write('</head><body onLoad="self.print()"><center>');
             docprint.document.write(content_vlue);
             docprint.document.write('</center></body></html>');
@@ -41,6 +41,79 @@
             <!-- end widget edit box -->
 
             <!-- widget content -->
+            <div class="smart-form">
+
+              
+                  <asp:Panel ID="pnlInfo" runat="server">
+                <div class="alert alert-info fade in">
+                    <button class="close" data-dismiss="alert">
+                        ×
+                    </button>
+                    <i class="fa-fw fa fa-info"></i>
+                    <strong>Info!</strong> Please select the Bid Analysis Request Transaction to perform Purchase Order
+                </div>
+            </asp:Panel>
+             <asp:GridView ID="grvBidforPO" Visible="True"
+                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                CssClass="table table-striped table-bordered table-hover" AllowPaging="True"  PageSize="15">
+                <RowStyle CssClass="rowstyle" />
+                <Columns>
+                      
+                    <%-- <asp:BoundField DataField="RequestNo" HeaderText="Bid Analysis Request No" SortExpression="RequestNo" />--%>
+                    
+                        <asp:BoundField DataField="Item" HeaderText="Item" SortExpression="Item" />
+                     
+                     <asp:BoundField DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
+                       <asp:BoundField DataField="Supplier.SupplierNameType" HeaderText="Supplier" SortExpression="Supplier.SupplierNameType" />
+                       <asp:BoundField DataField="Rank" HeaderText="Rank" SortExpression="Rank" />
+                      <asp:BoundField DataField="TotalCost" HeaderText="Total Cost" SortExpression="TotalCost" />                     
+                        <asp:BoundField DataField="ReasonForSelection" HeaderText="Reason For Selection" SortExpression="ReasonForSelection" />
+                      <asp:TemplateField>
+                         
+                          <ItemTemplate>
+                              <asp:CheckBox ID="chkSelect" runat="server" />
+                          </ItemTemplate>
+                      </asp:TemplateField>
+                      
+                </Columns>
+                <FooterStyle CssClass="FooterStyle" />
+                <HeaderStyle CssClass="headerstyle" />
+                <PagerStyle CssClass="PagerStyle" />
+                <RowStyle CssClass="rowstyle" />
+            </asp:GridView>
+                  <footer>
+           <asp:Button ID="btnCreatePO" runat="server" CssClass="btn btn-primary" Text="Create Purchase Order" OnClick="btnCreatePO_Click"/>
+          </footer>
+            </div>
+
+              <asp:GridView ID="grvRankedBidders" Visible="True"
+                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                CssClass="table table-striped table-bordered table-hover" AllowPaging="True"  PageSize="15" OnSelectedIndexChanged="grvRankedBidders_SelectedIndexChanged">
+                <RowStyle CssClass="rowstyle" />
+                <Columns>
+                      
+                    
+                    <asp:BoundField DataField="Supplier.SupplierNameType" HeaderText="Supplier" SortExpression="Supplier.SupplierNameType" />
+                     <asp:BoundField DataField="Rank" HeaderText="Rank" SortExpression="Rank" />
+                     <asp:BoundField DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
+                     <asp:BoundField DataField="UnitCost" HeaderText="Total Cost" SortExpression="UnitCost" />    
+                     <asp:BoundField DataField="TotalCost" HeaderText="Total Cost" SortExpression="TotalCost" />                                        
+                    <asp:BoundField DataField="ReasonForSelection" HeaderText="Reason For Selection" SortExpression="ReasonForSelection" />
+                     
+                      
+                      <asp:TemplateField>
+                         
+                          <ItemTemplate>
+                                 <asp:Button runat="server" CommandName="Select" Text="Prepare Purchase Order"></asp:Button>
+                          </ItemTemplate>
+                      </asp:TemplateField>
+                      
+                </Columns>
+                <FooterStyle CssClass="FooterStyle" />
+                <HeaderStyle CssClass="headerstyle" />
+                <PagerStyle CssClass="PagerStyle" />
+                <RowStyle CssClass="rowstyle" />
+            </asp:GridView>
             <div class="widget-body no-padding">
                 <div class="smart-form">
                     <fieldset>
@@ -125,30 +198,54 @@
                                                             
                                                         </label>
                                                     </section>
-                                                    <section class="col col-4">
-                                                        <label class="label">
-                                                       Supplier Contact</label>
-                                                        <label class="input">
-                                                        <asp:TextBox ID="txtSupplierContact" runat="server" Enabled="true"></asp:TextBox>
-                                                           
-                                                        </label>
-                                                    </section>
+                                                  
                                                                                                       
                                                     
                                                 </div>
-                                                 
+                        <div class="row">
+                                                 <section class="col col-4">
+                                                        <label class="label">
+                                                       Delivery Location:</label>
+                                                        <label class="input">
+                                                        <asp:TextBox ID="txtDelLoc" runat="server" Enabled="true"></asp:TextBox>
+                                                            
+                                                        </label>
+                                                    </section>
+                                                    <section class="col col-4">
+                                                        <label class="label">
+                                                       Delivery By</label>
+                                                        <label class="input">
+                                                        <asp:TextBox ID="txtDeliveryBy" runat="server" Enabled="true"></asp:TextBox>
+                                                            
+                                                        </label>
+                                                    </section>
+                                                  
+                                                                                                      
+                                                    
+                                                </div>
+                                                 <div class="row">
+                                                 <section class="col col-4">
+                                                        <label class="label">
+                                                       Delivery Date:</label>
+                                                       <label class="input">
+                                    <i class="icon-append fa fa-calendar"></i>
+                                    <asp:TextBox ID="txtDeliveryDate" runat="server" Visible="true" CssClass="form-control datepicker"></asp:TextBox>                            
+
+                                                       </label>
+                                                       
+                                                         
+                                                    </section>
+                                                    
+                                                  </div>
+                                                                                                      
+                                             
                                             </fieldset>  
                                             <asp:DataGrid ID="dgPODetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0" 
         CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id" 
          GridLines="None" ShowFooter="True">
    
         <Columns>
-            <asp:TemplateColumn HeaderText="Item">
-                    
-                     <ItemTemplate>
-                         <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountName")%>
-                     </ItemTemplate>
-                 </asp:TemplateColumn>
+          
             <asp:TemplateColumn HeaderText="Qty">
                 <ItemTemplate>
                     <%# DataBinder.Eval(Container.DataItem, "Qty")%>
@@ -167,7 +264,12 @@
                 </ItemTemplate>
                
             </asp:TemplateColumn>
-            
+               <asp:TemplateColumn HeaderText="Rank">
+                <ItemTemplate>
+                    <%# DataBinder.Eval(Container.DataItem, "Rank")%>
+                </ItemTemplate>
+               
+            </asp:TemplateColumn>
         </Columns>
            <PagerStyle  Cssclass="paginate_button active" HorizontalAlign="Center" />
                  </asp:DataGrid>
@@ -178,9 +280,9 @@
                                             <footer>
                                                 <asp:Button ID="btnRequest" runat="server" Cssclass="btn btn-primary" onclick="btnRequest_Click" Text="Save" ValidationGroup="Save" />
                                                 &nbsp;<asp:Button ID="btnCancel" runat="server" Cssclass="btn btn-primary" onclick="btnCancel_Click" Text="Back"  />
-												 <asp:Button ID="btnPrintPurchaseForm" runat="server" Cssclass="btn btn-primary"  Text="Print Purchase Form" OnClientClick="javascript:Clickheretoprint('printtran')" Enabled="False" />										
-                                                <asp:Button ID="btnPrintPurchaseOrder" runat="server" Cssclass="btn btn-primary"  Text="Print Purchase Order" OnClientClick="javascript:Clickheretoprint('divprint')" Enabled="False" />
-																						
+												 <asp:Button ID="btnPrintPurchaseForm" runat="server" Cssclass="btn btn-primary"  Text="Print Purchase Order" OnClientClick="javascript:Clickheretoprint('printtran')" Enabled="False" />										
+                                               <%-- <asp:Button ID="btnPrintPurchaseOrder" runat="server" Cssclass="btn btn-primary"  Text="Print Purchase Order" OnClientClick="javascript:Clickheretoprint('divprint')" Enabled="False" />--%>
+																					
 											</footer>
                                       
                                     </div></div>
@@ -189,333 +291,91 @@
 								</div>
         
 								<!-- end widget div -->
-       <div id="divprint" style="display: none;" > 
-             <table style="width: 100%;">
-                <tr>
-                    <td style="width: 17%; text-align:left;">
-                        <img src="../img/CHAI%20Logo.png" width="70" height="50" /></td>
-                    <td style="font-size: large; text-align: center;">
-                        <strong>CHAI ETHIOPIA
+     
+      <div id="printtran" style="display: none;">
+            <fieldset>
+                <table style="width: 100%;">
+                    <tr>
+                        <td style="font-size: large; text-align: center;">
+                            <img src="../img/CHAI%20Logo.png" width="100" height="100" />
                             <br />
-                            PURCHASE ORDER FORM</strong></td>
-                </tr>
-            </table>
-				<asp:Repeater ID="Repeater1" runat="server" Visible="true">
-    <HeaderTemplate>
-               <table border="1">
-                   <tr><td>
-
-                       </td>
-                       <td>
-                           Purchase Order Form
-                       </td>
-                       <td>
-
-                       </td>
-                       <td>
-
-                       </td>
-                   </tr>
-                    <tr >
-                        <b>
-                            <td>
-                                PO Number
-                            </td>
-                             <td>
-                                <asp:Label ID="lblPONumberP" runat="server" Text=""></asp:Label>
-                            </td>
-                             <td>                         
-                            </td>
-                            <td>
-                            </td>
-                            </tr>
-                            <tr>
-                              <b>
-                            <td>
-                                Requester
-                            </td>
-                            <td><asp:Label ID="lblRequesterP" runat="server" Text=""></asp:Label></td>
-                                
-                            
-                             <td></td>
-                              <td></td>
-                         </b>
-                            </tr>
-                   <tr>
-                              <b>
-                            <td>
-                                Date
-                            </td>
-                            <td><asp:Label ID="lblDateP" runat="server" Text=""></asp:Label></td>
-                                
-                            
-                             <td></td>
-                              <td></td>
-                         </b>
-                            </tr>
-                      <tr>
-                              <b>
-                            <td>
-                                Supplier Name
-                            </td>
-                            <td><asp:Label ID="lblSupplierName" runat="server" Text=""></asp:Label></td>
-                                
-                            
-                             <td></td>
-                              <td></td>
-                         </b>
-                            </tr>      
-                   <tr>
-                              <b>
-                            <td>
-                                Supplier Address
-                            </td>
-                            <td><asp:Label ID="lblSupplierAddress" runat="server" Text=""></asp:Label></td>
-                                
-                            
-                             <td></td>
-                              <td></td>
-                         </b>
-                            </tr>
-                   <tr>
-                              <b>
-                            <td>
-                                Supplier Contact
-                            </td>
-                            <td><asp:Label ID="lblSupplierContactP" runat="server" Text=""></asp:Label></td>
-                                
-                            
-                             <td></td>
-                              <td></td>
-                         </b>
-                            </tr>
-                   <tr>
-                              <b>
-                            <td>
-                                Bill To:
-                            </td>
-                            <td><asp:Label ID="lblBillToP" runat="server" Text=""></asp:Label></td>
-                                
-                            
-                             <td>Ship To:</td>
-                              <td><asp:Label ID="lblShipTo" runat="server" Text=""></asp:Label></td>
-                         </b>
-                            </tr>
-                   <tr>
-                              <b>
-                            <td>
-                                Payment Terms:
-                            </td>
-                            <td><asp:Label ID="lblPaymentTermsP" runat="server" Text=""></asp:Label></td>
-                                                      
-                             <td></td>
-                              <td></td>
-                         </b>
-                            </tr>
-                   <tr style="background-color:grey">
-                       <td>
-                           Item Description
-                       </td>
-                       <td>
-                           Qty
-                       </td>
-                       <td>
-                          Unit Cost 
-                       </td>
-                       <td></td>
-                      </tr>
-            </HeaderTemplate>
-            <ItemTemplate>
-               <tr >
-                    <td>
-                        <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountName")%>
-                        
-                    </td>
-                    <td>
-                        <%# DataBinder.Eval(Container.DataItem, "Qty")%>
-                    </td>
-                    <td>
-                         <%# DataBinder.Eval(Container.DataItem, "UnitCost")%>
-                    </td>
-                   <td>
-                         <%# DataBinder.Eval(Container.DataItem, "TotalCost")%>
-                    </td>
-                  </tr>
-            </ItemTemplate>
-            <SeparatorTemplate>
-               
-            </SeparatorTemplate>
-            <AlternatingItemTemplate>
-               
-            </AlternatingItemTemplate>
-            <SeparatorTemplate>
-               
-            </SeparatorTemplate>
-            <FooterTemplate>
-                <tr>
-                   <td></td>
-                    <td></td>
-                    <td></td>
-                    <td><asp:Label ID="lblItemTotalP" runat="server" Text=""></asp:Label></td>
-               
-                </tr>
-                <tr>
-                   <td></td>
-                    <td></td>
-                    <td>Delivery Fees:</td>
-                    <td>  <asp:Label ID="lblDeliveryFeesP" runat="server" Text=""></asp:Label></td>
-               
-                </tr>
-                <tr>
-                   <td></td>
-                    <td></td>
-                    <td>Vat/Sales tax:</td>
-                    <td>  <asp:Label ID="lblVatP" runat="server" Text=""></asp:Label></td>
-               
-                </tr>
-                <tr>
-                   <td></td>
-                    <td></td>
-                    <td>Total Cost (USD):</td>
-                    <td>  <asp:Label ID="lblTotalP" runat="server" Text=""></asp:Label></td>
-               
-                </tr>
-                 <tr>
-                        <b>
-                            <td>
-                                Authorized by:
-                            </td>
-                            <td>
-                                <asp:Label ID="lblAuthorizedByP" runat="server" Text=""></asp:Label>
-                            </td>
-                            <td>
-                              
-                            </td>
-                            <td>
-                               
-                            </td>
-                            
-                    </b>
+                            <strong>CHAI ETHIOPIA
+                                <br />
+                                PURCHASE ORDER</strong>
+                        </td>
                     </tr>
                 </table>
-            </FooterTemplate>
-</asp:Repeater>
-            </div>
-       <div id="printtran" style="display:none;">
-        <fieldset>
-            <table style="width: 100%;">
-                <tr>
-                    <td style="width: 17%; text-align:left;">
-                        <img src="../img/CHAI%20Logo.png" width="70" height="50" /></td>
-                    <td style="font-size: large; text-align: center;">
-                        <strong>CHAI ETHIOPIA
-                            <br />
-                            PURCHASE REQUEST FORM</strong></td>
-                </tr>
-            </table>
 
-            <table style="width: 100%;">
-                <tr>
-                    <td style="width: 585px">Request No</td>
-                    <td style="width: 617px" ><asp:Label ID="lblRequestNoResult" runat="server"></asp:Label></td>
-                    <td class="modal-sm" style="width: 404px" >Purpose</td>
-                    <td ><asp:Label ID="lblPurposeResult" runat="server"></asp:Label></td>
-                    
-                </tr>
-
-                <tr>
-                    <td style="width: 585px">                        
-                           Purchase Order No
-                      </td>  
-                    <td style="width: 617px" >
-                        <asp:Label ID="lblPurchaseOrderNo" runat="server"></asp:Label>
-                    </td>
-                    <td style="width: 404px" class="modal-sm">Required Date of Delivery</td>
-                    <td style="width: 389px">
-                        <asp:Label ID="lblDeliveryDateresult" runat="server"></asp:Label></td>
-                    
-                </tr>
-                <tr>
-                    <td style="width: 585px"  >
-                           Requester
+                <table style="width: 100%; border-style: solid;">
+                    <tr>
+                        <td style="width: 585px">Purchase Order No</td>
+                        <td style="width: 617px">
+                            <asp:Label ID="lblPurchaseOrderNo" runat="server"></asp:Label></td>
+                        <td style="width: 25%;">Are the service being delivered by Supplier or picked up by CHAI?</td>
+                        <td style="width: 25%;">
+                            <asp:Label ID="lblDeliveryBy" runat="server"></asp:Label></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%;">PO Created Date:</td>
+                        <td style="width: 25%;">
+                            <asp:Label ID="lblPOCreatedDate" runat="server"></asp:Label>
                         </td>
-                    <td style="width: 617px" >
-                        <asp:Label ID="lblRequesterResult" runat="server"></asp:Label>
-                    </td>
-                    <td class="modal-sm" style="width: 404px" >Deliver To</td>
-                    <td ><asp:Label ID="lblDeliverToResult" runat="server"></asp:Label></td>
-                   
-                </tr>
-                <tr>
-                    <td style="width: 585px"  >
-                            Request Date
+                      <td style="width: 25%;">Delivery Location: </td>
+                        <td style="width: 25%;">
+                            <asp:Label ID="lblDeliverLocation" runat="server"></asp:Label></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%;">Payment Terms</td>
+                        <td style="width: 25%;">
+                            <asp:Label ID="lblPaymentTerms" runat="server"></asp:Label>
                         </td>
-                    <td style="width: 617px" >
-                        <asp:Label ID="lblRequestedDateResult" runat="server"></asp:Label>
-                    </td>
-                    <td class="modal-sm" style="width: 404px" >Suggested Supplier</td>
-                    <td ><asp:Label ID="lblSuggestedSupplierResult" runat="server"></asp:Label></td>
-                   
-                </tr>
-                <tr>
-                    <td style="width: 585px" >
-                       Bill To
-                    </td>
-                    <td style="width: 617px" >
-                        <asp:Label ID="lblBillToResult" runat="server"></asp:Label>
-                    </td>
-                    <td class="modal-sm" style="width: 404px" >
-                       Ship To
-                    <td >
-                        <asp:Label ID="lblShipToResult" runat="server"></asp:Label>
-                    </td>
-                    
-                </tr>
-                 <tr>
-                    <td style="width: 585px" >
-                      Reason for Selection
-                    </td>
-                    <td style="width: 617px" >
-                        <asp:Label ID="lblReasonforSelectionResult" runat="server"></asp:Label>
-                    </td>
-                    <td class="modal-sm" style="width: 404px" >
-                       Selected by</td>
-                    <td >
-                        <asp:Label ID="lblSelectedbyResult" runat="server"></asp:Label>
-                    </td>
-                    
-                </tr>
-                <tr>
-                    <td style="width: 585px" >
-                        Delivery Fees
-                    </td>
-                    <td style="width: 617px" >
-                        <asp:Label ID="lblDeliveryFeesResult" runat="server"></asp:Label>
-                    </td>
-                    <td class="modal-sm" style="width: 404px" >
-                       Payment Terms</td>
-                    <td >
-                        <asp:Label ID="lblPaymentTerms" runat="server"></asp:Label>
-                    </td>
-                    
-                </tr>
-                
-                
-            </table>
-            <br />
-            <asp:GridView ID="grvDetails"
+                        <td style="width: 25%;">Delivery Date: </td>
+                        <td style="width: 25%;">
+                            <asp:Label ID="lblDeliveryDate" runat="server"></asp:Label></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%;">Ship To</td>
+                        <td style="width: 25%;">
+                            <asp:Label ID="lblShipTo" runat="server"></asp:Label>
+                        </td>
+                      <td style="width: 25%;">Total Cost</td>
+                        <td style="width: 25%;">
+                            <asp:Label ID="lblTotCost" runat="server"></asp:Label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 585px">Bill To</td>
+                        <td style="width: 617px">
+                            <asp:Label ID="lblBillToResult" runat="server"></asp:Label></td>
+                        
+                    </tr>
+                    <tr>
+                        <td style="width: 585px">Delivery Fees
+                        </td>
+                        <td style="width: 617px">
+                            <asp:Label ID="lblDeliveryFees" runat="server"></asp:Label>
+                        </td>
+                      
+                    </tr>
+                </table>
+                <br />
+                <asp:GridView ID="grvDetails"
                 runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
                 CssClass="table table-striped table-bordered table-hover">
                 <RowStyle CssClass="rowstyle" />
                 <Columns>
-                    <asp:BoundField DataField="Bidder.SupplierType.SupplierTypeName" HeaderText="AccountName" SortExpression="Bidder.ItemAccount.AccountName" />
-                    <asp:BoundField DataField="Bidder.Supplier.SupplierName" HeaderText="Supplier" SortExpression="Bidder.Supplier.SupplierName" />
+                   
                     
-                    <asp:BoundField DataField="Bidder.Rank" HeaderText="Rank" SortExpression="Bidder.Rank" />
-                    <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="ItemAccount.AccountName" />
+                    <asp:BoundField DataField="Rank" HeaderText="Rank" SortExpression="Rank" />
+                    <asp:BoundField DataField="ItemDescription" HeaderText="Item" />
                     <asp:BoundField DataField="Qty" HeaderText="Qty" />
                     <asp:BoundField DataField="UnitCost" HeaderText="UnitCost" />
                     <asp:BoundField DataField="TotalCost" HeaderText="TotalCost" />
+                    <asp:BoundField DataField="Vat" HeaderText="Vat" />
+                    
+                    <asp:BoundField DataField="Supplier.SupplierName" HeaderText="Supplier Name" />
+                    <asp:BoundField DataField="Supplier.SupplierAddress" HeaderText="Supplier Address" />
+                  
                     
                 </Columns>
                 <FooterStyle CssClass="FooterStyle" />
@@ -523,30 +383,34 @@
                 <PagerStyle CssClass="PagerStyle" />
                 <RowStyle CssClass="rowstyle" />
             </asp:GridView>
-            <br />
-            <asp:GridView ID="grvStatuses"
-                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                CssClass="table table-striped table-bordered table-hover" OnRowDataBound="grvStatuses_RowDataBound" >
-                <RowStyle CssClass="rowstyle"  />
-                <Columns>
-                  <asp:TemplateField HeaderText="Date">
-                                            <ItemTemplate>
-                                              <asp:Label ID="lblDate" runat="server" Text='<%# Eval("ApprovalDate", "{0:dd/MM/yyyy}")%>' ></asp:Label>
-                                            </ItemTemplate>
-                                            </asp:TemplateField> 
-                    <asp:BoundField HeaderText="Approver" />
-                    <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
-                     <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus"/>
-                </Columns>
-                <FooterStyle CssClass="FooterStyle" />
-                <HeaderStyle CssClass="headerstyle" />
-                <PagerStyle CssClass="PagerStyle" />
-                <RowStyle CssClass="rowstyle" />
-            </asp:GridView>
-         
-            
-        </fieldset>
-    </div>
+                <br />
+                <p style="text-align: left;">
+                    <b>Supplier:  Please follow steps 1-4 in fulfilling this Purchase Order:</b><br />
+                </p>
+                <ol style="text-align: left;">
+                    <li>By signing this Purchase Order or supplying Goods, you agree that the specifications of this Purchase Order and the attached Terms and Conditions apply to all Goods delivered under this Purchase Order and invoices pertaining thereto.</li>
+                    <li>You agree to process and fill this order in accordance with the price and specifications above, the attached Terms and Conditions and any additional delivery information communicated to you from time-to-time.</li>
+                    <li>Email all invoices to the e-mail address indicated above for approval and processing.  Send all other correspondence to the above local address.</li>
+                    <li>Notify us immediately if you are unable to deliver as specified</li>
+                </ol>
+
+                <table style="width: 100%;">
+                    <tr>
+                        <td>Clinton Health Access Initiative</td>
+                        <td style="width: 50%;"><asp:Label ID="lblSupp" runat="server"></asp:Label></td>
+                    </tr>
+                    <tr>
+                        <td>Signature:___________________</td>
+                        <td style="width: 50%;">Signature:___________________</td>
+                    </tr>
+                    <tr>
+                        <td>Date:</td>
+                        <td style="width: 50%;">Date:</td>
+                    </tr>
+                </table>
+            </fieldset>
+        </div>
+          
 							</div>
  	 	 	 
     

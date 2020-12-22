@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chai.WorkflowManagment.CoreDomain.Setting;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         {
             this.PaymentReimbursementRequestStatuses = new List<PaymentReimbursementRequestStatus>();
             this.PaymentReimbursementRequestDetails = new List<PaymentReimbursementRequestDetail>();
-       
+           
         }
         public int Id { get; set; }
         public Nullable<DateTime> RequestDate { get; set; }
@@ -22,12 +23,16 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public int CurrentLevel { get; set; }
         public string CurrentStatus { get; set; }
         public string ProgressStatus { get; set; }
-
+        public int CurrentApproverPosition { get; set; }
+        public virtual Project Project { get; set; }
+        public virtual Grant Grant { get; set; }
+        public decimal TotalAmount { get; set; }
+        public decimal ReceivableAmount { get; set; }
         [Required]
         public virtual CashPaymentRequest CashPaymentRequest { get; set; }
         public virtual IList<PaymentReimbursementRequestDetail> PaymentReimbursementRequestDetails { get; set; }
         public virtual IList<PaymentReimbursementRequestStatus> PaymentReimbursementRequestStatuses { get; set; }
-
+      
 
         #region ReimbursementDetails
         public virtual PaymentReimbursementRequestDetail GetPaymentReimbursementRequestDetail(int Id)
@@ -60,7 +65,16 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
                 break;
             }
         }
-
+        public virtual PaymentReimbursementRequestDetail GetDetailByItemAccount(int itemAccountId)
+        {
+            foreach (PaymentReimbursementRequestDetail CPRD in PaymentReimbursementRequestDetails)
+            {
+                if (CPRD.ItemAccount.Id == itemAccountId)
+                    return CPRD;
+            }
+            return null;
+        }
         #endregion
+
     }
 }

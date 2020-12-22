@@ -56,7 +56,16 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 return "{B428E389-9CD4-4B56-BEEE-3E4C48F746DA}";
             }
         }
-
+        private void PopProgramManagers(DropDownList ddlProgramManager)
+        {
+            ddlProgramManager.DataSource = _presenter.GetProgramManagers();
+            ddlProgramManager.DataBind();
+        }
+        private void PopPrograms(DropDownList ddlProgram)
+        {
+            ddlProgram.DataSource = _presenter.GetPrograms();
+            ddlProgram.DataBind();
+        }
         private void BindProjects()
         {
             dgProject.DataSource = _presenter.ListProjects(txtProjectCode.Text);
@@ -64,9 +73,11 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
             //_presenter.Commit();
         }
         #region interface
-
-
-        public IList<CoreDomain.Setting.Project> Projects
+        public string ProjectCode
+        {
+            get { return txtProjectCode.Text; }
+        }
+        public IList<Project> Projects
         {
             get
             {
@@ -91,7 +102,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         protected void dgProject_DeleteCommand(object source, DataGridCommandEventArgs e)
         {
             int id = (int)dgProject.DataKeys[e.Item.ItemIndex];
-            Chai.WorkflowManagment.CoreDomain.Setting.Project project = _presenter.GetProject(id);
+            Project project = _presenter.GetProject(id);
             try
             {
                 project.Status = "InActive";
@@ -107,16 +118,17 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         }
         protected void dgProject_ItemCommand(object source, DataGridCommandEventArgs e)
         {
-            Chai.WorkflowManagment.CoreDomain.Setting.Project project = new Chai.WorkflowManagment.CoreDomain.Setting.Project();
+            Project project = new Project();
             if (e.CommandName == "AddNew")
             {
                 try
                 {
-
                     TextBox txtFProjectDescription = e.Item.FindControl("txtFProjectDescription") as TextBox;
                     project.ProjectDescription = txtFProjectDescription.Text;
                     TextBox txtFProjectCode = e.Item.FindControl("txtFProjectCode") as TextBox;
                     project.ProjectCode = txtFProjectCode.Text;
+                    DropDownList ddlFProgram = e.Item.FindControl("ddlFProgram") as DropDownList;
+                    project.Program = _presenter.GetProgram(Convert.ToInt32(ddlFProgram.SelectedValue));
                     TextBox txtStartingDate = e.Item.FindControl("txtStartingDate") as TextBox;
                     project.StartingDate = Convert.ToDateTime(txtStartingDate.Text);
                     TextBox txtEndDate = e.Item.FindControl("txtEndDate") as TextBox;
@@ -130,7 +142,6 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                     DropDownList ddlStatus = e.Item.FindControl("ddlFStatus") as DropDownList;
                     project.Status = ddlStatus.SelectedValue;
 
-
                     SaveProject(project);
                     dgProject.EditItemIndex = -1;
                     BindProjects();
@@ -141,7 +152,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 }
             }
         }
-        private void SaveProject(Chai.WorkflowManagment.CoreDomain.Setting.Project project)
+        private void SaveProject(Project project)
         {
             try
             {
@@ -175,6 +186,8 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
             {
                 DropDownList ddlProgramManager = e.Item.FindControl("ddlProgramManager") as DropDownList;
                 PopProgramManagers(ddlProgramManager);
+                DropDownList ddlFProgram = e.Item.FindControl("ddlFProgram") as DropDownList;
+                PopPrograms(ddlFProgram);
                 DropDownList ddlFStatus = e.Item.FindControl("ddlFStatus") as DropDownList;
             }
             else
@@ -194,6 +207,19 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                         }
                     }
 
+                    DropDownList ddlProgram = e.Item.FindControl("ddlProgram") as DropDownList;
+                    if (ddlProgram != null)
+                    {
+                        PopPrograms(ddlProgram);
+                        int projectId = Convert.ToInt32(_Projects[e.Item.DataSetIndex].Id);
+                        if (_presenter.GetProject(projectId).Program != null)
+                        {
+                            ListItem li = ddlProgram.Items.FindByValue(_presenter.GetProject(projectId).Program.Id.ToString());
+                            if (li != null)
+                                li.Selected = true;
+                        }
+                    }
+
                     DropDownList ddlStatus = e.Item.FindControl("ddlStatus") as DropDownList;
                     if (ddlStatus != null)
                     {
@@ -207,11 +233,6 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 }
             }
         }
-        private void PopProgramManagers(DropDownList ddlProgramManager)
-        {
-            ddlProgramManager.DataSource = _presenter.GetProgramManagers();
-            ddlProgramManager.DataBind();
-        }
         protected void dgProject_UpdateCommand(object source, DataGridCommandEventArgs e)
         {
 
@@ -223,6 +244,8 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 project.ProjectDescription = txtProjectDescription.Text;
                 TextBox txtProjectCode = e.Item.FindControl("txtProjectCode") as TextBox;
                 project.ProjectCode = txtProjectCode.Text;
+                DropDownList ddlProgram = e.Item.FindControl("ddlProgram") as DropDownList;
+                project.Program = _presenter.GetProgram(Convert.ToInt32(ddlProgram.SelectedValue));
                 TextBox txtEdtStartingDate = e.Item.FindControl("txtEdtStartingDate") as TextBox;
                 project.StartingDate = Convert.ToDateTime(txtEdtStartingDate.Text);
                 TextBox txtEdtEndDate = e.Item.FindControl("txtEdtEndDate") as TextBox;
@@ -258,7 +281,6 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
             PnlProGrant.Visible = true;
             BindProjectGrants();
         }
-
         #region ProjectGrant
         private void BindProjectGrants()
         {
@@ -282,11 +304,11 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
 
                 BindProjectGrants();
 
-                Master.ShowMessage(new AppMessage("Project Grant was Removed Successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Project Grant was Removed Successfully", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to delete Project Grant. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to delete Project Grant. " + ex.Message, RMessageType.Error));
             }
         }
         protected void dgProjectGrant_EditCommand(object source, DataGridCommandEventArgs e)
@@ -308,13 +330,13 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                     projectgrant.Project = _Project;
                     _Project.ProGrants.Add(projectgrant);
                     _presenter.SaveOrUpdateProject(_Project);
-                    Master.ShowMessage(new AppMessage("Project Grant Added Successfully.", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    Master.ShowMessage(new AppMessage("Project Grant Added Successfully.", RMessageType.Info));
                     dgProjectGrant.EditItemIndex = -1;
                     BindProjectGrants();
                 }
                 catch (Exception ex)
                 {
-                    Master.ShowMessage(new AppMessage("Error: Unable to Add Project Grant. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Error: Unable to Add Project Grant. " + ex.Message, RMessageType.Error));
                 }
             }
         }
@@ -333,7 +355,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                     if (ddlGrant != null)
                     {
                         BindGrant(ddlGrant);
-                        if (_Project.ProGrants[e.Item.DataSetIndex].Grant.Id != null)
+                        if (_Project.ProGrants[e.Item.DataSetIndex].Grant != null)
                         {
                             ListItem lig = ddlGrant.Items.FindByValue(_Project.ProGrants[e.Item.DataSetIndex].Grant.Id.ToString());
                             if (lig != null)
@@ -368,11 +390,7 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
             ddlGrant.DataSource = _presenter.ListGrant();
             ddlGrant.DataBind();
         }
-        #endregion
-        public string ProjectCode
-        {
-            get { return txtProjectCode.Text; }
-        }
+        #endregion        
         protected void btnCancedetail_Click(object sender, EventArgs e)
         {
             PnlProGrant.Visible = false;

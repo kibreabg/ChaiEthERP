@@ -113,9 +113,9 @@ namespace Chai.WorkflowManagment.Modules.Request
         public IList<VehicleRequest> GetExtVehicleRequest()
         {
             int currentUserId = GetCurrentUser().Id;
-            return WorkspaceFactory.CreateReadOnly().Query<VehicleRequest>(x=> x.AppUser.Id== currentUserId && x.CurrentStatus != "Rejected").ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<VehicleRequest>(x => x.AppUser.Id == currentUserId && x.CurrentStatus != "Rejected").ToList();
         }
-        
+
         #endregion
         #region Cash Payment
         public CashPaymentRequest GetCashPaymentRequest(int RequestId)
@@ -127,7 +127,7 @@ namespace Chai.WorkflowManagment.Modules.Request
             string filterExpression = "";
 
             filterExpression = "SELECT * FROM CashPaymentRequests LEFT JOIN Suppliers on CashPaymentRequests.Supplier_Id = Suppliers.Id Where 1 = Case when '" + RequestNo + "' = '' Then 1 When CashPaymentRequests.VoucherNo = '" + RequestNo + "' Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When CashPaymentRequests.RequestDate = '" + RequestDate + "'  Then 1 END And CashPaymentRequests.AppUser_Id='" + GetCurrentUser().Id + "' ORDER BY CashPaymentRequests.Id Desc";
-           // return WorkspaceFactory.CreateReadOnly().Queryable<CashPaymentRequest>(filterExpression).ToList();
+            // return WorkspaceFactory.CreateReadOnly().Queryable<CashPaymentRequest>(filterExpression).ToList();
             return _workspace.SqlQuery<CashPaymentRequest>(filterExpression).ToList();
         }
         public IList<CashPaymentRequest> GetCashPaymentRequests()
@@ -137,11 +137,25 @@ namespace Chai.WorkflowManagment.Modules.Request
         public IList<CashPaymentRequest> ListCashPaymentsNotExpensed()
         {
             int currentUserId = GetCurrentUser().Id;
-            return WorkspaceFactory.CreateReadOnly().Query<CashPaymentRequest>(x => x.PaymentReimbursementStatus == "Completed" && x.PaymentReimbursementRequest == null && currentUserId == x.AppUser.Id).ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<CashPaymentRequest>(x => x.IsLiquidated == false && x.AmountType == "Advanced" && x.ProgressStatus == "Completed" && currentUserId == x.AppUser.Id).ToList();
+        }
+        public IList<CashPaymentRequest> GetAllOutPatMedCPReqsThisYear()
+        {
+            int currentUserId = GetCurrentUser().Id;
+            return WorkspaceFactory.CreateReadOnly().Query<CashPaymentRequest>(x => x.RequestType == "Medical Expense (Out-Patient)" && x.AppUser.Id == currentUserId && x.RequestDate.Value.Year == DateTime.Now.Year && (x.CurrentStatus != "Rejected" || x.CurrentStatus == null)).ToList();
+        }
+        public IList<CashPaymentRequest> GetAllInPatMedCPReqsThisYear()
+        {
+            int currentUserId = GetCurrentUser().Id;
+            return WorkspaceFactory.CreateReadOnly().Query<CashPaymentRequest>(x => x.RequestType == "Medical Expense (In-Patient)" && x.AppUser.Id == currentUserId && x.RequestDate.Value.Year == DateTime.Now.Year && (x.CurrentStatus != "Rejected" || x.CurrentStatus == null)).ToList();
         }
         public CashPaymentRequestDetail GetCashPaymentRequestDetail(int CPRDId)
         {
             return _workspace.Single<CashPaymentRequestDetail>(x => x.Id == CPRDId);
+        }
+        public PaymentReimbursementRequestDetail GetPaymentReimbursementRequestDetail(int CPRDId)
+        {
+            return _workspace.Single<PaymentReimbursementRequestDetail>(x => x.Id == CPRDId);
         }
         public int GetLastCashPaymentRequestId()
         {
@@ -151,7 +165,7 @@ namespace Chai.WorkflowManagment.Modules.Request
             }
             else { return 0; }
         }
-       
+
         public CPRAttachment GetCPRAttachment(int attachmentId)
         {
             return _workspace.Single<CPRAttachment>(x => x.Id == attachmentId);
@@ -344,6 +358,10 @@ namespace Chai.WorkflowManagment.Modules.Request
         {
             return WorkspaceFactory.CreateReadOnly().Query<ExpenseLiquidationRequest>(null).ToList();
         }
+        public PRAttachment GetPRAttachment(int attachmentId)
+        {
+            return _workspace.Single<PRAttachment>(x => x.Id == attachmentId);
+        }
         public ELRAttachment GetELRAttachment(int attachmentId)
         {
             return _workspace.Single<ELRAttachment>(x => x.Id == attachmentId);
@@ -354,6 +372,13 @@ namespace Chai.WorkflowManagment.Modules.Request
         public IList<LeaveRequest> GetLeaveRequests()
         {
             return WorkspaceFactory.CreateReadOnly().Query<LeaveRequest>(null).ToList();
+        }
+        public bool NotCompletRequest(int empId)
+        {
+          var LeaveRequest =   _workspace.Single<LeaveRequest>(x => x.Requester == empId && x.ProgressStatus == "InProgress");
+            if (LeaveRequest != null)
+            { return true; }
+            else { return false; }
         }
         public LeaveRequest GetLeaveRequest(int LeaveRequestId)
         {
@@ -408,15 +433,101 @@ namespace Chai.WorkflowManagment.Modules.Request
                 return 0;
         }
         #endregion
-         #region PurchaseRequest
+        #region PurchaseRequest
 
         public IList<PurchaseRequest> GetPurchaseRequests()
         {
             return WorkspaceFactory.CreateReadOnly().Query<PurchaseRequest>(null).ToList();
         }
+        public IList<PurchaseRequest> GetDistinctCompletedPurchaseReqs()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<PurchaseRequest>(x => x.ProgressStatus == "Completed" && x.IsVehicle == true).Distinct().ToList();
+        }
+      
+        public IList<PurchaseRequest> GetPurchaseRequestsInProgress()
+        {
+            string filterExpression = "";
+            filterExpression = "SELECT DISTINCT PurchaseRequests.Id,RequestNo,Requester,RequestedDate,Requireddateofdelivery,TotalPrice,SpecialNeed,NeededFor, " +
+                                      " DeliverTo,Comment,SuggestedSupplier,IsVehicle,MaintenanceRequestNo,CurrentApprover,CurrentLevel,ProgressStatus,CurrentStatus FROM " +
+                                      " PurchaseRequests INNER JOIN PurchaseRequestDetails ON dbo.PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id" +
+                                       " WHERE PurchaseRequestDetails.BidAnalysisRequestStatus = 'InProgress' AND PurchaseRequests.ProgressStatus = 'Completed' ORDER BY PurchaseRequests.Id DESC ";
+
+            return _workspace.SqlQuery<PurchaseRequest>(filterExpression).ToList();
+        }
+        public IList<PurchaseRequest> GetPurchaseRequestsCompleted()
+        {
+            string filterExpression = "";
+            filterExpression = "SELECT DISTINCT PurchaseRequests.Id,RequestNo,Requester,RequestedDate,Requireddateofdelivery,TotalPrice,SpecialNeed,NeededFor, " +
+                                      " DeliverTo,Comment,SuggestedSupplier,IsVehicle,MaintenanceRequestNo,CurrentApprover,CurrentLevel,ProgressStatus,CurrentStatus FROM " +
+                                      " PurchaseRequests INNER JOIN PurchaseRequestDetails ON dbo.PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id" +
+                                       " WHERE PurchaseRequestDetails.BidAnalysisRequestStatus = 'InProgress' AND PurchaseRequests.ProgressStatus = 'Completed' ORDER BY PurchaseRequests.Id DESC ";
+
+            return _workspace.SqlQuery<PurchaseRequest>(filterExpression).ToList();
+        }
+        public IList<PurchaseRequestDetail> ListPurchaseReqInProgress()
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM PurchaseRequestDetails INNER JOIN PurchaseRequests on dbo.PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id  Where PurchaseRequestDetails.BidAnalysisRequestStatus = 'InProgress'  order by PurchaseRequests.Id Desc ";
+
+            return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
+
+        }
+        public IList<PurchaseRequestDetail> ListPurchaseReqCompleted()
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM PurchaseRequestDetails INNER JOIN PurchaseRequests on dbo.PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id  Where PurchaseRequestDetails.BidAnalysisRequestStatus = 'Completed'  order by PurchaseRequests.Id Desc ";
+
+            return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
+
+        }
+        public IList<PurchaseRequestDetail> ListPurchaseReqInProgressById(int ReqId)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM PurchaseRequestDetails INNER JOIN PurchaseRequests on PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id  Where  PurchaseRequests.Id = '" + ReqId + "' AND PurchaseRequestDetails.BidAnalysisRequestStatus='InProgress' order by PurchaseRequests.Id Desc ";
+
+            return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
+
+        }
+        public IList<PurchaseRequestDetail> ListPRDetailsInProgressById(int ReqId)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM PurchaseRequestDetails INNER JOIN PurchaseRequests ON PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id WHERE PurchaseRequestDetails.BidAnalysisRequestStatus = 'InProgress' AND PurchaseRequests.Id = '" + ReqId + "'  ORDER BY PurchaseRequests.Id DESC";
+
+            return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
+
+        }
+
+        public IList<PurchaseRequestDetail> ListPRDetailsCompletedById(int ReqId)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM PurchaseRequestDetails INNER JOIN PurchaseRequests ON PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id WHERE PurchaseRequestDetails.BidAnalysisRequestStatus = 'Completed' AND PurchaseRequests.Id = '" + ReqId + "'  ORDER BY PurchaseRequests.Id DESC";
+
+            return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
+
+        }
+        
+        public IList<PurchaseRequestDetail> ListPurchaseReqById(int Id)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM PurchaseRequestDetails INNER JOIN PurchaseRequests on PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id  Where 1 = Case when '" + Id + "' = '' Then 1 When PurchaseRequestDetails.Id = '" + Id + "'  Then 1 END  order by PurchaseRequestDetails.Id Desc ";
+
+            return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
+
+        }
         public PurchaseRequest GetPurchaseRequest(int PurchaseRequestId)
         {
             return _workspace.Single<PurchaseRequest>(x => x.Id == PurchaseRequestId, x => x.PurchaseRequestDetails.Select(y => y.ItemAccount), x => x.PurchaseRequestDetails.Select(z => z.Project));
+        }
+
+        public PurchaseRequestDetail GetPurchaseRequestbyPuID(int Id)
+        {
+            return _workspace.Single<PurchaseRequestDetail>(x => x.Id == Id, y => y.PurchaseRequest);
         }
         public PurchaseRequestDetail GetPurchaseRequestDetail(int PurchaseRequestDetailId)
         {
@@ -448,6 +559,29 @@ namespace Chai.WorkflowManagment.Modules.Request
             return _workspace.SqlQuery<PurchaseRequest>(filterExpression).ToList();
 
         }
+        public IList<MaintenanceRequest> GetMaintenanceRequestsCompleted()
+        {
+            //int userId = GetCurrentUser().Id;
+            //string filterExpression = "";
+
+            //filterExpression = "SELECT  *  FROM MaintenanceRequests Where MaintenanceRequests.ProgressStatus ='InProgress' and  MaintenanceRequests.CurrentLevel=3 order by MaintenanceRequests.Id Desc ";
+
+            //return _workspace.SqlQuery<MaintenanceRequest>(filterExpression).ToList();
+            int currentUserId = GetCurrentUser().Id;
+            return WorkspaceFactory.CreateReadOnly().Query<MaintenanceRequest>(x => x.ProgressStatus == "InProgress" && x.CurrentLevel == 3 && x.AppUser.Id == currentUserId).ToList();
+
+
+        }
+
+       
+        //public IList<MaintenanceRequest> GetMaintenanceRequestsCompleted()
+        //{
+        //    string filterExpression = "";
+        //    filterExpression = "SELECT DISTINCT RequestNo FROM MaintenanceRequests " +
+        //                               " WHERE MaintenanceRequests.ProgressStatus = 'Completed' Group BY RequestNo";
+
+        //    return _workspace.SqlQuery<MaintenanceRequest>(filterExpression).ToList();
+        //}
         public int GetLastPurchaseRequestId()
         {
             if (_workspace.Last<PurchaseRequest>() != null)
@@ -459,7 +593,7 @@ namespace Chai.WorkflowManagment.Modules.Request
         }
 
         #endregion
-          #region Sole Vendor Requests
+        #region Sole Vendor Requests
         public IList<SoleVendorRequest> GetSoleVendorRequests()
         {
             return WorkspaceFactory.CreateReadOnly().Query<SoleVendorRequest>(null).ToList();
@@ -522,28 +656,229 @@ namespace Chai.WorkflowManagment.Modules.Request
             else { return 0; }
         }
 
+        public Bidder GetBidder(int id)
+        {
+            return _workspace.Single<Bidder>(x => x.Id == id);
+        }
+
+
+
+        #endregion
+        #region MaintenanceRequest
+
+        public IList<MaintenanceRequest> GetMaintenanceRequests()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<MaintenanceRequest>(null).ToList();
+
+        }
+       
+        public IList<MaintenanceRequest> GetMaintenanceRequestsInProgress()
+        {
+            string filterExpression = "";
+            filterExpression = "SELECT DISTINCT MaintenanceRequests.Id,RequestNo,Requester,RequestedDate,Requireddateofdelivery,TotalPrice,SpecialNeed,NeededFor, " +
+                                      " DeliverTo,Comment,SuggestedSupplier,IsVehicle,PlateNo,CurrentApprover,CurrentLevel,ProgressStatus,CurrentStatus FROM " +
+                                      " MaintenanceRequests INNER JOIN MaintenanceRequestDetails ON dbo.MaintenanceRequestDetails.MaintenanceRequest_Id = MaintenanceRequests.Id" +
+                                       " WHERE MaintenanceRequestDetails.BidAnalysisRequestStatus = 'InProgress' AND MaintenanceRequests.ProgressStatus = 'Completed' ORDER BY MaintenanceRequests.Id DESC ";
+
+            return _workspace.SqlQuery<MaintenanceRequest>(filterExpression).ToList();
+        }
+        public IList<MaintenanceRequestDetail> ListMaintenanceReqInProgress()
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM MaintenanceRequestDetails INNER JOIN MaintenanceRequests on dbo.MaintenanceRequestDetails.MaintenanceRequest_Id = MaintenanceRequests.Id  Where MaintenanceRequestDetails.BidAnalysisRequestStatus = 'InProgress'  order by MaintenanceRequests.Id Desc ";
+
+            return _workspace.SqlQuery<MaintenanceRequestDetail>(filterExpression).ToList();
+
+        }
+        public IList<MaintenanceRequestDetail> ListMaintenanceReqInProgressById(int ReqId)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM MaintenanceRequestDetails INNER JOIN MaintenanceRequests on MaintenanceRequestDetails.MaintenanceRequest_Id = MaintenanceRequests.Id  Where  MaintenanceRequests.Id = '" + ReqId + "' AND MaintenanceRequestDetails.BidAnalysisRequestStatus='InProgress' order by MaintenanceRequests.Id Desc ";
+
+            return _workspace.SqlQuery<MaintenanceRequestDetail>(filterExpression).ToList();
+
+        }
+        public AppUser GetMechanic()
+        {
+            return _workspace.Single<AppUser>(x => x.EmployeePosition.PositionName == "Driver/Mechanic");
+        }
+        public IList<MaintenanceRequestDetail> ListMaintenanceReqById(int Id)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM MaintenanceRequestDetails INNER JOIN MaintenanceRequests on MaintenanceRequestDetails.MaintenanceRequest_Id = MaintenanceRequests.Id  Where 1 = Case when '" + Id + "' = '' Then 1 When MaintenanceRequestDetails.Id = '" + Id + "'  Then 1 END  order by MaintenanceRequestDetails.Id Desc ";
+
+            return _workspace.SqlQuery<MaintenanceRequestDetail>(filterExpression).ToList();
+
+        }
+        public MaintenanceRequest GetMaintenanceRequest(int MaintenanceRequestId)
+        {
+            return _workspace.Single<MaintenanceRequest>(x => x.Id == MaintenanceRequestId);
+        }
+
+        public MaintenanceRequestDetail GetMaintenanceRequestbyPuID(int Id)
+        {
+            return _workspace.Single<MaintenanceRequestDetail>(x => x.Id == Id, y => y.MaintenanceRequest);
+        }
+        public MaintenanceRequestDetail GetMaintenanceRequestDetail(int MaintenanceRequestDetailId)
+        {
+            return _workspace.Single<MaintenanceRequestDetail>(x => x.Id == MaintenanceRequestDetailId);
+        }
+        public MaintenanceSparePart GetMaintenanceSparePart(int MaintenanceSparePartId)
+        {
+            return _workspace.Single<MaintenanceSparePart>(x => x.Id == MaintenanceSparePartId);
+        }
+        public IList<MaintenanceRequest> ListMaintenanceRequests(string RequestNo, string RequestDate)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM MaintenanceRequests Where 1 = Case when '" + RequestNo + "' = '' Then 1 When MaintenanceRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When MaintenanceRequests.RequestDate = '" + RequestDate + "'  Then 1 END and MaintenanceRequests.Requester='" + GetCurrentUser().Id + "' order by MaintenanceRequests.Id Desc ";
+
+            return _workspace.SqlQuery<MaintenanceRequest>(filterExpression).ToList();
+
+        }
+        public IList<MaintenanceRequest> ListMaintenanceRequestForBids(string RequestNo, string RequestDate, string ProgressStatus)
+        {
+            string filterExpression = "";
+
+            if (ProgressStatus != "Completed")
+            {
+                filterExpression = " SELECT  *  FROM MaintenanceRequests INNER JOIN AppUsers on AppUsers.Id=MaintenanceRequests.CurrentApprover  Left JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When MaintenanceRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When MaintenanceRequests.RequestedDate = '" + RequestDate + "'  Then 1 END AND MaintenanceRequests.ProgressStatus='" + ProgressStatus + "' " +
+                                       " AND  ((MaintenanceRequests.CurrentApprover = '" + CurrentUser().Id + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) order by MaintenanceRequests.Id DESC";
+            }
+            else
+            {
+                filterExpression = " SELECT  *  FROM MaintenanceRequests INNER JOIN AppUsers on AppUsers.Id=MaintenanceRequests.CurrentApprover INNER JOIN MaintenanceRequestStatuses on MaintenanceRequestStatuses.MaintenanceRequest_Id = MaintenanceRequests.Id Left JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When MaintenanceRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When MaintenanceRequests.RequestedDate = '" + RequestDate + "'  Then 1 END AND MaintenanceRequests.ProgressStatus='" + ProgressStatus + "' AND " +
+                                           "   (MaintenanceRequestStatuses.ApprovalStatus Is not null AND (MaintenanceRequestStatuses.Approver = '" + CurrentUser().Id + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) order by MaintenanceRequests.Id DESC ";
+            }
+            return _workspace.SqlQuery<MaintenanceRequest>(filterExpression).ToList();
+
+        }
+        public int GetLastMaintenanceRequestId()
+        {
+            if (_workspace.Last<MaintenanceRequest>() != null)
+            {
+                return _workspace.Last<MaintenanceRequest>().Id;
+            }
+            else
+            { return 0; }
+        }
+
+
+
+        #endregion
+        #region StoreRequest
+
+        public IList<StoreRequest> GetStoreRequests()
+        {
+            return WorkspaceFactory.CreateReadOnly().Query<StoreRequest>(null).ToList();
+
+        }
+
+        public IList<StoreRequest> GetStoreRequestsInProgress()
+        {
+            string filterExpression = "";
+            filterExpression = "SELECT DISTINCT StoreRequests.Id,RequestNo,Requester,RequestedDate,TotalPrice, " +
+                                      " DeliverTo,Comment,CurrentApprover,CurrentLevel,ProgressStatus,CurrentStatus FROM " +
+                                      " StoreRequests INNER JOIN StoreRequestDetails ON dbo.StoreRequestDetails.StoreRequest_Id = StoreRequests.Id" +
+                                       " WHERE  StoreRequests.ProgressStatus = 'Completed' ORDER BY StoreRequests.Id DESC ";
+
+            return _workspace.SqlQuery<StoreRequest>(filterExpression).ToList();
+        }
       
       
-        
+        public StoreRequest GetStoreRequest(int StoreRequestId)
+        {
+            return _workspace.Single<StoreRequest>(x => x.Id == StoreRequestId, x => x.StoreRequestDetails.Select(z => z.Project));
+        }
+        public StoreRequest GetStoreRequestByPurchaseId(int purchaseId)
+        {
+            return _workspace.First<StoreRequest>(x => x.purchaseId == purchaseId);
+        }
+        public StoreRequestDetail GetStoreRequestbyPuID(int Id)
+        {
+            return _workspace.Single<StoreRequestDetail>(x => x.Id == Id, y => y.StoreRequest);
+        }
+        public StoreRequestDetail GetStoreRequestDetail(int StoreRequestDetailId)
+        {
+            return _workspace.Single<StoreRequestDetail>(x => x.Id == StoreRequestDetailId);
+        }
+        public IList<StoreRequest> ListStoreRequests(string RequestNo, string RequestDate)
+        {
+            string filterExpression = "";
+
+            filterExpression = "SELECT  *  FROM StoreRequests Where 1 = Case when '" + RequestNo + "' = '' Then 1 When StoreRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When StoreRequests.RequestedDate = '" + RequestDate + "'  Then 1 END and StoreRequests.Requester='" + GetCurrentUser().Id + "' order by StoreRequests.Id Desc ";
+
+            return _workspace.SqlQuery<StoreRequest>(filterExpression).ToList();
+
+        }
+        public IList<StoreRequest> ListStoreRequestForBids(string RequestNo, string RequestDate, string ProgressStatus)
+        {
+            string filterExpression = "";
+
+            if (ProgressStatus != "Completed")
+            {
+                filterExpression = " SELECT  *  FROM StoreRequests INNER JOIN AppUsers on AppUsers.Id=StoreRequests.CurrentApprover  Left JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When StoreRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When StoreRequests.RequestedDate = '" + RequestDate + "'  Then 1 END AND StoreRequests.ProgressStatus='" + ProgressStatus + "' " +
+                                       " AND  ((StoreRequests.CurrentApprover = '" + CurrentUser().Id + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) order by StoreRequests.Id DESC";
+            }
+            else
+            {
+                filterExpression = " SELECT  *  FROM StoreRequests INNER JOIN AppUsers on AppUsers.Id=StoreRequests.CurrentApprover INNER JOIN StoreRequestStatuses on StoreRequestStatuses.StoreRequest_Id = StoreRequests.Id Left JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When StoreRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When StoreRequests.RequestedDate = '" + RequestDate + "'  Then 1 END AND StoreRequests.ProgressStatus='" + ProgressStatus + "' AND " +
+                                           "   (StoreRequestStatuses.ApprovalStatus Is not null AND (StoreRequestStatuses.Approver = '" + CurrentUser().Id + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) order by StoreRequests.Id DESC ";
+            }
+            return _workspace.SqlQuery<StoreRequest>(filterExpression).ToList();
+
+        }
+        public int GetLastStoreRequestId()
+        {
+            if (_workspace.Last<StoreRequest>() != null)
+            {
+                return _workspace.Last<StoreRequest>().Id;
+            }
+            else
+            { return 0; }
+        }
 
         #endregion
         #region Employee
         public Employee GetEmployee(int empid)
         {
-              return _workspace.Single<Employee>(x => x.Id == empid);
+            return _workspace.Single<Employee>(x => x.Id == empid);
         }
         #endregion
         #region Entity Manipulation
         public void SaveOrUpdateEntity<T>(T item) where T : class
         {
+          
             IEntity entity = (IEntity)item;
             if (entity.Id == 0)
                 _workspace.Add<T>(item);
             else
                 _workspace.Update<T>(item);
-
+            try { 
             _workspace.CommitChanges();
+        }
+            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            {
+                Exception raise = dbEx;
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        string message = string.Format("{0}:{1}",
+                            validationErrors.Entry.Entity.ToString(),
+                            validationError.ErrorMessage);
+        // raise a new exception nesting  
+        // the current instance as InnerException  
+        raise = new InvalidOperationException(message, raise);
+    }
+}
+                throw raise;
+            }
             _workspace.Refresh(item);
+           
         }
         public void DeleteEntity<T>(T item) where T : class
         {

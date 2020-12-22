@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Payment Reimbursement Request Approval Form" Language="C#" MasterPageFile="~/Shared/ModuleMaster.master" AutoEventWireup="true" CodeFile="frmPaymentReimbursementApproval.aspx.cs" Inherits="Chai.WorkflowManagment.Modules.Approval.Views.frmPaymentReimbursementApproval" EnableEventValidation="false" %>
+﻿<%@ Page Title="Payment Settlement Request Approval Form" Language="C#" MasterPageFile="~/Shared/ModuleMaster.master" AutoEventWireup="true" CodeFile="frmPaymentReimbursementApproval.aspx.cs" Inherits="Chai.WorkflowManagment.Modules.Approval.Views.frmPaymentReimbursementApproval" EnableEventValidation="false" %>
 
 <%@ MasterType TypeName="Chai.WorkflowManagment.Modules.Shell.BaseMaster" %>
 
@@ -24,7 +24,7 @@
     <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
         <header>
             <span class="widget-icon"><i class="fa fa-edit"></i></span>
-            <h2>Search Payment Reimbursement</h2>
+            <h2>Search Payment Settlement</h2>
         </header>
         <div>
             <div class="jarviswidget-editbox"></div>
@@ -68,8 +68,11 @@
             CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" PageSize="30">
             <RowStyle CssClass="rowstyle" />
             <Columns>
-                <asp:BoundField DataField="ExpenseType" HeaderText="Expense Type" SortExpression="ExpenseType" />
+                <asp:BoundField DataField="CashPaymentRequest.RequestNo" HeaderText="Cash Payment Request No." SortExpression="Cash Payment Request No" />
+                <asp:BoundField DataField="CashPaymentRequest.AppUser.FullName" HeaderText="Requester" />
                 <asp:BoundField DataField="RequestDate" HeaderText="Request Date" SortExpression="RequestDate" />
+                <asp:BoundField DataField="ReceivableAmount" HeaderText="Amount Advanced Taken" SortExpression="ReceivableAmount" />
+                <asp:BoundField DataField="TotalAmount" HeaderText="Total Expenditure" SortExpression="TotalAmount" />
                 <asp:ButtonField ButtonType="Button" CommandName="ViewItem" Text="View Item Detail" />
                 <asp:CommandField ButtonType="Button" SelectText="Process Request" ShowSelectButton="True" />
             </Columns>
@@ -89,7 +92,7 @@
                     <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-edit"></i></span>
-                            <h2>Process Payment Reimbursement Request</h2>
+                            <h2>Process Payment Settlement Request</h2>
                         </header>
                         <div>
                             <div class="jarviswidget-editbox"></div>
@@ -117,15 +120,17 @@
                                         <div class="row">
                                             <section class="col col-6">
                                                 <asp:Label ID="lblAttachments" runat="server" Text="Attachments" CssClass="label"></asp:Label>
-                                                <asp:GridView ID="grvAttachments"
+                                               <asp:GridView ID="grvAttachments"
                                                     runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                                                    CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" OnSelectedIndexChanged="grvAttachments_SelectedIndexChanged">
+                                                    CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
                                                     <RowStyle CssClass="rowstyle" />
                                                     <Columns>
-                                                        <asp:BoundField DataField="FileName" HeaderText="File Name" SortExpression="FileName" />
-                                                        <asp:BoundField DataField="ContentType" HeaderText="Content Type" SortExpression="ContentType" />
-                                                        <asp:BoundField DataField="Data" HeaderText="Data" Visible="false" />
-                                                        <asp:CommandField ButtonType="Link" SelectText="View Attachment" ShowSelectButton="True" />
+                                                        <asp:BoundField DataField="FilePath" HeaderText="File Name" SortExpression="FilePath" />
+                                                        <asp:TemplateField>
+                                                            <ItemTemplate>
+                                                                <asp:LinkButton ID="lnkDownload" Text="Download" CommandArgument='<%# Eval("FilePath") %>' runat="server" OnClick="DownloadFile"></asp:LinkButton>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
                                                     </Columns>
                                                     <FooterStyle CssClass="FooterStyle" />
                                                     <HeaderStyle CssClass="headerstyle" />
@@ -181,24 +186,16 @@
                                             </ItemTemplate>
 
                                         </asp:TemplateColumn>
-                                        <asp:TemplateColumn HeaderText="Amount Advanced">
-                                            <ItemTemplate>
-                                                <%# DataBinder.Eval(Container.DataItem, "AmountAdvanced")%>
-                                            </ItemTemplate>
-                                        </asp:TemplateColumn>
+                                
                                         <asp:TemplateColumn HeaderText="Actual Expenditure">
                                             <ItemTemplate>
                                                 <%# DataBinder.Eval(Container.DataItem, "ActualExpenditure")%>
                                             </ItemTemplate>
                                         </asp:TemplateColumn>
-                                        <asp:TemplateColumn HeaderText="Variance">
-                                            <ItemTemplate>
-                                                <%# DataBinder.Eval(Container.DataItem, "Variance")%>
-                                            </ItemTemplate>
-                                        </asp:TemplateColumn>
+                                        
                                         <asp:TemplateColumn HeaderText="Project ID">
                                             <ItemTemplate>
-                                                <%# DataBinder.Eval(Container.DataItem, "Project.ProjectCode")%>
+                                                <%# DataBinder.Eval(Container.DataItem, "PaymentReimbursementRequest.Project.ProjectCode")%>
                                             </ItemTemplate>
 
                                         </asp:TemplateColumn>
@@ -217,7 +214,7 @@
             </div>
         </div>
     </asp:Panel>
-    <div id="divprint" style="display: none;">
+    <div id="divprint" style="display:none;">
         <fieldset>
             <table style="width: 100%;">
                 <tr>
@@ -226,7 +223,7 @@
                     <td style="font-size: large; text-align: center;">
                         <strong>CHAI Ethiopia ERP
                             <br />
-                            CASH PAYMENT REIMBURSEMENT TRANSACTION FORM</strong></td>
+                            CASH PAYMENT SETTLEMENT TRANSACTION FORM</strong></td>
                 </tr>
             </table>
             <table style="width: 100%;">
@@ -240,26 +237,32 @@
                 <tr>
                     <td style="width: 848px">
                         <strong>
-                            <asp:Label ID="lblRequestNo" runat="server" Text="Request No:"></asp:Label>
+                            <asp:Label ID="lblRequestNo" runat="server" Text="Payment Request No:"></asp:Label>
                         </strong></td>
                     <td style="width: 390px">
                         <asp:Label ID="lblRequestNoResult" runat="server"></asp:Label>
                     </td>
-                    <td style="width: 389px">&nbsp;</td>
-                    <td style="width: 389px"></td>
-                    <td>&nbsp;</td>
+                    <td style="width: 389px">
+                            <strong>
+                            <asp:Label ID="lblRequestedDate" runat="server" Text="Requested Date:"></asp:Label>
+                        </strong>
+                       </td>
+                    <td style="width: 389px"> <asp:Label ID="lblRequestedDateResult" runat="server"></asp:Label></td>
+                   
                 </tr>
                 <tr>
-                    <td style="width: 848px">
-                        <strong>
-                            <asp:Label ID="lblRequestedDate" runat="server" Text="Requested Date:"></asp:Label>
+                   
+                    <td style="width: 389px"><strong>
+                            <asp:Label ID="lblAdvanceTaken" runat="server" Text="Total Advance Taken:"></asp:Label>
                         </strong></td>
+                    <td style="width: 389px"><asp:Label ID="lbladvancetakenresult" runat="server"></asp:Label></td>
+                    <td style="width: 848px">
+                       <strong>
+                            <asp:Label ID="lblActualExpenditure" runat="server" Text="Total Expenditure:"></asp:Label>
+                        </strong>
                     <td style="width: 390px">
-                        <asp:Label ID="lblRequestedDateResult" runat="server"></asp:Label>
+                       <asp:Label ID="lblActualExpenditureresult" runat="server"></asp:Label>
                     </td>
-                    <td style="width: 389px">&nbsp;</td>
-                    <td style="width: 389px"></td>
-                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td style="width: 848px">
@@ -269,11 +272,6 @@
                     <td style="width: 390px">
                         <asp:Label ID="lblRequesterResult" runat="server"></asp:Label>
                     </td>
-                    <td style="width: 389px">&nbsp;</td>
-                    <td style="width: 389px"></td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
                     <td style="width: 848px; height: 18px;">
                         <strong>
                             <asp:Label ID="lblEmployeeNo" runat="server" Text="Employee No:"></asp:Label>
@@ -281,10 +279,9 @@
                     <td style="width: 390px; height: 18px;">
                         <asp:Label ID="lblEmpNoResult" runat="server"></asp:Label>
                     </td>
-                    <td style="width: 389px; height: 18px;">&nbsp;</td>
-                    <td style="width: 389px; height: 18px;"></td>
-                    <td style="height: 18px">&nbsp;</td>
+                    <td>&nbsp;</td>
                 </tr>
+                
                 <tr>
                     <td style="width: 848px; height: 18px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>
                         <asp:Label ID="lblCommentPrint" runat="server" Text="Comment:"></asp:Label>
@@ -312,10 +309,8 @@
                 <RowStyle CssClass="rowstyle" />
                 <Columns>
                     <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="Account Name" />
-                    <asp:BoundField DataField="AmountAdvanced" HeaderText="Amount Advanced" />
                     <asp:BoundField DataField="ActualExpenditure" HeaderText="Actual Expenditure" />
-                    <asp:BoundField DataField="Variance" HeaderText="Variance" />
-                    <asp:BoundField DataField="Project.ProjectCode" HeaderText="Project" />
+                    <asp:BoundField DataField="PaymentReimbursementRequest.Project.ProjectCode" HeaderText="Project" />
                 </Columns>
                 <FooterStyle CssClass="FooterStyle" />
                 <HeaderStyle CssClass="headerstyle" />

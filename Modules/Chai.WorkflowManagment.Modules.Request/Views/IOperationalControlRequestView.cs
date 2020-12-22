@@ -10,13 +10,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         int GetOperationalControlRequestId { get; }
         string GetRequestNo { get; }
         int GetBankAccountId { get; }
-        //string GetPayee { get; }
-        string GetDescription { get; }
         int GetBeneficiaryId { get; }
-        string GetBranchCode { get; }
+        string GetPayee { get; }
+        string GetTelephoneNo { get; }
         string GetBankName { get; }
         string GetVoucherNo { get; }
-        string GetPageType { get; }
+        string GetPaymentType { get; }
     }
 }
 

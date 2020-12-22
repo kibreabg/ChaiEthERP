@@ -47,13 +47,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             txtLeaveAsOfToday.Text = (Math.Round((employee.EmployeeLeaveBalance() - _presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value)) * 2, MidpointRounding.AwayFromZero) / 2).ToString();
             if (employee != null)
                 BindInitialValues();
-
+            if (_presenter.NotCompletRequest(_presenter.CurrentUser().Id))
+            {
+                Master.ShowMessage(new AppMessage("Your Previous Leave Request is not completed. Please review the dashboard and contact the approver ", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                btnRequest.Enabled = false;
+            }
 
         }
 
         private string AutoNumber()
         {
-            return "LR-" + (_presenter.GetLastLeaveRequestId() + 1).ToString();
+            return "LR-" + _presenter.CurrentUser().Id.ToString() + "-" + (_presenter.GetLastLeaveRequestId() + 1).ToString();
         }
         [CreateNew]
         public LeaveRequestPresenter Presenter
@@ -297,6 +301,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                                 ClearForm();
                                 BindSearchLeaveRequestGrid();
+                                
                                 Master.TransferMessage(new AppMessage("Successfully did a Leave  Request, Reference No - <b>'" + _presenter.CurrentLeaveRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
                                 _presenter.RedirectPage(String.Format("frmLeaveRequest.aspx?{0}=0", AppConstants.TABID));
                                 Log.Info(_presenter.CurrentUser().FullName + " has requested for a Leave Type of " + ddlLeaveType.SelectedValue);

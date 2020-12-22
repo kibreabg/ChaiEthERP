@@ -17,7 +17,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Setting
         public string SupplierContact { get; set; }
         public string Email { get; set; }
         public string ContactPhone { get; set; }
-
+        
         public DateTime StartingDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Status { get; set; }

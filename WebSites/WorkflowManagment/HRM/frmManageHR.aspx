@@ -506,8 +506,9 @@
                                                         <asp:ListItem Value="">Select Class</asp:ListItem>
                                                         <asp:ListItem Value="Local National">Local National</asp:ListItem>
                                                         <asp:ListItem Value="Expat">Expat</asp:ListItem>
-                                                        <asp:ListItem Value="Seconedee">Seconedee</asp:ListItem>
+                                                        <asp:ListItem Value="Secondee">Secondee</asp:ListItem>
                                                         <asp:ListItem Value="Volunteer">Volunteer</asp:ListItem>
+                                                         <asp:ListItem Value="TCN">TCN</asp:ListItem>
                                                         <asp:ListItem Value="Independent Contractor">Independent Contractor</asp:ListItem>
 
                                                     </asp:DropDownList>
@@ -603,8 +604,7 @@
                                             <div class="col-md-12">
                                                 <asp:Button ID="btnCancelHist" runat="server" Text="Close" class="btn btn-default"></asp:Button>
                                                 <asp:Button ID="btnAddChange" runat="server" CssClass="btn btn-primary" Text="Add Change" ValidationGroup="Savedetail" OnClick="btnAddChange_Click" />
-                                                <asp:Button ID="btnPAFNew" runat="server" CssClass="btn btn-primary" Text="Generate PAF New Hire" OnClientClick="javascript:Clickheretoprint('divprint2')" Visible="False" OnClick="btnPAFNew_Click" />
-                                                <asp:Button ID="btnPAFChange" runat="server" CssClass="btn btn-primary" Text="Generate PAF Change" OnClientClick="javascript:Clickheretoprint('divprint')" Visible="True" OnClick="btnPAFChange_Click" />
+                                              
                                                 <asp:HiddenField ID="btnHiddenPopupp" runat="server" />
                                                 <asp:HiddenField ID="hfDetailId" runat="server" />
                                             </div>

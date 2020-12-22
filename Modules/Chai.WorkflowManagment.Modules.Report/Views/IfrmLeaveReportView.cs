@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Chai.WorkflowManagment.Modules.Report.Views
 {
-    public interface IfrmLeaveReportView
+    public interface IfrmLeaveTakenReportView
     {
     }
 }

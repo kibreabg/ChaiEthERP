@@ -130,9 +130,17 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         {
             return _controller.GetReviewExpenseLiquidationRequestsTasks();
         }
+        public int GetReviewPaymentReimbursementTasks()
+        {
+            return _controller.GetReviewPaymentReimbursementTasks();
+        }
         public int GetExpenseLiquidationRequestsTasks()
         {
             return _controller.GetExpenseLiquidationRequestsTasks();
+        }
+        public int GetPaymentReimbursementTasks()
+        {
+            return _controller.GetPaymentReimbursementTasks();
         }
         public int GetBankPaymentRequestsTasks()
         {
@@ -145,6 +153,15 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         public int GetSoleVendorRequestsTasks()
         {
             return _controller.GetSoleVendorTasks();
+        }
+
+        public int GetMaintenanceRequestsTasks()
+        {
+            return _controller.GetMaintenanceTasks();
+        }
+        public int GetStoreRequestsTasks()
+        {
+            return _controller.GetStoreTasks();
         }
         #endregion
         #region MyRequests
@@ -169,8 +186,12 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         public int GetTravelAdvanceRequestMyRequest()
         {
             return _controller.GetTravelAdvanceRequestMyRequest();
-
         }
+        public int GetExpenseLiquidationMyRequest()
+        {
+            return _controller.GetExpenseLiquidationMyRequest();
+        }
+        
         public int GetPurchaseRequestsMyRequest()
         {
             return _controller.GetPurchaseRequestsMyRequest();
@@ -181,6 +202,16 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
             return _controller.GetSoleVendorRequestsMyRequest();
 
         }
+        public int GetMaintenanceRequestsMyRequest()
+        {
+            return _controller.GetMaintenanceRequestsMyRequest();
+
+        }
+        public int GetStoreRequestsMyRequest()
+        {
+            return _controller.GetStoreRequestsMyRequest();
+
+        }
         public int GetBidAnalysisRequestsMyRequest()
         {
             return _controller.GetBidAnalysisRequestsMyRequest();
@@ -189,7 +220,11 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         public int GetBankRequestsMyRequest()
         {
             return _controller.GetBankRequestsMyRequest();
-        }              
+        }
+        public int GetPaymentReimbursementRequestMyRequest()
+        {
+            return _controller.GetPaymentReimbursementRequestMyRequest();
+        }
         public IList<LeaveRequest> ListLeaveApprovalProgress()
         {
             return _controller.GetLeaveInProgress();
@@ -202,6 +237,11 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         {
             return _controller.GetCashPaymentsInProgress();
         }
+        public IList<PaymentReimbursementRequest> ListPaymentReimbursementApprovalProgress()
+        {
+            return _controller.GetPaymentReimbursementRequestInProgress();
+        }
+    
         public IList<CostSharingRequest> ListCostApprovalProgress()
         {
             return _controller.GetCostSharingInProgress();
@@ -210,11 +250,15 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         {
             return _controller.GetTravelAdvanceInProgress();
         }
+        public IList<ExpenseLiquidationRequest> ListExpenseLiquidationProgress()
+        {
+            return _controller.GetExpenseLiquidationInProgress();
+        }
         public IList<PurchaseRequest> ListPurchaseApprovalProgress()
         {
             return _controller.GetPurchaseInProgress();
         }
-        public IList<BankPaymentRequest> ListBankPaymentApprovalProgress()
+        public IList<OperationalControlRequest> ListBankPaymentApprovalProgress()
         {
             return _controller.GetBankPaymentInProgress();
         }
@@ -225,6 +269,14 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         public IList<SoleVendorRequest> ListSoleVendorApprovalProgress()
         {
             return _controller.GetSoleVendorInProgress();
+        }
+        public IList<MaintenanceRequest> ListMaintenanceApprovalProgress()
+        {
+            return _controller.GetMaintenanceInProgress();
+        }
+        public IList<StoreRequest> ListStoreApprovalProgress()
+        {
+            return _controller.GetStoreInProgress();
         }
         #endregion
         public AppUser GetUser(int UserId)

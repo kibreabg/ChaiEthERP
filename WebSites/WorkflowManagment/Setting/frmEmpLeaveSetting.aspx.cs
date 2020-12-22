@@ -31,8 +31,12 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
             }
 
             this._presenter.OnViewLoaded();
-
-
+            int year = DateTime.Now.Year;
+            DateTime firstDay = new DateTime(year, 1, 1);
+            if (firstDay == DateTime.Today.Date)
+            {
+                btnEnd.Enabled = true;
+            }
         }
 
         [CreateNew]

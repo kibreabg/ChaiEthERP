@@ -28,10 +28,14 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
             BindVehicleRequests();
             BindCostSharingRequests();
             BindTravelAdvanceRequests();
+            BindExpenseLiquidationRequests();
             BindPurchaseRequests();
             BindBankPaymentRequests();
             BindBidAnalysisRequests();
             BindSoleVendorRequests();
+            BindMaintenanceRequests();
+            BindStoreRequests();
+            BindPaymentReimburesmentRequests();
         }
         this._presenter.OnViewLoaded();
         MyTasks();
@@ -84,6 +88,8 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         if (_presenter.GetLeaveTasks() != 0)
         {
             lblLeaverequests.Text = _presenter.GetLeaveTasks().ToString();
+            if (_presenter.GetLeaveTasks() > 0)
+                lblLeaverequests.ForeColor = System.Drawing.Color.Red;
             lnkLeaveRequest.Enabled = true;
             lnkLeaveRequest.PostBackUrl = ResolveUrl("Approval/frmLeaveApproval.aspx");
         }
@@ -94,6 +100,8 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         if (_presenter.GetVehicleTasks() != 0)
         {
             lblVehicleRequest.Text = _presenter.GetVehicleTasks().ToString();
+            if (_presenter.GetVehicleTasks() > 0)
+                lblVehicleRequest.ForeColor = System.Drawing.Color.Red;
             lnkVehicleRequest.Enabled = true;
             lnkVehicleRequest.PostBackUrl = ResolveUrl("Approval/frmVehicleApproval.aspx");
         }
@@ -104,6 +112,8 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         if (_presenter.GetCashPaymentRequestTasks() != 0)
         {
             lblPaymentRequest.Text = _presenter.GetCashPaymentRequestTasks().ToString();
+            if (_presenter.GetCashPaymentRequestTasks() > 0)
+                lblPaymentRequest.ForeColor = System.Drawing.Color.Red;
             lnkPaymentRequest.Enabled = true;
             lnkPaymentRequest.PostBackUrl = lnkPaymentRequest.ResolveUrl("Approval/frmCashPaymentApproval.aspx");
         }
@@ -111,6 +121,8 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         if (_presenter.GetCostSharingRequestTasks() != 0)
         {
             lblCostSharingRequest.Text = _presenter.GetCostSharingRequestTasks().ToString();
+            if (_presenter.GetCostSharingRequestTasks() > 0)
+                lblCostSharingRequest.ForeColor = System.Drawing.Color.Red;
             lnkCostSharingRequest.Enabled = true;
             lnkCostSharingRequest.PostBackUrl = lnkCostSharingRequest.ResolveUrl("Approval/frmCostSharingApproval.aspx");
         }
@@ -118,6 +130,8 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         if (_presenter.GetPurchaseRequestsTasks() != 0)
         {
             lblpurchaserequest.Text = _presenter.GetPurchaseRequestsTasks().ToString();
+            if (_presenter.GetPurchaseRequestsTasks() > 0)
+                lblpurchaserequest.ForeColor = System.Drawing.Color.Red;
             lnkPurchaseRequest.Enabled = true;
             lnkPurchaseRequest.PostBackUrl = ResolveUrl("Approval/frmPurchaseApprovalDetail.aspx");
         }
@@ -126,6 +140,8 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         if (_presenter.GetTravelAdvanceRequestTasks() != 0)
         {
             lblTravelAdvanceRequest.Text = _presenter.GetTravelAdvanceRequestTasks().ToString();
+            if (_presenter.GetTravelAdvanceRequestTasks() > 0)
+                lblTravelAdvanceRequest.ForeColor = System.Drawing.Color.Red;
             lnkTravelAdvanceRequest.Enabled = true;
             lnkTravelAdvanceRequest.PostBackUrl = ResolveUrl("Approval/frmTravelAdvanceApproval.aspx");
         }
@@ -134,6 +150,8 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         if (_presenter.GetReviewExpenseLiquidationRequestsTasks() != 0)
         {
             lblreviewliquidation.Text = _presenter.GetReviewExpenseLiquidationRequestsTasks().ToString();
+            if (_presenter.GetReviewExpenseLiquidationRequestsTasks() > 0)
+                lblreviewliquidation.ForeColor = System.Drawing.Color.Red;
             lnkreviewliquidation.Enabled = true;
             lnkreviewliquidation.PostBackUrl = ResolveUrl("Approval/frmExpenseLiquidationApproval.aspx");
         }
@@ -142,20 +160,44 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         if (_presenter.GetExpenseLiquidationRequestsTasks() != 0)
         {
             lblExpenseLiquidation.Text = _presenter.GetExpenseLiquidationRequestsTasks().ToString();
+            if (_presenter.GetExpenseLiquidationRequestsTasks() > 0)
+                lblExpenseLiquidation.ForeColor = System.Drawing.Color.Red;
             lnkExpenseLiquidation.Enabled = true;
             lnkExpenseLiquidation.PostBackUrl = ResolveUrl("Request/frmExpenseLiquidationRequest.aspx");
-
         }
         else
         {
             lblExpenseLiquidation.Text = Convert.ToString(0);
         }
+        if (_presenter.GetReviewPaymentReimbursementTasks() != 0)
+        {
+            lblreviewsettlemnt.Text = _presenter.GetReviewPaymentReimbursementTasks().ToString();
+            if (_presenter.GetReviewPaymentReimbursementTasks() > 0)
+                lblreviewsettlemnt.ForeColor = System.Drawing.Color.Red;
+            lnkReviewpaymentsettlemnt.Enabled = true;
+            lnkReviewpaymentsettlemnt.PostBackUrl = ResolveUrl("Approval/frmPaymentReimbursementApproval.aspx");
+        }
+        else
+        { lblreviewsettlemnt.Text = Convert.ToString(0); }
+        if (_presenter.GetPaymentReimbursementTasks() != 0)
+        {
+            lblReimbursement.Text = _presenter.GetPaymentReimbursementTasks().ToString();
+            if (_presenter.GetPaymentReimbursementTasks() > 0)
+                lblReimbursement.ForeColor = System.Drawing.Color.Red;
+            lnkPaymentReimbursement.Enabled = true;
+            lnkPaymentReimbursement.PostBackUrl = ResolveUrl("Request/frmPaymentReimbursementRequest.aspx");
+        }
+        else
+        {
+            lblReimbursement.Text = Convert.ToString(0);
+        }
         if (_presenter.GetBankPaymentRequestsTasks() != 0)
         {
             lblbankpayment.Text = _presenter.GetBankPaymentRequestsTasks().ToString();
+            if (_presenter.GetBankPaymentRequestsTasks() > 0)
+                lblbankpayment.ForeColor = System.Drawing.Color.Red;
             lnkbankpayment.Enabled = true;
             lnkbankpayment.PostBackUrl = ResolveUrl("Approval/frmOperationalControlApproval.aspx");
-
         }
         else
         {
@@ -165,9 +207,10 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         if (_presenter.GetBidAnalysisRequestsTasks() != 0)
         {
             lblBidAnalysis.Text = _presenter.GetBidAnalysisRequestsTasks().ToString();
+            if (_presenter.GetBidAnalysisRequestsTasks() > 0)
+                lblBidAnalysis.ForeColor = System.Drawing.Color.Red;
             lnkBidAnalysis.Enabled = true;
             lnkBidAnalysis.PostBackUrl = ResolveUrl("Approval/frmBidAnalysisApproval.aspx");
-
         }
         else
         {
@@ -176,13 +219,40 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         if (_presenter.GetSoleVendorRequestsTasks() != 0)
         {
             lblSolVendor.Text = _presenter.GetSoleVendorRequestsTasks().ToString();
+            if (_presenter.GetSoleVendorRequestsTasks() > 0)
+                lblSolVendor.ForeColor = System.Drawing.Color.Red;
             lnkSoleVendor.Enabled = true;
             lnkSoleVendor.PostBackUrl = ResolveUrl("Approval/frmSoleVendorApproval.aspx");
-
         }
         else
         {
             lblSolVendor.Text = Convert.ToString(0);
+        }
+
+        if (_presenter.GetMaintenanceRequestsTasks() != 0)
+        {
+            lblMaintenanc.Text = _presenter.GetMaintenanceRequestsTasks().ToString();
+            if (_presenter.GetMaintenanceRequestsTasks() > 0)
+                lblMaintenanc.ForeColor = System.Drawing.Color.Red;
+            lnkMaintenance.Enabled = true;
+            lnkMaintenance.PostBackUrl = ResolveUrl("Approval/frmMaintenanceApproval.aspx");
+        }
+        else
+        {
+            lblMaintenanc.Text = Convert.ToString(0);
+
+        }
+        if (_presenter.GetStoreRequestsTasks() != 0)
+        {
+            lblStore.Text = _presenter.GetStoreRequestsTasks().ToString();
+            if (_presenter.GetStoreRequestsTasks() > 0)
+                lblStore.ForeColor = System.Drawing.Color.Red;
+            lnkStore.Enabled = true;
+            lnkStore.PostBackUrl = ResolveUrl("Approval/frmStoreApproval.aspx");
+        }
+        else
+        {
+            lblStore.Text = Convert.ToString(0);
         }
     }
     private void MyRequests()
@@ -216,15 +286,22 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         {
             lblTravelStatus.Text = ProgressStatus.InProgress.ToString();
             lblTravelStatus.ForeColor = System.Drawing.Color.Green;
-
+        }
+        if (_presenter.GetExpenseLiquidationMyRequest() != 0)
+        {
+            lblExpenseStatus.Text = ProgressStatus.InProgress.ToString();
+            lblExpenseStatus.ForeColor = System.Drawing.Color.Green;
+        }
+        if (_presenter.GetPaymentReimbursementRequestMyRequest() != 0)
+        {
+            lblPaymentReimburesment.Text = ProgressStatus.InProgress.ToString();
+            lblPaymentReimburesment.ForeColor = System.Drawing.Color.Green;
         }
         if (_presenter.GetPurchaseRequestsMyRequest() != 0)
         {
             lblPurchaseStatus.Text = ProgressStatus.InProgress.ToString();
             lblPurchaseStatus.ForeColor = System.Drawing.Color.Green;
-
         }
-
         if (_presenter.GetBankRequestsMyRequest() != 0)
         {
             lblBankRequestStatus.Text = ProgressStatus.InProgress.ToString();
@@ -241,6 +318,18 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         {
             lblSoleVendorStatus.Text = ProgressStatus.InProgress.ToString();
             lblSoleVendorStatus.ForeColor = System.Drawing.Color.Green;
+
+        }
+        if (_presenter.GetMaintenanceRequestsMyRequest() != 0)
+        {
+            lblMaintenanceStatus.Text = ProgressStatus.InProgress.ToString();
+            lblMaintenanceStatus.ForeColor = System.Drawing.Color.Green;
+
+        }
+        if (_presenter.GetStoreRequestsMyRequest() != 0)
+        {
+            lblStoreStatus.Text = ProgressStatus.InProgress.ToString();
+            lblStoreStatus.ForeColor = System.Drawing.Color.Green;
 
         }
 
@@ -292,6 +381,11 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         grvTravelProgress.DataSource = _presenter.ListTravelApprovalProgress();
         grvTravelProgress.DataBind();
     }
+    private void BindExpenseLiquidationRequests()
+    {
+        grvExpenseProgress.DataSource = _presenter.ListExpenseLiquidationProgress();
+        grvExpenseProgress.DataBind();
+    }
     private void BindPurchaseRequests()
     {
         grvPurchaseProgress.DataSource = _presenter.ListPurchaseApprovalProgress();
@@ -302,7 +396,11 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         grvBankProgress.DataSource = _presenter.ListBankPaymentApprovalProgress();
         grvBankProgress.DataBind();
     }
-
+    private void BindPaymentReimburesmentRequests()
+    {
+        grvSettlement.DataSource = _presenter.ListPaymentReimbursementApprovalProgress();
+        grvSettlement.DataBind();
+    }
     private void BindBidAnalysisRequests()
     {
         grvBidAnalysisProgress.DataSource = _presenter.ListBidAnalysisApprovalProgress();
@@ -314,7 +412,16 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         grvSoleVendorProgress.DataSource = _presenter.ListSoleVendorApprovalProgress();
         grvSoleVendorProgress.DataBind();
     }
-
+    private void BindMaintenanceRequests()
+    {
+        grvMaintenanceProgress.DataSource = _presenter.ListMaintenanceApprovalProgress();
+        grvMaintenanceProgress.DataBind();
+    }
+    private void BindStoreRequests()
+    {
+        grvStoreProgress.DataSource = _presenter.ListStoreApprovalProgress();
+        grvStoreProgress.DataBind();
+    }
     protected void grvLeaveProgress_RowDataBound(object sender, GridViewRowEventArgs e)
     {
         if (_presenter.ListLeaveApprovalProgress() != null)
@@ -348,10 +455,10 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
                     if (_presenter.ListPaymentApprovalProgress()[e.Row.RowIndex].CurrentApprover != 0)
                         e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListPaymentApprovalProgress()[e.Row.RowIndex].CurrentApprover).FullName;
                     else
-                        e.Row.Cells[2].Text = "Finance Officer";
+                        e.Row.Cells[2].Text = "Accountant";
                 }
             }
-        }        
+        }
     }
     protected void grvCostProgress_RowDataBound(object sender, GridViewRowEventArgs e)
     {
@@ -370,8 +477,29 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                if (_presenter.ListTravelApprovalProgress()[e.Row.RowIndex].CurrentApprover != 0)
-                    e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListTravelApprovalProgress()[e.Row.RowIndex].CurrentApprover).FullName;
+                if (_presenter.ListTravelApprovalProgress().Count != 0)
+                {
+                    if (_presenter.ListTravelApprovalProgress()[e.Row.RowIndex].CurrentApprover != 0)
+                        e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListTravelApprovalProgress()[e.Row.RowIndex].CurrentApprover).FullName;
+                    else
+                        e.Row.Cells[2].Text = "Accountant";
+                }
+            }
+        }
+    }
+    protected void grvExpenseProgress_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        if (_presenter.ListExpenseLiquidationProgress() != null)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                if (_presenter.ListExpenseLiquidationProgress().Count != 0)
+                {
+                    if (_presenter.ListExpenseLiquidationProgress()[e.Row.RowIndex].CurrentApprover != 0)
+                        e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListExpenseLiquidationProgress()[e.Row.RowIndex].CurrentApprover).FullName;
+                    else
+                        e.Row.Cells[2].Text = "Accountant";
+                }                
             }
         }
     }
@@ -416,6 +544,44 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
             {
                 if (_presenter.ListSoleVendorApprovalProgress()[e.Row.RowIndex].CurrentApprover != 0)
                     e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListSoleVendorApprovalProgress()[e.Row.RowIndex].CurrentApprover).FullName;
+            }
+        }
+    }
+    protected void grvSettlementProgress_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        if (_presenter.ListPaymentReimbursementApprovalProgress() != null)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                if (_presenter.ListPaymentReimbursementApprovalProgress().Count != 0)
+                {
+                    if (_presenter.ListPaymentReimbursementApprovalProgress()[e.Row.RowIndex].CurrentApprover != 0)
+                        e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListPaymentReimbursementApprovalProgress()[e.Row.RowIndex].CurrentApprover).FullName;
+                    else
+                        e.Row.Cells[2].Text = "Accountant";
+                }
+            }
+        }
+    }
+    protected void grvMaintenanceProgress_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        if (_presenter.ListMaintenanceApprovalProgress() != null)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                if (_presenter.ListMaintenanceApprovalProgress()[e.Row.RowIndex].CurrentApprover != 0)
+                    e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListMaintenanceApprovalProgress()[e.Row.RowIndex].CurrentApprover).FullName;
+            }
+        }
+    }
+    protected void grvStoreProgress_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        if (_presenter.ListStoreApprovalProgress() != null)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                if (_presenter.ListStoreApprovalProgress()[e.Row.RowIndex].CurrentApprover != 0)
+                    e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListStoreApprovalProgress()[e.Row.RowIndex].CurrentApprover).FullName;
             }
         }
     }

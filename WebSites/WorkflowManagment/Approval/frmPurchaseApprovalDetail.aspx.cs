@@ -133,7 +133,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void BindGrant(TextBox txtGrant, int projectId)
         {
-            txtGrant.Text = _presenter.GetGrantbyprojectId(projectId).First().GrantCode;            
+            txtGrant.Text = _presenter.GetGrantbyprojectId(projectId).First().GrantCode;
         }
         private void BindSearchPurchaseRequestGrid()
         {
@@ -157,15 +157,16 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
                 else
                 {
-                    btnPrint.Enabled = false;
+                    btnPrint.Enabled = true;
                     btnApprove.Enabled = true;
                     ddlApprovalStatus.Enabled = true;
                 }
             }
-            if (_presenter.CurrentUser().EmployeePosition.PositionName == "Procurement Officer" && _presenter.CurrentPurchaseRequest.CurrentStatus != ApprovalStatus.Rejected.ToString() && _presenter.CurrentPurchaseRequest.CurrentLevel == (_presenter.CurrentPurchaseRequest.PurchaseRequestStatuses.Count - 1))
+            if (_presenter.CurrentUser().EmployeePosition.PositionName == "Logistic Assistant" && _presenter.CurrentPurchaseRequest.CurrentStatus != ApprovalStatus.Rejected.ToString() && _presenter.CurrentPurchaseRequest.CurrentLevel == (_presenter.CurrentPurchaseRequest.PurchaseRequestStatuses.Count - 1))
             {
-                lnkBidRequest.Visible = true;
-                lnkSoleVendor.Visible = true;
+                //lnkBidRequest.Visible = true;
+                // lnkSoleVendor.Visible = true;
+                _presenter.CurrentPurchaseRequest.PurchaseRequestDetails[0].BidAnalysisRequestStatus = "InProgress";
             }
         }
         private void ShowPrint()
@@ -229,10 +230,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                             _presenter.CurrentPurchaseRequest.CurrentApprover = PRRS.Approver;
                             _presenter.CurrentPurchaseRequest.CurrentLevel = PRRS.WorkflowLevel;
                             _presenter.CurrentPurchaseRequest.CurrentStatus = PRRS.ApprovalStatus;
-                            //Completed is commented out because we're going to complete purchase request
-                            //when Bid or SoleVendor is completed. 
-
-                            //_presenter.CurrentPurchaseRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                            _presenter.CurrentPurchaseRequest.ProgressStatus = ProgressStatus.Completed.ToString();
                         }
                         GetNextApprover();
                         PRRS.Approver = _presenter.CurrentUser().Id;
@@ -248,6 +246,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     else
                     {
                         _presenter.CurrentPurchaseRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                        _presenter.CurrentPurchaseRequest.CurrentStatus = PRRS.ApprovalStatus;
                         SendEmailRejected(PRRS);
                     }
                     break;
@@ -268,22 +267,18 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             DropDownList ddl = (DropDownList)sender;
             TextBox txtGrant = ddl.FindControl("txtGrant") as TextBox;
             BindGrant(txtGrant, Convert.ToInt32(ddl.SelectedValue));
-            pnlDetail_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
         }
         protected void ddlAccount_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
             TextBox txtAccountCode = ddl.FindControl("txtAccountCode") as TextBox;
             txtAccountCode.Text = _presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)).AccountCode;
-            pnlDetail_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
         }
         protected void btnFind_Click(object sender, EventArgs e)
         {
             BindSearchPurchaseRequestGrid();
-        }
-        protected void btnCancelPopup_Click(object sender, EventArgs e)
-        {
-            pnlApproval.Visible = false;
         }
         private void PrintTransaction()
         {
@@ -326,12 +321,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     Master.ShowMessage(new AppMessage("Purchase Approval Processed", RMessageType.Info));
                     btnApprove.Enabled = false;
                     BindSearchPurchaseRequestGrid();
-                    if (_presenter.CurrentUser().EmployeePosition.PositionName == "Procurement Officer" && _presenter.CurrentPurchaseRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
+                    if (_presenter.CurrentUser().EmployeePosition.PositionName == "Logistic Assistant" && _presenter.CurrentPurchaseRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
                     {
-                        lnkBidRequest.Visible = true;
-                        lnkSoleVendor.Visible = true;
+                        //lnkBidRequest.Visible = true;
+                        // lnkSoleVendor.Visible = true;
                     }
-                    pnlApproval_ModalPopupExtender.Show();
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
                 }
             }
             catch (Exception ex)
@@ -351,7 +346,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 //_presenter.OnViewLoaded();
                 dgPurchaseRequestDetail.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails;
                 dgPurchaseRequestDetail.DataBind();
-                pnlDetail_ModalPopupExtender.Show();
+                ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
             }
         }
         protected void grvPurchaseRequestList_SelectedIndexChanged(object sender, EventArgs e)
@@ -365,7 +360,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             PrintTransaction();
             txtRejectedReason.Visible = false;
             rfvRejectedReason.Enabled = false;
-            pnlApproval_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
         }
         private void PopApprovalStatus()
         {
@@ -392,20 +387,21 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         protected void grvPurchaseRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             Button btnStatus = e.Row.FindControl("btnStatus") as Button;
-            PurchaseRequest CSR = e.Row.DataItem as PurchaseRequest;
+            Label lblMaintReqPlateNo = e.Row.FindControl("lblMaintReqPlateNo") as Label;
+            PurchaseRequest PR = e.Row.DataItem as PurchaseRequest;
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                if (CSR.ProgressStatus == ProgressStatus.InProgress.ToString())
+                if (!String.IsNullOrEmpty(PR.MaintenanceRequestNo))
+                    lblMaintReqPlateNo.Text = _presenter.GetMaintenanceRequestById(Convert.ToInt32(PR.MaintenanceRequestNo)).ReqPlateNo;
+                if (PR.ProgressStatus == ProgressStatus.InProgress.ToString())
                 {
                     btnStatus.BackColor = System.Drawing.ColorTranslator.FromHtml("#FFFF6C");
-
                 }
-                else if (CSR.ProgressStatus == ProgressStatus.Completed.ToString())
+                else if (PR.ProgressStatus == ProgressStatus.Completed.ToString())
                 {
                     btnStatus.BackColor = System.Drawing.ColorTranslator.FromHtml("#FF7251");
-
                 }
-                e.Row.Cells[1].Text = _presenter.GetUser(CSR.Requester).FullName;
+                e.Row.Cells[1].Text = _presenter.GetUser(PR.Requester).FullName;
 
             }
         }
@@ -423,7 +419,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 txtRejectedReason.Visible = false;
                 rfvRejectedReason.Enabled = false;
             }
-            pnlApproval_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
         }
         protected void grvPurchaseRequestList_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
@@ -459,7 +455,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             this.dgPurchaseRequestDetail.EditItemIndex = e.Item.ItemIndex;
             BindPurchaseRequestDetails();
-            pnlDetail_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
         }
         protected void dgPurchaseRequestDetail_ItemDataBound(object sender, DataGridItemEventArgs e)
         {
@@ -491,7 +487,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     }
                 }
                 DropDownList ddlUnitOfMeasurment = e.Item.FindControl("ddlUnitOfMeasurment") as DropDownList;
-                if(ddlUnitOfMeasurment != null)
+                if (ddlUnitOfMeasurment != null)
                 {
                     ListItem liI = ddlUnitOfMeasurment.Items.FindByValue(_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].UnitOfMeasurment);
                     if (liI != null)
@@ -524,13 +520,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 TextBox txtAccountCode = e.Item.FindControl("txtAccountCode") as TextBox;
                 Detail.AccountCode = txtAccountCode.Text;
                 TextBox txtItem = e.Item.FindControl("txtItem") as TextBox;
-                Detail.Item = txtItem.Text;
+                Detail.ItemDescription = txtItem.Text;
                 TextBox txtApprovedQuantity = e.Item.FindControl("txtApprovedQuantity") as TextBox;
                 Detail.ApprovedQuantity = Convert.ToInt32(txtApprovedQuantity.Text);
                 DropDownList ddlPurposeOfPurchase = e.Item.FindControl("ddlPurposeOfPurchase") as DropDownList;
                 Detail.PurposeOfPurchase = ddlPurposeOfPurchase.SelectedValue;
                 DropDownList ddlUnitOfMeasurment = e.Item.FindControl("ddlUnitOfMeasurment") as DropDownList;
                 Detail.UnitOfMeasurment = ddlUnitOfMeasurment.SelectedValue;
+                TextBox txtRemark = e.Item.FindControl("txtRemark") as TextBox;
+                Detail.Remark = txtRemark.Text;
                 DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
                 Detail.Project = _presenter.GetProject(int.Parse(ddlProject.SelectedValue));
                 TextBox txtGrant = e.Item.FindControl("txtGrant") as TextBox;
@@ -539,7 +537,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 Master.ShowMessage(new AppMessage("Purchase Request Detail  Updated successfully.", RMessageType.Info));
                 dgPurchaseRequestDetail.EditItemIndex = -1;
                 BindPurchaseRequestDetails();
-                pnlDetail_ModalPopupExtender.Show();
+                ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
             }
             catch (Exception ex)
             {

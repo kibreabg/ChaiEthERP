@@ -37,8 +37,8 @@
             <div class="widget-body no-padding">
                 <div class="smart-form">
                     <fieldset>
-                        <div class="row">                            
-                           <%-- <section class="col col-6">
+                        <div class="row">
+                            <%-- <section class="col col-6">
                                 <label class="label">Travel Advance Number</label>
                                 <label class="input">
                                     <asp:TextBox ID="txtTravelAdvanceNo" runat="server" ReadOnly="true"></asp:TextBox>
@@ -58,7 +58,7 @@
                                 </label>
                             </section>
                         </div>
-                        <div class="row">                            
+                        <div class="row">
                             <section class="col col-6">
                                 <label class="label">Project</label>
                                 <label class="select">
@@ -110,178 +110,179 @@
                                 </label>
                             </section>
                         </div>
-                        <asp:DataGrid ID="dgTravelAdvanceRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
-                            CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
-                            GridLines="None"
-                            OnCancelCommand="dgTravelAdvanceRequestDetail_CancelCommand" OnDeleteCommand="dgTravelAdvanceRequestDetail_DeleteCommand" OnEditCommand="dgTravelAdvanceRequestDetail_EditCommand"
-                            OnItemCommand="dgTravelAdvanceRequestDetail_ItemCommand" OnItemDataBound="dgTravelAdvanceRequestDetail_ItemDataBound" OnUpdateCommand="dgTravelAdvanceRequestDetail_UpdateCommand"
-                            ShowFooter="True" OnSelectedIndexChanged="dgTravelAdvanceRequestDetail_SelectedIndexChanged">
+                        <div style="overflow-x: auto;">
+                            <asp:DataGrid ID="dgTravelAdvanceRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
+                                CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
+                                GridLines="None"
+                                OnCancelCommand="dgTravelAdvanceRequestDetail_CancelCommand" OnDeleteCommand="dgTravelAdvanceRequestDetail_DeleteCommand" OnEditCommand="dgTravelAdvanceRequestDetail_EditCommand"
+                                OnItemCommand="dgTravelAdvanceRequestDetail_ItemCommand" OnItemDataBound="dgTravelAdvanceRequestDetail_ItemDataBound" OnUpdateCommand="dgTravelAdvanceRequestDetail_UpdateCommand"
+                                ShowFooter="True" OnSelectedIndexChanged="dgTravelAdvanceRequestDetail_SelectedIndexChanged">
 
-                            <Columns>
-                                <asp:TemplateColumn HeaderText="City From">
-                                    <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "CityFrom")%>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <asp:TextBox ID="txtEdtCityFrom" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "CityFrom")%>' Width="118px"></asp:TextBox>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:TextBox ID="txtCityFrom" runat="server" CssClass="form-control" Width="118px"></asp:TextBox>
-                                    </FooterTemplate>
-                                </asp:TemplateColumn>
-                                <asp:TemplateColumn HeaderText="City To">
-                                    <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "CityTo")%>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <asp:TextBox ID="txtEdtCityTo" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "CityTo")%>' Width="118px"></asp:TextBox>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:TextBox ID="txtCityTo" runat="server" CssClass="form-control" Width="118px"></asp:TextBox>
-                                    </FooterTemplate>
-                                </asp:TemplateColumn>
-                                <asp:TemplateColumn HeaderText="Hotel Booked">
-                                    <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "HotelBooked")%>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <asp:RadioButtonList ID="rblEdtHotelBooked" RepeatDirection="Horizontal" runat="server">
-                                            <asp:ListItem Value="Yes">Yes</asp:ListItem>
-                                            <asp:ListItem Value="No">No</asp:ListItem>
-                                        </asp:RadioButtonList>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:RadioButtonList ID="rblHotelBooked" RepeatDirection="Horizontal" runat="server">
-                                            <asp:ListItem Value="Yes">Yes</asp:ListItem>
-                                            <asp:ListItem Value="No">No</asp:ListItem>
-                                        </asp:RadioButtonList>
-                                    </FooterTemplate>
-                                </asp:TemplateColumn>
-                                <asp:TemplateColumn HeaderText="From Date">
-                                    <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "FromDate", "{0:M/d/yyyy}")%>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <asp:TextBox ID="txtEdtFromDate" runat="server" CssClass="form-control datepicker"
-                                            data-dateformat="mm/dd/yy" Text=' <%# DataBinder.Eval(Container.DataItem, "FromDate", "{0:M/d/yyyy}")%>' Width="81px"></asp:TextBox>
-                                        <asp:RequiredFieldValidator
-                                            ID="rfvEdtFromDate" runat="server" ErrorMessage="From Date is required" Display="Dynamic"
-                                            CssClass="validator" ValidationGroup="edit"
-                                            SetFocusOnError="true" ControlToValidate="txtEdtFromDate"></asp:RequiredFieldValidator><br />
-                                        <asp:CompareValidator ID="cvEdtFromToDates" runat="server" ErrorMessage="Less Date"
-                                            ControlToCompare="txtEdtToDate" ControlToValidate="txtEdtFromDate" CssClass="validator"
-                                            ValidationGroup="edit" Type="Date" Operator="LessThanEqual"></asp:CompareValidator>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:TextBox ID="txtFromDate" runat="server" CssClass="form-control datepicker"
-                                            data-dateformat="mm/dd/yy" Width="81px"></asp:TextBox>
-                                        <asp:RequiredFieldValidator
-                                            ID="rfvtxtFromDate" runat="server" ErrorMessage="From Date is required" Display="Dynamic"
-                                            CssClass="validator" ValidationGroup="save"
-                                            SetFocusOnError="true" ControlToValidate="txtFromDate"></asp:RequiredFieldValidator><br />
-                                        <asp:CompareValidator ID="cvFromToDates" runat="server" ErrorMessage="Less Date"
-                                            ControlToCompare="txtToDate" ControlToValidate="txtFromDate" CssClass="validator"
-                                            ValidationGroup="save" Type="Date" Operator="LessThanEqual"></asp:CompareValidator>
-                                    </FooterTemplate>
-                                </asp:TemplateColumn>
-                                <asp:TemplateColumn HeaderText="To Date">
-                                    <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "ToDate", "{0:M/d/yyyy}")%>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <asp:TextBox ID="txtEdtToDate" runat="server" CssClass="form-control datepicker"
-                                            data-dateformat="mm/dd/yy" Text=' <%# DataBinder.Eval(Container.DataItem, "ToDate", "{0:M/d/yyyy}")%>' Width="81px"></asp:TextBox>
-                                        <asp:RequiredFieldValidator
-                                            ID="rfvtxtEdtToDate" runat="server" ErrorMessage="To Date is required" Display="Dynamic"
-                                            CssClass="validator" ValidationGroup="edit"
-                                            SetFocusOnError="true" ControlToValidate="txtEdtToDate"></asp:RequiredFieldValidator>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:TextBox ID="txtToDate" runat="server" CssClass="form-control datepicker"
-                                            data-dateformat="mm/dd/yy" Width="81px"></asp:TextBox>
-                                        <asp:RequiredFieldValidator
-                                            ID="rfvttxtToDate" runat="server" ErrorMessage="To Date is required" Display="Dynamic"
-                                            CssClass="validator" ValidationGroup="save"
-                                            SetFocusOnError="true" ControlToValidate="txtToDate"></asp:RequiredFieldValidator>
-                                    </FooterTemplate>
-                                </asp:TemplateColumn>
-                                <asp:TemplateColumn HeaderText="Mode Of Travel">
-                                    <EditItemTemplate>
-                                        <asp:DropDownList ID="ddlEdtModeOfTravel" runat="server" CssClass="form-control"
-                                            AppendDataBoundItems="True"
-                                            ValidationGroup="3">
-                                            <asp:ListItem Value="">Select Mode Of Travel</asp:ListItem>
-                                            <asp:ListItem Value="Chai Car/Hired Car">Chai Car/Hired Car</asp:ListItem>
-                                            <asp:ListItem Value="Bus">Bus</asp:ListItem>
-                                            <asp:ListItem Value="Air">Air</asp:ListItem>
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RfvStatus" runat="server"
-                                            ControlToValidate="ddlEdtModeOfTravel" ErrorMessage="Mode of Travel is required"
-                                            InitialValue="" SetFocusOnError="True" ValidationGroup="edit" CssClass="validator"></asp:RequiredFieldValidator>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:DropDownList ID="ddlModeOfTravel" runat="server" CssClass="form-control"
-                                            AppendDataBoundItems="True" EnableViewState="true" ValidationGroup="save">
-                                            <asp:ListItem Value="">Select Mode Of Travel</asp:ListItem>
-                                            <asp:ListItem Value="Chai Car/Hired Car">Chai Car/Hired Car</asp:ListItem>
-                                            <asp:ListItem Value="Bus">Bus</asp:ListItem>
-                                            <asp:ListItem Value="Air">Air</asp:ListItem>
+                                <Columns>
+                                    <asp:TemplateColumn HeaderText="City From">
+                                        <ItemTemplate>
+                                            <%# DataBinder.Eval(Container.DataItem, "CityFrom")%>
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:TextBox ID="txtEdtCityFrom" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "CityFrom")%>' Width="118px"></asp:TextBox>
+                                        </EditItemTemplate>
+                                        <FooterTemplate>
+                                            <asp:TextBox ID="txtCityFrom" runat="server" CssClass="form-control" Width="118px"></asp:TextBox>
+                                        </FooterTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="City To">
+                                        <ItemTemplate>
+                                            <%# DataBinder.Eval(Container.DataItem, "CityTo")%>
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:TextBox ID="txtEdtCityTo" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "CityTo")%>' Width="118px"></asp:TextBox>
+                                        </EditItemTemplate>
+                                        <FooterTemplate>
+                                            <asp:TextBox ID="txtCityTo" runat="server" CssClass="form-control" Width="118px"></asp:TextBox>
+                                        </FooterTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="Hotel Booked">
+                                        <ItemTemplate>
+                                            <%# DataBinder.Eval(Container.DataItem, "HotelBooked")%>
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:RadioButtonList ID="rblEdtHotelBooked" RepeatDirection="Horizontal" runat="server">
+                                                <asp:ListItem Value="Yes">Yes</asp:ListItem>
+                                                <asp:ListItem Value="No">No</asp:ListItem>
+                                            </asp:RadioButtonList>
+                                        </EditItemTemplate>
+                                        <FooterTemplate>
+                                            <asp:RadioButtonList ID="rblHotelBooked" RepeatDirection="Horizontal" runat="server">
+                                                <asp:ListItem Value="Yes">Yes</asp:ListItem>
+                                                <asp:ListItem Value="No">No</asp:ListItem>
+                                            </asp:RadioButtonList>
+                                        </FooterTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="From Date">
+                                        <ItemTemplate>
+                                            <%# DataBinder.Eval(Container.DataItem, "FromDate", "{0:M/d/yyyy}")%>
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:TextBox ID="txtEdtFromDate" runat="server" CssClass="form-control datepicker"
+                                                data-dateformat="mm/dd/yy" Text=' <%# DataBinder.Eval(Container.DataItem, "FromDate", "{0:M/d/yyyy}")%>' Width="81px"></asp:TextBox>
+                                            <asp:RequiredFieldValidator
+                                                ID="rfvEdtFromDate" runat="server" ErrorMessage="From Date is required" Display="Dynamic"
+                                                CssClass="validator" ValidationGroup="edit"
+                                                SetFocusOnError="true" ControlToValidate="txtEdtFromDate"></asp:RequiredFieldValidator><br />
+                                            <asp:CompareValidator ID="cvEdtFromToDates" runat="server" ErrorMessage="Less Date"
+                                                ControlToCompare="txtEdtToDate" ControlToValidate="txtEdtFromDate" CssClass="validator"
+                                                ValidationGroup="edit" Type="Date" Operator="LessThanEqual"></asp:CompareValidator>
+                                        </EditItemTemplate>
+                                        <FooterTemplate>
+                                            <asp:TextBox ID="txtFromDate" runat="server" CssClass="form-control datepicker"
+                                                data-dateformat="mm/dd/yy" Width="81px"></asp:TextBox>
+                                            <asp:RequiredFieldValidator
+                                                ID="rfvtxtFromDate" runat="server" ErrorMessage="From Date is required" Display="Dynamic"
+                                                CssClass="validator" ValidationGroup="save"
+                                                SetFocusOnError="true" ControlToValidate="txtFromDate"></asp:RequiredFieldValidator><br />
+                                            <asp:CompareValidator ID="cvFromToDates" runat="server" ErrorMessage="Less Date"
+                                                ControlToCompare="txtToDate" ControlToValidate="txtFromDate" CssClass="validator"
+                                                ValidationGroup="save" Type="Date" Operator="LessThanEqual"></asp:CompareValidator>
+                                        </FooterTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="To Date">
+                                        <ItemTemplate>
+                                            <%# DataBinder.Eval(Container.DataItem, "ToDate", "{0:M/d/yyyy}")%>
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:TextBox ID="txtEdtToDate" runat="server" CssClass="form-control datepicker"
+                                                data-dateformat="mm/dd/yy" Text=' <%# DataBinder.Eval(Container.DataItem, "ToDate", "{0:M/d/yyyy}")%>' Width="81px"></asp:TextBox>
+                                            <asp:RequiredFieldValidator
+                                                ID="rfvtxtEdtToDate" runat="server" ErrorMessage="To Date is required" Display="Dynamic"
+                                                CssClass="validator" ValidationGroup="edit"
+                                                SetFocusOnError="true" ControlToValidate="txtEdtToDate"></asp:RequiredFieldValidator>
+                                        </EditItemTemplate>
+                                        <FooterTemplate>
+                                            <asp:TextBox ID="txtToDate" runat="server" CssClass="form-control datepicker"
+                                                data-dateformat="mm/dd/yy" Width="81px"></asp:TextBox>
+                                            <asp:RequiredFieldValidator
+                                                ID="rfvttxtToDate" runat="server" ErrorMessage="To Date is required" Display="Dynamic"
+                                                CssClass="validator" ValidationGroup="save"
+                                                SetFocusOnError="true" ControlToValidate="txtToDate"></asp:RequiredFieldValidator>
+                                        </FooterTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="Mode Of Travel">
+                                        <EditItemTemplate>
+                                            <asp:DropDownList ID="ddlEdtModeOfTravel" runat="server" CssClass="form-control"
+                                                AppendDataBoundItems="True"
+                                                ValidationGroup="3">
+                                                <asp:ListItem Value="">Select Mode Of Travel</asp:ListItem>
+                                                <asp:ListItem Value="Chai Car/Hired Car">Chai Car/Hired Car</asp:ListItem>
+                                                <asp:ListItem Value="Bus">Bus</asp:ListItem>
+                                                <asp:ListItem Value="Air">Air</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RfvStatus" runat="server"
+                                                ControlToValidate="ddlEdtModeOfTravel" ErrorMessage="Mode of Travel is required"
+                                                InitialValue="" SetFocusOnError="True" ValidationGroup="edit" CssClass="validator"></asp:RequiredFieldValidator>
+                                        </EditItemTemplate>
+                                        <FooterTemplate>
+                                            <asp:DropDownList ID="ddlModeOfTravel" runat="server" CssClass="form-control"
+                                                AppendDataBoundItems="True" EnableViewState="true" ValidationGroup="save">
+                                                <asp:ListItem Value="">Select Mode Of Travel</asp:ListItem>
+                                                <asp:ListItem Value="Chai Car/Hired Car">Chai Car/Hired Car</asp:ListItem>
+                                                <asp:ListItem Value="Bus">Bus</asp:ListItem>
+                                                <asp:ListItem Value="Air">Air</asp:ListItem>
 
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RfvFStatus" runat="server"
-                                            ControlToValidate="ddlModeOfTravel" Display="Dynamic" CssClass="validator"
-                                            ErrorMessage="Mode of Travel is required" InitialValue="" SetFocusOnError="True"
-                                            ValidationGroup="save"></asp:RequiredFieldValidator>
-                                    </FooterTemplate>
-                                    <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "ModeOfTravel")%>
-                                    </ItemTemplate>
-                                </asp:TemplateColumn>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RfvFStatus" runat="server"
+                                                ControlToValidate="ddlModeOfTravel" Display="Dynamic" CssClass="validator"
+                                                ErrorMessage="Mode of Travel is required" InitialValue="" SetFocusOnError="True"
+                                                ValidationGroup="save"></asp:RequiredFieldValidator>
+                                        </FooterTemplate>
+                                        <ItemTemplate>
+                                            <%# DataBinder.Eval(Container.DataItem, "ModeOfTravel")%>
+                                        </ItemTemplate>
+                                    </asp:TemplateColumn>
 
-                                <asp:TemplateColumn HeaderText="Air Fare">
-                                    <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "AirFare")%>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <asp:TextBox ID="txtEdtAirFare" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "AirFare")%>' Width="67px"></asp:TextBox>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:TextBox ID="txtAirFare" runat="server" CssClass="form-control" Width="67px"></asp:TextBox>
-                                    </FooterTemplate>
-                                </asp:TemplateColumn>
-                                <asp:TemplateColumn HeaderText="Actions">
-                                    <EditItemTemplate>
-                                        <asp:LinkButton ID="lnkUpdate" runat="server" CommandName="Update" ValidationGroup="edit" CssClass="btn btn-xs btn-default"><i class="fa fa-save"></i></asp:LinkButton>
-                                        <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default"><i class="fa fa-times"></i></asp:LinkButton>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:LinkButton ID="lnkAddNew" runat="server" CommandName="AddNew" ValidationGroup="save" CssClass="btn btn-sm btn-success"><i class="fa fa-save"></i></asp:LinkButton>
-                                    </FooterTemplate>
-                                    <ItemTemplate>
-                                        <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
-                                        <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default" OnClientClick="javascript:return confirm('Are you sure you want to delete this entry?');"><i class="fa fa-times"></i></asp:LinkButton>
-                                    </ItemTemplate>
-                                </asp:TemplateColumn>
-                                <asp:ButtonColumn ButtonType="PushButton" CommandName="Select" Text="Add Cost"></asp:ButtonColumn>
-                            </Columns>
-                            <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
-                        </asp:DataGrid>
+                                    <asp:TemplateColumn HeaderText="Air Fare">
+                                        <ItemTemplate>
+                                            <%# DataBinder.Eval(Container.DataItem, "AirFare")%>
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:TextBox ID="txtEdtAirFare" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "AirFare")%>' Width="67px"></asp:TextBox>
+                                        </EditItemTemplate>
+                                        <FooterTemplate>
+                                            <asp:TextBox ID="txtAirFare" runat="server" CssClass="form-control" Width="67px"></asp:TextBox>
+                                        </FooterTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="Actions">
+                                        <EditItemTemplate>
+                                            <asp:LinkButton ID="lnkUpdate" runat="server" CommandName="Update" ValidationGroup="edit" CssClass="btn btn-xs btn-default"><i class="fa fa-save"></i></asp:LinkButton>
+                                            <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default"><i class="fa fa-times"></i></asp:LinkButton>
+                                        </EditItemTemplate>
+                                        <FooterTemplate>
+                                            <asp:LinkButton ID="lnkAddNew" runat="server" CommandName="AddNew" ValidationGroup="save" CssClass="btn btn-sm btn-success"><i class="fa fa-save"></i></asp:LinkButton>
+                                        </FooterTemplate>
+                                        <ItemTemplate>
+                                            <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
+                                            <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default" OnClientClick="javascript:return confirm('Are you sure you want to delete this entry?');"><i class="fa fa-times"></i></asp:LinkButton>
+                                        </ItemTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:ButtonColumn ButtonType="PushButton" CommandName="Select" Text="Add Cost"></asp:ButtonColumn>
+                                </Columns>
+                                <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
+                            </asp:DataGrid>
+                        </div>
                     </fieldset>
 
                     <footer>
                         <asp:Button ID="btnSave" ValidationGroup="saveMain" runat="server" Text="Request" OnClick="btnSave_Click" CssClass="btn btn-primary"></asp:Button>
-                        <%--<asp:Button ID="btnSearch" runat="server" Text="Search" CssClass="btn btn-primary" />--%>
-                        <a data-toggle="modal" runat="server" id="searchLink" href="#searchModal" class="btn btn-primary"><i class="fa fa-circle-arrow-up fa-lg"></i>Search</a>
-                        <asp:Button ID="btnDelete" runat="server" CausesValidation="False" CssClass="btn btn-primary"
+                        <a data-toggle="modal" runat="server" id="searchLink" href="#searchModal" class="btn btn-default"><i class="fa fa-circle-arrow-up fa-lg"></i>Search</a>
+                        <asp:Button ID="btnDelete" runat="server" CausesValidation="False" CssClass="btn btn-default"
                             Text="Delete" OnClick="btnDelete_Click" Visible="false"></asp:Button>
                         <cc1:ConfirmButtonExtender ID="btnDelete_ConfirmButtonExtender" runat="server"
                             ConfirmText="Are you sure" Enabled="True" TargetControlID="btnDelete">
                         </cc1:ConfirmButtonExtender>
-                        <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-primary" OnClick="btnCancel_Click" Text="New" />
-                          <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" PostBackUrl="../Default.aspx"></asp:Button>
+                        <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-default" OnClick="btnCancel_Click" Text="New" />
+                        <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-default" PostBackUrl="../Default.aspx"></asp:Button>
                         <asp:Button ID="btnHiddenPopupp" runat="server" />
                         <asp:HiddenField ID="hfDetailId" runat="server" />
-                        <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-primary" Enabled="false" OnClientClick="javascript:Clickheretoprint('divprint')"></asp:Button>
+                        <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-default" Enabled="false" OnClientClick="javascript:Clickheretoprint('divprint')"></asp:Button>
 
                     </footer>
                 </div>
@@ -338,11 +339,11 @@
                                         <RowStyle CssClass="rowstyle" />
                                         <Columns>
                                             <asp:BoundField DataField="TravelAdvanceNo" HeaderText="Travel Advance No" SortExpression="TravelAdvanceNo" />
-                                             <asp:TemplateField HeaderText="Request Date">
-                                            <ItemTemplate>
-                                              <asp:Label ID="lblDate" runat="server" Text='<%# Eval("RequestDate", "{0:dd/MM/yyyy}")%>' ></asp:Label>
-                                            </ItemTemplate>
-                                            </asp:TemplateField> 
+                                            <asp:TemplateField HeaderText="Request Date">
+                                                <ItemTemplate>
+                                                    <asp:Label ID="lblDate" runat="server" Text='<%# Eval("RequestDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
                                             <asp:BoundField DataField="VisitingTeam" HeaderText="Visiting Team" SortExpression="VisitingTeam" />
                                             <asp:BoundField DataField="PurposeOfTravel" HeaderText="Purpose Of Travel" SortExpression="PurposeOfTravel" />
                                             <asp:CommandField ShowSelectButton="True" />
@@ -357,7 +358,7 @@
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -440,13 +441,13 @@
                                         <%# DataBinder.Eval(Container.DataItem, "ExpenseType.ExpenseTypeName")%>
                                     </ItemTemplate>
                                     <EditItemTemplate>
-                                          <asp:DropDownList ID="ddlEdtExpenseType" runat="server" Enabled="true" DataValueField="Id" DataTextField="ExpenseTypeName" AppendDataBoundItems="True">
+                                        <asp:DropDownList ID="ddlEdtExpenseType" runat="server" Enabled="true" DataValueField="Id" DataTextField="ExpenseTypeName" AppendDataBoundItems="True">
                                             <asp:ListItem Value="0">--Select Expense Type--</asp:ListItem>
                                         </asp:DropDownList><i></i>
-                                     
+
                                     </EditItemTemplate>
                                     <FooterTemplate>
-                                         <asp:DropDownList ID="ddlExpenseType" runat="server" Enabled="true" DataValueField="Id" DataTextField="ExpenseTypeName" AppendDataBoundItems="True">
+                                        <asp:DropDownList ID="ddlExpenseType" runat="server" Enabled="true" DataValueField="Id" DataTextField="ExpenseTypeName" AppendDataBoundItems="True">
                                             <asp:ListItem Value="0">--Select Expense Type--</asp:ListItem>
                                         </asp:DropDownList><i></i>
                                     </FooterTemplate>

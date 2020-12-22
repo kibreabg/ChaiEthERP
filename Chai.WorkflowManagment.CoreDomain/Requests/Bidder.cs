@@ -1,4 +1,5 @@
-﻿using Chai.WorkflowManagment.CoreDomain.Setting;
+﻿using Chai.WorkflowManagment.CoreDomain.Approval;
+using Chai.WorkflowManagment.CoreDomain.Setting;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,32 +19,20 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public int Id { get; set; }
         public virtual BidderItemDetail BidderItemDetail { get; set; }
         public string ContactDetails { get; set; }
-        public string LeadTimefromSupplier { get; set; }
        
-        public string SpecialTermsDelivery { get; set; }
         public int Rank { get; set; }
         public virtual Supplier Supplier { get; set; }
         public virtual SupplierType SupplierType { get; set; }
+
+        public string Item { get; set; }
         public int Qty { get; set; }
         public decimal UnitCost { get; set; }
         public decimal TotalCost { get; set; }
-
+        public string ReasonForSelection { get; set; }
+        public string POStatus { get; set; }
+       // public virtual PurchaseOrder PurchaseOrders { get; set; }
         // [NotMapped]
-        /*   public string GetSelectionReason
-           {
-               get
-               {
-                   if (Rank == 1)
-                   {
-                       return BidderItemDetail.ReasonforSelection;
-
-                   }
-                   else
-                   {
-                       return "";
-                   }
-               }
-           }*/
+     
 
         //  public virtual IList<BidderItemDetail> BidderItemDetails { get; set; }
 

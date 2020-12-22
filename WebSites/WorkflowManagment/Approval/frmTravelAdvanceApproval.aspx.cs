@@ -81,7 +81,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         #endregion
         private void BindAccounts()
         {
-            if (_presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestStatuses.Count == _presenter.CurrentTravelAdvanceRequest.CurrentLevel && (_presenter.CurrentUser().EmployeePosition.PositionName == "Finance Officer" || _presenter.GetUser(_presenter.CurrentTravelAdvanceRequest.CurrentApprover).IsAssignedJob == true))
+            if (_presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestStatuses.Count == _presenter.CurrentTravelAdvanceRequest.CurrentLevel && (_presenter.CurrentUser().EmployeePosition.PositionName == "Accountant" || _presenter.GetUser(_presenter.CurrentTravelAdvanceRequest.CurrentApprover).IsAssignedJob == true))
             {
                 lblAccount.Visible = true;
                 lblAccountdd.Visible = true;
@@ -252,6 +252,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         //SendEmailToFinanceOfficers;
                         _presenter.CurrentTravelAdvanceRequest.CurrentApproverPosition = TARS.ApproverPosition;
                     }
+                    else
+                    {
+                        _presenter.CurrentTravelAdvanceRequest.CurrentApproverPosition = 0;
+                    }
                     SendEmail(TARS);
                     _presenter.CurrentTravelAdvanceRequest.CurrentApprover = TARS.Approver;
                     _presenter.CurrentTravelAdvanceRequest.CurrentLevel = TARS.WorkflowLevel;
@@ -375,7 +379,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             BindAccounts();
             txtRejectedReason.Visible = false;
             rfvRejectedReason.Enabled = false;
-            pnlApproval_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
         }
         protected void grvTravelAdvanceRequestList_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
@@ -414,7 +418,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         Master.ShowMessage(new AppMessage("Travel Advance  Approval Rejected", Chai.WorkflowManagment.Enums.RMessageType.Info));
                     btnApprove.Enabled = false;
                     BindSearchTravelAdvanceRequestGrid();
-                    pnlApproval_ModalPopupExtender.Show();
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
                 }
                 PrintTransaction();
             }
@@ -422,10 +426,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
 
             }
-        }
-        protected void btnCancelPopup_Click(object sender, EventArgs e)
-        {
-            pnlApproval_ModalPopupExtender.Hide();
         }
         protected void btnCancelPopup2_Click(object sender, EventArgs e)
         {
@@ -443,7 +443,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 txtRejectedReason.Visible = true;
                 rfvRejectedReason.Enabled = true;
             }
-            pnlApproval_ModalPopupExtender.Show();
+            else
+            {
+                lblRejectedReason.Visible = false;
+                txtRejectedReason.Visible = false;
+                rfvRejectedReason.Enabled = false;
+            }
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
         }
         protected void dgTravelAdvanceRequestDetail_SelectedIndexChanged(object sender, EventArgs e)
         {

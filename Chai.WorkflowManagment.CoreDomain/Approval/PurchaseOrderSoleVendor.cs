@@ -3,12 +3,9 @@ using Chai.WorkflowManagment.CoreDomain.Setting;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
 
 namespace Chai.WorkflowManagment.CoreDomain.Approval
 {
-    [Table("PurchaseOrderSoleVendors")]
     public partial class PurchaseOrderSoleVendor : IEntity
     {
 
@@ -18,8 +15,6 @@ namespace Chai.WorkflowManagment.CoreDomain.Approval
         }
 
         public int Id { get; set; }
-        [Required]
-        public virtual SoleVendorRequest SoleVendorRequest { get; set; }
         public DateTime PODate { get; set; }        
         public string PoNumber { get; set; }
         public string Billto { get; set; }
@@ -28,7 +23,12 @@ namespace Chai.WorkflowManagment.CoreDomain.Approval
         public string PaymentTerms { get; set; }
         public string Status { get; set; }
         public decimal TotalPrice { get; set; }
-        public virtual Supplier Supplier { get; set; }
+        public DateTime DeliveryDate { get; set; }
+        public string DeliveryLocation { get; set; }
+        public string DeliveryBy { get; set; }
+        [Required]
+        public virtual SoleVendorRequest SoleVendorRequest { get; set; }
+        public virtual SoleVendorSupplier SoleVendorSupplier { get; set; }
         public virtual IList<PurchaseOrderSoleVendorDetail> PurchaseOrderSoleVendorDetails { get; set; }
 
         #region PurchaseOrderSoleVendorDetail

@@ -111,65 +111,56 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;</button>
+                    <h4 class="modal-title">Process Payment Request</h4>
                 </div>
-                <div class="modal-body no-padding">
-                    <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
-                        <header>
-                            <span class="widget-icon"><i class="fa fa-edit"></i></span>
-                            <h2>Process Payment Request</h2>
-                        </header>
-                        <div>
-                            <div class="jarviswidget-editbox"></div>
-                            <div class="widget-body no-padding">
-                                <div class="smart-form">
-                                    <fieldset>
-
-                                        <div class="row">
-                                            <section class="col col-6">
-                                                <asp:Label ID="lblAccount" Visible="false" runat="server" CssClass="label">Payment Type</asp:Label>
-                                                <asp:Label ID="lblAccountdd" Visible="false" runat="server" CssClass="select">
-                                                    <asp:DropDownList ID="ddlAccount" runat="server">
-                                                        <asp:ListItem Value=" ">Select Payment Type</asp:ListItem>
-                                                        <asp:ListItem>Petty Cash</asp:ListItem>
-                                                        <asp:ListItem>Bank Payment</asp:ListItem>
-                                                        <asp:ListItem>Mobile Money</asp:ListItem>
-                                                    </asp:DropDownList><i></i>
-                                                </asp:Label>
-                                            </section>
-                                            <section class="col col-6">
-                                                <asp:Label ID="lblApprovalStatus" runat="server" Text="Approval Status" CssClass="label"></asp:Label>
-                                                <label class="select">
-                                                    <asp:DropDownList ID="ddlApprovalStatus" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlApprovalStatus_SelectedIndexChanged">
-                                                    </asp:DropDownList><i></i>
-                                                    <asp:RequiredFieldValidator ID="RfvApprovalStatus" CssClass="validator" runat="server" ValidationGroup="save" ErrorMessage="Approval Status Required" InitialValue="0" ControlToValidate="ddlApprovalStatus"></asp:RequiredFieldValidator>
-                                                </label>
-                                            </section>
-                                        </div>
-                                        <div class="row">
-                                            <section class="col col-12">
-                                                <asp:Label ID="lblRejectedReason" runat="server" Text="Rejected Reason" Visible="false" CssClass="label"></asp:Label>
-                                                <label class="input">
-                                                    <asp:TextBox ID="txtRejectedReason" Visible="false" runat="server"></asp:TextBox>
-                                                    <asp:RequiredFieldValidator ID="rfvRejectedReason" runat="server" Enabled="false" CssClass="validator" ValidationGroup="save" ErrorMessage="Must Enter Rejection Reason" ControlToValidate="txtRejectedReason"></asp:RequiredFieldValidator>
-                                                </label>
-                                            </section>
-                                        </div>
-
-                                    </fieldset>
-                                    <footer>
-                                        <asp:Button ID="btnApprove" runat="server" ValidationGroup="save" Text="Save" OnClick="btnApprove_Click" Enabled="false" CssClass="btn btn-primary"></asp:Button>
-                                        <asp:Button ID="btnCancelPopup" runat="server" Text="Close" CssClass="btn btn-primary"></asp:Button>
-                                        <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-primary" OnClientClick="javascript:Clickheretoprint('divprint');return false;" Enabled="False"></asp:Button>
-                                        <asp:Button ID="btnBankPayment" runat="server" CssClass="btn btn-primary" OnClick="btnBankPayment_Click" Text="Bank Payment" Visible="False" />
-                                    </footer>
+                <div class="modal-body">
+                    <div class="jarviswidget-editbox"></div>
+                    <div class="widget-body no-padding">
+                        <div class="smart-form">
+                            <fieldset>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <asp:Label ID="lblAccount" Visible="false" runat="server" CssClass="label">Payment Type</asp:Label>
+                                        <asp:Label ID="lblAccountdd" Visible="false" runat="server" CssClass="select">
+                                            <asp:DropDownList ID="ddlAccount" runat="server">
+                                                <asp:ListItem Value=" ">Select Payment Type</asp:ListItem>
+                                                <asp:ListItem>Petty Cash</asp:ListItem>
+                                                <asp:ListItem>Bank Payment</asp:ListItem>
+                                            </asp:DropDownList><i></i>
+                                        </asp:Label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <asp:Label ID="lblApprovalStatus" runat="server" Text="Approval Status" CssClass="label"></asp:Label>
+                                        <label class="select">
+                                            <asp:DropDownList ID="ddlApprovalStatus" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlApprovalStatus_SelectedIndexChanged">
+                                            </asp:DropDownList><i></i>
+                                            <asp:RequiredFieldValidator ID="RfvApprovalStatus" CssClass="validator" runat="server" ValidationGroup="save" ErrorMessage="Approval Status Required" InitialValue="0" ControlToValidate="ddlApprovalStatus"></asp:RequiredFieldValidator>
+                                        </label>
+                                    </section>
                                 </div>
-                            </div>
+                                <div class="row">
+                                    <section class="col col-12">
+                                        <asp:Label ID="lblRejectedReason" runat="server" Text="Rejected Reason" Visible="false" CssClass="label"></asp:Label>
+                                        <label class="input">
+                                            <asp:TextBox ID="txtRejectedReason" Visible="false" runat="server"></asp:TextBox>
+                                            <asp:RequiredFieldValidator ID="rfvRejectedReason" runat="server" Enabled="false" CssClass="validator" ValidationGroup="save" ErrorMessage="Must Enter Rejection Reason" ControlToValidate="txtRejectedReason"></asp:RequiredFieldValidator>
+                                        </label>
+                                    </section>
+                                </div>
+                            </fieldset>
+                            <footer>
+                                <asp:Button ID="btnApprove" runat="server" ValidationGroup="save" Text="Save" OnClick="btnApprove_Click" Enabled="false" CssClass="btn btn-primary"></asp:Button>
+                                <asp:Button ID="btnCancelPopup" runat="server" Text="Close" CssClass="btn btn-default"></asp:Button>
+                                <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-default" OnClientClick="javascript:Clickheretoprint('divprint');return false;" Enabled="False"></asp:Button>
+                                <asp:Button ID="btnBankPayment" runat="server" CssClass="btn btn-default" OnClick="btnBankPayment_Click" Text="Bank Payment" Visible="False" />
+                            </footer>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- /.modal-content -->
     </asp:Panel>
     <asp:ModalPopupExtender runat="server" BackgroundCssClass="modalBackground"
         Enabled="True" TargetControlID="btnPop" PopupControlID="pnlApproval" CancelControlID="btnCancelPopup"
@@ -381,6 +372,18 @@
                                                         <asp:TextBox ID="txtEdtAmount" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "Amount")%>'></asp:TextBox>
                                                     </EditItemTemplate>
                                                 </asp:TemplateColumn>
+                                                <asp:TemplateColumn HeaderText="Program">
+                                                    <ItemTemplate>
+                                                        <%# DataBinder.Eval(Container.DataItem, "CashPaymentRequest.Program.ProgramName")%>
+                                                    </ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <asp:DropDownList ID="ddlEdtProgram" CssClass="form-control" runat="server" AutoPostBack="true" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlEdtProgram_SelectedIndexChanged">
+                                                            <asp:ListItem Value="0">Select Program</asp:ListItem>
+                                                        </asp:DropDownList>
+                                                        <i></i>
+                                                        <asp:RequiredFieldValidator ID="rfvddlEdtProgram" runat="server" ControlToValidate="ddlEdtProgram" CssClass="validator" Display="Dynamic" ErrorMessage="Program must be selected" InitialValue="0" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                                    </EditItemTemplate>
+                                                </asp:TemplateColumn>
                                                 <asp:TemplateColumn HeaderText="Project ID">
                                                     <ItemTemplate>
                                                         <%# DataBinder.Eval(Container.DataItem, "Project.ProjectCode")%>
@@ -403,7 +406,7 @@
                                                         </asp:DropDownList>
                                                         <asp:RequiredFieldValidator ID="RfvGrant" runat="server" ControlToValidate="ddlEdtGrant" ErrorMessage="Grant is required" InitialValue="0" SetFocusOnError="True" ValidationGroup="edit"></asp:RequiredFieldValidator>
                                                     </EditItemTemplate>
-                                                </asp:TemplateColumn>                                                
+                                                </asp:TemplateColumn>
                                                 <asp:TemplateColumn HeaderText="Actions">
                                                     <EditItemTemplate>
                                                         <asp:LinkButton ID="lnkUpdate" runat="server" CausesValidation="true" CommandName="Update" CssClass="btn btn-xs btn-default" ValidationGroup="edit"><i class="fa fa-save"></i></asp:LinkButton>

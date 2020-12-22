@@ -18,37 +18,45 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
     {
         private PurchaseOrderPresenter _presenter;
         private BidAnalysisRequest _bidanalysisrequest;
-      
+        BidAnalysisRequest bid;
+        private int reqid;
+        decimal tot = 0;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!this.IsPostBack)
             {
+                Session["BAR"] = _presenter.CurrentBidAnalysisRequest.Id;
+              
                 this._presenter.OnViewInitialized();
-               
-                    if (_presenter.CurrentBidAnalysisRequest.PurchaseOrders == null)
-                    {
-                        _presenter.CurrentBidAnalysisRequest.PurchaseOrders = new PurchaseOrder();
+                if (_presenter.CurrentBidAnalysisRequest.PurchaseOrders == null)
+                {
+                    _presenter.CurrentBidAnalysisRequest.PurchaseOrders = new PurchaseOrder();
+                }
 
-                    }
-                
-                BindPurchaseOrder();
+
+                //  PopPurchaseRequestForPO();
+                 BindPurchaseOrder();
+                BindPOforBid();
                 btnPrintPurchaseForm.Enabled = true;
-                btnPrintPurchaseOrder.Enabled = true;
-                //BindRepeater();  
+              
+               //  PrintTransaction();
+                  
+               // BindRepeater();  
             }
             this._presenter.OnViewLoaded();
-           
-                if (_presenter.CurrentBidAnalysisRequest.PurchaseOrders != null)
+            
+            // BindPurchaseOrder();
+            if (_presenter.CurrentBidAnalysisRequest.PurchaseOrders != null)
+            {
+                if (_presenter.CurrentBidAnalysisRequest.PurchaseOrders.Id != 0)
                 {
-                    if (_presenter.CurrentBidAnalysisRequest.PurchaseOrders.Id != 0)
-                    {
-                        PrintTransaction();
-                        BindRepeater();
-                    }
-               
+                    PrintTransaction();
+                 
+
+                }
+            }
            
 
-            }
             //btnPrintworksheet.Attributes.Add("onclick", "javascript:Clickheretoprint('divprint'); return false;");
             //BindJS();
         }
@@ -99,17 +107,31 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         public int BidAnalysisRequestId
         {
+
             get
             {
+               
                 if (Convert.ToInt32(Request.QueryString["BidAnalysisRequestId"]) != 0)
                 {
                     return Convert.ToInt32(Request.QueryString["BidAnalysisRequestId"]);
                 }
-                return 0;
+                else if (Convert.ToInt32(Session["ReqID"]) != 0)
+                {
+                    return Convert.ToInt32(Session["ReqID"]);
+                }
 
-
-
+                else
+                {
+                    return 0;
+                }
             }
+            set
+            {
+                reqid = value;
+            }
+
+
+           
         }
      
         public string RequestType
@@ -126,109 +148,87 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             }
         }
-        private void BindRepeater()
-        {
-           
-
-                Repeater1.DataSource = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PurchaseOrderDetails;
-                Repeater1.DataBind();
-
-                Label lblPONumberP = Repeater1.Controls[0].Controls[0].FindControl("lblPONumberP") as Label;
-                lblPONumberP.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PoNumber;
-                Label lblRequesterP = Repeater1.Controls[0].Controls[0].FindControl("lblRequesterP") as Label;
-                lblRequesterP.Text = _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName;
-                Label lblDateP = Repeater1.Controls[0].Controls[0].FindControl("lblDateP") as Label;
-                lblDateP.Text = _presenter.CurrentBidAnalysisRequest.RequestDate.ToString();
-                if (_presenter.CurrentBidAnalysisRequest.PurchaseOrders.Supplier != null)
-                {
-                    Label lblSupplierName = Repeater1.Controls[0].Controls[0].FindControl("lblSupplierName") as Label;
-                    lblSupplierName.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.Supplier.SupplierName;
-                    Label lblSupplierAddress = Repeater1.Controls[0].Controls[0].FindControl("lblSupplierAddress") as Label;
-                    lblSupplierAddress.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.Supplier.SupplierAddress;
-                    Label lblSupplierContactP = Repeater1.Controls[0].Controls[0].FindControl("lblSupplierContactP") as Label;
-                    lblSupplierContactP.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.Supplier.SupplierContact;
-                }
-                Label lblBillToP = Repeater1.Controls[0].Controls[0].FindControl("lblBillToP") as Label;
-                lblBillToP.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.Billto;
-                Label lblShipTo = Repeater1.Controls[0].Controls[0].FindControl("lblShipTo") as Label;
-                lblShipTo.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.ShipTo;
-                Label lblPaymentTermsP = Repeater1.Controls[0].Controls[0].FindControl("lblPaymentTermsP") as Label;
-                lblPaymentTermsP.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PaymentTerms;
-                Label lblDeliveryFeesP = Repeater1.Controls[Repeater1.Controls.Count - 1].FindControl("lblDeliveryFeesP") as Label;
-                lblDeliveryFeesP.Text = Convert.ToString(_presenter.CurrentBidAnalysisRequest.PurchaseOrders.DeliveryFees);
-                Label lblItemTotalP = Repeater1.Controls[Repeater1.Controls.Count - 1].FindControl("lblTotalP") as Label;
-                Label lblVatP = Repeater1.Controls[Repeater1.Controls.Count - 1].FindControl("lblVatP") as Label;
-               
-                Label lblTotalP = Repeater1.Controls[Repeater1.Controls.Count - 1].FindControl("lblTotalP") as Label;
-                foreach (Bidder detail in _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders)
-                {
-                    PurchaseOrderDetail POD = new PurchaseOrderDetail();
-                    POD.ItemAccount = _presenter.GetItemAccount(detail.BidderItemDetail.ItemAccount.Id);
-                    POD.Qty = detail.BidderItemDetail.Qty;
-                    POD.UnitCost = detail.BidderItemDetail.UnitCost;
-                    POD.TotalCost = detail.BidderItemDetail.TotalCost;
-                    _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PurchaseOrderDetails.Add(POD);
-               
-                   lblItemTotalP.Text = ((lblItemTotalP.Text != "" ? Convert.ToDecimal(lblItemTotalP.Text) : 0) + POD.TotalCost).ToString();
-                }
-
-                lblTotalP.Text = Convert.ToString((!String.IsNullOrEmpty(lblItemTotalP.Text) ? Convert.ToDecimal(lblItemTotalP.Text) : 0) + (!String.IsNullOrEmpty(lblVatP.Text) ? Convert.ToDecimal(lblVatP.Text) : 0) + (!String.IsNullOrEmpty(lblDeliveryFeesP.Text) ? Convert.ToDecimal(lblDeliveryFeesP.Text) : 0));
-                Label lblAuthorizedBy = Repeater1.Controls[Repeater1.Controls.Count - 1].FindControl("lblAuthorizedByP") as Label;
-                foreach (BidAnalysisRequestStatus detail in _presenter.CurrentBidAnalysisRequest.BidAnalysisRequestStatuses)
-                {
-                    if (detail.ApprovalStatus == ApprovalStatus.Authorized.ToString())
-                    {
-                        lblAuthorizedBy.Text = _presenter.GetUser(detail.Approver).FullName;
-                    }
-                }
-            //lblAuthorizedBy.
-        }
+      
         private void AutoNumber()
         {
-            txtPONo.Text = "PO-" + (_presenter.GetLastPurchaseOrderId() + 1);
+            txtPONo.Text = "POBA-" + (_presenter.GetLastPurchaseOrderId() + 1);
         }
+
+        //private void PopPurchaseRequestForPO()
+        //{
+        //    ddlPurchaseReqForPO.Items.Clear();
+        //    ListItem lst = new ListItem();
+        //    lst.Text = " Select Request No ";
+        //    lst.Value = "0";
+        //    ddlPurchaseReqForPO.Items.Add(lst);
+        //    ddlPurchaseReqForPO.DataSource = _presenter.GetPurchaseRequestListInProgressForPO();
+        //    ddlPurchaseReqForPO.DataBind();
+        //}
         private void BindPurchaseOrder()
         {
             this._presenter.OnViewLoaded();
-            txtDate.Text = DateTime.Today.ToString();
-
-
-
-            txtRequester.Text = _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName;
-                if (_presenter.CurrentBidAnalysisRequest != null)
-                {
-                    int bider = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Rank;
-
-                    if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails.Count != 0 && _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Rank !=1)
+                     
+                    if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails != null)
                     {
-                    txtSupplierName.Text = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Supplier.SupplierName;                   
-                    txtSupplierAddress.Text = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Supplier.SupplierAddress;
-                    txtSupplierContact.Text = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Supplier.SupplierContact;
+
+
+
+                        foreach (GridViewRow item in grvBidforPO.Rows)
+                        {
+                            int BId = (int)grvBidforPO.DataKeys[item.RowIndex].Value;
+                            Session["BAR"] = BId;
+                            // check row is datarow
+                            if (item.RowType == DataControlRowType.DataRow)
+                            {
+                                CheckBox chk = (CheckBox)item.FindControl("chkSelect");
+                                if (chk.Checked)
+                                {
+                                    foreach (Bidder detail in _presenter.CurrentBidAnalysisRequest.GetBidderbyRank())
+                                    {
+                                if (detail.Id == BId && detail.Rank == 1 && chk.Checked)
+                                {
+                                    PurchaseOrderDetail POD = new PurchaseOrderDetail();
+                                    POD.ItemAccount = _presenter.GetItemAccount(detail.BidderItemDetail.ItemAccount.Id);
+                                    POD.Qty = detail.Qty;
+                                    POD.UnitCost = detail.UnitCost;
+                                    POD.TotalCost = detail.TotalCost;
+                                    POD.Rank = detail.Rank;
+                                    POD.Vat = Convert.ToDecimal((POD.TotalCost * 15) / 100);
+                                   // _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PurchaseOrderDetails.Add(POD);
+
+                                    txtPONo.Text = "PO-" + (_presenter.GetLastPurchaseOrderId() + 1).ToString();
+                                    txtRequester.Text = _presenter.CurrentUser().FirstName + " " + _presenter.CurrentUser().LastName;
+                                    txtDate.Text = DateTime.Today.Date.ToShortDateString();
+                                    txtSupplierName.Text = detail.Supplier.SupplierNameType;
+                                    txtSupplierAddress.Text = detail.Supplier.SupplierAddress;
+                                    //detail.POStatus = "Completed";
+                                }
+                               }
+                                }
+                            
+                       
                     }
+
+
                 }
+            }
+        }
 
-                if (_presenter.CurrentBidAnalysisRequest.PurchaseOrders != null)
+        private void BindPOforBid()
+        {
+            int id = Convert.ToInt32(Session["BAR"]);
+
+            foreach(Bidder detail in _presenter.CurrentBidAnalysisRequest.GetBidderbyRankBIDID(id))
+            {
+                if (detail.POStatus == "InProgress")
                 {
-                    if (_presenter.CurrentBidAnalysisRequest.PurchaseOrders.Id > 0)
-                    {
-                        txtPONo.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PoNumber;
-                        txtDate.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PODate.ToString();
-                        txtShipTo.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.ShipTo;
-                        txtBillto.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.Billto;
-                        txtDeliveeryFees.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.DeliveryFees.ToString();
-                        txtPaymentTerms.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PaymentTerms;
-                        btnPrintPurchaseOrder.Enabled = true;
-                        btnPrintPurchaseForm.Enabled = true;
-                    }
-                    else
-                    {
-                        txtDate.Text = DateTime.Today.ToString();
-                        AutoNumber();
-                    }
+                    grvBidforPO.DataSource = _presenter.CurrentBidAnalysisRequest.GetBidderbyRankBIDID(id);
+                    //  grvDetails.DataSource = _presenter.ListPurchaseReqInProgress();
+                    
+                    grvBidforPO.DataBind();
                 }
+            }
 
-                BindPODetail();
-            
 
         }
         private void SavePurchaseOrder()
@@ -236,27 +236,33 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             
             try
             {
-
+                
                 _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PoNumber = txtPONo.Text;
                 _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PODate = Convert.ToDateTime(txtDate.Text);
                 _presenter.CurrentBidAnalysisRequest.PurchaseOrders.Billto = txtBillto.Text;
                 _presenter.CurrentBidAnalysisRequest.PurchaseOrders.ShipTo = txtShipTo.Text;
                 _presenter.CurrentBidAnalysisRequest.PurchaseOrders.DeliveryFees = Convert.ToDecimal(txtDeliveeryFees.Text);
                 _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PaymentTerms = txtPaymentTerms.Text;
-                _presenter.CurrentBidAnalysisRequest.PurchaseOrders.BidAnalysisRequest = _presenter.CurrentBidAnalysisRequest;
-                if (_presenter.CurrentBidAnalysisRequest != null)
-                {
-                    if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Rank == 1)
-                    {
-                        _presenter.CurrentBidAnalysisRequest.PurchaseOrders.Supplier = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Supplier;
-                    }
-                }
+                _presenter.CurrentBidAnalysisRequest.PurchaseOrders.TotalPrice = 0;
+                _presenter.CurrentBidAnalysisRequest.PurchaseOrders.DeliveryDate = Convert.ToDateTime(txtDeliveryDate.Text);
+                _presenter.CurrentBidAnalysisRequest.PurchaseOrders.DeliveryLocation = txtDelLoc.Text;
+                _presenter.CurrentBidAnalysisRequest.PurchaseOrders.DeliveryBy = txtDeliveryBy.Text;
+                _presenter.CurrentBidAnalysisRequest.PurchaseOrders.Status = "Completed";
+               // _presenter.CurrentBidAnalysisRequest.PurchaseOrders.BidAnalysisRequest = _presenter.CurrentBidAnalysisRequest;
+                //if (_presenter.CurrentBidAnalysisRequest != null)
+                //{
+                //    if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Rank == 1)
+                //    {
+                //        _presenter.CurrentBidAnalysisRequest.PurchaseOrders.Supplier = txtSupplierName;
+                //    }
+                //}
 
+                List<int> checkedBidItemDetailIds = (List<int>)Session["checkedBidItemDetailIds"];
                 AddPurchasingItem();
 
-                
+
                 //_presenter.CurrentBidAnalysisRequest.PurchaseOrders.Status = "Completed";       
-                Master.ShowMessage(new AppMessage("Purchase Order Successfully Approved", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Purchase Order Successfully Produced", Chai.WorkflowManagment.Enums.RMessageType.Info));
             }
             catch (Exception ex)
             {
@@ -272,52 +278,79 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         private void BindPODetail()
         {
 
-            dgPODetail.DataSource = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders;
-            dgPODetail.DataBind();
+            foreach (BidderItemDetail BID in _presenter.CurrentBidAnalysisRequest.BidderItemDetails)
+            {
+                if (BID.GetBidderbyRank() != null)
+                {
+                    dgPODetail.DataSource = BID.Bidders;
+                    dgPODetail.DataBind();
+                }
+            }
 
         }
-       
+
 
         #region PurchaseOrderDetail
         private void AddPurchasingItem()
         {
-            if (_presenter.CurrentBidAnalysisRequest.PurchaseOrders.Id <= 0)
-            {
+            
 
-                if (_presenter.CurrentBidAnalysisRequest != null && _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Rank == 1)
+                if (_presenter.CurrentBidAnalysisRequest != null)
                 {
 
-                    foreach (BidderItemDetail detail in _presenter.CurrentBidAnalysisRequest.BidderItemDetails)
-                    {
-                        PurchaseOrderDetail POD = new PurchaseOrderDetail();
-                        POD.ItemAccount = _presenter.GetItemAccount(detail.ItemAccount.Id);
-                        POD.Qty = detail.Qty;
-                        POD.UnitCost = detail.UnitCost;
-                        POD.TotalCost = detail.TotalCost;
-                        _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PurchaseOrderDetails.Add(POD);
-                    }
-                    
-                }
-                else
+
+                foreach (PurchaseOrderDetail det in _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PurchaseOrderDetails)
                 {
-                    foreach (BidAnalysisRequestDetail PR in _presenter.CurrentBidAnalysisRequest.BidAnalysisRequestDetails)
+                    det.Status = "Closed";
+                }
+
+
+                    foreach (GridViewRow item in grvBidforPO.Rows)
                     {
-                        PurchaseOrderDetail POD = new PurchaseOrderDetail();
-                        POD.ItemAccount = _presenter.GetItemAccount(PR.ItemAccount.Id);
-                        POD.Qty = PR.Qty;
-                        POD.UnitCost = PR.Priceperunit;
-                        POD.TotalCost = PR.EstimatedCost;
-                        _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PurchaseOrderDetails.Add(POD);
+                        int BId = (int)grvBidforPO.DataKeys[item.RowIndex].Value;
+                        Session["BAR"] = BId;
+                        // check row is datarow
+                        if (item.RowType == DataControlRowType.DataRow)
+                        {
+                        foreach (Bidder detail in _presenter.CurrentBidAnalysisRequest.GetBidderbyRank())
+                        {
+                            CheckBox chk = (CheckBox)item.FindControl("chkSelect");
+                            if (chk.Checked && BId==detail.Id )
+                            {
+                              
+
+                                
+                                    if (detail.POStatus != "Completed" && chk.Checked)
+                                {
+                                    PurchaseOrderDetail POD = new PurchaseOrderDetail();
+                                    decimal x = detail.TotalCost * 15 / 100;
+                                    POD.ItemAccount = _presenter.GetItemAccount(detail.BidderItemDetail.ItemAccount.Id);
+                                    POD.ItemDescription = detail.Item;
+                                    POD.Vat = x;
+                                    POD.Qty = detail.Qty;
+                                    POD.UnitCost = detail.UnitCost;
+                                    POD.TotalCost = detail.TotalCost;
+                                    POD.Bidder = _presenter.GetBidderbyId(detail.Id);
+                                    
+                                    POD.Rank = detail.Rank;
+                                    POD.Supplier= detail.Supplier;
+                                    POD.Status = "Open";
+                                  
+                                    _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PurchaseOrderDetails.Add(POD);
+                                }
+                                }
+                            }
+                        }
 
                     }
-                }
+
+                    //BindPODetail();
+              
             }
-
-            //BindPODetail();
         }
 
 
-       
+
         #endregion
         protected void btnRequest_Click(object sender, EventArgs e)
         {
@@ -326,12 +359,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     SavePurchaseOrder();
                     _presenter.SaveOrUpdateBidAnalysisRequest(_presenter.CurrentBidAnalysisRequest);
-                    BindRepeater();
+                   // BindRepeater();
                     PrintTransaction();
-                    btnPrintPurchaseOrder.Enabled = true;
+                  
                     btnPrintPurchaseForm.Enabled = true;
-                    // Response.Redirect(String.Format("frmPurchaseApproval.aspx?PurchaseRequestId={0}&PnlStatus={1}", _presenter.CurrentBidAnalysisRequest.Id, "Enabled"));
-                }
+                btnRequest.Enabled = false;
+                Master.ShowMessage(new AppMessage("Successfully did a Purchase Order, Reference No - <b>'" + _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PoNumber + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                // Response.Redirect(String.Format("frmPurchaseApproval.aspx?PurchaseRequestId={0}&PnlStatus={1}", _presenter.CurrentBidAnalysisRequest.Id, "Enabled"));
+            }
                
             catch (Exception ex)
             {
@@ -353,34 +388,79 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void PrintTransaction()
         {
-            
-                lblRequestNoResult.Text = _presenter.CurrentBidAnalysisRequest.RequestNo;
-                lblRequesterResult.Text = _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName;
-                lblRequestedDateResult.Text = _presenter.CurrentBidAnalysisRequest.RequestDate.ToString();
-                //    lblDeliverToResult.Text = _presenter.CurrentBidAnalysisRequest..DeliverTo;
-                lblPurchaseOrderNo.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PoNumber;
-                //  lblDeliveryDateresult.Text = _presenter.CurrentBidAnalysisRequest..Requireddateofdelivery.ToString();
-             //   lblPurposeResult.Text = _presenter.CurrentBidAnalysisRequest.Neededfor;
-                lblBillToResult.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.Billto;
-                lblShipToResult.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.ShipTo;
-                lblPaymentTerms.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PaymentTerms;
-                lblDeliveryFeesResult.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.DeliveryFees.ToString();
-            
-                lblSuggestedSupplierResult.Text = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Supplier.SupplierName;
-                if (_presenter.CurrentBidAnalysisRequest != null)
+            if (_presenter.CurrentBidAnalysisRequest != null)
+            {
+                lblPOCreatedDate.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PODate.ToString();
+            lblPurchaseOrderNo.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PoNumber;
+            lblBillToResult.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.Billto;
+            lblShipTo.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.ShipTo;
+            lblPaymentTerms.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PaymentTerms;
+            lblDeliveryFees.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.DeliveryFees.ToString();
+            lblDeliverLocation.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.DeliveryLocation;
+            lblDeliveryDate.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.DeliveryDate.ToString();
+            lblDeliveryBy.Text = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.DeliveryBy;
+              
+                List<int> checkedBidItemDetailIds = new List<int>();
+                Session["checkedBidItemDetailIds"] = checkedBidItemDetailIds;
+
+                //if (_presenter.CurrentBidAnalysisRequest != null && _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Rank == 1)
+                //{
+                //    lblItemResult.Text = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].ItemDescription;
+                //}
+                //lblDeliveryDateresult.Text = _presenter.CurrentBidAnalysisRequest.PurchaseRequest.Requireddateofdelivery.ToShortDateString();
+                //    lblSuggestedSupplierResult.Text = _presenter.CurrentBidAnalysisRequest.BidderItemDetails[0].Bidders[0].Supplier.SupplierName;
+                foreach (GridViewRow item in grvBidforPO.Rows)
                 {
-                    lblReasonforSelectionResult.Text = _presenter.CurrentBidAnalysisRequest.ReasonforSelection;
-                    lblSelectedbyResult.Text = _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName;
+                    int bidDetailId = (int)grvBidforPO.DataKeys[item.RowIndex].Value;
 
-                    grvDetails.DataSource = _presenter.CurrentBidAnalysisRequest.GetAllBidders();
-                    grvDetails.DataBind();
+                    CheckBox chk = (CheckBox)item.FindControl("chkSelect");
+                  
+                     
 
+                        foreach (Bidder detail in _presenter.CurrentBidAnalysisRequest.GetBidderbyRank())
+                        {
+                        if (chk.Checked && bidDetailId == detail.Id)
+                        {
+                            if ((detail.Supplier.Id == _presenter.CurrentBidAnalysisRequest.GetBidderbySelectedItem(bidDetailId).Supplier.Id) && (chk.Checked) && (detail.Id == bidDetailId))
+
+                            {
+                                //lblSelectedbyResult.Text = _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName;
+                                //dgPODetail.DataSource = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.PurchaseOrderDetails;
+                                //dgPODetail.DataBind();
+
+
+                                lblSupp.Text = _presenter.CurrentBidAnalysisRequest.GetBidderbySelectedItem(bidDetailId).Supplier.SupplierName;
+                            }
+                        }
+                      }
+
+                   
+                  
                     
                 }
-                grvStatuses.DataSource = _presenter.CurrentBidAnalysisRequest.BidAnalysisRequestStatuses;
-                grvStatuses.DataBind();
+                foreach (PurchaseOrderDetail pod in _presenter.CurrentBidAnalysisRequest.PurchaseOrders.GetPurchaseOrderDetailByStatus())
+                {
+
+                    if (_presenter.CurrentBidAnalysisRequest.PurchaseOrders.PurchaseOrderDetails.Count > 0)
+                    {
+                        lblTotCost.Text = "";
+                        decimal delfee = Convert.ToDecimal(lblDeliveryFees.Text);
+                        tot = tot + pod.TotalCost;
+                        decimal vat = tot * Convert.ToDecimal(0.15);
+                        lblTotCost.Text = Math.Round(Convert.ToDecimal(delfee + tot + vat), 2).ToString();
+                      
+                        //grvDetails.DataSource = _presenter.CurrentBidAnalysisRequest.GetBidderbySelectedItem(bidDetailId);
+
+                    }
+                }
+
+                grvDetails.DataSource = _presenter.CurrentBidAnalysisRequest.PurchaseOrders.GetPurchaseOrderDetailByStatus();
+                grvDetails.DataBind();
+            }
+            }
+               
            
-        }
+        
         
         protected void grvStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
         {
@@ -393,6 +473,119 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
             }
            
+        }
+
+        protected void ddlPurchaseReqForPO_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+      
+           
+              
+        protected void btnCreatePO_Click(object sender, EventArgs e)
+        {
+
+            string x;
+            string y;
+
+
+            try
+            {
+                _presenter.OnViewLoaded();
+                //_presenter.CurrentBidAnalysisRequest.PurchaseOrders.RemovePurchaseOrderAll();
+                
+                btnRequest.Visible = true;
+                pnlInfo.Visible = false;
+                if (_presenter.CurrentBidAnalysisRequest.BidderItemDetails != null)
+                {
+                        List<int> checkedBidItemDetailIds = new List<int>();
+                    foreach (GridViewRow item in grvBidforPO.Rows)
+                    {
+
+                        x = grvBidforPO.Rows[0].Cells[2].Text;
+                        bool control = true;
+
+                        for (int i = 0; i < grvBidforPO.Rows.Count; i++)
+                        {
+                            for (int col = 0; col < grvBidforPO.Columns.Count; col++)
+                            {
+                               
+                                    y = grvBidforPO.Rows[i].Cells[2].Text;
+                                    if (x == y)
+                                    {
+
+                                        int bidDetailId = (int)grvBidforPO.DataKeys[item.RowIndex].Value;
+                                        if (item.RowType == DataControlRowType.DataRow)
+                                        {
+                                            CheckBox chk = (CheckBox)item.FindControl("chkSelect");
+
+                                            foreach (Bidder detail in _presenter.CurrentBidAnalysisRequest.GetBidderbyRank())
+                                            {
+                                                if ((detail.Supplier.Id == _presenter.CurrentBidAnalysisRequest.GetBidderbySelectedItem(bidDetailId).Supplier.Id) && (chk.Checked) && (detail.Id == bidDetailId))
+
+                                                {
+                                                    //Collect the Ids of the selected Sole Vendor Detail objects                                
+                                                    checkedBidItemDetailIds.Add(bidDetailId);
+                                                    txtDate.Text = DateTime.Today.ToString();
+                                                    txtDeliveryDate.Text = DateTime.Today.ToString();
+                                                    txtPONo.Text = "POBA-" + (_presenter.GetLastPurchaseOrderId() + 1).ToString();
+
+                                                    txtRequester.Text = _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName;
+                                                    //Assign the Sole Vendor Supplier value to the Purchase Order
+
+                                                    txtSupplierName.Text = detail.Supplier.SupplierNameType;
+                                                    txtSupplierAddress.Text = detail.Supplier.SupplierAddress;
+
+                                                }
+
+
+
+
+
+
+                                                // }
+                                            }
+                                            Session["checkedBidItemDetailIds"] = checkedBidItemDetailIds;
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Master.ShowMessage(new AppMessage("Error: Suppliers are different  ", RMessageType.Error));
+                                        break;
+                                    }
+                                
+                                }
+                            }
+
+
+
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Master.ShowMessage(new AppMessage("Error: Unable to bind Purchase Order " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
+            }
+        }
+
+        protected void grvRankedBidders_SelectedIndexChanged(object sender, EventArgs e)
+        {
+          
+            
+           int BId   = Convert.ToInt32(grvRankedBidders.SelectedDataKey[0]);
+            Session["BAR"] = BId;
+            
+            _presenter.OnViewLoaded();
+            btnRequest.Visible = true;
+        
+            pnlInfo.Visible = false;
+
+            BindPurchaseOrder();
         }
     }
 }

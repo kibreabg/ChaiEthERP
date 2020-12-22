@@ -73,7 +73,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void SaveCashPaymentRequestStatus()
         {
-            if (View.GetRequestType == "Medical")
+            if (View.GetRequestType == "Medical Expense (In-Patient)" || View.GetRequestType == "Medical Expense (Out-Patient)")
             {
                 int i = 1;
                 foreach (ApprovalLevel AL in GetApprovalSettingMedical().ApprovalLevels)
@@ -178,6 +178,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (CPRS.ApprovalStatus == null)
                     {
+                        if (CPRS.Approver == 0)
+                        {
+                            //This is to handle multiple Finance Officers responding to this request
+                            //SendEmailToFinanceOfficers;
+                            CurrentCashPaymentRequest.CurrentApproverPosition = CPRS.ApproverPosition;
+                        }
                         SendEmail(CPRS);
                         CurrentCashPaymentRequest.CurrentApprover = CPRS.Approver;
                         CurrentCashPaymentRequest.CurrentLevel = CPRS.WorkflowLevel;
@@ -190,6 +196,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public void SaveOrUpdateCashPaymentRequest()
         {
             CashPaymentRequest cashPaymentRequest = CurrentCashPaymentRequest;
+            
             if (cashPaymentRequest.Id <= 0)
             {
                 cashPaymentRequest.RequestNo = View.GetRequestNo;
@@ -198,6 +205,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             cashPaymentRequest.RequestDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
             cashPaymentRequest.Description = View.GetDescription;
             cashPaymentRequest.AmountType = View.GetAmountType;
+            cashPaymentRequest.RequestType = View.GetRequestType;
+            cashPaymentRequest.Program = _settingController.GetProgram(View.GetProgram);
             cashPaymentRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
             cashPaymentRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
             //Check if the Payee is the logged in employee or a supplier
@@ -218,6 +227,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
             cashPaymentRequest.ExportStatus = "Not Exported";
             cashPaymentRequest.IsLiquidated = false;
+
             if (CurrentCashPaymentRequest.CashPaymentRequestStatuses.Count == 0)
                 SaveCashPaymentRequestStatus();
 
@@ -256,6 +266,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.ListCashPaymentRequests(RequestNo, RequestDate);
         }
+        public IList<CashPaymentRequest> GetAllInPatMedCPReqsThisYear()
+        {
+            return _controller.GetAllInPatMedCPReqsThisYear();
+        }
+        public IList<CashPaymentRequest> GetAllOutPatMedCPReqsThisYear()
+        {
+            return _controller.GetAllOutPatMedCPReqsThisYear();
+        }
         public CashPaymentRequestDetail GetCashPaymentRequestDetail(int CPRDId)
         {
             return _controller.GetCashPaymentRequestDetail(CPRDId);
@@ -276,6 +294,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _settingController.GetItemAccount(ItemAccountId);
         }
+        public IList<Program> GetPrograms()
+        {
+            return _settingController.GetPrograms();
+        }
         public Project GetProject(int ProjectId)
         {
             return _settingController.GetProject(ProjectId);
@@ -288,9 +310,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _settingController.GetSuppliers();
         }
-        public IList<Project> ListProjects()
+        public IList<Project> ListProjects(int programID)
         {
-            return _settingController.GetProjects();
+            return _settingController.GetProjectsByProgramId(programID);
         }
         public IList<Grant> ListGrants()
         {
@@ -304,6 +326,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public IList<ItemAccount> ListItemAccounts()
         {
             return _settingController.GetItemAccounts();
+        }
+        public IList<ItemAccount> GetAdvanceAccount()
+        {
+            return _settingController.GetAdvanceAccount();
         }
         public AppUser CurrentUser()
         {
@@ -336,7 +362,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
             else
             {
-                foreach(AppUser accountant in _settingController.GetAppUsersByEmployeePosition(CPRS.ApproverPosition))
+                foreach (AppUser accountant in _settingController.GetAppUsersByEmployeePosition(CPRS.ApproverPosition))
                 {
                     if (accountant.IsAssignedJob != true)
                     {
@@ -346,7 +372,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     {
                         EmailSender.Send(GetSuperviser(_controller.GetAssignedJobbycurrentuser(accountant.Id).AssignedTo).Email, "Cash Payment Request", (CurrentCashPaymentRequest.AppUser.FullName).ToUpper() + " Requests for Cash Payment with Request No. - '" + (CurrentCashPaymentRequest.RequestNo).ToUpper() + "'");
                     }
-                    
+
                 }
             }
 
@@ -355,7 +381,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             _controller.Commit();
         }
-
+        
     }
 }
 

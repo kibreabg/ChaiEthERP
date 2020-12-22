@@ -18,13 +18,14 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public int Id { get; set; }
         public string RequestNo { get; set; }
         public Nullable<DateTime> RequestDate { get; set; }
-        public string Payee { get; set; }
         public string Description { get; set; }
+        public string Payee { get; set; }
+        public string TelephoneNo { get; set; }
         public string VoucherNo { get; set; }
-        public string PageType { get; set; }
-        public string BranchCode { get; set; }
+        public string PaymentType { get; set; }
         public string BankName { get; set; }
         public int CurrentApprover { get; set; }
+        public int CurrentApproverPosition { get; set; }
         public int CurrentLevel { get; set; }
         public string CurrentStatus { get; set; }
         public decimal TotalAmount { get; set; }

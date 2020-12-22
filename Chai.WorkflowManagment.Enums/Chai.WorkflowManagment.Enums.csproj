@@ -76,6 +76,7 @@
     <Compile Include="RMessageType.cs" />
     <Compile Include="TabType.cs" />
     <Compile Include="TestCategory.cs" />
+    <Compile Include="InventoryStatus.cs" />
     <Compile Include="WorkflowType.cs" />
   </ItemGroup>
   <ItemGroup />

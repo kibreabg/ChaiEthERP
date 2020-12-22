@@ -103,7 +103,32 @@
     <Compile Include="HRM\Termination.cs" />
     <Compile Include="HRM\TerminationReason.cs" />
     <Compile Include="HRM\WorkExperience.cs" />
+    <Compile Include="Inventory\FixedAsset.cs" />
+    <Compile Include="Inventory\FixedAssetHistory.cs" />
+    <Compile Include="Inventory\Stock.cs" />
+    <Compile Include="Inventory\UnitOfMeasurement.cs" />
+    <Compile Include="Inventory\Issue.cs" />
+    <Compile Include="Inventory\IssueDetail.cs" />
+    <Compile Include="Inventory\ReceiveDetail.cs" />
+    <Compile Include="Inventory\Receive.cs" />
+    <Compile Include="Inventory\Section.cs" />
+    <Compile Include="Inventory\Shelf.cs" />
+    <Compile Include="Inventory\Store.cs" />
+    <Compile Include="Inventory\ItemSubCategory.cs" />
+    <Compile Include="Inventory\ItemCategory.cs" />
+    <Compile Include="Inventory\Item.cs" />
+    <Compile Include="Requests\MaintenanceSparePart.cs" />
+    <Compile Include="Requests\PRAttachment.cs" />
+    <Compile Include="Requests\MaintenanceRequest.cs" />
+    <Compile Include="Requests\MaintenanceRequestDetail.cs" />
+    <Compile Include="Requests\MaintenanceRequestStatus.cs" />
+    <Compile Include="Requests\StoreRequest.cs" />
+    <Compile Include="Requests\StoreRequestDetail.cs" />
+    <Compile Include="Requests\StoreRequestStatus.cs" />
+    <Compile Include="Setting\ExpenseType.cs" />
     <Compile Include="Setting\Holiday.cs" />
+    <Compile Include="Setting\ServiceTypeDetail.cs" />
+    <Compile Include="Setting\ItemAccountChecklist.cs" />
     <Compile Include="Setting\JobTitle.cs" />
     <Compile Include="Setting\CarModel.cs" />
     <Compile Include="Setting\Program.cs" />
@@ -173,7 +198,7 @@
     <Compile Include="Setting\ApprovalLevel.cs" />
     <Compile Include="Setting\ApprovalSetting.cs" />
     <Compile Include="Setting\Beneficiary.cs" />
-    <Compile Include="Setting\ExpenseType.cs" />
+    <Compile Include="Setting\ServiceType.cs" />
     <Compile Include="Setting\SoleVendorSupplier.cs" />
     <Compile Include="Setting\Vehicle.cs" />
     <Compile Include="Setting\CarRental.cs" />
@@ -225,6 +250,7 @@
       <Name>Chai.WorkflowManagment.Shared</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

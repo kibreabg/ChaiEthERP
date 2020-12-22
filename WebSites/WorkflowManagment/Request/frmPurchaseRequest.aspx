@@ -42,6 +42,24 @@
             <div class="widget-body no-padding">
                 <div class="smart-form">
                     <fieldset>
+                        <div class="row">
+                            <section class="col col-6">
+                                <div class="smart-form">
+                                    <div class="inline-group">
+                                        <label class="checkbox">
+                                            <asp:CheckBox ID="ckIsVehicle" runat="server" OnCheckedChanged="ckIsVehicle_CheckedChanged" AutoPostBack="True" />
+                                            <i></i>Is Vehicle Spare Part?</label>
+                                    </div>
+                                </div>
+                            </section>
+                            <section class="col col-6">
+                                <asp:Label ID="lblMainReq" runat="server" Text="Maintenance Request No" Visible="False"></asp:Label>
+                                <label class="select">
+                                    <asp:DropDownList ID="ddlMaintenanceReq" AppendDataBoundItems="true" runat="server" DataValueField="Id" DataTextField="ReqPlateNo" AutoPostBack="True" OnSelectedIndexChanged="ddlMaintenanceReq_SelectedIndexChanged">
+                                    </asp:DropDownList><i></i>
+                                </label>
+                            </section>
+                        </div>
 
                         <div class="row">
                             <%--<section class="col col-4">
@@ -71,7 +89,7 @@
 
                         <div class="row">
 
-                            <section class="col col-4">
+                            <section class="col col-6">
                                 <label class="label">
                                     Required date of delivery</label>
                                 <label class="input">
@@ -81,7 +99,7 @@
                                     <asp:RequiredFieldValidator ID="RfvdeliveryDate" CssClass="validator" runat="server" ControlToValidate="txtdeliveryDate" ErrorMessage="Delivery Date Required" InitialValue="" SetFocusOnError="True" ValidationGroup="Save"></asp:RequiredFieldValidator>
                                 </label>
                             </section>
-                            <section class="col col-4">
+                            <section class="col col-6">
                                 <label class="label">
                                     Deliver to</label>
                                 <label class="input">
@@ -91,242 +109,261 @@
                             </section>
                         </div>
                         <div class="row">
-                            <section class="col col-4">
+                            <section class="col col-6">
                                 <label class="label">
                                     Suggested Suppliers (if any)</label>
                                 <label class="input">
                                     <asp:TextBox ID="txtSuggestedSupplier" runat="server" Visible="true"></asp:TextBox>
                                 </label>
                             </section>
-                            <section class="col col-4">
-                                <label id="lblapplyfor" runat="server" class="label" visible="true">
+                            <section class="col col-6">
+                                <label id="lblapplyfor" runat="server" class="label" visible="false">
                                     Remark</label>
                                 <label class="input">
-                                    <asp:TextBox ID="txtComment" runat="server" Visible="true"></asp:TextBox>
+                                    <asp:TextBox ID="txtComment" runat="server" Visible="false"></asp:TextBox>
                                 </label>
                             </section>
 
 
                         </div>
-                        <asp:DataGrid ID="dgPurchaseRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
-                            CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
-                            GridLines="None"
-                            OnCancelCommand="dgPurchaseRequestDetail_CancelCommand" OnDeleteCommand="dgPurchaseRequestDetail_DeleteCommand" OnEditCommand="dgPurchaseRequestDetail_EditCommand"
-                            OnItemCommand="dgPurchaseRequestDetail_ItemCommand" OnItemDataBound="dgPurchaseRequestDetail_ItemDataBound" OnUpdateCommand="dgPurchaseRequestDetail_UpdateCommand"
-                            ShowFooter="True">
+                        <div style="overflow-x: auto;">
+                            <asp:DataGrid ID="dgPurchaseRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
+                                CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
+                                GridLines="None"
+                                OnCancelCommand="dgPurchaseRequestDetail_CancelCommand" OnDeleteCommand="dgPurchaseRequestDetail_DeleteCommand" OnEditCommand="dgPurchaseRequestDetail_EditCommand"
+                                OnItemCommand="dgPurchaseRequestDetail_ItemCommand" OnItemDataBound="dgPurchaseRequestDetail_ItemDataBound" OnUpdateCommand="dgPurchaseRequestDetail_UpdateCommand"
+                                ShowFooter="True">
 
-                            <Columns>
-                                <asp:TemplateColumn HeaderText="Account Name">
-                                    <EditItemTemplate>
-                                        <asp:DropDownList ID="ddlAccount" runat="server" CssClass="form-control"
-                                            AppendDataBoundItems="True" DataTextField="AccountName" DataValueField="Id"
-                                            ValidationGroup="proedit">
-                                            <asp:ListItem Value="0">Select Account</asp:ListItem>
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RfvAccount" runat="server" CssClass="validator"
-                                            ControlToValidate="ddlAccount" ErrorMessage="Account Description Required"
-                                            InitialValue="0" SetFocusOnError="True" ValidationGroup="proedit"></asp:RequiredFieldValidator>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:DropDownList ID="ddlFAccount" runat="server" CssClass="form-control"
-                                            AppendDataBoundItems="True" DataTextField="AccountName" DataValueField="Id"
-                                            EnableViewState="true" ValidationGroup="proadd" AutoPostBack="True" OnSelectedIndexChanged="ddlFAccount_SelectedIndexChanged">
-                                            <asp:ListItem Value="0">Select Account</asp:ListItem>
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RfvFAccount" runat="server" CssClass="validator"
-                                            ControlToValidate="ddlFAccount" Display="Dynamic"
-                                            ErrorMessage="Account Description Required" InitialValue="0" SetFocusOnError="True"
-                                            ValidationGroup="proadd"></asp:RequiredFieldValidator>
-                                    </FooterTemplate>
-                                    <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountName")%>
-                                    </ItemTemplate>
-                                </asp:TemplateColumn>
-                                <asp:TemplateColumn HeaderText="Account Code">
-                                    <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "AccountCode")%>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <asp:TextBox ID="txtAccountCode" runat="server" CssClass="form-control" Enabled="false" Text=' <%# DataBinder.Eval(Container.DataItem, "AccountCode")%>'></asp:TextBox>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:TextBox ID="txtFAccountCode" runat="server" CssClass="form-control" Enabled="false"></asp:TextBox>
-                                    </FooterTemplate>
-                                </asp:TemplateColumn>
-                                <asp:TemplateColumn HeaderText="Item">
-                                    <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "Item")%>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <asp:TextBox ID="txtItem" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "Item")%>'></asp:TextBox>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:TextBox ID="txtFItem" runat="server" CssClass="form-control"></asp:TextBox>
-                                    </FooterTemplate>
-                                </asp:TemplateColumn>
-                                <asp:TemplateColumn HeaderText="Requested Quantity">
-                                    <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "Qty")%>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <asp:TextBox ID="txtQty" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "Qty")%>'></asp:TextBox>
-                                        <asp:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtQty" ID="txtQty_FilteredTextBoxExtender" FilterType="Numbers"></asp:FilteredTextBoxExtender>
-                                        <asp:RequiredFieldValidator ID="RfvQty" CssClass="validator" runat="server" ControlToValidate="txtQty" ErrorMessage="Qty Required" ValidationGroup="proedit"></asp:RequiredFieldValidator>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:TextBox ID="txtFQty" runat="server" CssClass="form-control"></asp:TextBox>
-                                        <asp:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtFQty" ID="txtFQty_FilteredTextBoxExtender" FilterType="Numbers"></asp:FilteredTextBoxExtender>
-                                        <asp:RequiredFieldValidator ID="RfvFQty" CssClass="validator" runat="server" ControlToValidate="txtFQty" ErrorMessage="Qty Required" ValidationGroup="proadd"></asp:RequiredFieldValidator>
-                                    </FooterTemplate>
-                                </asp:TemplateColumn>
-                                <asp:TemplateColumn HeaderText="Unit of Measurment">
-                                    <EditItemTemplate>
-                                        <asp:DropDownList ID="ddlUnitOfMeasurment" runat="server" CssClass="form-control"
-                                            AppendDataBoundItems="True"
-                                            ValidationGroup="proedit">
-                                            <asp:ListItem Value="0">Select Unit</asp:ListItem>
-                                            <asp:ListItem Value="Pieces (Pcs)">Pieces (Pcs)</asp:ListItem>
-                                            <asp:ListItem Value="Ream">Ream</asp:ListItem>
-                                            <asp:ListItem Value="Grams (g)">Grams (g)</asp:ListItem>
-                                            <asp:ListItem Value="Kilogram (kg)">Kilogram (kg)</asp:ListItem>
-                                            <asp:ListItem Value="Tons (ton)">Tons (ton)</asp:ListItem>
-                                            <asp:ListItem Value="Meter (m)">Meter (m)</asp:ListItem>
-                                            <asp:ListItem Value="Square Meter (m2)">Square Meter (m2)</asp:ListItem>
-                                            <asp:ListItem Value="Cubic meter (m3)">Cubic meter (m3)</asp:ListItem>
-                                            <asp:ListItem Value="Liter (L)">Liter (L)</asp:ListItem>
-                                            <asp:ListItem Value="Day (D)">Day (D)</asp:ListItem>
-                                            <asp:ListItem Value="Hour (Hr)">Hour (Hr)</asp:ListItem>
-                                            <asp:ListItem Value="Other">Other</asp:ListItem>
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RfvUoM" runat="server" CssClass="validator"
-                                            ControlToValidate="ddlUnitOfMeasurment" ErrorMessage="Unit of Measurement is Required"
-                                            InitialValue="0" SetFocusOnError="True" ValidationGroup="proedit"></asp:RequiredFieldValidator>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:DropDownList ID="ddlFUnitOfMeasurment" runat="server" CssClass="form-control"
-                                            AppendDataBoundItems="True" DataTextField="AccountName" DataValueField="Id"
-                                            EnableViewState="true" ValidationGroup="proadd">
-                                            <asp:ListItem Value="0">Select Unit</asp:ListItem>
-                                            <asp:ListItem Value="Pieces (Pcs)">Pieces (Pcs)</asp:ListItem>
-                                            <asp:ListItem Value="Ream">Ream</asp:ListItem>
-                                            <asp:ListItem Value="Grams (g)">Grams (g)</asp:ListItem>
-                                            <asp:ListItem Value="Kilogram (kg)">Kilogram (kg)</asp:ListItem>
-                                            <asp:ListItem Value="Tons (ton)">Tons (ton)</asp:ListItem>
-                                            <asp:ListItem Value="Meter (m)">Meter (m)</asp:ListItem>
-                                            <asp:ListItem Value="Square Meter (m2)">Square Meter (m2)</asp:ListItem>
-                                            <asp:ListItem Value="Cubic meter (m3)">Cubic meter (m3)</asp:ListItem>
-                                            <asp:ListItem Value="Liter (L)">Liter (L)</asp:ListItem>
-                                            <asp:ListItem Value="Day (D)">Day (D)</asp:ListItem>
-                                            <asp:ListItem Value="Hour (Hr)">Hour (Hr)</asp:ListItem>
-                                            <asp:ListItem Value="Other">Other</asp:ListItem>
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RfvFUoM" runat="server" CssClass="validator"
-                                            ControlToValidate="ddlFUnitOfMeasurment" Display="Dynamic"
-                                            ErrorMessage="Unit of Measurement is Required" InitialValue="0" SetFocusOnError="True"
-                                            ValidationGroup="proadd"></asp:RequiredFieldValidator>
-                                    </FooterTemplate>
-                                    <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "UnitOfMeasurment")%>
-                                    </ItemTemplate>
-                                </asp:TemplateColumn>
-                                <asp:TemplateColumn HeaderText="Purpose of Purchase">
-                                    <EditItemTemplate>
-                                        <asp:DropDownList ID="ddlPurposeOfPurchase" runat="server" CssClass="form-control"
-                                            AppendDataBoundItems="True" ValidationGroup="proedit">
-                                            <asp:ListItem Value="0">Select Purpose</asp:ListItem>
-                                            <asp:ListItem Value="Office Use">Office Use</asp:ListItem>
-                                            <asp:ListItem Value="Training">Training</asp:ListItem>
-                                            <asp:ListItem Value="Donation">Donation</asp:ListItem>
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RfvPoP" runat="server" CssClass="validator"
-                                            ControlToValidate="ddlPurposeOfPurchase" ErrorMessage="Purpose of Purchase is Required"
-                                            InitialValue="0" SetFocusOnError="True" ValidationGroup="proedit"></asp:RequiredFieldValidator>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:DropDownList ID="ddlFPurposeOfPurchase" runat="server" CssClass="form-control"
-                                            AppendDataBoundItems="True" EnableViewState="true" ValidationGroup="proadd">
-                                            <asp:ListItem Value="0">Select Purpose</asp:ListItem>
-                                            <asp:ListItem Value="Office Use">Office Use</asp:ListItem>
-                                            <asp:ListItem Value="Training">Training</asp:ListItem>
-                                            <asp:ListItem Value="Donation">Donation</asp:ListItem>
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RfvFPoP" runat="server" CssClass="validator"
-                                            ControlToValidate="ddlFPurposeOfPurchase" Display="Dynamic"
-                                            ErrorMessage="Purpose of Purchase is Required" InitialValue="0" SetFocusOnError="True"
-                                            ValidationGroup="proadd"></asp:RequiredFieldValidator>
-                                    </FooterTemplate>
-                                    <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "PurposeOfPurchase")%>
-                                    </ItemTemplate>
-                                </asp:TemplateColumn>
-                                <asp:TemplateColumn HeaderText="Project ID">
-                                    <EditItemTemplate>
-                                        <asp:DropDownList ID="ddlProject" runat="server" CssClass="form-control"
-                                            AppendDataBoundItems="True" DataTextField="ProjectCode" DataValueField="Id"
-                                            ValidationGroup="proedit" AutoPostBack="True" OnSelectedIndexChanged="ddlProject_SelectedIndexChanged">
-                                            <asp:ListItem Value="0">Select Project</asp:ListItem>
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RfvProject" runat="server" CssClass="validator"
-                                            ControlToValidate="ddlProject" ErrorMessage="Project Required"
-                                            InitialValue="0" SetFocusOnError="True" ValidationGroup="proedit"></asp:RequiredFieldValidator>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:DropDownList ID="ddlFProject" runat="server" CssClass="form-control"
-                                            AppendDataBoundItems="True" DataTextField="ProjectCode" DataValueField="Id"
-                                            EnableViewState="true" ValidationGroup="proadd" AutoPostBack="True" OnSelectedIndexChanged="ddlFProject_SelectedIndexChanged">
-                                            <asp:ListItem Value="0">Select Project</asp:ListItem>
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RfvFProjectCode" runat="server" CssClass="validator"
-                                            ControlToValidate="ddlFProject" Display="Dynamic"
-                                            ErrorMessage="Project Required" InitialValue="0" SetFocusOnError="True"
-                                            ValidationGroup="proadd"></asp:RequiredFieldValidator>
-                                    </FooterTemplate>
-                                    <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "Project.ProjectCode")%>
-                                    </ItemTemplate>
-                                </asp:TemplateColumn>
-                                <asp:TemplateColumn HeaderText="Grant ID">
-                                    <EditItemTemplate>
-                                        <asp:DropDownList ID="ddlGrant" runat="server" CssClass="form-control"
-                                            AppendDataBoundItems="True" DataTextField="GrantCode" DataValueField="Id"
-                                            ValidationGroup="proedit" OnSelectedIndexChanged="ddlGrant_SelectedIndexChanged">
-                                            <asp:ListItem Value="0">Select Grant</asp:ListItem>
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RfvGrant" runat="server" CssClass="validator"
-                                            ControlToValidate="ddlGrant" ErrorMessage="Grant Required"
-                                            InitialValue="0" SetFocusOnError="True" ValidationGroup="proedit"></asp:RequiredFieldValidator>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:DropDownList ID="ddlFGrant" runat="server" CssClass="form-control"
-                                            AppendDataBoundItems="True" DataTextField="GrantCode" DataValueField="Id"
-                                            EnableViewState="true" ValidationGroup="proadd">
-                                            <asp:ListItem Value="0">Select Grant</asp:ListItem>
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RfvFGrantCode" runat="server" CssClass="validator"
-                                            ControlToValidate="ddlFGrant" Display="Dynamic"
-                                            ErrorMessage="Grant Required" InitialValue="0" SetFocusOnError="True"
-                                            ValidationGroup="proadd"></asp:RequiredFieldValidator>
-                                    </FooterTemplate>
-                                    <ItemTemplate>
-                                        <%# DataBinder.Eval(Container.DataItem, "Grant.GrantCode")%>
-                                    </ItemTemplate>
-                                </asp:TemplateColumn>
-                                <asp:TemplateColumn HeaderText="Actions">
-                                    <EditItemTemplate>
-                                        <asp:LinkButton ID="lnkUpdate" runat="server" CommandName="Update" ValidationGroup="proedit" CssClass="btn btn-xs btn-default"><i class="fa fa-save"></i></asp:LinkButton>
-                                        <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default"><i class="fa fa-times"></i></asp:LinkButton>
-                                    </EditItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:LinkButton ID="lnkAddNew" runat="server" CommandName="AddNew" ValidationGroup="proadd" CssClass="btn btn-sm btn-success"><i class="fa fa-save"></i></asp:LinkButton>
-                                    </FooterTemplate>
-                                    <ItemTemplate>
-                                        <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
-                                        <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default" OnClientClick="javascript:return confirm('Are you sure you want to delete this entry?');"><i class="fa fa-times"></i></asp:LinkButton>
-                                    </ItemTemplate>
-                                </asp:TemplateColumn>
-                            </Columns>
-                            <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
-                        </asp:DataGrid>
+                                <Columns>
+                                    <asp:TemplateColumn HeaderText="Account Name">
+                                        <EditItemTemplate>
+                                            <asp:DropDownList ID="ddlAccount" runat="server" CssClass="form-control"
+                                                AppendDataBoundItems="True" DataTextField="AccountName" DataValueField="Id"
+                                                ValidationGroup="proedit" AutoPostBack="True" OnSelectedIndexChanged="ddlAccount_SelectedIndexChanged">
+                                                <asp:ListItem Value="0">Select Account</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RfvAccount" runat="server" CssClass="validator"
+                                                ControlToValidate="ddlAccount" ErrorMessage="Account Description Required"
+                                                InitialValue="0" SetFocusOnError="True" ValidationGroup="proedit"></asp:RequiredFieldValidator>
+                                        </EditItemTemplate>
+                                        <FooterTemplate>
+                                            <asp:DropDownList ID="ddlFAccount" runat="server" CssClass="form-control"
+                                                AppendDataBoundItems="True" DataTextField="AccountName" DataValueField="Id"
+                                                EnableViewState="true" ValidationGroup="proadd" AutoPostBack="True" OnSelectedIndexChanged="ddlFAccount_SelectedIndexChanged">
+                                                <asp:ListItem Value="0">Select Account</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RfvFAccount" runat="server" CssClass="validator"
+                                                ControlToValidate="ddlFAccount" Display="Dynamic"
+                                                ErrorMessage="Account Description Required" InitialValue="0" SetFocusOnError="True"
+                                                ValidationGroup="proadd"></asp:RequiredFieldValidator>
+                                        </FooterTemplate>
+                                        <ItemTemplate>
+                                            <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountName")%>
+                                        </ItemTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="Account Code">
+                                        <ItemTemplate>
+                                            <%# DataBinder.Eval(Container.DataItem, "AccountCode")%>
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:TextBox ID="txtAccountCode" runat="server" CssClass="form-control" Enabled="false" Text=' <%# DataBinder.Eval(Container.DataItem, "AccountCode")%>'></asp:TextBox>
+                                        </EditItemTemplate>
+                                        <FooterTemplate>
+                                            <asp:TextBox ID="txtFAccountCode" runat="server" CssClass="form-control" Enabled="false"></asp:TextBox>
+                                        </FooterTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="Item">
+                                        <ItemTemplate>
+                                            <%# DataBinder.Eval(Container.DataItem, "ItemDescription")%>
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:TextBox ID="txtItem" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "ItemDescription")%>'></asp:TextBox>
+                                        </EditItemTemplate>
+                                        <FooterTemplate>
+                                            <asp:TextBox ID="txtFItem" runat="server" CssClass="form-control"></asp:TextBox>
+                                        </FooterTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="Requested Quantity">
+                                        <ItemTemplate>
+                                            <%# DataBinder.Eval(Container.DataItem, "Qty")%>
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:TextBox ID="txtQty" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "Qty")%>'></asp:TextBox>
+                                            <asp:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtQty" ID="txtQty_FilteredTextBoxExtender" FilterType="Numbers"></asp:FilteredTextBoxExtender>
+                                            <asp:RequiredFieldValidator ID="RfvQty" CssClass="validator" runat="server" ControlToValidate="txtQty" ErrorMessage="Qty Required" ValidationGroup="proedit"></asp:RequiredFieldValidator>
+                                        </EditItemTemplate>
+                                        <FooterTemplate>
+                                            <asp:TextBox ID="txtFQty" runat="server" CssClass="form-control"></asp:TextBox>
+                                            <asp:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtFQty" ID="txtFQty_FilteredTextBoxExtender" FilterType="Numbers"></asp:FilteredTextBoxExtender>
+                                            <asp:RequiredFieldValidator ID="RfvFQty" CssClass="validator" runat="server" ControlToValidate="txtFQty" ErrorMessage="Qty Required" ValidationGroup="proadd"></asp:RequiredFieldValidator>
+                                        </FooterTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="Remark">
+                                        <ItemTemplate>
+                                            <%# DataBinder.Eval(Container.DataItem, "Remark")%>
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:TextBox ID="txtRemark" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "Remark")%>'></asp:TextBox>
+                                            <asp:RequiredFieldValidator ID="RfvRemark" CssClass="validator" runat="server" ControlToValidate="txtRemark" ErrorMessage="Remark Required" ValidationGroup="proedit"></asp:RequiredFieldValidator>
+                                        </EditItemTemplate>
+                                        <FooterTemplate>
+                                            <asp:TextBox ID="txtFRemark" runat="server" CssClass="form-control"></asp:TextBox>
+                                            <asp:RequiredFieldValidator ID="RfvFRemark" CssClass="validator" runat="server" ControlToValidate="txtFQty" ErrorMessage="Remark Required" ValidationGroup="proadd"></asp:RequiredFieldValidator>
+                                        </FooterTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="Unit of Measurment">
+                                        <EditItemTemplate>
+                                            <asp:DropDownList ID="ddlUnitOfMeasurment" runat="server" CssClass="form-control"
+                                                AppendDataBoundItems="True"
+                                                ValidationGroup="proedit">
+                                                <asp:ListItem Value="0">Select Unit</asp:ListItem>
+                                                <asp:ListItem Value="Pieces (Pcs)">Pieces (Pcs)</asp:ListItem>
+                                                <asp:ListItem Value="Ream">Ream</asp:ListItem>
+                                                <asp:ListItem Value="Grams (g)">Grams (g)</asp:ListItem>
+                                                <asp:ListItem Value="Kilogram (kg)">Kilogram (kg)</asp:ListItem>
+                                                <asp:ListItem Value="Tons (ton)">Tons (ton)</asp:ListItem>
+                                                <asp:ListItem Value="Meter (m)">Meter (m)</asp:ListItem>
+                                                <asp:ListItem Value="Square Meter (m2)">Square Meter (m2)</asp:ListItem>
+                                                <asp:ListItem Value="Cubic meter (m3)">Cubic meter (m3)</asp:ListItem>
+                                                <asp:ListItem Value="Liter (L)">Liter (L)</asp:ListItem>
+                                                <asp:ListItem Value="Day (D)">Day (D)</asp:ListItem>
+                                                <asp:ListItem Value="Hour (Hr)">Hour (Hr)</asp:ListItem>
+                                                <asp:ListItem Value="Pack (Pk)">Pack (Pk)</asp:ListItem>
+                                                <asp:ListItem Value="Set (St)">Set (St)</asp:ListItem>
+                                                <asp:ListItem Value="Other">Other</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RfvUoM" runat="server" CssClass="validator"
+                                                ControlToValidate="ddlUnitOfMeasurment" ErrorMessage="Unit of Measurement is Required"
+                                                InitialValue="0" SetFocusOnError="True" ValidationGroup="proedit"></asp:RequiredFieldValidator>
+                                        </EditItemTemplate>
+                                        <FooterTemplate>
+                                            <asp:DropDownList ID="ddlFUnitOfMeasurment" runat="server" CssClass="form-control"
+                                                AppendDataBoundItems="True" DataTextField="AccountName" DataValueField="Id"
+                                                EnableViewState="true" ValidationGroup="proadd">
+                                                <asp:ListItem Value="0">Select Unit</asp:ListItem>
+                                                <asp:ListItem Value="Pieces (Pcs)">Pieces (Pcs)</asp:ListItem>
+                                                <asp:ListItem Value="Ream">Ream</asp:ListItem>
+                                                <asp:ListItem Value="Grams (g)">Grams (g)</asp:ListItem>
+                                                <asp:ListItem Value="Kilogram (kg)">Kilogram (kg)</asp:ListItem>
+                                                <asp:ListItem Value="Tons (ton)">Tons (ton)</asp:ListItem>
+                                                <asp:ListItem Value="Meter (m)">Meter (m)</asp:ListItem>
+                                                <asp:ListItem Value="Square Meter (m2)">Square Meter (m2)</asp:ListItem>
+                                                <asp:ListItem Value="Cubic meter (m3)">Cubic meter (m3)</asp:ListItem>
+                                                <asp:ListItem Value="Liter (L)">Liter (L)</asp:ListItem>
+                                                <asp:ListItem Value="Day (D)">Day (D)</asp:ListItem>
+                                                <asp:ListItem Value="Hour (Hr)">Hour (Hr)</asp:ListItem>
+                                                <asp:ListItem Value="Pack (Pk)">Pack (Pk)</asp:ListItem>
+                                                <asp:ListItem Value="Set (St)">Set (St)</asp:ListItem>
+                                                <asp:ListItem Value="Other">Other</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RfvFUoM" runat="server" CssClass="validator"
+                                                ControlToValidate="ddlFUnitOfMeasurment" Display="Dynamic"
+                                                ErrorMessage="Unit of Measurement is Required" InitialValue="0" SetFocusOnError="True"
+                                                ValidationGroup="proadd"></asp:RequiredFieldValidator>
+                                        </FooterTemplate>
+                                        <ItemTemplate>
+                                            <%# DataBinder.Eval(Container.DataItem, "UnitOfMeasurment")%>
+                                        </ItemTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="Purpose of Purchase">
+                                        <EditItemTemplate>
+                                            <asp:DropDownList ID="ddlPurposeOfPurchase" runat="server" CssClass="form-control"
+                                                AppendDataBoundItems="True" ValidationGroup="proedit">
+                                                <asp:ListItem Value="0">Select Purpose</asp:ListItem>
+                                                <asp:ListItem Value="Office Use">Office Use</asp:ListItem>
+                                                <asp:ListItem Value="Training">Training</asp:ListItem>
+                                                <asp:ListItem Value="Donation">Donation</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RfvPoP" runat="server" CssClass="validator"
+                                                ControlToValidate="ddlPurposeOfPurchase" ErrorMessage="Purpose of Purchase is Required"
+                                                InitialValue="0" SetFocusOnError="True" ValidationGroup="proedit"></asp:RequiredFieldValidator>
+                                        </EditItemTemplate>
+                                        <FooterTemplate>
+                                            <asp:DropDownList ID="ddlFPurposeOfPurchase" runat="server" CssClass="form-control"
+                                                AppendDataBoundItems="True" EnableViewState="true" ValidationGroup="proadd">
+                                                <asp:ListItem Value="0">Select Purpose</asp:ListItem>
+                                                <asp:ListItem Value="Office Use">Office Use</asp:ListItem>
+                                                <asp:ListItem Value="Training">Training</asp:ListItem>
+                                                <asp:ListItem Value="Donation">Donation</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RfvFPoP" runat="server" CssClass="validator"
+                                                ControlToValidate="ddlFPurposeOfPurchase" Display="Dynamic"
+                                                ErrorMessage="Purpose of Purchase is Required" InitialValue="0" SetFocusOnError="True"
+                                                ValidationGroup="proadd"></asp:RequiredFieldValidator>
+                                        </FooterTemplate>
+                                        <ItemTemplate>
+                                            <%# DataBinder.Eval(Container.DataItem, "PurposeOfPurchase")%>
+                                        </ItemTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="Project ID">
+                                        <EditItemTemplate>
+                                            <asp:DropDownList ID="ddlProject" runat="server" CssClass="form-control"
+                                                AppendDataBoundItems="True" DataTextField="ProjectCode" DataValueField="Id"
+                                                ValidationGroup="proedit" AutoPostBack="True" OnSelectedIndexChanged="ddlProject_SelectedIndexChanged">
+                                                <asp:ListItem Value="0">Select Project</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RfvProject" runat="server" CssClass="validator"
+                                                ControlToValidate="ddlProject" ErrorMessage="Project Required"
+                                                InitialValue="0" SetFocusOnError="True" ValidationGroup="proedit"></asp:RequiredFieldValidator>
+                                        </EditItemTemplate>
+                                        <FooterTemplate>
+                                            <asp:DropDownList ID="ddlFProject" runat="server" CssClass="form-control"
+                                                AppendDataBoundItems="True" DataTextField="ProjectCode" DataValueField="Id"
+                                                EnableViewState="true" ValidationGroup="proadd" AutoPostBack="True" OnSelectedIndexChanged="ddlFProject_SelectedIndexChanged">
+                                                <asp:ListItem Value="0">Select Project</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RfvFProjectCode" runat="server" CssClass="validator"
+                                                ControlToValidate="ddlFProject" Display="Dynamic"
+                                                ErrorMessage="Project Required" InitialValue="0" SetFocusOnError="True"
+                                                ValidationGroup="proadd"></asp:RequiredFieldValidator>
+                                        </FooterTemplate>
+                                        <ItemTemplate>
+                                            <%# DataBinder.Eval(Container.DataItem, "Project.ProjectCode")%>
+                                        </ItemTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="Grant ID">
+                                        <EditItemTemplate>
+                                            <asp:DropDownList ID="ddlGrant" runat="server" CssClass="form-control"
+                                                AppendDataBoundItems="True" DataTextField="GrantCode" DataValueField="Id"
+                                                ValidationGroup="proedit" OnSelectedIndexChanged="ddlGrant_SelectedIndexChanged">
+                                                <asp:ListItem Value="0">Select Grant</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RfvGrant" runat="server" CssClass="validator"
+                                                ControlToValidate="ddlGrant" ErrorMessage="Grant Required"
+                                                InitialValue="0" SetFocusOnError="True" ValidationGroup="proedit"></asp:RequiredFieldValidator>
+                                        </EditItemTemplate>
+                                        <FooterTemplate>
+                                            <asp:DropDownList ID="ddlFGrant" runat="server" CssClass="form-control"
+                                                AppendDataBoundItems="True" DataTextField="GrantCode" DataValueField="Id"
+                                                EnableViewState="true" ValidationGroup="proadd">
+                                                <asp:ListItem Value="0">Select Grant</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RfvFGrantCode" runat="server" CssClass="validator"
+                                                ControlToValidate="ddlFGrant" Display="Dynamic"
+                                                ErrorMessage="Grant Required" InitialValue="0" SetFocusOnError="True"
+                                                ValidationGroup="proadd"></asp:RequiredFieldValidator>
+                                        </FooterTemplate>
+                                        <ItemTemplate>
+                                            <%# DataBinder.Eval(Container.DataItem, "Grant.GrantCode")%>
+                                        </ItemTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="Actions">
+                                        <EditItemTemplate>
+                                            <asp:LinkButton ID="lnkUpdate" runat="server" CommandName="Update" ValidationGroup="proedit" CssClass="btn btn-xs btn-default"><i class="fa fa-save"></i></asp:LinkButton>
+                                            <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default"><i class="fa fa-times"></i></asp:LinkButton>
+                                        </EditItemTemplate>
+                                        <FooterTemplate>
+                                            <asp:LinkButton ID="lnkAddNew" runat="server" CommandName="AddNew" ValidationGroup="proadd" CssClass="btn btn-sm btn-success"><i class="fa fa-save"></i></asp:LinkButton>
+                                        </FooterTemplate>
+                                        <ItemTemplate>
+                                            <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
+                                            <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default" OnClientClick="javascript:return confirm('Are you sure you want to delete this entry?');"><i class="fa fa-times"></i></asp:LinkButton>
+                                        </ItemTemplate>
+                                    </asp:TemplateColumn>
+                                </Columns>
+                                <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
+                            </asp:DataGrid>
+                        </div>
                     </fieldset>
 
                     <footer>

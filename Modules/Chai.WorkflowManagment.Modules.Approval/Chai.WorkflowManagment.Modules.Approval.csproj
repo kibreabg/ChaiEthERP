@@ -84,7 +84,9 @@
     <Compile Include="Views\IBankPaymentApprovalView.cs" />
     <Compile Include="Views\IBidAnalysisView.cs" />
     <Compile Include="Views\ICostSharingApprovalView.cs" />
+    <Compile Include="Views\IStoreApprovalView.cs" />
     <Compile Include="Views\IPurchaseOrderSoleVendorView.cs" />
+    <Compile Include="Views\IMaintenanceApprovalView.cs" />
     <Compile Include="Views\ISoleVendorApprovalView.cs" />
     <Compile Include="Views\ITravelLogAttachView.cs" />
     <Compile Include="Views\OperationalControlApprovalPresenter.cs" />
@@ -98,9 +100,11 @@
     <Compile Include="Views\IPurchaseOrderView.cs" />
     <Compile Include="Views\LeaveApprovalPresenter.cs" />
     <Compile Include="Views\PrintRequestedItemPresenter.cs" />
+    <Compile Include="Views\StoreApprovalPresenter.cs" />
     <Compile Include="Views\PurchaseApprovalDetailPresenter.cs" />
     <Compile Include="Views\PurchaseOrderPresenter.cs" />
     <Compile Include="Views\PurchaseOrderSoleVendorPresenter.cs" />
+    <Compile Include="Views\MaintenanceApprovalPresenter.cs" />
     <Compile Include="Views\SoleVendorApprovalPresenter.cs" />
     <Compile Include="Views\TravelAdvanceApprovalPresenter.cs" />
     <Compile Include="Views\DefaultPresenter.cs" />
@@ -140,6 +144,10 @@
     <ProjectReference Include="..\Chai.WorkflowManagment.Modules.Admin\Chai.WorkflowManagment.Modules.Admin.csproj">
       <Project>{1b1467b4-2bf5-4824-9fac-39c36d4c6c89}</Project>
       <Name>Chai.WorkflowManagment.Modules.Admin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chai.WorkflowManagment.Modules.Inventory\Chai.WorkflowManagment.Modules.Inventory.csproj">
+      <Project>{6de11e82-fe00-44e5-a6bc-43c794171ec4}</Project>
+      <Name>Chai.WorkflowManagment.Modules.Inventory</Name>
     </ProjectReference>
     <ProjectReference Include="..\Chai.WorkflowManagment.Modules.Request\Chai.WorkflowManagment.Modules.Request.csproj">
       <Project>{88b5eb9e-0fb5-4a23-99bd-f2b3c590f92d}</Project>

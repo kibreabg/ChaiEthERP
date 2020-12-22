@@ -15,6 +15,7 @@ using log4net;
 using log4net.Config;
 using Microsoft.Practices.ObjectBuilder;
 using System.IO;
+using Chai.WorkflowManagment.CoreDomain.Users;
 
 namespace Chai.WorkflowManagment.Modules.Approval.Views
 {
@@ -65,7 +66,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 return "{00397B85-1427-4EE2-94D7-7A1E8650A568}";
             }
         }
-       
+
         #region Field Getters
         public int GetOperationalControlRequestId
         {
@@ -90,7 +91,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             get { return 0; }
         }
         #endregion
-        
+
         private void PopApprovalStatus()
         {
             ddlApprovalStatus.Items.Clear();
@@ -139,7 +140,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 ddlSrchProgressStatus.Items.Add(new ListItem(s[i].Replace('_', ' '), s[i].Replace('_', ' ')));
                 ddlSrchProgressStatus.DataBind();
             }
-        
+
             ddlSrchProgressStatus.Items.Add(new ListItem("Retired", "Retired"));
         }
         private void BindSearchOperationalControlRequestGrid()
@@ -151,16 +152,16 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             foreach (OperationalControlRequestStatus OCRS in _presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses)
             {
-   
+
                 if (_presenter.CurrentOperationalControlRequest.CurrentLevel == _presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses.Count && _presenter.CurrentOperationalControlRequest.ProgressStatus == ProgressStatus.Completed.ToString())
                 {
                     btnPrint.Enabled = true;
-                
+
                     btnApprove.Enabled = false;
                 }
                 else
                     btnPrint.Enabled = false;
-            
+
             }
         }
         private void BindProject(DropDownList ddlProject)
@@ -193,15 +194,31 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void SendEmail(OperationalControlRequestStatus OCRS)
         {
-            if (_presenter.GetUser(OCRS.Approver).IsAssignedJob != true)
+            if (OCRS.Approver != 0)
             {
-                EmailSender.Send(_presenter.GetUser(OCRS.Approver).Email, "Bank Payment Approval", (_presenter.CurrentOperationalControlRequest.AppUser.FullName).ToUpper() + " Requests for payment");
+                if (_presenter.GetUser(OCRS.Approver).IsAssignedJob != true)
+                {
+                    EmailSender.Send(_presenter.GetUser(OCRS.Approver).Email, "Bank Payment Approval", (_presenter.CurrentOperationalControlRequest.AppUser.FullName).ToUpper() + " Requests for payment");
+                }
+                else
+                {
+                    EmailSender.Send(_presenter.GetUser(_presenter.GetAssignedJobbycurrentuser(OCRS.Approver).AssignedTo).Email, "Bank Payment Approval", (_presenter.CurrentOperationalControlRequest.AppUser.FullName).ToUpper() + " Requests for payment");
+                }
             }
             else
             {
-                EmailSender.Send(_presenter.GetUser(_presenter.GetAssignedJobbycurrentuser(OCRS.Approver).AssignedTo).Email, "Bank Payment Approval", (_presenter.CurrentOperationalControlRequest.AppUser.FullName).ToUpper() + " Requests for payment");
+                foreach (AppUser Payer in _presenter.GetAppUsersByEmployeePosition(OCRS.ApproverPosition))
+                {
+                    if (Payer.IsAssignedJob != true)
+                    {
+                        EmailSender.Send(Payer.Email, "Bank Payment Approval", (_presenter.CurrentOperationalControlRequest.AppUser.FullName).ToUpper() + " Requests for Bank Payment with Request No. " + (_presenter.CurrentOperationalControlRequest.RequestNo).ToUpper());
+                    }
+                    else
+                    {
+                        EmailSender.Send(_presenter.GetUser(_presenter.GetAssignedJobbycurrentuser(Payer.Id).AssignedTo).Email, "Bank Payment Approval", (_presenter.CurrentOperationalControlRequest.AppUser.FullName).ToUpper() + " Requests for Bank Payment with Request No. '" + (_presenter.CurrentOperationalControlRequest.RequestNo).ToUpper());
+                    }
+                }
             }
-
         }
         private void SendEmailRejected(OperationalControlRequestStatus OCRS)
         {
@@ -215,13 +232,23 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
             }
         }
-        
+
         private void GetNextApprover()
         {
             foreach (OperationalControlRequestStatus OCRS in _presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses)
             {
                 if (OCRS.ApprovalStatus == null)
                 {
+                    if (OCRS.Approver == 0)
+                    {
+                        //This is to handle multiple Finance Officers responding to this request
+                        //SendEmailToFinanceOfficers;
+                        _presenter.CurrentOperationalControlRequest.CurrentApproverPosition = OCRS.ApproverPosition;
+                    }
+                    else
+                    {
+                        _presenter.CurrentOperationalControlRequest.CurrentApproverPosition = 0;
+                    }
                     SendEmail(OCRS);
                     _presenter.CurrentOperationalControlRequest.CurrentApprover = OCRS.Approver;
                     _presenter.CurrentOperationalControlRequest.CurrentLevel = OCRS.WorkflowLevel;
@@ -261,7 +288,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     }
                     break;
                 }
-                
+
             }
         }
         protected void grvOperationalControlRequestList_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -280,7 +307,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     pnlDetail_ModalPopupExtender.Show();
                 }
             }
-           
+
         }
         protected void DownloadFile(object sender, EventArgs e)
         {
@@ -289,16 +316,16 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             Response.AppendHeader("Content-Disposition", "attachment; filename=" + Path.GetFileName(filePath));
             Response.WriteFile(filePath);
             Response.End();
-        }        
+        }
         protected void grvOperationalControlRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             Button btnStatus = e.Row.FindControl("btnStatus") as Button;
             OperationalControlRequest CSR = e.Row.DataItem as OperationalControlRequest;
             if (CSR != null)
             {
-            if (e.Row.RowType == DataControlRowType.DataRow)
-            {
-                
+                if (e.Row.RowType == DataControlRowType.DataRow)
+                {
+
                     if (CSR.ProgressStatus == ProgressStatus.InProgress.ToString())
                     {
                         btnStatus.BackColor = System.Drawing.ColorTranslator.FromHtml("#FFFF6C");
@@ -319,9 +346,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 PrintTransaction();
             }
-            
-            PopApprovalStatus();           
-            
+
+            PopApprovalStatus();
+
             btnApprove.Enabled = true;
             ShowPrint();
             BindOperationalControlRequestStatus();
@@ -329,7 +356,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             rfvRejectedReason.Enabled = false;
             pnlApproval_ModalPopupExtender.Show();
         }
-        
+
         protected void grvOperationalControlRequestList_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             grvOperationalControlRequestList.PageIndex = e.NewPageIndex;
@@ -346,7 +373,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 if (_presenter.CurrentOperationalControlRequest.ProgressStatus != ProgressStatus.Completed.ToString())
                 {
                     SaveOperationalControlRequestStatus();
-                    
+
                     _presenter.SaveOrUpdateOperationalControlRequest(_presenter.CurrentOperationalControlRequest);
                     ShowPrint();
                     if (ddlApprovalStatus.SelectedValue != "Rejected")
@@ -373,13 +400,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             lblRequesterResult.Text = _presenter.CurrentOperationalControlRequest.AppUser.FullName;
             lblRequestedDateResult.Text = _presenter.CurrentOperationalControlRequest.RequestDate.Value.ToShortDateString();
-            lblBeneficiaryNameResult.Text = _presenter.CurrentOperationalControlRequest.Beneficiary.BeneficiaryName;
-            lblDescriptionResult.Text = _presenter.CurrentOperationalControlRequest.Description;
-            lblBranchCodeResult.Text = _presenter.CurrentOperationalControlRequest.BranchCode.ToString();
+            //lblBeneficiaryNameResult.Text = _presenter.CurrentOperationalControlRequest.Beneficiary.BeneficiaryName;
             lblVoucherNoResult.Text = _presenter.CurrentOperationalControlRequest.VoucherNo.ToString();
             lblTotalAmountResult.Text = _presenter.CurrentOperationalControlRequest.TotalAmount.ToString();
             lblApprovalStatusResult.Text = _presenter.CurrentOperationalControlRequest.ProgressStatus.ToString();
-            lblActualExpendtureRes.Text = _presenter.CurrentOperationalControlRequest.TotalActualExpendture != null ? _presenter.CurrentOperationalControlRequest.TotalActualExpendture.ToString() : "";
+            lblActualExpendtureRes.Text = _presenter.CurrentOperationalControlRequest.TotalActualExpendture != 0 ? _presenter.CurrentOperationalControlRequest.TotalActualExpendture.ToString() : "";
             lblReimbersestatusRes.Text = _presenter.CurrentOperationalControlRequest.PaymentReimbursementStatus;
             //lblGrantIdResult.Text = _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails[0].Grant.GrantCode;
             //lblProjectIdResult.Text = _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails[0].Project.ProjectCode;
@@ -393,14 +418,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             pnlDetail.Visible = false;
         }
-        
+
         protected void grvStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (_presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses != null)
             {
                 if (e.Row.RowType == DataControlRowType.DataRow)
                 {
-                    e.Row.Cells[1].Text = _presenter.GetUser(_presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses[e.Row.RowIndex].Approver).FullName;
+                    if (_presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses[e.Row.RowIndex].Approver > 0)
+                        e.Row.Cells[1].Text = _presenter.GetUser(_presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses[e.Row.RowIndex].Approver).FullName;
                 }
             }
         }
@@ -520,10 +546,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             BindGrant(ddlEdtGrant, Convert.ToInt32(ddl.SelectedValue));
             pnlDetail_ModalPopupExtender.Show();
         }
-       
-       
-       
 
-       
-}
+
+
+
+
+    }
 }

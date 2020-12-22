@@ -22,8 +22,10 @@ namespace Chai.WorkflowManagment.CoreDomain.Approval
         public virtual BidAnalysisRequest BidAnalysisRequest { get; set; }
       
        
-        public Nullable<DateTime> PODate { get; set; }
-        public Supplier Supplier { get; set; }
+        public DateTime? PODate { get; set; }
+        public virtual Supplier Supplier { get; set; }
+
+       
         public string PoNumber { get; set; }
         public string Billto { get; set; }
         public string ShipTo { get; set; }
@@ -31,6 +33,9 @@ namespace Chai.WorkflowManagment.CoreDomain.Approval
         public string PaymentTerms { get; set; }
         public string Status { get; set; }
         public decimal TotalPrice { get; set; }
+        public DateTime? DeliveryDate { get; set; }
+        public string DeliveryLocation { get; set; }
+        public string DeliveryBy { get; set; }
         public IList<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
 
         #region PurchaseOrderDetail
@@ -45,8 +50,29 @@ namespace Chai.WorkflowManagment.CoreDomain.Approval
             }
             return null;
         }
+        public virtual PurchaseOrderDetail GetPurchaseOrderDetailBySupplierId(int Id)
+        {
 
+            foreach (PurchaseOrderDetail detail in PurchaseOrderDetails)
+            {
+                if (detail.Supplier.Id == Id)
+                    return detail;
 
+            }
+            return null;
+        }
+        
+        public  IList<PurchaseOrderDetail> GetPurchaseOrderDetailByStatus()
+        {
+            IList<PurchaseOrderDetail> PODs = new List<PurchaseOrderDetail>();
+            foreach (PurchaseOrderDetail PODetail in PurchaseOrderDetails)
+            {
+                if (PODetail.Status== "Open")
+                    PODs.Add(PODetail);
+
+            }
+            return PODs;
+        }
         public virtual void RemovePurchaseOrderDetail(int Id)
         {
 
@@ -58,7 +84,20 @@ namespace Chai.WorkflowManagment.CoreDomain.Approval
             }
 
         }
+        public virtual void RemovePurchaseOrderAll()
+        {
 
+            foreach (PurchaseOrderDetail detail in PurchaseOrderDetails)
+            {
+                
+                    PurchaseOrderDetails.Remove(detail);
+                break;
+            }
+
+        }
+
+
+      
         #endregion
 
     }

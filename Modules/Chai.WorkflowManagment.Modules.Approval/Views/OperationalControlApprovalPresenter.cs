@@ -138,7 +138,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _controller.GetAssignedUserbycurrentuser();
         }
-       
+        public IList<AppUser> GetAppUsersByEmployeePosition(int employeePosition)
+        {
+            return _settingController.GetAppUsersByEmployeePosition(employeePosition);
+        }
+
         public void Commit()
         {
             _controller.Commit();

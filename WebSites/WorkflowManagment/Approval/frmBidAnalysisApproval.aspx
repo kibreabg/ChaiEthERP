@@ -81,17 +81,17 @@
                     </ItemTemplate>
                 </asp:TemplateField>
                 
-                <asp:BoundField DataField="SpecialNeed" HeaderText="Suggested Supplier" SortExpression="SuggestedSupplier" />
+             <%--   <asp:BoundField DataField="Supplier.SupplierName" HeaderText="Suggested Supplier" SortExpression="Supplier.SupplierName" />--%>
                 
                 <asp:BoundField DataField="TotalPrice" HeaderText="Total Price" SortExpression="TotalPrice" />
 
-                 <asp:TemplateField HeaderText="Purchase Requested By">
+                <%-- <asp:TemplateField HeaderText="Purchase Requested By">
                    
                 </asp:TemplateField>
                
-                 <asp:TemplateField HeaderText="Supervisor For Requester">
+                 <asp:TemplateField HeaderText="Bid Analysis Prepared By">--%>
                    
-                </asp:TemplateField>
+                <%--</asp:TemplateField>--%>
                  <asp:TemplateField HeaderText="Purchase Requested No">
                     <ItemTemplate>
                      <%# DataBinder.Eval(Container.DataItem, "PurchaseRequest.RequestNo")%>
@@ -143,66 +143,41 @@
                             <div class="widget-body no-padding">
                                 <div class="smart-form">
 
-                                    <asp:DataGrid ID="dgPurchaseRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0" CssClass="table table-striped table-bordered table-hover" DataKeyField="Id" GridLines="None" OnItemDataBound="dgPurchaseRequestDetail_ItemDataBound" PagerStyle-CssClass="paginate_button active" ShowFooter="True">
-                                        <Columns>
-                                            <asp:TemplateColumn HeaderText="Supplier">
+                                    <asp:DataGrid ID="dgPurchaseRequestDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False"  CellPadding="0" TextWrap = "Wrap" CssClass="table table-striped table-bordered table-hover" DataKeyField="Id" GridLines="None" OnItemDataBound="dgPurchaseRequestDetail_ItemDataBound" PagerStyle-CssClass="paginate_button active" ShowFooter="True">
+                                         <Columns>
+                                                <asp:TemplateColumn HeaderText="Bidder Name" >
+                                                    <ItemTemplate>
+                                                        <%# DataBinder.Eval(Container.DataItem, "Supplier.SupplierNameType")%>
+                                                    </ItemTemplate>
+                                                </asp:TemplateColumn>
+                                                <asp:TemplateColumn HeaderText="Item" >
+                                                    <ItemTemplate>
+                                                        <%# DataBinder.Eval(Container.DataItem, "Item")%>
+                                                    </ItemTemplate>
+                                                </asp:TemplateColumn>
+                                                <asp:TemplateColumn HeaderText="Quantity">
+                                                    <ItemTemplate>
+                                                        <%# DataBinder.Eval(Container.DataItem, "Qty")%>
+                                                    </ItemTemplate>
+                                                </asp:TemplateColumn>
+                                                <asp:TemplateColumn HeaderText="Unit Cost">
+                                                    <ItemTemplate>
+                                                        <%# DataBinder.Eval(Container.DataItem, "UnitCost")%>
+                                                    </ItemTemplate>
+                                                </asp:TemplateColumn>
+                                                <asp:TemplateColumn HeaderText="Total Cost">
+                                                    <ItemTemplate>
+                                                        <%# DataBinder.Eval(Container.DataItem, "TotalCost")%>
+                                                    </ItemTemplate>
+                                                </asp:TemplateColumn>
+                                                <asp:TemplateColumn HeaderText="Rank">
+                                                    <ItemTemplate>
+                                                        <%# DataBinder.Eval(Container.DataItem, "Rank")%>
+                                                    </ItemTemplate>
+                                                </asp:TemplateColumn>
+                                            </Columns>
 
 
-                                                <ItemTemplate>
-                                                    <%# DataBinder.Eval(Container.DataItem, "Bidder.Supplier.SupplierName")%>
-                                                </ItemTemplate>
-                                            </asp:TemplateColumn>
-                                              <asp:TemplateColumn HeaderText="Account Code">
-
-
-                                                <ItemTemplate>
-                                                    <%# DataBinder.Eval(Container.DataItem, "ItemDescription")%>
-                                                </ItemTemplate>
-                                            </asp:TemplateColumn>
-                                             <asp:TemplateColumn HeaderText="Item">
-
-
-                                                <ItemTemplate>
-                                                    <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountName")%>
-                                                </ItemTemplate>
-                                            </asp:TemplateColumn>
-                                            <asp:TemplateColumn HeaderText="Rank">
-                                                <ItemTemplate>
-                                                    <%# DataBinder.Eval(Container.DataItem, "Bidder.Rank")%>
-                                                </ItemTemplate>
-                                           </asp:TemplateColumn>
-                                              <asp:TemplateColumn HeaderText="Reason For Selection">
-                                                <ItemTemplate>
-                                                     <asp:Label id="lblReason" runat="server" Text= '<%# DataBinder.Eval(Container.DataItem, "Bidder.GetSelectionReason")%>'></asp:Label>
-                                                  
-                                                </ItemTemplate>
-                                           </asp:TemplateColumn>
-                                            <asp:TemplateColumn HeaderText="Qty">
-                                                <ItemTemplate>
-                                                    <%# DataBinder.Eval(Container.DataItem, "Qty")%>
-                                                </ItemTemplate>
-
-
-                                            </asp:TemplateColumn>
-                                            <asp:TemplateColumn HeaderText="Price per unit">
-                                                <ItemTemplate>
-                                                    <%# DataBinder.Eval(Container.DataItem, "UnitCost")%>
-                                                </ItemTemplate>
-
-
-                                            </asp:TemplateColumn>
-                                             <asp:TemplateColumn HeaderText="Total Price">
-                                                <ItemTemplate>
-                                                    <%# DataBinder.Eval(Container.DataItem, "TotalCost")%>
-                                                </ItemTemplate>
-
-
-                                            </asp:TemplateColumn>
-                                          
-                                           
-
-
-                                        </Columns>
                                         <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
                                     </asp:DataGrid>
 
@@ -374,31 +349,7 @@
                     <td>&nbsp;</td>
                 </tr>
               
-                 <tr>
-                    <td style="width: 848px; height: 18px;">
-                        <strong>
-                            <asp:Label ID="lblCommentPrint" runat="server" Text="Reason For Selection:"></asp:Label>
-                        </strong></td>
-                    <td style="width: 390px; height: 18px;">
-                        <asp:Label ID="lblCommentResult" runat="server"></asp:Label>
-                    </td>
-                    <td style="width: 389px; height: 18px;">&nbsp;</td>
-                    <td style="width: 389px; height: 18px;"></td>
-                    <td style="height: 18px">&nbsp;</td>
-                </tr>
-              
-                 <tr>
-                    <td style="width: 848px; height: 18px;">
-                        <strong>
-                            <asp:Label ID="lblRequireddateofdelivery" runat="server" Text="Special Need:"></asp:Label>
-                        </strong></td>
-                    <td style="width: 390px; height: 18px;">
-                        <asp:Label ID="lblRequireddateofdeliveryResult" runat="server"></asp:Label>
-                    </td>
-                    <td style="width: 389px; height: 18px;">&nbsp;</td>
-                    <td style="width: 389px; height: 18px;"></td>
-                    <td style="height: 18px">&nbsp;</td>
-                </tr>
+               
                    <tr>
                     <td style="width: 848px; height: 18px;">
                         <strong>

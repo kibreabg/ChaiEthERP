@@ -71,8 +71,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         public AppUser GetAssignDriver(int Id)
         {
             return _adminController.GetAssignDriver(Id);
-        }
-       
+        }       
         public IList<CarRental> GetCarRentals()
         {
             return _settingController.GetCarRentals();
@@ -96,6 +95,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         public Vehicle GetVehicle(int Id)
         {
             return _settingController.GetVehicle(Id);
+        }
+        public Vehicle GetVehicleByDriver(int driverId)
+        {
+            return _settingController.GetVehicleByPlateNo(driverId);
         }
         public IList<Project> GetProjects()
         {

@@ -66,6 +66,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _adminController.GetDrivers();
         }
+        public IList<AppUser> GetAppUsersByEmployeePosition(int employeePosition)
+        {
+            return _settingController.GetAppUsersByEmployeePosition(employeePosition);
+        }
         public IList<CarRental> GetCarRentals()
         {
             return _settingController.GetCarRentals();
@@ -74,9 +78,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _settingController.GetCarRental(Id);
         }
-        public ELRAttachment GetAttachment(int attachmentId)
+        public PRAttachment GetAttachment(int attachmentId)
         {
-            return _requestController.GetELRAttachment(attachmentId);
+            return _requestController.GetPRAttachment(attachmentId);
         }
         public AppUser GetUser(int UserId)
         {
@@ -85,6 +89,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         public void SaveOrUpdatePaymentReimbursementRequest(PaymentReimbursementRequest PaymentReimbursementRequest)
         {
             _controller.SaveOrUpdateEntity(PaymentReimbursementRequest);
+        }
+        public void DeletePaymentReimbursementRequest(PaymentReimbursementRequest PaymentReimbursementRequest)
+        {
+            _controller.DeleteEntity(PaymentReimbursementRequest);
         }
         public IList<PaymentReimbursementRequest> ListPaymentReimbursementRequests(string RequestDate, string ProgressStatus)
         {

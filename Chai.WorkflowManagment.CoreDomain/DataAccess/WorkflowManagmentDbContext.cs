@@ -12,14 +12,14 @@ using Chai.WorkflowManagment.CoreDomain.TravelLogs;
 using Chai.WorkflowManagment.CoreDomain.Request;
 using Chai.WorkflowManagment.CoreDomain.Approval;
 using Chai.WorkflowManagment.CoreDomain.HRM;
-
+using Chai.WorkflowManagment.CoreDomain.Inventory;
 
 namespace Chai.WorkflowManagment.CoreDomain.DataAccess
 {
     public class WorkflowManagmentDbContext : BaseDbContext
     {
         public WorkflowManagmentDbContext(bool disableProxy)
-            : base("ERP")
+            : base("CHAIEthERPTest")
         {
             if (disableProxy)
                 ObjContext().ContextOptions.ProxyCreationEnabled = false;
@@ -47,6 +47,7 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
         public DbSet<ExpenseType> ExpenseTypes { get; set; }
         public DbSet<EmployeeLeave> EmployeeLeaves { get; set; }
         public DbSet<ItemAccount> ItemAccounts { get; set; }
+        public DbSet<ItemAccountChecklist> ItemAccountChecklists { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<SoleVendorSupplier> SoleVendorSuppliers { get; set; }
         public DbSet<SupplierType> SupplierTypes { get; set; }
@@ -74,7 +75,7 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
         public DbSet<PaymentReimbursementRequest> PaymentReimbursementRequests { get; set; }
         public DbSet<PaymentReimbursementRequestDetail> PaymentReimbursementRequestDetails { get; set; }
         public DbSet<PaymentReimbursementRequestStatus> PaymentReimbursementRequestStatuses { get; set; }
-
+        public DbSet<PRAttachment> PRAttachments { get; set; }
         public DbSet<OperationalControlRequest> OperationalControlRequests { get; set; }
         public DbSet<OperationalControlRequestDetail> OperationalControlRequestDetails { get; set; }
         public DbSet<OperationalControlRequestStatus> OperationalControlRequestStatuses { get; set; }
@@ -102,7 +103,13 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
         public DbSet<PurchaseRequest> PurchaseRequests { get; set; }
         public DbSet<PurchaseRequestDetail> PurchaseRequestDetail { get; set; }
         public DbSet<PurchaseRequestStatus> PurchaseRequestStatuses { get; set; }
+        public DbSet<StoreRequest> StoreRequests { get; set; }
+        public DbSet<StoreRequestDetail> StoreRequestDetail { get; set; }
+        public DbSet<StoreRequestStatus> StoreRequestStatuses { get; set; }
         public DbSet<BidAnalysisRequestDetail> BidAnalysisRequestDetail { get; set; }
+        public DbSet<MaintenanceRequest> MaintenanceRequest { get; set; }
+        public DbSet<MaintenanceRequestDetail> MaintenanceRequestDetail { get; set; }
+        public DbSet<MaintenanceRequestStatus> MaintenanceRequestStatus { get; set; }
         public DbSet<BAAttachment> BAAttachments { get; set; }
         public DbSet<Bidder> Bidders { get; set; }
         public DbSet<BidderItemDetail> BidderItemDetails { get; set; }
@@ -121,7 +128,22 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
         public DbSet<WorkExperience> WorkExperiences { get; set; }
         public DbSet<Holiday> Holidays { get; set; }
 
-       
+        public DbSet<Issue> Issues { get; set; }
+        public DbSet<IssueDetail> IssueDetails { get; set; }
+        public DbSet<Item> Items { get; set; }
+        public DbSet<ItemCategory> ItemCategories { get; set; }
+        public DbSet<ItemSubCategory> ItemSubCategories { get; set; }
+        public DbSet<Receive> Receives { get; set; }
+        public DbSet<ReceiveDetail> ReceiveDetails { get; set; }
+        public DbSet<Section> Sections { get; set; }
+        public DbSet<Shelf> Shelfs { get; set; }
+        public DbSet<Store> Stores { get; set; }
+        public DbSet<Stock> Stocks { get; set; }
+        public DbSet<UnitOfMeasurement> UnitOfMeasurements { get; set; }
+        public DbSet<FixedAsset> FixedAssets { get; set; }
+        public DbSet<FixedAssetHistory> FixedAssetHistories { get; set; }
+
+        public DbSqlQuery UpdateTaskpanNodePosition { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             //modelBuilder.Entity<AppUser>().HasMany(p => p.AppUserRoles).WithMany();
@@ -129,7 +151,6 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
             //modelBuilder.Entity<Tab>().HasMany(p => p.TabRoles).WithMany();
             //modelBuilder.Entity<Tab>().HasMany(p => p.TaskPans).WithMany();
             //modelBuilder.Entity<TaskPan>().HasMany(p => p.TaskPanNodes).WithMany();
-
 
             base.OnModelCreating(modelBuilder);
         }

@@ -32,6 +32,8 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public int Supervisor { get; set; }
         public int ReportsTo { get; set; }
         public virtual HRM.Contract Contract { get; set; }
-    
+      
+
+
     }
 }
