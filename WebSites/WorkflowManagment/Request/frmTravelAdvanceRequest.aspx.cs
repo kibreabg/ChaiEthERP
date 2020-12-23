@@ -239,7 +239,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     _presenter.SaveOrUpdateTARequest();
                     BindTravelAdvanceRequests();
-                    Master.ShowMessage(new AppMessage("Successfully did a Travel Advance Request, Reference No - <b>'" + _presenter.CurrentTravelAdvanceRequest.TravelAdvanceNo + "'</b> ", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    Master.ShowMessage(new AppMessage("Successfully did a Travel Advance Request, Reference No - <b>'" + _presenter.CurrentTravelAdvanceRequest.TravelAdvanceNo + "'</b> ", RMessageType.Info));
                     Log.Info(_presenter.CurrentUser().FullName + " has requested a Travel Advance of Total Amount " + _presenter.CurrentTravelAdvanceRequest.TotalTravelAdvance.ToString());
                     btnSave.Visible = false;
                     PrintTransaction();
@@ -247,16 +247,19 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
                 else
                 {
-                    Master.ShowMessage(new AppMessage("Please insert at least one Item Detail", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Please insert at least one Item Detail", RMessageType.Error));
                 }
             }
             catch (Exception ex)
             {
+                Master.ShowMessage(new AppMessage(ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
                 if (ex.InnerException != null)
                 {
                     if (ex.InnerException.InnerException.Message.Contains("Violation of UNIQUE KEY"))
                     {
-                        Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", RMessageType.Error));
                         AutoNumber();
                     }
                 }
@@ -269,7 +272,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             btnDelete.Enabled = false;
             btnSave.Enabled = false;
             BindTravelAdvanceRequests();
-            Master.ShowMessage(new AppMessage("Travel Advance Request Successfully Deleted", Chai.WorkflowManagment.Enums.RMessageType.Info));
+            Master.ShowMessage(new AppMessage("Travel Advance Request Successfully Deleted", RMessageType.Info));
         }
         protected void btnFind_Click(object sender, EventArgs e)
         {
@@ -359,11 +362,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 else { _presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestDetails.Remove(tard); }
                 BindTravelAdvanceDetails();
 
-                Master.ShowMessage(new AppMessage("Travel Advance Request Detail was Removed Successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Travel Advance Request Detail was Removed Successfully", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to delete Travel Advance Request Detail. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to delete Travel Advance Request Detail. " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         protected void dgTravelAdvanceRequestDetail_EditCommand(object source, DataGridCommandEventArgs e)
@@ -401,7 +406,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
                 catch (Exception ex)
                 {
-                    Master.ShowMessage(new AppMessage("Error: Unable to Save Travel Advance Detail " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Error: Unable to Save Travel Advance Detail " + ex.Message, RMessageType.Error));
+                    ExceptionUtility.LogException(ex, ex.Source);
+                    ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
                 }
             }
 
@@ -460,11 +467,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                 dgTravelAdvanceRequestDetail.EditItemIndex = -1;
                 BindTravelAdvanceDetails();
-                Master.ShowMessage(new AppMessage("Travel Advance Detail Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Travel Advance Detail Successfully Updated", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to Update Travel Advance Detail " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to Update Travel Advance Detail " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         protected void dgTravelAdvanceRequestDetail_SelectedIndexChanged(object sender, EventArgs e)
@@ -526,11 +535,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
                 BindCostsGrid(taco.TravelAdvanceRequestDetail);
                 pnlTACost_ModalPopupExtender.Show();
-                Master.ShowMessage(new AppMessage("Travel Advance Cost was removed successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Travel Advance Cost was removed successfully", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to delete Travel Advance Cost. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to delete Travel Advance Cost. " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         protected void dgTravelAdvanceRequestCost_EditCommand(object source, DataGridCommandEventArgs e)
@@ -584,7 +595,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
                 catch (Exception ex)
                 {
-                    Master.ShowMessage(new AppMessage("Error: Unable to Save Travel Advance Cost " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Error: Unable to Save Travel Advance Cost " + ex.Message, RMessageType.Error));
+                    ExceptionUtility.LogException(ex, ex.Source);
+                    ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
                 }
             }
         }
@@ -668,11 +681,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 dgTravelAdvanceRequestCost.EditItemIndex = -1;
                 BindCostsGrid(taCost.TravelAdvanceRequestDetail);
                 pnlTACost_ModalPopupExtender.Show();
-                Master.ShowMessage(new AppMessage("Travel Advance Cost Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Travel Advance Cost Successfully Updated", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to Update Travel Advance Cost " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to Update Travel Advance Cost " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
     }
