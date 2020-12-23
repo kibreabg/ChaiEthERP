@@ -22,6 +22,17 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public virtual IList<PRAttachment> PRAttachments { get; set; }
         #region PRAttachment
 
+        public virtual void RemovePRAttachment(int Id)
+        {
+            foreach (PRAttachment cpa in PRAttachments)
+            {
+                if (cpa.Id == Id)
+                {
+                    PRAttachments.Remove(cpa);
+                    break;
+                }
+            }
+        }
         public virtual void RemovePRAttachment(string FilePath)
         {
             foreach (PRAttachment cpa in PRAttachments)

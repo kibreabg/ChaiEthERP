@@ -74,7 +74,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return txtComment.Text; }
         }
-        
+
         public IList<PaymentReimbursementRequest> PaymentReimbursementRequests
         {
             get
@@ -162,7 +162,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     txtImbursement.Text = ((txtImbursement.Text != "" ? Convert.ToDecimal(txtImbursement.Text) : 0) + detail.ActualExpenditure).ToString();
                 }
             }
-           
+
         }
         protected void grvPaymentReimbursementRequestList_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -219,7 +219,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             TextBox txtEdtAccountCode = ddl.FindControl("txtEdtAccountCode") as TextBox;
             txtEdtAccountCode.Text = _presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)).AccountCode;
         }
-       
+
         private void BindAccountDescription(DropDownList ddlAccountDescription)
         {
             ddlAccountDescription.DataSource = _presenter.ListItemAccounts();
@@ -227,7 +227,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ddlAccountDescription.DataTextField = "AccountName";
             ddlAccountDescription.DataBind();
         }
-     
+
         private void BindProject(DropDownList ddlProject, int programID)
         {
             ddlProject.DataSource = _presenter.ListProjects(programID);
@@ -390,7 +390,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             if (e.Item.ItemType == ListItemType.Footer)
             {
-                
+
                 DropDownList ddlAccountDescription = e.Item.FindControl("ddlAccountDescription") as DropDownList;
                 BindAccountDescription(ddlAccountDescription);
             }
@@ -398,7 +398,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails != null)
                 {
-                    
+
                     DropDownList ddlAccountDescription = e.Item.FindControl("ddlEdtAccountDescription") as DropDownList;
                     if (ddlAccountDescription != null)
                     {
@@ -410,7 +410,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                                 liI.Selected = true;
                         }
                     }
-                   
+
                 }
             }
         }
@@ -501,13 +501,15 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (fileName != String.Empty)
             {
                 List<PRAttachment> attachments = (List<PRAttachment>)Session["attachments"];
+                int index = 0;
                 foreach (PRAttachment attachment in attachments)
                 {
-                    if (attachment.ItemAccountChecklists[0].ChecklistName == attachmentRow.Cells[1].Text)
+                    if (attachment.ItemAccountChecklists[0].ChecklistName == attachmentRow.Cells[1].Text && attachmentRow.DataItemIndex == index)
                     {
                         attachment.FilePath = "~/PRUploads/" + fileName;
                         fuReciept.PostedFile.SaveAs(Server.MapPath("~/PRUploads/") + fileName);
                     }
+                    index++;
                 }
 
                 BindAttachments();
