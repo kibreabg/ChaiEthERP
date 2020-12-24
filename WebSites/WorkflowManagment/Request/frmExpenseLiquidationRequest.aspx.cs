@@ -129,7 +129,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 txtTotActual.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure.ToString();
                 txtTotalAdvance.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance.ToString();
                 txtAdditionalComment.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.AdditionalComment;
-                BindExpenseLiquidationDetails();
+                BindExpenseLiquidationDetailGrid();
                 BindExpenseLiquidationRequests();
             }
         }
@@ -186,45 +186,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 PopulateLiquidation();
             }
             txtTravelAdvReqDate.Text = _presenter.CurrentTravelAdvanceRequest.RequestDate.Value.ToShortDateString();
-            dgExpenseLiquidationDetail.DataSource = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails;
-            dgExpenseLiquidationDetail.DataBind();
+            txtTotalAdvance.Text = _presenter.CurrentTravelAdvanceRequest.TotalTravelAdvance.ToString();
+            txtComment.Text = _presenter.CurrentTravelAdvanceRequest.PurposeOfTravel;
+            BindExpenseLiquidationDetailGrid();
             grvAttachments.DataSource = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ELRAttachments;
             grvAttachments.DataBind();
         }
-        private void SetLiquidationDetails()
+        private void BindExpenseLiquidationDetailGrid()
         {
-            int index = 0;
-            foreach (DataGridItem dgi in dgExpenseLiquidationDetail.Items)
-            {
-                int id = (int)dgExpenseLiquidationDetail.DataKeys[dgi.ItemIndex];
-
-                ExpenseLiquidationRequestDetail detail;
-                if (id > 0)
-                    detail = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.GetExpenseLiquidationRequestDetail(id);
-                else
-                    detail = (ExpenseLiquidationRequestDetail)_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails[index];
-
-                if (dgi.ItemType == ListItemType.Item || dgi.ItemType == ListItemType.AlternatingItem)
-                {
-                    TextBox txtFRefNo = dgi.FindControl("txtRefNo") as TextBox;
-                    detail.RefNo = txtFRefNo.Text;
-                    DropDownList ddlAccountDescription = dgi.FindControl("ddlAccountDescription") as DropDownList;
-                    detail.ItemAccount = _presenter.GetItemAccount(Convert.ToInt32(ddlAccountDescription.SelectedValue));
-                    DropDownList ddlProject = dgi.FindControl("ddlProject") as DropDownList;
-                    detail.Project = _presenter.GetProject(Convert.ToInt32(ddlProject.SelectedValue));
-                    DropDownList ddlGrant = dgi.FindControl("ddlGrant") as DropDownList;
-                    detail.Grant = _presenter.GetGrant(Convert.ToInt32(ddlGrant.SelectedValue));
-                    TextBox txtActualExpenditure = dgi.FindControl("txtActualExpenditure") as TextBox;
-                    detail.ActualExpenditure = Convert.ToDecimal(txtActualExpenditure.Text);
-                    TextBox txtVariance = dgi.FindControl("txtVariance") as TextBox;
-                    detail.Variance = Convert.ToDecimal(txtVariance.Text);
-                    //_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure + detail.ActualExpenditure;
-                    //txtTotActual.Text = (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure).ToString();
-                }
-
-                index++;
-                //_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails.Add(detail);
-            }
+            dgExpenseLiquidationDetail.DataSource = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails;
+            dgExpenseLiquidationDetail.DataBind();
         }
         protected void grvExpenseLiquidationRequestList_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -302,7 +273,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 if (e.Row.RowType == DataControlRowType.DataRow)
                 {
-                    e.Row.Cells[1].Text = _presenter.GetUser(_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestStatuses[e.Row.RowIndex].Approver).FullName;
+                    if (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestStatuses[e.Row.RowIndex].Approver != 0)
+                        e.Row.Cells[1].Text = _presenter.GetUser(_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestStatuses[e.Row.RowIndex].Approver).FullName;
                 }
             }
         }
@@ -319,14 +291,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 DropDownList ddlExpenseType = e.Item.FindControl("ddlExpenseType") as DropDownList;
                 PopExpenseTypes(ddlExpenseType);
             }
-            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            else
             {
                 if (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails != null)
                 {
                     DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
-                    BindProject(ddlProject);
                     if (ddlProject != null)
                     {
+                        BindProject(ddlProject);
                         if (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails[e.Item.DataSetIndex].Project != null)
                         {
                             ListItem liI = ddlProject.Items.FindByValue(_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails[e.Item.DataSetIndex].Project.Id.ToString());
@@ -339,7 +311,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     if (ddlGrant != null)
                     {
                         BindGrant(ddlGrant, Convert.ToInt32(ddlProject.SelectedValue));
-                        if (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails[e.Item.DataSetIndex].Grant.Id != null)
+                        if (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails[e.Item.DataSetIndex].Grant != null)
                         {
                             ListItem liI = ddlGrant.Items.FindByValue(_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails[e.Item.DataSetIndex].Grant.Id.ToString());
                             if (liI != null)
@@ -348,9 +320,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                     }
                     DropDownList ddlAccountDescription = e.Item.FindControl("ddlAccountDescription") as DropDownList;
-                    BindAccountDescription(ddlAccountDescription);
                     if (ddlAccountDescription != null)
                     {
+                        BindAccountDescription(ddlAccountDescription);
                         if (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails[e.Item.DataSetIndex].ItemAccount != null)
                         {
                             ListItem liI = ddlAccountDescription.Items.FindByValue(_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails[e.Item.DataSetIndex].ItemAccount.Id.ToString());
@@ -380,8 +352,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 try
                 {
                     ExpenseLiquidationRequestDetail elrd1 = new ExpenseLiquidationRequestDetail();
-                    TextBox txtFRefNo = e.Item.FindControl("txtFRefNo") as TextBox;
-                    elrd1.RefNo = txtFRefNo.Text;
                     elrd1.ExpenseLiquidationRequest = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest;
                     DropDownList ddlFAccountDescription1 = e.Item.FindControl("ddlFAccountDescription") as DropDownList;
                     elrd1.ItemAccount = _presenter.GetItemAccount(Convert.ToInt32(ddlFAccountDescription1.SelectedValue));
@@ -398,16 +368,58 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     TextBox txtFVariance1 = e.Item.FindControl("txtFVariance") as TextBox;
                     elrd1.Variance = Convert.ToDecimal(txtFVariance1.Text);
                     _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails.Add(elrd1);
-                    SetLiquidationDetails();
                     dgExpenseLiquidationDetail.EditItemIndex = -1;
-                    BindExpenseLiquidationDetails();
+                    BindExpenseLiquidationDetailGrid();
                     Master.ShowMessage(new AppMessage("Expense Liquidation Detail Successfully Added!", RMessageType.Info));
                 }
                 catch (Exception ex)
                 {
                     Master.ShowMessage(new AppMessage("Error: Unable to Add Expense Liquidation Detail " + ex.Message, RMessageType.Error));
+                    ExceptionUtility.LogException(ex, ex.Source);
+                    ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
                 }
             }
+        }
+        protected void dgExpenseLiquidationDetail_UpdateCommand(object source, DataGridCommandEventArgs e)
+        {
+            int eldId = (int)dgExpenseLiquidationDetail.DataKeys[e.Item.ItemIndex];
+            ExpenseLiquidationRequestDetail elrd;
+
+            if (eldId > 0)
+                elrd = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.GetExpenseLiquidationRequestDetail(eldId);
+            else
+                elrd = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails[e.Item.ItemIndex];
+
+            try
+            {
+                DropDownList ddlAccountDescription = e.Item.FindControl("ddlAccountDescription") as DropDownList;
+                elrd.ItemAccount = _presenter.GetItemAccount(Convert.ToInt32(ddlAccountDescription.SelectedValue));
+                DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
+                elrd.Project = _presenter.GetProject(Convert.ToInt32(ddlProject.SelectedValue));
+                DropDownList ddlGrant = e.Item.FindControl("ddlGrant") as DropDownList;
+                elrd.Grant = _presenter.GetGrant(Convert.ToInt32(ddlGrant.SelectedValue));
+                TextBox txtActualExpenditure = e.Item.FindControl("txtActualExpenditure") as TextBox;
+                elrd.ActualExpenditure = Convert.ToDecimal(txtActualExpenditure.Text);
+                TextBox txtVariance = e.Item.FindControl("txtVariance") as TextBox;
+                elrd.Variance = Convert.ToDecimal(txtVariance.Text);
+                _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure + elrd.ActualExpenditure;
+                txtTotActual.Text = (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure).ToString();
+
+                dgExpenseLiquidationDetail.EditItemIndex = -1;
+                BindExpenseLiquidationDetailGrid();
+                Master.ShowMessage(new AppMessage("Liquidation Detail Successfully Updated", RMessageType.Info));
+            }
+            catch (Exception ex)
+            {
+                Master.ShowMessage(new AppMessage("Error: Unable to Update liquidation detail. " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
+            }
+        }
+        protected void dgExpenseLiquidationDetail_EditCommand(object source, DataGridCommandEventArgs e)
+        {
+            this.dgExpenseLiquidationDetail.EditItemIndex = e.Item.ItemIndex;
+            BindExpenseLiquidationDetailGrid();
         }
         protected void txtActualExpenditure_TextChanged(object sender, EventArgs e)
         {
@@ -484,8 +496,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void btnSave_Click(object sender, EventArgs e)
         {
-            SetLiquidationDetails();
-
             if (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ELRAttachments.Count != 0)
             {
                 //For update cases make the totals equal to zero first then add up the individuals
@@ -571,5 +581,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
 
         }
+
     }
 }

@@ -133,28 +133,22 @@
                                         </label>
                                     </section>
                                     <section class="col col-6">
-                                        <asp:Label ID="lblRejectedReason" runat="server" Text="Rejected Reason" Visible="false" CssClass="label"></asp:Label>
-                                        <label class="input">
-                                            <asp:TextBox ID="txtRejectedReason" Visible="false" runat="server"></asp:TextBox>
-                                            <asp:RequiredFieldValidator ID="rfvRejectedReason" runat="server" Enabled="false" CssClass="validator" ValidationGroup="save" ErrorMessage="Must Enter Rejection Reason" ControlToValidate="txtRejectedReason"></asp:RequiredFieldValidator>
-                                        </label>
-                                    </section>
-                                </div>
-                                <div class="row">
-                                    <section class="col col-6">
-                                        <asp:Label ID="lblReferenceNo" Visible="false" runat="server" CssClass="label">Reference No.</asp:Label>
-                                        <asp:Label ID="lblReference" Visible="false" runat="server" CssClass="select">
-                                            <asp:TextBox ID="txtReference" runat="server" ReadOnly="true" Visible="false"></asp:TextBox>
-                                        </asp:Label>
-                                    </section>
-                                    <section class="col col-6">
-                                        <asp:Label ID="lblAccount" Visible="false" runat="server" CssClass="label">Payment Type</asp:Label>
+                                        <asp:Label ID="lblAccount" Visible="false" runat="server" CssClass="label">Bank Account</asp:Label>
                                         <asp:Label ID="lblAccountdd" Visible="false" runat="server" CssClass="select">
                                             <asp:DropDownList ID="ddlAccount" runat="server" AppendDataBoundItems="True" DataTextField="Name" DataValueField="Id">
                                                 <asp:ListItem Value="0">Select Account</asp:ListItem>
                                             </asp:DropDownList><i></i>
                                             <asp:RequiredFieldValidator ID="rfvddlaccount" runat="server" CssClass="validator" ValidationGroup="save" ErrorMessage="Account Required" InitialValue="0" ControlToValidate="ddlAccount"></asp:RequiredFieldValidator>
                                         </asp:Label>
+                                    </section>
+                                </div>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <asp:Label ID="lblRejectedReason" runat="server" Text="Rejected Reason" Visible="false" CssClass="label"></asp:Label>
+                                        <label class="input">
+                                            <asp:TextBox ID="txtRejectedReason" Visible="false" runat="server"></asp:TextBox>
+                                            <asp:RequiredFieldValidator ID="rfvRejectedReason" runat="server" Enabled="false" CssClass="validator" ValidationGroup="save" ErrorMessage="Must Enter Rejection Reason" ControlToValidate="txtRejectedReason"></asp:RequiredFieldValidator>
+                                        </label>
                                     </section>
                                 </div>
                             </fieldset>

@@ -173,27 +173,21 @@
                                                     <ContentTemplate>
                                                         <asp:DataGrid ID="dgExpenseLiquidationDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
                                                             CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
+                                                            OnEditCommand="dgExpenseLiquidationDetail_EditCommand" OnUpdateCommand="dgExpenseLiquidationDetail_UpdateCommand"
                                                             GridLines="None" OnItemDataBound="dgExpenseLiquidationDetail_ItemDataBound" ShowFooter="True" OnItemCommand="dgExpenseLiquidationDetail_ItemCommand">
 
                                                             <Columns>
-                                                                <asp:TemplateColumn HeaderText="Ref No.">
-                                                                    <ItemTemplate>
-                                                                        <asp:TextBox ID="txtRefNo" runat="server" CssClass="form-control" AutoPostBack="true" Text='<%# DataBinder.Eval(Container.DataItem, "RefNo")%>'></asp:TextBox>
-                                                                        <asp:RequiredFieldValidator ID="rfvtxtRefNo" runat="server" ControlToValidate="txtRefNo" CssClass="validator" ErrorMessage="Ref No. is required" ValidationGroup="request" InitialValue=""></asp:RequiredFieldValidator>
-                                                                    </ItemTemplate>
-                                                                    <FooterTemplate>
-                                                                        <asp:TextBox ID="txtFRefNo" runat="server" CssClass="form-control" AutoPostBack="true"></asp:TextBox>
-                                                                        <asp:RequiredFieldValidator ID="rfvtxtFRefNo" runat="server" CssClass="validator" ControlToValidate="txtFRefNo" ErrorMessage="Ref No. is required" ValidationGroup="save" InitialValue=""></asp:RequiredFieldValidator>
-                                                                    </FooterTemplate>
-                                                                </asp:TemplateColumn>
                                                                 <asp:TemplateColumn HeaderText="Account Name">
                                                                     <ItemTemplate>
+                                                                        <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountName")%>
+                                                                    </ItemTemplate>
+                                                                    <EditItemTemplate>
                                                                         <asp:DropDownList ID="ddlAccountDescription" runat="server" CssClass="form-control" AppendDataBoundItems="true" AutoPostBack="True" OnSelectedIndexChanged="ddlAccountDescription_SelectedIndexChanged">
                                                                             <asp:ListItem Value="0">Select Account</asp:ListItem>
                                                                         </asp:DropDownList>
-                                                                        <asp:RequiredFieldValidator ID="rfvddlAccountDescription" runat="server" ControlToValidate="ddlAccountDescription" CssClass="validator" Display="Dynamic" ErrorMessage="Account must be selected" InitialValue="0" SetFocusOnError="true" ValidationGroup="request"></asp:RequiredFieldValidator>
+                                                                        <asp:RequiredFieldValidator ID="rfvddlAccountDescription" runat="server" ControlToValidate="ddlAccountDescription" CssClass="validator" Display="Dynamic" ErrorMessage="Account must be selected" InitialValue="0" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
                                                                         <i></i>
-                                                                    </ItemTemplate>
+                                                                    </EditItemTemplate>
                                                                     <FooterTemplate>
                                                                         <asp:DropDownList ID="ddlFAccountDescription" runat="server" CssClass="form-control" AppendDataBoundItems="true" AutoPostBack="True" OnSelectedIndexChanged="ddlAccountDescription_SelectedIndexChanged">
                                                                             <asp:ListItem Value="0">Select Account</asp:ListItem>
@@ -204,8 +198,11 @@
                                                                 </asp:TemplateColumn>
                                                                 <asp:TemplateColumn HeaderText="Account Code">
                                                                     <ItemTemplate>
-                                                                        <asp:TextBox ID="txtAccountCode" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountCode")%>'></asp:TextBox>
+                                                                        <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountCode")%>
                                                                     </ItemTemplate>
+                                                                    <EditItemTemplate>
+                                                                        <asp:TextBox ID="txtAccountCode" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountCode")%>'></asp:TextBox>
+                                                                    </EditItemTemplate>
                                                                     <FooterTemplate>
                                                                         <asp:TextBox ID="txtAccountCode" runat="server" CssClass="form-control"></asp:TextBox>
                                                                     </FooterTemplate>
@@ -215,19 +212,22 @@
                                                                         <%# DataBinder.Eval(Container.DataItem, "ExpenseType.ExpenseTypeName")%>
                                                                     </ItemTemplate>
                                                                     <FooterTemplate>
-                                                                        <asp:DropDownList ID="ddlExpenseType" runat="server" Enabled="true" DataValueField="Id" DataTextField="ExpenseTypeName" AppendDataBoundItems="True">
+                                                                        <asp:DropDownList ID="ddlExpenseType" CssClass="form-control" runat="server" Enabled="true" DataValueField="Id" DataTextField="ExpenseTypeName" AppendDataBoundItems="True">
                                                                             <asp:ListItem Value="0">--Select Expense Type--</asp:ListItem>
                                                                         </asp:DropDownList><i></i>
                                                                     </FooterTemplate>
                                                                 </asp:TemplateColumn>
                                                                 <asp:TemplateColumn HeaderText="Project ID">
                                                                     <ItemTemplate>
+                                                                        <%# DataBinder.Eval(Container.DataItem, "Project.ProjectCode")%>
+                                                                    </ItemTemplate>
+                                                                    <EditItemTemplate>
                                                                         <asp:DropDownList ID="ddlProject" runat="server" AutoPostBack="true" CssClass="form-control" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlProject_SelectedIndexChanged">
                                                                             <asp:ListItem Value="0">Select Project</asp:ListItem>
                                                                         </asp:DropDownList>
-                                                                        <asp:RequiredFieldValidator ID="rfvddlProject" runat="server" ControlToValidate="ddlProject" CssClass="validator" Display="Dynamic" ErrorMessage="Project must be selected" InitialValue="0" SetFocusOnError="true" ValidationGroup="request"></asp:RequiredFieldValidator>
+                                                                        <asp:RequiredFieldValidator ID="rfvddlProject" runat="server" ControlToValidate="ddlProject" CssClass="validator" Display="Dynamic" ErrorMessage="Project must be selected" InitialValue="0" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
                                                                         <i></i>
-                                                                    </ItemTemplate>
+                                                                    </EditItemTemplate>
                                                                     <FooterTemplate>
                                                                         <asp:DropDownList ID="ddlFProject" runat="server" AutoPostBack="true" CssClass="form-control" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlFProject_SelectedIndexChanged">
                                                                             <asp:ListItem Value="0">Select Project</asp:ListItem>
@@ -238,18 +238,20 @@
                                                                 </asp:TemplateColumn>
                                                                 <asp:TemplateColumn HeaderText="Grant ID">
                                                                     <ItemTemplate>
+                                                                        <%# DataBinder.Eval(Container.DataItem, "Grant.GrantCode")%>
+                                                                    </ItemTemplate>
+                                                                    <EditItemTemplate>
                                                                         <asp:DropDownList ID="ddlGrant" runat="server" AppendDataBoundItems="True" CssClass="form-control" DataTextField="GrantCode" DataValueField="Id">
                                                                             <asp:ListItem Value="0">Select Grant</asp:ListItem>
                                                                         </asp:DropDownList>
-                                                                        <asp:RequiredFieldValidator ID="RfvGrant" runat="server" CssClass="validator" ControlToValidate="ddlGrant" ErrorMessage="Grant is required" InitialValue="0" SetFocusOnError="True" ValidationGroup="request"></asp:RequiredFieldValidator>
-                                                                    </ItemTemplate>
+                                                                        <asp:RequiredFieldValidator ID="RfvGrant" runat="server" CssClass="validator" ControlToValidate="ddlGrant" ErrorMessage="Grant is required" InitialValue="0" SetFocusOnError="True" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                                                    </EditItemTemplate>
                                                                     <FooterTemplate>
                                                                         <asp:DropDownList ID="ddlFGrant" runat="server" AppendDataBoundItems="True" CssClass="form-control" DataTextField="GrantCode" DataValueField="Id" EnableViewState="true">
                                                                             <asp:ListItem Value="0">Select Grant</asp:ListItem>
                                                                         </asp:DropDownList>
                                                                         <asp:RequiredFieldValidator ID="RfvFGrantCode" runat="server" CssClass="validator" ControlToValidate="ddlFGrant" Display="Dynamic" ErrorMessage="Grant is required" InitialValue="0" SetFocusOnError="True" ValidationGroup="save"></asp:RequiredFieldValidator>
                                                                     </FooterTemplate>
-
                                                                 </asp:TemplateColumn>
                                                                 <asp:TemplateColumn HeaderText="Amount Advanced">
                                                                     <ItemTemplate>
@@ -262,12 +264,15 @@
                                                                 </asp:TemplateColumn>
                                                                 <asp:TemplateColumn HeaderText="Actual Expenditure">
                                                                     <ItemTemplate>
-                                                                        <asp:TextBox ID="txtActualExpenditure" runat="server" CssClass="form-control" AutoPostBack="true" onkeypress="return IsOneDecimalPoint(event);" OnTextChanged="txtActualExpenditure_TextChanged" Text='<%# DataBinder.Eval(Container.DataItem, "ActualExpenditure")%>'></asp:TextBox>
+                                                                        <%# DataBinder.Eval(Container.DataItem, "ActualExpenditure")%>
+                                                                    </ItemTemplate>
+                                                                    <EditItemTemplate>
+                                                                        <asp:TextBox ID="txtActualExpenditure" runat="server" CssClass="form-control" AutoPostBack="true" onkeypress="return IsOneDecimalPoint(event);" OnTextChanged="txtActualExpenditure_TextChanged"></asp:TextBox>
                                                                         <%--<asp:RegularExpressionValidator runat="server" ValidationExpression="((\d+)((\.\d{1,2})?))$" ControlToValidate="txtActualExpenditure" CssClass="validator" ValidationGroup="request" ErrorMessage="Please enter a decimal value"></asp:RegularExpressionValidator>--%>
                                                                         <cc1:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtActualExpenditure" ID="txtActualExpenditure_FilteredTextBoxExtender" FilterType="Custom" ValidChars="0123456789."></cc1:FilteredTextBoxExtender>
                                                                         <%--<cc1:MaskedEditExtender runat="server" TargetControlID="txtActualExpenditure" Mask="9{9}.99" MaskType="Number" ClearMaskOnLostFocus="false"></cc1:MaskedEditExtender>--%>
-                                                                        <asp:RequiredFieldValidator ID="rfvActualExpenditure" runat="server" ControlToValidate="txtActualExpenditure" CssClass="validator" ErrorMessage="Actual Expenditure is required" ValidationGroup="request" InitialValue="-1"></asp:RequiredFieldValidator>
-                                                                    </ItemTemplate>
+                                                                        <asp:RequiredFieldValidator ID="rfvActualExpenditure" runat="server" ControlToValidate="txtActualExpenditure" CssClass="validator" ErrorMessage="Actual Expenditure is required" ValidationGroup="edit" InitialValue="-1"></asp:RequiredFieldValidator>
+                                                                    </EditItemTemplate>
                                                                     <FooterTemplate>
                                                                         <asp:TextBox ID="txtFActualExpenditure" runat="server" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtFActualExpenditure_TextChanged"></asp:TextBox>
                                                                         <cc1:FilteredTextBoxExtender runat="server" Enabled="True" TargetControlID="txtFActualExpenditure" ID="txtFActualExpenditure_FilteredTextBoxExtender" FilterType="Custom,Numbers" ValidChars="."></cc1:FilteredTextBoxExtender>
@@ -276,8 +281,11 @@
                                                                 </asp:TemplateColumn>
                                                                 <asp:TemplateColumn HeaderText="Variance">
                                                                     <ItemTemplate>
-                                                                        <asp:TextBox ID="txtVariance" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "Variance")%>'></asp:TextBox>
+                                                                        <%# DataBinder.Eval(Container.DataItem, "Variance")%>
                                                                     </ItemTemplate>
+                                                                    <EditItemTemplate>
+                                                                        <asp:TextBox ID="txtVariance" runat="server" CssClass="form-control"></asp:TextBox>
+                                                                    </EditItemTemplate>
                                                                     <FooterTemplate>
                                                                         <asp:TextBox ID="txtFVariance" runat="server" CssClass="form-control"></asp:TextBox>
                                                                     </FooterTemplate>
@@ -290,6 +298,9 @@
                                                                     <FooterTemplate>
                                                                         <asp:LinkButton ID="lnkAddNew" runat="server" CausesValidation="true" CommandName="AddNew" CssClass="btn btn-sm btn-success" ValidationGroup="save"><i class="fa fa-save"></i></asp:LinkButton>
                                                                     </FooterTemplate>
+                                                                    <ItemTemplate>
+                                                                        <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
+                                                                    </ItemTemplate>
                                                                 </asp:TemplateColumn>
                                                             </Columns>
                                                             <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
@@ -419,7 +430,7 @@
                                             ×
                                         </button>
                                         <i class="fa-fw fa fa-info"></i>
-                                        <strong>Info!</strong> Rejected Expense Liquidations are highlighted in <span style="color:red">Red Color</span>
+                                        <strong>Info!</strong> Rejected Expense Liquidations are highlighted in <span style="color: red">Red Color</span>
                                     </div>
                                 </div>
                             </div>

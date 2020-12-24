@@ -394,7 +394,6 @@
                 CssClass="table table-striped table-bordered table-hover" OnRowDataBound="grvDetails_RowDataBound" ShowFooter="True">
                 <RowStyle CssClass="rowstyle" />
                 <Columns>
-                    <asp:BoundField DataField="RefNo" HeaderText="Ref No." />
                     <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" />
                     <asp:TemplateField HeaderText="Project">
                         <ItemTemplate>
