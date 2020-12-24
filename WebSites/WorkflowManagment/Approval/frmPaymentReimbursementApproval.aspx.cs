@@ -370,12 +370,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     SavePaymentReimbursementRequestStatus();
 
                     ShowPrint();
-                    Master.ShowMessage(new AppMessage("Payment Settlement Approval Processed", Chai.WorkflowManagment.Enums.RMessageType.Info));
-
                     btnApprove.Enabled = false;
                     BindSearchPaymentReimbursementRequestGrid();
                     pnlApproval_ModalPopupExtender.Show();
                 }
+                Master.ShowMessage(new AppMessage("Payment Settlement Approval Processed", Chai.WorkflowManagment.Enums.RMessageType.Info));
             }
             catch (Exception ex)
             {
@@ -392,7 +391,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             if(_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest != null)
                 lblRequestNoResult.Text =  _presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.RequestNo.ToString() ;
             lblRequestedDateResult.Text = _presenter.CurrentPaymentReimbursementRequest.RequestDate.Value.ToShortDateString();
-            lblRequesterResult.Text = _presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.AppUser.UserName;
+            if (_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest != null)
+                lblRequesterResult.Text = _presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.AppUser.UserName;
             lblCommentResult.Text = _presenter.CurrentPaymentReimbursementRequest.Comment.ToString();
             lblApprovalStatusResult.Text = _presenter.CurrentPaymentReimbursementRequest.ProgressStatus.ToString();
             lbladvancetakenresult.Text = _presenter.CurrentPaymentReimbursementRequest.ReceivableAmount.ToString();
