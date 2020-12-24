@@ -96,6 +96,11 @@
                             <asp:Label ID="lblDateDelivery" runat="server" Text='<%# Eval("Requireddateofdelivery", "{0:dd/MM/yyyy}")%>'></asp:Label>
                         </ItemTemplate>
                     </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Maint Req No - Plate No">
+                        <ItemTemplate>
+                            <asp:Label ID="lblMaintReqPlateNo" runat="server"></asp:Label>
+                        </ItemTemplate>
+                    </asp:TemplateField>
                     <asp:BoundField DataField="SuggestedSupplier" HeaderText="Suggested Supplier" SortExpression="PurposeOfTravel" />
                     <asp:ButtonField ButtonType="Button" CommandName="ViewItem" Text="View Item Detail" />
                     <asp:CommandField ButtonType="Button" SelectText="Process Request" ShowSelectButton="True" />
@@ -211,10 +216,10 @@
                                         </asp:TemplateColumn>
                                         <asp:TemplateColumn HeaderText="Item">
                                             <ItemTemplate>
-                                                <%# DataBinder.Eval(Container.DataItem, "Item")%>
+                                                <%# DataBinder.Eval(Container.DataItem, "ItemDescription")%>
                                             </ItemTemplate>
                                             <EditItemTemplate>
-                                                <asp:TextBox ID="txtItem" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "Item")%>'></asp:TextBox>
+                                                <asp:TextBox ID="txtItem" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "ItemDescription")%>'></asp:TextBox>
                                             </EditItemTemplate>
                                         </asp:TemplateColumn>
                                         <asp:TemplateColumn HeaderText="Requested Quantity">
@@ -433,7 +438,7 @@
                 <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="AccountName" SortExpression="ItemAccount.AccountName" />
                 <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
                 <asp:BoundField DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
-                <asp:BoundField DataField="Item" HeaderText="Item" SortExpression="Item" />
+                <asp:BoundField DataField="ItemDescription" HeaderText="Item" SortExpression="ItemDescription" />
                 <asp:BoundField DataField="Remark" HeaderText="Remark" SortExpression="Remark" />
                 <asp:BoundField DataField="Project.ProjectCode" HeaderText="Project Code" />
                 <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant Code" />

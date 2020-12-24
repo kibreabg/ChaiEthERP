@@ -133,7 +133,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void BindGrant(TextBox txtGrant, int projectId)
         {
-            txtGrant.Text = _presenter.GetGrantbyprojectId(projectId).First().GrantCode;            
+            txtGrant.Text = _presenter.GetGrantbyprojectId(projectId).First().GrantCode;
         }
         private void BindSearchPurchaseRequestGrid()
         {
@@ -165,7 +165,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             if (_presenter.CurrentUser().EmployeePosition.PositionName == "Logistic Assistant" && _presenter.CurrentPurchaseRequest.CurrentStatus != ApprovalStatus.Rejected.ToString() && _presenter.CurrentPurchaseRequest.CurrentLevel == (_presenter.CurrentPurchaseRequest.PurchaseRequestStatuses.Count - 1))
             {
                 //lnkBidRequest.Visible = true;
-               // lnkSoleVendor.Visible = true;
+                // lnkSoleVendor.Visible = true;
                 _presenter.CurrentPurchaseRequest.PurchaseRequestDetails[0].BidAnalysisRequestStatus = "InProgress";
             }
         }
@@ -324,9 +324,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     if (_presenter.CurrentUser().EmployeePosition.PositionName == "Logistic Assistant" && _presenter.CurrentPurchaseRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
                     {
                         //lnkBidRequest.Visible = true;
-                       // lnkSoleVendor.Visible = true;
+                        // lnkSoleVendor.Visible = true;
                     }
-                    ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);                    
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
                 }
             }
             catch (Exception ex)
@@ -387,20 +387,21 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         protected void grvPurchaseRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             Button btnStatus = e.Row.FindControl("btnStatus") as Button;
-            PurchaseRequest CSR = e.Row.DataItem as PurchaseRequest;
+            Label lblMaintReqPlateNo = e.Row.FindControl("lblMaintReqPlateNo") as Label;
+            PurchaseRequest PR = e.Row.DataItem as PurchaseRequest;
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                if (CSR.ProgressStatus == ProgressStatus.InProgress.ToString())
+                if (!String.IsNullOrEmpty(PR.MaintenanceRequestNo))
+                    lblMaintReqPlateNo.Text = _presenter.GetMaintenanceRequestById(Convert.ToInt32(PR.MaintenanceRequestNo)).ReqPlateNo;
+                if (PR.ProgressStatus == ProgressStatus.InProgress.ToString())
                 {
                     btnStatus.BackColor = System.Drawing.ColorTranslator.FromHtml("#FFFF6C");
-
                 }
-                else if (CSR.ProgressStatus == ProgressStatus.Completed.ToString())
+                else if (PR.ProgressStatus == ProgressStatus.Completed.ToString())
                 {
                     btnStatus.BackColor = System.Drawing.ColorTranslator.FromHtml("#FF7251");
-
                 }
-                e.Row.Cells[1].Text = _presenter.GetUser(CSR.Requester).FullName;
+                e.Row.Cells[1].Text = _presenter.GetUser(PR.Requester).FullName;
 
             }
         }
@@ -486,7 +487,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     }
                 }
                 DropDownList ddlUnitOfMeasurment = e.Item.FindControl("ddlUnitOfMeasurment") as DropDownList;
-                if(ddlUnitOfMeasurment != null)
+                if (ddlUnitOfMeasurment != null)
                 {
                     ListItem liI = ddlUnitOfMeasurment.Items.FindByValue(_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[e.Item.DataSetIndex].UnitOfMeasurment);
                     if (liI != null)

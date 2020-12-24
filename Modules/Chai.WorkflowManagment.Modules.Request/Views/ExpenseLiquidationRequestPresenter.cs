@@ -107,7 +107,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     else
                     {
                         if (Approver(AL.EmployeePosition.Id) != null)
-                            ELRS.Approver = Approver(AL.EmployeePosition.Id).Id;
+                        {
+                            if (AL.EmployeePosition.PositionName == "Accountant")
+                            {
+                                ELRS.ApproverPosition = AL.EmployeePosition.Id; //So that we can entertain more than one finance manager to handle the request
+                            }
+                            else
+                            {
+                                ELRS.Approver = Approver(AL.EmployeePosition.Id).Id;
+                            }
+                        }
                         else
                             ELRS.Approver = 0;
                     }

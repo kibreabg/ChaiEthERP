@@ -256,7 +256,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (MRS.ApprovalStatus == null)
                     {
-                        SendEmail(MRS);
+                        //SendEmail(MRS);
+                       
                         CurrentMaintenanceRequest.CurrentApprover = MRS.Approver;
                         CurrentMaintenanceRequest.CurrentLevel = MRS.WorkflowLevel;
                         CurrentMaintenanceRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
@@ -265,6 +266,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
             }
         }
+      
         private void SendEmail(MaintenanceRequestStatus VRS)
         {
             if (GetSuperviser(VRS.Approver).IsAssignedJob != true)
@@ -327,6 +329,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _settingcontroller.GetServiceTypeDetbyTypeId(serviceTypeId);
 
+        }
+        public AppUser GetMechanic()
+        {
+            return _controller.GetMechanic();
         }
         public IList<Vehicle> GetVehicles()
         {

@@ -124,7 +124,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (ELRS.ApprovalStatus == null)
                     {
-                        
+                        if (ELRS.Approver == 0)
+                        {
+                            //This is to handle multiple Finance Officers responding to this request
+                            //SendEmailToFinanceOfficers;
+                            CurrentCashPaymentRequest.PaymentReimbursementRequest.CurrentApproverPosition = ELRS.ApproverPosition;
+                        }
                         CurrentCashPaymentRequest.PaymentReimbursementRequest.CurrentApprover = ELRS.Approver;
                         CurrentCashPaymentRequest.PaymentReimbursementRequest.CurrentLevel = ELRS.WorkflowLevel;
                         CurrentCashPaymentRequest.PaymentReimbursementRequest.CurrentStatus = ELRS.ApprovalStatus;
@@ -139,10 +144,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
             CurrentCashPaymentRequest.PaymentReimbursementRequest.RequestDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
             CurrentCashPaymentRequest.PaymentReimbursementRequest.Comment = View.GetComment;
-            
+            CurrentCashPaymentRequest.IsLiquidated = true;
             CurrentCashPaymentRequest.PaymentReimbursementRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
 
-            CurrentCashPaymentRequest.PaymentReimbursementRequest.CashPaymentRequest = _controller.GetCashPaymentRequest(tarId);
+            CurrentCashPaymentRequest.PaymentReimbursementRequest.CashPaymentRequest = CurrentCashPaymentRequest;
 
             if (CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Count == 0)
                 SavePaymentReimbursementRequestStatus();
@@ -157,6 +162,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             _controller.DeleteEntity(PaymentReimbursementRequest);
         }
+        public PaymentReimbursementRequestDetail GetPaymentReimbursementRequestDetail(int CPRDId)
+        {
+            return _controller.GetPaymentReimbursementRequestDetail(CPRDId);
+        }
+    
         public PaymentReimbursementRequest GetPaymentReimbursementRequest(int id)
         {
             return _controller.GetPaymentReimbursementRequest(id);

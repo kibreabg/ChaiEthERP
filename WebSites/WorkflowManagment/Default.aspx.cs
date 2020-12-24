@@ -169,6 +169,16 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         {
             lblExpenseLiquidation.Text = Convert.ToString(0);
         }
+        if (_presenter.GetReviewPaymentReimbursementTasks() != 0)
+        {
+            lblreviewsettlemnt.Text = _presenter.GetReviewPaymentReimbursementTasks().ToString();
+            if (_presenter.GetReviewPaymentReimbursementTasks() > 0)
+                lblreviewsettlemnt.ForeColor = System.Drawing.Color.Red;
+            lnkReviewpaymentsettlemnt.Enabled = true;
+            lnkReviewpaymentsettlemnt.PostBackUrl = ResolveUrl("Approval/frmPaymentReimbursementApproval.aspx");
+        }
+        else
+        { lblreviewsettlemnt.Text = Convert.ToString(0); }
         if (_presenter.GetPaymentReimbursementTasks() != 0)
         {
             lblReimbursement.Text = _presenter.GetPaymentReimbursementTasks().ToString();
@@ -279,8 +289,13 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         }
         if (_presenter.GetExpenseLiquidationMyRequest() != 0)
         {
-            lblExpenseLiquidation.Text = ProgressStatus.InProgress.ToString();
+            lblExpenseStatus.Text = ProgressStatus.InProgress.ToString();
             lblExpenseStatus.ForeColor = System.Drawing.Color.Green;
+        }
+        if (_presenter.GetPaymentReimbursementRequestMyRequest() != 0)
+        {
+            lblPaymentReimburesment.Text = ProgressStatus.InProgress.ToString();
+            lblPaymentReimburesment.ForeColor = System.Drawing.Color.Green;
         }
         if (_presenter.GetPurchaseRequestsMyRequest() != 0)
         {
@@ -462,8 +477,13 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                if (_presenter.ListTravelApprovalProgress()[e.Row.RowIndex].CurrentApprover != 0)
-                    e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListTravelApprovalProgress()[e.Row.RowIndex].CurrentApprover).FullName;
+                if (_presenter.ListTravelApprovalProgress().Count != 0)
+                {
+                    if (_presenter.ListTravelApprovalProgress()[e.Row.RowIndex].CurrentApprover != 0)
+                        e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListTravelApprovalProgress()[e.Row.RowIndex].CurrentApprover).FullName;
+                    else
+                        e.Row.Cells[2].Text = "Accountant";
+                }
             }
         }
     }
@@ -473,8 +493,13 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                if (_presenter.ListExpenseLiquidationProgress()[e.Row.RowIndex].CurrentApprover != 0)
-                    e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListExpenseLiquidationProgress()[e.Row.RowIndex].CurrentApprover).FullName;
+                if (_presenter.ListExpenseLiquidationProgress().Count != 0)
+                {
+                    if (_presenter.ListExpenseLiquidationProgress()[e.Row.RowIndex].CurrentApprover != 0)
+                        e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListExpenseLiquidationProgress()[e.Row.RowIndex].CurrentApprover).FullName;
+                    else
+                        e.Row.Cells[2].Text = "Accountant";
+                }                
             }
         }
     }

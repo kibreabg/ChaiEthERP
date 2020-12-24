@@ -690,16 +690,18 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             GridViewRow attachmentRow = (GridViewRow)uploadBtn.NamingContainer;
             FileUpload fuReciept = attachmentRow.FindControl("fuReciept") as FileUpload;
             string fileName = Path.GetFileName(fuReciept.PostedFile.FileName);
+            int index = 0;
             if (fileName != String.Empty)
             {
                 List<CPRAttachment> attachments = (List<CPRAttachment>)Session["attachments"];
                 foreach (CPRAttachment attachment in attachments)
                 {
-                    if (attachment.ItemAccountChecklists[0].ChecklistName == attachmentRow.Cells[1].Text)
+                    if (attachment.ItemAccountChecklists[0].ChecklistName == attachmentRow.Cells[1].Text && attachmentRow.DataItemIndex == index)
                     {
                         attachment.FilePath = "~/CPUploads/" + fileName;
                         fuReciept.PostedFile.SaveAs(Server.MapPath("~/CPUploads/") + fileName);
                     }
+                    index++;
                 }
 
                 BindAttachments();

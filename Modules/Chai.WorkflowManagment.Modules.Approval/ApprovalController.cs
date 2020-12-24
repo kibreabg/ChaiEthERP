@@ -177,8 +177,8 @@ namespace Chai.WorkflowManagment.Modules.Approval
         {
             string filterExpression = "";
 
-            filterExpression = " SELECT * FROM PaymentReimbursementRequests INNER JOIN AppUsers ON AppUsers.Id = PaymentReimbursementRequests.CurrentApprover LEFT JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 WHERE 1 = CASE WHEN '" + RequestDate + "' = '' THEN 1 WHEN PaymentReimbursementRequests.RequestDate = '" + RequestDate + "'  THEN 1 END AND PaymentReimbursementRequests.ProgressStatus='" + ProgressStatus + "' " +
-                                   " AND  ((PaymentReimbursementRequests.CurrentApprover = '" + CurrentUser().Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) ORDER BY PaymentReimbursementRequests.Id DESC";
+            filterExpression = " SELECT * FROM PaymentReimbursementRequests Left JOIN AppUsers ON AppUsers.Id = PaymentReimbursementRequests.CurrentApprover LEFT JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 WHERE 1 = CASE WHEN '" + RequestDate + "' = '' THEN 1 WHEN PaymentReimbursementRequests.RequestDate = '" + RequestDate + "'  THEN 1 END AND PaymentReimbursementRequests.ProgressStatus='" + ProgressStatus + "' " +
+                                   " AND  ((PaymentReimbursementRequests.CurrentApprover = '" + CurrentUser().Id + "') OR (PaymentReimbursementRequests.CurrentApproverPosition = '" + CurrentUser().EmployeePosition.Id + "')OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) ORDER BY PaymentReimbursementRequests.Id DESC";
 
             return _workspace.SqlQuery<PaymentReimbursementRequest>(filterExpression).ToList();
         }

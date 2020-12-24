@@ -4,15 +4,11 @@ using Chai.WorkflowManagment.Shared;
 using Chai.WorkflowManagment.Enums;
 using Chai.WorkflowManagment.CoreDomain.HRM;
 using System.Collections.Generic;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using System.Web.UI.WebControls;
-using Microsoft.Office.Interop.Word;
 using System.Reflection;
-using Word = Microsoft.Office.Interop;
+
 using System.IO;
 using System.Diagnostics;
-using System.Drawing.Drawing2D;
-using System.Drawing;
 
 namespace Chai.WorkflowManagment.Modules.HRM.Views
 {
@@ -96,128 +92,11 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             }
         }
 
-          private void FindAndReplace(Microsoft.Office.Interop.Word.Application wordApp, object findText, object replaceWithText)
-       {
-           object matchCase = true;
-           object matchWholeWord = true;
-           object matchWildCards = true;
-           object matchSoundLike = true;
-           object matchAllForms = true;
-           object forward = true;
-           object format = false;
-           object matchKashida = false;
-           object matchDiactities = false;
-           object matchAlefHamza = false;
-           object matchControl = false;
-           object read_only = false;
-           object visible = true;
-           object replace = 2;
-           object wrap = 1;
-
-           wordApp.Selection.Find.Execute(ref findText, ref matchCase, ref matchWholeWord, ref matchSoundLike, ref matchAllForms, ref forward, ref wrap, ref format, ref replaceWithText, ref replace, ref matchKashida, ref matchDiactities, ref matchAlefHamza, ref matchControl);
-
-       }
-       //-----------------------------------------
-        private void CreateWordDocument(object filename, object saveAs, object imagePath)
-       {
-           object missing = Missing.Value;
-           string tempPath = null;
-
-           Word.Word.Application wordApp = new Word.Word.Application();
-           Word.Word.Document aDoc = null;
-           if (File.Exists((string)filename)) {
-               DateTime today = DateTime.Now;
-               object readOnly = false;
-               object isVisible = true;
-               wordApp.Visible = true;
-               aDoc = wordApp.Documents.Open(ref filename, ref missing, ref readOnly
-                   , ref missing, ref missing, ref missing
-                   , ref missing, ref missing, ref missing
-                   , ref missing, ref missing, ref missing
-                   , ref missing, ref missing, ref missing, ref missing);
-               aDoc.Activate();
-
-               //Find and replace:
-               this.FindAndReplace(wordApp, "$$EmployeeID$$", _presenter.CurrentEmployee.AppUser.EmployeeNo);
-               this.FindAndReplace(wordApp, "$$FirstName$$", _presenter.CurrentEmployee.FirstName);
-               this.FindAndReplace(wordApp, "$$LastName$$", _presenter.CurrentEmployee.LastName);
-               this.FindAndReplace(wordApp, "$$EmailAddress$$", _presenter.CurrentEmployee.ChaiEMail);
-
-
-               //insert the picture:
-            
-
-               Object oMissed = aDoc.Paragraphs[1].Range; //the position you want to insert
-               Object oLinkToFile = false;  //default
-               Object oSaveWithDocument = true;//default
-               aDoc.InlineShapes.AddPicture(tempPath, ref oLinkToFile, ref oSaveWithDocument, ref oMissed);
-
-               #region Print Document :
-               #endregion
-
-           }
-          
-
-       }
-
-       public List<int> getRunningProcesses()
-       {
-           List<int> ProcessIDs = new List<int>();
-           //here we're going to get a list of all running processes on
-           //the computer
-           foreach (Process clsProcess in Process.GetProcesses())
-           {
-               if (Process.GetCurrentProcess().Id == clsProcess.Id)
-                   continue;
-               if (clsProcess.ProcessName.Contains("WINWORD"))
-               {
-                   ProcessIDs.Add(clsProcess.Id);
-               }
-           }
-           return ProcessIDs;
-       }
-
-
-       private void killProcesses(List<int> processesbeforegen, List<int> processesaftergen)
-       {
-           foreach (int pidafter in processesaftergen)
-           {
-               bool processfound = false;
-               foreach (int pidbefore in processesbeforegen)
-               {
-                   if (pidafter == pidbefore)
-                   {
-                       processfound = true;
-                   }
-               }
-
-               if (processfound == false)
-               {
-                   Process clsProcess = Process.GetProcessById(pidafter);
-                   clsProcess.Kill();
-               }
-           }
-       }
-
-
-       private void tEnabled(bool state)
-       {
-           //tCompany.Enabled = state;
-           //tFirstname.Enabled = state;
-           //tPhone.Enabled = state;
-           //tLastname.Enabled = state;
-           //btnLogo.Enabled = state;
-       }
       
 
-       protected void btnSubmit_Click(object sender, EventArgs e)
-       {
-            
-                CreateWordDocument(Path.GetFullPath("D: \\PAFCHANGE.docx"),null, pathImage);
-               tEnabled(true);
-               //printDocument1.DocumentName = SaveDoc.FileName;
-          
-       }
+      
+
+     
 
         private void AddContracts()
         {
@@ -869,13 +748,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             ClearEmpDetailFormFields();
         }
 
-        protected void btnPAFChange_Click(object sender, EventArgs e)
-        {
-            CreateWordDocument(Path.GetFullPath("D: \\PAFCHANGE.docx"), null, pathImage);
-            tEnabled(false);
-           // PrintTransaction();
-            ClearEmpDetailFormFields();
-        }
+     
 
         protected void dgContractDetail_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
