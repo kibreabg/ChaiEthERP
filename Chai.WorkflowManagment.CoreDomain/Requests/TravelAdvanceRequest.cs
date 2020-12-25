@@ -28,6 +28,9 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string ProgressStatus { get; set; }
         public string ExpenseLiquidationStatus { get; set; }
         public string ExportStatus { get; set; }
+        public virtual int LiquidationRejectionCount { get; set; }
+        public virtual string LiquidationRejectionReasons { get; set; }
+        public virtual string LiquidationRejectedBy { get; set; }
         public virtual Project Project { get; set; }
         public virtual Account Account { get; set; }
         public virtual Grant Grant { get; set; }

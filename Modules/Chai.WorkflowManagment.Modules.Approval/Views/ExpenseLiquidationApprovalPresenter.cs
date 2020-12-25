@@ -141,6 +141,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _controller.ExportTravelAdvance(LiquidationId);
         }
+        public void DeleteExpenseLiquidationRequest(ExpenseLiquidationRequest expenseLiquidationRequest)
+        {
+            _controller.DeleteEntity(expenseLiquidationRequest);
+        }
         public void Commit()
         {
             _controller.Commit();

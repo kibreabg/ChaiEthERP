@@ -275,16 +275,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     {
                         ELRS.Approver = _presenter.CurrentUser().Id;
                         _presenter.CurrentExpenseLiquidationRequest.CurrentStatus = ApprovalStatus.Rejected.ToString();
-
-                        //Make adjustments so that the rejected liquidation can appear to the requester for update and re-request
-                        _presenter.CurrentExpenseLiquidationRequest.TravelAdvanceRequest.ExpenseLiquidationStatus = "Completed";
-                        _presenter.CurrentExpenseLiquidationRequest.CurrentLevel = 1;
-                        _presenter.CurrentExpenseLiquidationRequest.CurrentApprover = GetFirstApprover();
-                        Log.Info(_presenter.GetUser(ELRS.Approver).FullName + " has " + (ELRS.ApprovalStatus).ToUpper() + " Expense Liquidation Request made by " + (_presenter.CurrentExpenseLiquidationRequest.TravelAdvanceRequest.AppUser.FullName).ToUpper());
-                        NullifyLiquidationStatuses();
-                        //Adjustments ended
-
+                        DeleteLiquidationIfRejected();
                         SendEmailRejected(ELRS);
+                        Log.Info(_presenter.GetUser(ELRS.Approver).FullName + " has " + (ELRS.ApprovalStatus).ToUpper() + " Expense Liquidation Request made by " + (_presenter.CurrentExpenseLiquidationRequest.TravelAdvanceRequest.AppUser.FullName).ToUpper());
 
                     }
                     break;
@@ -302,14 +295,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
 
             return approver;
-        }
-        private void NullifyLiquidationStatuses()
-        {
-            foreach (ExpenseLiquidationRequestStatus ELRS in _presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestStatuses)
-            {
-                ELRS.ApprovalStatus = null;
-                ELRS.Date = null;
-            }
         }
         private void GetNextApprover()
         {
@@ -335,6 +320,37 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     break;
                 }
             }
+        }
+        private void DeleteLiquidationIfRejected()
+        {
+            _presenter.CurrentExpenseLiquidationRequest.TravelAdvanceRequest.ExpenseLiquidationStatus = "Completed";
+            _presenter.CurrentExpenseLiquidationRequest.TravelAdvanceRequest.LiquidationRejectionCount = _presenter.CurrentExpenseLiquidationRequest.TravelAdvanceRequest.LiquidationRejectionCount + 1;
+            _presenter.CurrentExpenseLiquidationRequest.TravelAdvanceRequest.LiquidationRejectionReasons = _presenter.CurrentExpenseLiquidationRequest.TravelAdvanceRequest.LiquidationRejectionReasons + "," + txtRejectedReason.Text;
+            _presenter.CurrentExpenseLiquidationRequest.TravelAdvanceRequest.LiquidationRejectedBy = _presenter.CurrentExpenseLiquidationRequest.TravelAdvanceRequest.LiquidationRejectedBy + "," + _presenter.CurrentUser().Id;
+            IList<ExpenseLiquidationRequestDetail> detailList = _presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestDetails.ToList();
+            foreach (ExpenseLiquidationRequestDetail detail in detailList)
+            {
+                if (detail.ELRAttachments != null)
+                {
+                    IList<ELRAttachment> attachemntList = detail.ELRAttachments.ToList();
+                    foreach (ELRAttachment attach in attachemntList)
+                    {
+                        string filePath = HttpContext.Current.Server.MapPath(attach.FilePath);
+                        Response.Flush();
+                        if (File.Exists(filePath))
+                        {
+                            File.Delete(filePath);
+                        }
+                        detail.RemoveELAttachment(filePath);
+                    }
+                }
+                _presenter.CurrentExpenseLiquidationRequest.RemoveExpenseLiquidationRequestDetail(detail.Id);
+            }
+
+            _presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestStatuses.Clear();
+            ExpenseLiquidationRequest request = _presenter.CurrentExpenseLiquidationRequest;
+            _presenter.SaveOrUpdateExpenseLiquidationRequest(_presenter.CurrentExpenseLiquidationRequest);
+            _presenter.DeleteExpenseLiquidationRequest(request);
         }
         protected void grvExpenseLiquidationRequestList_SelectedIndexChanged(object sender, EventArgs e)
         {
