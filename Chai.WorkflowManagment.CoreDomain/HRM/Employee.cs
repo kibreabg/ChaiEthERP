@@ -396,13 +396,13 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
 
             return Sumleave;
         }
-        public virtual int LeavefromhiredtoYE()
+        public virtual decimal LeavefromhiredtoYE()
         {
             DateTime YE = new DateTime(DateTime.Today.Year, 12, 31);
-            int leaveEnti = 0;
-            int Sumleave = 0;
+            decimal leaveEnti = 0;
+            decimal Sumleave = 0;
             TimeSpan workingdays = YE - GetEmployeeHiredDate();
-            int wd = workingdays.Days;
+            decimal wd = workingdays.Days;
 
 
             int count = 1;
