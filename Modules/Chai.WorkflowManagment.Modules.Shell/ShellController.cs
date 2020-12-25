@@ -476,7 +476,7 @@ namespace Chai.WorkflowManagment.Modules.Shell
         public IList<ExpenseLiquidationRequest> GetExpenseLiquidationInProgress()
         {
             currentUser = GetCurrentUser().Id;
-            IList<ExpenseLiquidationRequest> expenseLiquidationRequests = WorkspaceFactory.CreateReadOnly().Query<ExpenseLiquidationRequest>(x => x.TravelAdvanceRequest.AppUser.Id == currentUser && x.ProgressStatus == "InProgress").ToList();
+            IList<ExpenseLiquidationRequest> expenseLiquidationRequests = WorkspaceFactory.CreateReadOnly().Query<ExpenseLiquidationRequest>(x => x.TravelAdvanceRequest.AppUser.Id == currentUser && x.ProgressStatus == "InProgress", y => y.TravelAdvanceRequest).ToList();
             return expenseLiquidationRequests;
         }
         public IList<PurchaseRequest> GetPurchaseInProgress()

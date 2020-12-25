@@ -50,6 +50,7 @@ namespace Chai.WorkflowManagment.Shared.MailSender
             }
             catch (Exception ex)
             {
+                ExceptionUtility.LogException(ex, ex.Source);
                 return false;
             }
 
@@ -82,6 +83,7 @@ namespace Chai.WorkflowManagment.Shared.MailSender
             }
             catch (Exception ex)
             {
+                ExceptionUtility.LogException(ex, ex.Source);
                 return false;
             }
 
@@ -124,6 +126,7 @@ namespace Chai.WorkflowManagment.Shared.MailSender
             }
             catch (Exception ex)
             {
+                ExceptionUtility.LogException(ex, ex.Source);
                 return false;
             }
 

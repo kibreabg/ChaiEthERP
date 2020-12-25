@@ -193,6 +193,18 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
             }
         }
+        private void BindAttachments()
+        {
+            List<ELRAttachment> attachments = new List<ELRAttachment>();
+            foreach (ExpenseLiquidationRequestDetail detail in _presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
+            {
+                attachments.AddRange(detail.ELRAttachments);
+                Session["attachments"] = attachments;
+            }
+
+            grvAttachments.DataSource = attachments;
+            grvAttachments.DataBind();
+        }
         private void ShowPrint()
         {
             btnPrint.Enabled = true;
@@ -331,10 +343,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             PopApprovalStatus();
             btnApprove.Enabled = true;
             ShowControls();
-            grvAttachments.DataSource = _presenter.CurrentExpenseLiquidationRequest.ELRAttachments;
-            grvAttachments.DataBind();
             BindExpenseLiquidationRequestStatus();
-            pnlApproval_ModalPopupExtender.Show();
+            BindAttachments();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);;
 
         }
         protected void grvExpenseLiquidationRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -371,7 +382,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     //_presenter.OnViewLoaded();
                     dgLiquidationRequestDetail.DataSource = _presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestDetails;
                     dgLiquidationRequestDetail.DataBind();
-                    pnlDetail_ModalPopupExtender.Show();
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
                 }
             }
         }
@@ -443,7 +454,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 lblRejectedReason.Visible = false;
                 txtRejectedReason.Visible = false;
             }
-            pnlApproval_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);;
         }
         protected void ddlEdtAccountDescription_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -474,7 +485,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     }
                     btnApprove.Enabled = false;
                     BindSearchExpenseLiquidationRequestGrid();
-                    pnlApproval_ModalPopupExtender.Show();
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);;
                     PrintTransaction();
                 }
 
@@ -485,14 +496,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 ExceptionUtility.LogException(ex, ex.Source);
                 ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
-        }
-        protected void btnCancelPopup_Click(object sender, EventArgs e)
-        {
-            pnlApproval_ModalPopupExtender.Hide();
-        }
-        protected void btnCancelPopup2_Click(object sender, EventArgs e)
-        {
-            pnlDetail.Visible = false;
         }
         private void PrintTransaction()
         {
@@ -664,7 +667,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             this.dgLiquidationRequestDetail.EditItemIndex = e.Item.ItemIndex;
             dgLiquidationRequestDetail.DataSource = _presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestDetails;
             dgLiquidationRequestDetail.DataBind();
-            pnlDetail_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
         }
         protected void dgLiquidationRequestDetail_UpdateCommand(object source, DataGridCommandEventArgs e)
         {
@@ -687,7 +690,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 dgLiquidationRequestDetail.EditItemIndex = -1;
                 dgLiquidationRequestDetail.DataSource = _presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestDetails;
                 dgLiquidationRequestDetail.DataBind();
-                pnlDetail_ModalPopupExtender.Show();
+                ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
                 Master.ShowMessage(new AppMessage("Expense Liquidation Detail Successfully Updated", RMessageType.Info));
             }
             catch (Exception ex)
@@ -727,7 +730,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
 
             }
-            pnlApproval_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);;
         }
     }
 }

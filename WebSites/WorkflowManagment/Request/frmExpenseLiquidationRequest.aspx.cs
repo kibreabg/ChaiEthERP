@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Chai.WorkflowManagment.CoreDomain.Requests;
+using Chai.WorkflowManagment.CoreDomain.Setting;
 using Chai.WorkflowManagment.CoreDomain.Users;
 using Chai.WorkflowManagment.Enums;
 using Chai.WorkflowManagment.Shared;
@@ -179,6 +180,18 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
             }
         }
+        private void BindAttachments()
+        {
+            List<ELRAttachment> attachments = new List<ELRAttachment>();
+            foreach (ExpenseLiquidationRequestDetail detail in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
+            {
+                attachments.AddRange(detail.ELRAttachments);
+                Session["attachments"] = attachments;
+            }
+
+            grvAttachments.DataSource = attachments;
+            grvAttachments.DataBind();
+        }
         private void BindExpenseLiquidationDetails()
         {
             if (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails.Count == 0)
@@ -189,8 +202,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             txtTotalAdvance.Text = _presenter.CurrentTravelAdvanceRequest.TotalTravelAdvance.ToString();
             txtComment.Text = _presenter.CurrentTravelAdvanceRequest.PurposeOfTravel;
             BindExpenseLiquidationDetailGrid();
-            grvAttachments.DataSource = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ELRAttachments;
-            grvAttachments.DataBind();
         }
         private void BindExpenseLiquidationDetailGrid()
         {
@@ -204,8 +215,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             tarId = (int)grvExpenseLiquidationRequestList.DataKeys[grvExpenseLiquidationRequestList.SelectedIndex].Value;
             Session["tarId"] = (int)grvExpenseLiquidationRequestList.DataKeys[grvExpenseLiquidationRequestList.SelectedIndex].Value;
             BindExpenseLiquidationRequestFields();
-            grvAttachments.DataSource = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ELRAttachments;
-            grvAttachments.DataBind();
             PrintTransaction();
             btnPrint.Enabled = true;
             //This is done so that the user can not ammend a liquidation while it's in an approval process. But one can ammend a rejected liquidation.
@@ -351,25 +360,42 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 try
                 {
-                    ExpenseLiquidationRequestDetail elrd1 = new ExpenseLiquidationRequestDetail();
-                    elrd1.ExpenseLiquidationRequest = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest;
+                    ExpenseLiquidationRequestDetail elrd = new ExpenseLiquidationRequestDetail();
+                    elrd.ExpenseLiquidationRequest = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest;
                     DropDownList ddlFAccountDescription1 = e.Item.FindControl("ddlFAccountDescription") as DropDownList;
-                    elrd1.ItemAccount = _presenter.GetItemAccount(Convert.ToInt32(ddlFAccountDescription1.SelectedValue));
+                    elrd.ItemAccount = _presenter.GetItemAccount(Convert.ToInt32(ddlFAccountDescription1.SelectedValue));
                     DropDownList ddlExpenseType = e.Item.FindControl("ddlExpenseType") as DropDownList;
-                    elrd1.ExpenseType = _presenter.GetExpenseType(Convert.ToInt32(ddlExpenseType.SelectedValue));
+                    elrd.ExpenseType = _presenter.GetExpenseType(Convert.ToInt32(ddlExpenseType.SelectedValue));
                     DropDownList ddlFProject1 = e.Item.FindControl("ddlFProject") as DropDownList;
-                    elrd1.Project = _presenter.GetProject(Convert.ToInt32(ddlFProject1.SelectedValue));
+                    elrd.Project = _presenter.GetProject(Convert.ToInt32(ddlFProject1.SelectedValue));
                     DropDownList ddlFGrant = e.Item.FindControl("ddlFGrant") as DropDownList;
-                    elrd1.Grant = _presenter.GetGrant(Convert.ToInt32(ddlFGrant.SelectedValue));
+                    elrd.Grant = _presenter.GetGrant(Convert.ToInt32(ddlFGrant.SelectedValue));
                     TextBox txtFAmount1 = e.Item.FindControl("txtFAmount") as TextBox;
-                    elrd1.AmountAdvanced = Convert.ToDecimal(txtFAmount1.Text);
+                    elrd.AmountAdvanced = Convert.ToDecimal(txtFAmount1.Text);
                     TextBox txtFActualExpenditure1 = e.Item.FindControl("txtFActualExpenditure") as TextBox;
-                    elrd1.ActualExpenditure = Convert.ToDecimal(txtFActualExpenditure1.Text);
+                    elrd.ActualExpenditure = Convert.ToDecimal(txtFActualExpenditure1.Text);
                     TextBox txtFVariance1 = e.Item.FindControl("txtFVariance") as TextBox;
-                    elrd1.Variance = Convert.ToDecimal(txtFVariance1.Text);
-                    _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails.Add(elrd1);
+                    elrd.Variance = Convert.ToDecimal(txtFVariance1.Text);
+
+                    //Add Checklists for attachments if available                    
+                    foreach (ItemAccountChecklist checklist in elrd.ItemAccount.ItemAccountChecklists)
+                    {
+                        ELRAttachment attachment = new ELRAttachment();
+                        attachment.ExpenseLiquidationRequestDetail = elrd;
+                        attachment.ItemAccountChecklists.Add(checklist);
+                        elrd.ELRAttachments.Add(attachment);
+                    }
+                    _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails.Add(elrd);
+                    BindAttachments();
+
                     dgExpenseLiquidationDetail.EditItemIndex = -1;
                     BindExpenseLiquidationDetailGrid();
+
+                    foreach (ELRAttachment attachment in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails[e.Item.ItemIndex + 1].ELRAttachments)
+                    {
+                        attachment.ExpenseLiquidationRequestDetail = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.GetExpenseLiquidationRequestDetail((int)dgExpenseLiquidationDetail.DataKeys[e.Item.ItemIndex + 1]);
+                    }
+
                     Master.ShowMessage(new AppMessage("Expense Liquidation Detail Successfully Added!", RMessageType.Info));
                 }
                 catch (Exception ex)
@@ -404,6 +430,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 elrd.Variance = Convert.ToDecimal(txtVariance.Text);
                 _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure + elrd.ActualExpenditure;
                 txtTotActual.Text = (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure).ToString();
+
+                //Add Checklists for attachments if available but clear all attachments first because this is update                    
+                elrd.ELRAttachments = new List<ELRAttachment>();
+                foreach (ItemAccountChecklist checklist in elrd.ItemAccount.ItemAccountChecklists)
+                {
+                    ELRAttachment attachment = new ELRAttachment();
+                    attachment.ExpenseLiquidationRequestDetail = elrd;
+                    attachment.ItemAccountChecklists.Add(checklist);
+                    elrd.ELRAttachments.Add(attachment);
+                }
+                BindAttachments();
 
                 dgExpenseLiquidationDetail.EditItemIndex = -1;
                 BindExpenseLiquidationDetailGrid();
@@ -442,7 +479,32 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void btnUpload_Click(object sender, EventArgs e)
         {
-            UploadFile();
+            Button uploadBtn = (Button)sender;
+            GridViewRow attachmentRow = (GridViewRow)uploadBtn.NamingContainer;
+            FileUpload fuReciept = attachmentRow.FindControl("fuReciept") as FileUpload;
+            string fileName = Path.GetFileName(fuReciept.PostedFile.FileName);
+            int index = 0;
+            if (fileName != String.Empty)
+            {
+                List<ELRAttachment> attachments = (List<ELRAttachment>)Session["attachments"];
+                foreach (ELRAttachment attachment in attachments)
+                {
+                    if (attachment.ItemAccountChecklists[0].ChecklistName == attachmentRow.Cells[1].Text && attachmentRow.DataItemIndex == index)
+                    {
+                        attachment.FilePath = "~/ELUploads/" + fileName;
+                        fuReciept.PostedFile.SaveAs(Server.MapPath("~/ELUploads/") + fileName);
+                    }
+                    index++;
+                }
+
+                BindAttachments();
+                Master.ShowMessage(new AppMessage("Successfully uploaded the attachment", RMessageType.Info));
+
+            }
+            else
+            {
+                Master.ShowMessage(new AppMessage("Please select file ", RMessageType.Error));
+            }
         }
         protected void DownloadFile(object sender, EventArgs e)
         {
@@ -455,48 +517,48 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         protected void DeleteFile(object sender, EventArgs e)
         {
             string filePath = (sender as LinkButton).CommandArgument;
-            _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.RemoveELAttachment(filePath);
-            File.Delete(Server.MapPath(filePath));
-            grvAttachments.DataSource = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ELRAttachments;
-            grvAttachments.DataBind();
-            //Response.Redirect(Request.Url.AbsoluteUri);
-
-
+            foreach (ExpenseLiquidationRequestDetail detail in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
+            {
+                foreach (ELRAttachment attachment in detail.ELRAttachments)
+                {
+                    if (attachment.FilePath == filePath)
+                    {
+                        detail.RemoveELAttachment(filePath);
+                        File.Delete(Server.MapPath(filePath));
+                    }
+                }
+            }
+            BindAttachments();
         }
-        private void UploadFile()
+        protected bool CheckReceiptsAttached()
         {
-            string fileName = Path.GetFileName(fuReciept.PostedFile.FileName);
-            try
+            int numAttachedReceipts = 0;
+            int numChecklists = 0;
+            foreach (ExpenseLiquidationRequestDetail detail in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
             {
-                if (fileName != String.Empty)
+                foreach (ELRAttachment attachment in detail.ELRAttachments)
                 {
-
-
-
-                    ELRAttachment attachment = new ELRAttachment();
-                    attachment.FilePath = "~/ELUploads/" + fileName;
-                    fuReciept.PostedFile.SaveAs(Server.MapPath("~/ELUploads/") + fileName);
-                    //Response.Redirect(Request.Url.AbsoluteUri);
-                    _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ELRAttachments.Add(attachment);
-
-                    grvAttachments.DataSource = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ELRAttachments;
-                    grvAttachments.DataBind();
-
-
-                }
-                else
-                {
-                    Master.ShowMessage(new AppMessage("Please select file ", RMessageType.Error));
+                    if (attachment.FilePath != null)
+                    {
+                        numAttachedReceipts++;
+                    }
                 }
             }
-            catch (HttpException ex)
+            foreach (ExpenseLiquidationRequestDetail detail in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
             {
-                Master.ShowMessage(new AppMessage("Unable to upload the file,The file is to big or The internet is too slow " + ex.InnerException.Message, RMessageType.Error));
+                foreach (ItemAccountChecklist checklist in detail.ItemAccount.ItemAccountChecklists)
+                {
+                    numChecklists++;
+                }
             }
+            if (numAttachedReceipts == numChecklists)
+                return true;
+            else
+                return false;
         }
         protected void btnSave_Click(object sender, EventArgs e)
         {
-            if (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ELRAttachments.Count != 0)
+            if (CheckReceiptsAttached())
             {
                 //For update cases make the totals equal to zero first then add up the individuals
                 _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure = 0;
@@ -519,7 +581,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 btnPrint.Enabled = true;
                 Session["tarId"] = null;
             }
-            else { Master.ShowMessage(new AppMessage("Please attach Receipt", RMessageType.Error)); }
+            else { Master.ShowMessage(new AppMessage("Please attach the required receipts", RMessageType.Error)); }
         }
         protected void btnDelete_Click(object sender, EventArgs e)
         {

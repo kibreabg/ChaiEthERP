@@ -5,6 +5,7 @@
 
 <%@ Register TagPrefix="asp" Namespace="AjaxControlToolkit" Assembly="AjaxControlToolkit" %>
 <asp:Content ID="Content2" ContentPlaceHolderID="DefaultContent" runat="Server">
+    <script src="../js/libs/jquery-2.0.2.min.js"></script>
     <script type="text/javascript">
         function Clickheretoprint(theid) {
             var disp_setting = "toolbar=yes,location=no,directories=yes,menubar=yes,";
@@ -19,6 +20,18 @@
             docprint.document.write('</center></body></html>');
             docprint.document.close();
             docprint.focus();
+        }
+
+        function showApprovalModal() {
+            $(document).ready(function () {
+                $('#approvalModal').modal('show');
+            });
+        }
+
+        function showDetailModal() {
+            $(document).ready(function () {
+                $('#detailModal').modal('show');
+            });
         }
     </script>
     <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
@@ -100,115 +113,105 @@
         </div>
         <br />
     </div>
-    <asp:Panel ID="pnlApproval" Height="100%" ScrollBars="Both" runat="server">
-        <div class="modal-dialog">
+    <div class="modal fade" id="approvalModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" style="width: 800px;">
             <div class="modal-content">
                 <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Process Expense Liquidation Request</h4>
                 </div>
-                <div class="modal-body no-padding">
-                    <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
-                        <header>
-                            <span class="widget-icon"><i class="fa fa-edit"></i></span>
-                            <h2>Process Expense Liquidation Request</h2>
-                        </header>
-                        <div>
-                            <div class="jarviswidget-editbox"></div>
-                            <div class="widget-body no-padding">
-                                <div class="smart-form">
-                                    <fieldset>
-                                        <div class="row">
-                                            <section class="col col-6">
-                                                <asp:Label ID="lblReimbersmentType" runat="server" Text="Retirement Type" CssClass="label" Visible="false"></asp:Label>
-                                                <label class="select">
-                                                    <asp:DropDownList ID="ddlType" runat="server" Visible="false">
-                                                        <asp:ListItem Value=" ">Select Retirement Type</asp:ListItem>
-                                                        <asp:ListItem Value="None">None</asp:ListItem>
-                                                        <asp:ListItem Value="Voucher">Reimbursement</asp:ListItem>
-                                                        <asp:ListItem Value="Receipt">Receipt</asp:ListItem>
+                <div class="modal-body">
+                    <div class="jarviswidget-editbox"></div>
+                    <div class="widget-body no-padding">
+                        <div class="smart-form">
+                            <fieldset>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <asp:Label ID="lblReimbersmentType" runat="server" Text="Retirement Type" CssClass="label" Visible="false"></asp:Label>
+                                        <label class="select">
+                                            <asp:DropDownList ID="ddlType" runat="server" Visible="false">
+                                                <asp:ListItem Value=" ">Select Retirement Type</asp:ListItem>
+                                                <asp:ListItem Value="None">None</asp:ListItem>
+                                                <asp:ListItem Value="Voucher">Reimbursement</asp:ListItem>
+                                                <asp:ListItem Value="Receipt">Receipt</asp:ListItem>
 
-                                                    </asp:DropDownList><i runat="server" id="iReimbersmentType" visible="false"></i>
+                                            </asp:DropDownList><i runat="server" id="iReimbersmentType" visible="false"></i>
 
-                                                </label>
-                                            </section>
-                                            <section class="col col-6">
-                                                <asp:Label ID="lblNumber" runat="server" Text="Number" CssClass="label" Visible="false"></asp:Label>
-                                                <label class="input">
-                                                    <asp:TextBox ID="txtNumber" runat="server" Visible="false"></asp:TextBox>
-                                                </label>
-                                            </section>
-                                        </div>
-                                        <div class="row">
-                                            <section class="col col-6">
-                                                <asp:Label ID="lblApprovalStatus" runat="server" Text="Approval Status" CssClass="label"></asp:Label>
-                                                <label class="select">
-                                                    <asp:DropDownList ID="ddlApprovalStatus" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlApprovalStatus_SelectedIndexChanged">
-                                                        <asp:ListItem Value="0">Select Status</asp:ListItem>
-                                                    </asp:DropDownList><i></i>
-                                                    <asp:RequiredFieldValidator ID="RfvApprovalStatus" CssClass="validator" runat="server" ValidationGroup="save" ErrorMessage="Approval Status Required" InitialValue="0" ControlToValidate="ddlApprovalStatus"></asp:RequiredFieldValidator>
-                                                </label>
-                                            </section>
-                                            <section class="col col-6">
-                                                <asp:Label ID="lblRejectedReason" runat="server" Text="Rejected Reason" Visible="false" CssClass="label"></asp:Label>
-                                                <label class="input">
-                                                    <asp:TextBox ID="txtRejectedReason" Visible="false" runat="server"></asp:TextBox>
-                                                </label>
-                                            </section>
-                                        </div>
-                                        <div class="row">
-                                            <section class="col col-6">
-                                                <asp:Label ID="lblAttachments" runat="server" Text="Attachments" CssClass="label"></asp:Label>
-                                                <asp:GridView ID="grvAttachments"
-                                                    runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                                                    CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
-                                                    <RowStyle CssClass="rowstyle" />
-                                                    <Columns>
-                                                        <asp:BoundField DataField="FilePath" HeaderText="File Name" SortExpression="FilePath" />
-                                                        <asp:TemplateField>
-                                                            <ItemTemplate>
-                                                                <asp:LinkButton ID="lnkDownload" Text="Download" CommandArgument='<%# Eval("FilePath") %>' runat="server" OnClick="DownloadFile"></asp:LinkButton>
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>
-                                                    </Columns>
-                                                    <FooterStyle CssClass="FooterStyle" />
-                                                    <HeaderStyle CssClass="headerstyle" />
-                                                    <PagerStyle CssClass="PagerStyle" />
-                                                    <RowStyle CssClass="rowstyle" />
-                                                </asp:GridView>
-                                            </section>
-                                        </div>
-                                    </fieldset>
-                                    <footer>
-                                        <asp:Button ID="btnApprove" runat="server" ValidationGroup="save" Text="Save" OnClick="btnApprove_Click" Enabled="false" CssClass="btn btn-primary"></asp:Button>
-                                        <asp:Button ID="btnCancelPopup" runat="server" Text="Close" CssClass="btn btn-primary" OnClick="btnCancelPopup_Click"></asp:Button>
-                                        <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-primary" Enabled="false" OnClientClick="javascript:Clickheretoprint('divprint');return false;"></asp:Button>
-                                        <asp:Button ID="btnExport" runat="server" Text="Export" CssClass="btn btn-primary" Enabled="False" OnClick="btnExport_Click"></asp:Button>
-                                    </footer>
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <asp:Label ID="lblNumber" runat="server" Text="Number" CssClass="label" Visible="false"></asp:Label>
+                                        <label class="input">
+                                            <asp:TextBox ID="txtNumber" runat="server" Visible="false"></asp:TextBox>
+                                        </label>
+                                    </section>
                                 </div>
-                            </div>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <asp:Label ID="lblApprovalStatus" runat="server" Text="Approval Status" CssClass="label"></asp:Label>
+                                        <label class="select">
+                                            <asp:DropDownList ID="ddlApprovalStatus" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlApprovalStatus_SelectedIndexChanged">
+                                                <asp:ListItem Value="0">Select Status</asp:ListItem>
+                                            </asp:DropDownList><i></i>
+                                            <asp:RequiredFieldValidator ID="RfvApprovalStatus" CssClass="validator" runat="server" ValidationGroup="save" ErrorMessage="Approval Status Required" InitialValue="0" ControlToValidate="ddlApprovalStatus"></asp:RequiredFieldValidator>
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <asp:Label ID="lblRejectedReason" runat="server" Text="Rejected Reason" Visible="false" CssClass="label"></asp:Label>
+                                        <label class="input">
+                                            <asp:TextBox ID="txtRejectedReason" Visible="false" runat="server"></asp:TextBox>
+                                        </label>
+                                    </section>
+                                </div>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <asp:Label ID="lblAttachments" runat="server" Text="Attachments" CssClass="label"></asp:Label>
+                                        <asp:GridView ID="grvAttachments"
+                                            runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                                            CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
+                                            <RowStyle CssClass="rowstyle" />
+                                            <Columns>
+                                                <asp:BoundField DataField="FilePath" HeaderText="File Name" SortExpression="FilePath" />
+                                                <asp:TemplateField>
+                                                    <ItemTemplate>
+                                                        <asp:LinkButton ID="lnkDownload" Text="Download" CommandArgument='<%# Eval("FilePath") %>' runat="server" OnClick="DownloadFile"></asp:LinkButton>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                            </Columns>
+                                            <FooterStyle CssClass="FooterStyle" />
+                                            <HeaderStyle CssClass="headerstyle" />
+                                            <PagerStyle CssClass="PagerStyle" />
+                                            <RowStyle CssClass="rowstyle" />
+                                        </asp:GridView>
+                                    </section>
+                                </div>
+                            </fieldset>
+                            <footer>
+                                <asp:Button ID="btnApprove" runat="server" ValidationGroup="save" Text="Save" OnClick="btnApprove_Click" Enabled="false" CssClass="btn btn-primary"></asp:Button>
+                                <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-primary" Enabled="false" OnClientClick="javascript:Clickheretoprint('divprint');return false;"></asp:Button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                <asp:Button ID="btnExport" runat="server" Text="Export" CssClass="btn btn-primary" Enabled="False" OnClick="btnExport_Click"></asp:Button>
+                            </footer>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- /.modal-content -->
-    </asp:Panel>
-    <asp:ModalPopupExtender runat="server" BackgroundCssClass="modalBackground" Enabled="True"
-        PopupControlID="pnlApproval" TargetControlID="btnPop"
-        ID="pnlApproval_ModalPopupExtender">
-    </asp:ModalPopupExtender>
-
-    <asp:Panel ID="pnlDetail" Height="100%" ScrollBars="Both" runat="server">
-        <div class="modal-content">
-            <div class="modal-body no-padding">
-                <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
-                    <header>
-                        <span class="widget-icon"><i class="fa fa-edit"></i></span>
-                        <h2>Expense Liquidation Details</h2>
-                    </header>
-                    <div>
-                        <div class="jarviswidget-editbox"></div>
-                        <div class="widget-body no-padding">
-                            <div class="smart-form">
+    </div>
+    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" style="width: 100%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;</button>
+                    <h4 class="modal-title">Process Purchase Request</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="jarviswidget-editbox"></div>
+                    <div class="widget-body no-padding">
+                        <div class="smart-form">
+                            <div style="overflow-x: auto;">
                                 <asp:DataGrid ID="dgLiquidationRequestDetail" runat="server"
                                     AutoGenerateColumns="False" CellPadding="0" CssClass="table table-striped table-bordered table-hover"
                                     DataKeyField="Id" GridLines="None" PagerStyle-CssClass="paginate_button active"
@@ -281,20 +284,16 @@
                                     </Columns>
                                     <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
                                 </asp:DataGrid>
-                                <footer>
-                                    <asp:Button ID="btnCancelPopup2" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" OnClick="btnCancelPopup2_Click"></asp:Button>
-                                </footer>
                             </div>
+                            <footer>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            </footer>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </asp:Panel>
-    <asp:ModalPopupExtender runat="server" BackgroundCssClass="modalBackground"
-        Enabled="True" TargetControlID="btnPop2" PopupControlID="pnlDetail" CancelControlID="btnCancelPopup2"
-        ID="pnlDetail_ModalPopupExtender">
-    </asp:ModalPopupExtender>
+    </div>
     <div id="divprint" style="display: none;">
         <fieldset>
             <table style="width: 100%;">
@@ -304,16 +303,16 @@
                     <td style="font-size: large; text-align: center;">
                         <strong>CHAI Ethiopia ERP
                             <br />
-                            LIQUIDATION EXPENSE TRANSACTION FORM</strong></td>
+                            EXPENSE LIQUIDATION TRANSACTION FORM</strong></td>
                 </tr>
             </table>
             <table style="width: 100%;">
 
                 <tr>
-                    <td align="right" style="width: 848px">&nbsp;</td>
-                    <td align="right" style="width: 390px">&nbsp;</td>
-                    <td align="right" style="width: 389px">&nbsp;</td>
-                    <td align="right" style="width: 389px">&nbsp;</td>
+                    <td style="width: 848px">&nbsp;</td>
+                    <td style="width: 390px">&nbsp;</td>
+                    <td style="width: 389px">&nbsp;</td>
+                    <td style="width: 389px">&nbsp;</td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
@@ -381,11 +380,9 @@
                         <asp:Label ID="lblTravelAdvReqDateResult" runat="server"></asp:Label>
                     </td>
                     <td style="width: 389px">
-                        <strong>
-                        </strong>
+                        <strong></strong>
                     </td>
-                    <td style="width: 389px">
-                    </td>
+                    <td style="width: 389px"></td>
                     <td>&nbsp;</td>
                 </tr>
             </table>
