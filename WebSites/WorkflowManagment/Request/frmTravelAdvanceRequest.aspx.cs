@@ -497,8 +497,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 hfDetailId.Value = dgTravelAdvanceRequestDetail.SelectedItem.ItemIndex.ToString();
             }
-            BindCostsGrid(tac);
-            pnlTACost_ModalPopupExtender.Show();
+            BindCostsGrid(tac);            
+            ScriptManager.RegisterStartupScript(this, GetType(), "showCostModal", "showCostModal();", true);
         }
         protected void dgTravelAdvanceRequestCost_CancelCommand(object source, DataGridCommandEventArgs e)
         {
@@ -534,7 +534,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     txtTotal.Text = _presenter.CurrentTravelAdvanceRequest.TotalTravelAdvance.ToString();
                 }
                 BindCostsGrid(taco.TravelAdvanceRequestDetail);
-                pnlTACost_ModalPopupExtender.Show();
+                ScriptManager.RegisterStartupScript(this, GetType(), "showCostModal", "showCostModal();", true);
                 Master.ShowMessage(new AppMessage("Travel Advance Cost was removed successfully", RMessageType.Info));
             }
             catch (Exception ex)
@@ -556,7 +556,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             else
                 taco = (TravelAdvanceCost)tac.TravelAdvanceCosts[e.Item.ItemIndex];
             BindCostsGrid(taco.TravelAdvanceRequestDetail);
-            pnlTACost_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showCostModal", "showCostModal();", true);
         }
         protected void dgTravelAdvanceRequestCost_ItemCommand(object source, DataGridCommandEventArgs e)
         {
@@ -591,7 +591,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                     dgTravelAdvanceRequestCost.EditItemIndex = -1;
                     BindCostsGrid(taCost.TravelAdvanceRequestDetail);
-                    pnlTACost_ModalPopupExtender.Show();
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showCostModal", "showCostModal();", true);
                 }
                 catch (Exception ex)
                 {
@@ -680,7 +680,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 txtTotal.Text = (_presenter.CurrentTravelAdvanceRequest.TotalTravelAdvance).ToString();
                 dgTravelAdvanceRequestCost.EditItemIndex = -1;
                 BindCostsGrid(taCost.TravelAdvanceRequestDetail);
-                pnlTACost_ModalPopupExtender.Show();
+                ScriptManager.RegisterStartupScript(this, GetType(), "showCostModal", "showCostModal();", true);
                 Master.ShowMessage(new AppMessage("Travel Advance Cost Successfully Updated", RMessageType.Info));
             }
             catch (Exception ex)

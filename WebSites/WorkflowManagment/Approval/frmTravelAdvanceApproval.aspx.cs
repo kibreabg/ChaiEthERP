@@ -344,9 +344,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     Session["CurrentTravelAdvanceRequest"] = _presenter.GetTravelAdvanceRequest(reqId);
                     _presenter.CurrentTravelAdvanceRequest = (TravelAdvanceRequest)Session["CurrentTravelAdvanceRequest"];
                     //_presenter.OnViewLoaded();
-                    pnlDetail_ModalPopupExtender.Show();
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
                     dgTravelAdvanceRequestDetail.DataSource = _presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestDetails;
                     dgTravelAdvanceRequestDetail.DataBind();
+                    grvTravelAdvanceCosts.DataSource = null;
+                    grvTravelAdvanceCosts.DataBind();
                 }
             }
         }
@@ -427,10 +429,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             }
         }
-        protected void btnCancelPopup2_Click(object sender, EventArgs e)
-        {
-            pnlDetail.Visible = false;
-        }
         protected void btnBankPayment_Click(object sender, EventArgs e)
         {
             Response.Redirect(String.Format("../Request/frmOperationalControlRequest.aspx?paymentId={0}&Page={1}", Convert.ToInt32(Session["PaymentId"]), "TravelAdvance"));
@@ -458,9 +456,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             _presenter.CurrentTravelAdvanceRequest = (TravelAdvanceRequest)Session["CurrentTravelAdvanceRequest"];
             grvTravelAdvanceCosts.DataSource = _presenter.CurrentTravelAdvanceRequest.GetTravelAdvanceRequestDetail(recordId).TravelAdvanceCosts;
             grvTravelAdvanceCosts.DataBind();
-
-            pnlDetail_ModalPopupExtender.Show();
-
+            ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
         }
         protected void grvTravelAdvanceCosts_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {

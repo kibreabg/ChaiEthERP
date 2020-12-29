@@ -26,6 +26,11 @@
                 $('#approvalModal').modal('show');
             });
         }
+        function showDetailModal() {
+            $(document).ready(function () {
+                $('#detailModal').modal('show');
+            });
+        }
     </script>
     <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
         <header>
@@ -164,95 +169,86 @@
             </div>
         </div>
     </div>
-    <asp:Panel ID="pnlDetail" runat="server">
-        <div class="modal-body no-padding">
-            <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
-                <header>
-                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
-                    <h2>Travel Advance Details</h2>
-                </header>
-                <div>
-                    <div class="jarviswidget-editbox"></div>
-                    <div class="widget-body no-padding">
-                        <div class="smart-form">
-                            <asp:DataGrid ID="dgTravelAdvanceRequestDetail" runat="server"
-                                AutoGenerateColumns="False" CellPadding="0" CssClass="table table-striped table-bordered table-hover"
-                                DataKeyField="Id" GridLines="None" PagerStyle-CssClass="paginate_button active" ShowFooter="True" OnSelectedIndexChanged="dgTravelAdvanceRequestDetail_SelectedIndexChanged">
-                                <Columns>
-                                    <asp:TemplateColumn HeaderText="City From">
-                                        <ItemTemplate>
-                                            <%# DataBinder.Eval(Container.DataItem, "CityFrom")%>
-                                        </ItemTemplate>
-                                    </asp:TemplateColumn>
-                                    <asp:TemplateColumn HeaderText="City To">
-                                        <ItemTemplate>
-                                            <%# DataBinder.Eval(Container.DataItem, "CityTo")%>
-                                        </ItemTemplate>
-                                    </asp:TemplateColumn>
-                                    <asp:TemplateColumn HeaderText="Hotel Booked">
-                                        <ItemTemplate>
-                                            <%# DataBinder.Eval(Container.DataItem, "HotelBooked")%>
-                                        </ItemTemplate>
-                                    </asp:TemplateColumn>
-                                    <asp:TemplateColumn HeaderText="From Date">
-                                        <ItemTemplate>
-                                            <%# DataBinder.Eval(Container.DataItem, "FromDate","{0:dd/MM/yyyy}")%>
-                                        </ItemTemplate>
-                                    </asp:TemplateColumn>
-                                    <asp:TemplateColumn HeaderText="To Date">
-                                        <ItemTemplate>
-                                            <%# DataBinder.Eval(Container.DataItem, "ToDate","{0:dd/MM/yyyy}")%>
-                                        </ItemTemplate>
-                                    </asp:TemplateColumn>
-                                    <asp:TemplateColumn HeaderText="Mode of Travel">
-                                        <ItemTemplate>
-                                            <%# DataBinder.Eval(Container.DataItem, "ModeOfTravel")%>
-                                        </ItemTemplate>
-                                    </asp:TemplateColumn>
-                                    <asp:ButtonColumn ButtonType="PushButton" CommandName="Select" Text="View Costs"></asp:ButtonColumn>
-                                </Columns>
-                                <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
-                            </asp:DataGrid>
-                        </div>
-                    </div>
+    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" style="width: 100%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;</button>
+                    <h4 class="modal-title">Travel Advance Detail</h4>
                 </div>
-                <br />
-                <div>
+                <div class="modal-body">
                     <div class="jarviswidget-editbox"></div>
                     <div class="widget-body no-padding">
                         <div class="smart-form">
-                            <asp:GridView ID="grvTravelAdvanceCosts"
-                                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                                AllowPaging="True" OnPageIndexChanging="grvTravelAdvanceCosts_PageIndexChanging"
-                                CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
-                                <RowStyle CssClass="rowstyle" />
-                                <Columns>
-                                    <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="Account Name" />
-                                    <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Request Date" />
-                                    <asp:BoundField DataField="ExpenseType.ExpenseTypeName" HeaderText="Expense Type" />
-                                    <asp:BoundField DataField="Days" HeaderText="Days" />
-                                    <asp:BoundField DataField="UnitCost" HeaderText="Unit Cost" />
-                                    <asp:BoundField DataField="NoOfUnits" HeaderText="No Of Units" />
-                                    <asp:BoundField DataField="Total" HeaderText="Total" />
-                                </Columns>
-                                <FooterStyle CssClass="FooterStyle" />
-                                <HeaderStyle CssClass="headerstyle" />
-                                <PagerStyle CssClass="PagerStyle" />
-                                <RowStyle CssClass="rowstyle" />
-                            </asp:GridView>
+                            <div style="overflow-x: auto;">
+                                <asp:DataGrid ID="dgTravelAdvanceRequestDetail" runat="server"
+                                    AutoGenerateColumns="False" CellPadding="0" CssClass="table table-striped table-bordered table-hover"
+                                    DataKeyField="Id" GridLines="None" PagerStyle-CssClass="paginate_button active" ShowFooter="True" OnSelectedIndexChanged="dgTravelAdvanceRequestDetail_SelectedIndexChanged">
+                                    <Columns>
+                                        <asp:TemplateColumn HeaderText="City From">
+                                            <ItemTemplate>
+                                                <%# DataBinder.Eval(Container.DataItem, "CityFrom")%>
+                                            </ItemTemplate>
+                                        </asp:TemplateColumn>
+                                        <asp:TemplateColumn HeaderText="City To">
+                                            <ItemTemplate>
+                                                <%# DataBinder.Eval(Container.DataItem, "CityTo")%>
+                                            </ItemTemplate>
+                                        </asp:TemplateColumn>
+                                        <asp:TemplateColumn HeaderText="Hotel Booked">
+                                            <ItemTemplate>
+                                                <%# DataBinder.Eval(Container.DataItem, "HotelBooked")%>
+                                            </ItemTemplate>
+                                        </asp:TemplateColumn>
+                                        <asp:TemplateColumn HeaderText="From Date">
+                                            <ItemTemplate>
+                                                <%# DataBinder.Eval(Container.DataItem, "FromDate","{0:dd/MM/yyyy}")%>
+                                            </ItemTemplate>
+                                        </asp:TemplateColumn>
+                                        <asp:TemplateColumn HeaderText="To Date">
+                                            <ItemTemplate>
+                                                <%# DataBinder.Eval(Container.DataItem, "ToDate","{0:dd/MM/yyyy}")%>
+                                            </ItemTemplate>
+                                        </asp:TemplateColumn>
+                                        <asp:TemplateColumn HeaderText="Mode of Travel">
+                                            <ItemTemplate>
+                                                <%# DataBinder.Eval(Container.DataItem, "ModeOfTravel")%>
+                                            </ItemTemplate>
+                                        </asp:TemplateColumn>
+                                        <asp:ButtonColumn ButtonType="PushButton" CommandName="Select" Text="View Costs"></asp:ButtonColumn>
+                                    </Columns>
+                                    <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
+                                </asp:DataGrid>
+                                <asp:GridView ID="grvTravelAdvanceCosts"
+                                    runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                                    AllowPaging="True" OnPageIndexChanging="grvTravelAdvanceCosts_PageIndexChanging"
+                                    CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
+                                    <RowStyle CssClass="rowstyle" />
+                                    <Columns>
+                                        <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="Account Name" />
+                                        <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Request Date" />
+                                        <asp:BoundField DataField="ExpenseType.ExpenseTypeName" HeaderText="Expense Type" />
+                                        <asp:BoundField DataField="Days" HeaderText="Days" />
+                                        <asp:BoundField DataField="UnitCost" HeaderText="Unit Cost" />
+                                        <asp:BoundField DataField="NoOfUnits" HeaderText="No Of Units" />
+                                        <asp:BoundField DataField="Total" HeaderText="Total" />
+                                    </Columns>
+                                    <FooterStyle CssClass="FooterStyle" />
+                                    <HeaderStyle CssClass="headerstyle" />
+                                    <PagerStyle CssClass="PagerStyle" />
+                                    <RowStyle CssClass="rowstyle" />
+                                </asp:GridView>
+                            </div>
                             <footer>
-                                <asp:Button ID="btnCancelPopup2" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" OnClick="btnCancelPopup2_Click"></asp:Button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                             </footer>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </asp:Panel>
-    <asp:ModalPopupExtender runat="server" BackgroundCssClass="modalBackground"
-        Enabled="True" TargetControlID="btnPop2" PopupControlID="pnlDetail" CancelControlID="btnCancelPopup2"
-        ID="pnlDetail_ModalPopupExtender">
-    </asp:ModalPopupExtender>
+    </div>
     <div id="divprint" style="display: none;">
         <fieldset>
             <table style="width: 100%;">
@@ -459,5 +455,4 @@
             </table>
         </fieldset>
     </div>
-
 </asp:Content>
