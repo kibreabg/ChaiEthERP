@@ -138,17 +138,6 @@
                                         </label>
                                     </section>
                                     <section class="col col-6">
-                                        <asp:Label ID="lblAccount" Visible="false" runat="server" CssClass="label">Bank Account</asp:Label>
-                                        <asp:Label ID="lblAccountdd" Visible="false" runat="server" CssClass="select">
-                                            <asp:DropDownList ID="ddlAccount" runat="server" AppendDataBoundItems="True" DataTextField="Name" DataValueField="Id">
-                                                <asp:ListItem Value="0">Select Account</asp:ListItem>
-                                            </asp:DropDownList><i></i>
-                                            <asp:RequiredFieldValidator ID="rfvddlaccount" runat="server" CssClass="validator" ValidationGroup="save" ErrorMessage="Account Required" InitialValue="0" ControlToValidate="ddlAccount"></asp:RequiredFieldValidator>
-                                        </asp:Label>
-                                    </section>
-                                </div>
-                                <div class="row">
-                                    <section class="col col-6">
                                         <asp:Label ID="lblRejectedReason" runat="server" Text="Rejected Reason" Visible="false" CssClass="label"></asp:Label>
                                         <label class="input">
                                             <asp:TextBox ID="txtRejectedReason" Visible="false" runat="server"></asp:TextBox>
@@ -161,7 +150,7 @@
                                 <asp:Button ID="btnApprove" runat="server" ValidationGroup="save" Text="Save" OnClick="btnApprove_Click" Enabled="false" CssClass="btn btn-primary"></asp:Button>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                 <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-primary" Enabled="false" OnClientClick="javascript:Clickheretoprint('divprint')"></asp:Button>
-                                <asp:Button ID="btnBankPayment" runat="server" CssClass="btn btn-primary" OnClick="btnBankPayment_Click" Text="Bank Payment" Visible="False" />
+                                <asp:Button ID="btnBankPayment" runat="server" CssClass="btn btn-primary" OnClick="btnBankPayment_Click" Text="Bank Payment" Visible="True" />
                             </footer>
                         </div>
                     </div>

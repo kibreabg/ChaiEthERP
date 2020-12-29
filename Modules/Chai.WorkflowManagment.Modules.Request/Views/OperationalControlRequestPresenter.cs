@@ -285,6 +285,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.GetCashPaymentRequest(paymentRequest);
         }
+        public TravelAdvanceRequest GetTravelAdvanceRequest(int travelRequest)
+        {
+            return _controller.GetTravelAdvanceRequest(travelRequest);
+        }
         public CostSharingRequest GetCostSharingPaymentRequest(int paymentRequest)
         {
             return _controller.GetCostSharingRequest(paymentRequest);

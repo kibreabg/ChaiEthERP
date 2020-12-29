@@ -743,7 +743,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void btnBankPayment_Click(object sender, EventArgs e)
         {
-            Response.Redirect(String.Format("../Request/frmOperationalControlRequest.aspx?paymentId={0}", Convert.ToInt32(Session["PaymentId"])));
+            Response.Redirect(String.Format("../Request/frmOperationalControlRequest.aspx?paymentId={0}&Page={1}", Convert.ToInt32(Session["PaymentId"]), "CashPayment"));
         }
         protected void btnReimburse_Click(object sender, EventArgs e)
         {

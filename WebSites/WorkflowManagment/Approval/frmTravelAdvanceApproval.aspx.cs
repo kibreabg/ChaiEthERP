@@ -78,20 +78,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
             }
         }
-        #endregion
-        private void BindAccounts()
-        {
-            if (_presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestStatuses.Count == _presenter.CurrentTravelAdvanceRequest.CurrentLevel && (_presenter.CurrentUser().EmployeePosition.PositionName == "Accountant" || _presenter.GetUser(_presenter.CurrentTravelAdvanceRequest.CurrentApprover).IsAssignedJob == true))
-            {
-                lblAccount.Visible = true;
-                lblAccountdd.Visible = true;
-            }
-            ddlAccount.Items.Clear();
-            ddlAccount.Items.Add(new ListItem("Select Account", "0"));
-            ddlAccount.DataSource = _presenter.GetAccounts();
-            ddlAccount.DataBind();
-
-        }
+        #endregion        
         private void PopApprovalStatus()
         {
             ddlApprovalStatus.Items.Clear();
@@ -237,8 +224,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void SendEmailToRequester()
         {
-            if (_presenter.CurrentTravelAdvanceRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
-                EmailSender.Send(_presenter.GetUser(_presenter.CurrentTravelAdvanceRequest.AppUser.Id).Email, "Tavel Adavnce Completion", "Your Travel Advance Request with Travel Advance No. - '" + (_presenter.CurrentTravelAdvanceRequest.TravelAdvanceNo).ToUpper() + "' was Completed, Please collect your payment");
+            if (_presenter.CurrentTravelAdvanceRequest.CurrentStatus != ApprovalStatus.Rejected.ToString() && _presenter.CurrentTravelAdvanceRequest.CurrentStatus != "Bank Payment")
+                EmailSender.Send(_presenter.GetUser(_presenter.CurrentTravelAdvanceRequest.AppUser.Id).Email, "Tavel Adavnce Completion", "Your Travel Advance Request with Travel Advance No. - '" + (_presenter.CurrentTravelAdvanceRequest.TravelAdvanceNo).ToUpper() + "' was completed. Please collect your payment.");
         }
         private void GetNextApprover()
         {
@@ -310,12 +297,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
                             TARS.Approver = _presenter.CurrentUser().Id;
                             _presenter.CurrentTravelAdvanceRequest.CurrentStatus = TARS.ApprovalStatus;
-                            if (TARS.PaymentType != null)
+                            if (ddlApprovalStatus.SelectedValue == "Bank Payment")
                             {
-                                if (TARS.PaymentType.Contains("Bank Payment"))
-                                {
-                                    btnBankPayment.Visible = true;
-                                }
+                                btnBankPayment.Visible = true;
                             }
                         }
                         GetNextApprover();
@@ -377,8 +361,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             _presenter.OnViewLoaded();
             PopApprovalStatus();
+            Session["PaymentId"] = _presenter.CurrentTravelAdvanceRequest.Id;
             BindTravelAdvanceRequestStatus();
-            BindAccounts();
             txtRejectedReason.Visible = false;
             rfvRejectedReason.Enabled = false;
             ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
@@ -411,7 +395,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     SaveTravelAdvanceRequestStatus();
 
-                    _presenter.CurrentTravelAdvanceRequest.Account = _presenter.GetAccount(Convert.ToInt32(ddlAccount.SelectedValue));
+                    //_presenter.CurrentTravelAdvanceRequest.Account = _presenter.GetAccount(Convert.ToInt32(ddlAccount.SelectedValue));
                     _presenter.SaveOrUpdateTravelAdvanceRequest(_presenter.CurrentTravelAdvanceRequest);
                     ShowPrint();
                     if (ddlApprovalStatus.SelectedValue != "Rejected")
@@ -426,7 +410,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
             catch (Exception ex)
             {
-
+                Master.ShowMessage(new AppMessage("Error: Unable to Approve the Travel Advance! " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         protected void btnBankPayment_Click(object sender, EventArgs e)
