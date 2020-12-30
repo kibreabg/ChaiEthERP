@@ -325,10 +325,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (MRS.ApprovalStatus == null)
                 {
-                   
-                       // SendEmailtoMechanic();
-                   
-                  
+
+                    // SendEmailtoMechanic();
+
+                    
                     _presenter.CurrentMaintenanceRequest.CurrentApprover = MRS.Approver;
                     _presenter.CurrentMaintenanceRequest.CurrentLevel = MRS.WorkflowLevel;
                     _presenter.CurrentMaintenanceRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
@@ -685,6 +685,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 BindServiceType(ddlFServiceType);
                 DropDownList ddlFServiceTypeDet = e.Item.FindControl("ddlMecServiceTypeDet") as DropDownList;
                 BindServiceTypeDetails(ddlFServiceTypeDet, Convert.ToInt32(ddlFServiceType.SelectedValue));
+
                 //DropDownList ddlFMecServiceTypeDet = e.Item.FindControl("ddlMecServiceTypeDet") as DropDownList;
                 //BindServiceTypeDetails(ddlFMecServiceTypeDet, Convert.ToInt32(ddlFServiceType.SelectedValue));
             }
@@ -716,6 +717,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     }
                 }
             }
+
+            
         }
         protected void dgMaintenanceRequestDetail_EditCommand(object source, DataGridCommandEventArgs e)
         {
@@ -752,6 +755,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 dgMaintenanceRequestDetail.DataBind();
                 ScriptManager.RegisterStartupScript(this, GetType(), "showMechanicDetail", "showMechanicDetail();", true);
                 Master.ShowMessage(new AppMessage("Car Maintenance Request Detail Successfully Updated", RMessageType.Info));
+                _presenter.SaveOrUpdateMaintenanceRequest(_presenter.CurrentMaintenanceRequest);
             }
             catch (Exception ex)
             {
@@ -788,6 +792,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     Detail.TechnicianRemark = txtEdtTechRemark.Text;
 
                     _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails.Add(Detail);
+                    _presenter.SaveOrUpdateMaintenanceRequest(_presenter.CurrentMaintenanceRequest);
                     Master.ShowMessage(new AppMessage("Maintenance Request Detail added successfully.", RMessageType.Info));
                     dgMaintenanceRequestDetail.EditItemIndex = -1;
                     dgMaintenanceRequestDetail.DataSource = _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails;
@@ -926,6 +931,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 Spare.MaintenanceRequest = _presenter.CurrentMaintenanceRequest;
                 Master.ShowMessage(new AppMessage("Maintenance Sparepart  Updated successfully.", RMessageType.Info));
                 dgSparepart.EditItemIndex = -1;
+                _presenter.SaveOrUpdateMaintenanceRequest(_presenter.CurrentMaintenanceRequest);
                 BindMaintenanceSpareparts();
             }
 
@@ -952,6 +958,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     //TextBox txtFRemark = e.Item.FindControl("txtFRemark") as TextBox;
                     //Spare.StoreKeeperRemark = txtFRemark.Text;
                     _presenter.CurrentMaintenanceRequest.MaintenanceSpareParts.Add(Spare);
+                    _presenter.SaveOrUpdateMaintenanceRequest(_presenter.CurrentMaintenanceRequest);
                     Master.ShowMessage(new AppMessage("Maintenance Sparepart  added successfully.", RMessageType.Info));
                     dgSparepart.EditItemIndex = -1;
                     BindMaintenanceSpareparts();
