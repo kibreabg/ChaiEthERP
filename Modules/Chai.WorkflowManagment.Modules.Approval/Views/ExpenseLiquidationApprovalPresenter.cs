@@ -129,6 +129,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _controller.GetAssignedJobbycurrentuser(userId);
         }
+        public IList<AppUser> GetAppUsersByEmployeePosition(int employeePosition)
+        {
+            return _settingController.GetAppUsersByEmployeePosition(employeePosition);
+        }
         public int GetAssignedUserbycurrentuser()
         {
             return _controller.GetAssignedUserbycurrentuser();
@@ -136,6 +140,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         public DataSet ExportTravelAdvance(int LiquidationId)
         {
             return _controller.ExportTravelAdvance(LiquidationId);
+        }
+        public void DeleteExpenseLiquidationRequest(ExpenseLiquidationRequest expenseLiquidationRequest)
+        {
+            _controller.DeleteEntity(expenseLiquidationRequest);
         }
         public void Commit()
         {

@@ -14,7 +14,8 @@ namespace Chai.WorkflowManagment.CoreDomain.Setting
         public string ChecklistName { get; set; }        
         public string Status { get; set; }
         public virtual ItemAccount ItemAccount { get; set; }
-        public virtual CPRAttachment CPRAttachment { get; set; }        
+        public virtual CPRAttachment CPRAttachment { get; set; }
+        public virtual PRAttachment PRAttachment { get; set; }
 
     }
 }

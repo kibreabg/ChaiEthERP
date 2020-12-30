@@ -74,7 +74,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return txtComment.Text; }
         }
-        
+
         public IList<PaymentReimbursementRequest> PaymentReimbursementRequests
         {
             get
@@ -127,7 +127,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (_presenter.CurrentCashPaymentRequest != null)
             {
                 txtComment.Text = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.Comment;
-                
+                _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.TotalAmount = 0;
+                _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails = null;
                 BindPaymentReimbursementRequests();
                 //grvAttachments.DataSource = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.CPRAttachments;
                 //grvAttachments.DataBind();
@@ -148,18 +149,21 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void BindPaymentReimbursementRequestDetails()
         {
-            dgPaymentReimbursementDetail.DataSource = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails;
-            dgPaymentReimbursementDetail.DataBind();
+            dgCashPaymentDetail.DataSource = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails;
+            dgCashPaymentDetail.DataBind();
         }
         private void CheckandBindCashPaymentDetails()
         {
-            if (_presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails.Count == 0)
+            PopulateReimbursement();
+            if (_presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails.Count > 0)
             {
-                PopulateReimbursement();
+                foreach (PaymentReimbursementRequestDetail detail in _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails)
+                {
+                    txtImbursement.Text = ((txtImbursement.Text != "" ? Convert.ToDecimal(txtImbursement.Text) : 0) + detail.ActualExpenditure).ToString();
+                }
             }
-           
+
         }
-        
         protected void grvPaymentReimbursementRequestList_SelectedIndexChanged(object sender, EventArgs e)
         {
             Session["PaymentReimbursementRequest"] = true;
@@ -196,9 +200,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             _presenter.OnViewLoaded();
             btnSave.Visible = true;
             btnSave.Enabled = true;
-            grvCashPayments.Visible = false;
+            txtReceivables.Text = grvCashPayments.SelectedRow.Cells[4].Text;
+            //grvCashPayments.Visible = false;
             pnlInfo.Visible = false;
             CheckandBindCashPaymentDetails();
+            BindPaymentReimbursementRequestDetails();
+            BindAttachments();
         }
         protected void ddlAccountDescription_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -212,7 +219,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             TextBox txtEdtAccountCode = ddl.FindControl("txtEdtAccountCode") as TextBox;
             txtEdtAccountCode.Text = _presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)).AccountCode;
         }
-       
+
         private void BindAccountDescription(DropDownList ddlAccountDescription)
         {
             ddlAccountDescription.DataSource = _presenter.ListItemAccounts();
@@ -220,14 +227,31 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ddlAccountDescription.DataTextField = "AccountName";
             ddlAccountDescription.DataBind();
         }
-        protected void dgPaymentReimbursementDetail_CancelCommand(object source, DataGridCommandEventArgs e)
+
+        private void BindProject(DropDownList ddlProject, int programID)
         {
-            this.dgPaymentReimbursementDetail.EditItemIndex = -1;
+            ddlProject.DataSource = _presenter.ListProjects(programID);
+            ddlProject.DataValueField = "Id";
+            ddlProject.DataTextField = "ProjectCode";
+            ddlProject.DataBind();
         }
-        protected void dgPaymentReimbursementDetail_DeleteCommand(object source, DataGridCommandEventArgs e)
+        private void BindGrant(DropDownList ddlGrant, int ProjectId)
         {
-            int id = (int)dgPaymentReimbursementDetail.DataKeys[e.Item.ItemIndex];
-            int CPRDId = (int)dgPaymentReimbursementDetail.DataKeys[e.Item.ItemIndex];
+            ddlGrant.Items.Clear();
+            ddlGrant.DataSource = _presenter.GetGrantbyprojectId(ProjectId);
+            ddlGrant.DataValueField = "Id";
+            ddlGrant.DataTextField = "GrantCode";
+            ddlGrant.DataBind();
+        }
+
+        protected void dgCashPaymentDetail_CancelCommand(object source, DataGridCommandEventArgs e)
+        {
+            this.dgCashPaymentDetail.EditItemIndex = -1;
+        }
+        protected void dgCashPaymentDetail_DeleteCommand(object source, DataGridCommandEventArgs e)
+        {
+            int id = (int)dgCashPaymentDetail.DataKeys[e.Item.ItemIndex];
+            int CPRDId = (int)dgCashPaymentDetail.DataKeys[e.Item.ItemIndex];
             PaymentReimbursementRequestDetail cprd;
 
             if (CPRDId > 0)
@@ -239,101 +263,134 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 if (CPRDId > 0)
                 {
                     _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.RemovePaymentReimbursementRequestDetail(id);
-                    if (_presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.GetPaymentReimbursementRequestDetail(id) != null)
-                        _presenter.DeletePaymentReimbursementRequestDetail(_presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.GetPaymentReimbursementRequestDetail(id));
+                    if (_presenter.GetPaymentReimbursementRequestDetail(id) != null)
+                        _presenter.DeletePaymentReimbursementRequestDetail(_presenter.GetPaymentReimbursementRequestDetail(id));
                     _presenter.SaveOrUpdatePaymentReimbursementRequest(tarId);
                 }
                 else { _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails.Remove(cprd); }
+                txtImbursement.Text = ((txtImbursement.Text != "" ? Convert.ToDecimal(txtImbursement.Text) : 0) - cprd.ActualExpenditure).ToString();
+                _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.TotalAmount = (_presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.TotalAmount - cprd.ActualExpenditure);
                 BindCashPaymentDetails();
 
-                Master.ShowMessage(new AppMessage("Payment Reimbursement Request Detail was Removed Successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Payment Request Detail was Removed Successfully", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to delete Payment Request Reimbursement Detail. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to delete Payment Request Detail. " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
-        protected void dgPaymentReimbursementDetail_ItemCommand(object source, DataGridCommandEventArgs e)
+        protected void dgCashPaymentDetail_ItemCommand(object source, DataGridCommandEventArgs e)
         {
             if (e.CommandName == "AddNew")
             {
                 try
                 {
                     PaymentReimbursementRequestDetail cprd = new PaymentReimbursementRequestDetail();
+                    cprd.PaymentReimbursementRequest = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest;
                     TextBox txtAmount = e.Item.FindControl("txtAmount") as TextBox;
                     cprd.ActualExpenditure = Convert.ToDecimal(txtAmount.Text);
                     TextBox txtAccountCode = e.Item.FindControl("txtAccountCode") as TextBox;
+                    cprd.AccountCode = txtAccountCode.Text;
                     DropDownList ddlAccountDescription = e.Item.FindControl("ddlAccountDescription") as DropDownList;
                     cprd.ItemAccount = _presenter.GetItemAccount(Convert.ToInt32(ddlAccountDescription.SelectedValue));
+                    DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
                     CheckBox ckSupDocAttached = e.Item.FindControl("ckSupDocAttached") as CheckBox;
                     cprd.SupportDocAttached = ckSupDocAttached.Checked;
-                    txtImbursement.Text  += cprd.ActualExpenditure;
-                                       
+                    _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.TotalAmount += cprd.ActualExpenditure;
+                    txtImbursement.Text = ((txtImbursement.Text != "" ? Convert.ToDecimal(txtImbursement.Text) : 0) + cprd.ActualExpenditure).ToString();
+                    //Add Checklists for attachments if available                    
+                    foreach (ItemAccountChecklist checklist in cprd.ItemAccount.ItemAccountChecklists)
+                    {
+                        PRAttachment attachment = new PRAttachment();
+                        attachment.PaymentReimbursementRequestDetail = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.GetDetailByItemAccount(cprd.ItemAccount.Id);
+                        attachment.ItemAccountChecklists.Add(checklist);
+                        cprd.PRAttachments.Add(attachment);
+                    }
                     _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails.Add(cprd);
+                    BindAttachments();
 
-                    dgPaymentReimbursementDetail.EditItemIndex = -1;
+                    dgCashPaymentDetail.EditItemIndex = -1;
                     BindCashPaymentDetails();
-                    Master.ShowMessage(new AppMessage("Payment Reimbursement Detail Successfully Added", RMessageType.Info));
+
+                    foreach (PRAttachment attachment in _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails[e.Item.ItemIndex + 1].PRAttachments)
+                    {
+                        attachment.PaymentReimbursementRequestDetail = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.GetPaymentReimbursementRequestDetail((int)dgCashPaymentDetail.DataKeys[e.Item.ItemIndex + 1]);
+                    }
+
+                    Master.ShowMessage(new AppMessage("Payment Detail Successfully Added", RMessageType.Info));
                 }
                 catch (Exception ex)
                 {
-                    Master.ShowMessage(new AppMessage("Error: Unable to Save Payment Reimbursement detail" + ex.Message, RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Error: Unable to Save Payment Detail" + ex.Message, RMessageType.Error));
+                    ExceptionUtility.LogException(ex, ex.Source);
+                    ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
                 }
             }
         }
-        protected void dgPaymentReimbursementDetail_EditCommand(object source, DataGridCommandEventArgs e)
+        protected void dgCashPaymentDetail_EditCommand(object source, DataGridCommandEventArgs e)
         {
-            this.dgPaymentReimbursementDetail.EditItemIndex = e.Item.ItemIndex;
+            this.dgCashPaymentDetail.EditItemIndex = e.Item.ItemIndex;
             BindCashPaymentDetails();
             //BindCarRentals();
         }
-        protected void dgPaymentReimbursementDetail_UpdateCommand(object source, DataGridCommandEventArgs e)
+        protected void dgCashPaymentDetail_UpdateCommand(object source, DataGridCommandEventArgs e)
         {
             decimal previousAmount = 0;
-            int CPRDId = (int)dgPaymentReimbursementDetail.DataKeys[e.Item.ItemIndex];
+            int CPRDId = (int)dgCashPaymentDetail.DataKeys[e.Item.ItemIndex];
             PaymentReimbursementRequestDetail cprd;
 
             if (CPRDId > 0)
                 cprd = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.GetPaymentReimbursementRequestDetail(CPRDId);
             else
-                cprd = (PaymentReimbursementRequestDetail)_presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails[e.Item.ItemIndex];
+                cprd = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails[e.Item.ItemIndex];
 
             try
             {
-                
+                cprd.PaymentReimbursementRequest = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest;
                 TextBox txtAmount = e.Item.FindControl("txtEdtAmount") as TextBox;
                 previousAmount = cprd.ActualExpenditure; //This is the Total Amount of this request before any edit
                 cprd.ActualExpenditure = Convert.ToDecimal(txtAmount.Text);
                 TextBox txtEdtAccountCode = e.Item.FindControl("txtEdtAccountCode") as TextBox;
-                //cprd.AccountCode = txtEdtAccountCode.Text;
+                cprd.AccountCode = txtEdtAccountCode.Text;
                 DropDownList ddlAccountDescription = e.Item.FindControl("ddlEdtAccountDescription") as DropDownList;
                 cprd.ItemAccount = _presenter.GetItemAccount(Convert.ToInt32(ddlAccountDescription.SelectedValue));
                 CheckBox ckEdtSupDocAttached = e.Item.FindControl("ckEdtSupDocAttached") as CheckBox;
                 cprd.SupportDocAttached = ckEdtSupDocAttached.Checked;
-         
-                txtImbursement.Text += cprd.ActualExpenditure -= previousAmount; //Subtract the previous Total amount
-                txtImbursement.Text += cprd.ActualExpenditure += cprd.ActualExpenditure; //Then add the new individual amounts to the Total amount
+                _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.TotalAmount -= previousAmount; //Subtract the previous Total amount
+                _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.TotalAmount += cprd.ActualExpenditure; //Then add the new individual amounts to the Total amount
+                txtImbursement.Text = ((txtImbursement.Text != "" ? Convert.ToDecimal(txtImbursement.Text) : 0) - previousAmount).ToString();
+                txtImbursement.Text = (Convert.ToDecimal(txtImbursement.Text) + cprd.ActualExpenditure).ToString();
 
+                //Add Checklists for attachments if available but clear all attachments first because this is update                    
+                cprd.PRAttachments = new List<PRAttachment>();
+                foreach (ItemAccountChecklist checklist in cprd.ItemAccount.ItemAccountChecklists)
+                {
+                    PRAttachment attachment = new PRAttachment();
+                    attachment.PaymentReimbursementRequestDetail = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.GetDetailByItemAccount(cprd.ItemAccount.Id);
+                    attachment.ItemAccountChecklists.Add(checklist);
 
+                    cprd.PRAttachments.Add(attachment);
+                }
+                BindAttachments();
 
-                dgPaymentReimbursementDetail.EditItemIndex = -1;
+                dgCashPaymentDetail.EditItemIndex = -1;
                 BindCashPaymentDetails();
-                Master.ShowMessage(new AppMessage("Payment Reimbursement Detail Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Payment Detail Successfully Updated", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to Update Payment Reimbursement. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to Update Payment. " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
-        protected void dgPaymentReimbursementDetail_ItemDataBound(object sender, DataGridItemEventArgs e)
+        protected void dgCashPaymentDetail_ItemDataBound(object sender, DataGridItemEventArgs e)
         {
             if (e.Item.ItemType == ListItemType.Footer)
             {
-                DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
-                int programID = Convert.ToInt32(ddlProgram.SelectedValue);
-             
-               // DropDownList ddlGrant = e.Item.FindControl("ddlGrant") as DropDownList;
-               // BindGrant(ddlGrant, Convert.ToInt32(ddlProject.SelectedValue));
+
                 DropDownList ddlAccountDescription = e.Item.FindControl("ddlAccountDescription") as DropDownList;
                 BindAccountDescription(ddlAccountDescription);
             }
@@ -341,23 +398,72 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails != null)
                 {
-                    DropDownList ddlProject = e.Item.FindControl("ddlEdtProject") as DropDownList;
-                    int programID = Convert.ToInt32(ddlProgram.SelectedValue);
-                   
+
                     DropDownList ddlAccountDescription = e.Item.FindControl("ddlEdtAccountDescription") as DropDownList;
                     if (ddlAccountDescription != null)
                     {
                         BindAccountDescription(ddlAccountDescription);
-                        if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[e.Item.DataSetIndex].ItemAccount.Id != 0)
+                        if (_presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails[e.Item.DataSetIndex].ItemAccount.Id != 0)
                         {
-                            ListItem liI = ddlAccountDescription.Items.FindByValue(_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[e.Item.DataSetIndex].ItemAccount.Id.ToString());
+                            ListItem liI = ddlAccountDescription.Items.FindByValue(_presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails[e.Item.DataSetIndex].ItemAccount.Id.ToString());
                             if (liI != null)
                                 liI.Selected = true;
                         }
                     }
-        
+
                 }
             }
+        }
+
+        protected void btnSave_Click(object sender, EventArgs e)
+        {
+            if (Convert.ToDecimal(txtImbursement.Text) == Convert.ToDecimal(txtReceivables.Text))
+            {
+                if (CheckReceiptsAttached() == true)
+                {
+                    _presenter.SaveOrUpdatePaymentReimbursementRequest(Convert.ToInt32(Session["tarId"]));
+                    BindPaymentReimbursementRequests();
+                    Master.ShowMessage(new AppMessage("Payment Settlement Request Successfully Saved!", RMessageType.Info));
+                    btnSave.Visible = false;
+                    Session["tarId"] = null;
+                }
+                else { Master.ShowMessage(new AppMessage("Please attach the required receipts!", RMessageType.Error)); }
+            }
+            else
+            {
+                Master.ShowMessage(new AppMessage("Please Make sure that amount advance taken is equal to settled amount!", RMessageType.Error));
+            }
+        }
+        protected void btnDelete_Click(object sender, EventArgs e)
+        {
+
+        }
+        protected void btnSearch_Click(object sender, EventArgs e)
+        {
+
+        }
+        protected void btnFind_Click(object sender, EventArgs e)
+        {
+            BindPaymentReimbursementRequests();
+            pnlSearch_ModalPopupExtender.Show();
+        }
+        protected void btnCancelPopup_Click(object sender, EventArgs e)
+        {
+            pnlWarning.Visible = false;
+            _presenter.CancelPage();
+        }
+        protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("frmPaymentReimbursementRequest.aspx");
+        }
+        private void BindCashPaymentDetails()
+        {
+            dgCashPaymentDetail.DataSource = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails;
+            dgCashPaymentDetail.DataBind();
+        }
+        protected void ddlProgram_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            BindCashPaymentDetails();
         }
         #region Attachments
         protected bool CheckReceiptsAttached()
@@ -394,14 +500,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             string fileName = Path.GetFileName(fuReciept.PostedFile.FileName);
             if (fileName != String.Empty)
             {
-                List<CPRAttachment> attachments = (List<CPRAttachment>)Session["attachments"];
-                foreach (CPRAttachment attachment in attachments)
+                List<PRAttachment> attachments = (List<PRAttachment>)Session["attachments"];
+                int index = 0;
+                foreach (PRAttachment attachment in attachments)
                 {
-                    if (attachment.ItemAccountChecklists[0].ChecklistName == attachmentRow.Cells[1].Text)
+                    if (attachment.ItemAccountChecklists[0].ChecklistName == attachmentRow.Cells[1].Text && attachmentRow.DataItemIndex == index)
                     {
                         attachment.FilePath = "~/PRUploads/" + fileName;
                         fuReciept.PostedFile.SaveAs(Server.MapPath("~/PRUploads/") + fileName);
                     }
+                    index++;
                 }
 
                 BindAttachments();
@@ -440,48 +548,5 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             //Response.Redirect(Request.Url.AbsoluteUri);
         }
         #endregion        
-        protected void btnSave_Click(object sender, EventArgs e)
-        {
-            if (CheckReceiptsAttached() == true)
-            {
-             _presenter.SaveOrUpdatePaymentReimbursementRequest(Convert.ToInt32(Session["tarId"]));
-            BindPaymentReimbursementRequests();
-            Master.ShowMessage(new AppMessage("Payment Reimbursement Request Successfully Reimbursed!", RMessageType.Info));
-            btnSave.Visible = false;
-            Session["tarId"] = null;
-            }
-            else { Master.ShowMessage(new AppMessage("Please attach the required receipts!", RMessageType.Error)); }
-        }
-        protected void btnDelete_Click(object sender, EventArgs e)
-        {
-
-        }
-        protected void btnSearch_Click(object sender, EventArgs e)
-        {
-
-        }
-        protected void btnFind_Click(object sender, EventArgs e)
-        {
-            BindPaymentReimbursementRequests();
-            pnlSearch_ModalPopupExtender.Show();
-        }
-        protected void btnCancelPopup_Click(object sender, EventArgs e)
-        {
-            pnlWarning.Visible = false;
-            _presenter.CancelPage();
-        }
-        protected void btnCancel_Click(object sender, EventArgs e)
-        {
-            Response.Redirect("frmPaymentReimbursementRequest.aspx");
-        }
-        private void BindCashPaymentDetails()
-        {
-            dgPaymentReimbursementDetail.DataSource = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails;
-            dgPaymentReimbursementDetail.DataBind();
-        }
-        protected void ddlProgram_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            BindCashPaymentDetails();
-        }
     }
 }

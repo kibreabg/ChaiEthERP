@@ -134,6 +134,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.GetEmployee(empId);
         }
+        public bool NotCompletRequest(int empId)
+        {
+            return _controller.NotCompletRequest(empId);
+        }
         public decimal getTotalSickLeaveTaken(int UserId)
         {
             return _controller.getTotalSickLeaveTaken(UserId);

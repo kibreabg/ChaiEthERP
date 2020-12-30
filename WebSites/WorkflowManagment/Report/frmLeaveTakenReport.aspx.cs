@@ -17,7 +17,8 @@ namespace Chai.WorkflowManagment.Modules.Report.Views
 			{
 				this._presenter.OnViewInitialized();
                 BindEmployee();
-                GRVEmployeeList.DataSource = _presenter.ListEmployees(ddlEmployeeName.SelectedValue);
+                BindProgram();
+                GRVEmployeeList.DataSource = _presenter.ListEmployees(ddlEmployeeName.SelectedValue, Convert.ToInt32(ddlSrchSrchProgram.SelectedValue));
                 GRVEmployeeList.DataBind();
 
             }
@@ -49,18 +50,23 @@ namespace Chai.WorkflowManagment.Modules.Report.Views
         }
         private void BindEmployee()
         {
-            ddlEmployeeName.DataSource = _presenter.ListEmployees(string.Empty);
+            ddlEmployeeName.DataSource = _presenter.ListEmployees(string.Empty,0);
             ddlEmployeeName.DataBind();
+        }
+        public void BindProgram()
+        {
+            ddlSrchSrchProgram.DataSource = _presenter.GetPrograms();
+            ddlSrchSrchProgram.DataBind();
         }
         protected void GRVEmployeeList_PageIndexChanging(object sender, System.Web.UI.WebControls.GridViewPageEventArgs e)
         {
             GRVEmployeeList.PageIndex = e.NewPageIndex;
-            GRVEmployeeList.DataSource = _presenter.ListEmployees(ddlEmployeeName.SelectedValue);
+            GRVEmployeeList.DataSource = _presenter.ListEmployees(ddlEmployeeName.SelectedValue, Convert.ToInt32(ddlSrchSrchProgram.SelectedValue));
             GRVEmployeeList.DataBind();
         }
         protected void GRVEmployeeList_RowDataBound(object sender, System.Web.UI.WebControls.GridViewRowEventArgs e)
         {
-            if (_presenter.ListEmployees(ddlEmployeeName.SelectedValue) != null)
+            if (_presenter.ListEmployees(ddlEmployeeName.SelectedValue, Convert.ToInt32(ddlSrchSrchProgram.SelectedValue)) != null)
             {
                 if (e.Row.RowType == DataControlRowType.DataRow)
                 {
@@ -82,7 +88,7 @@ namespace Chai.WorkflowManagment.Modules.Report.Views
         }
         protected void btnView_Click(object sender, EventArgs e)
         {
-            GRVEmployeeList.DataSource = _presenter.ListEmployees(ddlEmployeeName.SelectedValue);
+            GRVEmployeeList.DataSource = _presenter.ListEmployees(ddlEmployeeName.SelectedValue, Convert.ToInt32(ddlSrchSrchProgram.SelectedValue));
             GRVEmployeeList.DataBind();
         }
         

@@ -107,7 +107,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     else
                     {
                         if (Approver(AL.EmployeePosition.Id) != null)
-                            ELRS.Approver = Approver(AL.EmployeePosition.Id).Id;
+                        {
+                            if (AL.EmployeePosition.PositionName == "Accountant")
+                            {
+                                ELRS.ApproverPosition = AL.EmployeePosition.Id; //So that we can entertain more than one finance manager to handle the request
+                            }
+                            else
+                            {
+                                ELRS.Approver = Approver(AL.EmployeePosition.Id).Id;
+                            }
+                        }
                         else
                             ELRS.Approver = 0;
                     }
@@ -125,10 +134,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (ELRS.ApprovalStatus == null || ELRS.ApprovalStatus == "Rejected")
                     {
-                        SendEmail(ELRS);
+                        if (ELRS.Approver == 0)
+                        {
+                            //This is to handle multiple Finance Officers responding to this request
+                            //SendEmailToFinanceOfficers;
+                            CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.CurrentApproverPosition = ELRS.ApproverPosition;
+                        }                        
                         CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.CurrentApprover = ELRS.Approver;
                         CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.CurrentLevel = ELRS.WorkflowLevel;
-                        //CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.CurrentStatus = ELRS.ApprovalStatus;
+                        CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.CurrentStatus = ELRS.ApprovalStatus;
+                        SendEmail(ELRS);
                         break;
                     }
                 }
@@ -230,14 +245,32 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void SendEmail(ExpenseLiquidationRequestStatus ELRS)
         {
-            if (GetSuperviser(ELRS.Approver).IsAssignedJob != true)
+            if (ELRS.Approver != 0)
             {
-                EmailSender.Send(GetSuperviser(ELRS.Approver).Email, "Expense Liquidation Request", (CurrentTravelAdvanceRequest.AppUser.FullName).ToUpper() + " Requests for Expense Liquidation for Travel Advance No. '" + (CurrentTravelAdvanceRequest.TravelAdvanceNo).ToUpper()+ "'");
+                if (GetSuperviser(ELRS.Approver).IsAssignedJob != true)
+                {
+                    EmailSender.Send(GetSuperviser(ELRS.Approver).Email, "Expense Liquidation Request", (CurrentTravelAdvanceRequest.AppUser.FullName).ToUpper() + " Requests for Expense Liquidation for Travel Advance No. '" + (CurrentTravelAdvanceRequest.TravelAdvanceNo).ToUpper() + "'");
+                }
+                else
+                {
+                    EmailSender.Send(GetSuperviser(_controller.GetAssignedJobbycurrentuser(ELRS.Approver).AssignedTo).Email, "Expense Liquidation Request", (CurrentTravelAdvanceRequest.AppUser.FullName).ToUpper() + " Requests for Expense Liquidation  for Travel Advance No. '" + (CurrentTravelAdvanceRequest.TravelAdvanceNo).ToUpper() + "'");
+                }
             }
             else
             {
-                EmailSender.Send(GetSuperviser(_controller.GetAssignedJobbycurrentuser(ELRS.Approver).AssignedTo).Email, "Expense Liquidation Request", (CurrentTravelAdvanceRequest.AppUser.FullName).ToUpper() + " Requests for Expense Liquidation  for Travel Advance No. '" + (CurrentTravelAdvanceRequest.TravelAdvanceNo).ToUpper() + "'");
-            }
+                foreach (AppUser accountant in _settingController.GetAppUsersByEmployeePosition(ELRS.ApproverPosition))
+                {
+                    if (accountant.IsAssignedJob != true)
+                    {
+                        EmailSender.Send(accountant.Email, "Expense Liquidation Request", (CurrentTravelAdvanceRequest.AppUser.FullName).ToUpper() + " Requests for Expense Liquidation for Travel Advance No. - '" + (CurrentTravelAdvanceRequest.TravelAdvanceNo).ToUpper() + "'");
+                    }
+                    else
+                    {
+                        EmailSender.Send(GetSuperviser(_controller.GetAssignedJobbycurrentuser(accountant.Id).AssignedTo).Email, "Expense Liquidation Request", (CurrentTravelAdvanceRequest.AppUser.FullName).ToUpper() + " Requests for Expense Liquidation for Travel Advance No. - '" + (CurrentTravelAdvanceRequest.TravelAdvanceNo).ToUpper() + "'");
+                    }
+
+                }
+            }            
         }
         public void Commit()
         {

@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="frmLeaveTakenReport.aspx.cs" Inherits="Chai.WorkflowManagment.Modules.Report.Views.frmLeaveTakenReport"
-    Title="Vehicle Report" MasterPageFile="~/Shared/ModuleMaster.master" %>
+    Title="Leave Taken Report" MasterPageFile="~/Shared/ModuleMaster.master" %>
 
 
 
@@ -40,6 +40,14 @@
                                 <label class="select">
                                     <asp:DropDownList ID="ddlEmployeeName" runat="server" AppendDataBoundItems="True" DataTextField="FullName" DataValueField="FullName">
                                         <asp:ListItem Value=" ">Select Employee</asp:ListItem>
+                                    </asp:DropDownList><i></i>
+                                </label>
+                            </section>
+                                  <section class="col col-3">
+                                <asp:Label ID="lblSrchProgram" runat="server" Text="Program" CssClass="label"></asp:Label>
+                                <label class="select">
+                                    <asp:DropDownList ID="ddlSrchSrchProgram" runat="server" AppendDataBoundItems="True" DataTextField="ProgramName" DataValueField="Id">
+                                        <asp:ListItem Value="0">Select Program</asp:ListItem>
                                     </asp:DropDownList><i></i>
                                 </label>
                             </section>

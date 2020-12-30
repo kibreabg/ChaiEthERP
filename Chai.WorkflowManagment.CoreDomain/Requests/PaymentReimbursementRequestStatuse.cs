@@ -16,6 +16,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public int WorkflowLevel { get; set; }
         public string RejectedReason { get; set; }
         public int ApproverPosition { get; set; }
+        public string AssignedBy { get; set; }
         public virtual PaymentReimbursementRequest PaymentReimbursementRequest { get; set; }
     }
 }

@@ -65,8 +65,16 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
                 break;
             }
         }
-
+        public virtual PaymentReimbursementRequestDetail GetDetailByItemAccount(int itemAccountId)
+        {
+            foreach (PaymentReimbursementRequestDetail CPRD in PaymentReimbursementRequestDetails)
+            {
+                if (CPRD.ItemAccount.Id == itemAccountId)
+                    return CPRD;
+            }
+            return null;
+        }
         #endregion
-        
+
     }
 }

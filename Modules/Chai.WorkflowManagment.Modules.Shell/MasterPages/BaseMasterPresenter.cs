@@ -130,6 +130,10 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         {
             return _controller.GetReviewExpenseLiquidationRequestsTasks();
         }
+        public int GetReviewPaymentReimbursementTasks()
+        {
+            return _controller.GetReviewPaymentReimbursementTasks();
+        }
         public int GetExpenseLiquidationRequestsTasks()
         {
             return _controller.GetExpenseLiquidationRequestsTasks();
@@ -187,6 +191,7 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         {
             return _controller.GetExpenseLiquidationMyRequest();
         }
+        
         public int GetPurchaseRequestsMyRequest()
         {
             return _controller.GetPurchaseRequestsMyRequest();

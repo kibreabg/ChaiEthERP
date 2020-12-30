@@ -153,6 +153,10 @@ namespace Chai.WorkflowManagment.Modules.Request
         {
             return _workspace.Single<CashPaymentRequestDetail>(x => x.Id == CPRDId);
         }
+        public PaymentReimbursementRequestDetail GetPaymentReimbursementRequestDetail(int CPRDId)
+        {
+            return _workspace.Single<PaymentReimbursementRequestDetail>(x => x.Id == CPRDId);
+        }
         public int GetLastCashPaymentRequestId()
         {
             if (_workspace.Last<CashPaymentRequest>() != null)
@@ -368,6 +372,13 @@ namespace Chai.WorkflowManagment.Modules.Request
         public IList<LeaveRequest> GetLeaveRequests()
         {
             return WorkspaceFactory.CreateReadOnly().Query<LeaveRequest>(null).ToList();
+        }
+        public bool NotCompletRequest(int empId)
+        {
+          var LeaveRequest =   _workspace.Single<LeaveRequest>(x => x.Requester == empId && x.ProgressStatus == "InProgress");
+            if (LeaveRequest != null)
+            { return true; }
+            else { return false; }
         }
         public LeaveRequest GetLeaveRequest(int LeaveRequestId)
         {
