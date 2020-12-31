@@ -176,8 +176,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                                 foreach(TravelAdvanceCost TAC in TARD.TravelAdvanceCosts)
                                 {
                                     OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
-                                    //OCRD.ItemAccount = TAC.ItemAccount;
-                                    //OCRD.AccountCode = TAC.AccountCode;
+                                    OCRD.ItemAccount = TAC.ItemAccount;
+                                    OCRD.AccountCode = TAC.AccountCode;
                                     OCRD.Project = TAR.Project;
                                     OCRD.Grant = TAR.Grant;
                                     OCRD.Amount = TAC.Total;

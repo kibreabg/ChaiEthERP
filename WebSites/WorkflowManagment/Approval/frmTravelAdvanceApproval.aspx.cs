@@ -163,7 +163,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 if (TARS.WorkflowLevel == _presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestStatuses.Count && TARS.ApprovalStatus != null)
                 {
                     btnPrint.Enabled = true;
-                    if (_presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestStatuses.Last().PaymentType == "Bank Payment")
+                    if (_presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestStatuses.Last().ApprovalStatus == "Bank Payment")
                         btnBankPayment.Visible = true;
                 }
                 else

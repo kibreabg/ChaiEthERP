@@ -156,18 +156,31 @@ namespace Chai.WorkflowManagment.Modules.Approval
             string filterExpression = "";
             if (ProgressStatus == "InProgress")
             {
-                filterExpression = " SELECT * FROM OperationalControlRequests INNER JOIN AppUsers on AppUsers.Id = OperationalControlRequests.CurrentApprover Left JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1  Where 1 = Case when '" + RequestNo + "' = '' Then 1 When OperationalControlRequests.VoucherNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When OperationalControlRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND OperationalControlRequests.ProgressStatus='" + ProgressStatus + "' " +
-                                   " AND  ((OperationalControlRequests.CurrentApprover = '" + CurrentUser().Id + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) order by OperationalControlRequests.Id DESC ";
+                filterExpression = " SELECT * FROM OperationalControlRequests " +
+                                   " INNER JOIN AppUsers ON (AppUsers.Id = OperationalControlRequests.CurrentApprover) OR (AppUsers.EmployeePosition_Id = OperationalControlRequests.CurrentApproverPosition AND AppUsers.Id = '" + CurrentUser().Id + "') " +
+                                   " LEFT JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
+                                   " Where 1 = CASE WHEN '" + RequestNo + "' = '' Then 1 When OperationalControlRequests.VoucherNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When OperationalControlRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND OperationalControlRequests.ProgressStatus='" + ProgressStatus + "' " +
+                                   " AND ((OperationalControlRequests.CurrentApprover = '" + CurrentUser().Id + "') OR (OperationalControlRequests.CurrentApproverPosition = '" + CurrentUser().EmployeePosition.Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) ORDER BY OperationalControlRequests.Id DESC";
+
             }
             else if (ProgressStatus == "Not Retired" || ProgressStatus == "Retired")
             {
-                filterExpression = " SELECT * FROM OperationalControlRequests INNER JOIN AppUsers on AppUsers.Id = OperationalControlRequests.CurrentApprover Left JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When OperationalControlRequests.VoucherNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When OperationalControlRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND OperationalControlRequests.ProgressStatus='Completed' AND OperationalControlRequests.PaymentReimbursementStatus = '" + ProgressStatus + "'  " +
-                                   " AND  (OperationalControlRequests.CurrentApprover = '" + CurrentUser().Id + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "') order by OperationalControlRequests.Id DESC ";
+                filterExpression = " SELECT * FROM OperationalControlRequests " +
+                                   " INNER JOIN AppUsers ON  (AppUsers.Id = OperationalControlRequests.CurrentApprover) OR (AppUsers.EmployeePosition_Id = OperationalControlRequests.CurrentApproverPosition AND AppUsers.Id = '" + CurrentUser().Id + "') " +
+                                   " LEFT JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When OperationalControlRequests.VoucherNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When OperationalControlRequests.RequestDate = '" + RequestDate + "'  Then 1 END " +
+                                   " AND OperationalControlRequests.ProgressStatus='Completed' AND OperationalControlRequests.PaymentReimbursementStatus = '" + ProgressStatus + "' " +
+                                   " AND (OperationalControlRequests.CurrentApprover = '" + CurrentUser().Id + "') OR (OperationalControlRequests.CurrentApproverPosition = '" + CurrentUser().EmployeePosition.Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "') " +
+                                   " ORDER BY OperationalControlRequests.Id DESC ";
             }
             else if (ProgressStatus == "Completed")
             {
-                filterExpression = " SELECT * FROM OperationalControlRequests INNER JOIN AppUsers on AppUsers.Id = OperationalControlRequests.CurrentApprover INNER JOIN OperationalControlRequestStatuses on OperationalControlRequestStatuses.OperationalControlRequest_Id = OperationalControlRequests.Id  Left JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When OperationalControlRequests.VoucherNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When OperationalControlRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND OperationalControlRequests.ProgressStatus='" + ProgressStatus + "' " +
-                                           " AND  (OperationalControlRequestStatuses.ApprovalStatus Is not null  AND (OperationalControlRequestStatuses.Approver = '" + CurrentUser().Id + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) order by OperationalControlRequests.Id DESC ";
+                filterExpression = " SELECT * FROM OperationalControlRequests " +
+                                   " INNER JOIN AppUsers ON (AppUsers.Id = OperationalControlRequests.CurrentApprover) OR (AppUsers.EmployeePosition_Id = OperationalControlRequests.CurrentApproverPosition AND AppUsers.Id = '" + CurrentUser().Id + "') " +
+                                   " INNER JOIN OperationalControlRequestStatuses ON OperationalControlRequestStatuses.OperationalControlRequest_Id = OperationalControlRequests.Id " +
+                                   " LEFT JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
+                                   " WHERE 1 = CASE WHEN '" + RequestNo + "' = '' THEN 1 WHEN OperationalControlRequests.VoucherNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When OperationalControlRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND OperationalControlRequests.ProgressStatus='" + ProgressStatus + "' " +
+                                   " AND (OperationalControlRequestStatuses.ApprovalStatus IS NOT NULL AND (OperationalControlRequestStatuses.Approver = '" + CurrentUser().Id + "') or (OperationalControlRequestStatuses.ApproverPosition = '" + CurrentUser().EmployeePosition.Id + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) " +
+                                   " ORDER BY OperationalControlRequests.Id DESC ";
             }
             return _workspace.SqlQuery<OperationalControlRequest>(filterExpression).ToList();
         }
