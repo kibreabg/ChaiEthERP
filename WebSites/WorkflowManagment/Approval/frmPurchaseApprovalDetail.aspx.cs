@@ -289,7 +289,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             lblRemarkResult.Text = _presenter.CurrentPurchaseRequest.Comment;
             lblDelivertoResult.Text = _presenter.CurrentPurchaseRequest.DeliverTo;
-            lblRequestedDateResult.Text = _presenter.CurrentPurchaseRequest.Requireddateofdelivery.ToShortDateString();
+            lblReqDateofDeliveryResult.Text = _presenter.CurrentPurchaseRequest.Requireddateofdelivery.ToShortDateString();
             grvDetails.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails;
             grvDetails.DataBind();
 
