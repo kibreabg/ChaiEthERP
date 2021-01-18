@@ -270,6 +270,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.GetAllInPatMedCPReqsThisYear();
         }
+        public IList<CashPaymentRequest> GetAllMedCPReqsThisYear()
+        {
+            return _controller.GetAllMedCPReqsThisYear();
+        }
         public IList<CashPaymentRequest> GetAllOutPatMedCPReqsThisYear()
         {
             return _controller.GetAllOutPatMedCPReqsThisYear();

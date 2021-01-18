@@ -30,7 +30,7 @@ namespace Chai.WorkflowManagment.Modules.Request
         private IWorkspace _workspace;
 
         [InjectionConstructor]
-        public RequestController([ServiceDependency] IHttpContextLocatorService httpContextLocatorService, [ServiceDependency]INavigationService navigationService)
+        public RequestController([ServiceDependency] IHttpContextLocatorService httpContextLocatorService, [ServiceDependency] INavigationService navigationService)
             : base(httpContextLocatorService, navigationService)
         {
             _workspace = ZadsServices.Workspace;
@@ -142,12 +142,17 @@ namespace Chai.WorkflowManagment.Modules.Request
         public IList<CashPaymentRequest> GetAllOutPatMedCPReqsThisYear()
         {
             int currentUserId = GetCurrentUser().Id;
-            return WorkspaceFactory.CreateReadOnly().Query<CashPaymentRequest>(x => x.RequestType == "Medical Expense (Out-Patient)" && x.AppUser.Id == currentUserId && x.RequestDate.Value.Year == DateTime.Now.Year && (x.CurrentStatus != "Rejected" || x.CurrentStatus == null)).ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<CashPaymentRequest>(x => x.RequestType == "Medical Expense (Out-Patient)" && x.AppUser.Id == currentUserId && x.RequestDate.Value.Year == DateTime.Now.Year && (!x.CurrentStatus.Equals("Rejected") || x.CurrentStatus == null)).ToList();
         }
         public IList<CashPaymentRequest> GetAllInPatMedCPReqsThisYear()
         {
             int currentUserId = GetCurrentUser().Id;
-            return WorkspaceFactory.CreateReadOnly().Query<CashPaymentRequest>(x => x.RequestType == "Medical Expense (In-Patient)" && x.AppUser.Id == currentUserId && x.RequestDate.Value.Year == DateTime.Now.Year && (x.CurrentStatus != "Rejected" || x.CurrentStatus == null)).ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<CashPaymentRequest>(x => x.RequestType == "Medical Expense (In-Patient)" && x.AppUser.Id == currentUserId && x.RequestDate.Value.Year == DateTime.Now.Year && (!x.CurrentStatus.Equals("Rejected") || x.CurrentStatus == null)).ToList();
+        }
+        public IList<CashPaymentRequest> GetAllMedCPReqsThisYear()
+        {
+            int currentUserId = GetCurrentUser().Id;
+            return WorkspaceFactory.CreateReadOnly().Query<CashPaymentRequest>(x => (x.RequestType == "Medical Expense (In-Patient)" || x.RequestType == "Medical Expense (Out-Patient)") && x.AppUser.Id == currentUserId && x.RequestDate.Value.Year == DateTime.Now.Year && (!x.CurrentStatus.Equals("Rejected") || x.CurrentStatus == null)).ToList();
         }
         public CashPaymentRequestDetail GetCashPaymentRequestDetail(int CPRDId)
         {
@@ -375,7 +380,7 @@ namespace Chai.WorkflowManagment.Modules.Request
         }
         public bool NotCompletRequest(int empId)
         {
-          var LeaveRequest =   _workspace.Single<LeaveRequest>(x => x.Requester == empId && x.ProgressStatus == "InProgress");
+            var LeaveRequest = _workspace.Single<LeaveRequest>(x => x.Requester == empId && x.ProgressStatus == "InProgress");
             if (LeaveRequest != null)
             { return true; }
             else { return false; }
@@ -443,7 +448,7 @@ namespace Chai.WorkflowManagment.Modules.Request
         {
             return WorkspaceFactory.CreateReadOnly().Query<PurchaseRequest>(x => x.ProgressStatus == "Completed" && x.IsVehicle == true).Distinct().ToList();
         }
-      
+
         public IList<PurchaseRequest> GetPurchaseRequestsInProgress()
         {
             string filterExpression = "";
@@ -510,7 +515,7 @@ namespace Chai.WorkflowManagment.Modules.Request
             return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
 
         }
-        
+
         public IList<PurchaseRequestDetail> ListPurchaseReqById(int Id)
         {
             string filterExpression = "";
@@ -573,7 +578,7 @@ namespace Chai.WorkflowManagment.Modules.Request
 
         }
 
-       
+
         //public IList<MaintenanceRequest> GetMaintenanceRequestsCompleted()
         //{
         //    string filterExpression = "";
@@ -671,7 +676,7 @@ namespace Chai.WorkflowManagment.Modules.Request
             return WorkspaceFactory.CreateReadOnly().Query<MaintenanceRequest>(null).ToList();
 
         }
-       
+
         public IList<MaintenanceRequest> GetMaintenanceRequestsInProgress()
         {
             string filterExpression = "";
@@ -787,8 +792,8 @@ namespace Chai.WorkflowManagment.Modules.Request
 
             return _workspace.SqlQuery<StoreRequest>(filterExpression).ToList();
         }
-      
-      
+
+
         public StoreRequest GetStoreRequest(int StoreRequestId)
         {
             return _workspace.Single<StoreRequest>(x => x.Id == StoreRequestId, x => x.StoreRequestDetails.Select(z => z.Project));
@@ -851,15 +856,16 @@ namespace Chai.WorkflowManagment.Modules.Request
         #region Entity Manipulation
         public void SaveOrUpdateEntity<T>(T item) where T : class
         {
-          
+
             IEntity entity = (IEntity)item;
             if (entity.Id == 0)
                 _workspace.Add<T>(item);
             else
                 _workspace.Update<T>(item);
-            try { 
-            _workspace.CommitChanges();
-        }
+            try
+            {
+                _workspace.CommitChanges();
+            }
             catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
             {
                 Exception raise = dbEx;
@@ -870,15 +876,15 @@ namespace Chai.WorkflowManagment.Modules.Request
                         string message = string.Format("{0}:{1}",
                             validationErrors.Entry.Entity.ToString(),
                             validationError.ErrorMessage);
-        // raise a new exception nesting  
-        // the current instance as InnerException  
-        raise = new InvalidOperationException(message, raise);
-    }
-}
+                        // raise a new exception nesting  
+                        // the current instance as InnerException  
+                        raise = new InvalidOperationException(message, raise);
+                    }
+                }
                 throw raise;
             }
             _workspace.Refresh(item);
-           
+
         }
         public void DeleteEntity<T>(T item) where T : class
         {
