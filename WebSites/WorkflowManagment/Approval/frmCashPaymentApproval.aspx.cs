@@ -349,7 +349,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         if (_presenter.CurrentCashPaymentRequest.CurrentLevel == _presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses.Count)
                         {
                             _presenter.CurrentCashPaymentRequest.ProgressStatus = ProgressStatus.Completed.ToString();
-
                         }
                         GetNextApprover();
                         CPRS.Approver = _presenter.CurrentUser().Id;
