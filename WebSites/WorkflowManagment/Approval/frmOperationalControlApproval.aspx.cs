@@ -416,14 +416,17 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             lblRequesterResult.Text = _presenter.CurrentOperationalControlRequest.AppUser.FullName;
             lblRequestedDateResult.Text = _presenter.CurrentOperationalControlRequest.RequestDate.Value.ToShortDateString();
-            //lblBeneficiaryNameResult.Text = _presenter.CurrentOperationalControlRequest.Beneficiary.BeneficiaryName;
+            lblChaiBankResult.Text = _presenter.CurrentOperationalControlRequest.Account.Name;
+            lblChaiBankAccResult.Text = _presenter.CurrentOperationalControlRequest.Account.AccountNo;
+            lblDescriptionResult.Text = _presenter.CurrentOperationalControlRequest.Description;
+            lblBankNameResult.Text = _presenter.CurrentOperationalControlRequest.Beneficiary.BankName;
+            lblBeneficiaryNameResult.Text = _presenter.CurrentOperationalControlRequest.Beneficiary.BeneficiaryName;
+            lblBankAccountNoResult.Text = _presenter.CurrentOperationalControlRequest.Beneficiary.AccountNumber;
             lblVoucherNoResult.Text = _presenter.CurrentOperationalControlRequest.VoucherNo.ToString();
             lblTotalAmountResult.Text = _presenter.CurrentOperationalControlRequest.TotalAmount.ToString();
             lblApprovalStatusResult.Text = _presenter.CurrentOperationalControlRequest.ProgressStatus.ToString();
             lblActualExpendtureRes.Text = _presenter.CurrentOperationalControlRequest.TotalActualExpendture != 0 ? _presenter.CurrentOperationalControlRequest.TotalActualExpendture.ToString() : "";
             lblReimbersestatusRes.Text = _presenter.CurrentOperationalControlRequest.PaymentReimbursementStatus;
-            //lblGrantIdResult.Text = _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails[0].Grant.GrantCode;
-            //lblProjectIdResult.Text = _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails[0].Project.ProjectCode;
             grvDetails.DataSource = _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails;
             grvDetails.DataBind();
 

@@ -335,7 +335,7 @@
         <table style="width: 100%;">
             <tr>
                 <td style="font-size: large; text-align: center;">
-                    <img src="../img/CHAI%20Logo.png" width="70" height="70" />
+                    <img src="../img/CHAI%20Logo.png" width="130" height="80" />
                     <br />
                     <strong>CHAI ETHIOPIA
                             <br />

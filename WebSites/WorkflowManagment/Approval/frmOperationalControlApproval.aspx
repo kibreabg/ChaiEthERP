@@ -160,7 +160,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         &times;</button>
-                    <h4 class="modal-title">Travel Advance Detail</h4>
+                    <h4 class="modal-title">Bank Payment Request Detail</h4>
                 </div>
                 <div class="modal-body">
                     <div class="jarviswidget-editbox"></div>
@@ -288,133 +288,131 @@
         <fieldset>
             <table style="width: 100%;">
                 <tr>
-                    <td style="width: 17%; text-align: left;">
-                        <img src="../img/CHAI%20Logo.png" width="70" height="50" /></td>
                     <td style="font-size: large; text-align: center;">
-                        <strong>CHAI Ethiopia ERP
+                        <img src="../img/CHAI%20Logo.png" width="130" height="80" />
+                        <br />
+                        <strong>CHAI ETHIOPIA
                             <br />
                             BANK PAYMENT REQUEST FORM</strong></td>
                 </tr>
             </table>
             <table style="width: 100%;">
                 <tr>
-                    <td align="right" style="width: 848px">&nbsp;</td>
-                    <td align="right" style="width: 357px">&nbsp;</td>
-                    <td align="right" style="width: 389px">&nbsp;</td>
-                    <td align="right" style="width: 389px">&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-
-                <tr>
-                    <td style="width: 629px; height: 18px; padding-left: 10%;">
+                    <td style="width: 25%; text-align: right;">
                         <strong>
                             <asp:Label ID="lblVoucherNo" runat="server" Text="Voucher No:"></asp:Label>
                         </strong></td>
-                    <td style="width: 357px">
+                    <td style="width: 25%;">
                         <asp:Label ID="lblVoucherNoResult" runat="server"></asp:Label>
                     </td>
-                    <td style="width: 389px; height: 18px;">
+                    <td style="width: 25%; text-align: right;">
                         <strong>
                             <asp:Label ID="lblPostingRef" runat="server" Text="Posting Ref:"></asp:Label>
                         </strong>
                     </td>
-                    <td style="width: 389px; height: 18px;">__________
+                    <td style="width: 25%;">__________
                     </td>
-                    <td>&nbsp;</td>
                 </tr>
                 <tr>
-                    <td style="width: 629px; height: 18px; padding-left: 10%;">
+                    <td style="width: 25%; text-align: right;">
                         <strong>
                             <asp:Label ID="lblRequester" runat="server" Text="Requester:"></asp:Label>
                         </strong></td>
-                    <td style="width: 357px">
+                    <td style="width: 25%;">
                         <asp:Label ID="lblRequesterResult" runat="server"></asp:Label>
                     </td>
-                    <td style="width: 389px"><strong>
-                        <asp:Label ID="lblBranchCode" runat="server" Text="Bank:"></asp:Label>
+                    <td style="width: 25%; text-align: right;"><strong>
+                        <asp:Label ID="lblBankName" runat="server" Text="Beneficiary Bank:"></asp:Label>
                     </strong>
                     </td>
-                    <td style="width: 389px">
-                        <asp:Label ID="lblBranchCodeResult" runat="server"></asp:Label></td>
-                    <td>&nbsp;</td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblBankNameResult" runat="server"></asp:Label></td>
                 </tr>
                 <tr>
-                    <td style="width: 629px; height: 18px; padding-left: 10%;">
+                    <td style="width: 25%; text-align: right;">
                         <strong>
                             <asp:Label ID="lblRequestedDate" runat="server" Text="Requested Date:"></asp:Label>
                         </strong></td>
-                    <td style="width: 357px; height: 18px;">
+                    <td style="width: 25%;">
                         <asp:Label ID="lblRequestedDateResult" runat="server"></asp:Label>
                     </td>
-                    <td style="width: 389px; height: 18px;"><strong>
-                        <asp:Label ID="lblBankAccountNo" runat="server" Text="Bank Account No:"></asp:Label>
+                    <td style="width: 25%; text-align: right;"><strong>
+                        <asp:Label ID="lblBankAccountNo" runat="server" Text="Beneficiary Bank Account No:"></asp:Label>
                     </strong></td>
-                    <td style="width: 389px; height: 18px;">
+                    <td style="width: 25%;">
                         <asp:Label ID="lblBankAccountNoResult" runat="server"></asp:Label>
                     </td>
-                    <td style="height: 18px">&nbsp;</td>
                 </tr>
                 <tr>
-                    <td style="width: 629px; height: 18px; padding-left: 10%;">
+                    <td style="width: 25%; text-align: right;">
                         <strong>
                             <asp:Label ID="lblBeneficiaryName" runat="server" Text="Beneficiary Name:"></asp:Label>
                         </strong>
                     </td>
-                    <td style="width: 357px; height: 18px;">
+                    <td style="width: 25%;">
                         <asp:Label ID="lblBeneficiaryNameResult" runat="server"></asp:Label>
                     </td>
-                    <td style="width: 629px; height: 18px;">
+                    <td style="width: 25%; text-align: right;">
                         <strong>
                             <asp:Label ID="lblReimberseStatus" runat="server" Text="Retirement Status:"></asp:Label>
                         </strong>
                     </td>
-                    <td style="width: 389px; height: 18px;">
+                    <td style="width: 25%;">
                         <asp:Label ID="lblReimbersestatusRes" runat="server"></asp:Label>
                     </td>
-                    <td style="height: 18px">&nbsp;</td>
                 </tr>
                 <tr>
-                    <td style="width: 629px; height: 18px; padding-left: 10%;"><strong>
+                    <td style="width: 25%; text-align: right;"><strong>
                         <asp:Label ID="lblTotalAmount" runat="server" Text="Total Amount:"></asp:Label>
                     </strong>
                     </td>
-                    <td style="width: 357px; height: 18px;">
+                    <td style="width: 25%;">
                         <asp:Label ID="lblTotalAmountResult" runat="server"></asp:Label>
                     </td>
-                </tr>
-                <tr>
-                    <td style="width: 629px; height: 18px; padding-left: 10%;"><strong>
+                    <td style="width: 25%; text-align: right;"><strong>
                         <asp:Label ID="lblActualExpendture" runat="server" Text="Actual Expenditure:"></asp:Label>
                     </strong>
                     </td>
-                    <td style="width: 357px; height: 18px;">
+                    <td style="width: 25%;">
                         <asp:Label ID="lblActualExpendtureRes" runat="server"></asp:Label>
                     </td>
                 </tr>
                 <tr>
-                    <td style="width: 629px; height: 18px; padding-left: 10%;">
+                    <td style="width: 25%; text-align: right;">
                         <strong>
                             <asp:Label ID="lblDescription" runat="server" Text="Description:"></asp:Label>
                         </strong>
                     </td>
-                    <td colspan="3">
+                    <td style="width: 25%;">
                         <asp:Label ID="lblDescriptionResult" runat="server"></asp:Label>
                     </td>
-                </tr>
-                <tr>
-                    <td style="width: 629px; height: 18px; padding-left: 10%;"><strong>
+                    <td style="width: 25%; text-align: right;"><strong>
                         <asp:Label ID="lblApprovalStatusPrint" runat="server" Text="Approval Status:"></asp:Label>
                     </strong>
                     </td>
-                    <td style="width: 357px; height: 18px;">
+                    <td style="width: 25%;">
                         <asp:Label ID="lblApprovalStatusResult" runat="server"></asp:Label>
                     </td>
-                    <td style="width: 389px; height: 18px;"></td>
-                    <td style="width: 389px; height: 18px;"></td>
-                    <td style="height: 18px">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblChaiBank" runat="server" Text="CHAI Bank:"></asp:Label>
+                        </strong>
+                    </td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblChaiBankResult" runat="server"></asp:Label>
+                    </td>
+                    <td style="width: 25%; text-align: right;"><strong>
+                        <asp:Label ID="lblChaiBankAcc" runat="server" Text="CHAI Bank Account No:"></asp:Label>
+                    </strong>
+                    </td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblChaiBankAccResult" runat="server"></asp:Label>
+                    </td>
                 </tr>
             </table>
-
+            <br />
             <asp:GridView ID="grvDetails"
                 runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
                 CssClass="table table-striped table-bordered table-hover">
