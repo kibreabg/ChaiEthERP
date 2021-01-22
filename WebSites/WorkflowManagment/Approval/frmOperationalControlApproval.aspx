@@ -186,70 +186,131 @@
                                             </ul>
                                             <div class="tab-content padding-10">
                                                 <div class="tab-pane active" id="iss1">
-                                                    <asp:DataGrid ID="dgOperationalControlRequestDetail" runat="server"
-                                                        AutoGenerateColumns="False" CellPadding="0" CssClass="table table-striped table-bordered table-hover"
-                                                        DataKeyField="Id" GridLines="None" PagerStyle-CssClass="paginate_button active" ShowFooter="True"
-                                                        OnEditCommand="dgOperationalControlRequestDetail_EditCommand" OnItemDataBound="dgOperationalControlRequestDetail_ItemDataBound"
-                                                        OnUpdateCommand="dgOperationalControlRequestDetail_UpdateCommand">
-                                                        <Columns>
-                                                            <asp:TemplateColumn HeaderText="Account Name">
-                                                                <ItemTemplate>
-                                                                    <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountName")%>
-                                                                </ItemTemplate>
-                                                                <EditItemTemplate>
-                                                                    <asp:DropDownList ID="ddlEdtAccountDescription" CssClass="form-control" OnSelectedIndexChanged="ddlEdtAccountDescription_SelectedIndexChanged" runat="server" AppendDataBoundItems="true" AutoPostBack="True">
-                                                                        <asp:ListItem Value="0">Select Account</asp:ListItem>
-                                                                    </asp:DropDownList>
-                                                                    <i></i>
-                                                                </EditItemTemplate>
-                                                            </asp:TemplateColumn>
-                                                            <asp:TemplateColumn HeaderText="Account Code">
-                                                                <ItemTemplate>
-                                                                    <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountCode")%>
-                                                                </ItemTemplate>
-                                                                <EditItemTemplate>
-                                                                    <asp:TextBox ID="txtEdtAccountCode" ReadOnly="true" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "AccountCode")%>'></asp:TextBox>
-                                                                </EditItemTemplate>
-                                                            </asp:TemplateColumn>
-                                                            <asp:TemplateColumn HeaderText="Amount">
-                                                                <ItemTemplate>
-                                                                    <%# DataBinder.Eval(Container.DataItem, "Amount")%>
-                                                                </ItemTemplate>
-                                                            </asp:TemplateColumn>
-                                                            <asp:TemplateColumn HeaderText="Project ID">
-                                                                <ItemTemplate>
-                                                                    <%# DataBinder.Eval(Container.DataItem, "Project.ProjectCode")%>
-                                                                </ItemTemplate>
-                                                                <EditItemTemplate>
-                                                                    <asp:DropDownList ID="ddlEdtProject" CssClass="form-control" runat="server" AutoPostBack="true" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlEdtProject_SelectedIndexChanged">
-                                                                        <asp:ListItem Value="0">Select Project</asp:ListItem>
-                                                                    </asp:DropDownList>
-                                                                    <i></i>
-                                                                    <asp:RequiredFieldValidator ID="rfvddlEdtProject" runat="server" CssClass="validator" ControlToValidate="ddlEdtProject" Display="Dynamic" ErrorMessage="Project must be selected" InitialValue="0" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
-                                                                </EditItemTemplate>
-                                                            </asp:TemplateColumn>
-                                                            <asp:TemplateColumn HeaderText="Grant ID">
-                                                                <ItemTemplate>
-                                                                    <%# DataBinder.Eval(Container.DataItem, "Grant.GrantCode")%>
-                                                                </ItemTemplate>
-                                                                <EditItemTemplate>
-                                                                    <asp:DropDownList ID="ddlEdtGrant" runat="server" CssClass="form-control" DataTextField="GrantCode" DataValueField="Id">
-                                                                        <asp:ListItem Value="0">Select Grant</asp:ListItem>
-                                                                    </asp:DropDownList>
-                                                                    <asp:RequiredFieldValidator ID="RfvGrant" runat="server" ControlToValidate="ddlEdtGrant" ErrorMessage="Grant is required" InitialValue="0" SetFocusOnError="True" ValidationGroup="edit"></asp:RequiredFieldValidator>
-                                                                </EditItemTemplate>
-                                                            </asp:TemplateColumn>
-                                                            <asp:TemplateColumn HeaderText="Actions">
-                                                                <EditItemTemplate>
-                                                                    <asp:LinkButton ID="lnkUpdate" runat="server" CausesValidation="true" CommandName="Update" CssClass="btn btn-xs btn-default" ValidationGroup="edit"><i class="fa fa-save"></i></asp:LinkButton>
-                                                                </EditItemTemplate>
-                                                                <ItemTemplate>
-                                                                    <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
-                                                                </ItemTemplate>
-                                                            </asp:TemplateColumn>
-                                                        </Columns>
-                                                        <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
-                                                    </asp:DataGrid>
+                                                    <div style="overflow-x: auto;">
+                                                        <asp:DataGrid ID="dgOperationalControlRequestDetail" runat="server"
+                                                            AutoGenerateColumns="False" CellPadding="0" CssClass="table table-striped table-bordered table-hover"
+                                                            DataKeyField="Id" GridLines="None" PagerStyle-CssClass="paginate_button active" ShowFooter="True"
+                                                            OnEditCommand="dgOperationalControlRequestDetail_EditCommand" OnItemDataBound="dgOperationalControlRequestDetail_ItemDataBound"
+                                                            OnUpdateCommand="dgOperationalControlRequestDetail_UpdateCommand">
+                                                            <Columns>
+                                                                <asp:TemplateColumn HeaderText="Account Name">
+                                                                    <ItemTemplate>
+                                                                        <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountName")%>
+                                                                    </ItemTemplate>
+                                                                    <EditItemTemplate>
+                                                                        <asp:DropDownList ID="ddlEdtAccountDescription" CssClass="form-control" OnSelectedIndexChanged="ddlEdtAccountDescription_SelectedIndexChanged" runat="server" AppendDataBoundItems="true" AutoPostBack="True">
+                                                                            <asp:ListItem Value="0">Select Account</asp:ListItem>
+                                                                        </asp:DropDownList>
+                                                                        <i></i>
+                                                                    </EditItemTemplate>
+                                                                </asp:TemplateColumn>
+                                                                <asp:TemplateColumn HeaderText="Account Code">
+                                                                    <ItemTemplate>
+                                                                        <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountCode")%>
+                                                                    </ItemTemplate>
+                                                                    <EditItemTemplate>
+                                                                        <asp:TextBox ID="txtEdtAccountCode" ReadOnly="true" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "AccountCode")%>'></asp:TextBox>
+                                                                    </EditItemTemplate>
+                                                                </asp:TemplateColumn>
+                                                                <asp:TemplateColumn HeaderText="Amount">
+                                                                    <ItemTemplate>
+                                                                        <%# DataBinder.Eval(Container.DataItem, "Amount")%>
+                                                                    </ItemTemplate>
+                                                                </asp:TemplateColumn>
+                                                                <asp:TemplateColumn HeaderText="Project ID">
+                                                                    <ItemTemplate>
+                                                                        <%# DataBinder.Eval(Container.DataItem, "Project.ProjectCode")%>
+                                                                    </ItemTemplate>
+                                                                    <EditItemTemplate>
+                                                                        <asp:DropDownList ID="ddlEdtProject" CssClass="form-control" runat="server" AutoPostBack="true" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlEdtProject_SelectedIndexChanged">
+                                                                            <asp:ListItem Value="0">Select Project</asp:ListItem>
+                                                                        </asp:DropDownList>
+                                                                        <i></i>
+                                                                        <asp:RequiredFieldValidator ID="rfvddlEdtProject" runat="server" CssClass="validator" ControlToValidate="ddlEdtProject" Display="Dynamic" ErrorMessage="Project must be selected" InitialValue="0" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                                                    </EditItemTemplate>
+                                                                </asp:TemplateColumn>
+                                                                <asp:TemplateColumn HeaderText="Grant ID">
+                                                                    <ItemTemplate>
+                                                                        <%# DataBinder.Eval(Container.DataItem, "Grant.GrantCode")%>
+                                                                    </ItemTemplate>
+                                                                    <EditItemTemplate>
+                                                                        <asp:DropDownList ID="ddlEdtGrant" runat="server" CssClass="form-control" DataTextField="GrantCode" DataValueField="Id">
+                                                                            <asp:ListItem Value="0">Select Grant</asp:ListItem>
+                                                                        </asp:DropDownList>
+                                                                        <asp:RequiredFieldValidator ID="RfvGrant" runat="server" ControlToValidate="ddlEdtGrant" ErrorMessage="Grant is required" InitialValue="0" SetFocusOnError="True" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                                                    </EditItemTemplate>
+                                                                </asp:TemplateColumn>
+                                                                <asp:TemplateColumn HeaderText="Actions">
+                                                                    <EditItemTemplate>
+                                                                        <asp:LinkButton ID="lnkUpdate" runat="server" CausesValidation="true" CommandName="Update" CssClass="btn btn-xs btn-default" ValidationGroup="edit"><i class="fa fa-save"></i></asp:LinkButton>
+                                                                    </EditItemTemplate>
+                                                                    <ItemTemplate>
+                                                                        <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
+                                                                    </ItemTemplate>
+                                                                </asp:TemplateColumn>
+                                                            </Columns>
+                                                            <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
+                                                        </asp:DataGrid>
+                                                        <br />
+                                                        <asp:Label ID="lblTravelDetail" Font-Size="Large" Font-Bold="true" runat="server" Visible="false" Text="Travel Advance Detail"></asp:Label>
+                                                        <br />
+                                                        <asp:DataGrid ID="dgTravelAdvanceRequestDetail" runat="server" OnSelectedIndexChanged="dgTravelAdvanceRequestDetail_SelectedIndexChanged"
+                                                            AutoGenerateColumns="False" CellPadding="0" CssClass="table table-striped table-bordered table-hover"
+                                                            DataKeyField="Id" GridLines="None" PagerStyle-CssClass="paginate_button active" ShowFooter="True">
+                                                            <Columns>
+                                                                <asp:TemplateColumn HeaderText="City From">
+                                                                    <ItemTemplate>
+                                                                        <%# DataBinder.Eval(Container.DataItem, "CityFrom")%>
+                                                                    </ItemTemplate>
+                                                                </asp:TemplateColumn>
+                                                                <asp:TemplateColumn HeaderText="City To">
+                                                                    <ItemTemplate>
+                                                                        <%# DataBinder.Eval(Container.DataItem, "CityTo")%>
+                                                                    </ItemTemplate>
+                                                                </asp:TemplateColumn>
+                                                                <asp:TemplateColumn HeaderText="Hotel Booked">
+                                                                    <ItemTemplate>
+                                                                        <%# DataBinder.Eval(Container.DataItem, "HotelBooked")%>
+                                                                    </ItemTemplate>
+                                                                </asp:TemplateColumn>
+                                                                <asp:TemplateColumn HeaderText="From Date">
+                                                                    <ItemTemplate>
+                                                                        <%# DataBinder.Eval(Container.DataItem, "FromDate","{0:dd/MM/yyyy}")%>
+                                                                    </ItemTemplate>
+                                                                </asp:TemplateColumn>
+                                                                <asp:TemplateColumn HeaderText="To Date">
+                                                                    <ItemTemplate>
+                                                                        <%# DataBinder.Eval(Container.DataItem, "ToDate","{0:dd/MM/yyyy}")%>
+                                                                    </ItemTemplate>
+                                                                </asp:TemplateColumn>
+                                                                <asp:TemplateColumn HeaderText="Mode of Travel">
+                                                                    <ItemTemplate>
+                                                                        <%# DataBinder.Eval(Container.DataItem, "ModeOfTravel")%>
+                                                                    </ItemTemplate>
+                                                                </asp:TemplateColumn>
+                                                                <asp:ButtonColumn ButtonType="PushButton" CommandName="Select" Text="View Costs"></asp:ButtonColumn>
+                                                            </Columns>
+                                                            <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
+                                                        </asp:DataGrid>
+                                                        <asp:GridView ID="grvTravelAdvanceCosts"
+                                                            runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                                                            AllowPaging="True" CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
+                                                            <RowStyle CssClass="rowstyle" />
+                                                            <Columns>
+                                                                <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="Account Name" />
+                                                                <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Request Date" />
+                                                                <asp:BoundField DataField="ExpenseType.ExpenseTypeName" HeaderText="Expense Type" />
+                                                                <asp:BoundField DataField="Days" HeaderText="Days" />
+                                                                <asp:BoundField DataField="UnitCost" HeaderText="Unit Cost" />
+                                                                <asp:BoundField DataField="NoOfUnits" HeaderText="No Of Units" />
+                                                                <asp:BoundField DataField="Total" HeaderText="Total" />
+                                                            </Columns>
+                                                            <FooterStyle CssClass="FooterStyle" />
+                                                            <HeaderStyle CssClass="headerstyle" />
+                                                            <PagerStyle CssClass="PagerStyle" />
+                                                            <RowStyle CssClass="rowstyle" />
+                                                        </asp:GridView>
+                                                    </div>
                                                 </div>
                                                 <div class="tab-pane" id="iss2">
                                                     <asp:GridView ID="grvdetailAttachments"

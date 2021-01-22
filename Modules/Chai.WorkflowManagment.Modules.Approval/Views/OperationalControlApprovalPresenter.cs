@@ -77,6 +77,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _controller.ListOperationalControlRequests(RequestNo, RequestDate, ProgressStatus);
         }
+        public TravelAdvanceRequest GetTravelAdvanceRequest(int reqId)
+        {
+            return _requestController.GetTravelAdvanceRequest(reqId);
+        }
         public OCRAttachment GetAttachment(int attachmentId)
         {
             return _requestController.GetOCRAttachment(attachmentId);

@@ -266,7 +266,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     else
                     {
                         _presenter.CurrentOperationalControlRequest.CurrentApproverPosition = 0;
-                    }                    
+                    }
                     _presenter.CurrentOperationalControlRequest.CurrentApprover = OCRS.Approver;
                     _presenter.CurrentOperationalControlRequest.CurrentLevel = OCRS.WorkflowLevel;
                     _presenter.CurrentOperationalControlRequest.CurrentStatus = OCRS.ApprovalStatus;
@@ -322,10 +322,34 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     dgOperationalControlRequestDetail.DataBind();
                     grvdetailAttachments.DataSource = _presenter.CurrentOperationalControlRequest.OCRAttachments;
                     grvdetailAttachments.DataBind();
+
+                    //If this Bank Payment request was initiated from Travel Advance, show the details of the Travel Advance here
+                    if (_presenter.CurrentOperationalControlRequest.TravelAdvanceId > 0)
+                    {                        
+                        lblTravelDetail.Visible = true;
+                        dgTravelAdvanceRequestDetail.DataSource = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).TravelAdvanceRequestDetails;
+                        dgTravelAdvanceRequestDetail.DataBind();
+                    }
+                    else
+                    {
+                        dgTravelAdvanceRequestDetail.DataSource = null;
+                        dgTravelAdvanceRequestDetail.DataBind();
+                        grvTravelAdvanceCosts.DataSource = null;
+                        grvTravelAdvanceCosts.DataBind();
+                        lblTravelDetail.Visible = false;
+                    }
+
                     ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
                 }
             }
 
+        }
+        protected void dgTravelAdvanceRequestDetail_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int recordId = (int)dgTravelAdvanceRequestDetail.DataKeys[dgTravelAdvanceRequestDetail.SelectedIndex];
+            grvTravelAdvanceCosts.DataSource = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).GetTravelAdvanceRequestDetail(recordId).TravelAdvanceCosts;
+            grvTravelAdvanceCosts.DataBind();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
         }
         protected void DownloadFile(object sender, EventArgs e)
         {
@@ -419,9 +443,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             lblChaiBankResult.Text = _presenter.CurrentOperationalControlRequest.Account.Name;
             lblChaiBankAccResult.Text = _presenter.CurrentOperationalControlRequest.Account.AccountNo;
             lblDescriptionResult.Text = _presenter.CurrentOperationalControlRequest.Description;
-            lblBankNameResult.Text = _presenter.CurrentOperationalControlRequest.Beneficiary.BankName;
-            lblBeneficiaryNameResult.Text = _presenter.CurrentOperationalControlRequest.Beneficiary.BeneficiaryName;
-            lblBankAccountNoResult.Text = _presenter.CurrentOperationalControlRequest.Beneficiary.AccountNumber;
+            if (_presenter.CurrentOperationalControlRequest.Beneficiary != null)
+            {
+                lblBankNameResult.Text = _presenter.CurrentOperationalControlRequest.Beneficiary.BankName;
+                lblBeneficiaryNameResult.Text = _presenter.CurrentOperationalControlRequest.Beneficiary.BeneficiaryName;
+                lblBankAccountNoResult.Text = _presenter.CurrentOperationalControlRequest.Beneficiary.AccountNumber;
+            }
             lblVoucherNoResult.Text = _presenter.CurrentOperationalControlRequest.VoucherNo.ToString();
             lblTotalAmountResult.Text = _presenter.CurrentOperationalControlRequest.TotalAmount.ToString();
             lblApprovalStatusResult.Text = _presenter.CurrentOperationalControlRequest.ProgressStatus.ToString();
@@ -432,7 +459,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             grvStatuses.DataSource = _presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses;
             grvStatuses.DataBind();
-        }        
+        }
         protected void grvStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (_presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses != null)

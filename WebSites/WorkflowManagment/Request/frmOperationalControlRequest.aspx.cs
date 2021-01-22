@@ -167,10 +167,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (Request.QueryString["PaymentId"] != null)
                     {
-                        TravelAdvanceRequest TAR = _presenter.GetTravelAdvanceRequest(Convert.ToInt32(Request.QueryString["PaymentId"]));
+                        int travelAdvId = Convert.ToInt32(Request.QueryString["PaymentId"]);
+                        TravelAdvanceRequest TAR = _presenter.GetTravelAdvanceRequest(travelAdvId);
                         if (TAR != null)
-                        {
+                        {                            
                             _presenter.CurrentOperationalControlRequest.Description = TAR.PurposeOfTravel;
+                            _presenter.CurrentOperationalControlRequest.TravelAdvanceId = travelAdvId;
+
                             foreach (TravelAdvanceRequestDetail TARD in TAR.TravelAdvanceRequestDetails)
                             {
                                 foreach(TravelAdvanceCost TAC in TARD.TravelAdvanceCosts)
