@@ -36,9 +36,9 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public virtual AppUser AppUser { get; set; }
         public virtual Supplier Supplier { get; set; }
         public virtual Program Program { get; set; }
-        public virtual int SettlementRejectionCount {get;set;}
-        public virtual string SettlementRejectionReasons { get;set;}
-        public virtual string SettlementRejetcedby { get;set;}
+        public virtual int SettlementRejectionCount { get; set; }
+        public virtual string SettlementRejectionReasons { get; set; }
+        public virtual string SettlementRejetcedby { get; set; }
         public virtual PaymentReimbursementRequest PaymentReimbursementRequest { get; set; }
         public virtual IList<CashPaymentRequestDetail> CashPaymentRequestDetails { get; set; }
         public virtual IList<CashPaymentRequestStatus> CashPaymentRequestStatuses { get; set; }

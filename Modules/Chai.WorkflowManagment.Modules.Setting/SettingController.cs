@@ -657,7 +657,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
         #region Beneficiary
         public IList<Beneficiary> GetBeneficiaries()
         {
-            return WorkspaceFactory.CreateReadOnly().Query<Beneficiary>(x => x.Status == "Active").ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<Beneficiary>(x => x.Status == "Active").OrderBy(x => x.BeneficiaryName).ToList();
         }
         public Beneficiary GetBeneficiary(int BeneficiaryId)
         {

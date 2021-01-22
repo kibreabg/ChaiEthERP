@@ -183,7 +183,7 @@
                                                                 <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountName")%>
                                                             </ItemTemplate>
                                                             <EditItemTemplate>
-                                                                <asp:DropDownList ID="ddlEdtAccountDescription" runat="server" CssClass="form-control" AppendDataBoundItems="true" AutoPostBack="True">
+                                                                <asp:DropDownList ID="ddlEdtAccountDescription" runat="server" CssClass="form-control" AppendDataBoundItems="true" AutoPostBack="True" OnSelectedIndexChanged="ddlEdtAccountDescription_SelectedIndexChanged">
                                                                     <asp:ListItem Value="0">Select Account</asp:ListItem>
                                                                 </asp:DropDownList>
                                                                 <i></i>

@@ -124,40 +124,80 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         #endregion
         private void PopulateBankPaymentDetail()
         {
-            if (Request.QueryString["PaymentId"] != null)
+            if (Request.QueryString["Page"] != null)
             {
-                CashPaymentRequest CPR = _presenter.GetCashPaymentRequest(Convert.ToInt32(Request.QueryString["PaymentId"]));
-                if (CPR != null)
+                if (Request.QueryString["Page"].Contains("CashPayment"))
                 {
-                    _presenter.CurrentOperationalControlRequest.Description = CPR.Description;
-                    foreach (CashPaymentRequestDetail CPRD in CPR.CashPaymentRequestDetails)
+                    if (Request.QueryString["PaymentId"] != null)
                     {
-                        OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
-                        OCRD.ItemAccount = CPRD.ItemAccount;
-                        OCRD.Project = CPRD.Project;
-                        OCRD.Grant = CPRD.Grant;
-                        OCRD.Amount = CPRD.Amount;
-                        OCRD.ActualExpendture = CPRD.Amount;
-                        OCRD.AccountCode = CPRD.AccountCode;
-                        _presenter.CurrentOperationalControlRequest.TotalAmount += OCRD.Amount;
-                        _presenter.CurrentOperationalControlRequest.TotalActualExpendture += OCRD.Amount;
-                        OCRD.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
-                        _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails.Add(OCRD);
-
-                        if (CPRD.CPRAttachments.Count > 0)
+                        CashPaymentRequest CPR = _presenter.GetCashPaymentRequest(Convert.ToInt32(Request.QueryString["PaymentId"]));
+                        if (CPR != null)
                         {
-                            foreach (CPRAttachment CP in CPRD.CPRAttachments)
+                            _presenter.CurrentOperationalControlRequest.Description = CPR.Description;
+                            foreach (CashPaymentRequestDetail CPRD in CPR.CashPaymentRequestDetails)
                             {
-                                OCRAttachment OPA = new OCRAttachment();
+                                OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
+                                OCRD.ItemAccount = CPRD.ItemAccount;
+                                OCRD.Project = CPRD.Project;
+                                OCRD.Grant = CPRD.Grant;
+                                OCRD.Amount = CPRD.Amount;
+                                OCRD.ActualExpendture = CPRD.Amount;
+                                OCRD.AccountCode = CPRD.AccountCode;
+                                _presenter.CurrentOperationalControlRequest.TotalAmount += OCRD.Amount;
+                                _presenter.CurrentOperationalControlRequest.TotalActualExpendture += OCRD.Amount;
+                                OCRD.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
+                                _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails.Add(OCRD);
 
-                                OPA.FilePath = CP.FilePath;
-                                OPA.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
-                                _presenter.CurrentOperationalControlRequest.OCRAttachments.Add(OPA);
+                                if (CPRD.CPRAttachments.Count > 0)
+                                {
+                                    foreach (CPRAttachment CP in CPRD.CPRAttachments)
+                                    {
+                                        OCRAttachment OPA = new OCRAttachment();
+
+                                        OPA.FilePath = CP.FilePath;
+                                        OPA.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
+                                        _presenter.CurrentOperationalControlRequest.OCRAttachments.Add(OPA);
+                                    }
+                                }
                             }
                         }
                     }
                 }
+                else if (Request.QueryString["Page"].Contains("TravelAdvance"))
+                {
+                    if (Request.QueryString["PaymentId"] != null)
+                    {
+                        TravelAdvanceRequest TAR = _presenter.GetTravelAdvanceRequest(Convert.ToInt32(Request.QueryString["PaymentId"]));
+                        if (TAR != null)
+                        {
+                            _presenter.CurrentOperationalControlRequest.Description = TAR.PurposeOfTravel;
+                            foreach (TravelAdvanceRequestDetail TARD in TAR.TravelAdvanceRequestDetails)
+                            {
+                                foreach(TravelAdvanceCost TAC in TARD.TravelAdvanceCosts)
+                                {
+                                    OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
+                                    OCRD.ItemAccount = TAC.ItemAccount;
+                                    OCRD.AccountCode = TAC.AccountCode;
+                                    OCRD.Project = TAR.Project;
+                                    OCRD.Grant = TAR.Grant;
+                                    OCRD.Amount = TAC.Total;
+                                    OCRD.ActualExpendture = TAC.Total;                                    
+                                    _presenter.CurrentOperationalControlRequest.TotalAmount += OCRD.Amount;
+                                    _presenter.CurrentOperationalControlRequest.TotalActualExpendture += OCRD.Amount;
+                                    OCRD.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
+                                    _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails.Add(OCRD);
+                                }
+                                
+                            }
+                        }
+                    }
+                }
+
+
             }
+
+            
+
         }
         private string AutoNumber()
         {
@@ -388,7 +428,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     if (ddlAccountDescription != null)
                     {
                         BindAccountDescription(ddlAccountDescription);
-                        if (_presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails[e.Item.DataSetIndex].ItemAccount.Id != 0)
+                        if (_presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails[e.Item.DataSetIndex].ItemAccount != null)
                         {
                             ListItem liI = ddlAccountDescription.Items.FindByValue(_presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails[e.Item.DataSetIndex].ItemAccount.Id.ToString());
                             if (liI != null)
@@ -399,7 +439,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     if (ddlEdtGrant != null)
                     {
                         BindGrant(ddlEdtGrant, Convert.ToInt32(ddlProject.SelectedValue));
-                        if (_presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails[e.Item.DataSetIndex].Grant.Id != null)
+                        if (_presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails[e.Item.DataSetIndex].Grant != null)
                         {
                             ListItem liI = ddlEdtGrant.Items.FindByValue(_presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails[e.Item.DataSetIndex].Grant.Id.ToString());
                             if (liI != null)
@@ -494,6 +534,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             DropDownList ddl = (DropDownList)sender;
             TextBox txtAccountCode = ddl.FindControl("txtAccountCode") as TextBox;
+            txtAccountCode.Text = _presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)).AccountCode;
+        }
+        protected void ddlEdtAccountDescription_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DropDownList ddl = (DropDownList)sender;
+            TextBox txtAccountCode = ddl.FindControl("txtEdtAccountCode") as TextBox;
             txtAccountCode.Text = _presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)).AccountCode;
         }
         protected void ddlEdtProject_SelectedIndexChanged(object sender, EventArgs e)

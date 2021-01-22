@@ -12,12 +12,11 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         {
             this.ExpenseLiquidationRequestStatuses = new List<ExpenseLiquidationRequestStatus>();
             this.ExpenseLiquidationRequestDetails = new List<ExpenseLiquidationRequestDetail>();
-            this.ELRAttachments = new List<ELRAttachment>();
         }
         public int Id { get; set; }
         public Nullable<DateTime> RequestDate { get; set; }
         public Nullable<DateTime> TravelAdvRequestDate { get; set; }
-        public string ExpenseType { get; set; }        
+        public string ExpenseType { get; set; }
         public string Comment { get; set; }
         public string ExpenseReimbersmentType { get; set; }
         public string ReimbersmentNo { get; set; }
@@ -35,16 +34,28 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public virtual TravelAdvanceRequest TravelAdvanceRequest { get; set; }
         public virtual IList<ExpenseLiquidationRequestDetail> ExpenseLiquidationRequestDetails { get; set; }
         public virtual IList<ExpenseLiquidationRequestStatus> ExpenseLiquidationRequestStatuses { get; set; }
-        public virtual IList<ELRAttachment> ELRAttachments { get; set; }
+
 
         #region LiquidationDetails
         public virtual ExpenseLiquidationRequestDetail GetExpenseLiquidationRequestDetail(int Id)
         {
-
             foreach (ExpenseLiquidationRequestDetail ExpenseLiquidationRequestDetail in ExpenseLiquidationRequestDetails)
             {
                 if (ExpenseLiquidationRequestDetail.Id == Id)
                     return ExpenseLiquidationRequestDetail;
+            }
+            return null;
+        }
+        public virtual ExpenseLiquidationRequestDetail GetDetailByItemAccount(int itemAccountId)
+        {
+            foreach (ExpenseLiquidationRequestDetail ELRD in ExpenseLiquidationRequestDetails)
+            {
+                if (ELRD.ItemAccount != null)
+                {
+                    if (ELRD.ItemAccount.Id == itemAccountId)
+                        return ELRD;
+                }
+
             }
             return null;
         }
@@ -72,20 +83,6 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
 
         }
 
-        #endregion
-        #region ELAttachment
-
-        public virtual void RemoveELAttachment(string FilePath)
-        {
-            foreach (ELRAttachment cpa in ELRAttachments)
-            {
-                if (cpa.FilePath == FilePath)
-                {
-                    ELRAttachments.Remove(cpa);
-                    break;
-                }
-            }
-        }
-        #endregion
+        #endregion        
     }
 }

@@ -295,10 +295,6 @@
         </div>
 
     </div>
-    <%--<cc1:ModalPopupExtender ID="pnlSearch_ModalPopupExtender" runat="server" BackgroundCssClass="modalBackground" Enabled="True"
-        PopupControlID="pnlSearch" CancelControlID="btnCancelSearch" TargetControlID="btnSearch">
-    </cc1:ModalPopupExtender>
-    <asp:Panel ID="pnlSearch" runat="server">--%>
     <div class="modal fade" id="searchModal" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -368,7 +364,6 @@
             </div>
         </div>
     </div>
-    <%--</asp:Panel>--%>
 
     <asp:Panel ID="pnlWarning" Visible="false" Style="position: absolute; top: 55px; left: 108px;" runat="server">
         <div class="modal-dialog">

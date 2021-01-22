@@ -27,7 +27,7 @@ namespace Chai.WorkflowManagment.Modules.Shell
         [InjectionConstructor]
         public ShellController([ServiceDependency] IHttpContextLocatorService httpContextLocatorService,
            [ServiceDependency] INavigationService navigationService)
-            : base(httpContextLocatorService,navigationService)
+            : base(httpContextLocatorService, navigationService)
         {
             _workspace = ZadsServices.Workspace;
         }
@@ -44,8 +44,8 @@ namespace Chai.WorkflowManagment.Modules.Shell
         {
             int userId = GetCurrentUser().Id;
             IList<AssignJob> AJ = _workspace.All<AssignJob>(x => x.AssignedTo == userId && x.Status == true).ToList();
-                    return AJ[0]; 
-           
+            return AJ[0];
+
 
         }
         public AppUser GetUserByUserName(string userName)
@@ -61,14 +61,14 @@ namespace Chai.WorkflowManagment.Modules.Shell
         {
             using (var vr = WorkspaceFactory.CreateReadOnly())
             {
-                return vr.Single<Node>(x => x.Id == nodeid, x => x.NodeRoles.Select(y => y.Role));     
+                return vr.Single<Node>(x => x.Id == nodeid, x => x.NodeRoles.Select(y => y.Role));
             }
         }
         public Tab ActiveTab(int tabid)
         {
             using (var vr = WorkspaceFactory.CreateReadOnly())
             {
-                return vr.Single<Tab>(x => x.Id == tabid, x => x.PocModule, x => x.TabRoles.Select(z => z.Role), x => x.TaskPans.Select(y => y.TaskPanNodes.Select(w => w.Node.PocModule)), x => x.TaskPans.Select(y => y.TaskPanNodes.Select(w => w.Node.NodeRoles.Select(a => a.Role) )));
+                return vr.Single<Tab>(x => x.Id == tabid, x => x.PocModule, x => x.TabRoles.Select(z => z.Role), x => x.TaskPans.Select(y => y.TaskPanNodes.Select(w => w.Node.PocModule)), x => x.TaskPans.Select(y => y.TaskPanNodes.Select(w => w.Node.NodeRoles.Select(a => a.Role))));
             }
         }
         #region ReimbersmentStatus
@@ -125,14 +125,14 @@ namespace Chai.WorkflowManagment.Modules.Shell
                                    " AND  (VehicleRequests.CurrentApprover = '" + currentUser + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "') order by VehicleRequests.Id ";
 
             return _workspace.SqlQuery<VehicleRequest>(filterExpression).Count();
-        }       
+        }
         public int GetCashPaymentRequestTasks()
         {
             currentUser = GetCurrentUser().Id;
             string filterExpression = "";
 
             filterExpression = " SELECT * FROM CashPaymentRequests " +
-                                    " LEFT JOIN AppUsers ON AppUsers.Id = CashPaymentRequests.CurrentApprover " + 
+                                    " LEFT JOIN AppUsers ON AppUsers.Id = CashPaymentRequests.CurrentApprover " +
                                     " LEFT JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
                                     " WHERE CashPaymentRequests.ProgressStatus = 'InProgress'" +
                                         " AND ((CashPaymentRequests.CurrentApprover = '" + currentUser + "')" +
@@ -146,7 +146,7 @@ namespace Chai.WorkflowManagment.Modules.Shell
         {
             currentUser = GetCurrentUser().Id;
             string filterExpression = "";
-            
+
             filterExpression = " SELECT * FROM CostSharingRequests " +
                                     " LEFT JOIN AppUsers on AppUsers.Id = CostSharingRequests.CurrentApprover " +
                                     " LEFT JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
@@ -162,7 +162,7 @@ namespace Chai.WorkflowManagment.Modules.Shell
         {
             currentUser = GetCurrentUser().Id;
             string filterExpression = "";
-            
+
             filterExpression = " SELECT * FROM TravelAdvanceRequests " +
                                     " LEFT JOIN AppUsers on AppUsers.Id = TravelAdvanceRequests.CurrentApprover " +
                                     " LEFT JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
@@ -189,11 +189,17 @@ namespace Chai.WorkflowManagment.Modules.Shell
             currentUser = GetCurrentUser().Id;
             string filterExpression = "";
 
-            filterExpression = " SELECT * FROM ExpenseLiquidationRequests INNER JOIN AppUsers on AppUsers.Id = ExpenseLiquidationRequests.CurrentApprover Left JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where ExpenseLiquidationRequests.ProgressStatus='InProgress' " +
-                                   " AND (ExpenseLiquidationRequests.CurrentStatus != 'Rejected' OR ExpenseLiquidationRequests.CurrentStatus IS NULL) AND ((ExpenseLiquidationRequests.CurrentApprover = '" + currentUser + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) order by ExpenseLiquidationRequests.Id ";
+            filterExpression = " SELECT * FROM ExpenseLiquidationRequests " +
+                                    " LEFT JOIN AppUsers ON AppUsers.Id = ExpenseLiquidationRequests.CurrentApprover " +
+                                    " LEFT JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
+                                    " WHERE ExpenseLiquidationRequests.ProgressStatus = 'InProgress'" +
+                                        " AND ((ExpenseLiquidationRequests.CurrentApprover = '" + currentUser + "')" +
+                                        " OR (ExpenseLiquidationRequests.CurrentApproverPosition = '" + GetCurrentUser().EmployeePosition.Id + "')" +
+                                        " OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "'))" +
+                                        " ORDER BY ExpenseLiquidationRequests.Id";
 
             return _workspace.SqlQuery<ExpenseLiquidationRequest>(filterExpression).Count();
-        }       
+        }
         public int GetExpenseLiquidationRequestsTasks()
         {
             currentUser = GetCurrentUser().Id;
@@ -236,10 +242,15 @@ namespace Chai.WorkflowManagment.Modules.Shell
         public int GetBankPaymentTasks()
         {
             currentUser = GetCurrentUser().Id;
-            string filterExpression = "";
 
-            filterExpression = " SELECT * FROM OperationalControlRequests INNER JOIN AppUsers on AppUsers.Id = OperationalControlRequests.CurrentApprover Left JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where OperationalControlRequests.ProgressStatus='InProgress' " +
-                                  " AND  ((OperationalControlRequests.CurrentApprover = '" + currentUser+ "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) order by OperationalControlRequests.Id ";
+            string filterExpression = " SELECT * FROM OperationalControlRequests " +
+                                        " LEFT JOIN AppUsers on AppUsers.Id = OperationalControlRequests.CurrentApprover " +
+                                        " LEFT JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
+                                        " WHERE OperationalControlRequests.ProgressStatus = 'InProgress'" +
+                                            " AND ((OperationalControlRequests.CurrentApprover = '" + currentUser + "')" +
+                                            " OR (OperationalControlRequests.CurrentApproverPosition = '" + GetCurrentUser().EmployeePosition.Id + "')" +
+                                            " OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "'))" +
+                                            " ORDER BY OperationalControlRequests.RequestDate";
 
             return _workspace.SqlQuery<OperationalControlRequest>(filterExpression).Count();
         }
@@ -322,7 +333,7 @@ namespace Chai.WorkflowManagment.Modules.Shell
             else
                 return 0;
 
-        }        
+        }
         public int GetCostSharingRequestMyRequests()
         {
             currentUser = GetCurrentUser().Id;
@@ -451,7 +462,7 @@ namespace Chai.WorkflowManagment.Modules.Shell
         public IList<PaymentReimbursementRequest> GetPaymentReimbursementRequestInProgress()
         {
             currentUser = GetCurrentUser().Id;
-            IList<PaymentReimbursementRequest> paymentReimbursementRequest = WorkspaceFactory.CreateReadOnly().Query<PaymentReimbursementRequest>(x => x.CashPaymentRequest.AppUser.Id == currentUser && x.ProgressStatus == "InProgress", y=>y.CashPaymentRequest).ToList();
+            IList<PaymentReimbursementRequest> paymentReimbursementRequest = WorkspaceFactory.CreateReadOnly().Query<PaymentReimbursementRequest>(x => x.CashPaymentRequest.AppUser.Id == currentUser && x.ProgressStatus == "InProgress", y => y.CashPaymentRequest).ToList();
             return paymentReimbursementRequest;
         }
         public IList<CostSharingRequest> GetCostSharingInProgress()
@@ -470,7 +481,7 @@ namespace Chai.WorkflowManagment.Modules.Shell
         public IList<ExpenseLiquidationRequest> GetExpenseLiquidationInProgress()
         {
             currentUser = GetCurrentUser().Id;
-            IList<ExpenseLiquidationRequest> expenseLiquidationRequests = WorkspaceFactory.CreateReadOnly().Query<ExpenseLiquidationRequest>(x => x.TravelAdvanceRequest.AppUser.Id == currentUser && x.ProgressStatus == "InProgress").ToList();
+            IList<ExpenseLiquidationRequest> expenseLiquidationRequests = WorkspaceFactory.CreateReadOnly().Query<ExpenseLiquidationRequest>(x => x.TravelAdvanceRequest.AppUser.Id == currentUser && x.ProgressStatus == "InProgress", y => y.TravelAdvanceRequest).ToList();
             return expenseLiquidationRequests;
         }
         public IList<PurchaseRequest> GetPurchaseInProgress()

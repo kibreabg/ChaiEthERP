@@ -128,7 +128,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             string will = "";
             foreach (ApprovalLevel AL in AS.ApprovalLevels)
             {
-                if ((AL.EmployeePosition.PositionName == "Superviser/Line Manager" || AL.EmployeePosition.PositionName == "Program Manager"))
+                if ((AL.EmployeePosition.PositionName == "Superviser/Line Manager" || AL.EmployeePosition.PositionName == "Program Manager") && AL.WorkflowLevel == _presenter.CurrentCashPaymentRequest.CurrentLevel)
                 {
                     will = "Approve";
                     break;
@@ -349,7 +349,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         if (_presenter.CurrentCashPaymentRequest.CurrentLevel == _presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses.Count)
                         {
                             _presenter.CurrentCashPaymentRequest.ProgressStatus = ProgressStatus.Completed.ToString();
-
                         }
                         GetNextApprover();
                         CPRS.Approver = _presenter.CurrentUser().Id;
@@ -743,7 +742,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void btnBankPayment_Click(object sender, EventArgs e)
         {
-            Response.Redirect(String.Format("../Request/frmOperationalControlRequest.aspx?paymentId={0}", Convert.ToInt32(Session["PaymentId"])));
+            Response.Redirect(String.Format("../Request/frmOperationalControlRequest.aspx?paymentId={0}&Page={1}", Convert.ToInt32(Session["PaymentId"]), "CashPayment"));
         }
         protected void btnReimburse_Click(object sender, EventArgs e)
         {
