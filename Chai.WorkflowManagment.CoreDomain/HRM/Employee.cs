@@ -355,14 +355,14 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             
         }
 
-        public virtual decimal Leavefromhiredtonow()
+        public virtual int Leavefromhiredtonow()
         {
             DateTime DateHired = GetEmployeeHiredDate();
-           
-            decimal leaveEnti = 0;
-            decimal Sumleave = 0;
+
+            int leaveEnti = 0;
+            int Sumleave = 0;
             TimeSpan workingdays = DateTime.Now - DateHired;
-            decimal wd = workingdays.Days;
+            int wd = workingdays.Days;
 
 
             int count = 1;
@@ -396,13 +396,13 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
 
             return Sumleave;
         }
-        public virtual decimal LeavefromhiredtoYE()
+        public virtual int LeavefromhiredtoYE()
         {
             DateTime YE = new DateTime(DateTime.Today.Year, 12, 31);
-            decimal leaveEnti = 0;
-            decimal Sumleave = 0;
+            int leaveEnti = 0;
+            int Sumleave = 0;
             TimeSpan workingdays = YE - GetEmployeeHiredDate();
-            decimal wd = workingdays.Days;
+            int wd = workingdays.Days;
 
 
             int count = 1;
@@ -432,7 +432,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
 
             return Sumleave;
         }
-        public virtual decimal LeavefromhiredtoCED(DateTime CED)
+        public virtual int LeavefromhiredtoCED(DateTime CED)
         {
             DateTime ced = CED;
 
@@ -502,14 +502,14 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
 
             return Sumleave;
         }
-        public virtual decimal Leavefromhiredtolast(DateTime lastday)
+        public virtual int Leavefromhiredtolast(DateTime lastday)
         {
-           // DateTime lastday = lastday;
+            // DateTime lastday = lastday;
 
-            decimal leaveEnti = 0;
-            decimal Sumleave = 0;
+            int leaveEnti = 0;
+            int Sumleave = 0;
             TimeSpan workingdays = lastday - GetEmployeeHiredDate(); ;
-            decimal wd = workingdays.Days;
+            int wd = workingdays.Days;
 
 
             int count = 1;

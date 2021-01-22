@@ -209,7 +209,7 @@ namespace Chai.WorkflowManagment.Modules.Shell
         {
             currentUser = GetCurrentUser().Id;
             int Count = 0;
-            Count = WorkspaceFactory.CreateReadOnly().Count<CashPaymentRequest>(x => x.AppUser.Id == currentUser && x.IsLiquidated == false);
+            Count = WorkspaceFactory.CreateReadOnly().Count<CashPaymentRequest>(x => x.AppUser.Id == currentUser  && x.IsLiquidated == false && x.AmountType == "Advanced" && x.ProgressStatus == "Completed");
             if (Count != 0)
                 return Count;
             else
