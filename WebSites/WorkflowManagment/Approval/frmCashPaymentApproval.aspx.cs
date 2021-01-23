@@ -37,9 +37,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             if (_presenter.CurrentCashPaymentRequest != null)
             {
                 if (_presenter.CurrentCashPaymentRequest.Id != 0)
-                {
                     PrintTransaction();
-                }
             }
         }
         [CreateNew]
@@ -169,8 +167,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 ddlSrchProgressStatus.Items.Add(new ListItem(s[i].Replace('_', ' '), s[i].Replace('_', ' ')));
                 ddlSrchProgressStatus.DataBind();
             }
-            ddlSrchProgressStatus.Items.Add(new ListItem("Not Retired", "Not Retired"));
-            ddlSrchProgressStatus.Items.Add(new ListItem("Retired", "Retired"));
         }
         private void BindSearchCashPaymentRequestGrid()
         {
@@ -189,7 +185,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 if (_presenter.CurrentCashPaymentRequest.CurrentLevel == _presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses.Count && CPRS.ApprovalStatus != null)
                 {
                     btnPrint.Enabled = true;
-                    btnApprove.Enabled = false;                    
+                    btnApprove.Enabled = false;
+                }
+                else if (_presenter.CurrentCashPaymentRequest.CurrentStatus == ApprovalStatus.Rejected.ToString())
+                {
+                    btnApprove.Enabled = false;
+                    btnBankPayment.Visible = false;
                 }
                 else
                 {
@@ -198,8 +199,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
             }
 
-            if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses.Last().PaymentType == "Bank Payment" && _presenter.CurrentCashPaymentRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
+            if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses.Last().PaymentType == "Bank Payment" && !IsCashPaymentRequested() && _presenter.CurrentCashPaymentRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
                 btnBankPayment.Visible = true;
+            else
+                btnBankPayment.Visible = false;
         }
         private void BindAttachments()
         {
@@ -331,6 +334,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
             }
         }
+        private bool IsCashPaymentRequested()
+        {
+            OperationalControlRequest ocr = _presenter.GetOperationalControlRequestByPaymentId(_presenter.CurrentCashPaymentRequest.Id);
+            if (ocr != null)
+                return true;
+            else
+                return false;
+        }
         private void SaveCashPaymentRequestStatus()
         {
             foreach (CashPaymentRequestStatus CPRS in _presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses)
@@ -370,7 +381,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
 
             }
-        }        
+        }
         protected void btnUpload_Click(object sender, EventArgs e)
         {
             Button uploadBtn = (Button)sender;
@@ -457,6 +468,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         protected void grvCashPaymentRequestList_SelectedIndexChanged(object sender, EventArgs e)
         {
             _presenter.OnViewLoaded();
+            if (_presenter.CurrentCashPaymentRequest.ProgressStatus == ProgressStatus.Completed.ToString())
+            {
+                PrintTransaction();
+            }
             PopApprovalStatus();
             Session["PaymentId"] = _presenter.CurrentCashPaymentRequest.Id;
             btnApprove.Enabled = true;
@@ -757,7 +772,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
                 else
                 {
-                    Master.ShowMessage(new AppMessage("Error,Please attach Receipt", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Error,Please attach Receipt", RMessageType.Error));
                     pnlReimbursement_ModalPopupExtender.Show();
                 }
 
@@ -765,7 +780,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error,'" + ex.Message + "'", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error,'" + ex.Message + "'", RMessageType.Error));
             }
 
         }

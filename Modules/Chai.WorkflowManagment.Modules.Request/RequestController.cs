@@ -170,7 +170,10 @@ namespace Chai.WorkflowManagment.Modules.Request
             }
             else { return 0; }
         }
-
+        public OperationalControlRequest GetOperationalControlRequestByPaymentId(int paymentId)
+        {
+            return _workspace.First<OperationalControlRequest>(x => x.PaymentId == paymentId);
+        }
         public CPRAttachment GetCPRAttachment(int attachmentId)
         {
             return _workspace.Single<CPRAttachment>(x => x.Id == attachmentId);
@@ -272,6 +275,10 @@ namespace Chai.WorkflowManagment.Modules.Request
         {
             return _workspace.Single<OperationalControlRequest>(x => x.Id == RequestId);
         }
+        public OperationalControlRequest GetOperationalControlRequestByTravelId(int TravelAdvanceRequestId)
+        {
+            return _workspace.First<OperationalControlRequest>(x => x.TravelAdvanceId == TravelAdvanceRequestId);
+        }
         public IList<OperationalControlRequest> ListOperationalControlRequests(string RequestNo, string RequestDate)
         {
             string filterExpression = "";
@@ -311,7 +318,7 @@ namespace Chai.WorkflowManagment.Modules.Request
         public TravelAdvanceRequest GetTravelAdvanceRequest(int TravelAdvanceRequestId)
         {
             return _workspace.Single<TravelAdvanceRequest>(x => x.Id == TravelAdvanceRequestId);
-        }
+        }        
         public IList<TravelAdvanceRequest> GetTravelAdvanceRequests()
         {
             return WorkspaceFactory.CreateReadOnly().Query<TravelAdvanceRequest>(null).ToList();

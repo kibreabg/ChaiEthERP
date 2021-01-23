@@ -78,7 +78,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _controller.ListCashPaymentRequests(RequestNo, RequestDate, ProgressStatus);
         }
-        
+        public OperationalControlRequest GetOperationalControlRequestByPaymentId(int paymentId)
+        {
+            return _requestController.GetOperationalControlRequestByPaymentId(paymentId);
+        }
         public CPRAttachment GetAttachment(int attachmentId)
         {
             return _requestController.GetCPRAttachment(attachmentId);

@@ -97,7 +97,7 @@
                 <asp:CommandField ButtonType="Button" SelectText="Process Request" ShowSelectButton="True" />
                 <asp:TemplateField>
                     <ItemTemplate>
-                        <asp:Button runat="server" ID="btnStatus" Text="" BorderStyle="None" />
+                        <asp:Button runat="server" ID="btnStatus" Text="" Enabled="false" BorderStyle="None" />
                     </ItemTemplate>
                 </asp:TemplateField>
             </Columns>
@@ -149,8 +149,8 @@
                             <footer>
                                 <asp:Button ID="btnApprove" runat="server" ValidationGroup="save" Text="Save" OnClick="btnApprove_Click" Enabled="false" CssClass="btn btn-primary"></asp:Button>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-primary" Enabled="false" OnClientClick="javascript:Clickheretoprint('divprint')"></asp:Button>
-                                <asp:Button ID="btnBankPayment" runat="server" CssClass="btn btn-primary" OnClick="btnBankPayment_Click" Text="Bank Payment" Visible="False" />
+                                <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-default" Enabled="false" OnClientClick="javascript:Clickheretoprint('divprint')"></asp:Button>
+                                <asp:Button ID="btnBankPayment" runat="server" CssClass="btn btn-default" OnClick="btnBankPayment_Click" Text="Bank Payment" Visible="False" />
                             </footer>
                         </div>
                     </div>
@@ -242,22 +242,15 @@
         <fieldset>
             <table style="width: 100%;">
                 <tr>
-                    <td style="width: 17%; text-align: left;">
-                        <img src="../img/CHAI%20Logo.png" width="70" height="50" /></td>
                     <td style="font-size: large; text-align: center;">
-                        <strong>CHAI Ethiopia ERP<br />
+                        <img src="../img/CHAI%20Logo.png" width="130" height="80" />
+                        <br />
+                        <strong>CHAI ETHIOPIA
+                            <br />
                             TRAVEL ADVANCE REQUEST FORM</strong></td>
                 </tr>
             </table>
             <table style="width: 100%;">
-
-                <tr>
-                    <td align="right" style="width: 848px">&nbsp;</td>
-                    <td align="right" style="width: 390px">&nbsp;</td>
-                    <td align="right" style="width: 389px">&nbsp;</td>
-                    <td align="right" style="width: 389px">&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
                 <tr>
                     <td style="width: 848px; height: 18px; padding-left: 11%;">
                         <strong>

@@ -130,10 +130,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (Request.QueryString["PaymentId"] != null)
                     {
-                        CashPaymentRequest CPR = _presenter.GetCashPaymentRequest(Convert.ToInt32(Request.QueryString["PaymentId"]));
+                        int paymentId = Convert.ToInt32(Request.QueryString["PaymentId"]);
+                        CashPaymentRequest CPR = _presenter.GetCashPaymentRequest(paymentId);
                         if (CPR != null)
                         {
                             _presenter.CurrentOperationalControlRequest.Description = CPR.Description;
+                            _presenter.CurrentOperationalControlRequest.PaymentId = paymentId;
+
                             foreach (CashPaymentRequestDetail CPRD in CPR.CashPaymentRequestDetails)
                             {
                                 OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();

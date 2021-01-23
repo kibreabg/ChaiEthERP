@@ -83,6 +83,7 @@
             <Columns>
                 <asp:BoundField DataField="RequestNo" HeaderText="Vourcher No" SortExpression="RequestNo" />
                 <asp:BoundField DataField="RequestDate" HeaderText="Request Date" SortExpression="RequestDate" />
+                <asp:BoundField DataField="Description" HeaderText="Description" SortExpression="Description" />
                 <asp:BoundField DataField="Beneficiary.BeneficiaryName" HeaderText="Account Transfer Made To" SortExpression="Beneficiary.BeneficiaryName" />
                 <asp:BoundField DataField="Payee" HeaderText="Cheque/Letter Made Out To" SortExpression="Payee" />
                 <asp:BoundField DataField="TotalAmount" HeaderText="Total Amount" SortExpression="TotalAmount" />
@@ -90,7 +91,7 @@
                 <asp:CommandField ButtonType="Button" SelectText="Process Request" ShowSelectButton="True" />
                 <asp:TemplateField>
                     <ItemTemplate>
-                        <asp:Button runat="server" ID="btnStatus" Text="" BorderStyle="None" />
+                        <asp:Button runat="server" ID="btnStatus" Text="" Enabled="false" BorderStyle="None" />
                     </ItemTemplate>
                 </asp:TemplateField>
 
@@ -357,7 +358,7 @@
                             BANK PAYMENT REQUEST FORM</strong></td>
                 </tr>
             </table>
-            <table style="width: 100%;">
+            <table style="width: 100%; border-spacing: 10px;">
                 <tr>
                     <td style="width: 25%; text-align: right;">
                         <strong>
@@ -377,7 +378,7 @@
                 <tr>
                     <td style="width: 25%; text-align: right;">
                         <strong>
-                            <asp:Label ID="lblRequester" runat="server" Text="Requester:"></asp:Label>
+                            <asp:Label ID="lblRequester" runat="server" Text="Bank Payment Initiator:"></asp:Label>
                         </strong></td>
                     <td style="width: 25%;">
                         <asp:Label ID="lblRequesterResult" runat="server"></asp:Label>
@@ -430,13 +431,9 @@
                     <td style="width: 25%;">
                         <asp:Label ID="lblTotalAmountResult" runat="server"></asp:Label>
                     </td>
-                    <td style="width: 25%; text-align: right;"><strong>
-                        <asp:Label ID="lblActualExpendture" runat="server" Text="Actual Expenditure:"></asp:Label>
-                    </strong>
+                    <td style="width: 25%; text-align: right;"><strong></strong>
                     </td>
-                    <td style="width: 25%;">
-                        <asp:Label ID="lblActualExpendtureRes" runat="server"></asp:Label>
-                    </td>
+                    <td style="width: 25%;"></td>
                 </tr>
                 <tr>
                     <td style="width: 25%; text-align: right;">
@@ -482,7 +479,7 @@
                     <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="AccountName" SortExpression="ItemAccount.AccountName" />
                     <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
                     <asp:BoundField DataField="Amount" HeaderText="Amount" SortExpression="Amount" />
-                    <asp:BoundField DataField="ActualExpendture" HeaderText="Actual Expendture" SortExpression="ActualExpendture" />
+                    <%--<asp:BoundField DataField="ActualExpendture" HeaderText="Actual Expendture" SortExpression="ActualExpendture" />--%>
                 </Columns>
                 <FooterStyle CssClass="FooterStyle" />
                 <HeaderStyle CssClass="headerstyle" />
@@ -510,6 +507,74 @@
                 <RowStyle CssClass="rowstyle" />
             </asp:GridView>
             <br />
+            <div style="text-align: center;">
+                <asp:Label ID="lblTravelDetails" Text="Travel Advance Details" Font-Bold="true" Font-Size="Large" runat="server" Visible="false" />
+            </div>
+            <br />
+            <asp:GridView ID="grvTravelDetails"
+                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                CssClass="table table-striped table-bordered table-hover">
+                <RowStyle CssClass="rowstyle" />
+                <Columns>
+                    <asp:BoundField DataField="CityFrom" HeaderText="City From" SortExpression="CityFrom" />
+                    <asp:BoundField DataField="CityTo" HeaderText="City To" SortExpression="CityTo" />
+                    <asp:BoundField DataField="HotelBooked" HeaderText="Hotel Booked" SortExpression="HotelBooked" />
+                    <asp:TemplateField HeaderText="From Date">
+                        <ItemTemplate>
+                            <asp:Label ID="lblDate" runat="server" Text='<%# Eval("FromDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="To Date">
+                        <ItemTemplate>
+                            <asp:Label ID="Label1" runat="server" Text='<%# Eval("ToDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                    <asp:BoundField DataField="ModeOfTravel" HeaderText="Mode of Travel" SortExpression="ModeOfTravel" />
+                </Columns>
+                <FooterStyle CssClass="FooterStyle" />
+                <HeaderStyle CssClass="headerstyle" />
+                <PagerStyle CssClass="PagerStyle" />
+                <RowStyle CssClass="rowstyle" />
+            </asp:GridView>
+            <br />
+            <asp:GridView ID="grvTravelCosts"
+                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                CssClass="table table-striped table-bordered table-hover">
+                <RowStyle CssClass="rowstyle" />
+                <Columns>
+                    <asp:BoundField DataField="ExpenseType.ExpenseTypeName" HeaderText="Expense Type" SortExpression="ExpenseType.ExpenseTypeName" />
+                    <asp:BoundField DataField="AccountCode" HeaderText="Account Code" SortExpression="AccountCode" />
+                    <asp:BoundField DataField="Days" HeaderText="Days" SortExpression="Days" />
+                    <asp:BoundField DataField="UnitCost" HeaderText="Unit Cost" SortExpression="UnitCost" />
+                    <asp:BoundField DataField="NoOfUnits" HeaderText="No Of Units" SortExpression="NoOfUnits" />
+                    <asp:BoundField DataField="Total" HeaderText="Total" SortExpression="Total" />
+                </Columns>
+                <FooterStyle CssClass="FooterStyle" />
+                <HeaderStyle CssClass="headerstyle" />
+                <PagerStyle CssClass="PagerStyle" />
+                <RowStyle CssClass="rowstyle" />
+            </asp:GridView>
+            <br />
+            <asp:GridView ID="grvTravelStatuses" OnRowDataBound="grvStatuses_RowDataBound"
+                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                CssClass="table table-striped table-bordered table-hover">
+                <RowStyle CssClass="rowstyle" />
+                <Columns>
+                    <asp:TemplateField HeaderText="Date">
+                        <ItemTemplate>
+                            <asp:Label ID="lblDate" runat="server" Text='<%# Eval("Date", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:BoundField HeaderText="Name" />
+                    <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
+                    <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus" />
+                </Columns>
+                <FooterStyle CssClass="FooterStyle" />
+                <HeaderStyle CssClass="headerstyle" />
+                <PagerStyle CssClass="PagerStyle" />
+                <RowStyle CssClass="rowstyle" />
+            </asp:GridView>
 
         </fieldset>
     </div>

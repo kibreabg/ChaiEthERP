@@ -247,6 +247,7 @@
                                                 CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
                                                 <RowStyle CssClass="rowstyle" />
                                                 <Columns>
+                                                    <asp:BoundField DataField="ItemAccountChecklists[0].ItemAccount.AccountName" HeaderText="Account Name" />
                                                     <asp:BoundField DataField="FilePath" HeaderText="File Name" SortExpression="FilePath" />
                                                     <asp:BoundField DataField="ItemAccountChecklists[0].ChecklistName" HeaderText="Checklist Name" SortExpression="ItemAccountChecklists[0].ChecklistName" />
                                                     <asp:TemplateField>

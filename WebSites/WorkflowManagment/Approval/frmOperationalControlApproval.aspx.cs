@@ -159,8 +159,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 ddlSrchProgressStatus.Items.Add(new ListItem(s[i].Replace('_', ' '), s[i].Replace('_', ' ')));
                 ddlSrchProgressStatus.DataBind();
             }
-
-            ddlSrchProgressStatus.Items.Add(new ListItem("Retired", "Retired"));
         }
         private void BindSearchOperationalControlRequestGrid()
         {
@@ -325,7 +323,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
                     //If this Bank Payment request was initiated from Travel Advance, show the details of the Travel Advance here
                     if (_presenter.CurrentOperationalControlRequest.TravelAdvanceId > 0)
-                    {                        
+                    {
                         lblTravelDetail.Visible = true;
                         dgTravelAdvanceRequestDetail.DataSource = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).TravelAdvanceRequestDetails;
                         dgTravelAdvanceRequestDetail.DataBind();
@@ -452,13 +450,36 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             lblVoucherNoResult.Text = _presenter.CurrentOperationalControlRequest.VoucherNo.ToString();
             lblTotalAmountResult.Text = _presenter.CurrentOperationalControlRequest.TotalAmount.ToString();
             lblApprovalStatusResult.Text = _presenter.CurrentOperationalControlRequest.ProgressStatus.ToString();
-            lblActualExpendtureRes.Text = _presenter.CurrentOperationalControlRequest.TotalActualExpendture != 0 ? _presenter.CurrentOperationalControlRequest.TotalActualExpendture.ToString() : "";
             lblReimbersestatusRes.Text = _presenter.CurrentOperationalControlRequest.PaymentReimbursementStatus;
+
             grvDetails.DataSource = _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails;
             grvDetails.DataBind();
 
             grvStatuses.DataSource = _presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses;
             grvStatuses.DataBind();
+
+            if (_presenter.CurrentOperationalControlRequest.TravelAdvanceId > 0)
+            {
+                lblTravelDetails.Visible = true;
+                grvTravelDetails.DataSource = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).TravelAdvanceRequestDetails;
+                grvTravelDetails.DataBind();
+
+                grvTravelStatuses.DataSource = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).TravelAdvanceRequestStatuses;
+                grvTravelStatuses.DataBind();
+
+                IList<TravelAdvanceCost> allCosts = new List<TravelAdvanceCost>();
+
+                foreach (TravelAdvanceRequestDetail detail in _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).TravelAdvanceRequestDetails)
+                {
+                    foreach (TravelAdvanceCost cost in detail.TravelAdvanceCosts)
+                    {
+                        allCosts.Add(cost);
+                    }
+                }
+                grvTravelCosts.DataSource = allCosts;
+                grvTravelCosts.DataBind();
+            }
+
         }
         protected void grvStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
         {
