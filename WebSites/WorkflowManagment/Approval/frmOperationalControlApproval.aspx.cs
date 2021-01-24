@@ -460,6 +460,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             if (_presenter.CurrentOperationalControlRequest.TravelAdvanceId > 0)
             {
+                pnlTravelDetail.Visible = true;
+                pnlPaymentDetail.Visible = false;
                 lblTravelDetails.Visible = true;
                 grvTravelDetails.DataSource = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).TravelAdvanceRequestDetails;
                 grvTravelDetails.DataBind();
@@ -480,6 +482,40 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 grvTravelCosts.DataBind();
             }
 
+            if (_presenter.CurrentOperationalControlRequest.PaymentId > 0)
+            {
+                pnlPaymentDetail.Visible = true;
+                pnlTravelDetail.Visible = false;
+                lblPaymentDetail.Visible = true;
+                grvPaymentDetails.DataSource = _presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId).CashPaymentRequestDetails;
+                grvPaymentDetails.DataBind();
+
+                grvPaymentStatuses.DataSource = _presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId).CashPaymentRequestStatuses;
+                grvPaymentStatuses.DataBind();
+            }
+
+        }
+        protected void grvTravelStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (_presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).TravelAdvanceRequestStatuses != null)
+            {
+                if (e.Row.RowType == DataControlRowType.DataRow)
+                {
+                    if (_presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).TravelAdvanceRequestStatuses[e.Row.RowIndex].Approver > 0)
+                        e.Row.Cells[1].Text = _presenter.GetUser(_presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).TravelAdvanceRequestStatuses[e.Row.RowIndex].Approver).FullName;
+                }
+            }
+        }
+        protected void grvPaymentStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (_presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId).CashPaymentRequestStatuses != null)
+            {
+                if (e.Row.RowType == DataControlRowType.DataRow)
+                {
+                    if (_presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId).CashPaymentRequestStatuses[e.Row.RowIndex].Approver > 0)
+                        e.Row.Cells[1].Text = _presenter.GetUser(_presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId).CashPaymentRequestStatuses[e.Row.RowIndex].Approver).FullName;
+                }
+            }
         }
         protected void grvStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
         {

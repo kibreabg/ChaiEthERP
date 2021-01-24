@@ -81,6 +81,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _requestController.GetTravelAdvanceRequest(reqId);
         }
+        public CashPaymentRequest GetCashPaymentRequest(int reqId)
+        {
+            return _requestController.GetCashPaymentRequest(reqId);
+        }
         public OCRAttachment GetAttachment(int attachmentId)
         {
             return _requestController.GetOCRAttachment(attachmentId);

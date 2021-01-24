@@ -507,75 +507,119 @@
                 <RowStyle CssClass="rowstyle" />
             </asp:GridView>
             <br />
-            <div style="text-align: center;">
-                <asp:Label ID="lblTravelDetails" Text="Travel Advance Details" Font-Bold="true" Font-Size="Large" runat="server" Visible="false" />
-            </div>
-            <br />
-            <asp:GridView ID="grvTravelDetails"
-                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                CssClass="table table-striped table-bordered table-hover">
-                <RowStyle CssClass="rowstyle" />
-                <Columns>
-                    <asp:BoundField DataField="CityFrom" HeaderText="City From" SortExpression="CityFrom" />
-                    <asp:BoundField DataField="CityTo" HeaderText="City To" SortExpression="CityTo" />
-                    <asp:BoundField DataField="HotelBooked" HeaderText="Hotel Booked" SortExpression="HotelBooked" />
-                    <asp:TemplateField HeaderText="From Date">
-                        <ItemTemplate>
-                            <asp:Label ID="lblDate" runat="server" Text='<%# Eval("FromDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
-                        </ItemTemplate>
-                    </asp:TemplateField>
-                    <asp:TemplateField HeaderText="To Date">
-                        <ItemTemplate>
-                            <asp:Label ID="Label1" runat="server" Text='<%# Eval("ToDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
-                        </ItemTemplate>
-                    </asp:TemplateField>
+            <asp:Panel ID="pnlTravelDetail" Visible="false" runat="server">
+                <div style="text-align: center;">
+                    <asp:Label ID="lblTravelDetails" Text="Travel Advance Details" Font-Bold="true" Font-Size="Large" runat="server" Visible="false" />
+                </div>
+                <br />
+                <asp:GridView ID="grvTravelDetails"
+                    runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                    CssClass="table table-striped table-bordered table-hover">
+                    <RowStyle CssClass="rowstyle" />
+                    <Columns>
+                        <asp:BoundField DataField="CityFrom" HeaderText="City From" SortExpression="CityFrom" />
+                        <asp:BoundField DataField="CityTo" HeaderText="City To" SortExpression="CityTo" />
+                        <asp:BoundField DataField="HotelBooked" HeaderText="Hotel Booked" SortExpression="HotelBooked" />
+                        <asp:TemplateField HeaderText="From Date">
+                            <ItemTemplate>
+                                <asp:Label ID="lblDate" runat="server" Text='<%# Eval("FromDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="To Date">
+                            <ItemTemplate>
+                                <asp:Label ID="Label1" runat="server" Text='<%# Eval("ToDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
 
-                    <asp:BoundField DataField="ModeOfTravel" HeaderText="Mode of Travel" SortExpression="ModeOfTravel" />
-                </Columns>
-                <FooterStyle CssClass="FooterStyle" />
-                <HeaderStyle CssClass="headerstyle" />
-                <PagerStyle CssClass="PagerStyle" />
-                <RowStyle CssClass="rowstyle" />
-            </asp:GridView>
-            <br />
-            <asp:GridView ID="grvTravelCosts"
-                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                CssClass="table table-striped table-bordered table-hover">
-                <RowStyle CssClass="rowstyle" />
-                <Columns>
-                    <asp:BoundField DataField="ExpenseType.ExpenseTypeName" HeaderText="Expense Type" SortExpression="ExpenseType.ExpenseTypeName" />
-                    <asp:BoundField DataField="AccountCode" HeaderText="Account Code" SortExpression="AccountCode" />
-                    <asp:BoundField DataField="Days" HeaderText="Days" SortExpression="Days" />
-                    <asp:BoundField DataField="UnitCost" HeaderText="Unit Cost" SortExpression="UnitCost" />
-                    <asp:BoundField DataField="NoOfUnits" HeaderText="No Of Units" SortExpression="NoOfUnits" />
-                    <asp:BoundField DataField="Total" HeaderText="Total" SortExpression="Total" />
-                </Columns>
-                <FooterStyle CssClass="FooterStyle" />
-                <HeaderStyle CssClass="headerstyle" />
-                <PagerStyle CssClass="PagerStyle" />
-                <RowStyle CssClass="rowstyle" />
-            </asp:GridView>
-            <br />
-            <asp:GridView ID="grvTravelStatuses" OnRowDataBound="grvStatuses_RowDataBound"
-                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                CssClass="table table-striped table-bordered table-hover">
-                <RowStyle CssClass="rowstyle" />
-                <Columns>
-                    <asp:TemplateField HeaderText="Date">
-                        <ItemTemplate>
-                            <asp:Label ID="lblDate" runat="server" Text='<%# Eval("Date", "{0:dd/MM/yyyy}")%>'></asp:Label>
-                        </ItemTemplate>
-                    </asp:TemplateField>
-                    <asp:BoundField HeaderText="Name" />
-                    <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
-                    <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus" />
-                </Columns>
-                <FooterStyle CssClass="FooterStyle" />
-                <HeaderStyle CssClass="headerstyle" />
-                <PagerStyle CssClass="PagerStyle" />
-                <RowStyle CssClass="rowstyle" />
-            </asp:GridView>
-
+                        <asp:BoundField DataField="ModeOfTravel" HeaderText="Mode of Travel" SortExpression="ModeOfTravel" />
+                    </Columns>
+                    <FooterStyle CssClass="FooterStyle" />
+                    <HeaderStyle CssClass="headerstyle" />
+                    <PagerStyle CssClass="PagerStyle" />
+                    <RowStyle CssClass="rowstyle" />
+                </asp:GridView>
+                <br />
+                <asp:GridView ID="grvTravelCosts"
+                    runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                    CssClass="table table-striped table-bordered table-hover">
+                    <RowStyle CssClass="rowstyle" />
+                    <Columns>
+                        <asp:BoundField DataField="ExpenseType.ExpenseTypeName" HeaderText="Expense Type" SortExpression="ExpenseType.ExpenseTypeName" />
+                        <asp:BoundField DataField="AccountCode" HeaderText="Account Code" SortExpression="AccountCode" />
+                        <asp:BoundField DataField="Days" HeaderText="Days" SortExpression="Days" />
+                        <asp:BoundField DataField="UnitCost" HeaderText="Unit Cost" SortExpression="UnitCost" />
+                        <asp:BoundField DataField="NoOfUnits" HeaderText="No Of Units" SortExpression="NoOfUnits" />
+                        <asp:BoundField DataField="Total" HeaderText="Total" SortExpression="Total" />
+                    </Columns>
+                    <FooterStyle CssClass="FooterStyle" />
+                    <HeaderStyle CssClass="headerstyle" />
+                    <PagerStyle CssClass="PagerStyle" />
+                    <RowStyle CssClass="rowstyle" />
+                </asp:GridView>
+                <br />
+                <asp:GridView ID="grvTravelStatuses" OnRowDataBound="grvTravelStatuses_RowDataBound"
+                    runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                    CssClass="table table-striped table-bordered table-hover">
+                    <RowStyle CssClass="rowstyle" />
+                    <Columns>
+                        <asp:TemplateField HeaderText="Date">
+                            <ItemTemplate>
+                                <asp:Label ID="lblDate" runat="server" Text='<%# Eval("Date", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:BoundField HeaderText="Name" />
+                        <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
+                        <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus" />
+                    </Columns>
+                    <FooterStyle CssClass="FooterStyle" />
+                    <HeaderStyle CssClass="headerstyle" />
+                    <PagerStyle CssClass="PagerStyle" />
+                    <RowStyle CssClass="rowstyle" />
+                </asp:GridView>
+            </asp:Panel>
+            <asp:Panel ID="pnlPaymentDetail" runat="server">
+                <div style="text-align: center;">
+                    <asp:Label ID="lblPaymentDetail" Text="Payment Request Details" Font-Bold="true" Font-Size="Large" runat="server" Visible="false" />
+                </div>
+                <br />
+                <asp:GridView ID="grvPaymentDetails"
+                    runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                    CssClass="table table-striped table-bordered table-hover">
+                    <RowStyle CssClass="rowstyle" />
+                    <Columns>
+                        <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="AccountName" SortExpression="ItemAccount.AccountName" />
+                        <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
+                        <asp:BoundField DataField="Amount" HeaderText="Amount" SortExpression="Amount" />
+                        <asp:BoundField DataField="ActualExpendture" HeaderText="Actual Expendture" SortExpression="ActualExpendture" />
+                        <asp:BoundField DataField="Project.ProjectCode" HeaderText="Project Code" />
+                        <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant Code" />
+                    </Columns>
+                    <FooterStyle CssClass="FooterStyle" />
+                    <HeaderStyle CssClass="headerstyle" />
+                    <PagerStyle CssClass="PagerStyle" />
+                    <RowStyle CssClass="rowstyle" />
+                </asp:GridView>
+                <br />
+                <asp:GridView ID="grvPaymentStatuses"
+                    runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                    CssClass="table table-striped table-bordered table-hover" OnRowDataBound="grvPaymentStatuses_RowDataBound">
+                    <RowStyle CssClass="rowstyle" />
+                    <Columns>
+                        <asp:TemplateField HeaderText="Date">
+                            <ItemTemplate>
+                                <asp:Label ID="lblDate" runat="server" Text='<%# Eval("Date", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:BoundField HeaderText="Name" />
+                        <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
+                        <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus" />
+                    </Columns>
+                    <FooterStyle CssClass="FooterStyle" />
+                    <HeaderStyle CssClass="headerstyle" />
+                    <PagerStyle CssClass="PagerStyle" />
+                    <RowStyle CssClass="rowstyle" />
+                </asp:GridView>
+            </asp:Panel>
         </fieldset>
     </div>
 
