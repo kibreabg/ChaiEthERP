@@ -253,7 +253,30 @@
                                                             <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
                                                         </asp:DataGrid>
                                                         <br />
-                                                        <asp:Label ID="lblTravelDetail" Font-Size="Large" Font-Bold="true" runat="server" Visible="false" Text="Travel Advance Detail"></asp:Label>
+                                                        <asp:GridView ID="grvOperationalControlStatuses"
+                                                            runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                                                            CssClass="table table-striped table-bordered table-hover" OnRowDataBound="grvStatuses_RowDataBound">
+                                                            <RowStyle CssClass="rowstyle" />
+                                                            <Columns>
+                                                                <asp:TemplateField HeaderText="Date">
+                                                                    <ItemTemplate>
+                                                                        <asp:Label ID="lblDate" runat="server" Text='<%# Eval("Date", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                                                                    </ItemTemplate>
+                                                                </asp:TemplateField>
+                                                                <asp:BoundField HeaderText="Name" />
+                                                                <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
+                                                                <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus" />
+                                                            </Columns>
+                                                            <FooterStyle CssClass="FooterStyle" />
+                                                            <HeaderStyle CssClass="headerstyle" />
+                                                            <PagerStyle CssClass="PagerStyle" />
+                                                            <RowStyle CssClass="rowstyle" />
+                                                        </asp:GridView>
+                                                        <br />
+                                                        <div style="text-align: center;">
+                                                            <asp:Label ID="lblTravelDetail" Font-Size="Large" Font-Bold="true" runat="server" Visible="false" Text="Travel Advance Detail"></asp:Label>
+                                                        </div>
+
                                                         <br />
                                                         <asp:DataGrid ID="dgTravelAdvanceRequestDetail" runat="server" OnSelectedIndexChanged="dgTravelAdvanceRequestDetail_SelectedIndexChanged"
                                                             AutoGenerateColumns="False" CellPadding="0" CssClass="table table-striped table-bordered table-hover"
@@ -293,6 +316,7 @@
                                                             </Columns>
                                                             <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
                                                         </asp:DataGrid>
+                                                        <br />
                                                         <asp:GridView ID="grvTravelAdvanceCosts"
                                                             runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
                                                             AllowPaging="True" CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
@@ -305,6 +329,26 @@
                                                                 <asp:BoundField DataField="UnitCost" HeaderText="Unit Cost" />
                                                                 <asp:BoundField DataField="NoOfUnits" HeaderText="No Of Units" />
                                                                 <asp:BoundField DataField="Total" HeaderText="Total" />
+                                                            </Columns>
+                                                            <FooterStyle CssClass="FooterStyle" />
+                                                            <HeaderStyle CssClass="headerstyle" />
+                                                            <PagerStyle CssClass="PagerStyle" />
+                                                            <RowStyle CssClass="rowstyle" />
+                                                        </asp:GridView>
+                                                        <br />
+                                                        <asp:GridView ID="grvTravelAdvanceStatuses" OnRowDataBound="grvTravelStatuses_RowDataBound"
+                                                            runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                                                            CssClass="table table-striped table-bordered table-hover">
+                                                            <RowStyle CssClass="rowstyle" />
+                                                            <Columns>
+                                                                <asp:TemplateField HeaderText="Date">
+                                                                    <ItemTemplate>
+                                                                        <asp:Label ID="lblDate" runat="server" Text='<%# Eval("Date", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                                                                    </ItemTemplate>
+                                                                </asp:TemplateField>
+                                                                <asp:BoundField HeaderText="Name" />
+                                                                <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
+                                                                <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus" />
                                                             </Columns>
                                                             <FooterStyle CssClass="FooterStyle" />
                                                             <HeaderStyle CssClass="headerstyle" />

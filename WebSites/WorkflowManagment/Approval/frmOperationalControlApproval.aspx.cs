@@ -318,6 +318,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     dgOperationalControlRequestDetail.DataSource = _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails;
                     dgOperationalControlRequestDetail.DataBind();
+                    grvOperationalControlStatuses.DataSource = _presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses;
+                    grvOperationalControlStatuses.DataBind();
                     grvdetailAttachments.DataSource = _presenter.CurrentOperationalControlRequest.OCRAttachments;
                     grvdetailAttachments.DataBind();
 
@@ -327,6 +329,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         lblTravelDetail.Visible = true;
                         dgTravelAdvanceRequestDetail.DataSource = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).TravelAdvanceRequestDetails;
                         dgTravelAdvanceRequestDetail.DataBind();
+                        grvTravelAdvanceStatuses.DataSource = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).TravelAdvanceRequestStatuses;
+                        grvTravelAdvanceStatuses.DataBind();
                     }
                     else
                     {
@@ -334,6 +338,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         dgTravelAdvanceRequestDetail.DataBind();
                         grvTravelAdvanceCosts.DataSource = null;
                         grvTravelAdvanceCosts.DataBind();
+                        grvTravelAdvanceStatuses.DataSource = null;
+                        grvTravelAdvanceStatuses.DataBind();
                         lblTravelDetail.Visible = false;
                     }
 
@@ -345,8 +351,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         protected void dgTravelAdvanceRequestDetail_SelectedIndexChanged(object sender, EventArgs e)
         {
             int recordId = (int)dgTravelAdvanceRequestDetail.DataKeys[dgTravelAdvanceRequestDetail.SelectedIndex];
-            grvTravelAdvanceCosts.DataSource = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).GetTravelAdvanceRequestDetail(recordId).TravelAdvanceCosts;
-            grvTravelAdvanceCosts.DataBind();
+            if (_presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId) != null)
+            {
+                grvTravelAdvanceCosts.DataSource = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).GetTravelAdvanceRequestDetail(recordId).TravelAdvanceCosts;
+                grvTravelAdvanceCosts.DataBind();
+            }
+
             ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
         }
         protected void DownloadFile(object sender, EventArgs e)
