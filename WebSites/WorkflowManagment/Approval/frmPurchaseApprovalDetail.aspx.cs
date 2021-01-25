@@ -289,7 +289,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             lblRemarkResult.Text = _presenter.CurrentPurchaseRequest.Comment;
             lblDelivertoResult.Text = _presenter.CurrentPurchaseRequest.DeliverTo;
-            lblRequestedDateResult.Text = _presenter.CurrentPurchaseRequest.Requireddateofdelivery.ToShortDateString();
+            lblReqDateofDeliveryResult.Text = _presenter.CurrentPurchaseRequest.Requireddateofdelivery.ToShortDateString();
             grvDetails.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails;
             grvDetails.DataBind();
 
@@ -346,6 +346,26 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 //_presenter.OnViewLoaded();
                 dgPurchaseRequestDetail.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails;
                 dgPurchaseRequestDetail.DataBind();
+                if (_presenter.CurrentPurchaseRequest.MaintenanceId > 0)
+                {
+                    lblApprovalDet.Visible = true;
+                    lblMainDetail.Visible = true;
+                    grvPreviewDetail.DataSource= _presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestDetails;
+                    grvPreviewDetail.DataBind();
+                    grvMaintenanceStatuses.DataSource = _presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestStatuses;
+                    grvMaintenanceStatuses.DataBind();
+                }
+                else
+                {
+                    lblApprovalDet.Visible = false;
+                    lblMainDetail.Visible = false;
+                    grvPreviewDetail.DataSource = null;
+                    grvPreviewDetail.DataBind();
+                    grvMaintenanceStatuses.DataSource = null;
+                    grvMaintenanceStatuses.DataBind();
+                    
+                }
+
                 ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
             }
         }
@@ -425,6 +445,18 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             grvPurchaseRequestList.PageIndex = e.NewPageIndex;
             btnFind_Click(sender, e);
+        }
+
+        protected void grvMaintenanceStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (_presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestStatuses!= null)
+            {
+                if (e.Row.RowType == DataControlRowType.DataRow)
+                {
+                    if (_presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestStatuses[e.Row.RowIndex].Approver > 0)
+                        e.Row.Cells[1].Text = _presenter.GetUser(_presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestStatuses[e.Row.RowIndex].Approver).FullName;
+                }
+            }
         }
         protected void grvStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
         {

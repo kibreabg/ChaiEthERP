@@ -28,6 +28,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public int CurrentLevel { get; set; }
         public string CurrentStatus { get; set; }
         public string ProgressStatus { get; set; }
+        public int MaintenanceId { get; set; }
         public virtual IList<BidAnalysisRequest> BidAnalysisRequests { get; set; }
         public virtual IList<SoleVendorRequest> SoleVendorRequests { get; set; }
         public virtual IList<PurchaseRequestStatus> PurchaseRequestStatuses { get; set; }

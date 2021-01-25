@@ -111,6 +111,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         private void SavePurchaseRequest()
         {
             AppUser CurrentUser = _presenter.CurrentUser();
+            MaintenanceRequest mreq= _presenter.GetMaintenanceRequestById(Convert.ToInt32(ddlMaintenanceReq.SelectedValue));
             try
             {
                 _presenter.CurrentPurchaseRequest.Requester = CurrentUser.Id;
@@ -124,6 +125,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 _presenter.CurrentPurchaseRequest.IsVehicle = GetIsVehicle;
 
                 _presenter.CurrentPurchaseRequest.MaintenanceRequestNo = GetMaintenanceRequestNo;
+
+                _presenter.CurrentPurchaseRequest.MaintenanceId = mreq.Id;
                 //Determine total cost
                 /*       decimal cost = 0;
                        if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Count > 0)

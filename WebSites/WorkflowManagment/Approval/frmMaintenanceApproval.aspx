@@ -218,6 +218,7 @@
                                     </ul>
                                     <div class="tab-content padding-10">
                                         <div class="tab-pane active" id="iss3">
+
                                               <asp:GridView ID="grvPreviewDetail" CellPadding="5" CellSpacing="3"
                 runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
                 CssClass="table table-striped table-bordered table-hover">
