@@ -779,7 +779,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 List<CPRAttachment> attachments = (List<CPRAttachment>)Session["attachments"];
                 foreach (CPRAttachment attachment in attachments)
                 {
-                    if (attachment.ItemAccountChecklists[0].ChecklistName == attachmentRow.Cells[1].Text && attachmentRow.DataItemIndex == index)
+                    if (attachment.ItemAccountChecklists[0].ChecklistName == attachmentRow.Cells[2].Text && attachmentRow.DataItemIndex == index)
                     {
                         attachment.FilePath = "~/CPUploads/" + fileName;
                         fuReciept.PostedFile.SaveAs(Server.MapPath("~/CPUploads/") + fileName);
