@@ -772,7 +772,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             Button uploadBtn = (Button)sender;
             GridViewRow attachmentRow = (GridViewRow)uploadBtn.NamingContainer;
             FileUpload fuReciept = attachmentRow.FindControl("fuReciept") as FileUpload;
-            string fileName = Path.GetFileName(fuReciept.PostedFile.FileName);
+            string fileName = Path.GetFileNameWithoutExtension(fuReciept.PostedFile.FileName);
+            string extension = Path.GetExtension(fuReciept.PostedFile.FileName);
             int index = 0;
             if (fileName != String.Empty)
             {
@@ -781,8 +782,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (attachment.ItemAccountChecklists[0].ChecklistName == attachmentRow.Cells[2].Text && attachmentRow.DataItemIndex == index)
                     {
-                        attachment.FilePath = "~/CPUploads/" + fileName;
-                        fuReciept.PostedFile.SaveAs(Server.MapPath("~/CPUploads/") + fileName);
+                        attachment.FilePath = "~/CPUploads/" + fileName + DateTime.Now.ToString("ddMMyyyyHHmmss") + extension;
+                        fuReciept.PostedFile.SaveAs(Server.MapPath("~/CPUploads/") + fileName + DateTime.Now.ToString("ddMMyyyyHHmmss") + extension);
                     }
                     index++;
                 }
