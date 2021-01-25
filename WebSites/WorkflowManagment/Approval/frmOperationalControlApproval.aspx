@@ -83,6 +83,7 @@
             <Columns>
                 <asp:BoundField DataField="RequestNo" HeaderText="Vourcher No" SortExpression="RequestNo" />
                 <asp:BoundField DataField="RequestDate" HeaderText="Request Date" SortExpression="RequestDate" />
+                <asp:BoundField DataField="AppUser.FullName" HeaderText="Bank Payment Initiator" SortExpression="AppUser.FullName" />
                 <asp:BoundField DataField="Description" HeaderText="Description" SortExpression="Description" />
                 <asp:BoundField DataField="Beneficiary.BeneficiaryName" HeaderText="Account Transfer Made To" SortExpression="Beneficiary.BeneficiaryName" />
                 <asp:BoundField DataField="Payee" HeaderText="Cheque/Letter Made Out To" SortExpression="Payee" />
