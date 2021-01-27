@@ -97,7 +97,7 @@
                 <asp:ButtonField ButtonType="Button" CommandName="ViewItem" Text="Mechanic Review" />
                 <asp:ButtonField ButtonType="Button" CommandName="ViewItemPrev" Text="Preview" />
                 <asp:CommandField ShowSelectButton="True" SelectText="Process Request" ButtonType="Button" />
-                <asp:ButtonField CommandName="Maintained" Text="Maintained"/>
+               
             </Columns>
             <FooterStyle CssClass="FooterStyle" />
             <HeaderStyle CssClass="headerstyle" />

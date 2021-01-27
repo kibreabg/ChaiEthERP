@@ -536,42 +536,20 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (e.Row.RowType == DataControlRowType.DataRow)
                 {
-                    if(_presenter.CurrentUser().EmployeePosition.PositionName == "Driver/Mechanic" && MR.ProgressStatus == ProgressStatus.Completed.ToString())
+                    if(_presenter.CurrentUser().EmployeePosition.PositionName == "Driver/Mechanic" && MR.CurrentLevel <= MR.MaintenanceRequestStatuses.Count-1)
                     {
-
-                        if (MR.MaintenanceStatus == "Maintained")
-                        {
-                           
-                                e.Row.Cells[9].Visible = false;
-                                e.Row.Cells[6].Visible = true;
-                                e.Row.Cells[7].Visible = false;
-                           
-                        }
-                        else if (MR.MaintenanceStatus != "Maintained")
-                        {
-
-
-                            e.Row.Cells[9].Visible = true;
-                            e.Row.Cells[6].Visible = true;
-                            e.Row.Cells[7].Visible = false;
-                        }
-                       
-                    }
-                    else if (_presenter.CurrentUser().EmployeePosition.PositionName == "Driver/Mechanic" && MR.ProgressStatus != ProgressStatus.Completed.ToString())
-                    {
-                       
-
-                            e.Row.Cells[9].Visible = false;
+                        
                             e.Row.Cells[6].Visible = true;
                             e.Row.Cells[7].Visible = false;
                        
-
+                       
                     }
+                   
                     else
                     {
                       
 
-                            e.Row.Cells[9].Visible = false;
+                           
                             e.Row.Cells[6].Visible = false;
                             e.Row.Cells[7].Visible = true;
                         
@@ -689,7 +667,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 //DropDownList ddlFMecServiceTypeDet = e.Item.FindControl("ddlMecServiceTypeDet") as DropDownList;
                 //BindServiceTypeDetails(ddlFMecServiceTypeDet, Convert.ToInt32(ddlFServiceType.SelectedValue));
             }
-            else
+            else 
             {
 
                 if (_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails != null)
@@ -879,6 +857,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
         protected void dgSparepart_ItemDataBound(object sender, DataGridItemEventArgs e)
         {
+            
             if (e.Item.ItemType == ListItemType.Footer)
             {
                 DropDownList ddlFItem = e.Item.FindControl("ddlFItem") as DropDownList;
@@ -886,7 +865,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
 
             }
-            else
+            else 
             {
                 if (_presenter.CurrentMaintenanceRequest.MaintenanceSpareParts != null)
                 {

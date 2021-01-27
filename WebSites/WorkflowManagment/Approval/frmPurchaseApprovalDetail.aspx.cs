@@ -350,8 +350,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     lblApprovalDet.Visible = true;
                     lblMainDetail.Visible = true;
+                    lblReqItems.Visible = true;
                     grvPreviewDetail.DataSource= _presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestDetails;
                     grvPreviewDetail.DataBind();
+                    grvSparepart.DataSource = _presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceSpareParts;
+                    grvSparepart.DataBind();
                     grvMaintenanceStatuses.DataSource = _presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestStatuses;
                     grvMaintenanceStatuses.DataBind();
                 }
@@ -359,8 +362,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     lblApprovalDet.Visible = false;
                     lblMainDetail.Visible = false;
+                    lblReqItems.Visible = false;
                     grvPreviewDetail.DataSource = null;
                     grvPreviewDetail.DataBind();
+                    grvSparepart.DataSource = null;
+                    grvSparepart.DataBind(); 
                     grvMaintenanceStatuses.DataSource = null;
                     grvMaintenanceStatuses.DataBind();
                     

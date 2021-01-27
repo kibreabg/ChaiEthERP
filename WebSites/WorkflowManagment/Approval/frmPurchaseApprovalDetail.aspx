@@ -339,6 +339,23 @@
                 <PagerStyle CssClass="PagerStyle" />
                 <RowStyle CssClass="rowstyle" />
             </asp:GridView>
+                                
+                                 <div style="text-align: center;">
+                                                            <asp:Label ID="lblReqItems" Font-Size="Large" Font-Bold="true" runat="server" Visible="false" Text="Requested Items During Maintenance Review"></asp:Label>
+                                                        </div>
+                                  <asp:GridView ID="grvSparepart" CellPadding="5" CellSpacing="3"
+                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                CssClass="table table-striped table-bordered table-hover">
+                <Columns>
+                    <asp:BoundField DataField="Item.Name" HeaderText="Item" SortExpression="Item.Name" />
+                    
+
+                </Columns>
+                <FooterStyle CssClass="FooterStyle" />
+                <HeaderStyle CssClass="headerstyle" />
+                <PagerStyle CssClass="PagerStyle" />
+                <RowStyle CssClass="rowstyle" />
+            </asp:GridView>
                                  <div style="text-align: center;">
                                                             <asp:Label ID="lblApprovalDet" Font-Size="Large" Font-Bold="true" runat="server" Visible="false" Text="Maintenance Approval Detail"></asp:Label>
                                                         </div>
