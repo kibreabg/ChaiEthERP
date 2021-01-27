@@ -29,13 +29,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 this._presenter.OnViewInitialized();
                 XmlConfigurator.Configure();
                 PopProgressStatus();
+                BindSearchTravelAdvanceRequestGrid();
             }
             this._presenter.OnViewLoaded();
-            BindSearchTravelAdvanceRequestGrid();
-            if (_presenter.CurrentTravelAdvanceRequest.Id != 0)
+            if (_presenter.CurrentTravelAdvanceRequest != null)
             {
-
-                PrintTransaction();
+                if (_presenter.CurrentTravelAdvanceRequest.Id != 0)
+                    PrintTransaction();
             }
 
         }
@@ -160,15 +160,29 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     btnApprove.Enabled = true;
                 }
+
                 if (TARS.WorkflowLevel == _presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestStatuses.Count && TARS.ApprovalStatus != null)
                 {
                     btnPrint.Enabled = true;
-                    if (_presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestStatuses.Last().PaymentType == "Bank Payment")
-                        btnBankPayment.Visible = true;
+                    btnApprove.Enabled = false;
+                }
+                else if (_presenter.CurrentTravelAdvanceRequest.CurrentStatus == ApprovalStatus.Rejected.ToString())
+                {
+                    btnApprove.Enabled = false;
+                    btnBankPayment.Visible = false;
                 }
                 else
+                {
                     btnPrint.Enabled = false;
+                    btnApprove.Enabled = true;
+                }
+
             }
+
+            if (_presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestStatuses.Last().ApprovalStatus == "Bank Payment" && !IsBankPaymentRequested() && _presenter.CurrentTravelAdvanceRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
+                btnBankPayment.Visible = true;
+            else
+                btnBankPayment.Visible = false;
         }
         private void ShowPrint()
         {
@@ -227,6 +241,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             if (_presenter.CurrentTravelAdvanceRequest.CurrentStatus != ApprovalStatus.Rejected.ToString() && _presenter.CurrentTravelAdvanceRequest.CurrentStatus != "Bank Payment")
                 EmailSender.Send(_presenter.GetUser(_presenter.CurrentTravelAdvanceRequest.AppUser.Id).Email, "Tavel Adavnce Completion", "Your Travel Advance Request with Travel Advance No. - '" + (_presenter.CurrentTravelAdvanceRequest.TravelAdvanceNo).ToUpper() + "' was completed. Please collect your payment.");
         }
+        private bool IsBankPaymentRequested()
+        {
+            OperationalControlRequest ocr = _presenter.GetOperationalControlRequestByTravelId(_presenter.CurrentTravelAdvanceRequest.Id);
+            if (ocr != null)
+                return true;
+            else
+                return false;
+        }
         private void GetNextApprover()
         {
             foreach (TravelAdvanceRequestStatus TARS in _presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestStatuses)
@@ -271,12 +293,17 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             grvStatuses.DataSource = _presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestStatuses;
             grvStatuses.DataBind();
 
+            IList<TravelAdvanceCost> allCosts = new List<TravelAdvanceCost>();
 
             foreach (TravelAdvanceRequestDetail detail in _presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestDetails)
             {
-                grvCost.DataSource = detail.TravelAdvanceCosts;
-                grvCost.DataBind();
+                foreach (TravelAdvanceCost cost in detail.TravelAdvanceCosts)
+                {
+                    allCosts.Add(cost);
+                }
             }
+            grvCost.DataSource = allCosts;
+            grvCost.DataBind();
         }
         private void SaveTravelAdvanceRequestStatus()
         {
@@ -360,6 +387,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         protected void grvTravelAdvanceRequestList_SelectedIndexChanged(object sender, EventArgs e)
         {
             _presenter.OnViewLoaded();
+            if (_presenter.CurrentTravelAdvanceRequest.ProgressStatus == ProgressStatus.Completed.ToString())
+            {
+                PrintTransaction();
+            }
             PopApprovalStatus();
             Session["PaymentId"] = _presenter.CurrentTravelAdvanceRequest.Id;
             BindTravelAdvanceRequestStatus();

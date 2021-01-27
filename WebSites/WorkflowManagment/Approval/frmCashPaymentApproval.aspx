@@ -84,10 +84,10 @@
 
                 <asp:ButtonField ButtonType="Button" CommandName="ViewItem" Text="View Item Detail" />
                 <asp:CommandField ButtonType="Button" SelectText="Process Request" ShowSelectButton="True" />
-                <asp:ButtonField ButtonType="Button" CommandName="Retire" Text="Retire" />
+                <%--<asp:ButtonField ButtonType="Button" CommandName="Retire" Text="Retire" />--%>
                 <asp:TemplateField>
                     <ItemTemplate>
-                        <asp:Button runat="server" ID="btnStatus" Text="" BorderStyle="None" />
+                        <asp:Button runat="server" ID="btnStatus" Enabled="false" Text="" BorderStyle="None" />
                     </ItemTemplate>
                 </asp:TemplateField>
             </Columns>
@@ -462,24 +462,15 @@
         <fieldset>
             <table style="width: 100%;">
                 <tr>
-                    <td style="width: 17%; text-align: left;">
-                        <img src="../img/CHAI%20Logo.png" width="70" height="50" /></td>
                     <td style="font-size: large; text-align: center;">
-                        <strong>CHAI Ethiopia ERP
+                        <img src="../img/CHAI%20Logo.png" width="130" height="80" />
+                        <br />
+                        <strong>CHAI ETHIOPIA
                             <br />
                             PAYMENT REQUEST FORM</strong></td>
                 </tr>
             </table>
-
             <table style="width: 100%;">
-                <tr>
-                    <td align="right" style="">&nbsp;</td>
-                    <td align="right" style="width: 244px" class="inbox-data-from">&nbsp;</td>
-                    <td align="right" style="width: 271px">&nbsp;</td>
-                    <td align="right" style="width: 389px">&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-
                 <tr>
                     <td style="width: 629px; height: 18px; padding-left: 20%;">
                         <strong>

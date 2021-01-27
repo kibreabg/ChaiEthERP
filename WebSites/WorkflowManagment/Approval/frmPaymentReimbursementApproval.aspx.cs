@@ -176,6 +176,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         private void ShowPrint()
         {
             btnPrint.Enabled = true;
+            if (ddlApprovalStatus.SelectedValue != ApprovalStatus.Rejected.ToString())
+                SendEmailToRequester();
         }
         private void SendEmail(PaymentReimbursementRequestStatus PRRS)
         {
@@ -244,7 +246,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void SendEmailRejected(PaymentReimbursementRequestStatus CPRS)
         {
-            EmailSender.Send(_presenter.GetUser(_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.AppUser.Id).Email, "Settlement Request Rejection", "Your Settlement Request with Payment Request No. " + (_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.RequestNo).ToUpper() +  " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (CPRS.RejectedReason).ToUpper() + ". Please Re-Settle'");
+            EmailSender.Send(_presenter.GetUser(_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.AppUser.Id).Email, "Settlement Request Rejection", "Your Settlement Request with Payment Request No. " + (_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.RequestNo).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (CPRS.RejectedReason).ToUpper() + ". Please Re-Settle'");
 
             if (CPRS.WorkflowLevel > 1)
             {
@@ -253,6 +255,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     EmailSender.Send(_presenter.GetUser(_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses[i].Approver).Email, "Settlement Request Rejection", "Settlement Request with Payment Request No. " + (_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.RequestNo).ToUpper() + " made by " + (_presenter.GetUser(_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.AppUser.Id).FullName).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (CPRS.RejectedReason).ToUpper() + ". Please Re-Settle'");
                 }
             }
+        }
+        private void SendEmailToRequester()
+        {
+            // if (_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementStatus != "Bank Payment")
+            EmailSender.Send(_presenter.GetUser(_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.AppUser.Id).Email, "Settlement", "Your Settlement Request for Cash Payment - '" + (_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.RequestNo).ToUpper() + "' was Completed");
         }
         private void GetNextApprover()
         {
@@ -311,7 +318,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (CSR != null)
                 {
-                   if (CSR.ProgressStatus == ProgressStatus.InProgress.ToString())
+                    if (CSR.ProgressStatus == ProgressStatus.InProgress.ToString())
                     {
                         btnStatus.BackColor = System.Drawing.ColorTranslator.FromHtml("#FFFF6C");
 
@@ -388,8 +395,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         private void PrintTransaction()
         {
             pnlApproval_ModalPopupExtender.Hide();
-            if(_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest != null)
-                lblRequestNoResult.Text =  _presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.RequestNo.ToString() ;
+            if (_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest != null)
+                lblRequestNoResult.Text = _presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.RequestNo.ToString();
             lblRequestedDateResult.Text = _presenter.CurrentPaymentReimbursementRequest.RequestDate.Value.ToShortDateString();
             if (_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest != null)
                 lblRequesterResult.Text = _presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.AppUser.UserName;
@@ -449,7 +456,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         {
                             File.Delete(filePath);
                         }
-                       // Application.CompleteRequest()
+                        // Application.CompleteRequest()
                         detail.RemovePRAttachment(attach.Id);
                         //detail.PRAttachments.Remove(attach);
                     }
@@ -462,7 +469,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             _presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Clear();
             PaymentReimbursementRequest request = _presenter.CurrentPaymentReimbursementRequest;
             _presenter.SaveOrUpdatePaymentReimbursementRequest(_presenter.CurrentPaymentReimbursementRequest);
-           
+
             _presenter.DeletePaymentReimbursementRequest(request);
         }
     }

@@ -594,33 +594,77 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         protected bool ValidateMedExpLimit()
         {
             decimal previousAmounts = 0;
-            decimal totalAmount = 0;
+            decimal previousInPatientAmounts = 0;
+            decimal sharedFromOutPatient = 0;
+            decimal totalRequestedAmount = 0;
+            decimal requestedAmount = 0;
+            decimal totalAllowedExp = (2 * Convert.ToDecimal(WebConfigurationManager.AppSettings["InPatientMarried"]));
+
             if (_presenter.GetUser(_presenter.CurrentUser().Id).Employee.MaritalStatus == "Married")
             {
                 if (ddlRequestType.SelectedValue == "Medical Expense (In-Patient)")
                 {
-                    foreach (CashPaymentRequest cpr in _presenter.GetAllInPatMedCPReqsThisYear())
+                    foreach (CashPaymentRequest cpr in _presenter.GetAllMedCPReqsThisYear())
                     {
                         previousAmounts += cpr.TotalAmount;
                     }
-                    totalAmount = previousAmounts + _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Amount;
+                    foreach (CashPaymentRequestDetail cprd in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
+                    {
+                        requestedAmount += cprd.Amount;
+                    }
+                    totalRequestedAmount = previousAmounts + requestedAmount;
 
-                    if (totalAmount > Convert.ToDecimal(WebConfigurationManager.AppSettings["InPatientMarried"]))
-                    { return false; }
+                    if (totalRequestedAmount > totalAllowedExp)
+                    {
+                        _presenter.CurrentCashPaymentRequest.TotalAmount = totalAllowedExp - previousAmounts;
+                        return true;
+                    }
                     else
                     { return true; }
 
                 }
                 else if (ddlRequestType.SelectedValue == "Medical Expense (Out-Patient)")
                 {
-                    foreach (CashPaymentRequest cpr in _presenter.GetAllOutPatMedCPReqsThisYear())
+                    foreach (CashPaymentRequest cpr in _presenter.GetAllInPatMedCPReqsThisYear())
                     {
-                        previousAmounts += cpr.TotalAmount;
+                        previousInPatientAmounts += cpr.TotalAmount;
                     }
-                    totalAmount = previousAmounts + _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Amount;
 
-                    if (totalAmount > Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]))
-                        return false;
+                    //If aggregate of In-Patient expenses exceed the In-Patient limit, that means
+                    //we have shared a portion from the Out-Patient expense
+                    if (previousInPatientAmounts > Convert.ToDecimal(WebConfigurationManager.AppSettings["InPatientMarried"]))
+                    {
+                        sharedFromOutPatient = previousInPatientAmounts - Convert.ToDecimal(WebConfigurationManager.AppSettings["InPatientMarried"]);
+
+                        foreach (CashPaymentRequest cpr in _presenter.GetAllOutPatMedCPReqsThisYear())
+                        {
+                            previousAmounts += cpr.TotalAmount;
+                        }
+                        foreach (CashPaymentRequestDetail cprd in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
+                        {
+                            requestedAmount += cprd.Amount;
+                        }
+                        totalRequestedAmount = previousAmounts + requestedAmount + sharedFromOutPatient;
+                    }
+                    else
+                    {
+                        foreach (CashPaymentRequest cpr in _presenter.GetAllOutPatMedCPReqsThisYear())
+                        {
+                            previousAmounts += cpr.TotalAmount;
+                        }
+                        foreach (CashPaymentRequestDetail cprd in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
+                        {
+                            requestedAmount += cprd.Amount;
+                        }
+                        totalRequestedAmount = previousAmounts + requestedAmount;
+                    }
+
+
+                    if (totalRequestedAmount > Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]))
+                    {
+                        _presenter.CurrentCashPaymentRequest.TotalAmount = Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]) - previousAmounts;
+                        return true;
+                    }
                     else
                         return true;
                 }
@@ -629,28 +673,67 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 if (ddlRequestType.SelectedValue == "Medical Expense (In-Patient)")
                 {
-                    foreach (CashPaymentRequest cpr in _presenter.GetAllInPatMedCPReqsThisYear())
+                    foreach (CashPaymentRequest cpr in _presenter.GetAllMedCPReqsThisYear())
                     {
                         previousAmounts += cpr.TotalAmount;
                     }
-                    totalAmount = previousAmounts + _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Amount;
+                    foreach (CashPaymentRequestDetail cprd in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
+                    {
+                        requestedAmount += cprd.Amount;
+                    }
+                    totalRequestedAmount = previousAmounts + requestedAmount;
 
-                    if (totalAmount > Convert.ToDecimal(WebConfigurationManager.AppSettings["InPatientSingle"]))
-                        return false;
-                    else
+                    if (totalRequestedAmount > totalAllowedExp)
+                    {
+                        _presenter.CurrentCashPaymentRequest.TotalAmount = totalAllowedExp - previousAmounts;
                         return true;
+                    }
+                    else
+                    { return true; }
 
                 }
                 else if (ddlRequestType.SelectedValue == "Medical Expense (Out-Patient)")
                 {
-                    foreach (CashPaymentRequest cpr in _presenter.GetAllOutPatMedCPReqsThisYear())
+                    foreach (CashPaymentRequest cpr in _presenter.GetAllInPatMedCPReqsThisYear())
                     {
-                        previousAmounts += cpr.TotalAmount;
+                        previousInPatientAmounts += cpr.TotalAmount;
                     }
-                    totalAmount = previousAmounts + _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Amount;
 
-                    if (totalAmount > Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientSingle"]))
-                        return false;
+                    //If aggregate of In-Patient expenses exceed the In-Patient limit, that means
+                    //we have shared a portion from the Out-Patient expense
+                    if (previousInPatientAmounts > Convert.ToDecimal(WebConfigurationManager.AppSettings["InPatientMarried"]))
+                    {
+                        sharedFromOutPatient = previousInPatientAmounts - Convert.ToDecimal(WebConfigurationManager.AppSettings["InPatientMarried"]);
+
+                        foreach (CashPaymentRequest cpr in _presenter.GetAllOutPatMedCPReqsThisYear())
+                        {
+                            previousAmounts += cpr.TotalAmount;
+                        }
+                        foreach (CashPaymentRequestDetail cprd in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
+                        {
+                            requestedAmount += cprd.Amount;
+                        }
+                        totalRequestedAmount = previousAmounts + requestedAmount + sharedFromOutPatient;
+                    }
+                    else
+                    {
+                        foreach (CashPaymentRequest cpr in _presenter.GetAllOutPatMedCPReqsThisYear())
+                        {
+                            previousAmounts += cpr.TotalAmount;
+                        }
+                        foreach (CashPaymentRequestDetail cprd in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
+                        {
+                            requestedAmount += cprd.Amount;
+                        }
+                        totalRequestedAmount = previousAmounts + requestedAmount;
+                    }
+
+
+                    if (totalRequestedAmount > Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]))
+                    {
+                        _presenter.CurrentCashPaymentRequest.TotalAmount = Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]) - previousAmounts;
+                        return true;
+                    }
                     else
                         return true;
                 }
@@ -689,17 +772,18 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             Button uploadBtn = (Button)sender;
             GridViewRow attachmentRow = (GridViewRow)uploadBtn.NamingContainer;
             FileUpload fuReciept = attachmentRow.FindControl("fuReciept") as FileUpload;
-            string fileName = Path.GetFileName(fuReciept.PostedFile.FileName);
+            string fileName = Path.GetFileNameWithoutExtension(fuReciept.PostedFile.FileName);
+            string extension = Path.GetExtension(fuReciept.PostedFile.FileName);
             int index = 0;
             if (fileName != String.Empty)
             {
                 List<CPRAttachment> attachments = (List<CPRAttachment>)Session["attachments"];
                 foreach (CPRAttachment attachment in attachments)
                 {
-                    if (attachment.ItemAccountChecklists[0].ChecklistName == attachmentRow.Cells[1].Text && attachmentRow.DataItemIndex == index)
+                    if (attachment.ItemAccountChecklists[0].ChecklistName == attachmentRow.Cells[2].Text && attachmentRow.DataItemIndex == index)
                     {
-                        attachment.FilePath = "~/CPUploads/" + fileName;
-                        fuReciept.PostedFile.SaveAs(Server.MapPath("~/CPUploads/") + fileName);
+                        attachment.FilePath = "~/CPUploads/" + fileName + DateTime.Now.ToString("ddMMyyyyHHmmss") + extension;
+                        fuReciept.PostedFile.SaveAs(Server.MapPath("~/CPUploads/") + fileName + DateTime.Now.ToString("ddMMyyyyHHmmss") + extension);
                     }
                     index++;
                 }

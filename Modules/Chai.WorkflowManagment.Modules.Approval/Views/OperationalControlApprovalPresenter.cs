@@ -77,6 +77,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _controller.ListOperationalControlRequests(RequestNo, RequestDate, ProgressStatus);
         }
+        public TravelAdvanceRequest GetTravelAdvanceRequest(int reqId)
+        {
+            return _requestController.GetTravelAdvanceRequest(reqId);
+        }
+        public CashPaymentRequest GetCashPaymentRequest(int reqId)
+        {
+            return _requestController.GetCashPaymentRequest(reqId);
+        }
         public OCRAttachment GetAttachment(int attachmentId)
         {
             return _requestController.GetOCRAttachment(attachmentId);
@@ -121,7 +129,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _settingController.GetItemAccounts();
         }
-       
+
         public void navigate(string url)
         {
             _controller.Navigate(url);
@@ -146,7 +154,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         public void Commit()
         {
             _controller.Commit();
-        }        
+        }
     }
 }
 

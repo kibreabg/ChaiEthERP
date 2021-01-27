@@ -196,7 +196,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public void SaveOrUpdateCashPaymentRequest()
         {
             CashPaymentRequest cashPaymentRequest = CurrentCashPaymentRequest;
-            
+
             if (cashPaymentRequest.Id <= 0)
             {
                 cashPaymentRequest.RequestNo = View.GetRequestNo;
@@ -269,6 +269,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public IList<CashPaymentRequest> GetAllInPatMedCPReqsThisYear()
         {
             return _controller.GetAllInPatMedCPReqsThisYear();
+        }
+        public IList<CashPaymentRequest> GetAllMedCPReqsThisYear()
+        {
+            return _controller.GetAllMedCPReqsThisYear();
         }
         public IList<CashPaymentRequest> GetAllOutPatMedCPReqsThisYear()
         {
@@ -381,7 +385,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             _controller.Commit();
         }
-        
+
     }
 }
 

@@ -33,6 +33,8 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string ProgressStatus { get; set; }
         public string PaymentReimbursementStatus { get; set; }
         public string ExportStatus { get; set; }
+        public int TravelAdvanceId { get; set; }
+        public int PaymentId { get; set; }
         public virtual Beneficiary Beneficiary { get; set; }
         public virtual AppUser AppUser { get; set; }
         public virtual Account Account { get; set; }
