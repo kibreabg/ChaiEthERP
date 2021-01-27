@@ -373,13 +373,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 btnRequest.Visible = false;
                 btnDelete.Visible = false;
-                dgMaintenanceRequestDetail.Columns[8].Visible = false;
+                dgMaintenanceRequestDetail.Columns[3].Visible = false;
             }
             else
             {
                 btnRequest.Visible = true;
                 btnDelete.Visible = true;
-                dgMaintenanceRequestDetail.Columns[8].Visible = true;
+                //dgMaintenanceRequestDetail.Columns[3].Visible = true;
             }
         }
         protected void grvMaintenanceRequestList_RowDeleting(object sender, GridViewDeleteEventArgs e)

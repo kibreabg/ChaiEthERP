@@ -292,7 +292,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             lblReqDateofDeliveryResult.Text = _presenter.CurrentPurchaseRequest.Requireddateofdelivery.ToShortDateString();
             grvDetails.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails;
             grvDetails.DataBind();
-
+            grvMaintenaceDet.DataSource = _presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestDetails;
+            grvMaintenaceDet.DataBind();
+            grvMainSta.DataSource = _presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestStatuses;
+            grvMainSta.DataBind();
+           
             grvStatuses.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestStatuses;
             grvStatuses.DataBind();
 

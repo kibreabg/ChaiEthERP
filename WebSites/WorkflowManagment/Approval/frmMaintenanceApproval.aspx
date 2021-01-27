@@ -428,6 +428,12 @@
                                             </asp:DataGrid>
                                         </div>
                                     </div>
+
+                                      </div>
+                                 <footer>
+                                <asp:Button ID="Button1" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" OnClick="Button1_Click1"></asp:Button>
+                            </footer>
+                            </div>
                                 </div>
                             </div>
                         </div>

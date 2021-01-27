@@ -957,6 +957,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             pnlApproval.Visible = false;
         }
+
+        protected void Button1_Click1(object sender, EventArgs e)
+        {
+            pnlApproval.Visible = false;
+        }
     }
 
 }
