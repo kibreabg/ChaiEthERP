@@ -16,6 +16,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Setting
         public virtual ItemAccount ItemAccount { get; set; }
         public virtual CPRAttachment CPRAttachment { get; set; }
         public virtual PRAttachment PRAttachment { get; set; }
+        public virtual ELRAttachment ELRAttachment { get; set; }
 
     }
 }

@@ -130,10 +130,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (Request.QueryString["PaymentId"] != null)
                     {
-                        CashPaymentRequest CPR = _presenter.GetCashPaymentRequest(Convert.ToInt32(Request.QueryString["PaymentId"]));
+                        int paymentId = Convert.ToInt32(Request.QueryString["PaymentId"]);
+                        CashPaymentRequest CPR = _presenter.GetCashPaymentRequest(paymentId);
                         if (CPR != null)
                         {
                             _presenter.CurrentOperationalControlRequest.Description = CPR.Description;
+                            _presenter.CurrentOperationalControlRequest.PaymentId = paymentId;
+
                             foreach (CashPaymentRequestDetail CPRD in CPR.CashPaymentRequestDetails)
                             {
                                 OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
@@ -167,27 +170,30 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (Request.QueryString["PaymentId"] != null)
                     {
-                        TravelAdvanceRequest TAR = _presenter.GetTravelAdvanceRequest(Convert.ToInt32(Request.QueryString["PaymentId"]));
+                        int travelAdvId = Convert.ToInt32(Request.QueryString["PaymentId"]);
+                        TravelAdvanceRequest TAR = _presenter.GetTravelAdvanceRequest(travelAdvId);
                         if (TAR != null)
                         {
                             _presenter.CurrentOperationalControlRequest.Description = TAR.PurposeOfTravel;
+                            _presenter.CurrentOperationalControlRequest.TravelAdvanceId = travelAdvId;
+
                             foreach (TravelAdvanceRequestDetail TARD in TAR.TravelAdvanceRequestDetails)
                             {
-                                foreach(TravelAdvanceCost TAC in TARD.TravelAdvanceCosts)
+                                foreach (TravelAdvanceCost TAC in TARD.TravelAdvanceCosts)
                                 {
                                     OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
-                                    //OCRD.ItemAccount = TAC.ItemAccount;
-                                    //OCRD.AccountCode = TAC.AccountCode;
+                                    OCRD.ItemAccount = TAC.ItemAccount;
+                                    OCRD.AccountCode = TAC.AccountCode;
                                     OCRD.Project = TAR.Project;
                                     OCRD.Grant = TAR.Grant;
                                     OCRD.Amount = TAC.Total;
-                                    OCRD.ActualExpendture = TAC.Total;                                    
+                                    OCRD.ActualExpendture = TAC.Total;
                                     _presenter.CurrentOperationalControlRequest.TotalAmount += OCRD.Amount;
                                     _presenter.CurrentOperationalControlRequest.TotalActualExpendture += OCRD.Amount;
                                     OCRD.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
                                     _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails.Add(OCRD);
                                 }
-                                
+
                             }
                         }
                     }
@@ -196,7 +202,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
             }
 
-            
+
 
         }
         private string AutoNumber()
