@@ -91,7 +91,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             get { return 0; }
         }
         #endregion
-
         private void PopApprovalStatus()
         {
             ddlApprovalStatus.Items.Clear();
@@ -445,7 +444,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void PrintTransaction()
         {
-
             lblRequesterResult.Text = _presenter.CurrentOperationalControlRequest.AppUser.FullName;
             lblRequestedDateResult.Text = _presenter.CurrentOperationalControlRequest.RequestDate.Value.ToShortDateString();
             lblChaiBankResult.Text = _presenter.CurrentOperationalControlRequest.Account.Name;
@@ -460,7 +458,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             lblVoucherNoResult.Text = _presenter.CurrentOperationalControlRequest.VoucherNo.ToString();
             lblTotalAmountResult.Text = _presenter.CurrentOperationalControlRequest.TotalAmount.ToString();
             lblApprovalStatusResult.Text = _presenter.CurrentOperationalControlRequest.ProgressStatus.ToString();
-            lblReimbersestatusRes.Text = _presenter.CurrentOperationalControlRequest.PaymentReimbursementStatus;
+            lblProjectCodeResult.Text = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).Project.ProjectCode;
+            lblGrantCodeResult.Text = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).Grant.GrantCode;
 
             grvDetails.DataSource = _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails;
             grvDetails.DataBind();

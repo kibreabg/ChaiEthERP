@@ -459,16 +459,6 @@
                     <td style="width: 25%;">
                         <asp:Label ID="lblBeneficiaryNameResult" runat="server"></asp:Label>
                     </td>
-                    <td style="width: 25%; text-align: right;">
-                        <strong>
-                            <asp:Label ID="lblReimberseStatus" runat="server" Text="Retirement Status:"></asp:Label>
-                        </strong>
-                    </td>
-                    <td style="width: 25%;">
-                        <asp:Label ID="lblReimbersestatusRes" runat="server"></asp:Label>
-                    </td>
-                </tr>
-                <tr>
                     <td style="width: 25%; text-align: right;"><strong>
                         <asp:Label ID="lblTotalAmount" runat="server" Text="Total Amount:"></asp:Label>
                     </strong>
@@ -476,9 +466,24 @@
                     <td style="width: 25%;">
                         <asp:Label ID="lblTotalAmountResult" runat="server"></asp:Label>
                     </td>
-                    <td style="width: 25%; text-align: right;"><strong></strong>
+                </tr>
+                <tr>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblProjectCode" runat="server" Text="Project ID:"></asp:Label>
+                        </strong>
                     </td>
-                    <td style="width: 25%;"></td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblProjectCodeResult" runat="server"></asp:Label>
+                    </td>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblGrantCode" runat="server" Text="Grant ID:"></asp:Label>
+                        </strong>
+                    </td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblGrantCodeResult" runat="server"></asp:Label>
+                    </td>
                 </tr>
                 <tr>
                     <td style="width: 25%; text-align: right;">
@@ -665,6 +670,23 @@
                     <RowStyle CssClass="rowstyle" />
                 </asp:GridView>
             </asp:Panel>
+            <br />
+            <table style="width: 100%;">
+                <tr>
+                    <td></td>
+                    <td>Signature</td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: right; padding-right: 10%;">Recieved By </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>___________________</td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: right;">___________________</td>
+                </tr>
+            </table>
         </fieldset>
     </div>
 

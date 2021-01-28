@@ -616,8 +616,15 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                     if (totalRequestedAmount > totalAllowedExp)
                     {
-                        _presenter.CurrentCashPaymentRequest.TotalAmount = totalAllowedExp - previousAmounts;
-                        return true;
+                        if (totalAllowedExp - previousAmounts <= 0)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            _presenter.CurrentCashPaymentRequest.TotalAmount = totalAllowedExp - previousAmounts;
+                            return true;
+                        }
                     }
                     else
                     { return true; }
@@ -662,8 +669,15 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                     if (totalRequestedAmount > Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]))
                     {
-                        _presenter.CurrentCashPaymentRequest.TotalAmount = Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]) - previousAmounts;
-                        return true;
+                        if (Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]) - previousAmounts <= 0)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            _presenter.CurrentCashPaymentRequest.TotalAmount = Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]) - previousAmounts;
+                            return true;
+                        }
                     }
                     else
                         return true;
@@ -685,8 +699,15 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                     if (totalRequestedAmount > totalAllowedExp)
                     {
-                        _presenter.CurrentCashPaymentRequest.TotalAmount = totalAllowedExp - previousAmounts;
-                        return true;
+                        if (totalAllowedExp - previousAmounts <= 0)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            _presenter.CurrentCashPaymentRequest.TotalAmount = totalAllowedExp - previousAmounts;
+                            return true;
+                        }
                     }
                     else
                     { return true; }
@@ -731,8 +752,15 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                     if (totalRequestedAmount > Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]))
                     {
-                        _presenter.CurrentCashPaymentRequest.TotalAmount = Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]) - previousAmounts;
-                        return true;
+                        if (Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]) - previousAmounts <= 0)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            _presenter.CurrentCashPaymentRequest.TotalAmount = Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]) - previousAmounts;
+                            return true;
+                        }
                     }
                     else
                         return true;
