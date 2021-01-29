@@ -669,13 +669,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                     if (totalRequestedAmount > Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]))
                     {
-                        if (Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]) - previousAmounts <= 0)
+                        if (Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]) - (previousAmounts + sharedFromOutPatient) <= 0)
                         {
                             return false;
                         }
                         else
                         {
-                            _presenter.CurrentCashPaymentRequest.TotalAmount = Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]) - previousAmounts;
+                            _presenter.CurrentCashPaymentRequest.TotalAmount = Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]) - (previousAmounts + sharedFromOutPatient);
                             return true;
                         }
                     }
