@@ -82,7 +82,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     return 0;
                 }
             }
-        }        
+        }
         public string GetRequestNo
         {
             get { return AutoNumber(); }
@@ -102,7 +102,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         public string GetDepartureTime
         {
             get { return timepicker.Text; }
-        }     
+        }
         public string GetPurposeOfTravel
         {
             get { return txtPurposeOfTravel.Text; }
@@ -141,13 +141,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         public int GetExtRefRequest
         {
-            
+
             get { return Convert.ToInt32(ddlRequestNo.SelectedValue); }
         }
         public string GetTravelLogAttachment
         {
             get { return null; }
-        }    
+        }
         private void PopRequestPersonnels()
         {
             txtRequestingPersonnel.Text = _presenter.CurrentUser().FirstName + " " + _presenter.CurrentUser().LastName;
@@ -188,7 +188,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ddlRequestNo.DataSource = _presenter.GetExtVehicleRequest();
             ddlRequestNo.DataBind();
 
-       
+
         }
         private void PopGrants(int ProjectId)
         {
@@ -207,9 +207,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             txtNoOfPassangers.Text = String.Empty;
             txtDestination.Text = String.Empty;
             txtComment.Text = String.Empty;
-           
+
             ckIsExtension.Checked = false;
-            
+
         }
         private void BindVehicleRequests()
         {
@@ -225,18 +225,20 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 txtDepartureDate.Text = _presenter.CurrentVehicleRequest.DepartureDate.Value.ToShortDateString();
                 txtReturningDate.Text = _presenter.CurrentVehicleRequest.ReturningDate.Value.ToShortDateString();
                 timepicker.Text = _presenter.CurrentVehicleRequest.DepartureTime;
-              
+
                 txtPurposeOfTravel.Text = _presenter.CurrentVehicleRequest.PurposeOfTravel.ToString();
                 txtDestination.Text = _presenter.CurrentVehicleRequest.Destination;
                 txtComment.Text = _presenter.CurrentVehicleRequest.Comment;
                 txtNoOfPassangers.Text = _presenter.CurrentVehicleRequest.NoOfPassengers.ToString();
-                ddlProject.SelectedValue = _presenter.CurrentVehicleRequest.Project.Id.ToString();
-                PopGrants(Convert.ToInt32(ddlProject.SelectedValue));
-                
-                
+                if (_presenter.CurrentVehicleRequest.Project.Status != "InActive")
+                {
+                    ddlProject.SelectedValue = _presenter.CurrentVehicleRequest.Project.Id.ToString();
+                    PopGrants(Convert.ToInt32(ddlProject.SelectedValue));
+                }
+
                 ddlRequestNo.SelectedValue = _presenter.CurrentVehicleRequest.Id.ToString();
                 ddlGrant.SelectedValue = _presenter.CurrentVehicleRequest.Grant.Id.ToString();
-              
+
 
                 BindVehicleRequests();
             }
@@ -274,16 +276,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         protected void btnSave_Click(object sender, EventArgs e)
         {
             try
-            {              
+            {
                 _presenter.SaveOrUpdateVehicleRequest();
                 if (_presenter.CurrentVehicleRequest.VehicleRequestStatuses.Count != 0)
                 {
                     BindVehicleRequests();
-                    
+
                     Master.ShowMessage(new AppMessage("Successfully did a Vehicle Request, Reference No - <b>'" + _presenter.CurrentVehicleRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
                     Log.Info(_presenter.CurrentUser().FullName + " has requested a Vehicle");
                     btnSave.Visible = false;
-                   
+
                 }
                 else
                 {
@@ -344,7 +346,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 Label1.Visible = true;
                 i.Visible = true;
             }
-            else if(ckIsExtension.Checked == false)
+            else if (ckIsExtension.Checked == false)
             {
                 ddlRequestNo.Visible = false;
                 Label1.Visible = false;

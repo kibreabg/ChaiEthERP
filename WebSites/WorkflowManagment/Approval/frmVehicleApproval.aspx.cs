@@ -339,8 +339,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             PopApprovalStatus();
             BindVehicleRequestStatus();
             BindVehicles();
-            ddlProject.SelectedValue = _presenter.CurrentVehicleRequest.Project.Id.ToString();
-            ddlProject_SelectedIndexChanged(sender, e);
+            if (_presenter.CurrentVehicleRequest.Project.Status != "InActive")
+            {
+                ddlProject.SelectedValue = _presenter.CurrentVehicleRequest.Project.Id.ToString();
+                ddlProject_SelectedIndexChanged(sender, e);
+            }
+
             if (_presenter.CurrentVehicleRequest.Grant != null)
                 ddlGrant.SelectedValue = _presenter.CurrentVehicleRequest.Grant.Id.ToString();
             if (_presenter.CurrentVehicleRequest.ProgressStatus == ProgressStatus.Completed.ToString())
