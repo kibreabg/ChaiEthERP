@@ -111,7 +111,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         private void SavePurchaseRequest()
         {
             AppUser CurrentUser = _presenter.CurrentUser();
-            MaintenanceRequest mreq= _presenter.GetMaintenanceRequestById(Convert.ToInt32(ddlMaintenanceReq.SelectedValue));
+
             try
             {
                 _presenter.CurrentPurchaseRequest.Requester = CurrentUser.Id;
@@ -120,13 +120,15 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 _presenter.CurrentPurchaseRequest.DeliverTo = txtDeliverto.Text;
                 _presenter.CurrentPurchaseRequest.Comment = "";
                 _presenter.CurrentPurchaseRequest.SuggestedSupplier = txtSuggestedSupplier.Text;
-
                 _presenter.CurrentPurchaseRequest.Requireddateofdelivery = Convert.ToDateTime(txtdeliveryDate.Text);
                 _presenter.CurrentPurchaseRequest.IsVehicle = GetIsVehicle;
-
                 _presenter.CurrentPurchaseRequest.MaintenanceRequestNo = GetMaintenanceRequestNo;
+                if (!String.IsNullOrEmpty(ddlMaintenanceReq.SelectedValue))
+                {
+                    MaintenanceRequest mreq = _presenter.GetMaintenanceRequestById(Convert.ToInt32(ddlMaintenanceReq.SelectedValue));
+                    _presenter.CurrentPurchaseRequest.MaintenanceId = mreq.Id;
+                }
 
-                _presenter.CurrentPurchaseRequest.MaintenanceId = mreq.Id;
                 //Determine total cost
                 /*       decimal cost = 0;
                        if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Count > 0)
@@ -765,7 +767,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
             lblMainReq.Visible = true;
             ddlMaintenanceReq.Visible = true;
-            
+
             dgPurchaseRequestDetail.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails;
             dgPurchaseRequestDetail.DataBind();
 
