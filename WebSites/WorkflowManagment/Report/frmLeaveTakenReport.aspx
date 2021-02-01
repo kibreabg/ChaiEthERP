@@ -69,7 +69,7 @@
                 CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active"
                 AlternatingRowStyle-CssClass="" OnRowDataBound="GRVEmployeeList_RowDataBound" Width="100%"
                 Style="text-align: left" AllowPaging="True" OnPageIndexChanging="GRVEmployeeList_PageIndexChanging"
-                Visible="True" PageSize="20">
+                Visible="True" PageSize="40">
                 <%--    <FooterStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
                 <RowStyle BackColor="#F7F6F3" ForeColor="#333333" />--%>
                 <Columns>
