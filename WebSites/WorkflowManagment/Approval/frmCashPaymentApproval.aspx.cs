@@ -308,6 +308,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             if (_presenter.CurrentCashPaymentRequest.PaymentReimbursementStatus != "Bank Payment")
                 EmailSender.Send(_presenter.GetUser(_presenter.CurrentCashPaymentRequest.AppUser.Id).Email, "Collect your Payment ", "Your Payment Request for Payment - '" + (_presenter.CurrentCashPaymentRequest.RequestNo).ToUpper() + "' was Completed, Please collect your payment");
+            else
+                EmailSender.Send(_presenter.GetUser(_presenter.CurrentCashPaymentRequest.AppUser.Id).Email, "Bank Payment Process Started ", "Your Payment Request for Payment - '" + (_presenter.CurrentCashPaymentRequest.RequestNo).ToUpper() + "' is being processed for Bank Payment");
         }
         private void GetNextApprover()
         {

@@ -279,6 +279,10 @@ namespace Chai.WorkflowManagment.Modules.Request
         {
             return _workspace.First<OperationalControlRequest>(x => x.TravelAdvanceId == TravelAdvanceRequestId);
         }
+        public OperationalControlRequest GetOperationalControlRequestByLiquidationId(int LiquidationId)
+        {
+            return _workspace.First<OperationalControlRequest>(x => x.LiquidationId == LiquidationId);
+        }
         public IList<OperationalControlRequest> ListOperationalControlRequests(string RequestNo, string RequestDate)
         {
             string filterExpression = "";
@@ -365,6 +369,10 @@ namespace Chai.WorkflowManagment.Modules.Request
         public ExpenseLiquidationRequest GetExpenseLiquidationRequest(int RequestId)
         {
             return _workspace.Single<ExpenseLiquidationRequest>(x => x.Id == RequestId);
+        }
+        public ExpenseLiquidationRequest GetExpenseLiquidation(int LiquidationId)
+        {
+            return _workspace.Single<ExpenseLiquidationRequest>(x => x.Id == LiquidationId);
         }
         public IList<ExpenseLiquidationRequest> GetExpenseLiquidationRequests()
         {

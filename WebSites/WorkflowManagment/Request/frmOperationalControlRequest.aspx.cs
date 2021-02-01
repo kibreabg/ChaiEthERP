@@ -198,6 +198,27 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         }
                     }
                 }
+                else if (Request.QueryString["Page"].Contains("ExpenseLiquidation"))
+                {
+                    if (Request.QueryString["PaymentId"] != null)
+                    {
+                        int liquidationId = Convert.ToInt32(Request.QueryString["PaymentId"]);
+                        ExpenseLiquidationRequest ELR = _presenter.GetExpenseLiquidation(liquidationId);
+                        if (ELR != null)
+                        {
+                            _presenter.CurrentOperationalControlRequest.Description = ELR.Comment;
+                            _presenter.CurrentOperationalControlRequest.LiquidationId = liquidationId;
+
+                            OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
+                            OCRD.Amount = ELR.TotalActualExpenditure - ELR.TotalTravelAdvance;
+
+                            _presenter.CurrentOperationalControlRequest.TotalAmount = ELR.TotalTravelAdvance;
+                            _presenter.CurrentOperationalControlRequest.TotalActualExpendture = ELR.TotalActualExpenditure;
+                            OCRD.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
+                            _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails.Add(OCRD);
+                        }
+                    }
+                }
 
 
             }
