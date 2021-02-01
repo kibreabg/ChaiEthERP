@@ -370,9 +370,9 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             {
                 while (wd > 365)
                 {
-                    if (count <= 6 && count > 1)
+                    if (count < 6 && count > 1)
                         leaveEnti = leaveEnti + 2;
-                    if (count >= 6)
+                    if (count >= 5)
                         Sumleave = Sumleave + 30;
                     else
                         if (count == 1)
@@ -411,9 +411,9 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             {
                 while (wd > 365)
                 {
-                    if (count <= 6 && count > 1)
+                    if (count < 6 && count > 1)
                         leaveEnti = leaveEnti + 2;
-                    if (count >= 6)
+                    if (count >= 5)
                         Sumleave = Sumleave + 30;
                     else
                         if (count == 1)
@@ -448,9 +448,9 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             {
                 while (wd > 365)
                 {
-                    if (count <= 6 && count > 1)
+                    if (count < 6 && count > 1)
                         leaveEnti = leaveEnti + 2;
-                    if (count >= 6)
+                    if (count >= 5)
                         Sumleave = Sumleave + 30;
                     else
                        if (count == 1)
@@ -481,9 +481,9 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             {
                 while (wd > 365)
                 {
-                    if (count <= 6 && count > 1)
+                    if (count < 6 && count > 1)
                         leaveEnti = leaveEnti + 2;
-                    if (count >= 6)
+                    if (count >= 5)
                         Sumleave = Sumleave + 30;
                     else
                         if (count == 1)
@@ -518,9 +518,9 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             {
                 while (wd > 365)
                 {
-                    if (count <= 6 && count > 1)
+                    if (count < 6 && count > 1)
                         leaveEnti = leaveEnti + 2;
-                    if (count >= 6)
+                    if (count >= 5)
                         Sumleave = Sumleave + 30;
                     else
                         if (count == 1)
