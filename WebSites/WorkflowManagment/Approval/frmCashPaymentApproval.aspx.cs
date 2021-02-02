@@ -560,15 +560,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             lblRequestedDateResult.Text = _presenter.CurrentCashPaymentRequest.RequestDate.Value.ToShortDateString();
             if (_presenter.CurrentCashPaymentRequest.Supplier != null)
             {
-                lblPayeeResult.Text = _presenter.CurrentCashPaymentRequest.Supplier.SupplierName.ToString() != null ? _presenter.CurrentCashPaymentRequest.Supplier.SupplierName.ToString() : "";
+                lblSupplierRes.Text = _presenter.CurrentCashPaymentRequest.Supplier.SupplierName.ToString() != null ? _presenter.CurrentCashPaymentRequest.Supplier.SupplierName.ToString() : "";
             }
-
+            lblPayeeResult.Text = _presenter.CurrentCashPaymentRequest.Payee;
             lblVoucherNoResult.Text = _presenter.CurrentCashPaymentRequest.VoucherNo;
             lblTotalAmountResult.Text = _presenter.CurrentCashPaymentRequest.TotalAmount.ToString();
             lblApprovalStatusResult.Text = _presenter.CurrentCashPaymentRequest.ProgressStatus.ToString();
-            lblDescResult.Text = _presenter.CurrentCashPaymentRequest.Description;
-            lblActualExpendtureRes.Text = _presenter.CurrentCashPaymentRequest.TotalActualExpendture != 0 ? _presenter.CurrentCashPaymentRequest.TotalActualExpendture.ToString() : "";
-            lblReimbersestatusRes.Text = _presenter.CurrentCashPaymentRequest.PaymentReimbursementStatus;
+            lblDescResult.Text = _presenter.CurrentCashPaymentRequest.Description;            
             grvDetails.DataSource = _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails;
             grvDetails.DataBind();
 
