@@ -278,7 +278,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     foreach (ItemAccountChecklist checklist in cprd.ItemAccount.ItemAccountChecklists)
                     {
                         CPRAttachment attachment = new CPRAttachment();
-                        //attachment.CashPaymentRequestDetail = _presenter.CurrentCashPaymentRequest.GetDetailByItemAccount(cprd.ItemAccount.Id);
                         attachment.ItemAccountChecklists.Add(checklist);
                         cprd.CPRAttachments.Add(attachment);
                     }
@@ -288,11 +287,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                     dgCashPaymentDetail.EditItemIndex = -1;
                     BindCashPaymentDetails();
-
-                    foreach (CPRAttachment attachment in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[e.Item.ItemIndex + 1].CPRAttachments)
-                    {
-                        //attachment.CashPaymentRequestDetail = _presenter.CurrentCashPaymentRequest.GetCashPaymentRequestDetail((int)dgCashPaymentDetail.DataKeys[e.Item.ItemIndex + 1]);
-                    }
 
                     Master.ShowMessage(new AppMessage("Payment Detail Successfully Added", RMessageType.Info));
                 }
@@ -349,9 +343,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 foreach (ItemAccountChecklist checklist in cprd.ItemAccount.ItemAccountChecklists)
                 {
                     CPRAttachment attachment = new CPRAttachment();
-                    //attachment.CashPaymentRequestDetail = _presenter.CurrentCashPaymentRequest.GetDetailByItemAccount(cprd.ItemAccount.Id);
                     attachment.ItemAccountChecklists.Add(checklist);
-
                     cprd.CPRAttachments.Add(attachment);
                 }
                 BindAttachments();

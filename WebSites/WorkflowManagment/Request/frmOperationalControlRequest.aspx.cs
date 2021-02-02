@@ -444,7 +444,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     if (ddlProject != null)
                     {
                         BindProject(ddlProject);
-                        if (_presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails[e.Item.DataSetIndex].Project.Id != 0)
+                        if (_presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails[e.Item.DataSetIndex].Project != null)
                         {
                             ListItem liI = ddlProject.Items.FindByValue(_presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails[e.Item.DataSetIndex].Project.Id.ToString());
                             if (liI != null)

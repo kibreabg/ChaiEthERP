@@ -536,7 +536,7 @@
                     </td>
                     <td style="width: 271px; height: 18px;">
                         <strong>
-                            <asp:Label ID="lblTotalAmount" runat="server" Text="Total Amount:"></asp:Label>
+                            <asp:Label ID="lblTotalAmount" runat="server" Text="Total Amount Payed:"></asp:Label>
                         </strong></td>
                     <td style="width: 389px; height: 18px;">
                         <asp:Label ID="lblTotalAmountResult" runat="server"></asp:Label>
@@ -552,7 +552,7 @@
                         <asp:Label ID="lblApprovalStatusResult" runat="server"></asp:Label>
                     </td>
                     <td style="width: 271px; height: 18px;"><strong>
-                        <asp:Label ID="lblActualExpendture" runat="server" Text="Tot. Actual Expenditure:"></asp:Label>
+                        <asp:Label ID="lblActualExpendture" runat="server" Text="Tot. Actual Expenditure (For Advance):"></asp:Label>
                     </strong>
                     </td>
                     <td style="width: 244px; height: 18px;">
@@ -581,8 +581,8 @@
                 <Columns>
                     <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="AccountName" SortExpression="ItemAccount.AccountName" />
                     <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
-                    <asp:BoundField DataField="Amount" HeaderText="Amount" SortExpression="Amount" />
-                    <asp:BoundField DataField="ActualExpendture" HeaderText="Actual Expendture" SortExpression="ActualExpendture" />
+                    <asp:BoundField DataField="Amount" HeaderText="Amount Requested" SortExpression="Amount" />
+                    <asp:BoundField DataField="ActualExpendture" HeaderText="Actual Expendture (For Advance)" SortExpression="ActualExpendture" />
                     <asp:BoundField DataField="Project.ProjectCode" HeaderText="Project Code" />
                     <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant Code" />
                 </Columns>
@@ -618,7 +618,7 @@
                     <td>Signature</td>
                     <td></td>
                     <td></td>
-                    <td style="text-align: right; padding-right: 12%;">Recieved By </td>
+                    <td style="text-align: right; padding-right: 6%;">Recieved By </td>
                 </tr>
                 <tr>
                     <td></td>
