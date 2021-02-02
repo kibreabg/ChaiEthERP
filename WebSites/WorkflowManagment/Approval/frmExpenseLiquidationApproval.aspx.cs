@@ -224,8 +224,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void ShowPrint()
         {
-            btnPrint.Enabled = true;
-            //btnExport.Enabled = true;
+            if (_presenter.CurrentExpenseLiquidationRequest.CurrentLevel == _presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestStatuses.Count && _presenter.CurrentExpenseLiquidationRequest.ProgressStatus == ProgressStatus.Completed.ToString())
+            {
+                btnPrint.Enabled = true;
+
+                //Bank Payment should be initiated if CHAI is the one who's going to pay (variance is Positive)
+                decimal variance = _presenter.CurrentExpenseLiquidationRequest.TotalActualExpenditure - _presenter.CurrentExpenseLiquidationRequest.TotalTravelAdvance;
+                if (_presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestStatuses.Last().ApprovalStatus == "Bank Payment" && variance > 0 && _presenter.CurrentExpenseLiquidationRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
+                    btnBankPayment.Visible = true;
+            }
         }
         private void SendEmail(ExpenseLiquidationRequestStatus ELRS)
         {
