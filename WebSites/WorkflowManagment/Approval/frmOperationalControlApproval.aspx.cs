@@ -289,6 +289,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         if (_presenter.CurrentOperationalControlRequest.CurrentLevel == _presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses.Count)
                         {
                             _presenter.CurrentOperationalControlRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+
+                            //If this Bank Payment came from Travel Advance, Complete the ExpenseLiquidationStatus so that it appears in the TO BE LIQUIDATED list
+                            if (_presenter.CurrentOperationalControlRequest.TravelAdvanceId > 0)
+                            {
+                                TravelAdvanceRequest associatedTravelAdvance = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId);
+                                associatedTravelAdvance.ExpenseLiquidationStatus = ProgressStatus.Completed.ToString();
+                                _presenter.SaveOrUpdateTravelAdvanceRequest(associatedTravelAdvance);
+                            }
+                            
                         }
                         GetNextApprover();
                         OCRS.Approver = _presenter.CurrentUser().Id;

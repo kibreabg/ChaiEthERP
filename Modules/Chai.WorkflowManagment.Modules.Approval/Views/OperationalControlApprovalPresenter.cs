@@ -69,6 +69,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             _controller.SaveOrUpdateEntity(OperationalControlRequest);
         }
+        public void SaveOrUpdateTravelAdvanceRequest(TravelAdvanceRequest TravelAdvanceRequest)
+        {
+            _controller.SaveOrUpdateEntity(TravelAdvanceRequest);
+        }
         public OperationalControlRequest GetOperationalControlRequest(int reqId)
         {
             return _requestController.GetOperationalControlRequest(reqId);
