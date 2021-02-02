@@ -446,23 +446,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (CSR != null)
                 {
-                    if (e.Row.RowType == DataControlRowType.DataRow)
-                    {
-                        if (CSR.CurrentLevel == CSR.CashPaymentRequestStatuses.Count && CSR.ProgressStatus == "Completed")
-                            e.Row.Cells[8].Visible = true;
-                        else
-                            e.Row.Cells[8].Visible = false;
-                    }
+                    
 
                     if (CSR.ProgressStatus == ProgressStatus.InProgress.ToString())
                     {
                         btnStatus.BackColor = System.Drawing.ColorTranslator.FromHtml("#FFFF6C");
-
                     }
                     else if (CSR.ProgressStatus == ProgressStatus.Completed.ToString())
                     {
                         btnStatus.BackColor = System.Drawing.ColorTranslator.FromHtml("#FF7251");
-
                     }
                 }
             }
