@@ -58,11 +58,12 @@ namespace Chai.WorkflowManagment.Modules.Approval
         }
         #endregion
         #region Vehicle Approval
-        public IList<VehicleRequest> ListVehicleRequests(string RequestNo, string RequestDate, string ProgressStatus)
+        public IList<VehicleRequest> ListVehicleRequests(string RequestNo, string RequestDate, string ProgressStatus, string Requester)
         {
             string filterExpression = "";
 
             filterExpression = " SELECT  *  FROM VehicleRequests INNER JOIN AppUsers on AppUsers.Id=VehicleRequests.CurrentApprover Left JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id  AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When VehicleRequests.RequestNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When VehicleRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND VehicleRequests.ProgressStatus='" + ProgressStatus + "' " +
+                                   " AND  1 = CASE WHEN '" + Requester + "' = '0' THEN 1 WHEN VehicleRequests.AppUser_Id = '" + Requester + "'  THEN 1 END " +
                                    " AND  ((VehicleRequests.CurrentApprover = '" + CurrentUser().Id + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) order by VehicleRequests.Id Desc";
 
             return _workspace.SqlQuery<VehicleRequest>(filterExpression).ToList();

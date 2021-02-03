@@ -26,7 +26,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 PopProgressStatus();
                 BindVehicles();
                 PopProjects();
-
+                PopDrivers(ddlSrchRequester);
             }
             this._presenter.OnViewLoaded();
             BindSearchVehicleRequestGrid();
@@ -172,7 +172,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void BindSearchVehicleRequestGrid()
         {
-            grvVehicleRequestList.DataSource = _presenter.ListVehicleRequests(txtSrchRequestNo.Text, txtSrchRequestDate.Text, ddlSrchProgressStatus.SelectedValue);
+            grvVehicleRequestList.DataSource = _presenter.ListVehicleRequests(txtSrchRequestNo.Text, txtSrchRequestDate.Text, ddlSrchProgressStatus.SelectedValue, ddlSrchRequester.SelectedValue);
             grvVehicleRequestList.DataBind();
         }
         private void BindVehicleRequestStatus()

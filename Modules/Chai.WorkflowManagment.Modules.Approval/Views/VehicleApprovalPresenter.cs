@@ -137,9 +137,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             _controller.SaveOrUpdateEntity(VehicleRequest);
             _controller.CurrentObject = null;
         }
-        public IList<VehicleRequest> ListVehicleRequests(string RequestNo, string RequestDate, string ProgressStatus)
+        public IList<VehicleRequest> ListVehicleRequests(string RequestNo, string RequestDate, string ProgressStatus, string Requester)
         {
-            return _controller.ListVehicleRequests(RequestNo, RequestDate, ProgressStatus);
+            return _controller.ListVehicleRequests(RequestNo, RequestDate, ProgressStatus, Requester);
         }
         public AppUser CurrentUser()
         {
