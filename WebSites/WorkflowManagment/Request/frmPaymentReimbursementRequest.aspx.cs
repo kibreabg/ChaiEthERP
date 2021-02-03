@@ -417,13 +417,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
-            if (Convert.ToDecimal(txtImbursement.Text) == Convert.ToDecimal(txtReceivables.Text))
+            if (Convert.ToDecimal(txtImbursement.Text) >= Convert.ToDecimal(txtReceivables.Text))
             {
                 if (CheckReceiptsAttached() == true)
                 {
                     _presenter.SaveOrUpdatePaymentReimbursementRequest(Convert.ToInt32(Session["tarId"]));
                     BindPaymentReimbursementRequests();
-                    Master.ShowMessage(new AppMessage("Payment Settlement Request Successfully Saved!", RMessageType.Info));
+                    Master.ShowMessage(new AppMessage("Payment Settlement Request Successfully Saved, If you have over spend refund please Contact Finance", RMessageType.Info));
                     btnSave.Visible = false;
                     Session["tarId"] = null;
                 }
@@ -431,7 +431,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
             else
             {
-                Master.ShowMessage(new AppMessage("Please Make sure that amount advance taken is equal to settled amount!", RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Please Make sure that settled amount is greater than or equal to advance taken.", RMessageType.Error));
             }
         }
         protected void btnDelete_Click(object sender, EventArgs e)
