@@ -538,7 +538,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
 
             }
-            else if (ddlLeaveType.SelectedItem.Text.Contains("Sick Leave"))
+            else if (ddlLeaveType.SelectedItem.Text.Contains("Sick Leave") || ddlLeaveType.SelectedItem.Text.Contains("Exam Leave") || ddlLeaveType.SelectedItem.Text.Contains("Other Leaves"))
             {
 
 
