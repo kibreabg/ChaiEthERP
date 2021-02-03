@@ -59,6 +59,13 @@
                                     </asp:DropDownList><i></i>
                                 </label>
                             </section>
+                            <section class="col col-3">
+                                <asp:Label ID="lblSrchRequester" runat="server" Text="Requester" CssClass="label"></asp:Label>
+                                <label class="select">
+                                    <asp:DropDownList ID="ddlSrchRequester" runat="server">
+                                    </asp:DropDownList><i></i>
+                                </label>
+                            </section>
                         </div>
                     </fieldset>
                     <footer>
