@@ -219,7 +219,28 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         }
                     }
                 }
+                else if (Request.QueryString["Page"].Contains("Settlement"))
+                {
+                    if (Request.QueryString["SettlementId"] != null)
+                    {
+                        int SettlementId = Convert.ToInt32(Request.QueryString["SettlementId"]);
+                        PaymentReimbursementRequest PRR = _presenter.GetReimbursementRequest(SettlementId);
+                        if (PRR != null)
+                        {
+                            _presenter.CurrentOperationalControlRequest.Description = PRR.Comment;
+                            _presenter.CurrentOperationalControlRequest.LiquidationId = SettlementId;
 
+                            OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
+                            OCRD.Amount = PRR.TotalAmount - PRR.ReceivableAmount;
+                            OCRD.Project = PRR.Project;
+                            OCRD.Grant = PRR.Grant;
+                            _presenter.CurrentOperationalControlRequest.TotalAmount = PRR.ReceivableAmount;
+                            _presenter.CurrentOperationalControlRequest.TotalActualExpendture = PRR.TotalAmount;
+                            OCRD.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
+                            _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails.Add(OCRD);
+                        }
+                    }
+                }
 
             }
 

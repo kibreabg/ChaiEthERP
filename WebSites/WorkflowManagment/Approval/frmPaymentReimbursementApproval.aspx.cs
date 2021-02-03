@@ -22,6 +22,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
     {
         private PaymentReimbursementApprovalPresenter _presenter;
         private int reqID = 0;
+        decimal _totalUnitPrice = 0;
+        decimal _totalAmountAdvanced = 0;
+        decimal _totalVariance = 0;
+        decimal _totalActualExpenditure = 0;
         private static readonly ILog Log = LogManager.GetLogger("AuditTrailLog");
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -77,6 +81,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
         }
         #endregion
+        private bool IsBankPaymentRequested()
+        {
+            OperationalControlRequest ocr = _presenter.GetOperationalControlRequestByLiquidationId(_presenter.CurrentPaymentReimbursementRequest.Id);
+            if (ocr != null)
+                return true;
+            else
+                return false;
+        }
         private void PopProgressStatus()
         {
             string[] s = Enum.GetNames(typeof(ProgressStatus));
@@ -167,15 +179,39 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
                 else
                 // btnApprove.Enabled = false;
-                if (PRRS.ApprovalStatus != null)
+           if (PRRS.WorkflowLevel == _presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Count && PRRS.ApprovalStatus != null)
                 {
                     btnPrint.Enabled = true;
+                    btnApprove.Enabled = false;
+                }
+                else if (_presenter.CurrentPaymentReimbursementRequest.CurrentStatus == ApprovalStatus.Rejected.ToString())
+                {
+                    btnApprove.Enabled = false;
+                    btnBankPayment.Visible = false;
+                }
+                else
+                {
+                    btnPrint.Enabled = false;
+                    btnApprove.Enabled = true;
                 }
             }
+            //Bank Payment should be initiated if CHAI is the one who's going to pay (variance is Positive)
+            decimal variance = _presenter.CurrentPaymentReimbursementRequest.TotalAmount - _presenter.CurrentPaymentReimbursementRequest.ReceivableAmount;
+
+            if (_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Last().ApprovalStatus == "Bank Payment" && !IsBankPaymentRequested() && variance > 0 && _presenter.CurrentPaymentReimbursementRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
+                btnBankPayment.Visible = true;
+            else
+                btnBankPayment.Visible = false;
         }
         private void ShowPrint()
         {
             btnPrint.Enabled = true;
+            if (_presenter.CurrentPaymentReimbursementRequest.CurrentLevel == _presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Count && _presenter.CurrentPaymentReimbursementRequest.ProgressStatus == ProgressStatus.Completed.ToString())
+            {
+                decimal variance = _presenter.CurrentPaymentReimbursementRequest.TotalAmount - _presenter.CurrentPaymentReimbursementRequest.ReceivableAmount;
+                if (_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Last().ApprovalStatus == "Bank Payment" && variance > 0 && _presenter.CurrentPaymentReimbursementRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
+                    btnBankPayment.Visible = true;
+            }
             if (ddlApprovalStatus.SelectedValue != ApprovalStatus.Rejected.ToString())
                 SendEmailToRequester();
         }
@@ -302,6 +338,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             //grvPaymentReimbursementRequestList.SelectedDataKey.Value
             _presenter.OnViewLoaded();
+            if (_presenter.CurrentPaymentReimbursementRequest.ProgressStatus == ProgressStatus.Completed.ToString())
+            {
+                PrintTransaction();
+            }
+            Session["SettlementId"] = _presenter.CurrentPaymentReimbursementRequest.Id;
             PopApprovalStatus();
             BindAttachments();
             BindPaymentReimbursementRequestStatus();
@@ -435,7 +476,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
             }
         }
-
+        protected void btnBankPayment_Click(object sender, EventArgs e)
+        {
+            Response.Redirect(String.Format("../Request/frmOperationalControlRequest.aspx?paymentId={0}&Page={1}", Convert.ToInt32(Session["SettlementId"]), "Settlement"));
+        }
         private void DeleteSettlementIfRejected()
         {
             _presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.IsLiquidated = false;
