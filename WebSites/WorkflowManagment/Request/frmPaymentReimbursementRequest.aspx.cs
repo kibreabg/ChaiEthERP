@@ -223,6 +223,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         private void BindAccountDescription(DropDownList ddlAccountDescription)
         {
             ddlAccountDescription.DataSource = _presenter.ListItemAccounts();
+           
             ddlAccountDescription.DataValueField = "Id";
             ddlAccountDescription.DataTextField = "AccountName";
             ddlAccountDescription.DataBind();
@@ -393,6 +394,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                 DropDownList ddlAccountDescription = e.Item.FindControl("ddlAccountDescription") as DropDownList;
                 BindAccountDescription(ddlAccountDescription);
+                foreach (PaymentReimbursementRequestDetail Detail in _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails)
+                {
+                    foreach (ListItem item in ddlAccountDescription.Items)
+                    {
+                        if (Detail.ItemAccount.Id == Convert.ToInt32(item.Value))
+                        {
+                            item.Enabled = false;
+                        }
+                    }
+                }
+           
             }
             else
             {
