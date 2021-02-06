@@ -42,6 +42,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
 
         }
+        public OperationalControlRequest GetOperationalControlRequestByLiquidationId(int liquidationId)
+        {
+            return _requestController.GetOperationalControlRequestByLiquidationId(liquidationId);
+        }
         public PaymentReimbursementRequest CurrentPaymentReimbursementRequest
         {
             get

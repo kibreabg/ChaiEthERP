@@ -271,6 +271,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             tarId = Convert.ToInt32(grvTravelAdvances.SelectedDataKey[0]);
             Session["tarId"] = Convert.ToInt32(grvTravelAdvances.SelectedDataKey[0]);
             _presenter.OnViewLoaded();
+            _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest = new ExpenseLiquidationRequest();
             btnSave.Visible = true;
             grvTravelAdvances.Visible = false;
             pnlInfo.Visible = false;
@@ -358,6 +359,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             if (e.CommandName == "AddNew")
             {
+                decimal totalActExp = 0;
                 try
                 {
                     ExpenseLiquidationRequestDetail elrd = new ExpenseLiquidationRequestDetail();
@@ -386,6 +388,15 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         elrd.ELRAttachments.Add(attachment);
                     }
                     _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails.Add(elrd);
+
+                    foreach (ExpenseLiquidationRequestDetail eld in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
+                    {
+                        totalActExp += eld.ActualExpenditure;
+                    }
+
+                    _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure = totalActExp;
+                    txtTotActual.Text = (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure).ToString();
+
                     BindAttachments();
 
                     dgExpenseLiquidationDetail.EditItemIndex = -1;
@@ -410,6 +421,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             int eldId = (int)dgExpenseLiquidationDetail.DataKeys[e.Item.ItemIndex];
             ExpenseLiquidationRequestDetail elrd;
+            decimal totalActExp = 0;
 
             if (eldId > 0)
                 elrd = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.GetExpenseLiquidationRequestDetail(eldId);
@@ -428,7 +440,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 elrd.ActualExpenditure = Convert.ToDecimal(txtActualExpenditure.Text);
                 TextBox txtVariance = e.Item.FindControl("txtVariance") as TextBox;
                 elrd.Variance = Convert.ToDecimal(txtVariance.Text);
-                _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure + elrd.ActualExpenditure;
+
+                foreach(ExpenseLiquidationRequestDetail eld in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
+                {
+                    totalActExp += eld.ActualExpenditure;
+                }
+
+                _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure = totalActExp;
                 txtTotActual.Text = (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure).ToString();
 
                 //Add Checklists for attachments if available but clear all attachments first because this is update                    
@@ -558,30 +576,39 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void btnSave_Click(object sender, EventArgs e)
         {
-            if (CheckReceiptsAttached())
+            if ((Convert.ToDecimal(txtTotalAdvance.Text) <= Convert.ToDecimal(txtTotActual.Text)))
             {
-                //For update cases make the totals equal to zero first then add up the individuals
-                _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure = 0;
-                _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance = 0;
-                foreach (ExpenseLiquidationRequestDetail detail in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
+                if (CheckReceiptsAttached())
                 {
-                    _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure + detail.ActualExpenditure;
-                    _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance + detail.AmountAdvanced;
-                    txtTotActual.Text = (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure).ToString();
-                    txtTotalAdvance.Text = (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance).ToString();
-                }
+                    //For update cases make the totals equal to zero first then add up the individuals
+                    _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure = 0;
+                    _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance = 0;
+                    foreach (ExpenseLiquidationRequestDetail detail in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
+                    {
+                        _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure + detail.ActualExpenditure;
+                        _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance + detail.AmountAdvanced;
+                        txtTotActual.Text = (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure).ToString();
+                        txtTotalAdvance.Text = (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance).ToString();
+                    }
 
-                int tarID = Convert.ToInt32(Session["tarId"]);
-                _presenter.SaveOrUpdateExpenseLiquidationRequest(tarID);
-                BindExpenseLiquidationRequests();
-                PrintTransaction();
-                Master.ShowMessage(new AppMessage("Expense Successfully Liquidated", RMessageType.Info));
-                Log.Info(_presenter.CurrentUser().FullName + " has requested an Expense Liquidation for a total amount of " + _presenter.CurrentTravelAdvanceRequest.TotalTravelAdvance.ToString());
-                btnSave.Visible = false;
-                btnPrint.Enabled = true;
-                Session["tarId"] = null;
+                    int tarID = Convert.ToInt32(Session["tarId"]);
+                    _presenter.SaveOrUpdateExpenseLiquidationRequest(tarID);
+                    BindExpenseLiquidationRequests();
+                    PrintTransaction();
+                    Master.ShowMessage(new AppMessage("Expense Successfully Liquidated", RMessageType.Info));
+                    Log.Info(_presenter.CurrentUser().FullName + " has requested an Expense Liquidation for a total amount of " + _presenter.CurrentTravelAdvanceRequest.TotalTravelAdvance.ToString());
+                    btnSave.Visible = false;
+                    btnPrint.Enabled = true;
+                    Session["tarId"] = null;
+                }
+                else { Master.ShowMessage(new AppMessage("Please attach the required receipts", RMessageType.Error)); }
             }
-            else { Master.ShowMessage(new AppMessage("Please attach the required receipts", RMessageType.Error)); }
+            else
+            {
+                decimal variance = (Convert.ToDecimal(txtTotalAdvance.Text) - Convert.ToDecimal(txtTotActual.Text));
+                Master.ShowMessage(new AppMessage("Please liquidate the remaining " + variance.ToString() + " birr with your receipt from Bank!", RMessageType.Error));
+            }
+
         }
         protected void btnDelete_Click(object sender, EventArgs e)
         {

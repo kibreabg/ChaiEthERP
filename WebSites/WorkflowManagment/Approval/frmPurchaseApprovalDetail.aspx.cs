@@ -292,11 +292,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             lblReqDateofDeliveryResult.Text = _presenter.CurrentPurchaseRequest.Requireddateofdelivery.ToShortDateString();
             grvDetails.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails;
             grvDetails.DataBind();
-            grvMaintenaceDet.DataSource = _presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestDetails;
-            grvMaintenaceDet.DataBind();
-            grvMainSta.DataSource = _presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestStatuses;
-            grvMainSta.DataBind();
-           
+            if (_presenter.CurrentPurchaseRequest.MaintenanceId > 0)
+            {
+                grvMaintenaceDet.DataSource = _presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestDetails;
+                grvMaintenaceDet.DataBind();
+                grvMainSta.DataSource = _presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestStatuses;
+                grvMainSta.DataBind();
+            }
+
+
             grvStatuses.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestStatuses;
             grvStatuses.DataBind();
 
@@ -355,7 +359,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     lblApprovalDet.Visible = true;
                     lblMainDetail.Visible = true;
                     lblReqItems.Visible = true;
-                    grvPreviewDetail.DataSource= _presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestDetails;
+                    grvPreviewDetail.DataSource = _presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestDetails;
                     grvPreviewDetail.DataBind();
                     grvSparepart.DataSource = _presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceSpareParts;
                     grvSparepart.DataBind();
@@ -370,10 +374,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     grvPreviewDetail.DataSource = null;
                     grvPreviewDetail.DataBind();
                     grvSparepart.DataSource = null;
-                    grvSparepart.DataBind(); 
+                    grvSparepart.DataBind();
                     grvMaintenanceStatuses.DataSource = null;
                     grvMaintenanceStatuses.DataBind();
-                    
+
                 }
 
                 ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
@@ -459,7 +463,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
         protected void grvMaintenanceStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            if (_presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestStatuses!= null)
+            if (_presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestStatuses != null)
             {
                 if (e.Row.RowType == DataControlRowType.DataRow)
                 {

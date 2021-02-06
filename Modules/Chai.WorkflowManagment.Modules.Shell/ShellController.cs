@@ -215,7 +215,7 @@ namespace Chai.WorkflowManagment.Modules.Shell
         {
             currentUser = GetCurrentUser().Id;
             int Count = 0;
-            Count = WorkspaceFactory.CreateReadOnly().Count<CashPaymentRequest>(x => x.AppUser.Id == currentUser && x.IsLiquidated == false);
+            Count = WorkspaceFactory.CreateReadOnly().Count<CashPaymentRequest>(x => x.AppUser.Id == currentUser && x.IsLiquidated == false && x.AmountType == "Advanced" && x.ProgressStatus == "Completed");
             if (Count != 0)
                 return Count;
             else
@@ -242,10 +242,15 @@ namespace Chai.WorkflowManagment.Modules.Shell
         public int GetBankPaymentTasks()
         {
             currentUser = GetCurrentUser().Id;
-            string filterExpression = "";
 
-            filterExpression = " SELECT * FROM OperationalControlRequests INNER JOIN AppUsers on AppUsers.Id = OperationalControlRequests.CurrentApprover Left JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where OperationalControlRequests.ProgressStatus='InProgress' " +
-                                  " AND  ((OperationalControlRequests.CurrentApprover = '" + currentUser + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) order by OperationalControlRequests.Id ";
+            string filterExpression = " SELECT * FROM OperationalControlRequests " +
+                                        " LEFT JOIN AppUsers on AppUsers.Id = OperationalControlRequests.CurrentApprover " +
+                                        " LEFT JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
+                                        " WHERE OperationalControlRequests.ProgressStatus = 'InProgress'" +
+                                            " AND ((OperationalControlRequests.CurrentApprover = '" + currentUser + "')" +
+                                            " OR (OperationalControlRequests.CurrentApproverPosition = '" + GetCurrentUser().EmployeePosition.Id + "')" +
+                                            " OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "'))" +
+                                            " ORDER BY OperationalControlRequests.RequestDate";
 
             return _workspace.SqlQuery<OperationalControlRequest>(filterExpression).Count();
         }

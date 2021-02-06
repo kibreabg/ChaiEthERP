@@ -69,6 +69,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             _controller.SaveOrUpdateEntity(OperationalControlRequest);
         }
+        public void SaveOrUpdateTravelAdvanceRequest(TravelAdvanceRequest TravelAdvanceRequest)
+        {
+            _controller.SaveOrUpdateEntity(TravelAdvanceRequest);
+        }
         public OperationalControlRequest GetOperationalControlRequest(int reqId)
         {
             return _requestController.GetOperationalControlRequest(reqId);
@@ -76,6 +80,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         public IList<OperationalControlRequest> ListOperationalControlRequests(string RequestNo, string RequestDate, string ProgressStatus)
         {
             return _controller.ListOperationalControlRequests(RequestNo, RequestDate, ProgressStatus);
+        }
+        public TravelAdvanceRequest GetTravelAdvanceRequest(int reqId)
+        {
+            return _requestController.GetTravelAdvanceRequest(reqId);
+        }
+        public CashPaymentRequest GetCashPaymentRequest(int reqId)
+        {
+            return _requestController.GetCashPaymentRequest(reqId);
         }
         public OCRAttachment GetAttachment(int attachmentId)
         {
@@ -121,7 +133,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _settingController.GetItemAccounts();
         }
-       
+
         public void navigate(string url)
         {
             _controller.Navigate(url);
@@ -146,7 +158,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         public void Commit()
         {
             _controller.Commit();
-        }        
+        }
     }
 }
 

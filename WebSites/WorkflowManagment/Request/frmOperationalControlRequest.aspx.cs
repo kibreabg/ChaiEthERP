@@ -130,10 +130,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (Request.QueryString["PaymentId"] != null)
                     {
-                        CashPaymentRequest CPR = _presenter.GetCashPaymentRequest(Convert.ToInt32(Request.QueryString["PaymentId"]));
+                        int paymentId = Convert.ToInt32(Request.QueryString["PaymentId"]);
+                        CashPaymentRequest CPR = _presenter.GetCashPaymentRequest(paymentId);
                         if (CPR != null)
                         {
                             _presenter.CurrentOperationalControlRequest.Description = CPR.Description;
+                            _presenter.CurrentOperationalControlRequest.PaymentId = paymentId;
+
                             foreach (CashPaymentRequestDetail CPRD in CPR.CashPaymentRequestDetails)
                             {
                                 OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
@@ -167,36 +170,81 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (Request.QueryString["PaymentId"] != null)
                     {
-                        TravelAdvanceRequest TAR = _presenter.GetTravelAdvanceRequest(Convert.ToInt32(Request.QueryString["PaymentId"]));
+                        int travelAdvId = Convert.ToInt32(Request.QueryString["PaymentId"]);
+                        TravelAdvanceRequest TAR = _presenter.GetTravelAdvanceRequest(travelAdvId);
                         if (TAR != null)
                         {
                             _presenter.CurrentOperationalControlRequest.Description = TAR.PurposeOfTravel;
+                            _presenter.CurrentOperationalControlRequest.TravelAdvanceId = travelAdvId;
+
                             foreach (TravelAdvanceRequestDetail TARD in TAR.TravelAdvanceRequestDetails)
                             {
-                                foreach(TravelAdvanceCost TAC in TARD.TravelAdvanceCosts)
+                                foreach (TravelAdvanceCost TAC in TARD.TravelAdvanceCosts)
                                 {
                                     OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
-                                    //OCRD.ItemAccount = TAC.ItemAccount;
-                                    //OCRD.AccountCode = TAC.AccountCode;
+                                    OCRD.ItemAccount = TAC.ItemAccount;
+                                    OCRD.AccountCode = TAC.AccountCode;
                                     OCRD.Project = TAR.Project;
                                     OCRD.Grant = TAR.Grant;
                                     OCRD.Amount = TAC.Total;
-                                    OCRD.ActualExpendture = TAC.Total;                                    
+                                    OCRD.ActualExpendture = TAC.Total;
                                     _presenter.CurrentOperationalControlRequest.TotalAmount += OCRD.Amount;
                                     _presenter.CurrentOperationalControlRequest.TotalActualExpendture += OCRD.Amount;
                                     OCRD.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
                                     _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails.Add(OCRD);
                                 }
-                                
+
                             }
                         }
                     }
                 }
+                else if (Request.QueryString["Page"].Contains("ExpenseLiquidation"))
+                {
+                    if (Request.QueryString["PaymentId"] != null)
+                    {
+                        int liquidationId = Convert.ToInt32(Request.QueryString["PaymentId"]);
+                        ExpenseLiquidationRequest ELR = _presenter.GetExpenseLiquidation(liquidationId);
+                        if (ELR != null)
+                        {
+                            _presenter.CurrentOperationalControlRequest.Description = ELR.Comment;
+                            _presenter.CurrentOperationalControlRequest.LiquidationId = liquidationId;
 
+                            OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
+                            OCRD.Amount = ELR.TotalActualExpenditure - ELR.TotalTravelAdvance;
+
+                            _presenter.CurrentOperationalControlRequest.TotalAmount = ELR.TotalTravelAdvance;
+                            _presenter.CurrentOperationalControlRequest.TotalActualExpendture = ELR.TotalActualExpenditure;
+                            OCRD.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
+                            _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails.Add(OCRD);
+                        }
+                    }
+                }
+                else if (Request.QueryString["Page"].Contains("Settlement"))
+                {
+                    if (Request.QueryString["SettlementId"] != null)
+                    {
+                        int SettlementId = Convert.ToInt32(Request.QueryString["SettlementId"]);
+                        PaymentReimbursementRequest PRR = _presenter.GetReimbursementRequest(SettlementId);
+                        if (PRR != null)
+                        {
+                            _presenter.CurrentOperationalControlRequest.Description = PRR.Comment;
+                            _presenter.CurrentOperationalControlRequest.LiquidationId = SettlementId;
+
+                            OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
+                            OCRD.Amount = PRR.TotalAmount - PRR.ReceivableAmount;
+                            OCRD.Project = PRR.Project;
+                            OCRD.Grant = PRR.Grant;
+                            _presenter.CurrentOperationalControlRequest.TotalAmount = PRR.ReceivableAmount;
+                            _presenter.CurrentOperationalControlRequest.TotalActualExpendture = PRR.TotalAmount;
+                            OCRD.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
+                            _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails.Add(OCRD);
+                        }
+                    }
+                }
 
             }
 
-            
+
 
         }
         private string AutoNumber()
@@ -417,7 +465,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     if (ddlProject != null)
                     {
                         BindProject(ddlProject);
-                        if (_presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails[e.Item.DataSetIndex].Project.Id != 0)
+                        if (_presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails[e.Item.DataSetIndex].Project != null)
                         {
                             ListItem liI = ddlProject.Items.FindByValue(_presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails[e.Item.DataSetIndex].Project.Id.ToString());
                             if (liI != null)

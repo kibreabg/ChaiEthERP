@@ -59,6 +59,13 @@
                                     </asp:DropDownList><i></i>
                                 </label>
                             </section>
+                            <section class="col col-3">
+                                <asp:Label ID="lblSrchRequester" runat="server" Text="Requester" CssClass="label"></asp:Label>
+                                <label class="select">
+                                    <asp:DropDownList ID="ddlSrchRequester" runat="server">
+                                    </asp:DropDownList><i></i>
+                                </label>
+                            </section>
                         </div>
                     </fieldset>
                     <footer>
@@ -102,7 +109,7 @@
                     <asp:CommandField ButtonType="Button" SelectText="Process Request" ShowSelectButton="True" />
                     <asp:TemplateField>
                         <ItemTemplate>
-                            <asp:Button runat="server" ID="btnStatus" Text="" BorderStyle="None" />
+                            <asp:Button runat="server" ID="btnStatus" Enabled="false" Text="" BorderStyle="None" />
                         </ItemTemplate>
                     </asp:TemplateField>
                     <%--<asp:ButtonField ButtonType="Button" Text="Travel Log" CommandName="TravelLog" />--%>

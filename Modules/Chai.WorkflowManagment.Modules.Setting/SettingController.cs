@@ -30,7 +30,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
         private IWorkspace _workspace;
         private int currentUser;
         [InjectionConstructor]
-        public SettingController([ServiceDependency] IHttpContextLocatorService httpContextLocatorService, [ServiceDependency]INavigationService navigationService)
+        public SettingController([ServiceDependency] IHttpContextLocatorService httpContextLocatorService, [ServiceDependency] INavigationService navigationService)
             : base(httpContextLocatorService, navigationService)
         {
             _workspace = ZadsServices.Workspace;
@@ -264,7 +264,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
         public IList<Vehicle> GetVehicles()
         {
             return WorkspaceFactory.CreateReadOnly().Query<Vehicle>(x => x.Status == "Active").OrderBy(x => x.AppUser).ToList();
-          
+
         }
 
 
@@ -504,7 +504,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
         public IList<ServiceTypeDetail> GetServiceTypeDetbyname(string serviceTypename)
         {
             string filterExpression = "";
-            
+
             filterExpression = "select * from ServiceTypeDetails left join ServiceTypes on ServiceTypeDetails.ServiceType_Id=ServiceTypes.Id  Where ServiceTypes.Name = '" + serviceTypename + "' ";
 
             return _workspace.SqlQuery<ServiceTypeDetail>(filterExpression).ToList();
@@ -657,7 +657,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
         #region Beneficiary
         public IList<Beneficiary> GetBeneficiaries()
         {
-            return WorkspaceFactory.CreateReadOnly().Query<Beneficiary>(x => x.Status == "Active").ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<Beneficiary>(x => x.Status == "Active").OrderBy(x => x.BeneficiaryName).ToList();
         }
         public Beneficiary GetBeneficiary(int BeneficiaryId)
         {
@@ -813,7 +813,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
 
         }
 
-     
+
 
 
         #endregion
@@ -869,7 +869,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
             return _workspace.SqlQuery<Shelf>(filterExpression).ToList();
         }
 
-    
+
         #endregion
         #region Entity Manipulation
         public void SaveOrUpdateEntity<T>(T item) where T : class

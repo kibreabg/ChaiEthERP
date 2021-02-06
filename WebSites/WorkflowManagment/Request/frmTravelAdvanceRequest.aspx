@@ -232,7 +232,6 @@
                                                 <asp:ListItem Value="Chai Car/Hired Car">Chai Car/Hired Car</asp:ListItem>
                                                 <asp:ListItem Value="Bus">Bus</asp:ListItem>
                                                 <asp:ListItem Value="Air">Air</asp:ListItem>
-
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="RfvFStatus" runat="server"
                                                 ControlToValidate="ddlModeOfTravel" Display="Dynamic" CssClass="validator"
@@ -242,18 +241,6 @@
                                         <ItemTemplate>
                                             <%# DataBinder.Eval(Container.DataItem, "ModeOfTravel")%>
                                         </ItemTemplate>
-                                    </asp:TemplateColumn>
-
-                                    <asp:TemplateColumn HeaderText="Air Fare">
-                                        <ItemTemplate>
-                                            <%# DataBinder.Eval(Container.DataItem, "AirFare")%>
-                                        </ItemTemplate>
-                                        <EditItemTemplate>
-                                            <asp:TextBox ID="txtEdtAirFare" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "AirFare")%>' Width="67px"></asp:TextBox>
-                                        </EditItemTemplate>
-                                        <FooterTemplate>
-                                            <asp:TextBox ID="txtAirFare" runat="server" CssClass="form-control" Width="67px"></asp:TextBox>
-                                        </FooterTemplate>
                                     </asp:TemplateColumn>
                                     <asp:TemplateColumn HeaderText="Actions">
                                         <EditItemTemplate>

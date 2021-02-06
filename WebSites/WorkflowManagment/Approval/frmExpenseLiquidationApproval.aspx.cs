@@ -74,18 +74,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 return "{136836C4-1353-4DEF-A912-BF65AA84497C}";
             }
         }
-        private void ShowControls()
-        {
-            if ((_presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestStatuses.Count == _presenter.CurrentExpenseLiquidationRequest.CurrentLevel) && (_presenter.CurrentUser().EmployeePosition.PositionName == "Accountant"))
-            {
-                lblReimbersmentType.Visible = true;
-                ddlType.Visible = true;
-                lblNumber.Visible = true;
-                txtNumber.Visible = true;
-                iReimbersmentType.Visible = true;
-            }
 
-        }
         #region Field Getters
         public int GetExpenseLiquidationRequestId
         {
@@ -128,6 +117,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     ddlApprovalStatus.Items.Add(new ListItem(s[i].Replace('_', ' '), s[i].Replace('_', ' ')));
                 }
+            }
+            if (_presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestStatuses.Count == _presenter.CurrentExpenseLiquidationRequest.CurrentLevel)
+            {
+                ddlApprovalStatus.Items.Add(new ListItem(ApprovalStatus.Bank_Payment.ToString().Replace('_', ' '), ApprovalStatus.Bank_Payment.ToString().Replace('_', ' ')));
             }
             ddlApprovalStatus.Items.Add(new ListItem(ApprovalStatus.Rejected.ToString().Replace('_', ' '), ApprovalStatus.Rejected.ToString().Replace('_', ' ')));
 
@@ -177,21 +170,45 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void BindExpenseLiquidationRequestStatus()
         {
-            // ExpenseLiquidationApprovalPresenter _presenterm = new   ExpenseLiquidationApprovalPresenter;
             foreach (ExpenseLiquidationRequestStatus ELRS in _presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestStatuses)
             {
-                //if (ELRS.WorkflowLevel == _presenter.CurrentExpenseLiquidationRequest.CurrentLevel && _presenter.CurrentExpenseLiquidationRequest.ProgressStatus != ProgressStatus.Completed.ToString())
-                //{
-                //    btnApprove.Enabled = true;
-                //}
-                //else
-                //    btnApprove.Enabled = false;
-                if (ELRS.ApprovalStatus != null)
+                if (ELRS.WorkflowLevel == _presenter.CurrentExpenseLiquidationRequest.CurrentLevel && _presenter.CurrentExpenseLiquidationRequest.ProgressStatus != ProgressStatus.Completed.ToString())
+                {
+                    btnApprove.Enabled = true;
+                }
+
+                if (ELRS.WorkflowLevel == _presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestStatuses.Count && ELRS.ApprovalStatus != null)
                 {
                     btnPrint.Enabled = true;
-                    //btnExport.Enabled = true;
+                    btnApprove.Enabled = false;
+                }
+                else if (_presenter.CurrentExpenseLiquidationRequest.CurrentStatus == ApprovalStatus.Rejected.ToString())
+                {
+                    btnApprove.Enabled = false;
+                    btnBankPayment.Visible = false;
+                }
+                else
+                {
+                    btnPrint.Enabled = false;
+                    btnApprove.Enabled = true;
                 }
             }
+
+            //Bank Payment should be initiated if CHAI is the one who's going to pay (variance is Positive)
+            decimal variance = _presenter.CurrentExpenseLiquidationRequest.TotalActualExpenditure - _presenter.CurrentExpenseLiquidationRequest.TotalTravelAdvance;
+
+            if (_presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestStatuses.Last().ApprovalStatus == "Bank Payment" && !IsBankPaymentRequested() && variance > 0 && _presenter.CurrentExpenseLiquidationRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
+                btnBankPayment.Visible = true;
+            else
+                btnBankPayment.Visible = false;
+        }
+        private bool IsBankPaymentRequested()
+        {
+            OperationalControlRequest ocr = _presenter.GetOperationalControlRequestByLiquidationId(_presenter.CurrentExpenseLiquidationRequest.Id);
+            if (ocr != null)
+                return true;
+            else
+                return false;
         }
         private void BindAttachments()
         {
@@ -207,8 +224,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void ShowPrint()
         {
-            btnPrint.Enabled = true;
-            //btnExport.Enabled = true;
+            if (_presenter.CurrentExpenseLiquidationRequest.CurrentLevel == _presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestStatuses.Count && _presenter.CurrentExpenseLiquidationRequest.ProgressStatus == ProgressStatus.Completed.ToString())
+            {
+                btnPrint.Enabled = true;
+
+                //Bank Payment should be initiated if CHAI is the one who's going to pay (variance is Positive)
+                decimal variance = _presenter.CurrentExpenseLiquidationRequest.TotalActualExpenditure - _presenter.CurrentExpenseLiquidationRequest.TotalTravelAdvance;
+                if (_presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestStatuses.Last().ApprovalStatus == "Bank Payment" && variance > 0 && _presenter.CurrentExpenseLiquidationRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
+                    btnBankPayment.Visible = true;
+            }
         }
         private void SendEmail(ExpenseLiquidationRequestStatus ELRS)
         {
@@ -263,8 +287,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     if (ELRS.ApprovalStatus != ApprovalStatus.Rejected.ToString())
                     {
                         _presenter.CurrentExpenseLiquidationRequest.ProgressStatus = ProgressStatus.Completed.ToString();
-                        _presenter.CurrentExpenseLiquidationRequest.ExpenseReimbersmentType = ddlType.SelectedValue;
-                        _presenter.CurrentExpenseLiquidationRequest.ReimbersmentNo = txtNumber.Text;
                         _presenter.CurrentExpenseLiquidationRequest.TravelAdvanceRequest.ExpenseLiquidationStatus = "Finished";
                         GetNextApprover();
                         ELRS.Approver = _presenter.CurrentUser().Id;
@@ -354,11 +376,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void grvExpenseLiquidationRequestList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //grvExpenseLiquidationRequestList.SelectedDataKey.Value
             _presenter.OnViewLoaded();
+            if (_presenter.CurrentExpenseLiquidationRequest.ProgressStatus == ProgressStatus.Completed.ToString())
+            {
+                PrintTransaction();
+            }
             PopApprovalStatus();
+            Session["PaymentId"] = _presenter.CurrentExpenseLiquidationRequest.Id;
             btnApprove.Enabled = true;
-            ShowControls();
             BindExpenseLiquidationRequestStatus();
             BindAttachments();
             ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
@@ -512,6 +537,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 ExceptionUtility.LogException(ex, ex.Source);
                 ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
+        }
+        protected void btnBankPayment_Click(object sender, EventArgs e)
+        {
+            Response.Redirect(String.Format("../Request/frmOperationalControlRequest.aspx?paymentId={0}&Page={1}", Convert.ToInt32(Session["PaymentId"]), "ExpenseLiquidation"));
         }
         private void PrintTransaction()
         {
@@ -744,7 +773,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
             catch (Exception ex)
             {
-
+                Master.ShowMessage(new AppMessage("Error exporting to Excel. " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
             ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true); ;
         }

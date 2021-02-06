@@ -95,7 +95,7 @@
                 <asp:CommandField ButtonType="Button" SelectText="Process Request" ShowSelectButton="True" />
                 <asp:TemplateField>
                     <ItemTemplate>
-                        <asp:Button runat="server" ID="btnStatus" Text="" BorderStyle="None" />
+                        <asp:Button runat="server" ID="btnStatus" Enabled="false" Text="" BorderStyle="None" />
                     </ItemTemplate>
                 </asp:TemplateField>
             </Columns>
@@ -126,27 +126,6 @@
                     <div class="widget-body no-padding">
                         <div class="smart-form">
                             <fieldset>
-                                <div class="row">
-                                    <section class="col col-6">
-                                        <asp:Label ID="lblReimbersmentType" runat="server" Text="Retirement Type" CssClass="label" Visible="false"></asp:Label>
-                                        <label class="select">
-                                            <asp:DropDownList ID="ddlType" runat="server" Visible="false">
-                                                <asp:ListItem Value=" ">Select Retirement Type</asp:ListItem>
-                                                <asp:ListItem Value="None">None</asp:ListItem>
-                                                <asp:ListItem Value="Voucher">Reimbursement</asp:ListItem>
-                                                <asp:ListItem Value="Receipt">Receipt</asp:ListItem>
-
-                                            </asp:DropDownList><i runat="server" id="iReimbersmentType" visible="false"></i>
-
-                                        </label>
-                                    </section>
-                                    <section class="col col-6">
-                                        <asp:Label ID="lblNumber" runat="server" Text="Number" CssClass="label" Visible="false"></asp:Label>
-                                        <label class="input">
-                                            <asp:TextBox ID="txtNumber" runat="server" Visible="false"></asp:TextBox>
-                                        </label>
-                                    </section>
-                                </div>
                                 <div class="row">
                                     <section class="col col-6">
                                         <asp:Label ID="lblApprovalStatus" runat="server" Text="Approval Status" CssClass="label"></asp:Label>
@@ -191,7 +170,8 @@
                                 <asp:Button ID="btnApprove" runat="server" ValidationGroup="save" Text="Save" OnClick="btnApprove_Click" Enabled="false" CssClass="btn btn-primary"></asp:Button>
                                 <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-primary" Enabled="false" OnClientClick="javascript:Clickheretoprint('divprint');return false;"></asp:Button>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                <asp:Button ID="btnExport" runat="server" Text="Export" CssClass="btn btn-primary" Enabled="False" OnClick="btnExport_Click"></asp:Button>
+                                <asp:Button ID="btnBankPayment" runat="server" CssClass="btn btn-default" OnClick="btnBankPayment_Click" Text="Bank Payment" Visible="False" />
+                                <asp:Button ID="btnExport" runat="server" Text="Export" CssClass="btn btn-primary" Visible="False" OnClick="btnExport_Click"></asp:Button>
                             </footer>
                         </div>
                     </div>
@@ -205,7 +185,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         &times;</button>
-                    <h4 class="modal-title">Process Purchase Request</h4>
+                    <h4 class="modal-title">Expense Liquidation Detail</h4>
                 </div>
                 <div class="modal-body">
                     <div class="jarviswidget-editbox"></div>

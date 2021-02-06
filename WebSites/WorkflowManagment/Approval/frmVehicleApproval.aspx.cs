@@ -26,7 +26,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 PopProgressStatus();
                 BindVehicles();
                 PopProjects();
-
+                PopRequesters(ddlSrchRequester);
             }
             this._presenter.OnViewLoaded();
             BindSearchVehicleRequestGrid();
@@ -133,6 +133,16 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             ddlDriver.Items.Insert(0, new ListItem("Select Driver", "0"));
             ddlDriver.SelectedIndex = 0;
         }
+        private void PopRequesters(DropDownList ddl)
+        {
+            ddl.DataSource = _presenter.GetEmployeeList();
+            ddl.DataTextField = "FullName";
+            ddl.DataValueField = "ID";
+            ddl.DataBind();
+
+            ddl.Items.Insert(0, new ListItem("Select Requester", "0"));
+            ddl.SelectedIndex = 0;
+        }
         private void PopCarRentals(DropDownList ddlCarRental)
         {
             ddlCarRental.DataSource = _presenter.GetCarRentals();
@@ -172,7 +182,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void BindSearchVehicleRequestGrid()
         {
-            grvVehicleRequestList.DataSource = _presenter.ListVehicleRequests(txtSrchRequestNo.Text, txtSrchRequestDate.Text, ddlSrchProgressStatus.SelectedValue);
+            grvVehicleRequestList.DataSource = _presenter.ListVehicleRequests(txtSrchRequestNo.Text, txtSrchRequestDate.Text, ddlSrchProgressStatus.SelectedValue, ddlSrchRequester.SelectedValue);
             grvVehicleRequestList.DataBind();
         }
         private void BindVehicleRequestStatus()
@@ -339,8 +349,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             PopApprovalStatus();
             BindVehicleRequestStatus();
             BindVehicles();
-            ddlProject.SelectedValue = _presenter.CurrentVehicleRequest.Project.Id.ToString();
-            ddlProject_SelectedIndexChanged(sender, e);
+            if (_presenter.CurrentVehicleRequest.Project.Status != "InActive")
+            {
+                ddlProject.SelectedValue = _presenter.CurrentVehicleRequest.Project.Id.ToString();
+                ddlProject_SelectedIndexChanged(sender, e);
+            }
+
             if (_presenter.CurrentVehicleRequest.Grant != null)
                 ddlGrant.SelectedValue = _presenter.CurrentVehicleRequest.Grant.Id.ToString();
             if (_presenter.CurrentVehicleRequest.ProgressStatus == ProgressStatus.Completed.ToString())

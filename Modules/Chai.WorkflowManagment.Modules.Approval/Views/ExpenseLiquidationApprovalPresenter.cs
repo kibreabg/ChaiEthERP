@@ -105,6 +105,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _settingController.GetProjects();
         }
+        public OperationalControlRequest GetOperationalControlRequestByLiquidationId(int liquidationId)
+        {
+            return _requestController.GetOperationalControlRequestByLiquidationId(liquidationId);
+        }
         public TravelAdvanceRequest GetTravelAdvanceRequest(int id)
         {
             return _requestController.GetTravelAdvanceRequest(id);

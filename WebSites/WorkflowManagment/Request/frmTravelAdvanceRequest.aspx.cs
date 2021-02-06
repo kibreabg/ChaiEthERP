@@ -396,9 +396,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     tarDetail.ToDate = Convert.ToDateTime(txtToDate.Text);
                     DropDownList ddlModeOfTravel = e.Item.FindControl("ddlModeOfTravel") as DropDownList;
                     tarDetail.ModeOfTravel = ddlModeOfTravel.SelectedValue;
-                    TextBox txtAirFare = e.Item.FindControl("txtAirFare") as TextBox;
-                    if (!String.IsNullOrEmpty(txtAirFare.Text))
-                        tarDetail.AirFare = Convert.ToDecimal(txtAirFare.Text);
 
                     _presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestDetails.Add(tarDetail);
                     dgTravelAdvanceRequestDetail.EditItemIndex = -1;
@@ -461,9 +458,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 tarDetail.ToDate = Convert.ToDateTime(txtToDate.Text);
                 DropDownList ddlEdtModeOfTravel = e.Item.FindControl("ddlEdtModeOfTravel") as DropDownList;
                 tarDetail.ModeOfTravel = ddlEdtModeOfTravel.SelectedValue;
-                TextBox txtAirFare = e.Item.FindControl("txtEdtAirFare") as TextBox;
-                if (!String.IsNullOrEmpty(txtAirFare.Text))
-                    tarDetail.AirFare = Convert.ToDecimal(txtAirFare.Text);
 
                 dgTravelAdvanceRequestDetail.EditItemIndex = -1;
                 BindTravelAdvanceDetails();
@@ -497,7 +491,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 hfDetailId.Value = dgTravelAdvanceRequestDetail.SelectedItem.ItemIndex.ToString();
             }
-            BindCostsGrid(tac);            
+            BindCostsGrid(tac);
             ScriptManager.RegisterStartupScript(this, GetType(), "showCostModal", "showCostModal();", true);
         }
         protected void dgTravelAdvanceRequestCost_CancelCommand(object source, DataGridCommandEventArgs e)
@@ -527,7 +521,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     txtTotal.Text = _presenter.CurrentTravelAdvanceRequest.TotalTravelAdvance.ToString();
                     _presenter.SaveOrUpdateTARequest(_presenter.CurrentTravelAdvanceRequest);
                 }
-                else {
+                else
+                {
 
                     _presenter.CurrentTravelAdvanceRequest.GetTravelAdvanceRequestDetail(Convert.ToInt32(hfDetailId.Value)).TravelAdvanceCosts.Remove(taco);
                     _presenter.CurrentTravelAdvanceRequest.TotalTravelAdvance = _presenter.CurrentTravelAdvanceRequest.TotalTravelAdvance - taco.Total;
@@ -549,12 +544,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             tac = Session["tac"] as TravelAdvanceRequestDetail;
             this.dgTravelAdvanceRequestCost.EditItemIndex = e.Item.ItemIndex;
             int TACId = (int)dgTravelAdvanceRequestCost.DataKeys[e.Item.ItemIndex];
-            TravelAdvanceCost taco;
+            TravelAdvanceCost taco = new TravelAdvanceCost();
 
             if (TACId > 0)
                 taco = _presenter.GetTravelAdvanceCost(TACId);
             else
-                taco = (TravelAdvanceCost)tac.TravelAdvanceCosts[e.Item.ItemIndex];
+            {
+                if (tac != null)
+                    taco = (TravelAdvanceCost)tac.TravelAdvanceCosts[e.Item.ItemIndex];
+            }
+
             BindCostsGrid(taco.TravelAdvanceRequestDetail);
             ScriptManager.RegisterStartupScript(this, GetType(), "showCostModal", "showCostModal();", true);
         }
@@ -653,12 +652,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (id > 0)
                 taCost = tac.GetTravelAdvanceCost(id);
             else
-
                 taCost = tac.TravelAdvanceCosts[e.Item.ItemIndex];
 
             try
             {
-
                 taCost.TravelAdvanceRequestDetail = taCost.TravelAdvanceRequestDetail;
                 DropDownList ddlEdtAccountDescription = e.Item.FindControl("ddlEdtAccountDescription") as DropDownList;
                 ItemAccount itemEdtAccount = _presenter.GetItemAccount(Convert.ToInt32(ddlEdtAccountDescription.SelectedValue));
