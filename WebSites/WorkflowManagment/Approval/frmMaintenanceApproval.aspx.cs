@@ -257,8 +257,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
         private void SendEmailtoMechanic()
         {
-                   string message = "Your Reviewed Car Maintenance Request By " + (_presenter.CurrentMaintenanceRequest.AppUser.FullName).ToUpper() + " and Request Number :   '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + " is Approved: and Please Maintain the Requested Car for Maintenance.   '";
-                    EmailSender.Send(_presenter.GetMechanic().Email, "Maintenance Request ", message);
+                   string message = " Requested By " + (_presenter.CurrentMaintenanceRequest.AppUser.FullName).ToUpper() + " and Request Number :   '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + " is Approved: and Please Complete the Request.   '";
+                    EmailSender.Send(_presenter.GetMechanic().Email, "Maintenance Request: ", message);
                     Log.Info((_presenter.GetMechanic().FullName).ToUpper() + " has Maintained a Maintenance Request made by " + _presenter.CurrentMaintenanceRequest.AppUser.FullName);
              
         }
@@ -266,11 +266,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             if (_presenter.GetUser(MRS.Approver).IsAssignedJob != true)
             {
-                EmailSender.Send(_presenter.GetUser(MRS.Approver).Email, "Maintenance Request", (_presenter.GetUser(_presenter.CurrentMaintenanceRequest.AppUser.Id).FullName).ToUpper() + " Requests for Maintenance Request No. - '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + "'");
+                EmailSender.Send(_presenter.GetUser(MRS.Approver).Email, "Maintenance Request", (_presenter.GetUser(_presenter.CurrentMaintenanceRequest.AppUser.Id).FullName).ToUpper() + " with Request No. - '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + "Is Reviewed Please Approve");
             }
             else
             {
-                EmailSender.Send(_presenter.GetUser(_presenter.GetAssignedJobbycurrentuser(MRS.Approver).AssignedTo).Email, "Maintenance Request", (_presenter.GetUser(_presenter.CurrentMaintenanceRequest.AppUser.Id).FullName).ToUpper() + " Requests for Maintenance with  Request No. - '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + "'");
+                EmailSender.Send(_presenter.GetUser(_presenter.GetAssignedJobbycurrentuser(MRS.Approver).AssignedTo).Email, "Maintenance Request", (_presenter.GetUser(_presenter.CurrentMaintenanceRequest.AppUser.Id).FullName).ToUpper() + " with  Request No. - '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + "Is Reviewed Please Approve");
             }
         }
         private void SendEmailRejected(MaintenanceRequestStatus MRS)
@@ -330,7 +330,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     _presenter.CurrentMaintenanceRequest.CurrentLevel = MRS.WorkflowLevel;
                     _presenter.CurrentMaintenanceRequest.CurrentStatus = MRS.ApprovalStatus;
                     _presenter.CurrentMaintenanceRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
-                    SendEmail(MRS);
+
+                    if (MRS.ApprovalStatus == "Reviewed")
+                    {
+                        SendEmail(MRS);
+                    }
+                    else
+                    {
+                        SendEmailtoMechanic();
+                    }
                     break;
                 }
             }
