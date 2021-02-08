@@ -107,7 +107,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             }
 
-            ddlApprovalStatus.Items.Add(new ListItem(ApprovalStatus.Rejected.ToString().Replace('_', ' '), ApprovalStatus.Rejected.ToString().Replace('_', ' ')));
+            ddlApprovalStatus.Items.Add(new ListItem("Reject Bank Payment", ApprovalStatus.Rejected.ToString().Replace('_', ' ')));
+            ddlApprovalStatus.Items.Add(new ListItem("Reject Whole Process", ApprovalStatus.Reject_Whole_Process.ToString().Replace('_', ' ')));
 
         }
         private string GetWillStatus()
@@ -248,6 +249,24 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
             }
         }
+        private void SendEmailTravelRejected(TravelAdvanceRequest tar, string rejectedReason)
+        {
+            EmailSender.Send(_presenter.GetUser(tar.AppUser.Id).Email, "Travel Advance Request Rejection", "Your Travel Advance Request with Request No. - '" + (tar.TravelAdvanceNo.ToString()).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (rejectedReason).ToUpper() + "'");
+
+            foreach (TravelAdvanceRequestStatus TARS in tar.TravelAdvanceRequestStatuses)
+            {
+                EmailSender.Send(_presenter.GetUser(TARS.Approver).Email, "Travel Advance Request Rejection", "Travel Advance Request with Request No. - '" + (tar.TravelAdvanceNo.ToString()).ToUpper() + "' made by " + (_presenter.GetUser(tar.AppUser.Id).FullName).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (rejectedReason).ToUpper() + "'");
+            }
+        }
+        private void SendEmailPaymentRejected(CashPaymentRequest cpr, string rejectedReason)
+        {
+            EmailSender.Send(_presenter.GetUser(cpr.AppUser.Id).Email, "Cash Payment Request Rejection", "Your Cash Payment Request with Request No. - '" + (cpr.RequestNo.ToString()).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (rejectedReason).ToUpper() + "'");
+
+            foreach (CashPaymentRequestStatus CPRS in cpr.CashPaymentRequestStatuses)
+            {
+                EmailSender.Send(_presenter.GetUser(CPRS.Approver).Email, "Cash Payment Request Rejection", "The Cash Payment Request with Request No. - '" + (cpr.RequestNo.ToString()).ToUpper() + "' made by " + (_presenter.GetUser(cpr.AppUser.Id).FullName).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (rejectedReason).ToUpper() + "'");
+            }
+        }
         private void GetNextApprover()
         {
             foreach (OperationalControlRequestStatus OCRS in _presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses)
@@ -284,7 +303,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     OCRS.Account = _presenter.GetAccount(_presenter.CurrentOperationalControlRequest.Account.Id);
                     OCRS.Date = DateTime.Now;
                     OCRS.AssignedBy = _presenter.GetAssignedJobbycurrentuser(OCRS.Approver) != null ? _presenter.GetAssignedJobbycurrentuser(OCRS.Approver).AppUser.FullName : "";
-                    if (OCRS.ApprovalStatus != ApprovalStatus.Rejected.ToString())
+                    if (OCRS.ApprovalStatus != ApprovalStatus.Rejected.ToString() && OCRS.ApprovalStatus != ApprovalStatus.Reject_Whole_Process.ToString())
                     {
                         if (_presenter.CurrentOperationalControlRequest.CurrentLevel == _presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses.Count)
                         {
@@ -297,10 +316,34 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                                 associatedTravelAdvance.ExpenseLiquidationStatus = ProgressStatus.Completed.ToString();
                                 _presenter.SaveOrUpdateTravelAdvanceRequest(associatedTravelAdvance);
                             }
-                            
+
                         }
                         GetNextApprover();
                         OCRS.Approver = _presenter.CurrentUser().Id;
+                        Log.Info(_presenter.GetUser(OCRS.Approver).FullName + " has " + OCRS.ApprovalStatus + " Bank Payment Request made by " + _presenter.CurrentOperationalControlRequest.AppUser.FullName);
+                    }
+                    else if (OCRS.ApprovalStatus == ApprovalStatus.Reject_Whole_Process.ToString())
+                    {
+                        if (_presenter.CurrentOperationalControlRequest.TravelAdvanceId > 0)
+                        {
+                            TravelAdvanceRequest theTravelAdvance = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId);
+                            theTravelAdvance.CurrentStatus = ApprovalStatus.Rejected.ToString();
+                            theTravelAdvance.TravelAdvanceRequestStatuses.Last().RejectedReason = OCRS.RejectedReason;
+                            _presenter.SaveOrUpdateTravelAdvanceRequest(theTravelAdvance);
+                            SendEmailTravelRejected(theTravelAdvance, OCRS.RejectedReason);
+                        }
+                        else if (_presenter.CurrentOperationalControlRequest.PaymentId > 0)
+                        {
+                            CashPaymentRequest theCashPayment = _presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId);
+                            theCashPayment.CurrentStatus = ApprovalStatus.Rejected.ToString();
+                            theCashPayment.CashPaymentRequestStatuses.Last().RejectedReason = OCRS.RejectedReason;
+                            _presenter.SaveOrUpdateCashPaymentRequest(theCashPayment);
+                            SendEmailPaymentRejected(theCashPayment, OCRS.RejectedReason);
+                        }
+
+                        _presenter.CurrentOperationalControlRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                        OCRS.Approver = _presenter.CurrentUser().Id;
+                        SendEmailRejected(OCRS);
                         Log.Info(_presenter.GetUser(OCRS.Approver).FullName + " has " + OCRS.ApprovalStatus + " Bank Payment Request made by " + _presenter.CurrentOperationalControlRequest.AppUser.FullName);
                     }
                     else
@@ -549,7 +592,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void ddlApprovalStatus_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ddlApprovalStatus.SelectedValue == "Rejected")
+            if (ddlApprovalStatus.SelectedValue == ApprovalStatus.Rejected.ToString() || ddlApprovalStatus.SelectedValue == ApprovalStatus.Reject_Whole_Process.ToString().Replace('_', ' '))
             {
                 lblRejectedReason.Visible = true;
                 txtRejectedReason.Visible = true;
