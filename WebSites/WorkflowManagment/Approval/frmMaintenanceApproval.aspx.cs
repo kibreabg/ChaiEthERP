@@ -331,7 +331,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     _presenter.CurrentMaintenanceRequest.CurrentStatus = MRS.ApprovalStatus;
                     _presenter.CurrentMaintenanceRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
 
-                    if (MRS.ApprovalStatus == "Reviewed")
+                   // if (MRS.ApprovalStatus == "Reviewed")
+                   if(_presenter.CurrentMaintenanceRequest.MaintenanceRequestStatuses.Count != _presenter.CurrentMaintenanceRequest.CurrentLevel)
                     {
                         SendEmail(MRS);
                     }

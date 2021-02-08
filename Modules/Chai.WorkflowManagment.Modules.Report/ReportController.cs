@@ -228,7 +228,7 @@ namespace Chai.WorkflowManagment.Modules.Report
             filterExpression = "SELECT * FROM Employees left Join Contracts on Contracts.Employee_Id=Employees.Id and Contracts.Status = 'Active' Inner Join AppUsers on Appusers.Id = Employees.Id " +
                 " left Join EmployeeDetails on EmployeeDetails.Contract_Id = Contracts.Id  "  +
                 " Where 1 = Case when '" + FullName + "' = '' Then 1 When (Employees.FirstName + ' ' + Employees.lastName) like '%" + FullName + "%' Then 1 END AND " +
-                " 1 = Case when '" + programId + "' = '0' Then 1 When EmployeeDetails.Program_Id = '" + programId + "' Then 1 End ";
+                " 1 = Case when '" + programId + "' = '0' Then 1 When EmployeeDetails.Program_Id = '" + programId + "' Then 1 End order by AppUsers.HiredDate";
             // return WorkspaceFactory.CreateReadOnly().Queryable<CashPaymentRequest>(filterExpression).ToList();
             return _workspace.SqlQuery<Employee>(filterExpression).ToList();
         }
