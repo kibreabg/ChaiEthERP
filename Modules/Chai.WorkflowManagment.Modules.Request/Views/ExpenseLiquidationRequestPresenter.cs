@@ -99,9 +99,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     }
                     else if (AL.EmployeePosition.PositionName == "Program Manager")
                     {
-                        if (_TravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails[0].Project.Id != 0)
+                        if (_TravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails[0].Project != null)
                         {
-                            ELRS.Approver = GetProject(_TravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails[0].Project.Id).AppUser.Id;
+                            if (_TravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails[0].Project.AppUser.Id != CurrentUser().Id)
+                            {
+                                ELRS.Approver = GetProject(_TravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails[0].Project.Id).AppUser.Id;
+                            }
+                            else
+                            {
+                                ELRS.Approver = CurrentUser().Superviser.Value;
+                            }
                         }
                     }
                     else
@@ -139,7 +146,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             //This is to handle multiple Finance Officers responding to this request
                             //SendEmailToFinanceOfficers;
                             CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.CurrentApproverPosition = ELRS.ApproverPosition;
-                        }                        
+                        }
                         CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.CurrentApprover = ELRS.Approver;
                         CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.CurrentLevel = ELRS.WorkflowLevel;
                         CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.CurrentStatus = ELRS.ApprovalStatus;
@@ -270,7 +277,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     }
 
                 }
-            }            
+            }
         }
         public void Commit()
         {

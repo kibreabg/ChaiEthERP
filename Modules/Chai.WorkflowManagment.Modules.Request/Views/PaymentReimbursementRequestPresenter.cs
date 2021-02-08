@@ -42,7 +42,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         public override void OnViewInitialized()
         {
-            
+
         }
         public CashPaymentRequest CurrentCashPaymentRequest
         {
@@ -74,24 +74,31 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 int i = 1;
                 foreach (ApprovalLevel AL in GetApprovalSetting(RequestType.PaymentReimbursement_Request.ToString().Replace('_', ' '), 0).ApprovalLevels)
                 {
-                    PaymentReimbursementRequestStatus ELRS = new PaymentReimbursementRequestStatus();
-                    ELRS.PaymentReimbursementRequest = _CashPaymentRequest.PaymentReimbursementRequest;
+                    PaymentReimbursementRequestStatus PRRS = new PaymentReimbursementRequestStatus();
+                    PRRS.PaymentReimbursementRequest = _CashPaymentRequest.PaymentReimbursementRequest;
 
                     if (AL.EmployeePosition.PositionName == "Superviser/Line Manager")
                     {
                         if (CurrentUser().Superviser != 0)
-                            ELRS.Approver = CurrentUser().Superviser.Value;
+                            PRRS.Approver = CurrentUser().Superviser.Value;
                         else
                         {
-                            ELRS.ApprovalStatus = ApprovalStatus.Approved.ToString();
-                            ELRS.Date = Convert.ToDateTime(DateTime.Today.Date.ToShortDateString());
+                            PRRS.ApprovalStatus = ApprovalStatus.Approved.ToString();
+                            PRRS.Date = Convert.ToDateTime(DateTime.Today.Date.ToShortDateString());
                         }
                     }
                     else if (AL.EmployeePosition.PositionName == "Program Manager")
                     {
-                        if (CurrentCashPaymentRequest.PaymentReimbursementRequest.Project.Id != 0)
+                        if (CurrentCashPaymentRequest.PaymentReimbursementRequest.Project != null)
                         {
-                            ELRS.Approver = GetProject(CurrentCashPaymentRequest.PaymentReimbursementRequest.Project.Id).AppUser.Id;
+                            if (CurrentCashPaymentRequest.PaymentReimbursementRequest.Project.AppUser.Id != CurrentUser().Id)
+                            {
+                                PRRS.Approver = GetProject(CurrentCashPaymentRequest.PaymentReimbursementRequest.Project.Id).AppUser.Id;
+                            }
+                            else
+                            {
+                                PRRS.Approver = CurrentUser().Superviser.Value;
+                            }
                         }
                     }
                     else
@@ -100,19 +107,19 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         {
                             if (AL.EmployeePosition.PositionName == "Accountant")
                             {
-                                ELRS.ApproverPosition = AL.EmployeePosition.Id; //So that we can entertain more than one finance manager to handle the request
+                                PRRS.ApproverPosition = AL.EmployeePosition.Id; //So that we can entertain more than one finance manager to handle the request
                             }
                             else
                             {
-                                ELRS.Approver = Approver(AL.EmployeePosition.Id).Id;
+                                PRRS.Approver = Approver(AL.EmployeePosition.Id).Id;
                             }
                         }
                         else
-                            ELRS.Approver = 0;
+                            PRRS.Approver = 0;
                     }
-                    ELRS.WorkflowLevel = i;
+                    PRRS.WorkflowLevel = i;
                     i++;
-                    CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Add(ELRS);
+                    CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Add(PRRS);
                 }
             }
         }
@@ -151,7 +158,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
             if (CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Count == 0)
                 SavePaymentReimbursementRequestStatus();
-                GetCurrentApprover();
+            GetCurrentApprover();
             _controller.SaveOrUpdateEntity(CurrentCashPaymentRequest);
         }
         public void CancelPage()
@@ -166,7 +173,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.GetPaymentReimbursementRequestDetail(CPRDId);
         }
-    
+
         public PaymentReimbursementRequest GetPaymentReimbursementRequest(int id)
         {
             return _controller.GetPaymentReimbursementRequest(id);

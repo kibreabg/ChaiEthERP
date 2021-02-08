@@ -90,9 +90,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     }
                     else if (AL.EmployeePosition.PositionName == "Program Manager")
                     {
-                        if (CurrentTravelAdvanceRequest.Project.Id != 0)
+                        if (CurrentTravelAdvanceRequest.Project != null)
                         {
-                            TARS.Approver = GetProject(CurrentTravelAdvanceRequest.Project.Id).AppUser.Id;
+                            if (CurrentTravelAdvanceRequest.Project.AppUser.Id != CurrentUser().Id)
+                            {
+                                TARS.Approver = GetProject(CurrentTravelAdvanceRequest.Project.Id).AppUser.Id;
+                            }
+                            else
+                            {
+                                TARS.Approver = CurrentUser().Superviser.Value;
+                            }
                         }
                     }
                     else

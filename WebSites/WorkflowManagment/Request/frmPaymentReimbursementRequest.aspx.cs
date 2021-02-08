@@ -74,7 +74,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return txtComment.Text; }
         }
-
         public IList<PaymentReimbursementRequest> PaymentReimbursementRequests
         {
             get
@@ -219,7 +218,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             TextBox txtEdtAccountCode = ddl.FindControl("txtEdtAccountCode") as TextBox;
             txtEdtAccountCode.Text = _presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)).AccountCode;
         }
-
         private void BindAccountDescription(DropDownList ddlAccountDescription)
         {
             ddlAccountDescription.DataSource = _presenter.ListItemAccounts();
@@ -228,7 +226,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ddlAccountDescription.DataTextField = "AccountName";
             ddlAccountDescription.DataBind();
         }
-
         private void BindProject(DropDownList ddlProject, int programID)
         {
             ddlProject.DataSource = _presenter.ListProjects(programID);
@@ -244,7 +241,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ddlGrant.DataTextField = "GrantCode";
             ddlGrant.DataBind();
         }
-
         protected void dgCashPaymentDetail_CancelCommand(object source, DataGridCommandEventArgs e)
         {
             this.dgCashPaymentDetail.EditItemIndex = -1;
@@ -426,7 +422,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
             }
         }
-
         protected void btnSave_Click(object sender, EventArgs e)
         {
             if (Convert.ToDecimal(txtImbursement.Text) >= Convert.ToDecimal(txtReceivables.Text))
