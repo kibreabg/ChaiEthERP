@@ -197,10 +197,10 @@
                                                         </asp:TemplateColumn>
                                                         <asp:TemplateColumn HeaderText="Account Code">
                                                             <ItemTemplate>
-                                                                <%# DataBinder.Eval(Container.DataItem, "AccountCode")%>
+                                                                <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountCode")%>
                                                             </ItemTemplate>
                                                             <EditItemTemplate>
-                                                                <asp:TextBox ID="txtEdtAccountCode" Enabled="false" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "AccountCode")%>'></asp:TextBox>
+                                                                <asp:TextBox ID="txtEdtAccountCode" Enabled="false" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountCode")%>'></asp:TextBox>
                                                             </EditItemTemplate>
                                                             <FooterTemplate>
                                                                 <asp:TextBox ID="txtAccountCode" runat="server" Enabled="false" CssClass="form-control"></asp:TextBox>

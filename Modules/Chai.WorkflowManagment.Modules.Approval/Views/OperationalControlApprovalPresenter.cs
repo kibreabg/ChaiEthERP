@@ -89,6 +89,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _requestController.GetTravelAdvanceRequest(reqId);
         }
+        public ExpenseLiquidationRequest GetExpenseLiquidationRequest(int liqID)
+        {
+            return _requestController.GetExpenseLiquidationRequest(liqID);
+        }
         public CashPaymentRequest GetCashPaymentRequest(int reqId)
         {
             return _requestController.GetCashPaymentRequest(reqId);

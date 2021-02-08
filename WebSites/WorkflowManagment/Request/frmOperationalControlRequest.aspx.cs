@@ -93,6 +93,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return int.Parse(ddlBeneficiary.SelectedValue); }
         }
+        public string GetDescription
+        {
+            get { return txtDescription.Text; }
+        }
         public string GetPayee
         {
             get { return txtPayee.Text; }
@@ -206,14 +210,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         ExpenseLiquidationRequest ELR = _presenter.GetExpenseLiquidation(liquidationId);
                         if (ELR != null)
                         {
-                            _presenter.CurrentOperationalControlRequest.Description = ELR.Comment;
                             _presenter.CurrentOperationalControlRequest.LiquidationId = liquidationId;
 
                             OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
                             OCRD.Amount = ELR.TotalActualExpenditure - ELR.TotalTravelAdvance;
+                            OCRD.ItemAccount = _presenter.GetDefaultItemAccount();
+                            OCRD.Project = ELR.ExpenseLiquidationRequestDetails[0].Project;
+                            OCRD.Grant = ELR.ExpenseLiquidationRequestDetails[0].Grant;
 
-                            _presenter.CurrentOperationalControlRequest.TotalAmount = ELR.TotalTravelAdvance;
-                            _presenter.CurrentOperationalControlRequest.TotalActualExpendture = ELR.TotalActualExpenditure;
+                            _presenter.CurrentOperationalControlRequest.TotalAmount = OCRD.Amount;
+                            _presenter.CurrentOperationalControlRequest.TotalActualExpendture = OCRD.Amount;
                             OCRD.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
                             _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails.Add(OCRD);
                         }
@@ -241,11 +247,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         }
                     }
                 }
-
             }
-
-
-
         }
         private string AutoNumber()
         {
@@ -530,7 +532,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     _presenter.SaveOrUpdateOperationalControlRequest();
                     BindOperationalControlRequests();
-                    Master.ShowMessage(new AppMessage("Successfully did a Bank Payment  Request, with Reference No - <b>'" + _presenter.CurrentOperationalControlRequest.VoucherNo + "'</b>", RMessageType.Info));
+                    Master.ShowMessage(new AppMessage("Successfully requested a Bank Payment with a Reference No - <b>'" + _presenter.CurrentOperationalControlRequest.VoucherNo + "'</b>", RMessageType.Info));
                     Log.Info(_presenter.CurrentUser().FullName + " has requested a Bank Payment for a total amount of " + _presenter.CurrentOperationalControlRequest.TotalAmount.ToString());
                     btnSave.Visible = false;
                 }
@@ -547,7 +549,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (ex.InnerException.InnerException.Message.Contains("Violation of UNIQUE KEY"))
                     {
-                        Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", RMessageType.Error));
+                        Master.ShowMessage(new AppMessage("Please Click Request button Again, There is a duplicate Number", RMessageType.Error));
                         //AutoNumber();
                     }
                 }
