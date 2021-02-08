@@ -26,7 +26,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 PopProgressStatus();
                 BindVehicles();
                 PopProjects();
-                PopDrivers(ddlSrchRequester);
+                PopRequesters(ddlSrchRequester);
             }
             this._presenter.OnViewLoaded();
             BindSearchVehicleRequestGrid();
@@ -132,6 +132,16 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             ddlDriver.Items.Insert(0, new ListItem("Select Driver", "0"));
             ddlDriver.SelectedIndex = 0;
+        }
+        private void PopRequesters(DropDownList ddl)
+        {
+            ddl.DataSource = _presenter.GetEmployeeList();
+            ddl.DataTextField = "FullName";
+            ddl.DataValueField = "ID";
+            ddl.DataBind();
+
+            ddl.Items.Insert(0, new ListItem("Select Requester", "0"));
+            ddl.SelectedIndex = 0;
         }
         private void PopCarRentals(DropDownList ddlCarRental)
         {

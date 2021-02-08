@@ -320,12 +320,18 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         if (_presenter.CurrentTravelAdvanceRequest.CurrentLevel == _presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestStatuses.Count)
                         {
                             _presenter.CurrentTravelAdvanceRequest.ProgressStatus = ProgressStatus.Completed.ToString();
-                            
+
                             TARS.Approver = _presenter.CurrentUser().Id;
+                            _presenter.CurrentTravelAdvanceRequest.CurrentStatus = TARS.ApprovalStatus;
                             _presenter.CurrentTravelAdvanceRequest.CurrentStatus = TARS.ApprovalStatus;
                             if (ddlApprovalStatus.SelectedValue == "Bank Payment")
                             {
                                 btnBankPayment.Visible = true;
+                            }
+                            else
+                            {
+                                //For Petty Cash the process has ended and is now ready to be liquidated.
+                                _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationStatus = ProgressStatus.Completed.ToString();
                             }
                         }
                         GetNextApprover();

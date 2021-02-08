@@ -182,9 +182,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         }
                         else if (AL.EmployeePosition.PositionName == "Program Manager")
                         {
-                            if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[0].Project.Id != 0)
+                            if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[0].Project != null)
                             {
-                                PRS.Approver = _presenter.GetProject(_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[0].Project.Id).AppUser.Id;
+                                if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[0].Project.AppUser.Id != _presenter.CurrentUser().Id)
+                                {
+                                    PRS.Approver = _presenter.GetProject(_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[0].Project.Id).AppUser.Id;
+                                }
+                                else
+                                {
+                                    PRS.Approver = _presenter.CurrentUser().Superviser.Value;
+                                }
                             }
                         }
                         else

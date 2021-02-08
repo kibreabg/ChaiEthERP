@@ -109,7 +109,7 @@
                     <asp:CommandField ButtonType="Button" SelectText="Process Request" ShowSelectButton="True" />
                     <asp:TemplateField>
                         <ItemTemplate>
-                            <asp:Button runat="server" ID="btnStatus" Text="" BorderStyle="None" />
+                            <asp:Button runat="server" ID="btnStatus" Enabled="false" Text="" BorderStyle="None" />
                         </ItemTemplate>
                     </asp:TemplateField>
                     <%--<asp:ButtonField ButtonType="Button" Text="Travel Log" CommandName="TravelLog" />--%>

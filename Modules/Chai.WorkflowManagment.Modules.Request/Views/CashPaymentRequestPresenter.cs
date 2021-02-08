@@ -93,9 +93,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     }
                     else if (AL.EmployeePosition.PositionName == "Program Manager")
                     {
-                        if (CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Project.Id != 0)
+                        if (CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Project != null)
                         {
-                            CPRS.Approver = GetProject(CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Project.Id).AppUser.Id;
+                            if (CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Project.AppUser.Id != CurrentUser().Id)
+                            {
+                                CPRS.Approver = GetProject(CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Project.Id).AppUser.Id;
+                            }
+                            else
+                            {
+                                CPRS.Approver = CurrentUser().Superviser.Value;
+                            }
                         }
                     }
                     else
@@ -141,9 +148,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         }
                         else if (AL.EmployeePosition.PositionName == "Program Manager")
                         {
-                            if (CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Project.Id != 0)
+                            if (CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Project != null)
                             {
-                                CPRS.Approver = GetProject(CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Project.Id).AppUser.Id;
+                                if (CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Project.AppUser.Id != CurrentUser().Id)
+                                {
+                                    CPRS.Approver = GetProject(CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Project.Id).AppUser.Id;
+                                }
+                                else
+                                {
+                                    CPRS.Approver = CurrentUser().Superviser.Value;
+                                }
                             }
                         }
                         else
@@ -168,7 +182,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     }
                 }
             }
-
         }
         private void GetCurrentApprover()
         {

@@ -515,7 +515,9 @@
                         <asp:Label ID="lblPayeeResult" runat="server"></asp:Label>
                     </td>
                     <td style="width: 25%; text-align: right;">
-                        <asp:Label ID="lblSupplier" runat="server" Text="Supplier:"></asp:Label>
+                        <strong>
+                            <asp:Label ID="lblSupplier" runat="server" Text="Supplier:"></asp:Label>
+                        </strong>
                     </td>
                     <td style="width: 25%;">
                         <asp:Label ID="lblSupplierRes" runat="server"></asp:Label>

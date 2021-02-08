@@ -93,9 +93,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     }
                     else if (AL.EmployeePosition.PositionName == "Program Manager")
                     {
-                        if (CurrentOperationalControlRequest.OperationalControlRequestDetails[0].Project.Id != 0)
+                        if (CurrentOperationalControlRequest.OperationalControlRequestDetails[0].Project != null)
                         {
-                            OCRS.Approver = GetProject(CurrentOperationalControlRequest.OperationalControlRequestDetails[0].Project.Id).AppUser.Id;
+                            if (CurrentOperationalControlRequest.OperationalControlRequestDetails[0].Project.AppUser.Id != CurrentUser().Id)
+                            {
+                                OCRS.Approver = GetProject(CurrentOperationalControlRequest.OperationalControlRequestDetails[0].Project.Id).AppUser.Id;
+                            }
+                            else
+                            {
+                                OCRS.Approver = CurrentUser().Superviser.Value;
+                            }
                         }
                     }
                     else
