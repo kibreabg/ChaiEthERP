@@ -215,6 +215,9 @@
                                                                     <ItemTemplate>
                                                                         <%# DataBinder.Eval(Container.DataItem, "Amount")%>
                                                                     </ItemTemplate>
+                                                                      <FooterTemplate>
+                                                                        <asp:Label ID="lblSettelementTotalVariance" runat="server" />
+                                                                    </FooterTemplate>
                                                                 </asp:TemplateColumn>
                                                                 <asp:TemplateColumn HeaderText="Project ID">
                                                                     <ItemTemplate>
@@ -448,6 +451,7 @@
                                                             <PagerStyle CssClass="PagerStyle" />
                                                             <RowStyle CssClass="rowstyle" />
                                                         </asp:GridView>
+
                                                     </div>
                                                 </div>
                                                 <div class="tab-pane" id="iss2">

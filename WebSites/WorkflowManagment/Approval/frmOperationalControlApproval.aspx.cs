@@ -24,6 +24,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         private OperationalControlApprovalPresenter _presenter;
         private static readonly ILog Log = LogManager.GetLogger("AuditTrailLog");
         private int reqID = 0;
+        decimal _totalAmountAdvanced = 0;
+        decimal _totalActualExpenditure = 0;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!this.IsPostBack)
@@ -381,6 +383,34 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 _presenter.CurrentOperationalControlRequest = _presenter.GetOperationalControlRequest(reqID);
                 if (e.CommandName == "ViewItem")
                 {
+                    if (_presenter.CurrentOperationalControlRequest.SettlementId > 0)
+                    {
+                        PaymentReimbursementRequest request = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId);
+                        if (request != null)
+                        {
+                            IList<OperationalControlRequestDetail> Details = new List<OperationalControlRequestDetail>();
+                            foreach (CashPaymentRequestDetail detail in request.CashPaymentRequest.CashPaymentRequestDetails)
+                            {
+                                OperationalControlRequestDetail OP = new OperationalControlRequestDetail();
+                                OP.ItemAccount = detail.ItemAccount;
+                                OP.AccountCode = detail.AccountCode;
+                                OP.Project = detail.Project;
+                                OP.Grant = detail.Grant;
+                                OP.Amount = detail.Amount;
+                                _totalAmountAdvanced = _totalAmountAdvanced + OP.Amount;
+                                Session["totalAmountAdvanced"] = _totalAmountAdvanced;
+                                Details.Add(OP);
+                                dgOperationalControlRequestDetail.DataSource = Details;
+                                dgOperationalControlRequestDetail.DataBind();
+
+                            }
+                        }
+                    }
+                    foreach (OperationalControlRequestDetail OPDetail in _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails)
+                    {
+                        _totalActualExpenditure = _totalActualExpenditure + OPDetail.Amount;
+                    }
+                    Session["ActualExpenditure"] = _totalActualExpenditure;
                     dgOperationalControlRequestDetail.DataSource = _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails;
                     dgOperationalControlRequestDetail.DataBind();
                     grvOperationalControlStatuses.DataSource = _presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses;
@@ -699,8 +729,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void dgOperationalControlRequestDetail_ItemDataBound(object sender, DataGridItemEventArgs e)
         {
+           
+
             if (e.Item.ItemType == ListItemType.Footer)
             {
+                
+                Label lblTotalVariance = e.Item.FindControl("lblSettelementTotalVariance") as Label;
+                lblTotalVariance.Text = "Over Spend Refund" + (Convert.ToDecimal(Session["ActualExpenditure"]) - Convert.ToDecimal(Session["totalAmountAdvanced"])).ToString();
+                lblTotalVariance.ForeColor = System.Drawing.Color.Green;
+                lblTotalVariance.Font.Bold = true;
             }
             else
             {

@@ -213,6 +213,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 if (_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Last().ApprovalStatus == "Bank Payment" && variance > 0 && _presenter.CurrentPaymentReimbursementRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
                     btnBankPayment.Visible = true;
             }
+
             if (ddlApprovalStatus.SelectedValue != ApprovalStatus.Rejected.ToString() && _presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Last().ApprovalStatus != "Bank Payment")
                 SendEmailToRequester();
         }
@@ -297,7 +298,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         private void SendEmailToRequester()
         {
 
-            // if (_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementStatus != "Bank Payment")
+            if (_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Count == _presenter.CurrentPaymentReimbursementRequest.CurrentLevel)
             EmailSender.Send(_presenter.GetUser(_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.AppUser.Id).Email, "Settlement", "Your Settlement Request for Cash Payment - '" + (_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.RequestNo).ToUpper() + "' was Completed");
         }
         private void GetNextApprover()
