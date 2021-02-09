@@ -11,6 +11,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         string GetRequestNo { get; }
         int GetBankAccountId { get; }
         int GetBeneficiaryId { get; }
+        string GetDescription { get; }
         string GetPayee { get; }
         string GetTelephoneNo { get; }
         string GetBankName { get; }

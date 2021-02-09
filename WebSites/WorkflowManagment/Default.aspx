@@ -117,7 +117,7 @@
                                 <li class="">
                                     <span class="handle" style="display: none"></span>
                                     <p>
-                                        <asp:Label ID="lblExpenseLiquidationMyRequest" runat="server" Text="Expense Liquidation Request" CssClass="label"></asp:Label>-
+                                        <asp:Label ID="lblExpenseLiquidationMyRequest" runat="server" Text="Travel Expense Liquidation Request" CssClass="label"></asp:Label>-
                                             <asp:Label ID="lblExpenseStatus" runat="server" Text="No Request"></asp:Label>
                                     </p>
                                     <a data-toggle="modal" runat="server" id="A14" href="#expenseModal">Progress Detail</a>
@@ -157,7 +157,7 @@
                                 <li class="">
                                     <span class="handle" style="display: none"></span>
                                     <p>
-                                        <asp:Label ID="lblPaymentReimburesmentMyRequest" runat="server" Text="Settlement Request" CssClass="label"></asp:Label>-
+                                        <asp:Label ID="lblPaymentReimburesmentMyRequest" runat="server" Text="Cash Payment Settlement Request" CssClass="label"></asp:Label>-
                                             <asp:Label ID="lblPaymentReimburesment" runat="server" Text="No Request"></asp:Label>
                                     </p>
                                     <a data-toggle="modal" runat="server" id="A11" href="#SettlementModal">Progress Detail</a>
@@ -274,28 +274,28 @@
                                 <li class="">
                                     <span class="handle" style="display: none"></span>
                                     <p>
-                                        <asp:LinkButton ID="lnkreviewliquidation" runat="server" Text="Review Liquidation" Enabled="false"></asp:LinkButton>
+                                        <asp:LinkButton ID="lnkreviewliquidation" runat="server" Text="Review Travel Liquidation" Enabled="false"></asp:LinkButton>
                                         (<small class="num-of-tasks"><asp:Label ID="lblreviewliquidation" runat="server" Text=""></asp:Label></small>)
                                     </p>
                                 </li>
                                 <li class="">
                                     <span class="handle" style="display: none"></span>
                                     <p>
-                                        <asp:LinkButton ID="lnkExpenseLiquidation" runat="server" Text="Expense Liquidation" Enabled="false"></asp:LinkButton>
+                                        <asp:LinkButton ID="lnkExpenseLiquidation" runat="server" Text="Travel Expense Liquidation" Enabled="false"></asp:LinkButton>
                                         (<small class="num-of-tasks"><asp:Label ID="lblExpenseLiquidation" runat="server" Text=""></asp:Label></small>)
                                     </p>
                                 </li>
                                      <li class="">
                                     <span class="handle" style="display: none"></span>
                                     <p>
-                                        <asp:LinkButton ID="lnkReviewpaymentsettlemnt" runat="server" Text="Review Settlement" Enabled="false"></asp:LinkButton>
+                                        <asp:LinkButton ID="lnkReviewpaymentsettlemnt" runat="server" Text="Review Cash Payment Settlement" Enabled="false"></asp:LinkButton>
                                         (<small class="num-of-tasks"><asp:Label ID="lblreviewsettlemnt" runat="server" Text=""></asp:Label></small>)
                                     </p>
                                 </li>
                                 <li class="">
                                     <span class="handle" style="display: none"></span>
                                     <p>
-                                        <asp:LinkButton ID="lnkPaymentReimbursement" runat="server" Text="Payment Settlement" Enabled="false"></asp:LinkButton>
+                                        <asp:LinkButton ID="lnkPaymentReimbursement" runat="server" Text="Cash Payment Settlement" Enabled="false"></asp:LinkButton>
                                         (<small class="num-of-tasks"><asp:Label ID="lblReimbursement" runat="server" Text=""></asp:Label></small>)
                                     </p>
                                 </li>
@@ -553,7 +553,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         ×
                     </button>
-                    <h4 class="modal-title" id="myExpenseModalLabel">Expense Liquidation Approval Progress</h4>
+                    <h4 class="modal-title" id="myExpenseModalLabel">Travel Expense Liquidation Approval Progress</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">

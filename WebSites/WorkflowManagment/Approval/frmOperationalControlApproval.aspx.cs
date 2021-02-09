@@ -107,7 +107,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             }
 
-            ddlApprovalStatus.Items.Add(new ListItem(ApprovalStatus.Rejected.ToString().Replace('_', ' '), ApprovalStatus.Rejected.ToString().Replace('_', ' ')));
+            ddlApprovalStatus.Items.Add(new ListItem("Reject Bank Payment", ApprovalStatus.Rejected.ToString().Replace('_', ' ')));
+            ddlApprovalStatus.Items.Add(new ListItem("Reject Whole Process", ApprovalStatus.Reject_Whole_Process.ToString().Replace('_', ' ')));
 
         }
         private string GetWillStatus()
@@ -254,6 +255,24 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
             }
         }
+        private void SendEmailTravelRejected(TravelAdvanceRequest tar, string rejectedReason)
+        {
+            EmailSender.Send(_presenter.GetUser(tar.AppUser.Id).Email, "Travel Advance Request Rejection", "Your Travel Advance Request with Request No. - '" + (tar.TravelAdvanceNo.ToString()).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (rejectedReason).ToUpper() + "'");
+
+            foreach (TravelAdvanceRequestStatus TARS in tar.TravelAdvanceRequestStatuses)
+            {
+                EmailSender.Send(_presenter.GetUser(TARS.Approver).Email, "Travel Advance Request Rejection", "Travel Advance Request with Request No. - '" + (tar.TravelAdvanceNo.ToString()).ToUpper() + "' made by " + (_presenter.GetUser(tar.AppUser.Id).FullName).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (rejectedReason).ToUpper() + "'");
+            }
+        }
+        private void SendEmailPaymentRejected(CashPaymentRequest cpr, string rejectedReason)
+        {
+            EmailSender.Send(_presenter.GetUser(cpr.AppUser.Id).Email, "Cash Payment Request Rejection", "Your Cash Payment Request with Request No. - '" + (cpr.RequestNo.ToString()).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (rejectedReason).ToUpper() + "'");
+
+            foreach (CashPaymentRequestStatus CPRS in cpr.CashPaymentRequestStatuses)
+            {
+                EmailSender.Send(_presenter.GetUser(CPRS.Approver).Email, "Cash Payment Request Rejection", "The Cash Payment Request with Request No. - '" + (cpr.RequestNo.ToString()).ToUpper() + "' made by " + (_presenter.GetUser(cpr.AppUser.Id).FullName).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (rejectedReason).ToUpper() + "'");
+            }
+        }
         private void GetNextApprover()
         {
             foreach (OperationalControlRequestStatus OCRS in _presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses)
@@ -290,7 +309,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     OCRS.Account = _presenter.GetAccount(_presenter.CurrentOperationalControlRequest.Account.Id);
                     OCRS.Date = DateTime.Now;
                     OCRS.AssignedBy = _presenter.GetAssignedJobbycurrentuser(OCRS.Approver) != null ? _presenter.GetAssignedJobbycurrentuser(OCRS.Approver).AppUser.FullName : "";
-                    if (OCRS.ApprovalStatus != ApprovalStatus.Rejected.ToString())
+                    if (OCRS.ApprovalStatus != ApprovalStatus.Rejected.ToString() && OCRS.ApprovalStatus != ApprovalStatus.Reject_Whole_Process.ToString())
                     {
                         if (_presenter.CurrentOperationalControlRequest.CurrentLevel == _presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses.Count)
                         {
@@ -315,6 +334,30 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         }
                         GetNextApprover();
                         OCRS.Approver = _presenter.CurrentUser().Id;
+                        Log.Info(_presenter.GetUser(OCRS.Approver).FullName + " has " + OCRS.ApprovalStatus + " Bank Payment Request made by " + _presenter.CurrentOperationalControlRequest.AppUser.FullName);
+                    }
+                    else if (OCRS.ApprovalStatus == ApprovalStatus.Reject_Whole_Process.ToString())
+                    {
+                        if (_presenter.CurrentOperationalControlRequest.TravelAdvanceId > 0)
+                        {
+                            TravelAdvanceRequest theTravelAdvance = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId);
+                            theTravelAdvance.CurrentStatus = ApprovalStatus.Rejected.ToString();
+                            theTravelAdvance.TravelAdvanceRequestStatuses.Last().RejectedReason = OCRS.RejectedReason;
+                            _presenter.SaveOrUpdateTravelAdvanceRequest(theTravelAdvance);
+                            SendEmailTravelRejected(theTravelAdvance, OCRS.RejectedReason);
+                        }
+                        else if (_presenter.CurrentOperationalControlRequest.PaymentId > 0)
+                        {
+                            CashPaymentRequest theCashPayment = _presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId);
+                            theCashPayment.CurrentStatus = ApprovalStatus.Rejected.ToString();
+                            theCashPayment.CashPaymentRequestStatuses.Last().RejectedReason = OCRS.RejectedReason;
+                            _presenter.SaveOrUpdateCashPaymentRequest(theCashPayment);
+                            SendEmailPaymentRejected(theCashPayment, OCRS.RejectedReason);
+                        }
+
+                        _presenter.CurrentOperationalControlRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                        OCRS.Approver = _presenter.CurrentUser().Id;
+                        SendEmailRejected(OCRS);
                         Log.Info(_presenter.GetUser(OCRS.Approver).FullName + " has " + OCRS.ApprovalStatus + " Bank Payment Request made by " + _presenter.CurrentOperationalControlRequest.AppUser.FullName);
                     }
                     else
@@ -354,6 +397,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         grvTravelAdvanceStatuses.DataSource = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).TravelAdvanceRequestStatuses;
                         grvTravelAdvanceStatuses.DataBind();
                     }
+                    else if (_presenter.CurrentOperationalControlRequest.LiquidationId > 0)
+                    {
+                        lblLiquidationDetail.Visible = true;
+                        dgLiquidationRequestDetail.DataSource = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId).ExpenseLiquidationRequestDetails;
+                        dgLiquidationRequestDetail.DataBind();
+                        grvLiquidationStatuses.DataSource = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId).ExpenseLiquidationRequestStatuses;
+                        grvLiquidationStatuses.DataBind();
+                    }
                     else
                     {
                         dgTravelAdvanceRequestDetail.DataSource = null;
@@ -362,10 +413,63 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         grvTravelAdvanceCosts.DataBind();
                         grvTravelAdvanceStatuses.DataSource = null;
                         grvTravelAdvanceStatuses.DataBind();
+                        dgLiquidationRequestDetail.DataSource = null;
+                        dgLiquidationRequestDetail.DataBind();
+                        grvLiquidationStatuses.DataSource = null;
+                        grvLiquidationStatuses.DataBind();
                         lblTravelDetail.Visible = false;
+                        lblLiquidationDetail.Visible = false;
                     }
 
                     ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
+                }
+            }
+
+        }
+        protected void dgLiquidationRequestDetail_ItemDataBound(object sender, DataGridItemEventArgs e)
+        {
+            decimal _totalVariance = 0;
+            decimal _totalAmountAdvanced = 0;
+            decimal _totalActualExpenditure = 0;
+
+            ExpenseLiquidationRequest liquidationReq = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId);
+            if (liquidationReq.ExpenseLiquidationRequestDetails != null)
+            {
+                if (e.Item.ItemType == ListItemType.Footer)
+                {
+                    foreach (ExpenseLiquidationRequestDetail detail in liquidationReq.ExpenseLiquidationRequestDetails)
+                    {
+                        _totalVariance = _totalVariance + detail.Variance;
+                    }
+
+                    Label lblTotalVariance = e.Item.FindControl("lblTotalVariance") as Label;
+                    lblTotalVariance.Text = _totalVariance.ToString();
+                    lblTotalVariance.ForeColor = System.Drawing.Color.Green;
+                    lblTotalVariance.Font.Bold = true;
+                }
+                if (e.Item.ItemType == ListItemType.Footer)
+                {
+                    foreach (ExpenseLiquidationRequestDetail detail in liquidationReq.ExpenseLiquidationRequestDetails)
+                    {
+                        _totalAmountAdvanced = _totalAmountAdvanced + detail.AmountAdvanced;
+                    }
+
+
+                    Label lblTotalAdvAmount = e.Item.FindControl("lblTotalAdvAmount") as Label;
+                    lblTotalAdvAmount.Text = _totalAmountAdvanced.ToString();
+                    lblTotalAdvAmount.ForeColor = System.Drawing.Color.Green;
+                    lblTotalAdvAmount.Font.Bold = true;
+                }
+                if (e.Item.ItemType == ListItemType.Footer)
+                {
+                    foreach (ExpenseLiquidationRequestDetail detail in liquidationReq.ExpenseLiquidationRequestDetails)
+                    {
+                        _totalActualExpenditure = _totalActualExpenditure + detail.ActualExpenditure;
+                    }
+                    Label lblTotalActualExp = e.Item.FindControl("lblTotalActualExp") as Label;
+                    lblTotalActualExp.Text = _totalActualExpenditure.ToString();
+                    lblTotalActualExp.ForeColor = System.Drawing.Color.Green;
+                    lblTotalActualExp.Font.Bold = true;
                 }
             }
 
@@ -539,6 +643,22 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
             }
         }
+        protected void grvLiquidationStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            ExpenseLiquidationRequest liquidationReq = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId);
+            if (liquidationReq.ExpenseLiquidationRequestStatuses != null)
+            {
+                if (e.Row.RowType == DataControlRowType.DataRow)
+                {
+                    if (liquidationReq.ExpenseLiquidationRequestStatuses[e.Row.RowIndex].Approver != 0)
+                        e.Row.Cells[1].Text = _presenter.GetUser(liquidationReq.ExpenseLiquidationRequestStatuses[e.Row.RowIndex].Approver).FullName;
+                    if (e.Row.Cells[3].Text == "Pay")
+                    {
+                        e.Row.Cells[3].Text = "Reviewed";
+                    }
+                }
+            }
+        }
         protected void grvPaymentStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (_presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId).CashPaymentRequestStatuses != null)
@@ -563,7 +683,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void ddlApprovalStatus_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ddlApprovalStatus.SelectedValue == "Rejected")
+            if (ddlApprovalStatus.SelectedValue == ApprovalStatus.Rejected.ToString() || ddlApprovalStatus.SelectedValue == ApprovalStatus.Reject_Whole_Process.ToString().Replace('_', ' '))
             {
                 lblRejectedReason.Visible = true;
                 txtRejectedReason.Visible = true;

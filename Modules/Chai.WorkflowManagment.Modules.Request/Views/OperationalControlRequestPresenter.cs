@@ -159,7 +159,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 operationalControlRequest.Payee = View.GetPayee;
                 operationalControlRequest.TelephoneNo = View.GetTelephoneNo;
             }
-            
+            operationalControlRequest.Description = View.GetDescription;
             operationalControlRequest.BankName = View.GetBankName;
             operationalControlRequest.VoucherNo = View.GetVoucherNo;
             operationalControlRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
@@ -218,7 +218,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _adminController.GetUser(id);
         }
-
+        public ItemAccount GetDefaultItemAccount()
+        {
+            return _settingController.GetDefaultItemAccount();
+        }
         public ItemAccount GetItemAccount(int ItemAccountId)
         {
             return _settingController.GetItemAccount(ItemAccountId);
@@ -259,12 +262,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _settingController.GetBeneficiaries();
         }
-
         public Beneficiary GetBeneficiary(int id)
         {
             return _settingController.GetBeneficiary(id);
         }
-
         public AppUser CurrentUser()
         {
             return _controller.GetCurrentUser();
@@ -309,8 +310,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             return _controller.GetCostSharingRequest(paymentRequest);
         }
         #region Beneficary
-
-
         public void SaveOrUpdateBeneficiary(Beneficiary beneficiary)
         {
             _controller.SaveOrUpdateEntity(beneficiary);
@@ -323,7 +322,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _settingController.GetBeneficiary(id);
         }
-
         public IList<Beneficiary> ListBeneficiaries(string BeneficiaryName)
         {
             return _settingController.ListBeneficiaries(BeneficiaryName);

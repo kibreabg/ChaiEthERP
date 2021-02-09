@@ -69,9 +69,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             _controller.SaveOrUpdateEntity(OperationalControlRequest);
         }
-        public void SaveOrUpdateTravelAdvanceRequest(TravelAdvanceRequest TravelAdvanceRequest)
+        public void SaveOrUpdateTravelAdvanceRequest(TravelAdvanceRequest travelAdvanceRequest)
         {
-            _controller.SaveOrUpdateEntity(TravelAdvanceRequest);
+            _controller.SaveOrUpdateEntity(travelAdvanceRequest);
+        }
+        public void SaveOrUpdateCashPaymentRequest(CashPaymentRequest cashPaymentRequest)
+        {
+            _controller.SaveOrUpdateEntity(cashPaymentRequest);
         }
         public OperationalControlRequest GetOperationalControlRequest(int reqId)
         {
@@ -84,6 +88,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         public TravelAdvanceRequest GetTravelAdvanceRequest(int reqId)
         {
             return _requestController.GetTravelAdvanceRequest(reqId);
+        }
+        public ExpenseLiquidationRequest GetExpenseLiquidationRequest(int liqID)
+        {
+            return _requestController.GetExpenseLiquidationRequest(liqID);
         }
         public PaymentReimbursementRequest GetPaymentReimbursementRequest(int reqId)
         {

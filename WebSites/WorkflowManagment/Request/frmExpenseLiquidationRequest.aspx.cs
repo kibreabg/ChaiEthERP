@@ -595,7 +595,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     _presenter.SaveOrUpdateExpenseLiquidationRequest(tarID);
                     BindExpenseLiquidationRequests();
                     PrintTransaction();
-                    Master.ShowMessage(new AppMessage("Expense Successfully Liquidated", RMessageType.Info));
+                    Master.ShowMessage(new AppMessage("Travel Expense Liquidation Successfully Requested!", RMessageType.Info));
                     Log.Info(_presenter.CurrentUser().FullName + " has requested an Expense Liquidation for a total amount of " + _presenter.CurrentTravelAdvanceRequest.TotalTravelAdvance.ToString());
                     btnSave.Visible = false;
                     btnPrint.Enabled = true;
