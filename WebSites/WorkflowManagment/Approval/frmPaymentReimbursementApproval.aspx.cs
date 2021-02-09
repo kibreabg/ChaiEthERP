@@ -41,6 +41,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 PrintTransaction();
             }
+           lblOverSpend.Text = (_presenter.CurrentPaymentReimbursementRequest.TotalAmount - _presenter.CurrentPaymentReimbursementRequest.ReceivableAmount).ToString();
         }
         [CreateNew]
         public PaymentReimbursementApprovalPresenter Presenter
@@ -198,7 +199,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             //Bank Payment should be initiated if CHAI is the one who's going to pay (variance is Positive)
             decimal variance = _presenter.CurrentPaymentReimbursementRequest.TotalAmount - _presenter.CurrentPaymentReimbursementRequest.ReceivableAmount;
 
-            if (_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Last().ApprovalStatus == "Bank Payment" && !IsBankPaymentRequested() && variance > 0 && _presenter.CurrentPaymentReimbursementRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
+            if (_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Last().ApprovalStatus == "Bank Payment" && variance > 0  && !IsBankPaymentRequested() &&  _presenter.CurrentPaymentReimbursementRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
                 btnBankPayment.Visible = true;
             else
                 btnBankPayment.Visible = false;
@@ -212,7 +213,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 if (_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Last().ApprovalStatus == "Bank Payment" && variance > 0 && _presenter.CurrentPaymentReimbursementRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
                     btnBankPayment.Visible = true;
             }
-            if (ddlApprovalStatus.SelectedValue != ApprovalStatus.Rejected.ToString())
+            if (ddlApprovalStatus.SelectedValue != ApprovalStatus.Rejected.ToString() && _presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Last().ApprovalStatus != "Bank Payment")
                 SendEmailToRequester();
         }
         private void SendEmail(PaymentReimbursementRequestStatus PRRS)
@@ -258,7 +259,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         if (_presenter.CurrentPaymentReimbursementRequest.CurrentLevel == _presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Count)
                         {
                             _presenter.CurrentPaymentReimbursementRequest.ProgressStatus = ProgressStatus.Completed.ToString();
-                            _presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.PaymentReimbursementStatus = "Finished";
+                            if(_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Last().ApprovalStatus != "Bank Payment")
+                                _presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.PaymentReimbursementStatus = "Finished";
 
                         }
 
@@ -479,7 +481,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void btnBankPayment_Click(object sender, EventArgs e)
         {
-            Response.Redirect(String.Format("../Request/frmOperationalControlRequest.aspx?paymentId={0}&Page={1}", Convert.ToInt32(Session["SettlementId"]), "Settlement"));
+            Response.Redirect(String.Format("../Request/frmOperationalControlRequest.aspx?SettlementId={0}&Page={1}", Convert.ToInt32(Session["SettlementId"]), "Settlement"));
         }
         private void DeleteSettlementIfRejected()
         {

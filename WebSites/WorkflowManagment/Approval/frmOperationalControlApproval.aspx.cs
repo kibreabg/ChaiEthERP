@@ -208,6 +208,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 btnPrint.Enabled = true;
             }
         }
+        private void SendEmailToSettelmentRequester(PaymentReimbursementRequest settelment)
+        {
+
+            // if (_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementStatus != "Bank Payment")
+            EmailSender.Send(_presenter.GetUser(settelment.CashPaymentRequest.AppUser.Id).Email, "Settlement", "Your Settlement Request for Cash Payment - '" + (settelment.CashPaymentRequest.RequestNo).ToUpper() + "' was Completed. Please collect your Money");
+        }
         private void SendEmail(OperationalControlRequestStatus OCRS)
         {
             if (OCRS.Approver != 0)
@@ -297,7 +303,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                                 associatedTravelAdvance.ExpenseLiquidationStatus = ProgressStatus.Completed.ToString();
                                 _presenter.SaveOrUpdateTravelAdvanceRequest(associatedTravelAdvance);
                             }
-                            
+                            if (_presenter.CurrentOperationalControlRequest.SettlementId > 0)
+                            {
+                                PaymentReimbursementRequest associatedsettlementrequest = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId);
+                                associatedsettlementrequest.CashPaymentRequest.PaymentReimbursementStatus = "Finished";
+                                SendEmailToSettelmentRequester(associatedsettlementrequest);
+
+
+                            }
+
                         }
                         GetNextApprover();
                         OCRS.Approver = _presenter.CurrentUser().Id;
