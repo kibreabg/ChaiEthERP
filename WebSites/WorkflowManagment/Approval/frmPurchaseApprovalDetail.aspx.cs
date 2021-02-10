@@ -294,15 +294,29 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             grvDetails.DataBind();
             if (_presenter.CurrentPurchaseRequest.MaintenanceId > 0)
             {
+                lblApprovalDet.Visible = true;
+                lblMainDetail.Visible = true;
+                lblReqItems.Visible = true;
                 grvMaintenaceDet.DataSource = _presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestDetails;
                 grvMaintenaceDet.DataBind();
                 grvMainSta.DataSource = _presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestStatuses;
                 grvMainSta.DataBind();
+                grvStatuses.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestStatuses;
+                grvStatuses.DataBind();
             }
 
+            else
+            {
+                lblApprovalDet.Visible = false;
+                lblMainDetail.Visible = false;
+                lblReqItems.Visible = false;
+                grvStatuses.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestStatuses;
+                grvStatuses.DataBind();
+            }
 
-            grvStatuses.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestStatuses;
-            grvStatuses.DataBind();
+           
+
+           
 
 
         }
