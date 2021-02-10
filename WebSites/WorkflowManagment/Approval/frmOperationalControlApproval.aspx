@@ -451,7 +451,83 @@
                                                             <PagerStyle CssClass="PagerStyle" />
                                                             <RowStyle CssClass="rowstyle" />
                                                         </asp:GridView>
+                                                          <br />
+                                                        <div style="text-align: center;">
+                                                            <asp:Label ID="lblSettelementDetail" Font-Size="Large" Font-Bold="true" runat="server" Visible="false" Text="Cash Payment Settelement Detail"></asp:Label>
+                                                        </div>
+                                                        <br />
+                                                         <asp:DataGrid ID="dgReimbursementDetail" runat="server"
+                                                            AutoGenerateColumns="False" CellPadding="0" CssClass="table table-striped table-bordered table-hover"
+                                                            DataKeyField="Id" GridLines="None" PagerStyle-CssClass="paginate_button active" ShowFooter="True" OnItemDataBound="dgReimbursementDetail_ItemDataBound">
+                                                            <Columns>
+                                                                <asp:TemplateColumn HeaderText="Account Name">
+                                                                    <ItemTemplate>
+                                                                        <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountName")%>
+                                                                    </ItemTemplate>
 
+                                                                </asp:TemplateColumn>
+                                                                <asp:TemplateColumn HeaderText="Account Code">
+                                                                    <ItemTemplate>
+                                                                        <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountCode")%>
+                                                                    </ItemTemplate>
+
+                                                                </asp:TemplateColumn>
+                                
+                                                                <asp:TemplateColumn HeaderText="Actual Expenditure">
+                                                                    <ItemTemplate>
+                                                                        <%# DataBinder.Eval(Container.DataItem, "ActualExpenditure")%>
+                                                                    </ItemTemplate>
+                                                                </asp:TemplateColumn>
+                                        
+                                                                <asp:TemplateColumn HeaderText="Project ID">
+                                                                    <ItemTemplate>
+                                                                        <%# DataBinder.Eval(Container.DataItem, "PaymentReimbursementRequest.Project.ProjectCode")%>
+                                                                    </ItemTemplate>
+
+                                                                </asp:TemplateColumn>
+                                                                 <asp:TemplateColumn HeaderText="Amount Advanced">
+                                                                    <FooterTemplate>
+                                                                        <asp:Label ID="lblTotalAdvAmount" runat="server" />
+                                                                    </FooterTemplate>
+                                                                    <ItemTemplate>
+                                                                        <asp:Label ID="lblTotalAdvAmount" runat="server" />
+                                                                      <%--  <%# DataBinder.Eval(Container.DataItem, "AmountAdvanced")%>--%>
+                                                                    </ItemTemplate>
+                                                                </asp:TemplateColumn>
+                                               
+                                                                <asp:TemplateColumn HeaderText="Variance">
+                                                                    <FooterTemplate>
+                                                                        <asp:Label ID="lblTotalVariance" runat="server" />
+                                                                    </FooterTemplate>
+                                                                    <ItemTemplate>
+                                                                        <asp:Label ID="lblTotalVariance" runat="server" />
+                                                                        <%--<%# DataBinder.Eval(Container.DataItem, "Variance")%>--%>
+                                                                    </ItemTemplate>
+                                                                </asp:TemplateColumn>
+
+                                                                </Columns>
+                                                                <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
+                                                            </asp:DataGrid>
+                                                        <br />
+                                                        <asp:GridView ID="dgReimbursementStatus"
+                                                            runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                                                            CssClass="table table-striped table-bordered table-hover" OnRowDataBound="dgReimbursementStatus_RowDataBound">
+                                                            <RowStyle CssClass="rowstyle" />
+                                                            <Columns>
+                                                                <asp:TemplateField HeaderText="Date">
+                                                                    <ItemTemplate>
+                                                                        <asp:Label ID="lblDate" runat="server" Text='<%# Eval("Date", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                                                                    </ItemTemplate>
+                                                                </asp:TemplateField>
+                                                                <asp:BoundField DataField="Approver" HeaderText="Reviewer" SortExpression="Approver" />
+                                                                <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
+                                                                <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus" />
+                                                            </Columns>
+                                                            <FooterStyle CssClass="FooterStyle" />
+                                                            <HeaderStyle CssClass="headerstyle" />
+                                                            <PagerStyle CssClass="PagerStyle" />
+                                                            <RowStyle CssClass="rowstyle" />
+                                                        </asp:GridView>
                                                     </div>
                                                 </div>
                                                 <div class="tab-pane" id="iss2">
@@ -765,6 +841,40 @@
                     <PagerStyle CssClass="PagerStyle" />
                     <RowStyle CssClass="rowstyle" />
                 </asp:GridView>
+            </asp:Panel>
+            <asp:Panel ID="pnlSettelementDetail" runat="server" Visible="false">
+                     <div style="text-align: center;">
+                    <asp:Label ID="lblSettelementDetails" Text="Settlement Details" Font-Bold="true" Font-Size="Large" runat="server" Visible="false" />
+                </div>
+                <br />
+                 <asp:GridView ID="grvReDetail"
+                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                CssClass="table table-striped table-bordered table-hover">
+                <RowStyle CssClass="rowstyle" />
+                <Columns>
+                    <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="Account Name" />
+                    <asp:BoundField DataField="ActualExpenditure" HeaderText="Actual Expenditure" />
+                    <asp:BoundField DataField="PaymentReimbursementRequest.Project.ProjectCode" HeaderText="Project" />
+                </Columns>
+                <FooterStyle CssClass="FooterStyle" />
+                <HeaderStyle CssClass="headerstyle" />
+                <PagerStyle CssClass="PagerStyle" />
+                <RowStyle CssClass="rowstyle" />
+            </asp:GridView>
+            <br />
+            <asp:GridView ID="grvPRstatus"
+                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                CssClass="table table-striped table-bordered table-hover" OnRowDataBound="grvPRstatus_RowDataBound">
+                <RowStyle CssClass="rowstyle" />
+                <Columns>
+                    <asp:BoundField DataField="Date" HeaderText="Date" SortExpression="Date" />
+                    <asp:BoundField DataField="Approver" HeaderText="Approver" SortExpression="Approver" />
+                </Columns>
+                <FooterStyle CssClass="FooterStyle" />
+                <HeaderStyle CssClass="headerstyle" />
+                <PagerStyle CssClass="PagerStyle" />
+                <RowStyle CssClass="rowstyle" />
+            </asp:GridView>
             </asp:Panel>
             <br />
             <table style="width: 100%;">

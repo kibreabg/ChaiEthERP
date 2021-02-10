@@ -435,6 +435,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         grvLiquidationStatuses.DataSource = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId).ExpenseLiquidationRequestStatuses;
                         grvLiquidationStatuses.DataBind();
                     }
+                    else if (_presenter.CurrentOperationalControlRequest.SettlementId > 0)
+                    {
+                        lblSettelementDetail.Visible = true;
+                        dgReimbursementDetail.DataSource = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId).PaymentReimbursementRequestDetails;
+                        dgReimbursementDetail.DataBind();
+                        dgReimbursementStatus.DataSource = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId).PaymentReimbursementRequestStatuses;
+                        dgReimbursementStatus.DataBind();
+                    }
                     else
                     {
                         dgTravelAdvanceRequestDetail.DataSource = null;
@@ -500,6 +508,54 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     lblTotalActualExp.Text = _totalActualExpenditure.ToString();
                     lblTotalActualExp.ForeColor = System.Drawing.Color.Green;
                     lblTotalActualExp.Font.Bold = true;
+                }
+            }
+
+        }
+        protected void dgReimbursementDetail_ItemDataBound(object sender, DataGridItemEventArgs e)
+        {
+            decimal _totalVariance = 0;
+            decimal _totalAmountAdvanced = 0;
+            decimal _totalActualExpenditure = 0;
+
+            PaymentReimbursementRequest ReimbursementReq = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId);
+            if (ReimbursementReq.PaymentReimbursementRequestDetails != null)
+            {
+                if (e.Item.ItemType == ListItemType.Item)
+                {
+                    foreach (PaymentReimbursementRequestDetail detail in ReimbursementReq.PaymentReimbursementRequestDetails)
+                    {
+                        _totalVariance = ReimbursementReq.ReceivableAmount - ReimbursementReq.TotalAmount;
+                    }
+
+                    Label lblTotalVariance = e.Item.FindControl("lblTotalVariance") as Label;
+                    lblTotalVariance.Text = _totalVariance.ToString();
+                    lblTotalVariance.ForeColor = System.Drawing.Color.Green;
+                    lblTotalVariance.Font.Bold = true;
+                }
+                if (e.Item.ItemType == ListItemType.Item)
+                {
+                    foreach (PaymentReimbursementRequestDetail detail in ReimbursementReq.PaymentReimbursementRequestDetails)
+                    {
+                        _totalAmountAdvanced = ReimbursementReq.ReceivableAmount;
+                    }
+
+
+                    Label lblTotalAdvAmount = e.Item.FindControl("lblTotalAdvAmount") as Label;
+                    lblTotalAdvAmount.Text = _totalAmountAdvanced.ToString();
+                    //lblTotalAdvAmount.ForeColor = System.Drawing.Color.Green;
+                    lblTotalAdvAmount.Font.Bold = true;
+                }
+                if (e.Item.ItemType == ListItemType.Item)
+                {
+                    //foreach (PaymentReimbursementRequestDetail detail in ReimbursementReq.PaymentReimbursementRequestDetails)
+                    //{
+                    //    _totalActualExpenditure = ReimbursementReq.TotalAmount;
+                    //}
+                    //Label lblTotalActualExp = e.Item.FindControl("lblTotalActualExp") as Label;
+                    //lblTotalActualExp.Text = _totalActualExpenditure.ToString();
+                    //lblTotalActualExp.ForeColor = System.Drawing.Color.Green;
+                    //lblTotalActualExp.Font.Bold = true;
                 }
             }
 
@@ -660,6 +716,21 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 grvPaymentStatuses.DataSource = _presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId).CashPaymentRequestStatuses;
                 grvPaymentStatuses.DataBind();
             }
+            if (_presenter.CurrentOperationalControlRequest.SettlementId > 0)
+            {
+                pnlSettelementDetail.Visible = true;
+                pnlTravelDetail.Visible = false;
+                pnlPaymentDetail.Visible = false;
+                lblTravelDetails.Visible = false;
+                pnlPaymentDetail.Visible = false;
+                lblPaymentDetail.Visible = false;
+                lblSettelementDetails.Visible = true;
+                grvReDetail.DataSource = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId).PaymentReimbursementRequestDetails;
+                grvReDetail.DataBind();
+
+                grvPRstatus.DataSource = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId).PaymentReimbursementRequestStatuses;
+                grvPRstatus.DataBind();
+            }
 
         }
         protected void grvTravelStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -673,6 +744,17 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
             }
         }
+        protected void grvPRstatus_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (_presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId).PaymentReimbursementRequestStatuses != null)
+            {
+                if (e.Row.RowType == DataControlRowType.DataRow)
+                {
+                    if (_presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId).PaymentReimbursementRequestStatuses[e.Row.RowIndex].Approver > 0)
+                        e.Row.Cells[1].Text = _presenter.GetUser(_presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId).PaymentReimbursementRequestStatuses[e.Row.RowIndex].Approver).FullName;
+                }
+            }
+        }
         protected void grvLiquidationStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             ExpenseLiquidationRequest liquidationReq = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId);
@@ -682,6 +764,22 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     if (liquidationReq.ExpenseLiquidationRequestStatuses[e.Row.RowIndex].Approver != 0)
                         e.Row.Cells[1].Text = _presenter.GetUser(liquidationReq.ExpenseLiquidationRequestStatuses[e.Row.RowIndex].Approver).FullName;
+                    if (e.Row.Cells[3].Text == "Pay")
+                    {
+                        e.Row.Cells[3].Text = "Reviewed";
+                    }
+                }
+            }
+        }
+        protected void dgReimbursementStatus_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            PaymentReimbursementRequest ReimbursementReq = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId);
+            if (ReimbursementReq.PaymentReimbursementRequestStatuses != null)
+            {
+                if (e.Row.RowType == DataControlRowType.DataRow)
+                {
+                    if (ReimbursementReq.PaymentReimbursementRequestStatuses[e.Row.RowIndex].Approver != 0)
+                        e.Row.Cells[1].Text = _presenter.GetUser(ReimbursementReq.PaymentReimbursementRequestStatuses[e.Row.RowIndex].Approver).FullName;
                     if (e.Row.Cells[3].Text == "Pay")
                     {
                         e.Row.Cells[3].Text = "Reviewed";
@@ -729,15 +827,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void dgOperationalControlRequestDetail_ItemDataBound(object sender, DataGridItemEventArgs e)
         {
-           
+
 
             if (e.Item.ItemType == ListItemType.Footer)
             {
                 
-                Label lblTotalVariance = e.Item.FindControl("lblSettelementTotalVariance") as Label;
-                lblTotalVariance.Text = "Over Spend Refund" + (Convert.ToDecimal(Session["ActualExpenditure"]) - Convert.ToDecimal(Session["totalAmountAdvanced"])).ToString();
-                lblTotalVariance.ForeColor = System.Drawing.Color.Green;
-                lblTotalVariance.Font.Bold = true;
             }
             else
             {

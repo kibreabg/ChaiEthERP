@@ -41,7 +41,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 PrintTransaction();
             }
-           lblOverSpend.Text = (_presenter.CurrentPaymentReimbursementRequest.TotalAmount - _presenter.CurrentPaymentReimbursementRequest.ReceivableAmount).ToString();
+           
         }
         [CreateNew]
         public PaymentReimbursementApprovalPresenter Presenter
@@ -342,6 +342,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             //grvPaymentReimbursementRequestList.SelectedDataKey.Value
             _presenter.OnViewLoaded();
+            lblOverSpend.Text = (_presenter.CurrentPaymentReimbursementRequest.ReceivableAmount- _presenter.CurrentPaymentReimbursementRequest.TotalAmount).ToString();
             if (_presenter.CurrentPaymentReimbursementRequest.ProgressStatus == ProgressStatus.Completed.ToString())
             {
                 PrintTransaction();

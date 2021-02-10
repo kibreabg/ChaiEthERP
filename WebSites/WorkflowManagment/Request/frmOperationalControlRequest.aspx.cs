@@ -240,8 +240,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             foreach (PaymentReimbursementRequestDetail detail in PRR.PaymentReimbursementRequestDetails)
                             {
                                 OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
-                                OCRD.ItemAccount = detail.ItemAccount;
-                                OCRD.Amount = detail.ActualExpenditure;
+                                OCRD.ItemAccount = PRR.CashPaymentRequest.CashPaymentRequestDetails[0].ItemAccount;//  detail.ItemAccount;
+                                OCRD.Amount = PRR.ReceivableAmount - PRR.TotalAmount ;
                                 OCRD.Project = PRR.Project;
                                 OCRD.Grant = PRR.Grant;
                                 _presenter.CurrentOperationalControlRequest.TotalAmount = PRR.ReceivableAmount;
