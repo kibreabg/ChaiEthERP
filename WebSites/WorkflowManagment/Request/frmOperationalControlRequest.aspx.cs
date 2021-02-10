@@ -222,6 +222,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             _presenter.CurrentOperationalControlRequest.TotalActualExpendture = OCRD.Amount;
                             OCRD.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
                             _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails.Add(OCRD);
+
                         }
                     }
                 }
@@ -229,21 +230,36 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (Request.QueryString["SettlementId"] != null)
                     {
+                        
                         int SettlementId = Convert.ToInt32(Request.QueryString["SettlementId"]);
                         PaymentReimbursementRequest PRR = _presenter.GetReimbursementRequest(SettlementId);
                         if (PRR != null)
                         {
                             _presenter.CurrentOperationalControlRequest.Description = PRR.Comment;
-                            _presenter.CurrentOperationalControlRequest.LiquidationId = SettlementId;
+                            _presenter.CurrentOperationalControlRequest.SettlementId = SettlementId;
+                            foreach (PaymentReimbursementRequestDetail detail in PRR.PaymentReimbursementRequestDetails)
+                            {
+                                OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
+                                OCRD.ItemAccount = PRR.CashPaymentRequest.CashPaymentRequestDetails[0].ItemAccount;//  detail.ItemAccount;
+                                OCRD.Amount = PRR.ReceivableAmount - PRR.TotalAmount ;
+                                OCRD.Project = PRR.Project;
+                                OCRD.Grant = PRR.Grant;
+                                _presenter.CurrentOperationalControlRequest.TotalAmount = PRR.ReceivableAmount;
+                                _presenter.CurrentOperationalControlRequest.TotalActualExpendture = PRR.TotalAmount;
+                                OCRD.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
+                                _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails.Add(OCRD);
+                                if (detail.PRAttachments.Count > 0)
+                                {
+                                    foreach (PRAttachment CP in detail.PRAttachments)
+                                    {
+                                        OCRAttachment OPA = new OCRAttachment();
 
-                            OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
-                            OCRD.Amount = PRR.TotalAmount - PRR.ReceivableAmount;
-                            OCRD.Project = PRR.Project;
-                            OCRD.Grant = PRR.Grant;
-                            _presenter.CurrentOperationalControlRequest.TotalAmount = PRR.ReceivableAmount;
-                            _presenter.CurrentOperationalControlRequest.TotalActualExpendture = PRR.TotalAmount;
-                            OCRD.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
-                            _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails.Add(OCRD);
+                                        OPA.FilePath = CP.FilePath;
+                                        OPA.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
+                                        _presenter.CurrentOperationalControlRequest.OCRAttachments.Add(OPA);
+                                    }
+                                }
+                            }
                         }
                     }
                 }

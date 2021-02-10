@@ -24,6 +24,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         private OperationalControlApprovalPresenter _presenter;
         private static readonly ILog Log = LogManager.GetLogger("AuditTrailLog");
         private int reqID = 0;
+        decimal _totalAmountAdvanced = 0;
+        decimal _totalActualExpenditure = 0;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!this.IsPostBack)
@@ -209,6 +211,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 btnPrint.Enabled = true;
             }
         }
+        private void SendEmailToSettelmentRequester(PaymentReimbursementRequest settelment)
+        {
+
+            // if (_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementStatus != "Bank Payment")
+            EmailSender.Send(_presenter.GetUser(settelment.CashPaymentRequest.AppUser.Id).Email, "Settlement", "Your Settlement Request for Cash Payment - '" + (settelment.CashPaymentRequest.RequestNo).ToUpper() + "' was Completed. Please collect your Money");
+        }
         private void SendEmail(OperationalControlRequestStatus OCRS)
         {
             if (OCRS.Approver != 0)
@@ -316,6 +324,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                                 associatedTravelAdvance.ExpenseLiquidationStatus = ProgressStatus.Completed.ToString();
                                 _presenter.SaveOrUpdateTravelAdvanceRequest(associatedTravelAdvance);
                             }
+                            if (_presenter.CurrentOperationalControlRequest.SettlementId > 0)
+                            {
+                                PaymentReimbursementRequest associatedsettlementrequest = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId);
+                                associatedsettlementrequest.CashPaymentRequest.PaymentReimbursementStatus = "Finished";
+                                SendEmailToSettelmentRequester(associatedsettlementrequest);
+
+
+                            }
 
                         }
                         GetNextApprover();
@@ -367,6 +383,34 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 _presenter.CurrentOperationalControlRequest = _presenter.GetOperationalControlRequest(reqID);
                 if (e.CommandName == "ViewItem")
                 {
+                    if (_presenter.CurrentOperationalControlRequest.SettlementId > 0)
+                    {
+                        PaymentReimbursementRequest request = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId);
+                        if (request != null)
+                        {
+                            IList<OperationalControlRequestDetail> Details = new List<OperationalControlRequestDetail>();
+                            foreach (CashPaymentRequestDetail detail in request.CashPaymentRequest.CashPaymentRequestDetails)
+                            {
+                                OperationalControlRequestDetail OP = new OperationalControlRequestDetail();
+                                OP.ItemAccount = detail.ItemAccount;
+                                OP.AccountCode = detail.AccountCode;
+                                OP.Project = detail.Project;
+                                OP.Grant = detail.Grant;
+                                OP.Amount = detail.Amount;
+                                _totalAmountAdvanced = _totalAmountAdvanced + OP.Amount;
+                                Session["totalAmountAdvanced"] = _totalAmountAdvanced;
+                                Details.Add(OP);
+                                dgOperationalControlRequestDetail.DataSource = Details;
+                                dgOperationalControlRequestDetail.DataBind();
+
+                            }
+                        }
+                    }
+                    foreach (OperationalControlRequestDetail OPDetail in _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails)
+                    {
+                        _totalActualExpenditure = _totalActualExpenditure + OPDetail.Amount;
+                    }
+                    Session["ActualExpenditure"] = _totalActualExpenditure;
                     dgOperationalControlRequestDetail.DataSource = _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails;
                     dgOperationalControlRequestDetail.DataBind();
                     grvOperationalControlStatuses.DataSource = _presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses;
@@ -390,6 +434,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         dgLiquidationRequestDetail.DataBind();
                         grvLiquidationStatuses.DataSource = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId).ExpenseLiquidationRequestStatuses;
                         grvLiquidationStatuses.DataBind();
+                    }
+                    else if (_presenter.CurrentOperationalControlRequest.SettlementId > 0)
+                    {
+                        lblSettelementDetail.Visible = true;
+                        dgReimbursementDetail.DataSource = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId).PaymentReimbursementRequestDetails;
+                        dgReimbursementDetail.DataBind();
+                        dgReimbursementStatus.DataSource = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId).PaymentReimbursementRequestStatuses;
+                        dgReimbursementStatus.DataBind();
                     }
                     else
                     {
@@ -456,6 +508,54 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     lblTotalActualExp.Text = _totalActualExpenditure.ToString();
                     lblTotalActualExp.ForeColor = System.Drawing.Color.Green;
                     lblTotalActualExp.Font.Bold = true;
+                }
+            }
+
+        }
+        protected void dgReimbursementDetail_ItemDataBound(object sender, DataGridItemEventArgs e)
+        {
+            decimal _totalVariance = 0;
+            decimal _totalAmountAdvanced = 0;
+            decimal _totalActualExpenditure = 0;
+
+            PaymentReimbursementRequest ReimbursementReq = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId);
+            if (ReimbursementReq.PaymentReimbursementRequestDetails != null)
+            {
+                if (e.Item.ItemType == ListItemType.Item)
+                {
+                    foreach (PaymentReimbursementRequestDetail detail in ReimbursementReq.PaymentReimbursementRequestDetails)
+                    {
+                        _totalVariance = ReimbursementReq.ReceivableAmount - ReimbursementReq.TotalAmount;
+                    }
+
+                    Label lblTotalVariance = e.Item.FindControl("lblTotalVariance") as Label;
+                    lblTotalVariance.Text = _totalVariance.ToString();
+                    lblTotalVariance.ForeColor = System.Drawing.Color.Green;
+                    lblTotalVariance.Font.Bold = true;
+                }
+                if (e.Item.ItemType == ListItemType.Item)
+                {
+                    foreach (PaymentReimbursementRequestDetail detail in ReimbursementReq.PaymentReimbursementRequestDetails)
+                    {
+                        _totalAmountAdvanced = ReimbursementReq.ReceivableAmount;
+                    }
+
+
+                    Label lblTotalAdvAmount = e.Item.FindControl("lblTotalAdvAmount") as Label;
+                    lblTotalAdvAmount.Text = _totalAmountAdvanced.ToString();
+                    //lblTotalAdvAmount.ForeColor = System.Drawing.Color.Green;
+                    lblTotalAdvAmount.Font.Bold = true;
+                }
+                if (e.Item.ItemType == ListItemType.Item)
+                {
+                    //foreach (PaymentReimbursementRequestDetail detail in ReimbursementReq.PaymentReimbursementRequestDetails)
+                    //{
+                    //    _totalActualExpenditure = ReimbursementReq.TotalAmount;
+                    //}
+                    //Label lblTotalActualExp = e.Item.FindControl("lblTotalActualExp") as Label;
+                    //lblTotalActualExp.Text = _totalActualExpenditure.ToString();
+                    //lblTotalActualExp.ForeColor = System.Drawing.Color.Green;
+                    //lblTotalActualExp.Font.Bold = true;
                 }
             }
 
@@ -616,6 +716,21 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 grvPaymentStatuses.DataSource = _presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId).CashPaymentRequestStatuses;
                 grvPaymentStatuses.DataBind();
             }
+            if (_presenter.CurrentOperationalControlRequest.SettlementId > 0)
+            {
+                pnlSettelementDetail.Visible = true;
+                pnlTravelDetail.Visible = false;
+                pnlPaymentDetail.Visible = false;
+                lblTravelDetails.Visible = false;
+                pnlPaymentDetail.Visible = false;
+                lblPaymentDetail.Visible = false;
+                lblSettelementDetails.Visible = true;
+                grvReDetail.DataSource = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId).PaymentReimbursementRequestDetails;
+                grvReDetail.DataBind();
+
+                grvPRstatus.DataSource = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId).PaymentReimbursementRequestStatuses;
+                grvPRstatus.DataBind();
+            }
 
         }
         protected void grvTravelStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -629,6 +744,17 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
             }
         }
+        protected void grvPRstatus_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (_presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId).PaymentReimbursementRequestStatuses != null)
+            {
+                if (e.Row.RowType == DataControlRowType.DataRow)
+                {
+                    if (_presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId).PaymentReimbursementRequestStatuses[e.Row.RowIndex].Approver > 0)
+                        e.Row.Cells[1].Text = _presenter.GetUser(_presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId).PaymentReimbursementRequestStatuses[e.Row.RowIndex].Approver).FullName;
+                }
+            }
+        }
         protected void grvLiquidationStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             ExpenseLiquidationRequest liquidationReq = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId);
@@ -638,6 +764,22 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     if (liquidationReq.ExpenseLiquidationRequestStatuses[e.Row.RowIndex].Approver != 0)
                         e.Row.Cells[1].Text = _presenter.GetUser(liquidationReq.ExpenseLiquidationRequestStatuses[e.Row.RowIndex].Approver).FullName;
+                    if (e.Row.Cells[3].Text == "Pay")
+                    {
+                        e.Row.Cells[3].Text = "Reviewed";
+                    }
+                }
+            }
+        }
+        protected void dgReimbursementStatus_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            PaymentReimbursementRequest ReimbursementReq = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId);
+            if (ReimbursementReq.PaymentReimbursementRequestStatuses != null)
+            {
+                if (e.Row.RowType == DataControlRowType.DataRow)
+                {
+                    if (ReimbursementReq.PaymentReimbursementRequestStatuses[e.Row.RowIndex].Approver != 0)
+                        e.Row.Cells[1].Text = _presenter.GetUser(ReimbursementReq.PaymentReimbursementRequestStatuses[e.Row.RowIndex].Approver).FullName;
                     if (e.Row.Cells[3].Text == "Pay")
                     {
                         e.Row.Cells[3].Text = "Reviewed";
@@ -685,8 +827,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void dgOperationalControlRequestDetail_ItemDataBound(object sender, DataGridItemEventArgs e)
         {
+
+
             if (e.Item.ItemType == ListItemType.Footer)
             {
+                
             }
             else
             {
