@@ -667,6 +667,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
                 if (e.Item.ItemType == ListItemType.Footer)
                 {
+                    _totalVariance = 0;
                     foreach (ExpenseLiquidationRequestDetail detail in _presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
                     {
                         _totalVariance = _totalVariance + detail.Variance;
@@ -680,6 +681,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
                 if (e.Item.ItemType == ListItemType.Footer)
                 {
+                    _totalAmountAdvanced = 0;
                     foreach (ExpenseLiquidationRequestDetail detail in _presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
                     {
                         _totalAmountAdvanced = _totalAmountAdvanced + detail.AmountAdvanced;
@@ -693,6 +695,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
                 if (e.Item.ItemType == ListItemType.Footer)
                 {
+                    _totalActualExpenditure = 0;
                     foreach (ExpenseLiquidationRequestDetail detail in _presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
                     {
                         _totalActualExpenditure = _totalActualExpenditure + detail.ActualExpenditure;
