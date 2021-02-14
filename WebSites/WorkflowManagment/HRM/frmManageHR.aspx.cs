@@ -905,7 +905,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             if (e.CommandName == "History")
             {
                 int Row = Convert.ToInt32(e.CommandArgument);
-                if (Row == 0) {
+                if (Row == 0)
+                {
 
                     int TEMPChid = Convert.ToInt32(dgContractDetail.DataKeys[Row].Value);
                     if (TEMPChid > 0)
@@ -930,7 +931,8 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
 
                     chan = Session["chan"] as Contract;
-
+                    if(chan!=null)
+                        { 
 
                     if (chan.EmployeeDetails.Count == 0)
                     {
@@ -938,13 +940,13 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                         BindEmpDetail(chan);
 
                         ClearEmpDetailFormFields();
-                       
+
                         pnlEMPHIST_ModalPopupExtender.Show();
                     }
-                    else if (chan.EmployeeDetails.Count >0)
-                        {
+                    else if (chan.EmployeeDetails.Count > 0)
+                    {
                         ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
-                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                       // ddlProgram.SelectedValue = chan.EmployeeDetails[TEMPChid].Program.Id.ToString();
                         ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
                         txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
                         txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
@@ -958,6 +960,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                         txtEffectDate.Text = chan.EmployeeDetails[0].EffectiveDateOfChange.ToShortDateString();
                         pnlEMPHIST_ModalPopupExtender.Show();
                     }
+                }
                 }
                 else if (Row == 1)
                 {
@@ -991,7 +994,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     {
 
                         ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
-                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                       //ddlProgram.SelectedValue = chan.EmployeeDetails[TEMPChid].Program.Id.ToString();
                         ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
                         txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
                         txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
@@ -1038,7 +1041,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     if (chan.EmployeeDetails.Count > 0)
                     {
                         ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
-                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                      //  ddlProgram.SelectedValue = chan.EmployeeDetails[TEMPChid].Program.Id.ToString();
                         ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
                         txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
                         txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
@@ -1085,7 +1088,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     if (chan.EmployeeDetails.Count > 0)
                     {
                         ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
-                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                       // ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
                         ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
                         txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
                         txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
@@ -1131,7 +1134,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     if (chan.EmployeeDetails.Count > 0)
                     {
                         ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
-                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                      //  ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
                         ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
                         txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
                         txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
@@ -1178,7 +1181,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     {
 
                         ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
-                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                       // ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
                         ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
                         txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
                         txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
@@ -1226,7 +1229,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     {
 
                         ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
-                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                      //  ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
                         ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
                         txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
                         txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
@@ -1273,7 +1276,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     if (chan.EmployeeDetails.Count > 0)
                     {
                         ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
-                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                      //  ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
                         ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
                         txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
                         txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
@@ -1320,7 +1323,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     if (chan.EmployeeDetails.Count > 0)
                     {
                         ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
-                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                       // ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
                         ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
                         txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
                         txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
@@ -1367,7 +1370,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     {
 
                         ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
-                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                       // ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
                         ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
                         txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
                         txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
@@ -1414,7 +1417,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     {
 
                         ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
-                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                       // ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
                         ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
                         txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
                         txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
@@ -1461,7 +1464,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     if (chan.EmployeeDetails.Count > 0)
                     {
                         ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
-                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                        //ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
                         ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
                         txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
                         txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
@@ -1508,7 +1511,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     if (chan.EmployeeDetails.Count > 0)
                     {
                         ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
-                        ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
+                       // ddlProgram.SelectedValue = chan.EmployeeDetails[0].Program.Id.ToString();
                         ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
                         txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
                         txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;

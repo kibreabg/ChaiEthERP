@@ -453,6 +453,7 @@
                                                     <asp:DropDownList ID="ddlDutyStation" runat="server" CssClass="form-control" placeholder="Duty Station" AppendDataBoundItems="True">
                                                         <asp:ListItem Value="Addis Ababa">Addis Ababa</asp:ListItem>
                                                         <asp:ListItem Value="SNNPR">SNNPR</asp:ListItem>
+                                                         <asp:ListItem Value="Sidama">Sidama</asp:ListItem>
                                                         <asp:ListItem Value="Tigray">Tigray</asp:ListItem>
                                                         <asp:ListItem Value="Oromia">Oromia</asp:ListItem>
                                                         <asp:ListItem Value="Amhara">Amhara</asp:ListItem>

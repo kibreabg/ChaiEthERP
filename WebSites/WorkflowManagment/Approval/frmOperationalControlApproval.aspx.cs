@@ -110,7 +110,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
 
             ddlApprovalStatus.Items.Add(new ListItem("Reject Bank Payment", ApprovalStatus.Rejected.ToString().Replace('_', ' ')));
-            ddlApprovalStatus.Items.Add(new ListItem("Reject Whole Process", ApprovalStatus.Reject_Whole_Process.ToString().Replace('_', ' ')));
+            if (_presenter.CurrentOperationalControlRequest.PaymentId > 0 || _presenter.CurrentOperationalControlRequest.TravelAdvanceId > 0)
+            {
+                ddlApprovalStatus.Items.Add(new ListItem("Reject Whole Process", ApprovalStatus.Reject_Whole_Process.ToString().Replace('_', ' ')));
+            }
 
         }
         private string GetWillStatus()
@@ -421,15 +424,30 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     //If this Bank Payment request was initiated from Travel Advance, show the details of the Travel Advance here
                     if (_presenter.CurrentOperationalControlRequest.TravelAdvanceId > 0)
                     {
-                        lblTravelDetail.Visible = true;
+                        pnlTravelDetails.Visible = true;
+                        pnlLiquidationDetails.Visible = false;
+                        pnlSettlmentDetails.Visible = false;
+                        pnlPaymentDetails.Visible = false;
                         dgTravelAdvanceRequestDetail.DataSource = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).TravelAdvanceRequestDetails;
                         dgTravelAdvanceRequestDetail.DataBind();
                         grvTravelAdvanceStatuses.DataSource = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).TravelAdvanceRequestStatuses;
                         grvTravelAdvanceStatuses.DataBind();
                     }
+                    else if (_presenter.CurrentOperationalControlRequest.PaymentId > 0)
+                    {
+                        pnlTravelDetails.Visible = false;
+                        pnlLiquidationDetails.Visible = false;
+                        pnlSettlmentDetails.Visible = false;
+                        pnlPaymentDetails.Visible = true;
+                        grvPaymentRequestStatuses.DataSource = _presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId).CashPaymentRequestStatuses;
+                        grvPaymentRequestStatuses.DataBind();
+                    }
                     else if (_presenter.CurrentOperationalControlRequest.LiquidationId > 0)
                     {
-                        lblLiquidationDetail.Visible = true;
+                        pnlTravelDetails.Visible = false;
+                        pnlLiquidationDetails.Visible = true;
+                        pnlSettlmentDetails.Visible = false;
+                        pnlPaymentDetails.Visible = false;
                         dgLiquidationRequestDetail.DataSource = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId).ExpenseLiquidationRequestDetails;
                         dgLiquidationRequestDetail.DataBind();
                         grvLiquidationStatuses.DataSource = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId).ExpenseLiquidationRequestStatuses;
@@ -437,7 +455,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     }
                     else if (_presenter.CurrentOperationalControlRequest.SettlementId > 0)
                     {
-                        lblSettelementDetail.Visible = true;
+                        pnlTravelDetails.Visible = false;
+                        pnlLiquidationDetails.Visible = false;
+                        pnlSettlmentDetails.Visible = true;
+                        pnlPaymentDetails.Visible = false;
                         dgReimbursementDetail.DataSource = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId).PaymentReimbursementRequestDetails;
                         dgReimbursementDetail.DataBind();
                         dgReimbursementStatus.DataSource = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId).PaymentReimbursementRequestStatuses;
@@ -687,6 +708,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 pnlPaymentDetail.Visible = false;
                 pnlSettelementDetail.Visible = false;
                 lblTravelDetails.Visible = true;
+                pnlLiquidationDetail.Visible = false;
+                pnlSettelementDetail.Visible = false;
                 grvTravelDetails.DataSource = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).TravelAdvanceRequestDetails;
                 grvTravelDetails.DataBind();
 
@@ -705,11 +728,28 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 grvTravelCosts.DataSource = allCosts;
                 grvTravelCosts.DataBind();
             }
+            if (_presenter.CurrentOperationalControlRequest.LiquidationId > 0)
+            {
+                lblProjectCodeResult.Text = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId).ExpenseLiquidationRequestDetails[0].Project.ProjectCode;
+                lblGrantCodeResult.Text = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId).ExpenseLiquidationRequestDetails[0].Grant.GrantCode;
+
+                pnlLiquidationDetail.Visible = true;
+                pnlPaymentDetail.Visible = false;
+                pnlSettelementDetail.Visible = false;
+                pnlTravelDetail.Visible = false;
+                dgLiquidationDetail.DataSource = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId).ExpenseLiquidationRequestDetails;
+                dgLiquidationDetail.DataBind();
+
+                grvLiquidationPrintStatuses.DataSource = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId).ExpenseLiquidationRequestStatuses;
+                grvLiquidationPrintStatuses.DataBind();
+            }
 
             if (_presenter.CurrentOperationalControlRequest.PaymentId > 0)
             {
                 pnlPaymentDetail.Visible = true;
                 pnlTravelDetail.Visible = false;
+                pnlLiquidationDetail.Visible = false;
+                pnlSettelementDetail.Visible = false;
                 pnlSettelementDetail.Visible = false;
                 lblPaymentDetail.Visible = true;
                 grvPaymentDetails.DataSource = _presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId).CashPaymentRequestDetails;
@@ -723,9 +763,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 pnlSettelementDetail.Visible = true;
                 pnlTravelDetail.Visible = false;
                 pnlPaymentDetail.Visible = false;
-                lblTravelDetails.Visible = false;
-                pnlPaymentDetail.Visible = false;
-                lblPaymentDetail.Visible = false;
+                pnlLiquidationDetail.Visible = false;
                 lblSettelementDetails.Visible = true;
                 grvReDetail.DataSource = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId).PaymentReimbursementRequestDetails;
                 grvReDetail.DataBind();
@@ -833,7 +871,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             if (e.Item.ItemType == ListItemType.Footer)
             {
-                
+
             }
             else
             {
