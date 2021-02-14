@@ -72,9 +72,9 @@ namespace Chai.WorkflowManagment.Modules.Report.Views
                 {
 
                     Employee emp = e.Row.DataItem as Employee;
-                    e.Row.Cells[5].Text = (Math.Round((emp.EmployeeLeaveBalanceYE() - _presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value)) * 2, MidpointRounding.AwayFromZero) / 2).ToString();
-                    e.Row.Cells[4].Text = emp.GetActiveContract() != null ? (Math.Round((emp.EmployeeLeaveBalanceCED(emp.GetActiveContract().ContractEndDate) - _presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value)) * 2, MidpointRounding.AwayFromZero) / 2).ToString() : "";
-                    e.Row.Cells[3].Text = (Math.Round((emp.EmployeeLeaveBalance() - _presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value)) * 2, MidpointRounding.AwayFromZero) / 2).ToString();
+                    e.Row.Cells[5].Text = (Math.Round((emp.EmployeeLeaveBalanceYE() - Convert.ToDouble(_presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value))) * 2, MidpointRounding.AwayFromZero) / 2).ToString();
+                    e.Row.Cells[4].Text = emp.GetActiveContract() != null ? (Math.Round((emp.EmployeeLeaveBalanceCED(emp.GetActiveContract().ContractEndDate) - Convert.ToDouble(_presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value))) * 2, MidpointRounding.AwayFromZero) / 2).ToString() : "";
+                    e.Row.Cells[3].Text = (Math.Round((emp.EmployeeLeaveBalance() - Convert.ToDouble(_presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value))) * 2, MidpointRounding.AwayFromZero) / 2).ToString();
                     e.Row.Cells[2].Text = _presenter.EmpLeaveTaken(emp.Id, emp.LeaveSettingDate.Value).ToString();
 
                 }

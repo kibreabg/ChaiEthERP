@@ -685,6 +685,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
                 pnlTravelDetail.Visible = true;
                 pnlPaymentDetail.Visible = false;
+                pnlSettelementDetail.Visible = false;
                 lblTravelDetails.Visible = true;
                 grvTravelDetails.DataSource = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).TravelAdvanceRequestDetails;
                 grvTravelDetails.DataBind();
@@ -709,6 +710,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 pnlPaymentDetail.Visible = true;
                 pnlTravelDetail.Visible = false;
+                pnlSettelementDetail.Visible = false;
                 lblPaymentDetail.Visible = true;
                 grvPaymentDetails.DataSource = _presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId).CashPaymentRequestDetails;
                 grvPaymentDetails.DataBind();
