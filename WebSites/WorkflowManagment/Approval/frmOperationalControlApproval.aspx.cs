@@ -466,6 +466,21 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         dgReimbursementStatus.DataSource = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId).PaymentReimbursementRequestStatuses;
                         dgReimbursementStatus.DataBind();
                     }
+                    else
+                    {
+                        dgTravelAdvanceRequestDetail.DataSource = null;
+                        dgTravelAdvanceRequestDetail.DataBind();
+                        grvTravelAdvanceCosts.DataSource = null;
+                        grvTravelAdvanceCosts.DataBind();
+                        grvTravelAdvanceStatuses.DataSource = null;
+                        grvTravelAdvanceStatuses.DataBind();
+                        dgLiquidationRequestDetail.DataSource = null;
+                        dgLiquidationRequestDetail.DataBind();
+                        grvLiquidationStatuses.DataSource = null;
+                        grvLiquidationStatuses.DataBind();
+                        lblTravelDetail.Visible = false;
+                        lblLiquidationDetail.Visible = false;
+                    }
 
                     ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
                 }
@@ -693,6 +708,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
                 pnlTravelDetail.Visible = true;
                 pnlPaymentDetail.Visible = false;
+                pnlSettelementDetail.Visible = false;
+                lblTravelDetails.Visible = true;
                 pnlLiquidationDetail.Visible = false;
                 pnlSettelementDetail.Visible = false;
                 grvTravelDetails.DataSource = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).TravelAdvanceRequestDetails;
@@ -735,6 +752,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 pnlTravelDetail.Visible = false;
                 pnlLiquidationDetail.Visible = false;
                 pnlSettelementDetail.Visible = false;
+                pnlSettelementDetail.Visible = false;
+                lblPaymentDetail.Visible = true;
                 grvPaymentDetails.DataSource = _presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId).CashPaymentRequestDetails;
                 grvPaymentDetails.DataBind();
 

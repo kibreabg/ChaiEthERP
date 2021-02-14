@@ -44,7 +44,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             this._presenter.OnViewLoaded();
             employee = _presenter.GetEmployee(_presenter.CurrentUser().Id);
             //txtLeaveAsOfCalEndDate.Text = (Math.Round((employee.EmployeeLeaveBalanceYE() - _presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value)) * 2, MidpointRounding.AwayFromZero) / 2).ToString();
-            txtLeaveAsOfToday.Text = (Math.Round((employee.EmployeeLeaveBalance() - _presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value)) * 2, MidpointRounding.AwayFromZero) / 2).ToString();
+            txtLeaveAsOfToday.Text = (Math.Round((employee.EmployeeLeaveBalance() - Convert.ToDouble(_presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value))) * 2, MidpointRounding.AwayFromZero) / 2).ToString();
             if (employee != null)
                 BindInitialValues();
             if (_presenter.NotCompletRequest(_presenter.CurrentUser().Id))
@@ -513,7 +513,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                 if (employee != null)
                 {
-                    txtforward.Text = (Math.Round((employee.EmployeeLeaveBalance() - _presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value)) * 2,MidpointRounding.AwayFromZero)/2).ToString();
+                    txtforward.Text = (Math.Round((employee.EmployeeLeaveBalance() - Convert.ToDouble(_presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value))) * 2,MidpointRounding.AwayFromZero)/2).ToString();
 
                 }
                 else
