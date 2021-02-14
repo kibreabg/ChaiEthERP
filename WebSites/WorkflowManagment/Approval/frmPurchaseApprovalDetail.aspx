@@ -181,7 +181,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         &times;</button>
-                    <h4 class="modal-title">Process Purchase Request</h4>
+                    <h4 class="modal-title">Purchase Request Details</h4>
                 </div>
                 <div class="modal-body">
                     <div class="jarviswidget-editbox"></div>
@@ -321,63 +321,63 @@
                                     </Columns>
                                     <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
                                 </asp:DataGrid>
-                                  <div style="text-align: center;">
-                                                            <asp:Label ID="lblMainDetail" Font-Size="Large" Font-Bold="true" runat="server" Visible="false" Text="Maintenance Request Review Detail"></asp:Label>
-                                                        </div>
+                                <div style="text-align: center;">
+                                    <asp:Label ID="lblMainDetail" Font-Size="Large" Font-Bold="true" runat="server" Visible="false" Text="Maintenance Request Review Detail"></asp:Label>
+                                </div>
                                 <asp:GridView ID="grvPreviewDetail" CellPadding="5" CellSpacing="3"
-                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                CssClass="table table-striped table-bordered table-hover">
-                <Columns>
-                    <asp:BoundField DataField="ServiceType.Name" HeaderText="Service Type" SortExpression="ServiceType.Name" />
-                    <asp:BoundField DataField="DriverServiceTypeDetail.Description" HeaderText="Driver's Service Type Request" SortExpression="DriverServiceTypeDetail.Description" />
-                    <asp:BoundField DataField="MechanicServiceTypeDetail.Description" HeaderText="Mechanic's Service Type Reccomendation" SortExpression="MechanicServiceTypeDetail.Description" />
-                    <asp:BoundField DataField="TechnicianRemark" HeaderText="Mechanic's Remark" SortExpression="TechnicianRemark" />
+                                    runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                                    CssClass="table table-striped table-bordered table-hover">
+                                    <Columns>
+                                        <asp:BoundField DataField="ServiceType.Name" HeaderText="Service Type" SortExpression="ServiceType.Name" />
+                                        <asp:BoundField DataField="DriverServiceTypeDetail.Description" HeaderText="Driver's Service Type Request" SortExpression="DriverServiceTypeDetail.Description" />
+                                        <asp:BoundField DataField="MechanicServiceTypeDetail.Description" HeaderText="Mechanic's Service Type Reccomendation" SortExpression="MechanicServiceTypeDetail.Description" />
+                                        <asp:BoundField DataField="TechnicianRemark" HeaderText="Mechanic's Remark" SortExpression="TechnicianRemark" />
 
-                </Columns>
-                <FooterStyle CssClass="FooterStyle" />
-                <HeaderStyle CssClass="headerstyle" />
-                <PagerStyle CssClass="PagerStyle" />
-                <RowStyle CssClass="rowstyle" />
-            </asp:GridView>
-                                
-                                 <div style="text-align: center;">
-                                                            <asp:Label ID="lblReqItems" Font-Size="Large" Font-Bold="true" runat="server" Visible="false" Text="Requested Items During Maintenance Review"></asp:Label>
-                                                        </div>
-                                  <asp:GridView ID="grvSparepart" CellPadding="5" CellSpacing="3"
-                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                CssClass="table table-striped table-bordered table-hover">
-                <Columns>
-                    <asp:BoundField DataField="Item.Name" HeaderText="Item" SortExpression="Item.Name" />
-                    
+                                    </Columns>
+                                    <FooterStyle CssClass="FooterStyle" />
+                                    <HeaderStyle CssClass="headerstyle" />
+                                    <PagerStyle CssClass="PagerStyle" />
+                                    <RowStyle CssClass="rowstyle" />
+                                </asp:GridView>
 
-                </Columns>
-                <FooterStyle CssClass="FooterStyle" />
-                <HeaderStyle CssClass="headerstyle" />
-                <PagerStyle CssClass="PagerStyle" />
-                <RowStyle CssClass="rowstyle" />
-            </asp:GridView>
-                                 <div style="text-align: center;">
-                                                            <asp:Label ID="lblApprovalDet" Font-Size="Large" Font-Bold="true" runat="server" Visible="false" Text="Maintenance Approval Detail"></asp:Label>
-                                                        </div>
-                                   <asp:GridView ID="grvMaintenanceStatuses" OnRowDataBound="grvMaintenanceStatuses_RowDataBound"
-                                                            runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                                                            CssClass="table table-striped table-bordered table-hover">
-                                                            <RowStyle CssClass="rowstyle" />
-                                                            <Columns>
-                                                                <asp:TemplateField HeaderText="Date">
-                                                                    <ItemTemplate>
-                                                                        <asp:Label ID="lblDate" runat="server" Text='<%# Eval("Date", "{0:dd/MM/yyyy}")%>'></asp:Label>
-                                                                    </ItemTemplate>
-                                                                </asp:TemplateField>
-                                                                <asp:BoundField HeaderText="Name" />
-                                                                <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
-                                                                <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus" />
-                                                            </Columns>
-                                                            <FooterStyle CssClass="FooterStyle" />
-                                                            <HeaderStyle CssClass="headerstyle" />
-                                                            <PagerStyle CssClass="PagerStyle" />
-                                                            <RowStyle CssClass="rowstyle" />
-                                                        </asp:GridView>
+                                <div style="text-align: center;">
+                                    <asp:Label ID="lblReqItems" Font-Size="Large" Font-Bold="true" runat="server" Visible="false" Text="Requested Items During Maintenance Review"></asp:Label>
+                                </div>
+                                <asp:GridView ID="grvSparepart" CellPadding="5" CellSpacing="3"
+                                    runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                                    CssClass="table table-striped table-bordered table-hover">
+                                    <Columns>
+                                        <asp:BoundField DataField="Item.Name" HeaderText="Item" SortExpression="Item.Name" />
+
+
+                                    </Columns>
+                                    <FooterStyle CssClass="FooterStyle" />
+                                    <HeaderStyle CssClass="headerstyle" />
+                                    <PagerStyle CssClass="PagerStyle" />
+                                    <RowStyle CssClass="rowstyle" />
+                                </asp:GridView>
+                                <div style="text-align: center;">
+                                    <asp:Label ID="lblApprovalDet" Font-Size="Large" Font-Bold="true" runat="server" Visible="false" Text="Maintenance Approval Detail"></asp:Label>
+                                </div>
+                                <asp:GridView ID="grvMaintenanceStatuses" OnRowDataBound="grvMaintenanceStatuses_RowDataBound"
+                                    runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                                    CssClass="table table-striped table-bordered table-hover">
+                                    <RowStyle CssClass="rowstyle" />
+                                    <Columns>
+                                        <asp:TemplateField HeaderText="Date">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblDate" runat="server" Text='<%# Eval("Date", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:BoundField HeaderText="Name" />
+                                        <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
+                                        <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus" />
+                                    </Columns>
+                                    <FooterStyle CssClass="FooterStyle" />
+                                    <HeaderStyle CssClass="headerstyle" />
+                                    <PagerStyle CssClass="PagerStyle" />
+                                    <RowStyle CssClass="rowstyle" />
+                                </asp:GridView>
 
                             </div>
                             <footer>
@@ -486,47 +486,47 @@
         </asp:GridView>
 
         <div style="text-align: center;">
-                                                            <asp:Label ID="Label2"  Font-Bold="true" runat="server" Text="Maintenance Request Review Detail"></asp:Label>
-                                                        </div>
+            <asp:Label ID="Label2" Font-Bold="true" runat="server" Text="Maintenance Request Review Detail"></asp:Label>
+        </div>
         <asp:GridView ID="grvMaintenaceDet" CellPadding="5" CellSpacing="3"
-                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                CssClass="table table-striped table-bordered table-hover">
-                <Columns>
-                    <asp:BoundField DataField="ServiceType.Name" HeaderText="Service Type" SortExpression="ServiceType.Name" />
-                    <asp:BoundField DataField="DriverServiceTypeDetail.Description" HeaderText="Driver's Service Type Request" SortExpression="DriverServiceTypeDetail.Description" />
-                    <asp:BoundField DataField="MechanicServiceTypeDetail.Description" HeaderText="Mechanic's Service Type Reccomendation" SortExpression="MechanicServiceTypeDetail.Description" />
-                    <asp:BoundField DataField="TechnicianRemark" HeaderText="Mechanic's Remark" SortExpression="TechnicianRemark" />
+            runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+            CssClass="table table-striped table-bordered table-hover">
+            <Columns>
+                <asp:BoundField DataField="ServiceType.Name" HeaderText="Service Type" SortExpression="ServiceType.Name" />
+                <asp:BoundField DataField="DriverServiceTypeDetail.Description" HeaderText="Driver's Service Type Request" SortExpression="DriverServiceTypeDetail.Description" />
+                <asp:BoundField DataField="MechanicServiceTypeDetail.Description" HeaderText="Mechanic's Service Type Reccomendation" SortExpression="MechanicServiceTypeDetail.Description" />
+                <asp:BoundField DataField="TechnicianRemark" HeaderText="Mechanic's Remark" SortExpression="TechnicianRemark" />
 
-                </Columns>
-                <FooterStyle CssClass="FooterStyle" />
-                <HeaderStyle CssClass="headerstyle" />
-                <PagerStyle CssClass="PagerStyle" />
-                <RowStyle CssClass="rowstyle" />
-            </asp:GridView>
-                                
-                                
-                                 <div style="text-align: center;">
-                                                            <asp:Label ID="Label3"  runat="server"  Text="Maintenance Approval Detail"></asp:Label>
-                                                        </div>
-                                   <asp:GridView ID="grvMainSta" OnRowDataBound="grvMaintenanceStatuses_RowDataBound"
-                                                            runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                                                            CssClass="table table-striped table-bordered table-hover">
-                                                            <RowStyle CssClass="rowstyle" />
-                                                            <Columns>
-                                                                <asp:TemplateField HeaderText="Date">
-                                                                    <ItemTemplate>
-                                                                        <asp:Label ID="lblDate" runat="server" Text='<%# Eval("Date", "{0:dd/MM/yyyy}")%>'></asp:Label>
-                                                                    </ItemTemplate>
-                                                                </asp:TemplateField>
-                                                                <asp:BoundField HeaderText="Name" />
-                                                                <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
-                                                                <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus" />
-                                                            </Columns>
-                                                            <FooterStyle CssClass="FooterStyle" />
-                                                            <HeaderStyle CssClass="headerstyle" />
-                                                            <PagerStyle CssClass="PagerStyle" />
-                                                            <RowStyle CssClass="rowstyle" />
-                                                        </asp:GridView>
+            </Columns>
+            <FooterStyle CssClass="FooterStyle" />
+            <HeaderStyle CssClass="headerstyle" />
+            <PagerStyle CssClass="PagerStyle" />
+            <RowStyle CssClass="rowstyle" />
+        </asp:GridView>
+
+
+        <div style="text-align: center;">
+            <asp:Label ID="Label3" runat="server" Text="Maintenance Approval Detail"></asp:Label>
+        </div>
+        <asp:GridView ID="grvMainSta" OnRowDataBound="grvMaintenanceStatuses_RowDataBound"
+            runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+            CssClass="table table-striped table-bordered table-hover">
+            <RowStyle CssClass="rowstyle" />
+            <Columns>
+                <asp:TemplateField HeaderText="Date">
+                    <ItemTemplate>
+                        <asp:Label ID="lblDate" runat="server" Text='<%# Eval("Date", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                    </ItemTemplate>
+                </asp:TemplateField>
+                <asp:BoundField HeaderText="Name" />
+                <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
+                <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus" />
+            </Columns>
+            <FooterStyle CssClass="FooterStyle" />
+            <HeaderStyle CssClass="headerstyle" />
+            <PagerStyle CssClass="PagerStyle" />
+            <RowStyle CssClass="rowstyle" />
+        </asp:GridView>
         <br />
         <br />
         <asp:GridView ID="grvStatuses" CellPadding="5" CellSpacing="3"

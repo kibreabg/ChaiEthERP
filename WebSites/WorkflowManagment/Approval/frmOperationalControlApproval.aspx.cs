@@ -432,6 +432,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         dgTravelAdvanceRequestDetail.DataBind();
                         grvTravelAdvanceStatuses.DataSource = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).TravelAdvanceRequestStatuses;
                         grvTravelAdvanceStatuses.DataBind();
+                        grvTravelAdvanceCosts.DataSource = null;
+                        grvTravelAdvanceCosts.DataBind();
                     }
                     else if (_presenter.CurrentOperationalControlRequest.PaymentId > 0)
                     {
