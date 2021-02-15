@@ -467,7 +467,7 @@ namespace Chai.WorkflowManagment.Modules.Request
         public IList<PurchaseRequest> GetPurchaseRequestsInProgress()
         {
             string filterExpression = "";
-            filterExpression = "SELECT DISTINCT PurchaseRequests.Id,RequestNo,Requester,RequestedDate,Requireddateofdelivery,TotalPrice,SpecialNeed,NeededFor, " +
+            filterExpression = "SELECT DISTINCT PurchaseRequests.Id,RequestNo,Requester,MaintenanceId,RequestedDate,Requireddateofdelivery,TotalPrice,SpecialNeed,NeededFor, " +
                                       " DeliverTo,Comment,SuggestedSupplier,IsVehicle,MaintenanceRequestNo,CurrentApprover,CurrentLevel,ProgressStatus,CurrentStatus FROM " +
                                       " PurchaseRequests INNER JOIN PurchaseRequestDetails ON dbo.PurchaseRequestDetails.PurchaseRequest_Id = PurchaseRequests.Id" +
                                        " WHERE PurchaseRequestDetails.BidAnalysisRequestStatus = 'InProgress' AND PurchaseRequests.ProgressStatus = 'Completed' ORDER BY PurchaseRequests.Id DESC ";
