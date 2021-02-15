@@ -179,12 +179,11 @@ namespace Chai.WorkflowManagment.Modules.Approval
             {
                 filterExpression = " SELECT * FROM OperationalControlRequests " +
                                    " INNER JOIN OperationalControlRequestStatuses ON OperationalControlRequestStatuses.OperationalControlRequest_Id = OperationalControlRequests.Id " +
-                                   " INNER JOIN AppUsers ON (AppUsers.Id = OperationalControlRequestStatuses.Approver) OR (AppUsers.EmployeePosition_Id = OperationalControlRequests.CurrentApproverPosition AND AppUsers.Id = '" + CurrentUser().Id + "') " +
-                                   " LEFT JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
+                                   " INNER JOIN AppUsers ON AppUsers.Id = OperationalControlRequestStatuses.Approver" +
+                                   " LEFT JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
                                    " WHERE 1 = CASE WHEN '" + RequestNo + "' = '' THEN 1 WHEN OperationalControlRequests.VoucherNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When OperationalControlRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND OperationalControlRequests.ProgressStatus='" + ProgressStatus + "' " +
-                                   " AND OperationalControlRequestStatuses.ApprovalStatus IS NOT NULL AND ((OperationalControlRequestStatuses.Approver = '" + CurrentUser().Id + "') OR (OperationalControlRequestStatuses.ApproverPosition = '" + CurrentUser().EmployeePosition.Id + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) " +
+                                   " AND OperationalControlRequestStatuses.ApprovalStatus IS NOT NULL AND ((OperationalControlRequestStatuses.Approver = '" + CurrentUser().Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) " +
                                    " AND (OperationalControlRequests.CurrentStatus != 'Rejected' OR OperationalControlRequests.CurrentStatus IS NULL)" +
-                                   " AND OperationalControlRequests.CurrentLevel = OperationalControlRequestStatuses.WorkflowLevel " +
                                    " ORDER BY OperationalControlRequests.Id DESC ";
             }
             return _workspace.SqlQuery<OperationalControlRequest>(filterExpression).ToList();

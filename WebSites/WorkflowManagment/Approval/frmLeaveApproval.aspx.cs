@@ -344,7 +344,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                // lblEDS.Text = employee.GetEmployeeDutyStation();
                 if (employee != null)
                 {
-                    lblViewBalRes.Text = (Math.Round((employee.EmployeeLeaveBalance() - _presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value)) * 2, MidpointRounding.AwayFromZero) / 2).ToString();
+                    lblViewBalRes.Text = (Math.Round((employee.EmployeeLeaveBalance() - Convert.ToDouble(_presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value))) * 2, MidpointRounding.AwayFromZero) / 2).ToString();
                 }
                 else
                 {
