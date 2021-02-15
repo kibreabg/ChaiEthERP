@@ -423,6 +423,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                                 // SendEmailToRequester();
 
                             }
+                            else if (ddlApprovalStatus.SelectedValue == "Completed")
+                            {
+                                Master.ShowMessage(new AppMessage("Maintenance Approval Completed", RMessageType.Info));
+
+                                // SendEmailToRequester();
+
+                            }
 
                             else
                             {
