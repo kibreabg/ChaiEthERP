@@ -63,11 +63,16 @@
                                     </asp:DropDownList><i></i>
                                 </label>
                             </section>
+                            <section class="col col-3">
+                                <asp:Label ID="lblSrchRequester" runat="server" Text="Requester" CssClass="label"></asp:Label>
+                                <label class="select">
+                                    <asp:DropDownList ID="ddlSrchRequester" runat="server">
+                                    </asp:DropDownList><i></i>
+                                </label>
+                            </section>
                         </div>
                     </fieldset>
                     <footer>
-                        <asp:Button ID="btnPop" runat="server" />
-                        <asp:Button ID="btnPop2" runat="server" />
                         <asp:Button ID="btnFind" runat="server" Text="Find" CssClass="btn btn-primary" OnClick="btnFind_Click"></asp:Button>
                         <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" PostBackUrl="../Default.aspx"></asp:Button>
                     </footer>

@@ -61,6 +61,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _adminController.GetDrivers();
         }
+        public IList<AppUser> GetEmployeeList()
+        {
+            return _settingController.GetEmployeeList();
+        }
         public IList<CarRental> GetCarRentals()
         {
             return _settingController.GetCarRentals();
@@ -85,9 +89,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _requestController.GetExpenseLiquidationRequest(liqID);
         }
-        public IList<ExpenseLiquidationRequest> ListExpenseLiquidationRequests(string ExpenseType, string RequestDate, string ProgressStatus)
+        public IList<ExpenseLiquidationRequest> ListExpenseLiquidationRequests(string ExpenseType, string RequestDate, string ProgressStatus, string Requester)
         {
-            return _controller.ListExpenseLiquidationRequests(ExpenseType, RequestDate, ProgressStatus);
+            return _controller.ListExpenseLiquidationRequests(ExpenseType, RequestDate, ProgressStatus, Requester);
         }
         public ItemAccount GetItemAccount(int id)
         {
