@@ -269,6 +269,18 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 EmailSender.Send(_presenter.GetUser(TARS.Approver).Email, "Travel Advance Request Rejection", "Travel Advance Request with Request No. - '" + (tar.TravelAdvanceNo.ToString()).ToUpper() + "' made by " + (_presenter.GetUser(tar.AppUser.Id).FullName).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (rejectedReason).ToUpper() + "'");
             }
         }
+        private void SendEmailToTravelRequester(TravelAdvanceRequest tar)
+        {
+            EmailSender.Send(_presenter.GetUser(tar.AppUser.Id).Email, "Travel Advance Payment Ready", "The Advance Payment for your Travel Advance Request with Request No. - '" + (tar.TravelAdvanceNo.ToString()).ToUpper() + "' is ready. You can collect your money.");
+        }
+        private void SendEmailToLiquidationRequester(ExpenseLiquidationRequest elr)
+        {
+            EmailSender.Send(_presenter.GetUser(elr.TravelAdvanceRequest.AppUser.Id).Email, "Travel Liquidation Payment Ready", "Your Payment for your Travel Liquidation Request with Request No. - '" + (elr.TravelAdvanceRequest.TravelAdvanceNo.ToString()).ToUpper() + "' is ready. You can collect your money.");
+        }
+        private void SendEmailToPaymentRequester(CashPaymentRequest cpr)
+        {
+            EmailSender.Send(_presenter.GetUser(cpr.AppUser.Id).Email, "Payment Ready", "Your Payment for your Payment Request with Request No. - '" + (cpr.RequestNo.ToString()).ToUpper() + "' is ready. You can collect your money.");
+        }
         private void SendEmailPaymentRejected(CashPaymentRequest cpr, string rejectedReason)
         {
             EmailSender.Send(_presenter.GetUser(cpr.AppUser.Id).Email, "Cash Payment Request Rejection", "Your Cash Payment Request with Request No. - '" + (cpr.RequestNo.ToString()).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (rejectedReason).ToUpper() + "'");
@@ -326,19 +338,28 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                                 TravelAdvanceRequest associatedTravelAdvance = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId);
                                 associatedTravelAdvance.ExpenseLiquidationStatus = ProgressStatus.Completed.ToString();
                                 _presenter.SaveOrUpdateTravelAdvanceRequest(associatedTravelAdvance);
+                                SendEmailToTravelRequester(associatedTravelAdvance);
+                            }
+                            if (_presenter.CurrentOperationalControlRequest.LiquidationId > 0)
+                            {
+                                ExpenseLiquidationRequest associatedLiquidation = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId);
+                                SendEmailToLiquidationRequester(associatedLiquidation);
+                            }
+                            if (_presenter.CurrentOperationalControlRequest.PaymentId > 0)
+                            {
+                                CashPaymentRequest associatedPayment = _presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId);
+                                SendEmailToPaymentRequester(associatedPayment);
                             }
                             if (_presenter.CurrentOperationalControlRequest.SettlementId > 0)
                             {
                                 PaymentReimbursementRequest associatedsettlementrequest = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId);
                                 associatedsettlementrequest.CashPaymentRequest.PaymentReimbursementStatus = "Finished";
                                 SendEmailToSettelmentRequester(associatedsettlementrequest);
-
-
                             }
-
                         }
                         GetNextApprover();
                         OCRS.Approver = _presenter.CurrentUser().Id;
+                        _presenter.CurrentOperationalControlRequest.CurrentStatus = OCRS.ApprovalStatus;
                         Log.Info(_presenter.GetUser(OCRS.Approver).FullName + " has " + OCRS.ApprovalStatus + " Bank Payment Request made by " + _presenter.CurrentOperationalControlRequest.AppUser.FullName);
                     }
                     else if (OCRS.ApprovalStatus == ApprovalStatus.Reject_Whole_Process.ToString())
@@ -361,6 +382,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         }
 
                         _presenter.CurrentOperationalControlRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                        _presenter.CurrentOperationalControlRequest.CurrentStatus = ApprovalStatus.Rejected.ToString();
                         OCRS.Approver = _presenter.CurrentUser().Id;
                         SendEmailRejected(OCRS);
                         Log.Info(_presenter.GetUser(OCRS.Approver).FullName + " has " + OCRS.ApprovalStatus + " Bank Payment Request made by " + _presenter.CurrentOperationalControlRequest.AppUser.FullName);
@@ -368,6 +390,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     else
                     {
                         _presenter.CurrentOperationalControlRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                        _presenter.CurrentOperationalControlRequest.CurrentStatus = ApprovalStatus.Rejected.ToString();
                         OCRS.Approver = _presenter.CurrentUser().Id;
                         SendEmailRejected(OCRS);
                         Log.Info(_presenter.GetUser(OCRS.Approver).FullName + " has " + OCRS.ApprovalStatus + " Bank Payment Request made by " + _presenter.CurrentOperationalControlRequest.AppUser.FullName);
@@ -424,35 +447,41 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     //If this Bank Payment request was initiated from Travel Advance, show the details of the Travel Advance here
                     if (_presenter.CurrentOperationalControlRequest.TravelAdvanceId > 0)
                     {
+                        TravelAdvanceRequest theTravel = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId);
                         pnlTravelDetails.Visible = true;
                         pnlLiquidationDetails.Visible = false;
                         pnlSettlmentDetails.Visible = false;
                         pnlPaymentDetails.Visible = false;
-                        dgTravelAdvanceRequestDetail.DataSource = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).TravelAdvanceRequestDetails;
+                        lblTravelRequester.Text = theTravel.AppUser.FullName + " (" + theTravel.TravelAdvanceNo + ")";
+                        dgTravelAdvanceRequestDetail.DataSource = theTravel.TravelAdvanceRequestDetails;
                         dgTravelAdvanceRequestDetail.DataBind();
-                        grvTravelAdvanceStatuses.DataSource = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).TravelAdvanceRequestStatuses;
+                        grvTravelAdvanceStatuses.DataSource = theTravel.TravelAdvanceRequestStatuses;
                         grvTravelAdvanceStatuses.DataBind();
                         grvTravelAdvanceCosts.DataSource = null;
                         grvTravelAdvanceCosts.DataBind();
                     }
                     else if (_presenter.CurrentOperationalControlRequest.PaymentId > 0)
                     {
+                        CashPaymentRequest thePayment = _presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId);
                         pnlTravelDetails.Visible = false;
                         pnlLiquidationDetails.Visible = false;
                         pnlSettlmentDetails.Visible = false;
                         pnlPaymentDetails.Visible = true;
-                        grvPaymentRequestStatuses.DataSource = _presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId).CashPaymentRequestStatuses;
+                        lblPaymentRequester.Text = lblTravelRequester.Text = thePayment.AppUser.FullName + " (" + thePayment.RequestNo + ")";
+                        grvPaymentRequestStatuses.DataSource = thePayment.CashPaymentRequestStatuses;
                         grvPaymentRequestStatuses.DataBind();
                     }
                     else if (_presenter.CurrentOperationalControlRequest.LiquidationId > 0)
                     {
+                        ExpenseLiquidationRequest theLiquidation = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId);
                         pnlTravelDetails.Visible = false;
                         pnlLiquidationDetails.Visible = true;
                         pnlSettlmentDetails.Visible = false;
                         pnlPaymentDetails.Visible = false;
-                        dgLiquidationRequestDetail.DataSource = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId).ExpenseLiquidationRequestDetails;
+                        lblLiquidationRequester.Text = theLiquidation.TravelAdvanceRequest.AppUser.FullName + " (" + theLiquidation.TravelAdvanceRequest.TravelAdvanceNo + ")";
+                        dgLiquidationRequestDetail.DataSource = theLiquidation.ExpenseLiquidationRequestDetails;
                         dgLiquidationRequestDetail.DataBind();
-                        grvLiquidationStatuses.DataSource = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId).ExpenseLiquidationRequestStatuses;
+                        grvLiquidationStatuses.DataSource = theLiquidation.ExpenseLiquidationRequestStatuses;
                         grvLiquidationStatuses.DataBind();
                     }
                     else if (_presenter.CurrentOperationalControlRequest.SettlementId > 0)
@@ -653,19 +682,19 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             try
             {
-                if (_presenter.CurrentOperationalControlRequest.ProgressStatus != ProgressStatus.Completed.ToString())
+                if (_presenter.CurrentOperationalControlRequest.ProgressStatus != ProgressStatus.Completed.ToString() || ddlApprovalStatus.SelectedValue == ApprovalStatus.Rejected.ToString())
                 {
                     SaveOperationalControlRequestStatus();
 
                     _presenter.SaveOrUpdateOperationalControlRequest(_presenter.CurrentOperationalControlRequest);
                     ShowPrint();
-                    if (ddlApprovalStatus.SelectedValue != "Rejected")
+                    if (ddlApprovalStatus.SelectedValue != ApprovalStatus.Rejected.ToString())
                     {
-                        Master.ShowMessage(new AppMessage("Bank Payment Approval Processed", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                        Master.ShowMessage(new AppMessage("Bank Payment Approval Processed", RMessageType.Info));
                     }
                     else
                     {
-                        Master.ShowMessage(new AppMessage("Bank Payment Approval Rejected", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                        Master.ShowMessage(new AppMessage("Bank Payment Approval Rejected", RMessageType.Info));
                     }
                     btnApprove.Enabled = false;
                     BindSearchOperationalControlRequestGrid();
@@ -675,7 +704,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
             catch (Exception ex)
             {
-
+                Master.ShowMessage(new AppMessage(ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         private void PrintTransaction()
@@ -858,12 +889,16 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 lblRejectedReason.Visible = true;
                 txtRejectedReason.Visible = true;
                 rfvRejectedReason.Enabled = true;
+                if (_presenter.CurrentOperationalControlRequest.CurrentLevel == _presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses.Count)
+                    btnApprove.Enabled = true;
             }
             else
             {
                 lblRejectedReason.Visible = false;
                 txtRejectedReason.Visible = false;
                 rfvRejectedReason.Enabled = false;
+                if (_presenter.CurrentOperationalControlRequest.CurrentLevel == _presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses.Count)
+                    btnApprove.Enabled = false;
             }
             ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
         }
@@ -949,11 +984,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 dgOperationalControlRequestDetail.DataSource = _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails;
                 dgOperationalControlRequestDetail.DataBind();
                 ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
-                Master.ShowMessage(new AppMessage("Bank Payment Detail Successfully Updated", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Bank Payment Detail Successfully Updated", RMessageType.Info));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to Update Bank Payment Detail. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to Update Bank Payment Detail. " + ex.Message, RMessageType.Error));
             }
         }
         protected void ddlEdtAccountDescription_SelectedIndexChanged(object sender, EventArgs e)
