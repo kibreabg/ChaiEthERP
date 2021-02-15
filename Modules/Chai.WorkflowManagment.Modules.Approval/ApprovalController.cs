@@ -107,13 +107,12 @@ namespace Chai.WorkflowManagment.Modules.Approval
             }
             else if (ProgressStatus == "Completed")
             {
-                filterExpression = " SELECT * FROM CashPaymentRequests " +
+                filterExpression = " SELECT DISTINCT(CashPaymentRequests.RequestNo), CashPaymentRequests.* FROM CashPaymentRequests " +
                                    " INNER JOIN CashPaymentRequestStatuses ON CashPaymentRequestStatuses.CashPaymentRequest_Id = CashPaymentRequests.Id " +
-                                   " INNER JOIN AppUsers ON (AppUsers.Id = CashPaymentRequestStatuses.Approver) OR (AppUsers.EmployeePosition_Id = CashPaymentRequests.CurrentApproverPosition AND AppUsers.Id = '" + CurrentUser().Id + "') " +
+                                   " INNER JOIN AppUsers ON AppUsers.Id = CashPaymentRequestStatuses.Approver" +
                                    " LEFT JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
                                    " WHERE 1 = Case when '" + RequestNo + "' = '' Then 1 When CashPaymentRequests.VoucherNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When CashPaymentRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND CashPaymentRequests.ProgressStatus='" + ProgressStatus + "' " +
-                                   " AND CashPaymentRequestStatuses.ApprovalStatus IS NOT NULL AND ((CashPaymentRequestStatuses.Approver = '" + CurrentUser().Id + "') OR (CashPaymentRequestStatuses.ApproverPosition = '" + CurrentUser().EmployeePosition.Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) " +
-                                   " AND CashPaymentRequests.CurrentLevel = CashPaymentRequestStatuses.WorkflowLevel " +
+                                   " AND CashPaymentRequestStatuses.ApprovalStatus IS NOT NULL AND ((CashPaymentRequestStatuses.Approver = '" + CurrentUser().Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) " +
                                    " AND (CashPaymentRequests.CurrentStatus != 'Rejected' OR CashPaymentRequests.CurrentStatus IS NULL) " +
                                    " ORDER BY CashPaymentRequests.Id DESC";
 
@@ -177,7 +176,7 @@ namespace Chai.WorkflowManagment.Modules.Approval
             }
             else if (ProgressStatus == "Completed")
             {
-                filterExpression = " SELECT * FROM OperationalControlRequests " +
+                filterExpression = " SELECT DISTINCT(OperationalControlRequests.VoucherNo), OperationalControlRequests.* FROM OperationalControlRequests " +
                                    " INNER JOIN OperationalControlRequestStatuses ON OperationalControlRequestStatuses.OperationalControlRequest_Id = OperationalControlRequests.Id " +
                                    " INNER JOIN AppUsers ON AppUsers.Id = OperationalControlRequestStatuses.Approver" +
                                    " LEFT JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
@@ -212,17 +211,16 @@ namespace Chai.WorkflowManagment.Modules.Approval
             }
             else
             {
-                filterExpression = " SELECT * FROM TravelAdvanceRequests " +
+                filterExpression = " SELECT DISTINCT(TravelAdvanceRequests.TravelAdvanceNo), TravelAdvanceRequests.* FROM TravelAdvanceRequests " +
                                    " INNER JOIN TravelAdvanceRequestStatuses ON TravelAdvanceRequestStatuses.TravelAdvanceRequest_Id = TravelAdvanceRequests.Id " +
-                                   " INNER JOIN AppUsers ON (AppUsers.Id = TravelAdvanceRequestStatuses.Approver) OR (AppUsers.EmployeePosition_Id = TravelAdvanceRequests.CurrentApproverPosition AND AppUsers.Id = '" + CurrentUser().Id + "') " +                                   
+                                   " INNER JOIN AppUsers ON AppUsers.Id = TravelAdvanceRequestStatuses.Approver" +
                                    " LEFT JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
                                    " WHERE 1 = CASE WHEN '" + RequestNo + "' = '' THEN 1 WHEN TravelAdvanceRequests.TravelAdvanceNo = '" + RequestNo + "'  Then 1 END " +
                                    " AND 1 = CASE WHEN '" + RequestDate + "' = '' THEN 1 WHEN TravelAdvanceRequests.RequestDate = '" + RequestDate + "'  Then 1 END " +
                                    " AND TravelAdvanceRequests.ProgressStatus='" + ProgressStatus + "'" +
                                    " AND (TravelAdvanceRequests.CurrentStatus != 'Rejected' OR TravelAdvanceRequests.CurrentStatus IS NULL)" +
-                                   " AND TravelAdvanceRequests.CurrentLevel = TravelAdvanceRequestStatuses.WorkflowLevel " +
                                    " AND TravelAdvanceRequestStatuses.ApprovalStatus IS NOT NULL " +
-                                   " AND ((TravelAdvanceRequestStatuses.Approver = '" + CurrentUser().Id + "') OR (TravelAdvanceRequestStatuses.ApproverPosition = '" + CurrentUser().EmployeePosition.Id + "') or (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) " +
+                                   " AND ((TravelAdvanceRequestStatuses.Approver = '" + CurrentUser().Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) " +
                                    " ORDER BY TravelAdvanceRequests.Id DESC ";
 
             }
