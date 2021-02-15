@@ -441,7 +441,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 TextBox txtVariance = e.Item.FindControl("txtVariance") as TextBox;
                 elrd.Variance = Convert.ToDecimal(txtVariance.Text);
 
-                foreach(ExpenseLiquidationRequestDetail eld in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
+                foreach (ExpenseLiquidationRequestDetail eld in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
                 {
                     totalActExp += eld.ActualExpenditure;
                 }
@@ -564,10 +564,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
             foreach (ExpenseLiquidationRequestDetail detail in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
             {
-                foreach (ItemAccountChecklist checklist in detail.ItemAccount.ItemAccountChecklists)
+                if (detail.ItemAccount != null)
                 {
-                    numChecklists++;
+                    foreach (ItemAccountChecklist checklist in detail.ItemAccount.ItemAccountChecklists)
+                    {
+                        numChecklists++;
+                    }
                 }
+
             }
             if (numAttachedReceipts == numChecklists)
                 return true;
