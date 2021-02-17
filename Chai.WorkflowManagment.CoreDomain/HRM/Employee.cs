@@ -378,7 +378,11 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                     count++;
                    wd = wd - 365;
                 }
-               
+                if (leaveEnti < 10 && wd != 0)
+                {
+                    leaveEnti += 2;
+                }
+
             }
 
             return (Settingdays.Days * (20 + leaveEnti) / 12) / 30;
@@ -403,33 +407,22 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                     if (count <= 6 && count > 1)
                         leaveEnti = leaveEnti + 2;
 
-                    //if (count > 6)
-                    //    Sumleave = Sumleave + 30;
-                    //else if (count == 1)
-                    //    Sumleave = 20;
-                    //else
-                    //    Sumleave = Sumleave + 20 + leaveEnti;
 
                     count++;
                     wd = wd - 365;
                 }
-                //if (wd <= 365)
-                //{
-                //    Sumleave = Sumleave + (20 + leaveEnti) * (wd / 365);
-                //}
+            
+            }
+            if (leaveEnti < 10 && wd != 0)
+            {
+                leaveEnti += 2;
             }
 
-             if( (Settingdays.Days * (20 + leaveEnti) / 12) / 30 > 30 )
+            if ( (Settingdays.Days * (20 + leaveEnti) / 12) / 30 > 30 )
             return 30;
             else
             return (Settingdays.Days * (20 + leaveEnti) / 12) / 30;
-            //else
-            //{ //leaveEnti = leaveEnti + Math.Round(wd / 365);
-
-            //    Sumleave = Sumleave + (20 + leaveEnti) * (wd / 365);
-            //}
-
-            //  return Sumleave;
+     
         }
         public virtual double LeavefromhiredtoCED(DateTime CED)
         {
@@ -455,6 +448,10 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                     wd = wd - 365;
                 }
               
+            }
+            if (leaveEnti < 10 && wd != 0)
+            {
+                leaveEnti += 2;
             }
 
             if ((Settingdays.Days * (20 + leaveEnti) / 12) / 30 > 30)
@@ -482,6 +479,10 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                     wd = wd - 365;
                 }
                
+            }
+            if (leaveEnti < 10 && wd != 0)
+            {
+                leaveEnti += 2;
             }
 
             return ((Totworkingdays / 30) * ((20 + leaveEnti)/12));
@@ -513,6 +514,10 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                     wd = wd - 365;
                 }
                 
+            }
+            if (leaveEnti < 10 && wd != 0)
+            {
+                leaveEnti += 2;
             }
 
             if ((Settingdays.Days * (20 + leaveEnti) / 12) / 30 > 30)
