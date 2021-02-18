@@ -73,10 +73,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void SaveOperationalControlRequestStatus()
         {
-            if (GetApprovalSetting(RequestType.OperationalControl_Request.ToString().Replace('_', ' '), 0) != null)
+            if (GetApprovalSetting(RequestType.OperationalControl_Request.ToString().Replace('_', ' '), CurrentOperationalControlRequest.TotalAmount) != null)
             {
                 int i = 1;
-                foreach (ApprovalLevel AL in GetApprovalSetting(RequestType.OperationalControl_Request.ToString().Replace('_', ' '), 0).ApprovalLevels)
+                foreach (ApprovalLevel AL in GetApprovalSetting(RequestType.OperationalControl_Request.ToString().Replace('_', ' '), CurrentOperationalControlRequest.TotalAmount).ApprovalLevels)
                 {
                     OperationalControlRequestStatus OCRS = new OperationalControlRequestStatus();
                     OCRS.OperationalControlRequest = CurrentOperationalControlRequest;
@@ -150,7 +150,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             operationalControlRequest.RequestNo = View.GetRequestNo;
             operationalControlRequest.RequestDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
             operationalControlRequest.Account = _settingController.GetAccount(View.GetBankAccountId);
-            if(View.GetBeneficiaryId > 0)
+            if (View.GetBeneficiaryId > 0)
             {
                 operationalControlRequest.Beneficiary = _settingController.GetBeneficiary(View.GetBeneficiaryId);
             }

@@ -521,7 +521,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (ex.InnerException.InnerException.Message.Contains("Violation of UNIQUE KEY"))
                     {
-                        Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", RMessageType.Error));
+                        Master.ShowMessage(new AppMessage("Please Click Request button Again, There is a duplicate Number", RMessageType.Error));
                         //AutoNumber();
                     }
                 }
