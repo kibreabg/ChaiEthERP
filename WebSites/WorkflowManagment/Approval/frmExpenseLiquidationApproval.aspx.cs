@@ -38,6 +38,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 this._presenter.OnViewInitialized();
                 XmlConfigurator.Configure();
                 PopProgressStatus();
+                PopRequesters(ddlSrchRequester);
             }
             this._presenter.OnViewLoaded();
             BindSearchExpenseLiquidationRequestGrid();
@@ -48,8 +49,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     PrintTransaction();
                 }
             }
-
-
         }
         [CreateNew]
         public ExpenseLiquidationApprovalPresenter Presenter
@@ -104,6 +103,16 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 ddlSrchProgressStatus.Items.Add(new ListItem(s[i].Replace('_', ' '), s[i].Replace('_', ' ')));
                 ddlSrchProgressStatus.DataBind();
             }
+        }
+        private void PopRequesters(DropDownList ddl)
+        {
+            ddl.DataSource = _presenter.GetEmployeeList();
+            ddl.DataTextField = "FullName";
+            ddl.DataValueField = "ID";
+            ddl.DataBind();
+
+            ddl.Items.Insert(0, new ListItem("Select Requester", "0"));
+            ddl.SelectedIndex = 0;
         }
         private void PopApprovalStatus()
         {
@@ -165,7 +174,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void BindSearchExpenseLiquidationRequestGrid()
         {
-            grvExpenseLiquidationRequestList.DataSource = _presenter.ListExpenseLiquidationRequests(txtSrchExpenseType.Text, txtSrchRequestDate.Text, ddlSrchProgressStatus.SelectedValue);
+            grvExpenseLiquidationRequestList.DataSource = _presenter.ListExpenseLiquidationRequests(txtSrchExpenseType.Text, txtSrchRequestDate.Text, ddlSrchProgressStatus.SelectedValue, ddlSrchRequester.SelectedValue);
             grvExpenseLiquidationRequestList.DataBind();
         }
         private void BindExpenseLiquidationRequestStatus()

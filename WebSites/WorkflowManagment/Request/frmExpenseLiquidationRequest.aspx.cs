@@ -441,7 +441,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 TextBox txtVariance = e.Item.FindControl("txtVariance") as TextBox;
                 elrd.Variance = Convert.ToDecimal(txtVariance.Text);
 
-                foreach(ExpenseLiquidationRequestDetail eld in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
+                foreach (ExpenseLiquidationRequestDetail eld in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
                 {
                     totalActExp += eld.ActualExpenditure;
                 }
@@ -500,17 +500,18 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             Button uploadBtn = (Button)sender;
             GridViewRow attachmentRow = (GridViewRow)uploadBtn.NamingContainer;
             FileUpload fuReciept = attachmentRow.FindControl("fuReciept") as FileUpload;
-            string fileName = Path.GetFileName(fuReciept.PostedFile.FileName);
+            string fileName = Path.GetFileNameWithoutExtension(fuReciept.PostedFile.FileName);
+            string extension = Path.GetExtension(fuReciept.PostedFile.FileName);
             int index = 0;
             if (fileName != String.Empty)
             {
                 List<ELRAttachment> attachments = (List<ELRAttachment>)Session["attachments"];
                 foreach (ELRAttachment attachment in attachments)
                 {
-                    if (attachment.ItemAccountChecklists[0].ChecklistName == attachmentRow.Cells[1].Text && attachmentRow.DataItemIndex == index)
+                    if (attachment.ItemAccountChecklists[0].ChecklistName == attachmentRow.Cells[2].Text && attachmentRow.DataItemIndex == index)
                     {
-                        attachment.FilePath = "~/ELUploads/" + fileName;
-                        fuReciept.PostedFile.SaveAs(Server.MapPath("~/ELUploads/") + fileName);
+                        attachment.FilePath = "~/ELUploads/" + fileName + DateTime.Now.ToString("ddMMyyyyHHmmss") + extension;
+                        fuReciept.PostedFile.SaveAs(Server.MapPath("~/ELUploads/") + fileName + DateTime.Now.ToString("ddMMyyyyHHmmss") + extension);
                     }
                     index++;
                 }
@@ -564,10 +565,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
             foreach (ExpenseLiquidationRequestDetail detail in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
             {
-                foreach (ItemAccountChecklist checklist in detail.ItemAccount.ItemAccountChecklists)
+                if (detail.ItemAccount != null)
                 {
-                    numChecklists++;
+                    foreach (ItemAccountChecklist checklist in detail.ItemAccount.ItemAccountChecklists)
+                    {
+                        numChecklists++;
+                    }
                 }
+
             }
             if (numAttachedReceipts == numChecklists)
                 return true;

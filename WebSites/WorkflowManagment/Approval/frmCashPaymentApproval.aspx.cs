@@ -31,6 +31,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 this._presenter.OnViewInitialized();
                 XmlConfigurator.Configure();
                 PopProgressStatus();
+                PopRequesters(ddlSrchRequester);
                 BindSearchCashPaymentRequestGrid();
             }
             this._presenter.OnViewLoaded();
@@ -111,6 +112,16 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             ddlApprovalStatus.Items.Add(new ListItem(ApprovalStatus.Rejected.ToString().Replace('_', ' '), ApprovalStatus.Rejected.ToString().Replace('_', ' ')));
 
         }
+        private void PopRequesters(DropDownList ddl)
+        {
+            ddl.DataSource = _presenter.GetEmployeeList();
+            ddl.DataTextField = "FullName";
+            ddl.DataValueField = "ID";
+            ddl.DataBind();
+
+            ddl.Items.Insert(0, new ListItem("Select Requester", "0"));
+            ddl.SelectedIndex = 0;
+        }
         private string GetWillStatus()
         {
             ApprovalSetting AS = null;
@@ -170,7 +181,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void BindSearchCashPaymentRequestGrid()
         {
-            grvCashPaymentRequestList.DataSource = _presenter.ListCashPaymentRequests(txtSrchRequestNo.Text, txtSrchRequestDate.Text, ddlSrchProgressStatus.SelectedValue);
+            grvCashPaymentRequestList.DataSource = _presenter.ListCashPaymentRequests(txtSrchRequestNo.Text, txtSrchRequestDate.Text, ddlSrchProgressStatus.SelectedValue, ddlSrchRequester.SelectedValue);
             grvCashPaymentRequestList.DataBind();
         }
         private void BindCashPaymentRequestStatus()

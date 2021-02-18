@@ -29,6 +29,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 this._presenter.OnViewInitialized();
                 XmlConfigurator.Configure();
                 PopProgressStatus();
+                PopRequesters(ddlSrchRequester);
                 BindSearchTravelAdvanceRequestGrid();
             }
             this._presenter.OnViewLoaded();
@@ -147,9 +148,19 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 ddlSrchProgressStatus.DataBind();
             }
         }
+        private void PopRequesters(DropDownList ddl)
+        {
+            ddl.DataSource = _presenter.GetEmployeeList();
+            ddl.DataTextField = "FullName";
+            ddl.DataValueField = "ID";
+            ddl.DataBind();
+
+            ddl.Items.Insert(0, new ListItem("Select Requester", "0"));
+            ddl.SelectedIndex = 0;
+        }
         private void BindSearchTravelAdvanceRequestGrid()
         {
-            grvTravelAdvanceRequestList.DataSource = _presenter.ListTravelAdvanceRequests(txtSrchRequestNo.Text, txtSrchRequestDate.Text, ddlSrchProgressStatus.SelectedValue);
+            grvTravelAdvanceRequestList.DataSource = _presenter.ListTravelAdvanceRequests(txtSrchRequestNo.Text, txtSrchRequestDate.Text, ddlSrchProgressStatus.SelectedValue, ddlSrchRequester.SelectedValue);
             grvTravelAdvanceRequestList.DataBind();
         }
         private void BindTravelAdvanceRequestStatus()

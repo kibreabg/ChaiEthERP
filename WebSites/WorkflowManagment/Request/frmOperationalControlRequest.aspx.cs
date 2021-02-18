@@ -140,6 +140,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         {
                             _presenter.CurrentOperationalControlRequest.Description = CPR.Description;
                             _presenter.CurrentOperationalControlRequest.PaymentId = paymentId;
+                            txtOriginalRequester.Text = CPR.AppUser.FullName;
 
                             foreach (CashPaymentRequestDetail CPRD in CPR.CashPaymentRequestDetails)
                             {
@@ -180,6 +181,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         {
                             _presenter.CurrentOperationalControlRequest.Description = TAR.PurposeOfTravel;
                             _presenter.CurrentOperationalControlRequest.TravelAdvanceId = travelAdvId;
+                            txtOriginalRequester.Text = TAR.AppUser.FullName;
 
                             foreach (TravelAdvanceRequestDetail TARD in TAR.TravelAdvanceRequestDetails)
                             {
@@ -211,6 +213,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         if (ELR != null)
                         {
                             _presenter.CurrentOperationalControlRequest.LiquidationId = liquidationId;
+                            txtOriginalRequester.Text = ELR.TravelAdvanceRequest.AppUser.FullName;
 
                             OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
                             OCRD.Amount = ELR.TotalActualExpenditure - ELR.TotalTravelAdvance;
@@ -230,7 +233,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (Request.QueryString["SettlementId"] != null)
                     {
-                        
+
                         int SettlementId = Convert.ToInt32(Request.QueryString["SettlementId"]);
                         PaymentReimbursementRequest PRR = _presenter.GetReimbursementRequest(SettlementId);
                         if (PRR != null)
@@ -241,7 +244,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             {
                                 OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
                                 OCRD.ItemAccount = PRR.CashPaymentRequest.CashPaymentRequestDetails[0].ItemAccount;//  detail.ItemAccount;
-                                OCRD.Amount = PRR.ReceivableAmount - PRR.TotalAmount ;
+                                OCRD.Amount = PRR.ReceivableAmount - PRR.TotalAmount;
                                 OCRD.Project = PRR.Project;
                                 OCRD.Grant = PRR.Grant;
                                 _presenter.CurrentOperationalControlRequest.TotalAmount = PRR.ReceivableAmount;

@@ -204,7 +204,7 @@ namespace Chai.WorkflowManagment.Modules.Shell
         {
             currentUser = GetCurrentUser().Id;
             int Count = 0;
-            Count = WorkspaceFactory.CreateReadOnly().Count<TravelAdvanceRequest>(x => x.AppUser.Id == currentUser && x.ExpenseLiquidationStatus == "Completed");
+            Count = WorkspaceFactory.CreateReadOnly().Count<TravelAdvanceRequest>(x => x.AppUser.Id == currentUser && x.ExpenseLiquidationStatus == "Completed" && x.ExpenseLiquidationRequest.ExpenseLiquidationRequestStatuses.Count == 0);
             if (Count != 0)
                 return Count;
             else
