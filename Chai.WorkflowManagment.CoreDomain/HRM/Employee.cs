@@ -398,7 +398,6 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             TimeSpan Settingdays = YE - LeaveSettingDate.Value;
             double Totworkingdays = workingdays.Days;
             double wd = workingdays.Days;
-
             int count = 1;
             if (wd > 365)
             {
