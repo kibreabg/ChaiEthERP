@@ -779,6 +779,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             if (_presenter.CurrentOperationalControlRequest.PaymentId > 0)
             {
+                lblProjectCodeResult.Text = _presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId).CashPaymentRequestDetails[0].Project.ProjectCode;
+                lblGrantCodeResult.Text = _presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId).CashPaymentRequestDetails[0].Grant.GrantCode;
+
                 pnlPaymentDetail.Visible = true;
                 pnlTravelDetail.Visible = false;
                 pnlLiquidationDetail.Visible = false;
