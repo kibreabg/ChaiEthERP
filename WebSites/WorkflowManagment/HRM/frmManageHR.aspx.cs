@@ -316,11 +316,11 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             {
                 int x = chan.EmployeeDetails.Count;
                 chan.EmployeeDetails[x-1].Contract = _presenter.GetContract(chan.Id);
-                dgChange.DataSource = chan.EmployeeDetails;
-                dgChange.DataBind();
+              
 
             }
-            
+            dgChange.DataSource = chan.EmployeeDetails;
+            dgChange.DataBind();
         }
         
         protected void dgContractDetail_ItemCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
@@ -993,19 +993,20 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     }
                     else if (chan.EmployeeDetails.Count > 0)
                     {
-                        ddlPosition.SelectedValue = chan.EmployeeDetails[0].Position.Id.ToString();
+                        int y = chan.EmployeeDetails.Count;
+                        ddlPosition.SelectedValue = chan.EmployeeDetails[y-1].Position.Id.ToString();
                        // ddlProgram.SelectedValue = chan.EmployeeDetails[TEMPChid].Program.Id.ToString();
-                        ddlDutyStation.Text = chan.EmployeeDetails[0].DutyStation;
-                        txtSalary.Text = chan.EmployeeDetails[0].Salary.ToString();
-                        txtEmployeeStatus.Text = chan.EmployeeDetails[0].EmploymentStatus;
-                        txtClass.Text = chan.EmployeeDetails[0].Class;
-                        txtHoursPerWeek.Text = chan.EmployeeDetails[0].HoursPerWeek;
-                        txtBaseCount.Text = chan.EmployeeDetails[0].BaseCountry;
-                        txtBaseCity.Text = chan.EmployeeDetails[0].BaseCity;
-                        txtBaseState.Text = chan.EmployeeDetails[0].BaseState;
-                        txtCountryTeam.Text = chan.EmployeeDetails[0].CountryTeam;
-                        ddlSuperVisor.SelectedValue = chan.EmployeeDetails[0].Supervisor.ToString();
-                        txtEffectDate.Text = chan.EmployeeDetails[0].EffectiveDateOfChange.ToShortDateString();
+                        ddlDutyStation.Text = chan.EmployeeDetails[y - 1].DutyStation;
+                        txtSalary.Text = chan.EmployeeDetails[y - 1].Salary.ToString();
+                        txtEmployeeStatus.Text = chan.EmployeeDetails[y - 1].EmploymentStatus;
+                        txtClass.Text = chan.EmployeeDetails[y - 1].Class;
+                        txtHoursPerWeek.Text = chan.EmployeeDetails[y - 1].HoursPerWeek;
+                        txtBaseCount.Text = chan.EmployeeDetails[y - 1].BaseCountry;
+                        txtBaseCity.Text = chan.EmployeeDetails[y - 1].BaseCity;
+                        txtBaseState.Text = chan.EmployeeDetails[y - 1].BaseState;
+                        txtCountryTeam.Text = chan.EmployeeDetails[y - 1].CountryTeam;
+                        ddlSuperVisor.SelectedValue = chan.EmployeeDetails[y - 1].Supervisor.ToString();
+                        txtEffectDate.Text = chan.EmployeeDetails[y - 1].EffectiveDateOfChange.ToShortDateString();
                         pnlEMPHIST_ModalPopupExtender.Show();
                     }
                 }
