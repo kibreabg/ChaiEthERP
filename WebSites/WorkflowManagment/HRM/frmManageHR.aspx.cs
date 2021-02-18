@@ -194,32 +194,12 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                             cont.ContractEndDate = Convert.ToDateTime(EndDate);
                             cont.Reason = ddlReason.SelectedItem.Text;
                             cont.Status = ddlStatus.SelectedItem.Text;
-                    EmployeeDetail emp = new EmployeeDetail();
-                    
-                    emp.Position = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].Position;
-                    emp.Program = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].Program;
-
-                    emp.DutyStation = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].DutyStation;
-                    emp.DescriptiveJobTitle = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].DescriptiveJobTitle;
-                    emp.Salary = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].Salary;
-                    emp.HoursPerWeek = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].HoursPerWeek;
-                    emp.BaseCountry = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].BaseCountry;
-                    emp.BaseCity = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].BaseCity;
-                    emp.BaseState = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].BaseState;
-                    emp.Class = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].Class;
-                    emp.CountryTeam = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].CountryTeam;
-                    emp.EmploymentStatus = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].EmploymentStatus;
-
-                    emp.Supervisor = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].Supervisor;
-                    emp.ReportsTo = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].ReportsTo;
-                    emp.EffectiveDateOfChange = DateTime.Now;
-
-                    _presenter.CurrentEmployee.GetPreviousContract().Status = "In Active";
+                   
+                 
                   
 
                     _presenter.CurrentEmployee.Contracts.Add(cont);
-                    emp.Contract = _presenter.GetContract(cont.Id);
-                    _presenter.CurrentEmployee.GetActiveContractForEmp().EmployeeDetails.Add(emp);
+                 
                     _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
                     dgContractDetail.EditIndex = -1;
                     ClearContractFormFields();
