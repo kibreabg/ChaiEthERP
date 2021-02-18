@@ -892,7 +892,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 lblRejectedReason.Visible = true;
                 txtRejectedReason.Visible = true;
                 rfvRejectedReason.Enabled = true;
-                if (_presenter.CurrentOperationalControlRequest.CurrentLevel == _presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses.Count)
+                if (_presenter.CurrentOperationalControlRequest.ProgressStatus == ProgressStatus.Completed.ToString())
                     btnApprove.Enabled = true;
             }
             else
@@ -900,7 +900,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 lblRejectedReason.Visible = false;
                 txtRejectedReason.Visible = false;
                 rfvRejectedReason.Enabled = false;
-                if (_presenter.CurrentOperationalControlRequest.CurrentLevel == _presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses.Count)
+                if (_presenter.CurrentOperationalControlRequest.ProgressStatus == ProgressStatus.Completed.ToString())
                     btnApprove.Enabled = false;
             }
             ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
