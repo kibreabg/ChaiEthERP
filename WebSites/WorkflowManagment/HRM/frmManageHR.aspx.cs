@@ -168,7 +168,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                         emp.ReportsTo = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].ReportsTo;
                         emp.EffectiveDateOfChange = DateTime.Now;
 
-                        _presenter.CurrentEmployee.GetPreviousContract().Status = "In Active";
+                        _presenter.CurrentEmployee.Contracts[0].Status = "In Active";
                       
                         _presenter.CurrentEmployee.Contracts.Add(cont);
                         _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
