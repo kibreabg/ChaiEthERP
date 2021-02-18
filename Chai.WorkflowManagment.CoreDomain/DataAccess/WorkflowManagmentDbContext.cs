@@ -146,6 +146,15 @@ namespace Chai.WorkflowManagment.CoreDomain.DataAccess
         public DbSqlQuery UpdateTaskpanNodePosition { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<CashPaymentRequestDetail>()
+                .HasMany<CPRAttachment>(cprd => cprd.CPRAttachments)
+                .WithMany(cpra => cpra.CashPaymentRequestDetails)
+                .Map(cs =>
+                {
+                    cs.MapLeftKey("CashPaymentRequestDetail_Id");
+                    cs.MapRightKey("CPRAttachment_Id");
+                    cs.ToTable("CashPaymentRequestDetailCPRAttachments");
+                });
             //modelBuilder.Entity<AppUser>().HasMany(p => p.AppUserRoles).WithMany();
             //modelBuilder.Entity<Node>().HasMany(p => p.NodeRoles).WithMany();
             //modelBuilder.Entity<Tab>().HasMany(p => p.TabRoles).WithMany();
