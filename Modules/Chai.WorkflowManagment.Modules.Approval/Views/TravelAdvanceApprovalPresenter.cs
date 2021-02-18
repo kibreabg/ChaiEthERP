@@ -69,6 +69,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _controller.GetAssignedJobbycurrentuser();
         }
+        public IList<AppUser> GetEmployeeList()
+        {
+            return _settingController.GetEmployeeList();
+        }
         public AppUser GetUser(int UserId)
         {
             return _adminController.GetUser(UserId);
@@ -89,9 +93,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             _controller.SaveOrUpdateEntity(TravelAdvanceRequest);
         }
-        public IList<TravelAdvanceRequest> ListTravelAdvanceRequests(string RequestNo, string RequestDate, string ProgressStatus)
+        public IList<TravelAdvanceRequest> ListTravelAdvanceRequests(string RequestNo, string RequestDate, string ProgressStatus, string Requester)
         {
-            return _controller.ListTravelAdvanceRequests(RequestNo, RequestDate, ProgressStatus);
+            return _controller.ListTravelAdvanceRequests(RequestNo, RequestDate, ProgressStatus, Requester);
         }
         public AppUser CurrentUser()
         {

@@ -65,6 +65,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _adminController.GetUser(UserId);
         }
+        public IList<AppUser> GetEmployeeList()
+        {
+            return _settingController.GetEmployeeList();
+        }
         public void SaveOrUpdateCashPaymentRequest(CashPaymentRequest CashPaymentRequest)
         {
             _controller.SaveOrUpdateEntity(CashPaymentRequest);
@@ -74,9 +78,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _requestController.GetCashPaymentRequest(reqId);
         }
-        public IList<CashPaymentRequest> ListCashPaymentRequests(string RequestNo, string RequestDate, string ProgressStatus)
+        public IList<CashPaymentRequest> ListCashPaymentRequests(string RequestNo, string RequestDate, string ProgressStatus, string Requester)
         {
-            return _controller.ListCashPaymentRequests(RequestNo, RequestDate, ProgressStatus);
+            return _controller.ListCashPaymentRequests(RequestNo, RequestDate, ProgressStatus, Requester);
         }
         public OperationalControlRequest GetOperationalControlRequestByPaymentId(int paymentId)
         {

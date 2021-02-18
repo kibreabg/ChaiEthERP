@@ -170,10 +170,6 @@ namespace Chai.WorkflowManagment.Modules.Request
             }
             else { return 0; }
         }
-        public OperationalControlRequest GetOperationalControlRequestByPaymentId(int paymentId)
-        {
-            return _workspace.First<OperationalControlRequest>(x => x.PaymentId == paymentId);
-        }
         public CPRAttachment GetCPRAttachment(int attachmentId)
         {
             return _workspace.Single<CPRAttachment>(x => x.Id == attachmentId);
@@ -275,13 +271,17 @@ namespace Chai.WorkflowManagment.Modules.Request
         {
             return _workspace.Single<OperationalControlRequest>(x => x.Id == RequestId);
         }
+        public OperationalControlRequest GetOperationalControlRequestByPaymentId(int paymentId)
+        {
+            return _workspace.First<OperationalControlRequest>(x => x.PaymentId == paymentId && (x.CurrentStatus != "Rejected" || String.IsNullOrEmpty(x.CurrentStatus)));
+        }
         public OperationalControlRequest GetOperationalControlRequestByTravelId(int TravelAdvanceRequestId)
         {
-            return _workspace.First<OperationalControlRequest>(x => x.TravelAdvanceId == TravelAdvanceRequestId);
+            return _workspace.First<OperationalControlRequest>(x => x.TravelAdvanceId == TravelAdvanceRequestId && (x.CurrentStatus != "Rejected" || String.IsNullOrEmpty(x.CurrentStatus)));
         }
         public OperationalControlRequest GetOperationalControlRequestByLiquidationId(int LiquidationId)
         {
-            return _workspace.First<OperationalControlRequest>(x => x.LiquidationId == LiquidationId);
+            return _workspace.First<OperationalControlRequest>(x => x.LiquidationId == LiquidationId && (x.CurrentStatus != "Rejected" || String.IsNullOrEmpty(x.CurrentStatus)));
         }
         public IList<OperationalControlRequest> ListOperationalControlRequests(string RequestNo, string RequestDate)
         {
@@ -388,7 +388,6 @@ namespace Chai.WorkflowManagment.Modules.Request
         }
         #endregion
         #region LeaveRequest
-
         public IList<LeaveRequest> GetLeaveRequests()
         {
             return WorkspaceFactory.CreateReadOnly().Query<LeaveRequest>(null).ToList();
@@ -454,7 +453,6 @@ namespace Chai.WorkflowManagment.Modules.Request
         }
         #endregion
         #region PurchaseRequest
-
         public IList<PurchaseRequest> GetPurchaseRequests()
         {
             return WorkspaceFactory.CreateReadOnly().Query<PurchaseRequest>(null).ToList();
@@ -463,7 +461,6 @@ namespace Chai.WorkflowManagment.Modules.Request
         {
             return WorkspaceFactory.CreateReadOnly().Query<PurchaseRequest>(x => x.ProgressStatus == "Completed" && x.IsVehicle == true).Distinct().ToList();
         }
-
         public IList<PurchaseRequest> GetPurchaseRequestsInProgress()
         {
             string filterExpression = "";
@@ -520,7 +517,6 @@ namespace Chai.WorkflowManagment.Modules.Request
             return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
 
         }
-
         public IList<PurchaseRequestDetail> ListPRDetailsCompletedById(int ReqId)
         {
             string filterExpression = "";
@@ -530,7 +526,6 @@ namespace Chai.WorkflowManagment.Modules.Request
             return _workspace.SqlQuery<PurchaseRequestDetail>(filterExpression).ToList();
 
         }
-
         public IList<PurchaseRequestDetail> ListPurchaseReqById(int Id)
         {
             string filterExpression = "";
@@ -544,7 +539,6 @@ namespace Chai.WorkflowManagment.Modules.Request
         {
             return _workspace.Single<PurchaseRequest>(x => x.Id == PurchaseRequestId, x => x.PurchaseRequestDetails.Select(y => y.ItemAccount), x => x.PurchaseRequestDetails.Select(z => z.Project));
         }
-
         public PurchaseRequestDetail GetPurchaseRequestbyPuID(int Id)
         {
             return _workspace.Single<PurchaseRequestDetail>(x => x.Id == Id, y => y.PurchaseRequest);
@@ -593,7 +587,6 @@ namespace Chai.WorkflowManagment.Modules.Request
 
         }
 
-
         //public IList<MaintenanceRequest> GetMaintenanceRequestsCompleted()
         //{
         //    string filterExpression = "";
@@ -611,7 +604,6 @@ namespace Chai.WorkflowManagment.Modules.Request
             else
             { return 0; }
         }
-
         #endregion
         #region Sole Vendor Requests
         public IList<SoleVendorRequest> GetSoleVendorRequests()
@@ -643,7 +635,6 @@ namespace Chai.WorkflowManagment.Modules.Request
             }
             else { return 0; }
         }
-
         #endregion
         #region Bid Analysis Requests
         public IList<BidAnalysisRequest> GetBidAnalysisRequests()
@@ -675,23 +666,17 @@ namespace Chai.WorkflowManagment.Modules.Request
             }
             else { return 0; }
         }
-
         public Bidder GetBidder(int id)
         {
             return _workspace.Single<Bidder>(x => x.Id == id);
         }
-
-
-
         #endregion
         #region MaintenanceRequest
-
         public IList<MaintenanceRequest> GetMaintenanceRequests()
         {
             return WorkspaceFactory.CreateReadOnly().Query<MaintenanceRequest>(null).ToList();
 
         }
-
         public IList<MaintenanceRequest> GetMaintenanceRequestsInProgress()
         {
             string filterExpression = "";
@@ -737,7 +722,6 @@ namespace Chai.WorkflowManagment.Modules.Request
         {
             return _workspace.Single<MaintenanceRequest>(x => x.Id == MaintenanceRequestId);
         }
-
         public MaintenanceRequestDetail GetMaintenanceRequestbyPuID(int Id)
         {
             return _workspace.Single<MaintenanceRequestDetail>(x => x.Id == Id, y => y.MaintenanceRequest);
@@ -785,18 +769,13 @@ namespace Chai.WorkflowManagment.Modules.Request
             else
             { return 0; }
         }
-
-
-
         #endregion
         #region StoreRequest
-
         public IList<StoreRequest> GetStoreRequests()
         {
             return WorkspaceFactory.CreateReadOnly().Query<StoreRequest>(null).ToList();
 
         }
-
         public IList<StoreRequest> GetStoreRequestsInProgress()
         {
             string filterExpression = "";
@@ -807,8 +786,6 @@ namespace Chai.WorkflowManagment.Modules.Request
 
             return _workspace.SqlQuery<StoreRequest>(filterExpression).ToList();
         }
-
-
         public StoreRequest GetStoreRequest(int StoreRequestId)
         {
             return _workspace.Single<StoreRequest>(x => x.Id == StoreRequestId, x => x.StoreRequestDetails.Select(z => z.Project));
@@ -860,7 +837,6 @@ namespace Chai.WorkflowManagment.Modules.Request
             else
             { return 0; }
         }
-
         #endregion
         #region Employee
         public Employee GetEmployee(int empid)
@@ -907,7 +883,6 @@ namespace Chai.WorkflowManagment.Modules.Request
             _workspace.CommitChanges();
             _workspace.Refresh(item);
         }
-
         public void Commit()
         {
             _workspace.CommitChanges();

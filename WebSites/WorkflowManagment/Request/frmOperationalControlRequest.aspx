@@ -41,6 +41,10 @@
                                 <label class="label">Description</label>
                                 <label class="input">
                                     <asp:TextBox ID="txtDescription" TextMode="MultiLine" Width="100%" runat="server"></asp:TextBox>
+                                    <asp:RequiredFieldValidator
+                                        ID="rfvDescription" runat="server" ErrorMessage="Description must be provided" Display="Dynamic"
+                                        CssClass="validator" ValidationGroup="saveMain" InitialValue=""
+                                        SetFocusOnError="true" ControlToValidate="txtDescription"></asp:RequiredFieldValidator>
                                 </label>
                             </section>
                         </div>
@@ -108,6 +112,12 @@
                                     <label class="label">Account No.</label>
                                     <label class="input">
                                         <asp:TextBox ID="txtBenAccountNo" Enabled="false" runat="server"></asp:TextBox>
+                                    </label>
+                                </section>
+                                <section class="col col-6">
+                                    <label class="label">Original Requester</label>
+                                    <label class="input">
+                                        <asp:TextBox ID="txtOriginalRequester" Enabled="false" runat="server"></asp:TextBox>
                                     </label>
                                 </section>
                             </div>
