@@ -143,33 +143,56 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 {
                     if (_presenter.CurrentEmployee.GetEmpContract(GetId).ContractEndDate < Convert.ToDateTime(StartDate))
                     {
-                        
+                        int x = _presenter.CurrentEmployee.Contracts.Count;
                         cont.ContractStartDate = Convert.ToDateTime(StartDate);
                         cont.ContractEndDate = Convert.ToDateTime(EndDate);
                         cont.Reason = ddlReason.SelectedItem.Text;
                         cont.Status = ddlStatus.SelectedItem.Text;
                         EmployeeDetail emp = new EmployeeDetail();
                         emp.Contract = _presenter.GetContract(_presenter.CurrentEmployee.GetActiveContractForEmp().Id);
-                        emp.Position = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].Position;
-                        emp.Program = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].Program;
+                        if (cont.EmployeeDetails.Count > 0)
+                        {
+                            emp.Position = _presenter.CurrentEmployee.Contracts[x-1].EmployeeDetails[0].Position;
+                            emp.Program = _presenter.CurrentEmployee.Contracts[x-1].EmployeeDetails[0].Program;
 
-                        emp.DutyStation = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].DutyStation;
-                        emp.DescriptiveJobTitle = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].DescriptiveJobTitle;
-                        emp.Salary = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].Salary;
-                        emp.HoursPerWeek = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].HoursPerWeek;
-                        emp.BaseCountry = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].BaseCountry;
-                        emp.BaseCity = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].BaseCity;
-                        emp.BaseState = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].BaseState;
-                        emp.Class = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].Class;
-                        emp.CountryTeam = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].CountryTeam;
-                        emp.EmploymentStatus = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].EmploymentStatus;
+                            emp.DutyStation = _presenter.CurrentEmployee.Contracts[x-1].EmployeeDetails[0].DutyStation;
+                            emp.DescriptiveJobTitle = _presenter.CurrentEmployee.Contracts[x-1].EmployeeDetails[0].DescriptiveJobTitle;
+                            emp.Salary = _presenter.CurrentEmployee.Contracts[x-1].EmployeeDetails[0].Salary;
+                            emp.HoursPerWeek = _presenter.CurrentEmployee.Contracts[x-1].EmployeeDetails[0].HoursPerWeek;
+                            emp.BaseCountry = _presenter.CurrentEmployee.Contracts[x-1].EmployeeDetails[0].BaseCountry;
+                            emp.BaseCity = _presenter.CurrentEmployee.Contracts[x-1].EmployeeDetails[0].BaseCity;
+                            emp.BaseState = _presenter.CurrentEmployee.Contracts[x-1].EmployeeDetails[0].BaseState;
+                            emp.Class = _presenter.CurrentEmployee.Contracts[x-1].EmployeeDetails[0].Class;
+                            emp.CountryTeam = _presenter.CurrentEmployee.Contracts[x-1].EmployeeDetails[0].CountryTeam;
+                            emp.EmploymentStatus = _presenter.CurrentEmployee.Contracts[x-1].EmployeeDetails[0].EmploymentStatus;
 
-                        emp.Supervisor = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].Supervisor;
-                        emp.ReportsTo = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].ReportsTo;
-                        emp.EffectiveDateOfChange = DateTime.Now;
+                            emp.Supervisor = _presenter.CurrentEmployee.Contracts[x-1].EmployeeDetails[0].Supervisor;
+                            emp.ReportsTo = _presenter.CurrentEmployee.Contracts[x-1].EmployeeDetails[0].ReportsTo;
+                            emp.EffectiveDateOfChange = DateTime.Now;
 
-                        _presenter.CurrentEmployee.GetPreviousContract().Status = "In Active";
-                      
+                            _presenter.CurrentEmployee.Contracts[x-1].Status = "In Active";
+                        }
+                        else
+                        {
+                            emp.Position = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].Position;
+                            emp.Program = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].Program;
+
+                            emp.DutyStation = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].DutyStation;
+                            emp.DescriptiveJobTitle = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].DescriptiveJobTitle;
+                            emp.Salary = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].Salary;
+                            emp.HoursPerWeek = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].HoursPerWeek;
+                            emp.BaseCountry = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].BaseCountry;
+                            emp.BaseCity = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].BaseCity;
+                            emp.BaseState = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].BaseState;
+                            emp.Class = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].Class;
+                            emp.CountryTeam = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].CountryTeam;
+                            emp.EmploymentStatus = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].EmploymentStatus;
+
+                            emp.Supervisor = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].Supervisor;
+                            emp.ReportsTo = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].ReportsTo;
+                            emp.EffectiveDateOfChange = DateTime.Now;
+                            _presenter.CurrentEmployee.Contracts[0].Status = "In Active";
+                        }
                         _presenter.CurrentEmployee.Contracts.Add(cont);
                         _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
                         emp.Contract = _presenter.GetContract(cont.Id);
@@ -194,32 +217,12 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                             cont.ContractEndDate = Convert.ToDateTime(EndDate);
                             cont.Reason = ddlReason.SelectedItem.Text;
                             cont.Status = ddlStatus.SelectedItem.Text;
-                    EmployeeDetail emp = new EmployeeDetail();
-                    
-                    emp.Position = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].Position;
-                    emp.Program = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].Program;
-
-                    emp.DutyStation = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].DutyStation;
-                    emp.DescriptiveJobTitle = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].DescriptiveJobTitle;
-                    emp.Salary = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].Salary;
-                    emp.HoursPerWeek = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].HoursPerWeek;
-                    emp.BaseCountry = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].BaseCountry;
-                    emp.BaseCity = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].BaseCity;
-                    emp.BaseState = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].BaseState;
-                    emp.Class = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].Class;
-                    emp.CountryTeam = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].CountryTeam;
-                    emp.EmploymentStatus = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].EmploymentStatus;
-
-                    emp.Supervisor = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].Supervisor;
-                    emp.ReportsTo = _presenter.CurrentEmployee.Contracts[0].EmployeeDetails[0].ReportsTo;
-                    emp.EffectiveDateOfChange = DateTime.Now;
-
-                    _presenter.CurrentEmployee.GetPreviousContract().Status = "In Active";
+                   
+                 
                   
 
                     _presenter.CurrentEmployee.Contracts.Add(cont);
-                    emp.Contract = _presenter.GetContract(cont.Id);
-                    _presenter.CurrentEmployee.GetActiveContractForEmp().EmployeeDetails.Add(emp);
+                 
                     _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
                     dgContractDetail.EditIndex = -1;
                     ClearContractFormFields();
@@ -709,7 +712,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         protected void btnAddChange_Click(object sender, EventArgs e)
         {
             AddEmployeeDetail();
-            _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
+           // _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
 
         }
 
@@ -717,7 +720,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         {
             AddContracts();
 
-            _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
+          //  _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
         }
 
         protected void dgContractDetail_SelectedIndexChanged(object sender, EventArgs e)
