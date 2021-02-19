@@ -118,7 +118,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private string GetWillStatus()
         {
-            ApprovalSetting AS = _presenter.GetApprovalSettingforProcess(RequestType.OperationalControl_Request.ToString().Replace('_', ' ').ToString(), 0);
+            ApprovalSetting AS = _presenter.GetApprovalSettingforProcess(RequestType.OperationalControl_Request.ToString().Replace('_', ' ').ToString(), _presenter.CurrentOperationalControlRequest.TotalAmount);
             string will = "";
             foreach (ApprovalLevel AL in AS.ApprovalLevels)
             {
