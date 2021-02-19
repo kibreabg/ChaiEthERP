@@ -722,6 +722,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 lblBeneficiaryNameResult.Text = _presenter.CurrentOperationalControlRequest.Beneficiary.BeneficiaryName;
                 lblBankAccountNoResult.Text = _presenter.CurrentOperationalControlRequest.Beneficiary.AccountNumber;
             }
+            else
+            {
+                lblBankNameResult.Text = String.Empty;
+                lblBeneficiaryNameResult.Text = String.Empty;
+                lblBankAccountNoResult.Text = String.Empty;
+            }
             lblVoucherNoResult.Text = _presenter.CurrentOperationalControlRequest.VoucherNo.ToString();
             lblTotalAmountResult.Text = _presenter.CurrentOperationalControlRequest.TotalAmount.ToString();
             lblApprovalStatusResult.Text = _presenter.CurrentOperationalControlRequest.ProgressStatus.ToString();
