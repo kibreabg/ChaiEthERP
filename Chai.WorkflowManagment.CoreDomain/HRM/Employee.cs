@@ -412,10 +412,10 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                 }
             
             }
-            if (leaveEnti < 10 && wd != 0)
-            {
-                leaveEnti += 2;
-            }
+            //if (leaveEnti < 10 && wd != 0)
+            //{
+            //    leaveEnti += 2;
+            //}
 
             if ( (Settingdays.Days * (20 + leaveEnti) / 12) / 30 > 30 )
             return 30;
