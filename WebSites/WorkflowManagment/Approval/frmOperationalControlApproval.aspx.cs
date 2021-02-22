@@ -122,6 +122,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             ApprovalSetting AS = _presenter.GetApprovalSettingforProcess(RequestType.OperationalControl_Request.ToString().Replace('_', ' ').ToString(), _presenter.CurrentOperationalControlRequest.TotalAmount);
             string will = "";
+            string supervisorEmpPosition = _presenter.GetUser((int)_presenter.CurrentUser().Superviser).EmployeePosition.PositionName;
+            string currentApproverEmpPosition = _presenter.GetUser(_presenter.CurrentOperationalControlRequest.CurrentApprover).EmployeePosition.PositionName;
             foreach (ApprovalLevel AL in AS.ApprovalLevels)
             {
                 if (AL.EmployeePosition.PositionName == "Superviser/Line Manager" || AL.EmployeePosition.PositionName == "Program Manager" && _presenter.CurrentOperationalControlRequest.CurrentLevel == 1)
@@ -138,7 +140,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     try
                     {
-                        if (_presenter.GetUser(_presenter.CurrentOperationalControlRequest.CurrentApprover).EmployeePosition.PositionName == AL.EmployeePosition.PositionName && AL.WorkflowLevel == _presenter.CurrentOperationalControlRequest.CurrentLevel)
+                        if ((currentApproverEmpPosition == AL.EmployeePosition.PositionName || currentApproverEmpPosition == supervisorEmpPosition) && AL.WorkflowLevel == _presenter.CurrentOperationalControlRequest.CurrentLevel)
                         {
                             will = AL.Will;
                             break;
