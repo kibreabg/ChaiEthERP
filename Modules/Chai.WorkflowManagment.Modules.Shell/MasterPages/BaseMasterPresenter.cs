@@ -21,14 +21,12 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         public BaseMasterPresenter()
         {
         }
-
         public override void OnViewLoaded()
         {
             View.CurrentUser = _controller.GetCurrentUser();
             if (!Int32.TryParse(View.TabId, out _tabId))
                 _tabId = -1;
         }
-
         [CreateNew]
         public ShellController Controller
         {
@@ -44,41 +42,33 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
                 this._controller = value;
             }
         }
-
         public int TabId
         {
             get { return _tabId; }
-        }
-
-        
+        }        
         public IHttpContext CurrentContext
         {
             get { return Controller.GetCurrentContext(); }
         }
-
         public AppUser CurrentUser
         {
             get
             {
                 return Controller.GetCurrentUser();
             }
-        }
-        
+        }        
         public bool UserIsAuthenticated
         {
             get { return Controller.UserIsAuthenticated;}
         }
-
         public void Navigate(string url)
         {
             Controller.Navigate(url);
-        }
-        
+        }        
         public Tab ActiveTab
         {
             get { return Controller.ActiveTab(_tabId); }
         }
-
         public IEnumerable<Tab> GetListOfAllTabs()
         {
             using(var vr = WorkspaceFactory.CreateReadOnly())
@@ -87,7 +77,6 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
             }
         }
         #region ReimbersmentStatus
-
         public int GetCashPaymentReimbersment()
         {
             return _controller.GetCashPaymentReimbersment();
@@ -154,7 +143,6 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         {
             return _controller.GetSoleVendorTasks();
         }
-
         public int GetMaintenanceRequestsTasks()
         {
             return _controller.GetMaintenanceTasks();
@@ -190,8 +178,7 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         public int GetExpenseLiquidationMyRequest()
         {
             return _controller.GetExpenseLiquidationMyRequest();
-        }
-        
+        }        
         public int GetPurchaseRequestsMyRequest()
         {
             return _controller.GetPurchaseRequestsMyRequest();
@@ -240,8 +227,7 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         public IList<PaymentReimbursementRequest> ListPaymentReimbursementApprovalProgress()
         {
             return _controller.GetPaymentReimbursementRequestInProgress();
-        }
-    
+        }    
         public IList<CostSharingRequest> ListCostApprovalProgress()
         {
             return _controller.GetCostSharingInProgress();
@@ -282,6 +268,22 @@ namespace Chai.WorkflowManagment.Modules.Shell.MasterPages
         public AppUser GetUser(int UserId)
         {
             return _controller.GetUser(UserId);
-        }        
+        }
+        public CashPaymentRequest GetCashPaymentRequest(int reqId)
+        {
+            return _controller.GetCashPaymentRequest(reqId);
+        }
+        public TravelAdvanceRequest GetTravelAdvanceRequest(int reqId)
+        {
+            return _controller.GetTravelAdvanceRequest(reqId);
+        }
+        public ExpenseLiquidationRequest GetExpenseLiquidationRequest(int liqID)
+        {
+            return _controller.GetExpenseLiquidationRequest(liqID);
+        }
+        public PaymentReimbursementRequest GetPaymentReimbursementRequest(int reqId)
+        {
+            return _controller.GetPaymentReimbursementRequest(reqId);
+        }
     }
 }
