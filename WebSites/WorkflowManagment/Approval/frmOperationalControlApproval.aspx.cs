@@ -102,11 +102,20 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             for (int i = 0; i < s.Length; i++)
             {
-                if (GetWillStatus().Substring(0, 3) == s[i].Substring(0, 3))
+                try
                 {
-                    ddlApprovalStatus.Items.Add(new ListItem(s[i].Replace('_', ' '), s[i].Replace('_', ' ')));
+                    string willStatus = GetWillStatus().Substring(0, 3);
+                    string subString = s[i].Substring(0, 3);
+                    if (willStatus == subString)
+                    {
+                        ddlApprovalStatus.Items.Add(new ListItem(s[i].Replace('_', ' '), s[i].Replace('_', ' ')));
+                    }
                 }
-
+                catch (Exception ex)
+                {
+                    ExceptionUtility.LogException(ex, ex.Source);
+                    ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
+                }
             }
 
             ddlApprovalStatus.Items.Add(new ListItem("Reject Bank Payment", ApprovalStatus.Rejected.ToString().Replace('_', ' ')));
@@ -118,15 +127,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private string GetWillStatus()
         {
-            ApprovalSetting AS = _presenter.GetApprovalSettingforProcess(RequestType.OperationalControl_Request.ToString().Replace('_', ' ').ToString(), 0);
+            ApprovalSetting AS = _presenter.GetApprovalSettingforProcess(RequestType.OperationalControl_Request.ToString().Replace('_', ' ').ToString(), _presenter.CurrentOperationalControlRequest.TotalAmount);
             string will = "";
+            
             foreach (ApprovalLevel AL in AS.ApprovalLevels)
             {
-                if (AL.EmployeePosition.PositionName == "Superviser/Line Manager" || AL.EmployeePosition.PositionName == "Program Manager" && _presenter.CurrentOperationalControlRequest.CurrentLevel == 1)
+                if ((AL.EmployeePosition.PositionName == "Superviser/Line Manager" || AL.EmployeePosition.PositionName == "Program Manager") && _presenter.CurrentOperationalControlRequest.CurrentLevel == 1)
                 {
                     will = "Approve";
                     break;
-
                 }
                 /*else if (_presenter.GetUser(_presenter.CurrentOperationalControlRequest.CurrentApprover).EmployeePosition.PositionName == AL.EmployeePosition.PositionName)
                 {
@@ -136,7 +145,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     try
                     {
-                        if (_presenter.GetUser(_presenter.CurrentOperationalControlRequest.CurrentApprover).EmployeePosition.PositionName == AL.EmployeePosition.PositionName && AL.WorkflowLevel == _presenter.CurrentOperationalControlRequest.CurrentLevel)
+                        int currentUserId = _presenter.CurrentUser().Id;
+                        string currentApproverEmpPosition = _presenter.GetUser(_presenter.CurrentOperationalControlRequest.CurrentApprover).EmployeePosition.PositionName;
+                        if ((currentApproverEmpPosition == AL.EmployeePosition.PositionName || _presenter.CurrentOperationalControlRequest.CurrentApprover == currentUserId) && AL.WorkflowLevel == _presenter.CurrentOperationalControlRequest.CurrentLevel)
                         {
                             will = AL.Will;
                             break;
@@ -721,6 +732,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 lblBankNameResult.Text = _presenter.CurrentOperationalControlRequest.Beneficiary.BankName;
                 lblBeneficiaryNameResult.Text = _presenter.CurrentOperationalControlRequest.Beneficiary.BeneficiaryName;
                 lblBankAccountNoResult.Text = _presenter.CurrentOperationalControlRequest.Beneficiary.AccountNumber;
+            }
+            else
+            {
+                lblBankNameResult.Text = String.Empty;
+                lblBeneficiaryNameResult.Text = String.Empty;
+                lblBankAccountNoResult.Text = String.Empty;
             }
             lblVoucherNoResult.Text = _presenter.CurrentOperationalControlRequest.VoucherNo.ToString();
             lblTotalAmountResult.Text = _presenter.CurrentOperationalControlRequest.TotalAmount.ToString();

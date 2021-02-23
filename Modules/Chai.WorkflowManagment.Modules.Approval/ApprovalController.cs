@@ -118,7 +118,7 @@ namespace Chai.WorkflowManagment.Modules.Approval
                                    " AND  1 = CASE WHEN '" + RequestDate + "' = '' Then 1 When CashPaymentRequests.RequestDate = '" + RequestDate + "'  Then 1 END " +
                                    " AND 1 = CASE WHEN '" + Requester + "' = '0' THEN 1 WHEN CashPaymentRequests.AppUser_Id = '" + Requester + "'  THEN 1 END " +
                                    " AND CashPaymentRequests.ProgressStatus='" + ProgressStatus + "' " +
-                                   " AND CashPaymentRequestStatuses.ApprovalStatus IS NOT NULL AND ((CashPaymentRequestStatuses.Approver = '" + CurrentUser().Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) " +
+                                   " AND CashPaymentRequestStatuses.ApprovalStatus IS NOT NULL AND ((CashPaymentRequestStatuses.Approver = '" + CurrentUser().Id + "') OR (CashPaymentRequests.CurrentApproverPosition = '" + CurrentUser().EmployeePosition.Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) " +
                                    " AND (CashPaymentRequests.CurrentStatus != 'Rejected' OR CashPaymentRequests.CurrentStatus IS NULL) " +
                                    " ORDER BY CashPaymentRequests.Id DESC";
 
@@ -187,7 +187,7 @@ namespace Chai.WorkflowManagment.Modules.Approval
                                    " INNER JOIN AppUsers ON AppUsers.Id = OperationalControlRequestStatuses.Approver" +
                                    " LEFT JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
                                    " WHERE 1 = CASE WHEN '" + RequestNo + "' = '' THEN 1 WHEN OperationalControlRequests.VoucherNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When OperationalControlRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND OperationalControlRequests.ProgressStatus='" + ProgressStatus + "' " +
-                                   " AND OperationalControlRequestStatuses.ApprovalStatus IS NOT NULL AND ((OperationalControlRequestStatuses.Approver = '" + CurrentUser().Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) " +
+                                   " AND OperationalControlRequestStatuses.ApprovalStatus IS NOT NULL AND ((OperationalControlRequestStatuses.Approver = '" + CurrentUser().Id + "') OR (OperationalControlRequests.CurrentApproverPosition = '" + CurrentUser().EmployeePosition.Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) " +
                                    " AND (OperationalControlRequests.CurrentStatus != 'Rejected' OR OperationalControlRequests.CurrentStatus IS NULL)" +
                                    " ORDER BY OperationalControlRequests.Id DESC ";
             }
@@ -234,7 +234,7 @@ namespace Chai.WorkflowManagment.Modules.Approval
                                    " AND TravelAdvanceRequests.ProgressStatus='" + ProgressStatus + "'" +
                                    " AND (TravelAdvanceRequests.CurrentStatus != 'Rejected' OR TravelAdvanceRequests.CurrentStatus IS NULL)" +
                                    " AND TravelAdvanceRequestStatuses.ApprovalStatus IS NOT NULL " +
-                                   " AND ((TravelAdvanceRequestStatuses.Approver = '" + CurrentUser().Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) " +
+                                   " AND ((TravelAdvanceRequestStatuses.Approver = '" + CurrentUser().Id + "') OR (TravelAdvanceRequests.CurrentApproverPosition = '" + CurrentUser().EmployeePosition.Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) " +
                                    " ORDER BY TravelAdvanceRequests.Id DESC ";
 
             }

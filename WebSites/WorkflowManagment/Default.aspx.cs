@@ -499,7 +499,7 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
                         e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListExpenseLiquidationProgress()[e.Row.RowIndex].CurrentApprover).FullName;
                     else
                         e.Row.Cells[2].Text = "Accountant";
-                }                
+                }
             }
         }
     }
@@ -521,7 +521,15 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
                 if (_presenter.ListBankPaymentApprovalProgress()[e.Row.RowIndex].CurrentApprover != 0)
-                    e.Row.Cells[2].Text = _presenter.GetUser(_presenter.ListBankPaymentApprovalProgress()[e.Row.RowIndex].CurrentApprover).FullName;
+                    e.Row.Cells[3].Text = _presenter.GetUser(_presenter.ListBankPaymentApprovalProgress()[e.Row.RowIndex].CurrentApprover).FullName;
+                if (_presenter.ListBankPaymentApprovalProgress()[e.Row.RowIndex].PaymentId > 0)
+                    e.Row.Cells[2].Text = _presenter.GetCashPaymentRequest(_presenter.ListBankPaymentApprovalProgress()[e.Row.RowIndex].PaymentId).AppUser.FullName;
+                else if (_presenter.ListBankPaymentApprovalProgress()[e.Row.RowIndex].TravelAdvanceId > 0)
+                    e.Row.Cells[2].Text = _presenter.GetTravelAdvanceRequest(_presenter.ListBankPaymentApprovalProgress()[e.Row.RowIndex].TravelAdvanceId).AppUser.FullName;
+                else if (_presenter.ListBankPaymentApprovalProgress()[e.Row.RowIndex].LiquidationId > 0)
+                    e.Row.Cells[2].Text = _presenter.GetExpenseLiquidationRequest(_presenter.ListBankPaymentApprovalProgress()[e.Row.RowIndex].LiquidationId).TravelAdvanceRequest.AppUser.FullName;
+                else if (_presenter.ListBankPaymentApprovalProgress()[e.Row.RowIndex].SettlementId > 0)
+                    e.Row.Cells[2].Text = _presenter.GetPaymentReimbursementRequest(_presenter.ListBankPaymentApprovalProgress()[e.Row.RowIndex].SettlementId).CashPaymentRequest.AppUser.FullName;
             }
         }
     }
