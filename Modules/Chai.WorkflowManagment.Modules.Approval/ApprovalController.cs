@@ -555,8 +555,7 @@ namespace Chai.WorkflowManagment.Modules.Approval
         public void DeleteEntity<T>(T item) where T : class
         {
             _workspace.Delete<T>(item);
-            _workspace.CommitChanges();
-            _workspace.Refresh(item);
+            _workspace.CommitChanges();            
         }
         public void Commit()
         {
