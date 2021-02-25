@@ -20,6 +20,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public DateTime ContractEndDate { get; set; }
         public string Reason { get; set; }
         public string Status { get; set; }
+        public string EmployeeChange { get; set; }
         public virtual HRM.Employee Employee { get; set; }
 
         public virtual IList<EmployeeDetail> EmployeeDetails { get; set; }

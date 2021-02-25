@@ -170,7 +170,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                             emp.ReportsTo = _presenter.CurrentEmployee.Contracts[x-1].EmployeeDetails[x-1].ReportsTo;
                             emp.EffectiveDateOfChange = DateTime.Now;
 
-                            _presenter.CurrentEmployee.Contracts[x].Status = "In Active";
+                            _presenter.CurrentEmployee.Contracts[x-1].Status = "In Active";
                         }
                         //else
                         //{
@@ -316,7 +316,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             chan = Session["chan"] as Contract;
             var prevCont = chan.Employee.GetPreviousContract();
           
-            if (prevCont != null)
+            if (prevCont != null && prevCont.EmployeeDetails.Count>0)
             {
                   int prevcontId = prevCont.Id;
                 if (prevcontId > 0)
@@ -522,7 +522,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     empdetail.Program = _presenter.GetProgram(Convert.ToInt32(ddlProgram.Text));
 
                     empdetail.DutyStation = ddlDutyStation.Text;
-                    empdetail.DescriptiveJobTitle = empdetail.Position.ToString();
+                    empdetail.DescriptiveJobTitle = empdetail.Position.PositionName.ToString();
                     empdetail.Salary = Convert.ToDecimal(txtSalary.Text);
                     empdetail.HoursPerWeek = txtHoursPerWeek.Text;
                     empdetail.BaseCountry = txtBaseCount.Text;
@@ -535,7 +535,14 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     empdetail.Supervisor = Convert.ToInt32(ddlSuperVisor.Text);
                     empdetail.ReportsTo = empdetail.Supervisor;
                     empdetail.EffectiveDateOfChange = Convert.ToDateTime(txtEffectDate.Text);
-                   
+                    Contract con = new Contract();
+                    con.ContractEndDate = chan.ContractEndDate;
+                    con.ContractStartDate = chan.ContractStartDate;
+                    con.Reason = chan.Reason;
+                    chan.Status = "In Active";
+                    con.Status = "Active";
+                    con.EmployeeChange = "EmplpyeeChange";
+                    _presenter.CurrentEmployee.Contracts.Add(con);
                     _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
 
                     BindEmpDetail(empdetail.Contract);
@@ -561,7 +568,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 empdetail.Program = _presenter.GetProgram(Convert.ToInt32(ddlProgram.Text));
 
                 empdetail.DutyStation = ddlDutyStation.Text;
-                empdetail.DescriptiveJobTitle = empdetail.Position.ToString();
+                empdetail.DescriptiveJobTitle = empdetail.Position.PositionName.ToString();
                 empdetail.Salary = Convert.ToDecimal(txtSalary.Text);
                 empdetail.HoursPerWeek = txtHoursPerWeek.Text;
                 empdetail.BaseCountry = txtBaseCount.Text;
@@ -582,8 +589,18 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     _presenter.CurrentEmployee.Contracts[Convert.ToInt32(hfDetailId.Value)].EmployeeDetails.Add(empdetail);
              
                 BindEmpDetail(empdetail.Contract);
+
+
+                Contract con = new Contract();
+                con.ContractEndDate = chan.ContractEndDate;
+                con.ContractStartDate = chan.ContractStartDate;
+                con.Reason = chan.Reason;
+                chan.Status = "In Active";
+                con.Status = "Active";
+                con.EmployeeChange = "EmplpyeeChange";
+                _presenter.CurrentEmployee.Contracts.Add(con);
                 _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
-                ClearEmpDetailFormFields();
+               // ClearEmpDetailFormFields();
                 pnlEMPHIST_ModalPopupExtender.Show();
 
 
@@ -968,6 +985,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
         protected void dgContractDetail_RowCommand1(object sender, GridViewCommandEventArgs e)
         {
+            EmployeeDetail empdetail;
             if (e.CommandName == "History")
             {
                 int Row = Convert.ToInt32(e.CommandArgument);
@@ -990,7 +1008,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     }
                     BindEmpDetail(chan);
                     
-                    EmployeeDetail empdetail;
+                    
 
 
 
@@ -1023,20 +1041,20 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     }
                     else if (prevCont.EmployeeDetails.Count>0)
                     {
-                        int x = chan.EmployeeDetails.Count;
+                        int x = prevCont.EmployeeDetails.Count;
                         ddlPosition.SelectedValue = prevCont.EmployeeDetails[x-1].Position.Id.ToString();
-                       ddlProgram.SelectedValue = chan.EmployeeDetails[x - 1].Program.Id.ToString();
-                        ddlDutyStation.Text = prevCont.EmployeeDetails[x - 1].DutyStation;
-                        txtSalary.Text = prevCont.EmployeeDetails[x - 1].Salary.ToString();
-                        txtEmployeeStatus.Text = prevCont.EmployeeDetails[x - 1].EmploymentStatus;
-                        txtClass.Text = prevCont.EmployeeDetails[x - 1].Class;
-                        txtHoursPerWeek.Text = prevCont.EmployeeDetails[x - 1].HoursPerWeek;
-                        txtBaseCount.Text = prevCont.EmployeeDetails[x - 1].BaseCountry;
-                        txtBaseCity.Text = prevCont.EmployeeDetails[x - 1].BaseCity;
-                        txtBaseState.Text = prevCont.EmployeeDetails[x - 1].BaseState;
-                        txtCountryTeam.Text = prevCont.EmployeeDetails[x - 1].CountryTeam;
-                        ddlSuperVisor.SelectedValue = prevCont.EmployeeDetails[x - 1].Supervisor.ToString();
-                        txtEffectDate.Text = prevCont.EmployeeDetails[x - 1].EffectiveDateOfChange.ToShortDateString();
+                       //ddlProgram.SelectedValue = prevCont.EmployeeDetails[x-1].Program.Id.ToString();
+                        ddlDutyStation.Text = prevCont.EmployeeDetails[x-1].DutyStation;
+                        txtSalary.Text = prevCont.EmployeeDetails[x-1].Salary.ToString();
+                        txtEmployeeStatus.Text = prevCont.EmployeeDetails[x-1].EmploymentStatus;
+                        txtClass.Text = prevCont.EmployeeDetails[x-1].Class;
+                        txtHoursPerWeek.Text = prevCont.EmployeeDetails[x-1].HoursPerWeek;
+                        txtBaseCount.Text = prevCont.EmployeeDetails[x-1].BaseCountry;
+                        txtBaseCity.Text = prevCont.EmployeeDetails[x-1].BaseCity;
+                        txtBaseState.Text = prevCont.EmployeeDetails[x-1].BaseState;
+                        txtCountryTeam.Text = prevCont.EmployeeDetails[x-1].CountryTeam;
+                        ddlSuperVisor.SelectedValue = prevCont.EmployeeDetails[x-1].Supervisor.ToString();
+                        txtEffectDate.Text = prevCont.EmployeeDetails[x-1].EffectiveDateOfChange.ToShortDateString();
                         pnlEMPHIST_ModalPopupExtender.Show();
                     }
                 }
