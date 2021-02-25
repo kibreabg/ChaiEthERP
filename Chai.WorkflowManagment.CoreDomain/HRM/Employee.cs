@@ -317,8 +317,10 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                 if (CD.Status == "Active")
                 {
                     if (CD.EmployeeDetails.Count != 0)
-
-                        return CD.EmployeeDetails.Last().Program.ProgramName;
+                        if (CD.EmployeeDetails.Last().Program != null)
+                        {
+                            return CD.EmployeeDetails.Last().Program.ProgramName;
+                        }
                 }
 
             }
@@ -333,7 +335,10 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                 {
                     if (CD.EmployeeDetails.Count != 0)
 
-                        return CD.EmployeeDetails.Last().Position.PositionName;
+                        if (CD.EmployeeDetails.Last().Position != null)
+                        {
+                            return CD.EmployeeDetails.Last().Position.PositionName;
+                        }
                 }
 
             }
