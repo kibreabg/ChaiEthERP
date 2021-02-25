@@ -107,7 +107,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
                 if (id != 0)
                 {
-
+                    int x = _presenter.CurrentEmployee.Contracts.Count;
                     var StartDate = txtStartDate.Text != "" ? txtStartDate.Text : "";
                     var EndDate = txtEndDate.Text != "" ? txtEndDate.Text : " ";
                     Contract cont = _presenter.CurrentEmployee.GetContract(id);
@@ -116,9 +116,40 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                         cont.ContractEndDate = Convert.ToDateTime(EndDate);
                         cont.Reason = ddlReason.SelectedValue;
                         cont.Status = ddlStatus.SelectedValue;
-                        
-                        
-                        _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
+
+                    EmployeeDetail emp = new EmployeeDetail();
+                    emp.Contract = _presenter.GetContract(_presenter.CurrentEmployee.GetActiveContractForEmp().Id);
+                    if (cont.EmployeeDetails.Count > 0)
+                    {
+                        emp.Position = _presenter.CurrentEmployee.Contracts[x - 1].EmployeeDetails[x - 1].Position;
+                        emp.Program = _presenter.CurrentEmployee.Contracts[x - 1].EmployeeDetails[x - 1].Program;
+
+                        emp.DutyStation = _presenter.CurrentEmployee.Contracts[x - 1].EmployeeDetails[x - 1].DutyStation;
+                        emp.DescriptiveJobTitle = _presenter.CurrentEmployee.Contracts[x - 1].EmployeeDetails[x - 1].DescriptiveJobTitle;
+                        emp.Salary = _presenter.CurrentEmployee.Contracts[x - 1].EmployeeDetails[x - 1].Salary;
+                        emp.HoursPerWeek = _presenter.CurrentEmployee.Contracts[x - 1].EmployeeDetails[x - 1].HoursPerWeek;
+                        emp.BaseCountry = _presenter.CurrentEmployee.Contracts[x - 1].EmployeeDetails[x - 1].BaseCountry;
+                        emp.BaseCity = _presenter.CurrentEmployee.Contracts[x - 1].EmployeeDetails[x - 1].BaseCity;
+                        emp.BaseState = _presenter.CurrentEmployee.Contracts[x - 1].EmployeeDetails[x - 1].BaseState;
+                        emp.Class = _presenter.CurrentEmployee.Contracts[x - 1].EmployeeDetails[x - 1].Class;
+                        emp.CountryTeam = _presenter.CurrentEmployee.Contracts[x - 1].EmployeeDetails[x - 1].CountryTeam;
+                        emp.EmploymentStatus = _presenter.CurrentEmployee.Contracts[x - 1].EmployeeDetails[x - 1].EmploymentStatus;
+
+                        emp.Supervisor = _presenter.CurrentEmployee.Contracts[x - 1].EmployeeDetails[x - 1].Supervisor;
+                        emp.ReportsTo = _presenter.CurrentEmployee.Contracts[x - 1].EmployeeDetails[x - 1].ReportsTo;
+                        emp.EffectiveDateOfChange = DateTime.Now;
+                       
+                    }
+
+
+                    emp.Contract = _presenter.GetContract(_presenter.CurrentEmployee.GetActiveContractForEmp().Id);
+                    _presenter.CurrentEmployee.GetActiveContractForEmp().EmployeeDetails.Add(emp);
+                    var prevCont = _presenter.CurrentEmployee.GetPreviousContract();
+                    if (prevCont.EmployeeDetails.Count > 0)
+                    {
+                        prevCont.Status = "In Active";
+                    }
+                    _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
 
                         dgContractDetail.EditIndex = -1;
                         ClearContractFormFields();
@@ -170,7 +201,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                             emp.ReportsTo = _presenter.CurrentEmployee.Contracts[x-1].EmployeeDetails[x-1].ReportsTo;
                             emp.EffectiveDateOfChange = DateTime.Now;
 
-                            _presenter.CurrentEmployee.Contracts[x-1].Status = "In Active";
+                          
                         }
                         //else
                         //{
@@ -197,6 +228,11 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                         //_presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
                         emp.Contract = _presenter.GetContract(_presenter.CurrentEmployee.GetActiveContractForEmp().Id);
                         _presenter.CurrentEmployee.GetActiveContractForEmp().EmployeeDetails.Add(emp);
+                        var prevCont = _presenter.CurrentEmployee.GetPreviousContract();
+                        if (prevCont.EmployeeDetails.Count > 0)
+                        {
+                            prevCont.Status = "In Active";
+                        }
                         _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
                         dgContractDetail.EditIndex = -1;
                         ClearContractFormFields();
@@ -211,15 +247,21 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                 }
                 else
                 {
-                    
-                   
-                            cont.ContractStartDate = Convert.ToDateTime(StartDate);
+                    int x = _presenter.CurrentEmployee.Contracts.Count;
+
+                    cont.ContractStartDate = Convert.ToDateTime(StartDate);
                             cont.ContractEndDate = Convert.ToDateTime(EndDate);
                             cont.Reason = ddlReason.SelectedItem.Text;
                             cont.Status = ddlStatus.SelectedItem.Text;
-                   
-                 
-                  
+                    if (x > 0)
+                    {
+                        var prevCont = _presenter.CurrentEmployee.GetPreviousContract();
+                        if (prevCont.EmployeeDetails.Count > 0)
+                        {
+                            prevCont.Status = "In Active";
+                        }
+                    }
+
 
                     _presenter.CurrentEmployee.Contracts.Add(cont);
                  
