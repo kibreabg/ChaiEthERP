@@ -298,17 +298,12 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                 if (CD.Status == "Active")
                 {
                     if (CD.EmployeeDetails.Count != 0)
-
+                    {
                         return CD.EmployeeDetails.Last().DutyStation;
+                    }
                 }
-
             }
-
-
             return null;
-
-
-
         }
         public virtual string GetEmployeeProgram()
         {
@@ -317,10 +312,13 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                 if (CD.Status == "Active")
                 {
                     if (CD.EmployeeDetails.Count != 0)
+                    {
                         if (CD.EmployeeDetails.Last().Program != null)
                         {
                             return CD.EmployeeDetails.Last().Program.ProgramName;
                         }
+                    }
+
                 }
 
             }
@@ -334,13 +332,13 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                 if (CD.Status == "Active")
                 {
                     if (CD.EmployeeDetails.Count != 0)
-
+                    {
                         if (CD.EmployeeDetails.Last().Position != null)
                         {
                             return CD.EmployeeDetails.Last().Position.PositionName;
                         }
+                    }
                 }
-
             }
 
             return null;
@@ -369,7 +367,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             TimeSpan Settingdays = DateTime.Now - LeaveSettingDate.Value;
             double Totworkingdays = workingdays.Days;
             double wd = workingdays.Days;
-           
+
             int count = 1;
             if (wd > 365)
             {
@@ -378,10 +376,10 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                     if (count <= 6 && count > 1)
                         leaveEnti = leaveEnti + 2;
 
-                  
+
 
                     count++;
-                   wd = wd - 365;
+                    wd = wd - 365;
                 }
                 if (leaveEnti < 10 && wd != 0)
                 {
@@ -391,7 +389,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             }
 
             return (Settingdays.Days * (20 + leaveEnti) / 12) / 30;
-           
+
         }
         public virtual double LeavefromhiredtoYE()
         {
@@ -415,18 +413,18 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                     count++;
                     wd = wd - 365;
                 }
-            
+
             }
             //if (leaveEnti < 10 && wd != 0)
             //{
             //    leaveEnti += 2;
             //}
 
-            if ( (Settingdays.Days * (20 + leaveEnti) / 12) / 30 > 30 )
-            return 30;
+            if ((Settingdays.Days * (20 + leaveEnti) / 12) / 30 > 30)
+                return 30;
             else
-            return (Settingdays.Days * (20 + leaveEnti) / 12) / 30;
-     
+                return (Settingdays.Days * (20 + leaveEnti) / 12) / 30;
+
         }
         public virtual double LeavefromhiredtoCED(DateTime CED)
         {
@@ -447,11 +445,11 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                 {
                     if (count <= 6 && count > 1)
                         leaveEnti = leaveEnti + 2;
-                                       
+
                     count++;
                     wd = wd - 365;
                 }
-              
+
             }
             if (leaveEnti < 10 && wd != 0)
             {
@@ -477,20 +475,20 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                 {
                     if (count <= 6 && count > 1)
                         leaveEnti = leaveEnti + 2;
-                                      
+
 
                     count++;
                     wd = wd - 365;
                 }
-               
+
             }
             if (leaveEnti < 10 && wd != 0)
             {
                 leaveEnti += 2;
             }
 
-            return ((Totworkingdays / 30) * ((20 + leaveEnti)/12));
-      
+            return ((Totworkingdays / 30) * ((20 + leaveEnti) / 12));
+
         }
         public virtual double Leavefromhiredtolast(DateTime lastday)
         {
@@ -512,12 +510,12 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
                     if (count <= 6 && count > 1)
                         leaveEnti = leaveEnti + 2;
 
-                  
+
 
                     count++;
                     wd = wd - 365;
                 }
-                
+
             }
             if (leaveEnti < 10 && wd != 0)
             {
@@ -544,7 +542,7 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public virtual double EmployeeLeaveBalanceCED(DateTime CED)
         {
 
-            if (LeavefromhiredtoCED(CED)  + Convert.ToDouble(SDLeaveBalance.Value) > 50)
+            if (LeavefromhiredtoCED(CED) + Convert.ToDouble(SDLeaveBalance.Value) > 50)
             {
                 return 50;
             }
@@ -553,18 +551,18 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         }
         public virtual double EmployeeLeaveBalanceYE()
         {
-           // return 0;
+            // return 0;
             if (LeavefromhiredtoYE() + Convert.ToDouble(SDLeaveBalance.Value) > 50)
             {
                 return 50;
             }
             else
-            { return LeavefromhiredtoYE()  + Convert.ToDouble(SDLeaveBalance.Value); }
+            { return LeavefromhiredtoYE() + Convert.ToDouble(SDLeaveBalance.Value); }
         }
         public virtual double EmployeeLeaveBalanceLastDay(DateTime Lastday)
         {
-           
-            if ((Leavefromhiredtolast(Lastday)  + Convert.ToDouble(SDLeaveBalance.Value) > 50))
+
+            if ((Leavefromhiredtolast(Lastday) + Convert.ToDouble(SDLeaveBalance.Value) > 50))
             {
                 return 50;
             }
