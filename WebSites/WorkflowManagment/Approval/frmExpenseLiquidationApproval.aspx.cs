@@ -522,7 +522,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 if (_presenter.CurrentExpenseLiquidationRequest.ProgressStatus != ProgressStatus.Completed.ToString())
                 {
                     SaveExpenseLiquidationRequestStatus();
-                    _presenter.SaveOrUpdateExpenseLiquidationRequest(_presenter.CurrentExpenseLiquidationRequest);
+                    if (ddlApprovalStatus.SelectedValue != "Rejected")
+                        _presenter.SaveOrUpdateExpenseLiquidationRequest(_presenter.CurrentExpenseLiquidationRequest);
                     ShowPrint();
                     if (ddlApprovalStatus.SelectedValue != "Rejected")
                     {
