@@ -147,9 +147,21 @@ namespace Chai.WorkflowManagment.Modules.HRM
         {
             return WorkspaceFactory.CreateReadOnly().Query<EmployeeDetail>(null).ToList();
         }
+
+       
+        
         public EmployeeDetail GetEmployeeDetail(int id)
         {
             return _workspace.Single<EmployeeDetail>(x => x.Id == id);
+        }
+        public EmployeeDetail GetEmployeeDetailByContId(int id)
+        {
+            return _workspace.Single<EmployeeDetail>(x => x.Contract.Id == id);
+        }
+        
+        public EmployeeDetail GetEmployeeDetailByPrevContract(int contid)
+        {
+            return _workspace.Single<EmployeeDetail>(x => x.Contract.Id == contid);
         }
         public IList<EmployeeDetail> ListEmployeeDetails()
         {

@@ -9,17 +9,9 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
 {
     public partial class EmployeeDetail : IEntity
     {
-        public int Id { get; set; }
-  
-       
-        public virtual Setting.EmployeePosition Position { get; set; }
-
-        public virtual Setting.Program Program { get; set; }
-
+        public int Id { get; set; }        
         public string  DutyStation { get; set; }
-
         public decimal Salary { get;  set;}
-
         public string EmploymentStatus { get; set; }
         public string Class { get; set; }
         public string HoursPerWeek { get; set; }
@@ -31,8 +23,10 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public string DescriptiveJobTitle { get; set; }
         public int Supervisor { get; set; }
         public int ReportsTo { get; set; }
-        public virtual HRM.Contract Contract { get; set; }
-      
+        public virtual Contract Contract { get; set; }
+        public virtual EmployeePosition Position { get; set; }
+        public virtual Program Program { get; set; }
+
 
 
     }

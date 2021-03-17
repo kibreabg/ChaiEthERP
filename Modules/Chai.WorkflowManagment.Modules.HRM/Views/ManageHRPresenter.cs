@@ -184,11 +184,15 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         {
             return _controller.GetEmployeeDetail(id);
         }
+        public EmployeeDetail GetEmployeeDetailByContId(int id)
+        {
+            return _controller.GetEmployeeDetailByContId(id);
+        }
 
         #endregion
 
         #region Warning
-       
+
 
         public IList<Warning> GetWarnings()
         {

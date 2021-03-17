@@ -78,8 +78,23 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 int i = 1;
                 foreach (ApprovalLevel AL in GetApprovalSetting(RequestType.OperationalControl_Request.ToString().Replace('_', ' '), CurrentOperationalControlRequest.TotalAmount).ApprovalLevels)
                 {
+                    int originalRequesterId = 0;
                     OperationalControlRequestStatus OCRS = new OperationalControlRequestStatus();
                     OCRS.OperationalControlRequest = CurrentOperationalControlRequest;
+
+                    if (CurrentOperationalControlRequest.PaymentId > 0)
+                    {
+                        originalRequesterId = GetCashPaymentRequest(CurrentOperationalControlRequest.PaymentId).AppUser.Id;
+                    }
+                    else if (CurrentOperationalControlRequest.TravelAdvanceId > 0)
+                    {
+                        originalRequesterId = GetTravelAdvanceRequest(CurrentOperationalControlRequest.TravelAdvanceId).AppUser.Id;
+                    }
+                    else if (CurrentOperationalControlRequest.LiquidationId > 0)
+                    {
+                        originalRequesterId = GetExpenseLiquidation(CurrentOperationalControlRequest.LiquidationId).TravelAdvanceRequest.AppUser.Id;
+                    }
+
                     //All Approver positions must be entered into the database before the approval workflow could run effectively!
                     if (AL.EmployeePosition.PositionName == "Superviser/Line Manager")
                     {
@@ -111,7 +126,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         {
                             if (AL.EmployeePosition.PositionName == "Accountant")
                             {
-                                OCRS.ApproverPosition = AL.EmployeePosition.Id; //So that we can entertain more than one finance manager to handle the request
+                                //So that we can entertain more than one finance manager to handle the request
+                                OCRS.ApproverPosition = AL.EmployeePosition.Id; 
+                            }
+                            else if(originalRequesterId == Approver(AL.EmployeePosition.Id).Id)
+                            {
+                                //The original requester of this bank payment shouldn't approve their request; rather their supervisor
+                                OCRS.Approver = Approver(AL.EmployeePosition.Id).Superviser.Value;
                             }
                             else
                             {

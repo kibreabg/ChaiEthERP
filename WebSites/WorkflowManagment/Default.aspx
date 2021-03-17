@@ -651,6 +651,11 @@
                                                     <asp:Label ID="lblRequestDate" runat="server" Text='<%# Eval("RequestDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
+                                            <asp:TemplateField HeaderText="Original Requester">
+                                                <ItemTemplate>
+                                                    <asp:Label ID="lblOriginalRequester" runat="server"></asp:Label>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
                                             <asp:BoundField DataField="CurrentApprover" HeaderText="Current Approver" SortExpression="CurrentApprover" />
                                         </Columns>
                                         <FooterStyle CssClass="FooterStyle" />

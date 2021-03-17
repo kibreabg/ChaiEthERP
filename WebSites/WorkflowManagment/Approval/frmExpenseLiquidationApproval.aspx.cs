@@ -306,10 +306,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     {
                         ELRS.Approver = _presenter.CurrentUser().Id;
                         _presenter.CurrentExpenseLiquidationRequest.CurrentStatus = ApprovalStatus.Rejected.ToString();
-                        DeleteLiquidationIfRejected();
                         SendEmailRejected(ELRS);
-                        Log.Info(_presenter.GetUser(ELRS.Approver).FullName + " has " + (ELRS.ApprovalStatus).ToUpper() + " Expense Liquidation Request made by " + (_presenter.CurrentExpenseLiquidationRequest.TravelAdvanceRequest.AppUser.FullName).ToUpper());
-
+                        Log.Info(_presenter.CurrentUser().FullName + " has " + (ELRS.ApprovalStatus).ToUpper() + " Expense Liquidation Request made by " + (_presenter.CurrentExpenseLiquidationRequest.TravelAdvanceRequest.AppUser.FullName).ToUpper());
+                        DeleteLiquidationIfRejected();
                     }
                     break;
                 }
@@ -523,7 +522,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 if (_presenter.CurrentExpenseLiquidationRequest.ProgressStatus != ProgressStatus.Completed.ToString())
                 {
                     SaveExpenseLiquidationRequestStatus();
-                    _presenter.SaveOrUpdateExpenseLiquidationRequest(_presenter.CurrentExpenseLiquidationRequest);
+                    if (ddlApprovalStatus.SelectedValue != "Rejected")
+                        _presenter.SaveOrUpdateExpenseLiquidationRequest(_presenter.CurrentExpenseLiquidationRequest);
                     ShowPrint();
                     if (ddlApprovalStatus.SelectedValue != "Rejected")
                     {
