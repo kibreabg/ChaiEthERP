@@ -150,7 +150,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 _presenter.CurrentLeaveRequest.Balance = txtbalance.Text != "" ? Convert.ToDecimal(txtbalance.Text) : 0;
                 _presenter.CurrentLeaveRequest.Forward = txtforward.Text != "" ? Convert.ToDecimal(txtforward.Text) : 0;
                 _presenter.CurrentLeaveRequest.Type = ddltype.SelectedValue;
-                if(ddlLeaveType.SelectedItem.Text == "Sick Leave" || ddlLeaveType.SelectedItem.Text == "Exam Leave" || ddlLeaveType.SelectedItem.Text == "Maternity Leave" || ddlLeaveType.SelectedItem.Text == "Other Leaves")
+                if(ddlLeaveType.SelectedItem.Text == "Sick Leave" || ddlLeaveType.SelectedItem.Text == "Exam Leave" || ddlLeaveType.SelectedItem.Text == "Maternity Leave" || ddlLeaveType.SelectedItem.Text == "Paternity Leave" || ddlLeaveType.SelectedItem.Text == "Other Leaves")
                     _presenter.CurrentLeaveRequest.FilePath = UploadFile();
                 SaveLeaveRequestStatus();
 
@@ -278,7 +278,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 if (ddlLeaveType.SelectedItem.Text != "Annual Leave")
                 {
-                    if (ddlLeaveType.SelectedItem.Text != "Sick Leave" || ddlLeaveType.SelectedItem.Text != "Exam Leave" || ddlLeaveType.SelectedItem.Text != "Maternity Leave" || ddlLeaveType.SelectedItem.Text != "Other Leaves")
+                    if (ddlLeaveType.SelectedItem.Text != "Sick Leave" || ddlLeaveType.SelectedItem.Text != "Exam Leave" || ddlLeaveType.SelectedItem.Text != "Maternity Leave" || ddlLeaveType.SelectedItem.Text == "Paternity Leave" || ddlLeaveType.SelectedItem.Text != "Other Leaves")
                     {
                         GetCurrentApprover();
                         _presenter.SaveOrUpdateLeaveRequest(_presenter.CurrentLeaveRequest);
@@ -290,7 +290,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                        // Master.ShowMessage(new AppMessage("Successfully did a Leave  Request, Reference No - <b>'" + _presenter.CurrentLeaveRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
                         Log.Info(_presenter.CurrentUser().FullName + " has requested for a Leave Type of " + ddlLeaveType.SelectedValue);
                     }
-                    else if (ddlLeaveType.SelectedItem.Text == "Sick Leave" || ddlLeaveType.SelectedItem.Text == "Exam Leave" || ddlLeaveType.SelectedItem.Text != "Maternity Leave" || ddlLeaveType.SelectedItem.Text == "Other Leaves")
+                    else if (ddlLeaveType.SelectedItem.Text == "Sick Leave" || ddlLeaveType.SelectedItem.Text == "Exam Leave" || ddlLeaveType.SelectedItem.Text != "Maternity Leave" || ddlLeaveType.SelectedItem.Text == "Paternity Leave" || ddlLeaveType.SelectedItem.Text == "Other Leaves")
                     {
                         if (_presenter.CurrentLeaveRequest.FilePath != "")
                         {
@@ -538,7 +538,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
 
             }
-            else if (ddlLeaveType.SelectedItem.Text.Contains("Sick Leave") || ddlLeaveType.SelectedItem.Text.Contains("Exam Leave") || ddlLeaveType.SelectedItem.Text.Contains("Other Leaves") || ddlLeaveType.SelectedItem.Text.Contains("Maternity Leave"))
+            else if (ddlLeaveType.SelectedItem.Text.Contains("Sick Leave") || ddlLeaveType.SelectedItem.Text.Contains("Exam Leave") || ddlLeaveType.SelectedItem.Text.Contains("Other Leaves") || ddlLeaveType.SelectedItem.Text.Contains("Maternity Leave") || ddlLeaveType.SelectedItem.Text == "Paternity Leave")
             {
 
 
