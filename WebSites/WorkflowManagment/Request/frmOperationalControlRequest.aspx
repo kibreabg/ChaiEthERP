@@ -12,12 +12,6 @@
                 $('#searchModal').modal('show');
             });
         }
-
-        function showBeneficiaryModal() {
-            $(document).ready(function () {
-                $('#addBeneficiaryModal').modal('show');
-            });
-        }
     </script>
     <div class="jarviswidget" id="wid-id-8" data-widget-editbutton="false" data-widget-custombutton="false">
         <header>
@@ -77,13 +71,13 @@
                             <section>
                                 <div class="inline-group">
                                     <label class="radio">
-                                        <asp:RadioButton ID="rbAccount" AutoPostBack="true" OnCheckedChanged="rbAccount_CheckedChanged" Checked="true" GroupName="PaymentType" runat="server" />
+                                        <asp:RadioButton ID="rbAccount" Checked="true" GroupName="PaymentType" runat="server" />
                                         <i></i>Transfer to Account</label>
                                     <label class="radio">
-                                        <asp:RadioButton ID="rbCheque" AutoPostBack="true" OnCheckedChanged="rbCheque_CheckedChanged" GroupName="PaymentType" runat="server" />
+                                        <asp:RadioButton ID="rbCheque" GroupName="PaymentType" runat="server" />
                                         <i></i>Cheque Payment</label>
                                     <label class="radio">
-                                        <asp:RadioButton ID="rbTelegraphic" AutoPostBack="true" OnCheckedChanged="rbTelegraphic_CheckedChanged" GroupName="PaymentType" runat="server" />
+                                        <asp:RadioButton ID="rbTelegraphic" GroupName="PaymentType" runat="server" />
                                         <i></i>Telegraphic Transfer</label>
                                 </div>
                             </section>
@@ -93,10 +87,9 @@
                                 <section class="col col-6">
                                     <label class="label">Beneficiary Name</label>
                                     <label class="select">
-                                        <asp:DropDownList ID="ddlBeneficiary" runat="server" AppendDataBoundItems="True" AutoPostBack="True" DataTextField="BeneficiaryName" DataValueField="Id" OnSelectedIndexChanged="ddlBeneficiary_SelectedIndexChanged">
+                                        <asp:DropDownList ID="ddlBeneficiary" runat="server" AppendDataBoundItems="True" AutoPostBack="True" DataTextField="SupplierName" DataValueField="Id" OnSelectedIndexChanged="ddlBeneficiary_SelectedIndexChanged">
                                             <asp:ListItem Value="0">Select Beneficiary</asp:ListItem>
                                         </asp:DropDownList><i></i>
-                                        <asp:LinkButton ID="lnkAddBeneficiary" runat="server" OnClick="lnkAddBeneficiary_Click">Add Beneficiary</asp:LinkButton>
                                     </label>
                                     <asp:RequiredFieldValidator ID="rfvddlBeneficiary" runat="server" ControlToValidate="ddlBeneficiary" CssClass="validator" Display="Dynamic" ErrorMessage="Beneficiary is required" SetFocusOnError="true" InitialValue="0" ValidationGroup="saveMain"></asp:RequiredFieldValidator>
                                 </section>
@@ -121,22 +114,13 @@
                                     </label>
                                 </section>
                             </div>
-                        </asp:Panel>
-                        <asp:Panel ID="pnlChequeTelegraphic" runat="server" Visible="false">
                             <div class="row">
-                                <section class="col col-6">
-                                    <label class="label">Beneficiary Name</label>
-                                    <label class="input">
-                                        <asp:TextBox ID="txtPayee" runat="server"></asp:TextBox>
-                                    </label>
-                                    <asp:RequiredFieldValidator ID="rfvtxtPayee" runat="server" Enabled="false" ControlToValidate="txtPayee" CssClass="validator" Display="Dynamic" ErrorMessage="Beneficiary is required" SetFocusOnError="true" ValidationGroup="saveMain"></asp:RequiredFieldValidator>
-                                </section>
                                 <section class="col col-6">
                                     <label class="label">Telephone Number</label>
                                     <label class="input">
                                         <asp:TextBox ID="txtTelephoneNo" runat="server"></asp:TextBox>
                                     </label>
-                                    <asp:RequiredFieldValidator ID="rfvtxtTelephoneNo" runat="server" Enabled="false" ControlToValidate="txtTelephoneNo" CssClass="validator" Display="Dynamic" ErrorMessage="Enter Beneficiary's phone no." SetFocusOnError="true" ValidationGroup="saveMain"></asp:RequiredFieldValidator>
+                                    <asp:RequiredFieldValidator ID="rfvtxtTelephoneNo" runat="server" ControlToValidate="txtTelephoneNo" CssClass="validator" Display="Dynamic" ErrorMessage="Enter Beneficiary's phone no." SetFocusOnError="true" ValidationGroup="saveMain"></asp:RequiredFieldValidator>
                                 </section>
                             </div>
                         </asp:Panel>
@@ -392,7 +376,7 @@
                                         <Columns>
                                             <asp:BoundField DataField="RequestNo" HeaderText="Vourcher No" SortExpression="RequestNo" />
                                             <asp:BoundField DataField="RequestDate" HeaderText="Request Date" SortExpression="RequestDate" />
-                                            <asp:BoundField DataField="Beneficiary.BeneficiaryName" HeaderText="Account Transfer Made To" SortExpression="Beneficiary.BeneficiaryName" />
+                                            <asp:BoundField DataField="Supplier.SupplierName" HeaderText="Account Transfer Made To" SortExpression="Supplier.SupplierName" />
                                             <asp:BoundField DataField="Payee" HeaderText="Cheque/Letter Made Out To" SortExpression="Payee" />
                                             <asp:BoundField DataField="TotalAmount" HeaderText="Total Amount" SortExpression="TotalAmount" />
                                             <asp:CommandField ShowSelectButton="True" />
@@ -408,94 +392,6 @@
                     </div>
                 </div>
 
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="addBeneficiaryModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" style="width: 800px;">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        &times;</button>
-                    <h4 class="modal-title" id="myDetailModalLabel">Add Beneficiary</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="jarviswidget-editbox"></div>
-                    <div class="widget-body no-padding">
-                        <div class="smart-form">
-                            <fieldset>
-                                <div class="row">
-                                    <asp:DataGrid ID="dgBeneficiary" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
-                                        CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
-                                        GridLines="None"
-                                        OnCancelCommand="dgBeneficiary_CancelCommand" OnDeleteCommand="dgBeneficiary_DeleteCommand" OnEditCommand="dgBeneficiary_EditCommand"
-                                        OnItemCommand="dgBeneficiary_ItemCommand" OnItemDataBound="dgBeneficiary_ItemDataBound" OnUpdateCommand="dgBeneficiary_UpdateCommand"
-                                        ShowFooter="True">
-
-                                        <Columns>
-                                            <asp:TemplateColumn HeaderText="Beneficiary Name">
-                                                <ItemTemplate>
-                                                    <%# DataBinder.Eval(Container.DataItem, "BeneficiaryName")%>
-                                                </ItemTemplate>
-                                                <EditItemTemplate>
-                                                    <asp:TextBox ID="txtEdtBeneficiaryName" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "BeneficiaryName")%>'></asp:TextBox>
-                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" CssClass="validator" ControlToValidate="txtEdtBeneficiaryName" ErrorMessage="Beneficiary Name Required" ValidationGroup="1">*</asp:RequiredFieldValidator>
-                                                </EditItemTemplate>
-                                                <FooterTemplate>
-                                                    <asp:TextBox ID="txtBeneficiaryName" runat="server" CssClass="form-control"></asp:TextBox>
-                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" CssClass="validator" ControlToValidate="txtBeneficiaryName" ErrorMessage="Beneficiary Name Required" ValidationGroup="2">*</asp:RequiredFieldValidator>
-                                                </FooterTemplate>
-                                            </asp:TemplateColumn>
-                                            <asp:TemplateColumn HeaderText="Bank Name">
-                                                <ItemTemplate>
-                                                    <%# DataBinder.Eval(Container.DataItem, "BankName")%>
-                                                </ItemTemplate>
-                                                <EditItemTemplate>
-                                                    <asp:TextBox ID="txtEdtBankName" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "BankName")%>'></asp:TextBox>
-                                                    <asp:RequiredFieldValidator ID="rfvBankName" runat="server" CssClass="validator" ControlToValidate="txtEdtBankName" ErrorMessage="Bank Name Required" ValidationGroup="1">*</asp:RequiredFieldValidator>
-                                                </EditItemTemplate>
-                                                <FooterTemplate>
-                                                    <asp:TextBox ID="txtBankName" runat="server" CssClass="form-control"></asp:TextBox>
-                                                    <asp:RequiredFieldValidator ID="rfvfBankName" runat="server" CssClass="validator" ControlToValidate="txtBankName" ErrorMessage="Bank Name Required" ValidationGroup="2">*</asp:RequiredFieldValidator>
-                                                </FooterTemplate>
-                                            </asp:TemplateColumn>
-                                            <asp:TemplateColumn HeaderText="Account Number">
-                                                <ItemTemplate>
-                                                    <%# DataBinder.Eval(Container.DataItem, "AccountNumber")%>
-                                                </ItemTemplate>
-                                                <EditItemTemplate>
-                                                    <asp:TextBox ID="txtEdtAccountNumber" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "AccountNumber")%>'></asp:TextBox>
-                                                    <asp:RequiredFieldValidator ID="rfvAccountNumber" runat="server" CssClass="validator" ControlToValidate="txtEdtAccountNumber" ErrorMessage="Account Number Required" ValidationGroup="1">*</asp:RequiredFieldValidator>
-                                                </EditItemTemplate>
-                                                <FooterTemplate>
-                                                    <asp:TextBox ID="txtAccountNumber" runat="server" CssClass="form-control"></asp:TextBox>
-                                                    <asp:RequiredFieldValidator ID="rfvfAccountNumber" runat="server" CssClass="validator" ControlToValidate="txtAccountNumber" ErrorMessage="Account Number Required" ValidationGroup="2">*</asp:RequiredFieldValidator>
-                                                </FooterTemplate>
-                                            </asp:TemplateColumn>
-                                            <asp:TemplateColumn HeaderText="Actions">
-                                                <EditItemTemplate>
-                                                    <asp:LinkButton ID="lnkUpdate" runat="server" CommandName="Update" ValidationGroup="1" CssClass="btn btn-xs btn-default"><i class="fa fa-save"></i></asp:LinkButton>
-                                                    <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default"><i class="fa fa-times"></i></asp:LinkButton>
-                                                </EditItemTemplate>
-                                                <FooterTemplate>
-                                                    <asp:LinkButton ID="lnkAddNew" runat="server" CommandName="AddNew" ValidationGroup="2" CssClass="btn btn-sm btn-success"><i class="fa fa-save"></i></asp:LinkButton>
-                                                </FooterTemplate>
-                                                <ItemTemplate>
-                                                    <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
-                                                    <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default" OnClientClick="javascript:return confirm('Are you sure you want to delete this entry?');"><i class="fa fa-times"></i></asp:LinkButton>
-                                                </ItemTemplate>
-                                            </asp:TemplateColumn>
-                                        </Columns>
-                                        <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
-                                    </asp:DataGrid>
-                                </div>
-                            </fieldset>
-                            <footer>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                            </footer>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

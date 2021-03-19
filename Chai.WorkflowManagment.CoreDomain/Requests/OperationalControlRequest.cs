@@ -37,7 +37,7 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public int PaymentId { get; set; }
         public int LiquidationId { get; set; }
         public int SettlementId { get; set; }
-        public virtual Beneficiary Beneficiary { get; set; }
+        public virtual Supplier Supplier { get; set; }
         public virtual AppUser AppUser { get; set; }
         public virtual Account Account { get; set; }
         public virtual IList<OperationalControlRequestDetail> OperationalControlRequestDetails { get; set; }

@@ -15,13 +15,13 @@ namespace Chai.WorkflowManagment.CoreDomain.Setting
         public string SupplierName { get; set; }
         public string SupplierAddress { get; set; }
         public string SupplierContact { get; set; }
+        public string BankName { get; set; }
+        public string AccountNumber { get; set; }
         public string Email { get; set; }
         public string ContactPhone { get; set; }
         public string Status { get; set; }
-        public virtual SupplierType SupplierType { get; set; }
-
         public string SupplierNameType { get; set; }
-
+        public virtual SupplierType SupplierType { get; set; }
 
     }
 }

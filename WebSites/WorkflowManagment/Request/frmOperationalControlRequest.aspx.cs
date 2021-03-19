@@ -97,10 +97,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return txtDescription.Text; }
         }
-        public string GetPayee
-        {
-            get { return txtPayee.Text; }
-        }
         public string GetTelephoneNo
         {
             get { return txtTelephoneNo.Text; }
@@ -140,6 +136,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         {
                             _presenter.CurrentOperationalControlRequest.Description = CPR.Description;
                             _presenter.CurrentOperationalControlRequest.PaymentId = paymentId;
+                            _presenter.CurrentOperationalControlRequest.Supplier = CPR.Supplier;
                             txtOriginalRequester.Text = CPR.AppUser.FullName;
 
                             foreach (CashPaymentRequestDetail CPRD in CPR.CashPaymentRequestDetails)
@@ -297,12 +294,19 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             lst.Text = " Select Beneficiary ";
             lst.Value = "0";
             ddlBeneficiary.Items.Add(lst);
-            ddlBeneficiary.DataSource = _presenter.GetBeneficiaries();
+            ddlBeneficiary.DataSource = _presenter.GetSuppliers();
             ddlBeneficiary.DataBind();
         }
         private void BindOperationalControlDetails()
         {
             txtDescription.Text = _presenter.CurrentOperationalControlRequest.Description;
+            if (_presenter.CurrentOperationalControlRequest.Supplier != null)
+            {
+                ddlBeneficiary.SelectedValue = _presenter.CurrentOperationalControlRequest.Supplier.Id.ToString();
+                txtBankName.Text = _presenter.CurrentOperationalControlRequest.Supplier.BankName;
+                txtBenAccountNo.Text = _presenter.CurrentOperationalControlRequest.Supplier.AccountNumber;
+                txtTelephoneNo.Text = _presenter.CurrentOperationalControlRequest.Supplier.ContactPhone;
+            }
             dgOperationalControlDetail.DataSource = _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails;
             dgOperationalControlDetail.DataBind();
         }
@@ -321,10 +325,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             _presenter.OnViewLoaded();
             if (_presenter.CurrentOperationalControlRequest != null)
             {
-                if (_presenter.CurrentOperationalControlRequest.Beneficiary != null)
-                    ddlBeneficiary.SelectedValue = _presenter.CurrentOperationalControlRequest.Beneficiary.Id.ToString();
-                txtPayee.Text = _presenter.CurrentOperationalControlRequest.Payee;
-                txtTelephoneNo.Text = _presenter.CurrentOperationalControlRequest.TelephoneNo;
+                if (_presenter.CurrentOperationalControlRequest.Supplier != null)
+                {
+                    ddlBeneficiary.SelectedValue = _presenter.CurrentOperationalControlRequest.Supplier.Id.ToString();
+                    txtBankName.Text = _presenter.CurrentOperationalControlRequest.Supplier.BankName;
+                    txtBenAccountNo.Text = _presenter.CurrentOperationalControlRequest.Supplier.AccountNumber;
+                    txtTelephoneNo.Text = _presenter.CurrentOperationalControlRequest.Supplier.ContactPhone;
+                }
+
                 txtBankName.Text = _presenter.CurrentOperationalControlRequest.BankName;
                 ddlBankAccount.SelectedValue = _presenter.CurrentOperationalControlRequest.Account.Id.ToString();
                 txtBankAccountNo.Text = _presenter.GetBankAccount(_presenter.CurrentOperationalControlRequest.Account.Id).AccountNo;
@@ -631,47 +639,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void ddlBeneficiary_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Beneficiary beneficiary = _presenter.GetBeneficiary(Convert.ToInt32(ddlBeneficiary.SelectedValue));
-            if (beneficiary != null)
+            Supplier supplier = _presenter.GetSupplier(Convert.ToInt32(ddlBeneficiary.SelectedValue));
+            if (supplier != null)
             {
-                txtBankName.Text = beneficiary.BankName;
-                txtBenAccountNo.Text = beneficiary.AccountNumber;
+                txtBankName.Text = supplier.BankName;
+                txtBenAccountNo.Text = supplier.AccountNumber;
             }
             else
             {
                 txtBankName.Text = "";
                 txtBenAccountNo.Text = "";
             }
-        }
-        protected void rbCheque_CheckedChanged(object sender, EventArgs e)
-        {
-            pnlBeneficiaries.Visible = false;
-            pnlChequeTelegraphic.Visible = true;
-            txtBankName.Text = "";
-            txtBenAccountNo.Text = "";
-            ddlBeneficiary.SelectedValue = "0";
-            rfvddlBeneficiary.Enabled = false;
-            rfvtxtPayee.Enabled = true;
-            rfvtxtTelephoneNo.Enabled = true;
-        }
-        protected void rbAccount_CheckedChanged(object sender, EventArgs e)
-        {
-            pnlBeneficiaries.Visible = true;
-            pnlChequeTelegraphic.Visible = false;
-            rfvtxtPayee.Enabled = false;
-            rfvtxtTelephoneNo.Enabled = false;
-            rfvddlBeneficiary.Enabled = true;
-        }
-        protected void rbTelegraphic_CheckedChanged(object sender, EventArgs e)
-        {
-            pnlBeneficiaries.Visible = false;
-            pnlChequeTelegraphic.Visible = true;
-            txtBankName.Text = "";
-            txtBenAccountNo.Text = "";
-            ddlBeneficiary.SelectedValue = "0";
-            rfvddlBeneficiary.Enabled = false;
-            rfvtxtPayee.Enabled = true;
-            rfvtxtTelephoneNo.Enabled = true;
         }
         #region Attachments
         protected void btnUpload_Click(object sender, EventArgs e)
@@ -720,130 +698,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
         }
         #endregion
-        #region Beneficiaries
-        void BindBeneficiaries()
-        {
-            dgBeneficiary.DataSource = _presenter.ListBeneficiaries("");
-            dgBeneficiary.DataBind();
-            PopBeneficiaries();
-        }
-        protected void dgBeneficiary_CancelCommand(object source, DataGridCommandEventArgs e)
-        {
-            this.dgBeneficiary.EditItemIndex = -1;
-            ScriptManager.RegisterStartupScript(this, GetType(), "receiveBeneficiaryModal", "showBeneficiaryModal();", true);
-        }
-        protected void dgBeneficiary_DeleteCommand(object source, DataGridCommandEventArgs e)
-        {
-            int id = (int)dgBeneficiary.DataKeys[e.Item.ItemIndex];
-            Beneficiary beneficiary = _presenter.GetBeneficiaryById(id);
-            try
-            {
-                _presenter.DeleteBeneficiary(beneficiary);
-                BindBeneficiaries();
-
-                Master.ShowMessage(new AppMessage("beneficiary was Removed Successfully", RMessageType.Info));
-            }
-            catch (Exception ex)
-            {
-                Master.ShowMessage(new AppMessage("Error: Unable to delete beneficiary. " + ex.Message, RMessageType.Error));
-                ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
-            }
-            ScriptManager.RegisterStartupScript(this, GetType(), "receiveBeneficiaryModal", "showBeneficiaryModal();", true);
-        }
-        protected void dgBeneficiary_ItemCommand(object source, DataGridCommandEventArgs e)
-        {
-            Beneficiary beneficiary = new Beneficiary();
-            if (e.CommandName == "AddNew")
-            {
-                try
-                {
-                    TextBox txtName = e.Item.FindControl("txtBeneficiaryName") as TextBox;
-                    beneficiary.BeneficiaryName = txtName.Text;
-                    TextBox txtBankName = e.Item.FindControl("txtBankName") as TextBox;
-                    beneficiary.BankName = txtBankName.Text;
-                    TextBox txtAccountNumber = e.Item.FindControl("txtAccountNumber") as TextBox;
-                    beneficiary.AccountNumber = txtAccountNumber.Text;
-                    beneficiary.Status = "Active";
-                    SaveBeneficiary(beneficiary);
-                    dgBeneficiary.EditItemIndex = -1;
-                    BindBeneficiaries();
-                }
-                catch (Exception ex)
-                {
-                    Master.ShowMessage(new AppMessage("Error: Unable to Add Beneficiary " + ex.Message, RMessageType.Error));
-                    ExceptionUtility.LogException(ex, ex.Source);
-                    ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
-                }
-            }
-            ScriptManager.RegisterStartupScript(this, GetType(), "receiveBeneficiaryModal", "showBeneficiaryModal();", true);
-        }
-        private void SaveBeneficiary(Beneficiary beneficiary)
-        {
-            try
-            {
-                if (beneficiary.Id <= 0)
-                {
-                    _presenter.SaveOrUpdateBeneficiary(beneficiary);
-                    Master.ShowMessage(new AppMessage("Beneficiary Saved", RMessageType.Info));
-                }
-                else
-                {
-                    _presenter.SaveOrUpdateBeneficiary(beneficiary);
-                    Master.ShowMessage(new AppMessage("Beneficiary Updated", RMessageType.Info));
-                }
-            }
-            catch (Exception ex)
-            {
-                Master.ShowMessage(new AppMessage(ex.Message, RMessageType.Error));
-                ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
-            }
-        }
-        protected void dgBeneficiary_EditCommand(object source, DataGridCommandEventArgs e)
-        {
-            this.dgBeneficiary.EditItemIndex = e.Item.ItemIndex;
-            BindBeneficiaries();
-            ScriptManager.RegisterStartupScript(this, GetType(), "receiveBeneficiaryModal", "showBeneficiaryModal();", true);
-        }
-        protected void dgBeneficiary_ItemDataBound(object sender, DataGridItemEventArgs e)
-        {
-
-        }
-        protected void dgBeneficiary_UpdateCommand(object source, DataGridCommandEventArgs e)
-        {
-
-            int id = (int)dgBeneficiary.DataKeys[e.Item.ItemIndex];
-            Beneficiary beneficiary = _presenter.GetBeneficiaryById(id);
-
-            try
-            {
-                TextBox txtName = e.Item.FindControl("txtEdtBeneficiaryName") as TextBox;
-                beneficiary.BeneficiaryName = txtName.Text;
-                TextBox txtBankName = e.Item.FindControl("txtEdtBankName") as TextBox;
-                beneficiary.BankName = txtBankName.Text;
-                TextBox txtAccountNumber = e.Item.FindControl("txtEdtAccountNumber") as TextBox;
-                beneficiary.AccountNumber = txtAccountNumber.Text;
-                beneficiary.Status = "Active";
-                SaveBeneficiary(beneficiary);
-                dgBeneficiary.EditItemIndex = -1;
-                BindBeneficiaries();
-            }
-            catch (Exception ex)
-            {
-                Master.ShowMessage(new AppMessage("Error: Unable to Update Beneficiary. " + ex.Message, RMessageType.Error));
-                ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
-            }
-            ScriptManager.RegisterStartupScript(this, GetType(), "receiveBeneficiaryModal", "showBeneficiaryModal();", true);
-        }
-        protected void lnkAddBeneficiary_Click(object sender, EventArgs e)
-        {
-            BindBeneficiaries();
-            ScriptManager.RegisterStartupScript(this, GetType(), "receiveBeneficiaryModal", "showBeneficiaryModal();", true);
-        }
-        #endregion
-
     }
 
 }

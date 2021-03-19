@@ -127,9 +127,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             if (AL.EmployeePosition.PositionName == "Accountant")
                             {
                                 //So that we can entertain more than one finance manager to handle the request
-                                OCRS.ApproverPosition = AL.EmployeePosition.Id; 
+                                OCRS.ApproverPosition = AL.EmployeePosition.Id;
                             }
-                            else if(originalRequesterId == Approver(AL.EmployeePosition.Id).Id)
+                            else if (originalRequesterId == Approver(AL.EmployeePosition.Id).Id)
                             {
                                 //The original requester of this bank payment shouldn't approve their request; rather their supervisor
                                 OCRS.Approver = Approver(AL.EmployeePosition.Id).Superviser.Value;
@@ -172,14 +172,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             operationalControlRequest.RequestDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
             operationalControlRequest.Account = _settingController.GetAccount(View.GetBankAccountId);
             if (View.GetBeneficiaryId > 0)
-            {
-                operationalControlRequest.Beneficiary = _settingController.GetBeneficiary(View.GetBeneficiaryId);
-            }
-            else
-            {
-                operationalControlRequest.Payee = View.GetPayee;
-                operationalControlRequest.TelephoneNo = View.GetTelephoneNo;
-            }
+                operationalControlRequest.Supplier = _settingController.GetSupplier(View.GetBeneficiaryId);
             operationalControlRequest.Description = View.GetDescription;
             operationalControlRequest.BankName = View.GetBankName;
             operationalControlRequest.VoucherNo = View.GetVoucherNo;
@@ -279,13 +272,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _settingController.GetAccount(id);
         }
-        public IList<Beneficiary> GetBeneficiaries()
+        public IList<Supplier> GetSuppliers()
         {
-            return _settingController.GetBeneficiaries();
+            return _settingController.GetSuppliers();
         }
-        public Beneficiary GetBeneficiary(int id)
+        public Supplier GetSupplier(int id)
         {
-            return _settingController.GetBeneficiary(id);
+            return _settingController.GetSupplier(id);
         }
         public AppUser CurrentUser()
         {

@@ -727,11 +727,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             lblChaiBankResult.Text = _presenter.CurrentOperationalControlRequest.Account.Name;
             lblChaiBankAccResult.Text = _presenter.CurrentOperationalControlRequest.Account.AccountNo;
             lblDescriptionResult.Text = _presenter.CurrentOperationalControlRequest.Description;
-            if (_presenter.CurrentOperationalControlRequest.Beneficiary != null)
+            if (_presenter.CurrentOperationalControlRequest.Supplier != null)
             {
-                lblBankNameResult.Text = _presenter.CurrentOperationalControlRequest.Beneficiary.BankName;
-                lblBeneficiaryNameResult.Text = _presenter.CurrentOperationalControlRequest.Beneficiary.BeneficiaryName;
-                lblBankAccountNoResult.Text = _presenter.CurrentOperationalControlRequest.Beneficiary.AccountNumber;
+                lblBankNameResult.Text = _presenter.CurrentOperationalControlRequest.Supplier.BankName;
+                lblBeneficiaryNameResult.Text = _presenter.CurrentOperationalControlRequest.Supplier.SupplierName;
+                lblBankAccountNoResult.Text = _presenter.CurrentOperationalControlRequest.Supplier.AccountNumber;
             }
             else
             {

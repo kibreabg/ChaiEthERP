@@ -85,8 +85,7 @@
                 <asp:BoundField DataField="RequestDate" HeaderText="Request Date" SortExpression="RequestDate" />
                 <asp:BoundField DataField="AppUser.FullName" HeaderText="Bank Payment Initiator" SortExpression="AppUser.FullName" />
                 <asp:BoundField DataField="Description" HeaderText="Description" SortExpression="Description" />
-                <asp:BoundField DataField="Beneficiary.BeneficiaryName" HeaderText="Account Transfer Made To" SortExpression="Beneficiary.BeneficiaryName" />
-                <asp:BoundField DataField="Payee" HeaderText="Cheque/Letter Made Out To" SortExpression="Payee" />
+                <asp:BoundField DataField="Supplier.SupplierName" HeaderText="Beneficiary" SortExpression="Supplier.SupplierName" />
                 <asp:BoundField DataField="TotalAmount" HeaderText="Total Amount" SortExpression="TotalAmount" />
                 <asp:ButtonField ButtonType="Button" CommandName="ViewItem" Text="View Item Detail" />
                 <asp:CommandField ButtonType="Button" SelectText="Process Request" ShowSelectButton="True" />
