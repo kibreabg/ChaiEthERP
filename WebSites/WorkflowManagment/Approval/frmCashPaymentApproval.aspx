@@ -4,12 +4,12 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 <%@ Register TagPrefix="asp" Namespace="AjaxControlToolkit" Assembly="AjaxControlToolkit" %>
 <asp:Content ID="Content2" ContentPlaceHolderID="DefaultContent" runat="Server">
-    <script type="text/javascript" language="javascript">
+    <script src="../js/libs/jquery-2.0.2.min.js"></script>
+    <script type="text/javascript">
         function Clickheretoprint(theid) {
             var disp_setting = "toolbar=yes,location=no,directories=yes,menubar=yes,";
             disp_setting += "scrollbars=yes,width=750, height=600, left=100, top=25";
             var content_vlue = document.getElementById(theid).innerHTML;
-
             var docprint = window.open("", "", disp_setting);
             docprint.document.open();
             docprint.document.write('<html><head><title>CHAI Ethiopia ERP</title>');
@@ -18,6 +18,16 @@
             docprint.document.write('</center></body></html>');
             docprint.document.close();
             docprint.focus();
+        }
+        function showApprovalModal() {
+            $(document).ready(function () {
+                $('#approvalModal').modal('show');
+            });
+        }
+        function showDetailModal() {
+            $(document).ready(function () {
+                $('#detailModal').modal('show');
+            });
         }
     </script>
     <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
@@ -104,24 +114,20 @@
             <PagerStyle CssClass="PagerStyle" />
             <RowStyle CssClass="rowstyle" />
         </asp:GridView>
-
         <div>
-
-            <asp:Button runat="server" ID="btnInProgress" Text="" BorderStyle="None" BackColor="#FFFF6C" /><b>In Progress</b><br />
-            <asp:Button runat="server" ID="btnComplete" Text="" BorderStyle="None" BackColor="#FF7251" />
+            <asp:Button runat="server" ID="btnInProgress" Enabled="false" Text="" BorderStyle="None" BackColor="#FFFF6C" /><b>In Progress</b><br />
+            <asp:Button runat="server" ID="btnComplete" Enabled="false" Text="" BorderStyle="None" BackColor="#FF7251" />
             <b>Completed</b>
-
         </div>
-
         <br />
     </div>
-    <asp:Panel ID="pnlApproval" runat="server">
+    <div class="modal fade" id="approvalModal" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         &times;</button>
-                    <h4 class="modal-title">Process Payment Request</h4>
+                    <h4 class="modal-title" id="myModalLabel">Process Purchase Request</h4>
                 </div>
                 <div class="modal-body">
                     <div class="jarviswidget-editbox"></div>
@@ -160,7 +166,7 @@
                             </fieldset>
                             <footer>
                                 <asp:Button ID="btnApprove" runat="server" ValidationGroup="save" Text="Save" OnClick="btnApprove_Click" Enabled="false" CssClass="btn btn-primary"></asp:Button>
-                                <asp:Button ID="btnCancelPopup" runat="server" Text="Close" CssClass="btn btn-default"></asp:Button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                 <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-default" OnClientClick="javascript:Clickheretoprint('divprint');return false;" Enabled="False"></asp:Button>
                                 <asp:Button ID="btnBankPayment" runat="server" CssClass="btn btn-default" OnClick="btnBankPayment_Click" Text="Bank Payment" Visible="False" />
                             </footer>
@@ -169,11 +175,7 @@
                 </div>
             </div>
         </div>
-    </asp:Panel>
-    <asp:ModalPopupExtender runat="server" BackgroundCssClass="modalBackground"
-        Enabled="True" TargetControlID="btnPop" PopupControlID="pnlApproval" CancelControlID="btnCancelPopup"
-        ID="pnlApproval_ModalPopupExtender">
-    </asp:ModalPopupExtender>
+    </div>
     <asp:Panel ID="pnlReimbursement" runat="server">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -306,166 +308,148 @@
         Enabled="True" TargetControlID="btnPop3" PopupControlID="pnlReimbursement" CancelControlID="btnCloseReimburse"
         ID="pnlReimbursement_ModalPopupExtender">
     </asp:ModalPopupExtender>
-    <asp:Panel ID="pnlDetail" runat="server">
-        <div class="modal-content">
-            <div class="modal-body no-padding">
-                <div role="content">
-
-                    <!-- widget edit box -->
-                    <div class="jarviswidget-editbox">
-                        <!-- This area used as dropdown edit box -->
-
-                    </div>
-                    <!-- end widget edit box -->
-
-                    <!-- widget content -->
-                    <div class="widget-body">
-                        <div class="tab-content">
-                            <div class="tab-pane" id="hr1">
-                                <div class="tabbable tabs-below">
-                                    <div class="tab-content padding-10">
-                                        <div class="tab-pane" id="AA">
-                                        </div>
-                                    </div>
-                                    <ul class="nav nav-tabs">
-                                        <li class="active">
-                                            <a data-toggle="tab" href="#AA">Tab 1</a>
-                                        </li>
-                                    </ul>
+    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" style="width: 100%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;</button>
+                    <h4 class="modal-title">Cash Payment Request Detail</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="jarviswidget-editbox"></div>
+                    <div class="widget-body no-padding">
+                        <div class="smart-form">
+                            <div role="content">
+                                <div class="jarviswidget-editbox">
                                 </div>
+                                <div class="widget-body">
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="hr2">
+                                            <ul class="nav nav-tabs">
+                                                <li class="active">
+                                                    <a href="#iss1" data-toggle="tab">Item Details</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#iss2" data-toggle="tab">Attachment</a>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content padding-10">
+                                                <div class="tab-pane active" id="iss1">
+                                                    <asp:DataGrid ID="dgCashPaymentRequestDetail" runat="server"
+                                                        AutoGenerateColumns="False" CellPadding="0" CssClass="table table-striped table-bordered table-hover"
+                                                        DataKeyField="Id" GridLines="None" PagerStyle-CssClass="paginate_button active" ShowFooter="True"
+                                                        OnEditCommand="dgCashPaymentRequestDetail_EditCommand" OnItemDataBound="dgCashPaymentRequestDetail_ItemDataBound"
+                                                        OnUpdateCommand="dgCashPaymentRequestDetail_UpdateCommand">
+                                                        <Columns>
+                                                            <asp:TemplateColumn HeaderText="Account Name">
+                                                                <ItemTemplate>
+                                                                    <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountName")%>
+                                                                </ItemTemplate>
+                                                                <EditItemTemplate>
+                                                                    <asp:DropDownList ID="ddlEdtAccountDescription" CssClass="form-control" OnSelectedIndexChanged="ddlEdtAccountDescription_SelectedIndexChanged" runat="server" AppendDataBoundItems="true" AutoPostBack="True">
+                                                                        <asp:ListItem Value="0">Select Account</asp:ListItem>
+                                                                    </asp:DropDownList>
+                                                                    <i></i>
+                                                                </EditItemTemplate>
+                                                            </asp:TemplateColumn>
+                                                            <asp:TemplateColumn HeaderText="Account Code">
+                                                                <ItemTemplate>
+                                                                    <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountCode")%>
+                                                                </ItemTemplate>
+                                                                <EditItemTemplate>
+                                                                    <asp:TextBox ID="txtEdtAccountCode" ReadOnly="true" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "AccountCode")%>'></asp:TextBox>
+                                                                </EditItemTemplate>
+                                                            </asp:TemplateColumn>
+                                                            <asp:TemplateColumn HeaderText="Amount">
+                                                                <ItemTemplate>
+                                                                    <%# DataBinder.Eval(Container.DataItem, "Amount")%>
+                                                                </ItemTemplate>
+                                                                <EditItemTemplate>
+                                                                    <asp:TextBox ID="txtEdtAmount" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "Amount")%>'></asp:TextBox>
+                                                                </EditItemTemplate>
+                                                            </asp:TemplateColumn>
+                                                            <asp:TemplateColumn HeaderText="Program">
+                                                                <ItemTemplate>
+                                                                    <%# DataBinder.Eval(Container.DataItem, "CashPaymentRequest.Program.ProgramName")%>
+                                                                </ItemTemplate>
+                                                                <EditItemTemplate>
+                                                                    <asp:DropDownList ID="ddlEdtProgram" CssClass="form-control" runat="server" AutoPostBack="true" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlEdtProgram_SelectedIndexChanged">
+                                                                        <asp:ListItem Value="0">Select Program</asp:ListItem>
+                                                                    </asp:DropDownList>
+                                                                    <i></i>
+                                                                    <asp:RequiredFieldValidator ID="rfvddlEdtProgram" runat="server" ControlToValidate="ddlEdtProgram" CssClass="validator" Display="Dynamic" ErrorMessage="Program must be selected" InitialValue="0" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                                                </EditItemTemplate>
+                                                            </asp:TemplateColumn>
+                                                            <asp:TemplateColumn HeaderText="Project ID">
+                                                                <ItemTemplate>
+                                                                    <%# DataBinder.Eval(Container.DataItem, "Project.ProjectCode")%>
+                                                                </ItemTemplate>
+                                                                <EditItemTemplate>
+                                                                    <asp:DropDownList ID="ddlEdtProject" CssClass="form-control" runat="server" AutoPostBack="true" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlEdtProject_SelectedIndexChanged">
+                                                                        <asp:ListItem Value="0">Select Project</asp:ListItem>
+                                                                    </asp:DropDownList>
+                                                                    <i></i>
+                                                                    <asp:RequiredFieldValidator ID="rfvddlEdtProject" runat="server" ControlToValidate="ddlEdtProject" CssClass="validator" Display="Dynamic" ErrorMessage="Project must be selected" InitialValue="0" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                                                </EditItemTemplate>
+                                                            </asp:TemplateColumn>
+                                                            <asp:TemplateColumn HeaderText="Grant ID">
+                                                                <ItemTemplate>
+                                                                    <%# DataBinder.Eval(Container.DataItem, "Grant.GrantCode")%>
+                                                                </ItemTemplate>
+                                                                <EditItemTemplate>
+                                                                    <asp:DropDownList ID="ddlEdtGrant" runat="server" CssClass="form-control" DataTextField="GrantCode" DataValueField="Id">
+                                                                        <asp:ListItem Value="0">Select Grant</asp:ListItem>
+                                                                    </asp:DropDownList>
+                                                                    <asp:RequiredFieldValidator ID="RfvGrant" runat="server" ControlToValidate="ddlEdtGrant" ErrorMessage="Grant is required" InitialValue="0" SetFocusOnError="True" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                                                </EditItemTemplate>
+                                                            </asp:TemplateColumn>
+                                                            <asp:TemplateColumn HeaderText="Actions">
+                                                                <EditItemTemplate>
+                                                                    <asp:LinkButton ID="lnkUpdate" runat="server" CausesValidation="true" CommandName="Update" CssClass="btn btn-xs btn-default" ValidationGroup="edit"><i class="fa fa-save"></i></asp:LinkButton>
+                                                                </EditItemTemplate>
+                                                                <ItemTemplate>
+                                                                    <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateColumn>
+                                                        </Columns>
+                                                        <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
+                                                    </asp:DataGrid>
+                                                </div>
+                                                <div class="tab-pane" id="iss2">
+                                                    <asp:GridView ID="grvdetailAttachments"
+                                                        runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                                                        CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
+                                                        <RowStyle CssClass="rowstyle" />
+                                                        <Columns>
+                                                            <asp:BoundField DataField="FilePath" HeaderText="File Name" SortExpression="FilePath" />
 
-                            </div>
-                            <div class="tab-pane active" id="hr2">
-                                <ul class="nav nav-tabs">
-                                    <li class="active">
-                                        <a href="#iss1" data-toggle="tab">Item Details</a>
-                                    </li>
-                                    <li>
-                                        <a href="#iss2" data-toggle="tab">Attachment</a>
-                                    </li>
-
-                                </ul>
-                                <div class="tab-content padding-10">
-                                    <div class="tab-pane active" id="iss1">
-                                        <asp:DataGrid ID="dgCashPaymentRequestDetail" runat="server"
-                                            AutoGenerateColumns="False" CellPadding="0" CssClass="table table-striped table-bordered table-hover"
-                                            DataKeyField="Id" GridLines="None" PagerStyle-CssClass="paginate_button active" ShowFooter="True"
-                                            OnEditCommand="dgCashPaymentRequestDetail_EditCommand" OnItemDataBound="dgCashPaymentRequestDetail_ItemDataBound"
-                                            OnUpdateCommand="dgCashPaymentRequestDetail_UpdateCommand">
-                                            <Columns>
-                                                <asp:TemplateColumn HeaderText="Account Name">
-                                                    <ItemTemplate>
-                                                        <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountName")%>
-                                                    </ItemTemplate>
-                                                    <EditItemTemplate>
-                                                        <asp:DropDownList ID="ddlEdtAccountDescription" CssClass="form-control" OnSelectedIndexChanged="ddlEdtAccountDescription_SelectedIndexChanged" runat="server" AppendDataBoundItems="true" AutoPostBack="True">
-                                                            <asp:ListItem Value="0">Select Account</asp:ListItem>
-                                                        </asp:DropDownList>
-                                                        <i></i>
-                                                    </EditItemTemplate>
-                                                </asp:TemplateColumn>
-                                                <asp:TemplateColumn HeaderText="Account Code">
-                                                    <ItemTemplate>
-                                                        <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountCode")%>
-                                                    </ItemTemplate>
-                                                    <EditItemTemplate>
-                                                        <asp:TextBox ID="txtEdtAccountCode" ReadOnly="true" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "AccountCode")%>'></asp:TextBox>
-                                                    </EditItemTemplate>
-                                                </asp:TemplateColumn>
-                                                <asp:TemplateColumn HeaderText="Amount">
-                                                    <ItemTemplate>
-                                                        <%# DataBinder.Eval(Container.DataItem, "Amount")%>
-                                                    </ItemTemplate>
-                                                    <EditItemTemplate>
-                                                        <asp:TextBox ID="txtEdtAmount" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "Amount")%>'></asp:TextBox>
-                                                    </EditItemTemplate>
-                                                </asp:TemplateColumn>
-                                                <asp:TemplateColumn HeaderText="Program">
-                                                    <ItemTemplate>
-                                                        <%# DataBinder.Eval(Container.DataItem, "CashPaymentRequest.Program.ProgramName")%>
-                                                    </ItemTemplate>
-                                                    <EditItemTemplate>
-                                                        <asp:DropDownList ID="ddlEdtProgram" CssClass="form-control" runat="server" AutoPostBack="true" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlEdtProgram_SelectedIndexChanged">
-                                                            <asp:ListItem Value="0">Select Program</asp:ListItem>
-                                                        </asp:DropDownList>
-                                                        <i></i>
-                                                        <asp:RequiredFieldValidator ID="rfvddlEdtProgram" runat="server" ControlToValidate="ddlEdtProgram" CssClass="validator" Display="Dynamic" ErrorMessage="Program must be selected" InitialValue="0" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
-                                                    </EditItemTemplate>
-                                                </asp:TemplateColumn>
-                                                <asp:TemplateColumn HeaderText="Project ID">
-                                                    <ItemTemplate>
-                                                        <%# DataBinder.Eval(Container.DataItem, "Project.ProjectCode")%>
-                                                    </ItemTemplate>
-                                                    <EditItemTemplate>
-                                                        <asp:DropDownList ID="ddlEdtProject" CssClass="form-control" runat="server" AutoPostBack="true" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlEdtProject_SelectedIndexChanged">
-                                                            <asp:ListItem Value="0">Select Project</asp:ListItem>
-                                                        </asp:DropDownList>
-                                                        <i></i>
-                                                        <asp:RequiredFieldValidator ID="rfvddlEdtProject" runat="server" ControlToValidate="ddlEdtProject" CssClass="validator" Display="Dynamic" ErrorMessage="Project must be selected" InitialValue="0" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
-                                                    </EditItemTemplate>
-                                                </asp:TemplateColumn>
-                                                <asp:TemplateColumn HeaderText="Grant ID">
-                                                    <ItemTemplate>
-                                                        <%# DataBinder.Eval(Container.DataItem, "Grant.GrantCode")%>
-                                                    </ItemTemplate>
-                                                    <EditItemTemplate>
-                                                        <asp:DropDownList ID="ddlEdtGrant" runat="server" CssClass="form-control" DataTextField="GrantCode" DataValueField="Id">
-                                                            <asp:ListItem Value="0">Select Grant</asp:ListItem>
-                                                        </asp:DropDownList>
-                                                        <asp:RequiredFieldValidator ID="RfvGrant" runat="server" ControlToValidate="ddlEdtGrant" ErrorMessage="Grant is required" InitialValue="0" SetFocusOnError="True" ValidationGroup="edit"></asp:RequiredFieldValidator>
-                                                    </EditItemTemplate>
-                                                </asp:TemplateColumn>
-                                                <asp:TemplateColumn HeaderText="Actions">
-                                                    <EditItemTemplate>
-                                                        <asp:LinkButton ID="lnkUpdate" runat="server" CausesValidation="true" CommandName="Update" CssClass="btn btn-xs btn-default" ValidationGroup="edit"><i class="fa fa-save"></i></asp:LinkButton>
-                                                    </EditItemTemplate>
-                                                    <ItemTemplate>
-                                                        <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
-                                                    </ItemTemplate>
-                                                </asp:TemplateColumn>
-                                            </Columns>
-                                            <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
-                                        </asp:DataGrid>
-                                    </div>
-                                    <div class="tab-pane" id="iss2">
-                                        <asp:GridView ID="grvdetailAttachments"
-                                            runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                                            CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
-                                            <RowStyle CssClass="rowstyle" />
-                                            <Columns>
-                                                <asp:BoundField DataField="FilePath" HeaderText="File Name" SortExpression="FilePath" />
-
-                                                <asp:TemplateField>
-                                                    <ItemTemplate>
-                                                        <asp:LinkButton ID="lnkDownload2" Text="Download" CommandArgument='<%# Eval("FilePath") %>' runat="server" OnClick="DownloadFile2"></asp:LinkButton>
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
-                                            </Columns>
-                                            <FooterStyle CssClass="FooterStyle" />
-                                            <HeaderStyle CssClass="headerstyle" />
-                                            <PagerStyle CssClass="PagerStyle" />
-                                            <RowStyle CssClass="rowstyle" />
-                                        </asp:GridView>
+                                                            <asp:TemplateField>
+                                                                <ItemTemplate>
+                                                                    <asp:LinkButton ID="lnkDownload2" Text="Download" CommandArgument='<%# Eval("FilePath") %>' runat="server" OnClick="DownloadFile2"></asp:LinkButton>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                        </Columns>
+                                                        <FooterStyle CssClass="FooterStyle" />
+                                                        <HeaderStyle CssClass="headerstyle" />
+                                                        <PagerStyle CssClass="PagerStyle" />
+                                                        <RowStyle CssClass="rowstyle" />
+                                                    </asp:GridView>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <footer>
-                                <asp:Button ID="btnCancelPopup2" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" OnClick="btnCancelPopup2_Click"></asp:Button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                             </footer>
                         </div>
-
                     </div>
-                    <!-- end widget content -->
-
                 </div>
             </div>
         </div>
-
-    </asp:Panel>
-    <asp:ModalPopupExtender runat="server" BackgroundCssClass="modalBackground"
-        Enabled="True" TargetControlID="btnPop2" PopupControlID="pnlDetail" CancelControlID="btnCancelPopup2"
-        ID="pnlDetail_ModalPopupExtender">
-    </asp:ModalPopupExtender>
+    </div>
     <div id="divprint" style="display: none;">
         <fieldset>
             <table style="width: 100%;">

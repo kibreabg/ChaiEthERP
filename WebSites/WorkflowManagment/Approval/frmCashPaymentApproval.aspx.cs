@@ -430,7 +430,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             Response.AppendHeader("Content-Disposition", "attachment; filename=" + Path.GetFileName(filePath));
             Response.WriteFile(filePath);
             Response.End();
-            pnlDetail_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
         }
         protected void DownloadFile2(object sender, EventArgs e)
         {
@@ -484,7 +484,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             BindCashPaymentRequestStatus();
             txtRejectedReason.Visible = false;
             rfvRejectedReason.Enabled = false;
-            pnlApproval_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
         }
         protected void grvCashPaymentRequestList_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
@@ -503,7 +503,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     dgCashPaymentRequestDetail.DataSource = _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails;
                     dgCashPaymentRequestDetail.DataBind();
                     BindAttachments();
-                    pnlDetail_ModalPopupExtender.Show();
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
                 }
                 else if (e.CommandName == "Retire")
                 {
@@ -545,7 +545,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
                     btnApprove.Enabled = false;
                     BindSearchCashPaymentRequestGrid();
-                    pnlApproval_ModalPopupExtender.Show();
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
                 }
                 PrintTransaction();
             }
@@ -576,10 +576,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             grvStatuses.DataSource = _presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses;
             grvStatuses.DataBind();
         }
-        protected void btnCancelPopup2_Click(object sender, EventArgs e)
-        {
-            pnlDetail.Visible = false;
-        }
         protected void grvStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses != null)
@@ -605,7 +601,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 txtRejectedReason.Visible = false;
                 rfvRejectedReason.Enabled = false;
             }
-            pnlApproval_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
         }
         protected void dgCashPaymentRequestDetail_ItemDataBound(object sender, DataGridItemEventArgs e)
         {
@@ -687,7 +683,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             this.dgCashPaymentRequestDetail.EditItemIndex = e.Item.ItemIndex;
             dgCashPaymentRequestDetail.DataSource = _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails;
             dgCashPaymentRequestDetail.DataBind();
-            pnlDetail_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
         }
         protected void dgCashPaymentRequestDetail_UpdateCommand(object source, DataGridCommandEventArgs e)
         {
@@ -720,7 +716,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 dgCashPaymentRequestDetail.EditItemIndex = -1;
                 dgCashPaymentRequestDetail.DataSource = _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails;
                 dgCashPaymentRequestDetail.DataBind();
-                pnlDetail_ModalPopupExtender.Show();
+                ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
                 Master.ShowMessage(new AppMessage("Payment Detail Successfully Updated", RMessageType.Info));
             }
             catch (Exception ex)
@@ -733,21 +729,21 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             DropDownList ddl = (DropDownList)sender;
             TextBox txtAccountCode = ddl.FindControl("txtEdtAccountCode") as TextBox;
             txtAccountCode.Text = _presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)).AccountCode;
-            pnlDetail_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
         }
         protected void ddlEdtProject_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
             DropDownList ddlEdtGrant = ddl.FindControl("ddlEdtGrant") as DropDownList;
             BindGrant(ddlEdtGrant, Convert.ToInt32(ddl.SelectedValue));
-            pnlDetail_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
         }
         protected void ddlEdtProgram_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
             DropDownList ddlEdtProject = ddl.FindControl("ddlEdtProject") as DropDownList;
             BindProject(ddlEdtProject, Convert.ToInt32(ddl.SelectedValue));
-            pnlDetail_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
         }
         protected void btnCancel_Click(object sender, EventArgs e)
         {

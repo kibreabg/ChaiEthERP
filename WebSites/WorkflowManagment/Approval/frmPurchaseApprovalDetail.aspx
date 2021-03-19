@@ -332,14 +332,12 @@
                                         <asp:BoundField DataField="DriverServiceTypeDetail.Description" HeaderText="Driver's Service Type Request" SortExpression="DriverServiceTypeDetail.Description" />
                                         <asp:BoundField DataField="MechanicServiceTypeDetail.Description" HeaderText="Mechanic's Service Type Reccomendation" SortExpression="MechanicServiceTypeDetail.Description" />
                                         <asp:BoundField DataField="TechnicianRemark" HeaderText="Mechanic's Remark" SortExpression="TechnicianRemark" />
-
                                     </Columns>
                                     <FooterStyle CssClass="FooterStyle" />
                                     <HeaderStyle CssClass="headerstyle" />
                                     <PagerStyle CssClass="PagerStyle" />
                                     <RowStyle CssClass="rowstyle" />
                                 </asp:GridView>
-
                                 <div style="text-align: center;">
                                     <asp:Label ID="lblReqItems" Font-Size="Large" Font-Bold="true" runat="server" Visible="false" Text="Requested Items During Maintenance Review"></asp:Label>
                                 </div>
@@ -348,8 +346,6 @@
                                     CssClass="table table-striped table-bordered table-hover">
                                     <Columns>
                                         <asp:BoundField DataField="Item.Name" HeaderText="Item" SortExpression="Item.Name" />
-
-
                                     </Columns>
                                     <FooterStyle CssClass="FooterStyle" />
                                     <HeaderStyle CssClass="headerstyle" />
@@ -378,7 +374,6 @@
                                     <PagerStyle CssClass="PagerStyle" />
                                     <RowStyle CssClass="rowstyle" />
                                 </asp:GridView>
-
                             </div>
                             <footer>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
