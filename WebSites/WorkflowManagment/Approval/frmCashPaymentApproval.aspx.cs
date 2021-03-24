@@ -457,7 +457,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (CSR != null)
                 {
-                    
+
 
                     if (CSR.ProgressStatus == ProgressStatus.InProgress.ToString())
                     {
@@ -502,6 +502,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     dgCashPaymentRequestDetail.DataSource = _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails;
                     dgCashPaymentRequestDetail.DataBind();
+                    grvPaymentRequestStatuses.DataSource = _presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses;
+                    grvPaymentRequestStatuses.DataBind();
                     BindAttachments();
                     ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
                 }
@@ -519,6 +521,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         btnPrintReimburse.Enabled = true;
                     }
                 }
+            }
+        }
+        protected void grvPaymentStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses[e.Row.RowIndex].Approver > 0)
+                    e.Row.Cells[1].Text = _presenter.GetUser(_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses[e.Row.RowIndex].Approver).FullName;
             }
         }
         protected void btnFind_Click(object sender, EventArgs e)
@@ -569,7 +579,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             lblVoucherNoResult.Text = _presenter.CurrentCashPaymentRequest.VoucherNo;
             lblTotalAmountResult.Text = _presenter.CurrentCashPaymentRequest.TotalAmount.ToString();
             lblApprovalStatusResult.Text = _presenter.CurrentCashPaymentRequest.ProgressStatus.ToString();
-            lblDescResult.Text = _presenter.CurrentCashPaymentRequest.Description;            
+            lblDescResult.Text = _presenter.CurrentCashPaymentRequest.Description;
             grvDetails.DataSource = _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails;
             grvDetails.DataBind();
 

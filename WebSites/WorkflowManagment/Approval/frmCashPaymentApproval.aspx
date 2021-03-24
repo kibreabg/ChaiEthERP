@@ -415,6 +415,29 @@
                                                         </Columns>
                                                         <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
                                                     </asp:DataGrid>
+                                                    <br />
+                                                    <div style="text-align: center;">
+                                                        <asp:Label ID="lblCashApprovalStatus" Font-Size="Large" Font-Bold="true" runat="server" Text="Approval Status"></asp:Label>
+                                                    </div>
+                                                    <asp:GridView ID="grvPaymentRequestStatuses"
+                                                        runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                                                        CssClass="table table-striped table-bordered table-hover" OnRowDataBound="grvPaymentStatuses_RowDataBound">
+                                                        <RowStyle CssClass="rowstyle" />
+                                                        <Columns>
+                                                            <asp:TemplateField HeaderText="Date">
+                                                                <ItemTemplate>
+                                                                    <asp:Label ID="lblDate" runat="server" Text='<%# Eval("Date", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                            <asp:BoundField HeaderText="Name" />
+                                                            <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
+                                                            <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus" />
+                                                        </Columns>
+                                                        <FooterStyle CssClass="FooterStyle" />
+                                                        <HeaderStyle CssClass="headerstyle" />
+                                                        <PagerStyle CssClass="PagerStyle" />
+                                                        <RowStyle CssClass="rowstyle" />
+                                                    </asp:GridView>
                                                 </div>
                                                 <div class="tab-pane" id="iss2">
                                                     <asp:GridView ID="grvdetailAttachments"
