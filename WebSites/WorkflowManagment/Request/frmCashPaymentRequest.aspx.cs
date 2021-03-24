@@ -137,7 +137,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             List<CPRAttachment> attachments = new List<CPRAttachment>();
             foreach (CashPaymentRequestDetail detail in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
             {
-                attachments.AddRange(detail.CPRAttachments);                
+                attachments.AddRange(detail.CPRAttachments);
             }
 
             Session["attachments"] = attachments;
@@ -232,6 +232,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 if (CPRDId > 0)
                 {
+                    //Remove the detail amaount from the Total Amount before deleting the detail record
+                    _presenter.CurrentCashPaymentRequest.TotalAmount -= cprd.Amount;
                     _presenter.CurrentCashPaymentRequest.RemoveCashPaymentRequestDetail(id);
                     if (_presenter.GetCashPaymentRequestDetail(id) != null)
                         _presenter.DeleteCashPaymentRequestDetail(_presenter.GetCashPaymentRequestDetail(id));
@@ -423,11 +425,26 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 btnSave.Visible = false;
                 btnDelete.Visible = false;
+                //If the Request has undergone approval process hide the Actions buttons from the Details Datagrid
+                foreach (DataGridColumn col in dgCashPaymentDetail.Columns)
+                {
+                    if (col.HeaderText.ToLower().Trim() == "actions")
+                    {
+                        col.Visible = false;
+                    }
+                }
             }
             else
             {
                 btnSave.Visible = true;
                 btnDelete.Visible = true;
+                foreach (DataGridColumn col in dgCashPaymentDetail.Columns)
+                {
+                    if (col.HeaderText.ToLower().Trim() == "actions")
+                    {
+                        col.Visible = true;
+                    }
+                }
             }
         }
         protected void grvCashPaymentRequestList_PageIndexChanging(object sender, GridViewPageEventArgs e)
@@ -466,6 +483,15 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                                 Log.Info(_presenter.CurrentUser().FullName + " has requested a Payment of Total Amount " + _presenter.CurrentCashPaymentRequest.TotalAmount.ToString());
                                 btnSave.Visible = false;
 
+                                //Once the Request is saved hide the Actions buttons from the Details Datagrid
+                                foreach (DataGridColumn col in dgCashPaymentDetail.Columns)
+                                {
+                                    if (col.HeaderText.ToLower().Trim() == "actions")
+                                    {
+                                        col.Visible = false;
+                                    }
+                                }
+
                             }
                             else if (ddlAmountType.SelectedValue == "Advanced")
                             {
@@ -491,6 +517,15 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             Log.Info(_presenter.CurrentUser().FullName + " has requested a Payment of Total Amount " + _presenter.CurrentCashPaymentRequest.TotalAmount.ToString());
                             btnSave.Visible = false;
 
+                            //Once the Request is saved hide the Actions buttons from the Details Datagrid
+                            foreach (DataGridColumn col in dgCashPaymentDetail.Columns)
+                            {
+                                if (col.HeaderText.ToLower().Trim() == "actions")
+                                {
+                                    col.Visible = false;
+                                }
+                            }
+
                         }
                         else if (ddlAmountType.SelectedValue == "Advanced")
                         {
@@ -499,6 +534,15 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             Master.ShowMessage(new AppMessage("Successfully did a Payment  Request, Reference No - <b>'" + _presenter.CurrentCashPaymentRequest.VoucherNo + "'</b>", RMessageType.Info));
                             Log.Info(_presenter.CurrentUser().FullName + " has requested a Payment of Total Amount " + _presenter.CurrentCashPaymentRequest.TotalAmount.ToString());
                             btnSave.Visible = false;
+
+                            //Once the Request is saved hide the Actions buttons from the Details Datagrid
+                            foreach (DataGridColumn col in dgCashPaymentDetail.Columns)
+                            {
+                                if (col.HeaderText.ToLower().Trim() == "actions")
+                                {
+                                    col.Visible = false;
+                                }
+                            }
                         }
                         else
                         {
