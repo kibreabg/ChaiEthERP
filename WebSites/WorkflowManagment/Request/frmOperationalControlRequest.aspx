@@ -119,8 +119,7 @@
                                     <label class="label">Telephone Number</label>
                                     <label class="input">
                                         <asp:TextBox ID="txtTelephoneNo" runat="server"></asp:TextBox>
-                                    </label>
-                                    <asp:RequiredFieldValidator ID="rfvtxtTelephoneNo" runat="server" ControlToValidate="txtTelephoneNo" CssClass="validator" Display="Dynamic" ErrorMessage="Enter Beneficiary's phone no." SetFocusOnError="true" ValidationGroup="saveMain"></asp:RequiredFieldValidator>
+                                    </label>                                    
                                 </section>
                             </div>
                         </asp:Panel>
