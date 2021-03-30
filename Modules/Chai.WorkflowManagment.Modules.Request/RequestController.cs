@@ -45,7 +45,7 @@ namespace Chai.WorkflowManagment.Modules.Request
         }
         public AppUser Approver(int position)
         {
-            return _workspace.SqlQuery<AppUser>("SELECT * FROM AppUsers WHERE EmployeePosition_Id = " + position).ToList().Last<AppUser>();
+            return _workspace.SqlQuery<AppUser>("SELECT * FROM AppUsers WHERE IsActive = 1 AND EmployeePosition_Id = " + position).ToList().Last<AppUser>();
         }
 
         #region CurrenrObject

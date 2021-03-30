@@ -91,20 +91,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             CPRS.Date = Convert.ToDateTime(DateTime.Today.Date.ToShortDateString());
                         }
                     }
-                    else if (AL.EmployeePosition.PositionName == "Program Manager")
-                    {
-                        if (CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Project != null)
-                        {
-                            if (CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Project.AppUser.Id != CurrentUser().Id)
-                            {
-                                CPRS.Approver = GetProject(CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Project.Id).AppUser.Id;
-                            }
-                            else
-                            {
-                                CPRS.Approver = CurrentUser().Superviser.Value;
-                            }
-                        }
-                    }
                     else
                     {
                         if (Approver(AL.EmployeePosition.Id) != null)
@@ -115,7 +101,15 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             }
                             else
                             {
-                                CPRS.Approver = Approver(AL.EmployeePosition.Id).Id;
+                                //If the HR Manager is the one requesting, it should be approved by their Line Manager.
+                                if (Approver(AL.EmployeePosition.Id).Id == CurrentUser().Id)
+                                {
+                                    CPRS.Approver = CurrentUser().Superviser.Value;
+                                }
+                                else
+                                {
+                                    CPRS.Approver = Approver(AL.EmployeePosition.Id).Id;
+                                }
                             }
                         }
                         else
