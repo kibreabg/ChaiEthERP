@@ -6,33 +6,10 @@
 
 <asp:Content ID="content" ContentPlaceHolderID="DefaultContent" runat="Server">
     <script src="../js/libs/jquery-2.0.2.min.js"></script>
-
-    
     <script type="text/javascript">
         $(document).ready(function () {
             vv();
         });
-        function vv() {
-            //for bootstrap 3 use 'shown.bs.tab' instead of 'shown' in the next line
-            
-            $('a[data-toggle="tab"]').on('shown.bs.tab', function () {
-                    //save the latest tab; use cookies if you like 'em better:
-                    localStorage.setItem('lastTab', $(this).attr('href'));
-                });
-
-                //go to the latest tab, if it exists:
-                var lastTab = localStorage.getItem('lastTab');
-                if (lastTab) {
-                    $('a[href=' + lastTab + ']').tab('show');
-                }
-                else {
-                    // Set the first tab if cookie do not exist
-                    $('a[data-toggle="tab"]:first').tab('show');
-                }
-            
-        }
-       
-   
         $(document).ready(function () {
             // fuelux wizard
             var wizard = $('.wizard').wizard();
@@ -47,12 +24,8 @@
                     iconSmall: "fa fa-check bounce animated",
                     timeout: 4000
                 });
-
             });
         });
-    </script>
-
-    <script type="text/javascript" lang="javascript">
         function Clickheretoprint(theid) {
             var disp_setting = "toolbar=yes,location=no,directories=yes,menubar=yes,";
             disp_setting += "scrollbars=yes,width=750, height=600, left=100, top=25";
@@ -67,13 +40,35 @@
             docprint.document.close();
             docprint.focus();
         }
-    </script>
-    <script type="text/javascript" language="javascript">
+        function showEmpHistoryModal() {
+            $(document).ready(function () {
+                $('#empHistory').modal('show');
+            });
+        }
         function onshowing() {
             $find('pnlEMPHIST_ModalPopupExtender').set_X(document.documentElement.clientWidth / 2);
             $find('pnlEMPHIST_ModalPopupExtender').set_Y(document.documentElement.clientHeight / 2);
         }
+        function vv() {
+            //for bootstrap 3 use 'shown.bs.tab' instead of 'shown' in the next line
+
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function () {
+                //save the latest tab; use cookies if you like 'em better:
+                localStorage.setItem('lastTab', $(this).attr('href'));
+            });
+
+            //go to the latest tab, if it exists:
+            var lastTab = localStorage.getItem('lastTab');
+            if (lastTab) {
+                $('a[href=' + lastTab + ']').tab('show');
+            }
+            else {
+                // Set the first tab if cookie do not exist
+                $('a[data-toggle="tab"]:first').tab('show');
+            }
+        }
     </script>
+
     <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-x" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false" role="widget" style="">
         <header role="heading">
             <span class="widget-icon"><i class="fa fa-align-justify"></i></span>
@@ -89,9 +84,7 @@
             </div>
 
             <div class="col-sm-9">
-
                 <div class="row">
-
                     <div class="col-sm-6">
                         <h1>
                             <asp:Label ID="txtFullName" runat="server"></asp:Label>
@@ -150,20 +143,21 @@
                                         <asp:Label ID="txttoalleavetaken" runat="server"></asp:Label></span>
                                 </p>
                             </li>
-                                <li>
-                                    <fieldset>
-                                        <div class="form-group">
-                                           <div class="input-group">
+                            <li>
+                                <fieldset>
+                                    <div class="form-group">
+                                        <div class="input-group">
                                             <asp:TextBox ID="txtthisdate" CssClass="form-control datepicker" placeholder="Leave Balance as of this date" data-dateformat="mm/dd/yy" runat="server"></asp:TextBox>
-                                           </div>
-                                        <div class="input-group-append">
-                                        <asp:Button ID="btnGet" runat="server" Text="Get" class="btn btn-outline-secondary" OnClick="btnGet_Click"/>
-                                        </div>                                   
-                                    <span class="badge bg-color-yellow"><asp:Label ID="lbllastdayleave" runat="server"></asp:Label></span>
                                         </div>
-                                       </fieldset>
-                                   
-                               
+                                        <div class="input-group-append">
+                                            <asp:Button ID="btnGet" runat="server" Text="Get" class="btn btn-outline-secondary" OnClick="btnGet_Click" />
+                                        </div>
+                                        <span class="badge bg-color-yellow">
+                                            <asp:Label ID="lbllastdayleave" runat="server"></asp:Label></span>
+                                    </div>
+                                </fieldset>
+
+
                             </li>
                         </ul>
                     </div>
@@ -201,7 +195,7 @@
                         <li class="active">
                             <a href="#tab-r1" runat="server" data-toggle="tab"><span class="badge bg-color-blue txt-color-white"></span>Contract </a>
                         </li>
-                        
+
                         <li class="">
                             <a href="#tab-r2" runat="server" data-toggle="tab"><span class="badge bg-color-greenLight txt-color-white"></span>Exit Management</a>
                         </li>
@@ -217,7 +211,7 @@
                     </ul>
                 </div>
                 <div class="tab-content">
-                    <div class="tab-pane active"id="tab-r1">
+                    <div class="tab-pane active" id="tab-r1">
                         <fieldset>
                             <div class="row">
                                 <div class="col-sm-6">
@@ -318,7 +312,7 @@
                         </fieldset>
                     </div>
 
-                    <div class="tab-pane"  id="tab-r2">
+                    <div class="tab-pane" id="tab-r2">
                         <fieldset>
 
                             <div class="row">
@@ -398,7 +392,7 @@
                                                     <ItemStyle Font-Underline="True" ForeColor="#3333FF" />
                                                 </asp:CommandField>
                                                 <asp:CommandField ShowDeleteButton="True">
-                                                <ItemStyle ForeColor="Blue" />
+                                                    <ItemStyle ForeColor="Blue" />
                                                 </asp:CommandField>
 
                                             </Columns>
@@ -411,15 +405,13 @@
                         </fieldset>
                     </div>
 
-                    <asp:Panel ID="pnlEMPHIST" Visible="true" runat="server" Style="min-height: 400px" >
-                        <div style="max-height: 600px; overflow: auto;">
-                        <div class="modal-dialog" >
-                            <div class="modal-content"overflow: auto;>
-                                <div class="modal-header" >
+                    <div class="modal fade" id="empHistory" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" style="width: 100%;">
+                            <div class="modal-content">
+                                <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                                        ×
-                                    </button>
-                                    <h4 class="modal-title" id="myLeaveModalLabel">Employee Change History</h4>
+                                        &times;</button>
+                                    <h4 class="modal-title">Employee Change History</h4>
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
@@ -432,8 +424,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <div class="input-group">
@@ -453,7 +443,7 @@
                                                     <asp:DropDownList ID="ddlDutyStation" runat="server" CssClass="form-control" placeholder="Duty Station" AppendDataBoundItems="True">
                                                         <asp:ListItem Value="Addis Ababa">Addis Ababa</asp:ListItem>
                                                         <asp:ListItem Value="SNNPR">SNNPR</asp:ListItem>
-                                                         <asp:ListItem Value="Sidama">Sidama</asp:ListItem>
+                                                        <asp:ListItem Value="Sidama">Sidama</asp:ListItem>
                                                         <asp:ListItem Value="Tigray">Tigray</asp:ListItem>
                                                         <asp:ListItem Value="Oromia">Oromia</asp:ListItem>
                                                         <asp:ListItem Value="Amhara">Amhara</asp:ListItem>
@@ -496,8 +486,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <div class="input-group">
@@ -509,7 +497,7 @@
                                                         <asp:ListItem Value="Expat">Expat</asp:ListItem>
                                                         <asp:ListItem Value="Secondee">Secondee</asp:ListItem>
                                                         <asp:ListItem Value="Volunteer">Volunteer</asp:ListItem>
-                                                         <asp:ListItem Value="TCN">TCN</asp:ListItem>
+                                                        <asp:ListItem Value="TCN">TCN</asp:ListItem>
                                                         <asp:ListItem Value="Independent Contractor">Independent Contractor</asp:ListItem>
 
                                                     </asp:DropDownList>
@@ -531,8 +519,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <div class="input-group">
@@ -553,15 +539,12 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"></span>
                                                     <asp:TextBox ID="txtBaseState" runat="server" CssClass="form-control" placeholder="Base State"></asp:TextBox>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidatorstate" runat="server" ControlToValidate="txtBaseState" CssClass="validator" Display="Dynamic" ErrorMessage="Base State is required" SetFocusOnError="true" ValidationGroup="Savedetail" ForeColor="Red"></asp:RequiredFieldValidator>
-
                                                 </div>
                                             </div>
                                         </div>
@@ -576,15 +559,23 @@
                                                 </div>
                                             </div>
                                         </div>
-                                         <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><i class="icon-append fa fa-calendar"></i></span>
-                                            <asp:TextBox ID="txtEffectDate" runat="server" CssClass="form-control datepicker" placeholder="Change Effective Date" data-dateformat="mm/dd/yy"></asp:TextBox>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="icon-append fa fa-calendar"></i></span>
+                                                    <asp:TextBox ID="txtEffectDate" runat="server" CssClass="form-control datepicker" placeholder="Change Effective Date" data-dateformat="mm/dd/yy"></asp:TextBox>
+                                                    <cc1:MaskedEditExtender ID="meeEffectiveDate" runat="server"
+                                                        CultureAMPMPlaceholder="" CultureCurrencySymbolPlaceholder=""
+                                                        CultureDateFormat="" CultureDatePlaceholder="" CultureDecimalPlaceholder=""
+                                                        CultureThousandsPlaceholder="" CultureTimePlaceholder="" Enabled="True"
+                                                        Mask="99/99/99" MaskType="Date" TargetControlID="txtEffectDate">
+                                                    </cc1:MaskedEditExtender>
+                                                    <cc1:MaskedEditValidator ID="mevEffectiveDate" runat="server" ControlToValidate="txtEffectDate"
+                                                        ControlExtender="meeEffectiveDate" InvalidValueMessage="Invalid Date Format"
+                                                        IsValidEmpty="False" />
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                        
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-6">
@@ -596,20 +587,16 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
                                     </div>
-
-                                   
                                     <div class="form-actions">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <asp:Button ID="btnCancelHist" runat="server" Text="Close" class="btn btn-default"></asp:Button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                                 <asp:Button ID="btnAddChange" runat="server" CssClass="btn btn-primary" Text="Add Change" ValidationGroup="Savedetail" OnClick="btnAddChange_Click" />
-                                              
+
                                                 <asp:HiddenField ID="btnHiddenPopupp" runat="server" />
                                                 <asp:HiddenField ID="hfDetailId" runat="server" />
                                             </div>
-
                                         </div>
                                     </div>
                                     <div class="widget-body no-padding">
@@ -630,7 +617,7 @@
                                                     <asp:CommandField SelectText="Edit" ShowSelectButton="True">
                                                         <ItemStyle ForeColor="#000099" />
                                                     </asp:CommandField>
-                                                    <asp:CommandField ShowDeleteButton="True" >
+                                                    <asp:CommandField ShowDeleteButton="True">
                                                         <ItemStyle ForeColor="#0000CC" />
                                                     </asp:CommandField>
                                                 </Columns>
@@ -641,16 +628,9 @@
                                 </div>
                             </div>
                         </div>
-                            </div>
-                    </asp:Panel>
+                    </div>
                 </div>
             </div>
-
-
-            <cc1:ModalPopupExtender runat="server" Enabled="True" CancelControlID="btnCancelHist"
-                ID="pnlEMPHIST_ModalPopupExtender" TargetControlID="btnHiddenPopupp" X="300" Y="50" BackgroundCssClass="modalBackground" PopupControlID="pnlEMPHIST"
-                Drag="true" PopupDragHandleControlID="dragHandle" RepositionMode="RepositionOnWindowResizeAndScroll">
-            </cc1:ModalPopupExtender>
 
             <!-- end widget content -->
             <div id="divprint" style="display: none;">
@@ -1363,5 +1343,5 @@
 
         <!-- end widget div -->
     </div>
-   
+
 </asp:Content>
