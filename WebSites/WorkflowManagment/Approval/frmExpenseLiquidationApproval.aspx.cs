@@ -467,28 +467,17 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                Label lblVariance = (Label)e.Row.FindControl("lblVariance");
-                decimal qty = Convert.ToDecimal(lblVariance.Text);
-                _totalUnitPrice = _totalUnitPrice + qty;
-
-                Label lblAmountAdvanced = (Label)e.Row.FindControl("lblAmountAdvanced");
-                decimal amnt = Convert.ToDecimal(lblAmountAdvanced.Text);
-                _totalAmountAdvanced = _totalAmountAdvanced + amnt;
-
-                Label lblActualExpenditure = (Label)e.Row.FindControl("lblActualExpenditure");
-                decimal exp = Convert.ToDecimal(lblActualExpenditure.Text);
-                _totalActualExpenditure = _totalActualExpenditure + exp;
             }
             if (e.Row.RowType == DataControlRowType.Footer)
             {
-                Label lblTotalqty = (Label)e.Row.FindControl("lblTotalqty");
-                lblTotalqty.Text = _totalUnitPrice.ToString();
-
                 Label lblTotalAmountAdv = (Label)e.Row.FindControl("lblTotalAmountAdv");
-                lblTotalAmountAdv.Text = _totalAmountAdvanced.ToString();
+                lblTotalAmountAdv.Text = _presenter.CurrentExpenseLiquidationRequest.TotalTravelAdvance.ToString();
 
                 Label lblTotalActualExp = (Label)e.Row.FindControl("lblTotalActualExp");
-                lblTotalActualExp.Text = _totalActualExpenditure.ToString();
+                lblTotalActualExp.Text = _presenter.CurrentExpenseLiquidationRequest.TotalActualExpenditure.ToString();
+
+                Label lblTotalVariance = (Label)e.Row.FindControl("lblTotalVariance");
+                lblTotalVariance.Text = (_presenter.CurrentExpenseLiquidationRequest.TotalTravelAdvance - _presenter.CurrentExpenseLiquidationRequest.TotalActualExpenditure).ToString();
             }
         }
         protected void ddlApprovalStatus_SelectedIndexChanged(object sender, EventArgs e)
