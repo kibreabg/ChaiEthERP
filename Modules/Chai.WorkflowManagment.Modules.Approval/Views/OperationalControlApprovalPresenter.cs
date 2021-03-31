@@ -81,9 +81,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _requestController.GetOperationalControlRequest(reqId);
         }
-        public IList<OperationalControlRequest> ListOperationalControlRequests(string RequestNo, string RequestDate, string ProgressStatus)
+        public IList<OperationalControlRequest> ListOperationalControlRequests(string RequestNo, string RequestDate, string ProgressStatus, string Requester)
         {
-            return _controller.ListOperationalControlRequests(RequestNo, RequestDate, ProgressStatus);
+            return _controller.ListOperationalControlRequests(RequestNo, RequestDate, ProgressStatus, Requester);
         }
         public TravelAdvanceRequest GetTravelAdvanceRequest(int reqId)
         {
@@ -120,6 +120,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         public IList<Project> ListProjects()
         {
             return _settingController.GetProjects();
+        }
+        public IList<Supplier> GetSuppliers()
+        {
+            return _settingController.GetSuppliers();
         }
         public Project GetProject(int ProjectId)
         {

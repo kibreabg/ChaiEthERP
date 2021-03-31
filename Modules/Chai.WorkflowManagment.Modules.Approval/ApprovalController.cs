@@ -159,7 +159,7 @@ namespace Chai.WorkflowManagment.Modules.Approval
         }
         #endregion
         #region Operational Control Approval
-        public IList<OperationalControlRequest> ListOperationalControlRequests(string RequestNo, string RequestDate, string ProgressStatus)
+        public IList<OperationalControlRequest> ListOperationalControlRequests(string RequestNo, string RequestDate, string ProgressStatus, string Requester)
         {
             string filterExpression = "";
             if (ProgressStatus == "InProgress")
@@ -167,7 +167,10 @@ namespace Chai.WorkflowManagment.Modules.Approval
                 filterExpression = " SELECT * FROM OperationalControlRequests " +
                                    " INNER JOIN AppUsers ON (AppUsers.Id = OperationalControlRequests.CurrentApprover) OR (AppUsers.EmployeePosition_Id = OperationalControlRequests.CurrentApproverPosition AND AppUsers.Id = '" + CurrentUser().Id + "') " +
                                    " LEFT JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
-                                   " Where 1 = CASE WHEN '" + RequestNo + "' = '' Then 1 When OperationalControlRequests.VoucherNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When OperationalControlRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND OperationalControlRequests.ProgressStatus='" + ProgressStatus + "' " +
+                                   " WHERE 1 = CASE WHEN '" + RequestNo + "' = '' Then 1 When OperationalControlRequests.VoucherNo = '" + RequestNo + "'  Then 1 END " +
+                                   " AND 1 = CASE WHEN '" + RequestDate + "' = '' Then 1 When OperationalControlRequests.RequestDate = '" + RequestDate + "'  THEN 1 END " +
+                                   " AND 1 = CASE WHEN '" + Requester + "' = '0' THEN 1 WHEN OperationalControlRequests.Supplier_Id = '" + Requester + "'  THEN 1 END " +
+                                   " AND OperationalControlRequests.ProgressStatus='" + ProgressStatus + "' " +
                                    " AND ((OperationalControlRequests.CurrentApprover = '" + CurrentUser().Id + "') OR (OperationalControlRequests.CurrentApproverPosition = '" + CurrentUser().EmployeePosition.Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) ORDER BY OperationalControlRequests.Id DESC";
 
             }
@@ -175,7 +178,10 @@ namespace Chai.WorkflowManagment.Modules.Approval
             {
                 filterExpression = " SELECT * FROM OperationalControlRequests " +
                                    " INNER JOIN AppUsers ON  (AppUsers.Id = OperationalControlRequests.CurrentApprover) OR (AppUsers.EmployeePosition_Id = OperationalControlRequests.CurrentApproverPosition AND AppUsers.Id = '" + CurrentUser().Id + "') " +
-                                   " LEFT JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When OperationalControlRequests.VoucherNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When OperationalControlRequests.RequestDate = '" + RequestDate + "'  Then 1 END " +
+                                   " LEFT JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
+                                   " WHERE 1 = CASE WHEN '" + RequestNo + "' = '' THEN 1 WHEN OperationalControlRequests.VoucherNo = '" + RequestNo + "'  Then 1 END " +
+                                   " AND  1 = CASE WHEN '" + RequestDate + "' = '' Then 1 When OperationalControlRequests.RequestDate = '" + RequestDate + "'  Then 1 END " +
+                                   " AND 1 = CASE WHEN '" + Requester + "' = '0' THEN 1 WHEN OperationalControlRequests.Supplier_Id = '" + Requester + "'  THEN 1 END " +
                                    " AND OperationalControlRequests.ProgressStatus='Completed' AND OperationalControlRequests.PaymentReimbursementStatus = '" + ProgressStatus + "' " +
                                    " AND (OperationalControlRequests.CurrentApprover = '" + CurrentUser().Id + "') OR (OperationalControlRequests.CurrentApproverPosition = '" + CurrentUser().EmployeePosition.Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "') " +
                                    " ORDER BY OperationalControlRequests.Id DESC ";
@@ -186,7 +192,10 @@ namespace Chai.WorkflowManagment.Modules.Approval
                                    " INNER JOIN OperationalControlRequestStatuses ON OperationalControlRequestStatuses.OperationalControlRequest_Id = OperationalControlRequests.Id " +
                                    " INNER JOIN AppUsers ON AppUsers.Id = OperationalControlRequestStatuses.Approver" +
                                    " LEFT JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
-                                   " WHERE 1 = CASE WHEN '" + RequestNo + "' = '' THEN 1 WHEN OperationalControlRequests.VoucherNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When OperationalControlRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND OperationalControlRequests.ProgressStatus='" + ProgressStatus + "' " +
+                                   " WHERE 1 = CASE WHEN '" + RequestNo + "' = '' THEN 1 WHEN OperationalControlRequests.VoucherNo = '" + RequestNo + "' THEN 1 END " + 
+                                   " AND 1 = CASE WHEN '" + RequestDate + "' = '' THEN 1 WHEN OperationalControlRequests.RequestDate = '" + RequestDate + "' THEN 1 END " +
+                                   " AND 1 = CASE WHEN '" + Requester + "' = '0' THEN 1 WHEN OperationalControlRequests.Supplier_Id = '" + Requester + "'  THEN 1 END " +
+                                   " AND OperationalControlRequests.ProgressStatus='" + ProgressStatus + "' " +
                                    " AND OperationalControlRequestStatuses.ApprovalStatus IS NOT NULL AND ((OperationalControlRequestStatuses.Approver = '" + CurrentUser().Id + "') OR (OperationalControlRequests.CurrentApproverPosition = '" + CurrentUser().EmployeePosition.Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) " +
                                    " AND (OperationalControlRequests.CurrentStatus != 'Rejected' OR OperationalControlRequests.CurrentStatus IS NULL)" +
                                    " ORDER BY OperationalControlRequests.Id DESC ";

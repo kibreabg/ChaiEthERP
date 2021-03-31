@@ -33,6 +33,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 this._presenter.OnViewInitialized();
                 XmlConfigurator.Configure();
                 PopProgressStatus();
+                PopRequesters(ddlSrchRequester);
                 BindSearchOperationalControlRequestGrid();
             }
             this._presenter.OnViewLoaded();
@@ -125,11 +126,21 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
 
         }
+        private void PopRequesters(DropDownList ddl)
+        {
+            ddl.DataSource = _presenter.GetSuppliers();
+            ddl.DataTextField = "SupplierName";
+            ddl.DataValueField = "Id";
+            ddl.DataBind();
+
+            ddl.Items.Insert(0, new ListItem("Select Requester", "0"));
+            ddl.SelectedIndex = 0;
+        }
         private string GetWillStatus()
         {
             ApprovalSetting AS = _presenter.GetApprovalSettingforProcess(RequestType.OperationalControl_Request.ToString().Replace('_', ' ').ToString(), _presenter.CurrentOperationalControlRequest.TotalAmount);
             string will = "";
-            
+
             foreach (ApprovalLevel AL in AS.ApprovalLevels)
             {
                 if ((AL.EmployeePosition.PositionName == "Superviser/Line Manager" || AL.EmployeePosition.PositionName == "Program Manager") && _presenter.CurrentOperationalControlRequest.CurrentLevel == 1)
@@ -178,7 +189,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void BindSearchOperationalControlRequestGrid()
         {
-            grvOperationalControlRequestList.DataSource = _presenter.ListOperationalControlRequests(txtSrchRequestNo.Text, txtSrchRequestDate.Text, ddlSrchProgressStatus.SelectedValue);
+            grvOperationalControlRequestList.DataSource = _presenter.ListOperationalControlRequests(txtSrchRequestNo.Text, txtSrchRequestDate.Text, ddlSrchProgressStatus.SelectedValue, ddlSrchRequester.SelectedValue);
             grvOperationalControlRequestList.DataBind();
         }
         private void BindOperationalControlRequestStatus()
