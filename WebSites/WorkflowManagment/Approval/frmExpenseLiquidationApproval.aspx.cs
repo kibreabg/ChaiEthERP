@@ -510,24 +510,34 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (_presenter.CurrentExpenseLiquidationRequest.ProgressStatus != ProgressStatus.Completed.ToString())
                 {
-                    SaveExpenseLiquidationRequestStatus();
-                    if (ddlApprovalStatus.SelectedValue != "Rejected")
-                        _presenter.SaveOrUpdateExpenseLiquidationRequest(_presenter.CurrentExpenseLiquidationRequest);
-                    ShowPrint();
-                    if (ddlApprovalStatus.SelectedValue != "Rejected")
+                    decimal totalTravelAdvance = _presenter.CurrentExpenseLiquidationRequest.TotalTravelAdvance;
+                    decimal totalActualExpenditure = _presenter.CurrentExpenseLiquidationRequest.TotalActualExpenditure;
+                    decimal variance = totalTravelAdvance - totalActualExpenditure;
+
+                    if (totalTravelAdvance < totalActualExpenditure && ddlApprovalStatus.SelectedValue == ProgressStatus.Completed.ToString())
                     {
-                        Master.ShowMessage(new AppMessage("Expense Liquidation Approval Processed", RMessageType.Info));
+                        Master.ShowMessage(new AppMessage("Please initiate a bank payment for the remaining " + variance.ToString() + " birr to be paid for the requester!", RMessageType.Error));
                     }
                     else
                     {
-                        Master.ShowMessage(new AppMessage("Expense Liquidation Approval Rejected", RMessageType.Info));
-                    }
-                    btnApprove.Enabled = false;
-                    BindSearchExpenseLiquidationRequestGrid();
-                    ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true); ;
-                    PrintTransaction();
+                        SaveExpenseLiquidationRequestStatus();
+                        if (ddlApprovalStatus.SelectedValue != "Rejected")
+                            _presenter.SaveOrUpdateExpenseLiquidationRequest(_presenter.CurrentExpenseLiquidationRequest);
+                        ShowPrint();
+                        if (ddlApprovalStatus.SelectedValue != "Rejected")
+                        {
+                            Master.ShowMessage(new AppMessage("Expense Liquidation Approval Processed", RMessageType.Info));
+                        }
+                        else
+                        {
+                            Master.ShowMessage(new AppMessage("Expense Liquidation Approval Rejected", RMessageType.Info));
+                        }
+                        btnApprove.Enabled = false;
+                        BindSearchExpenseLiquidationRequestGrid();
+                        ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true); ;
+                        PrintTransaction();
+                    }                    
                 }
-
             }
             catch (Exception ex)
             {
