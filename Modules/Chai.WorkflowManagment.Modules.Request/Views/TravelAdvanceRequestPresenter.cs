@@ -189,6 +189,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.ListTravelAdvanceRequests(RequestNo, ReqestDate);
         }
+        public IList<TravelAdvanceRequest> ListUnliquidatedTravelAdvances()
+        {
+            return _controller.ListUnliquidatedTravelAdvances();
+        }
         public TravelAdvanceRequestDetail GetTravelAdvanceRequestDetail(int id)
         {
             return _controller.GetTravelAdvanceRequestDetail(id);

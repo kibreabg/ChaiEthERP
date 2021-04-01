@@ -127,6 +127,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 pnlWarning.Visible = true;
             }
         }
+        private bool DoesNonLiquidatedAdvancesExist()
+        {            
+            if (_presenter.ListUnliquidatedTravelAdvances().Count() > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         private void PopRequestPersonnels()
         {
             txtRequester.Text = _presenter.CurrentUser().FirstName + " " + _presenter.CurrentUser().LastName;
@@ -235,34 +246,34 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             try
             {
-                if (_presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestDetails.Count != 0)
+                if (!DoesNonLiquidatedAdvancesExist())
                 {
-                    _presenter.SaveOrUpdateTARequest();
-                    BindTravelAdvanceRequests();
-                    Master.ShowMessage(new AppMessage("Successfully did a Travel Advance Request, Reference No - <b>'" + _presenter.CurrentTravelAdvanceRequest.TravelAdvanceNo + "'</b> ", RMessageType.Info));
-                    Log.Info(_presenter.CurrentUser().FullName + " has requested a Travel Advance of Total Amount " + _presenter.CurrentTravelAdvanceRequest.TotalTravelAdvance.ToString());
-                    btnSave.Visible = false;
-                    PrintTransaction();
-                    btnPrint.Enabled = true;
+                    if (_presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestDetails.Count != 0)
+                    {
+                        _presenter.SaveOrUpdateTARequest();
+                        BindTravelAdvanceRequests();
+                        Master.ShowMessage(new AppMessage("Successfully did a Travel Advance Request, Reference No - <b>'" + _presenter.CurrentTravelAdvanceRequest.TravelAdvanceNo + "'</b> ", RMessageType.Info));
+                        Log.Info(_presenter.CurrentUser().FullName + " has requested a Travel Advance of Total Amount " + _presenter.CurrentTravelAdvanceRequest.TotalTravelAdvance.ToString());
+                        btnSave.Visible = false;
+                        PrintTransaction();
+                        btnPrint.Enabled = true;
+                    }
+                    else
+                    {
+                        Master.ShowMessage(new AppMessage("Please insert at least one Item Detail", RMessageType.Error));
+                    }
                 }
                 else
                 {
-                    Master.ShowMessage(new AppMessage("Please insert at least one Item Detail", RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("You have Unliquidated Travel Advances. Please Liquidate them before requesting another Travel Advance!", RMessageType.Error));
                 }
+                
             }
             catch (Exception ex)
             {
                 Master.ShowMessage(new AppMessage(ex.Message, RMessageType.Error));
                 ExceptionUtility.LogException(ex, ex.Source);
                 ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
-                if (ex.InnerException != null)
-                {
-                    if (ex.InnerException.InnerException.Message.Contains("Violation of UNIQUE KEY"))
-                    {
-                        Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", RMessageType.Error));
-                        AutoNumber();
-                    }
-                }
             }
         }
         protected void btnDelete_Click(object sender, EventArgs e)

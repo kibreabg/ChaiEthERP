@@ -348,6 +348,11 @@ namespace Chai.WorkflowManagment.Modules.Request
             int currentUserId = GetCurrentUser().Id;
             return WorkspaceFactory.CreateReadOnly().Query<TravelAdvanceRequest>(x => x.ExpenseLiquidationStatus == "Completed" && x.ExpenseLiquidationRequest.ExpenseLiquidationRequestStatuses.Count == 0 && x.AppUser.Id == currentUserId).ToList();
         }
+        public IList<TravelAdvanceRequest> ListUnliquidatedTravelAdvances()
+        {
+            int currentUserId = GetCurrentUser().Id;
+            return WorkspaceFactory.CreateReadOnly().Query<TravelAdvanceRequest>(x => x.ExpenseLiquidationStatus != "Finished" || x.ExpenseLiquidationStatus == null && x.AppUser.Id == currentUserId).ToList();
+        }
         public TravelAdvanceRequestDetail GetTravelAdvanceRequestDetail(int id)
         {
             return _workspace.Single<TravelAdvanceRequestDetail>(x => x.Id == id);
