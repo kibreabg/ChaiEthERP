@@ -351,7 +351,7 @@ namespace Chai.WorkflowManagment.Modules.Request
         public IList<TravelAdvanceRequest> ListUnliquidatedTravelAdvances()
         {
             int currentUserId = GetCurrentUser().Id;
-            return WorkspaceFactory.CreateReadOnly().Query<TravelAdvanceRequest>(x => x.ExpenseLiquidationStatus != "Finished" || x.ExpenseLiquidationStatus == null && x.AppUser.Id == currentUserId).ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<TravelAdvanceRequest>(x => (x.ExpenseLiquidationStatus != "Finished" || x.ExpenseLiquidationStatus == null) && x.AppUser.Id == currentUserId).ToList();
         }
         public TravelAdvanceRequestDetail GetTravelAdvanceRequestDetail(int id)
         {
