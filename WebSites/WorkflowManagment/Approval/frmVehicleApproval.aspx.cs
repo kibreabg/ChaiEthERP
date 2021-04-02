@@ -649,7 +649,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     if (ddlApprovalStatus.SelectedValue == ApprovalStatus.Rejected.ToString() && txtRejectedReason.Text == "")
                     {
                         Master.ShowMessage(new AppMessage("Please Insert Rejected/Canceled Reason ", RMessageType.Error));
-
                     }
                     else
                     {

@@ -254,13 +254,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
 
         }
-
         private void SendEmailtoMechanic()
         {
-                   string message = " Requested By " + (_presenter.CurrentMaintenanceRequest.AppUser.FullName).ToUpper() + " and Request Number :   '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + " is Approved: and Please Complete the Request.   '";
-                    EmailSender.Send(_presenter.GetMechanic().Email, "Maintenance Request: ", message);
-                    Log.Info((_presenter.GetMechanic().FullName).ToUpper() + " has Maintained a Maintenance Request made by " + _presenter.CurrentMaintenanceRequest.AppUser.FullName);
-             
+            string message = " Requested By " + (_presenter.CurrentMaintenanceRequest.AppUser.FullName).ToUpper() + " and Request Number :   '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + " is Approved: and Please Complete the Request.   '";
+            EmailSender.Send(_presenter.GetMechanic().Email, "Maintenance Request: ", message);
+            Log.Info((_presenter.GetMechanic().FullName).ToUpper() + " has Maintained a Maintenance Request made by " + _presenter.CurrentMaintenanceRequest.AppUser.FullName);
+
         }
         private void SendEmail(MaintenanceRequestStatus MRS)
         {
@@ -291,7 +290,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             EmailSender.Send(_presenter.GetUser(_presenter.CurrentMaintenanceRequest.AppUser.Id).Email, "Maintenance Request ", "Your Maintenance Request with Maintenance Request No. - '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + "' is Completed.");
         }
-
         private void SendEmailToRequesterForPurchase()
         {
 
@@ -317,7 +315,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
 
 
-            
+
         }
         private void GetNextApprover()
         {
@@ -325,14 +323,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (MRS.ApprovalStatus == null)
                 {
-                    
+
                     _presenter.CurrentMaintenanceRequest.CurrentApprover = MRS.Approver;
                     _presenter.CurrentMaintenanceRequest.CurrentLevel = MRS.WorkflowLevel;
                     _presenter.CurrentMaintenanceRequest.CurrentStatus = MRS.ApprovalStatus;
                     _presenter.CurrentMaintenanceRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
 
-                   // if (MRS.ApprovalStatus == "Reviewed")
-                   if(_presenter.CurrentMaintenanceRequest.MaintenanceRequestStatuses.Count != _presenter.CurrentMaintenanceRequest.CurrentLevel)
+                    // if (MRS.ApprovalStatus == "Reviewed")
+                    if (_presenter.CurrentMaintenanceRequest.MaintenanceRequestStatuses.Count != _presenter.CurrentMaintenanceRequest.CurrentLevel)
                     {
                         SendEmail(MRS);
                     }
@@ -378,7 +376,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
 
 
-       }
+        }
         protected void btnApprove_Click(object sender, EventArgs e)
         {
             try
@@ -390,7 +388,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     {
                         foreach (MaintenanceRequestDetail mrd in _presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails)
                         {
-                            if (mrd.MechanicServiceTypeDetail == null )
+                            if (mrd.MechanicServiceTypeDetail == null)
                             {
                                 mechanicApproved = false;
                             }
@@ -406,40 +404,32 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         ShowPrint();
                         if (ddlApprovalStatus.SelectedValue != "Rejected")
                         {
-                            
+
                             if (ddlApprovalStatus.SelectedValue == "Approved")
                             {
-                             
+
                                 Master.ShowMessage(new AppMessage("Maintenance Approval Processed", RMessageType.Info));
-                                
+
                                 // SendEmailToRequester();
                                 SendEmailToRequesterForPurchase();
-                                
+
                             }
                             else if (ddlApprovalStatus.SelectedValue == "Reviewed")
                             {
                                 Master.ShowMessage(new AppMessage("Maintenance Approval Processed", RMessageType.Info));
-                              
+
                                 // SendEmailToRequester();
 
                             }
                             else if (ddlApprovalStatus.SelectedValue == "Completed")
                             {
                                 Master.ShowMessage(new AppMessage("Maintenance Approval Completed", RMessageType.Info));
-
                                 // SendEmailToRequester();
-
                             }
-
                             else
                             {
-                              
                                 Master.ShowMessage(new AppMessage("Maintenance Approval Rejected", RMessageType.Info));
-                              
                             }
-                            
-                           
-
 
                             btnApprove.Enabled = false;
                             BindSearchMaintenanceGrid();
@@ -447,7 +437,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                             pnlApproval_ModalPopupExtender.Show();
                             ShowPrint();
                         }
-                       
+
                     }
 
                     else if (mechanicApproved || ddlApprovalStatus.SelectedValue == "Rejected")
@@ -458,19 +448,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         btnApprove.Enabled = false;
                         BindSearchMaintenanceGrid();
                         pnlApproval_ModalPopupExtender.Show();
-
                     }
 
                     else
                     {
-                        Master.ShowMessage(new AppMessage("Please Add Mechanic Details and Remark " , Chai.WorkflowManagment.Enums.RMessageType.Error));
-                       
-
+                        Master.ShowMessage(new AppMessage("Please Add Mechanic Details and Remark ", RMessageType.Error));
                     }
-
-                   
                 }
-
             }
             catch (Exception ex)
             {
@@ -557,46 +541,46 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             if (MR != null)
             {
 
-                    if (e.Row.RowType == DataControlRowType.DataRow)
+                if (e.Row.RowType == DataControlRowType.DataRow)
+                {
+
+                    //int rwId = (int)grvMaintenanceRequestList.DataKeys[rw.RowIndex].Value;
+                    if (_presenter.CurrentUser().EmployeePosition.PositionName == "Driver/Mechanic" && MR.CurrentLevel < 2)
                     {
-                   
-                        //int rwId = (int)grvMaintenanceRequestList.DataKeys[rw.RowIndex].Value;
-                        if (_presenter.CurrentUser().EmployeePosition.PositionName == "Driver/Mechanic" && MR.CurrentLevel<2)
-                        {
 
-                            //rw.Cells[6].Visible = true;
-                            //rw.Cells[7].Visible = false;
-                            e.Row.Cells[1].Text = _presenter.GetUser(MR.Requester).FullName;
-                            e.Row.Cells[6].Visible = true;
-                            e.Row.Cells[7].Visible = false;
-                        }
-
-
-                        else if (_presenter.CurrentUser().EmployeePosition.PositionName == "Driver/Mechanic" && MR.CurrentLevel>=2)
-                        {
-
-
-                            //rw.Cells[6].Visible = false;
-                            //rw.Cells[7].Visible = true;
-                            e.Row.Cells[1].Text = _presenter.GetUser(MR.Requester).FullName;
-                            e.Row.Cells[6].Visible = false;
-                            e.Row.Cells[7].Visible = true;
-                        }
-
-
-
-                        else
-                            {
-                            //rw.Cells[6].Visible = false;
-                            //rw.Cells[7].Visible = true;
-                            e.Row.Cells[1].Text = _presenter.GetUser(MR.Requester).FullName;
-                            e.Row.Cells[6].Visible = false;
-                            e.Row.Cells[7].Visible = true;
-                        }
-                            
-                       
+                        //rw.Cells[6].Visible = true;
+                        //rw.Cells[7].Visible = false;
+                        e.Row.Cells[1].Text = _presenter.GetUser(MR.Requester).FullName;
+                        e.Row.Cells[6].Visible = true;
+                        e.Row.Cells[7].Visible = false;
                     }
-              
+
+
+                    else if (_presenter.CurrentUser().EmployeePosition.PositionName == "Driver/Mechanic" && MR.CurrentLevel >= 2)
+                    {
+
+
+                        //rw.Cells[6].Visible = false;
+                        //rw.Cells[7].Visible = true;
+                        e.Row.Cells[1].Text = _presenter.GetUser(MR.Requester).FullName;
+                        e.Row.Cells[6].Visible = false;
+                        e.Row.Cells[7].Visible = true;
+                    }
+
+
+
+                    else
+                    {
+                        //rw.Cells[6].Visible = false;
+                        //rw.Cells[7].Visible = true;
+                        e.Row.Cells[1].Text = _presenter.GetUser(MR.Requester).FullName;
+                        e.Row.Cells[6].Visible = false;
+                        e.Row.Cells[7].Visible = true;
+                    }
+
+
+                }
+
             }
         }
         protected void grvMaintenanceRequestList_PageIndexChanging(object sender, GridViewPageEventArgs e)
@@ -709,7 +693,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 //DropDownList ddlFMecServiceTypeDet = e.Item.FindControl("ddlMecServiceTypeDet") as DropDownList;
                 //BindServiceTypeDetails(ddlFMecServiceTypeDet, Convert.ToInt32(ddlFServiceType.SelectedValue));
             }
-            else 
+            else
             {
 
                 if (_presenter.CurrentMaintenanceRequest.MaintenanceRequestDetails != null)
@@ -738,7 +722,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
             }
 
-            
+
         }
         protected void dgMaintenanceRequestDetail_EditCommand(object source, DataGridCommandEventArgs e)
         {
@@ -901,8 +885,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
         protected void dgSparepart_ItemDataBound(object sender, DataGridItemEventArgs e)
         {
-           // dgSparepart.DataSource = null;
-           // dgSparepart.DataBind();
+            // dgSparepart.DataSource = null;
+            // dgSparepart.DataBind();
             if (e.Item.ItemType == ListItemType.Footer)
             {
                 DropDownList ddlFItem = e.Item.FindControl("ddlFItem") as DropDownList;
@@ -910,7 +894,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
 
             }
-            else 
+            else
             {
                 if (_presenter.CurrentMaintenanceRequest.MaintenanceSpareParts != null)
                 {

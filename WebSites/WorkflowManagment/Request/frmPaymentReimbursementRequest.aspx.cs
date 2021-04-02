@@ -221,7 +221,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         private void BindAccountDescription(DropDownList ddlAccountDescription)
         {
             ddlAccountDescription.DataSource = _presenter.ListItemAccounts();
-           
+
             ddlAccountDescription.DataValueField = "Id";
             ddlAccountDescription.DataTextField = "AccountName";
             ddlAccountDescription.DataBind();
@@ -400,7 +400,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         }
                     }
                 }
-           
+
             }
             else
             {
@@ -424,21 +424,30 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void btnSave_Click(object sender, EventArgs e)
         {
-            if (Convert.ToDecimal(txtImbursement.Text) >= Convert.ToDecimal(txtReceivables.Text))
+            try
             {
-                if (CheckReceiptsAttached() == true)
+                if (Convert.ToDecimal(txtImbursement.Text) >= Convert.ToDecimal(txtReceivables.Text))
                 {
-                    _presenter.SaveOrUpdatePaymentReimbursementRequest(Convert.ToInt32(Session["tarId"]));
-                    BindPaymentReimbursementRequests();
-                    Master.ShowMessage(new AppMessage("Payment Settlement Request Successfully Saved, If you have over spend refund please Contact Finance", RMessageType.Info));
-                    btnSave.Visible = false;
-                    Session["tarId"] = null;
+                    if (CheckReceiptsAttached() == true)
+                    {
+                        _presenter.SaveOrUpdatePaymentReimbursementRequest(Convert.ToInt32(Session["tarId"]));
+                        BindPaymentReimbursementRequests();
+                        Master.ShowMessage(new AppMessage("Payment Settlement Request Successfully Saved, If you have over spend refund please Contact Finance", RMessageType.Info));
+                        btnSave.Visible = false;
+                        Session["tarId"] = null;
+                    }
+                    else { Master.ShowMessage(new AppMessage("Please attach the required receipts!", RMessageType.Error)); }
                 }
-                else { Master.ShowMessage(new AppMessage("Please attach the required receipts!", RMessageType.Error)); }
+                else
+                {
+                    Master.ShowMessage(new AppMessage("Please Make sure that settled amount is greater than or equal to advance taken.", RMessageType.Error));
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Please Make sure that settled amount is greater than or equal to advance taken.", RMessageType.Error));
+                Master.ShowMessage(new AppMessage(ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         protected void btnDelete_Click(object sender, EventArgs e)

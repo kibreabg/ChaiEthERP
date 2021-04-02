@@ -142,10 +142,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     will = "Approve";
                     break;
                 }
-                /*else if (_presenter.GetUser(_presenter.CurrentCashPaymentRequest.CurrentApprover).EmployeePosition.PositionName == AL.EmployeePosition.PositionName)
+                else if (_presenter.CurrentCashPaymentRequest.AppUser.Superviser == _presenter.CurrentCashPaymentRequest.CurrentApprover && AL.WorkflowLevel == _presenter.CurrentCashPaymentRequest.CurrentLevel)
                 {
-                    will = AL.Will;
-                }*/
+                    //If the current approver is the supervisor of the requester
+                    //Eg. Dr. Rahel is supervisor of Seble and she must approve Medical requested by Seble rather than Seble approving her requests
+                    will = "Approve";
+                    break;
+                }
                 else
                 {
                     try

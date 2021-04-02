@@ -43,11 +43,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
             //btnPrint.Attributes.Add("onclick", "javascript:Clickheretoprint('divprint'); return false;");
 
-        }
-        //protected void BindJS()
-        //{
-        //    Page.ClientScript.RegisterClientScriptBlock(this.GetType(), "workflowscripts", String.Format("<script language=\"JavaScript\" src=\"http://localhost/WorkflowManagment/WorkflowManagment.js\"></script>\n"));
-        //}
+        }        
         [CreateNew]
         public LeaveApprovalPresenter Presenter
         {
@@ -270,7 +266,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             try
             {
-
                 if (_presenter.CurrentLeaveRequest.ProgressStatus != ProgressStatus.Completed.ToString())
                 {
                     SaveLeaveRequestStatus();
@@ -296,11 +291,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
             catch (Exception ex)
             {
+                Master.ShowMessage(new AppMessage(ex.Message, RMessageType.Error));
                 ExceptionUtility.LogException(ex, ex.Source);
                 ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
-
-
         }
         private decimal CalculateLeave(EmployeeLeave empleave)
         {
@@ -465,7 +459,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             Response.WriteFile(_presenter.CurrentLeaveRequest.FilePath);
             Response.End();
         }
-
         protected void grvStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (_presenter.CurrentLeaveRequest.LeaveRequestStatuses != null)

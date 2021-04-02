@@ -150,7 +150,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (ex.InnerException.InnerException.Message.Contains("Violation of UNIQUE KEY"))
                     {
-                        Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", RMessageType.Error));
                         //AutoNumber();
                     }
                 }
@@ -266,7 +266,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return ckIsVehicle.Checked; }
         }
-
         public string GetMaintenanceRequestNo
         {
             get { return ddlMaintenanceReq.SelectedValue; }
@@ -350,7 +349,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             _presenter.DeletePurchaseRequest(_presenter.GetPurchaseRequestById(Convert.ToInt32(grvPurchaseRequestList.DataKeys[e.RowIndex].Value)));
 
             btnFind_Click(sender, e);
-            Master.ShowMessage(new AppMessage("Purchase Request Successfully Deleted", Chai.WorkflowManagment.Enums.RMessageType.Info));
+            Master.ShowMessage(new AppMessage("Purchase Request Successfully Deleted", RMessageType.Info));
 
         }
         protected void grvPurchaseRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -477,37 +476,24 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         _presenter.SaveOrUpdateLeavePurchase(_presenter.CurrentPurchaseRequest);
                         ClearForm();
                         BindSearchPurchaseRequestGrid();
-                        Master.ShowMessage(new AppMessage("Successfully did a Purchase Request, Reference No - <b>'" + _presenter.CurrentPurchaseRequest.RequestNo + "'</b> ", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                        Master.ShowMessage(new AppMessage("Successfully did a Purchase Request, Reference No - <b>'" + _presenter.CurrentPurchaseRequest.RequestNo + "'</b> ", RMessageType.Info));
                         // Log.Info(_presenter.CurrentUser().FullName + " has requested for a Purchase of Total Price " + _presenter.CurrentPurchaseRequest.TotalPrice);
                     }
                     else
                     {
-                        Master.ShowMessage(new AppMessage("There is an error constracting Approval Process", Chai.WorkflowManagment.Enums.RMessageType.Error));
-
+                        Master.ShowMessage(new AppMessage("There is an error constracting Approval Process", RMessageType.Error));
                     }
-
                 }
                 else
                 {
-                    Master.ShowMessage(new AppMessage("You have to insert at least one purchase item detail", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("You have to insert at least one purchase item detail", RMessageType.Error));
                 }
             }
-            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            catch (Exception ex)
             {
-                Exception raise = dbEx;
-                foreach (var validationErrors in dbEx.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        string message = string.Format("{0}:{1}",
-                            validationErrors.Entry.Entity.ToString(),
-                            validationError.ErrorMessage);
-                        // raise a new exception nesting  
-                        // the current instance as InnerException  
-                        raise = new InvalidOperationException(message, raise);
-                    }
-                }
-                throw raise;
+                Master.ShowMessage(new AppMessage(ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
         protected void btnDelete_Click(object sender, EventArgs e)
@@ -523,17 +509,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     _presenter.DeletePurchaseRequest(_presenter.CurrentPurchaseRequest);
                     ClearForm();
-                    Master.ShowMessage(new AppMessage("Purchase Request Deleted ", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                    Master.ShowMessage(new AppMessage("Purchase Request Deleted ", RMessageType.Info));
                     BindSearchPurchaseRequestGrid();
                     BindPurchaseRequestDetails();
                     btnDelete.Visible = false;
                 }
                 else
-                    Master.ShowMessage(new AppMessage("Warning: Unable to Delete Purchase Request ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Warning: Unable to Delete Purchase Request ", RMessageType.Error));
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Warning: Unable to Delete Purchase Request " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Warning: Unable to Delete Purchase Request " + ex.Message, RMessageType.Error));
             }
         }
         protected void ddlFAccount_SelectedIndexChanged(object sender, EventArgs e)

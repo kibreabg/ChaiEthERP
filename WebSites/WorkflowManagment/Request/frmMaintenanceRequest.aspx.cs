@@ -191,9 +191,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     break;
                 }
             }
-        }
-
-      
+        }      
         private void SendEmail(MaintenanceRequestStatus PRS)
         {
             if (_presenter.GetSuperviser(PRS.Approver).IsAssignedJob != true)
@@ -480,7 +478,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
-
         private void SendEmailtoMechanic()
         {
             string message = "Car Maintenance Request By " + (_presenter.CurrentMaintenanceRequest.AppUser.FullName).ToUpper() + " and Request Number is :   '" + (_presenter.CurrentMaintenanceRequest.RequestNo).ToUpper() + " Please Review :   '";

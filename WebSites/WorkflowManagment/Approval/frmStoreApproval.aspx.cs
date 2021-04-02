@@ -257,8 +257,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
 
             }
-        }
-    
+        }    
         protected void ddlProject_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;

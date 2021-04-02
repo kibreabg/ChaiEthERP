@@ -61,7 +61,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 this._presenter.View = this;
             }
         }
-
         public override string PageID
         {
             get
@@ -69,7 +68,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 return "{00397B85-1427-4EE2-94D7-7A1E8650A568}";
             }
         }
-
         #region Field Getters
         public int GetOperationalControlRequestId
         {
