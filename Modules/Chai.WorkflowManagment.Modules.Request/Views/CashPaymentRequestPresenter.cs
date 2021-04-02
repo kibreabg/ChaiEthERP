@@ -269,9 +269,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.GetLastCashPaymentRequestId();
         }
-        public IList<CashPaymentRequest> ListCashPaymentRequests(string RequestNo, string RequestDate)
+        public IList<CashPaymentRequest> ListCashPaymentRequests(string RequestNo, string RequestDate, string Supplier)
         {
-            return _controller.ListCashPaymentRequests(RequestNo, RequestDate);
+            return _controller.ListCashPaymentRequests(RequestNo, RequestDate, Supplier);
         }
         public IList<CashPaymentRequest> GetAllInPatMedCPReqsThisYear()
         {

@@ -122,12 +122,18 @@ namespace Chai.WorkflowManagment.Modules.Request
         {
             return _workspace.Single<CashPaymentRequest>(x => x.Id == RequestId);
         }
-        public IList<CashPaymentRequest> ListCashPaymentRequests(string RequestNo, string RequestDate)
+        public IList<CashPaymentRequest> ListCashPaymentRequests(string RequestNo, string RequestDate, string Supplier)
         {
             string filterExpression = "";
 
-            filterExpression = "SELECT * FROM CashPaymentRequests LEFT JOIN Suppliers on CashPaymentRequests.Supplier_Id = Suppliers.Id Where 1 = Case when '" + RequestNo + "' = '' Then 1 When CashPaymentRequests.VoucherNo = '" + RequestNo + "' Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When CashPaymentRequests.RequestDate = '" + RequestDate + "'  Then 1 END And CashPaymentRequests.AppUser_Id='" + GetCurrentUser().Id + "' ORDER BY CashPaymentRequests.Id Desc";
-            // return WorkspaceFactory.CreateReadOnly().Queryable<CashPaymentRequest>(filterExpression).ToList();
+            filterExpression = " SELECT * FROM CashPaymentRequests " +
+                               " LEFT JOIN Suppliers ON CashPaymentRequests.Supplier_Id = Suppliers.Id " +
+                               " WHERE 1 = CASE WHEN '" + RequestNo + "' = '' THEN 1 WHEN CashPaymentRequests.VoucherNo = '" + RequestNo + "' THEN 1 END " +
+                               " AND 1 = CASE WHEN '" + RequestDate + "' = '' THEN 1 WHEN CashPaymentRequests.RequestDate = '" + RequestDate + "' THEN 1 END " +
+                               " AND 1 = CASE WHEN '" + Supplier + "' = '' THEN 1 WHEN CashPaymentRequests.Supplier_Id = '" + Supplier + "' THEN 1 END " +
+                               " AND CashPaymentRequests.AppUser_Id='" + GetCurrentUser().Id + "' " +
+                               " ORDER BY CashPaymentRequests.Id Desc";
+
             return _workspace.SqlQuery<CashPaymentRequest>(filterExpression).ToList();
         }
         public IList<CashPaymentRequest> GetCashPaymentRequests()

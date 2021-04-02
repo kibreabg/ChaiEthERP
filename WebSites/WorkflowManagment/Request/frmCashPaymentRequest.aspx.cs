@@ -129,7 +129,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void BindCashPaymentRequests()
         {
-            grvCashPaymentRequestList.DataSource = _presenter.ListCashPaymentRequests(txtSrchRequestNo.Text, txtSrchRequestDate.Text);
+            grvCashPaymentRequestList.DataSource = _presenter.ListCashPaymentRequests(txtSrchRequestNo.Text, txtSrchRequestDate.Text, ddlSrchSupplier.SelectedValue);
             grvCashPaymentRequestList.DataBind();
         }
         private void BindAttachments()
@@ -147,9 +147,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         private void PopPayee()
         {
             ddlPayee.Items.Clear();
-            ListItem lst = new ListItem();
-            lst.Text = " Select Payee ";
-            lst.Value = "0";
+            ListItem lst = new ListItem
+            {
+                Text = " Select Payee ",
+                Value = "0"
+            };
             ListItem empPayee = new ListItem();
             empPayee.Text = _presenter.CurrentUser().FullName;
             empPayee.Value = "-1";
@@ -157,6 +159,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ddlPayee.Items.Add(empPayee);
             ddlPayee.DataSource = _presenter.GetSuppliers();
             ddlPayee.DataBind();
+
+            ddlSrchSupplier.Items.Clear();
+            ListItem lstItem = new ListItem
+            {
+                Text = " Select Payee ",
+                Value = "0"
+            };
+            ddlSrchSupplier.Items.Add(lstItem);
+            ddlSrchSupplier.DataSource = _presenter.GetSuppliers();
+            ddlSrchSupplier.DataBind();
         }
         private void BindCashPaymentRequestFields()
         {

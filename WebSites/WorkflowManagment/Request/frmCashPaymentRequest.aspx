@@ -304,13 +304,20 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="txtSrchRequestNo">Voucher No.</label>
                                 <asp:TextBox ID="txtSrchRequestNo" CssClass="form-control" ToolTip="Voucher No" runat="server"></asp:TextBox>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="ddlSrchSupplier">Supplier</label>
+                                <asp:DropDownList ID="ddlSrchSupplier" CssClass="form-control" runat="server" DataTextField="SupplierName" AppendDataBoundItems="true" DataValueField="Id">
+                                </asp:DropDownList><i></i>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="txtSrchRequestDate">Request Date</label>
                                 <label class="input" style="position: relative; display: block; font-weight: 400;">

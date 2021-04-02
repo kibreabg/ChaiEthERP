@@ -52,6 +52,13 @@
                                     </asp:DropDownList><i></i>
                                 </label>
                             </section>
+                            <section class="col col-3">
+                                <asp:Label ID="lblSrchRequester" runat="server" Text="Requester" CssClass="label"></asp:Label>
+                                <label class="select">
+                                    <asp:DropDownList ID="ddlSrchRequester" runat="server">
+                                    </asp:DropDownList><i></i>
+                                </label>
+                            </section>
                         </div>
                     </fieldset>
                     <footer>
@@ -75,9 +82,9 @@
                 <asp:BoundField DataField="TotalAmount" HeaderText="Total Expenditure" SortExpression="TotalAmount" />
                 <asp:ButtonField ButtonType="Button" CommandName="ViewItem" Text="View Item Detail" />
                 <asp:CommandField ButtonType="Button" SelectText="Process Request" ShowSelectButton="True" />
-                     <asp:TemplateField>
+                <asp:TemplateField>
                     <ItemTemplate>
-                        <asp:Button runat="server" ID="btnStatus" Text="" BorderStyle="None" />
+                        <asp:Button runat="server" ID="btnStatus" Enabled="false" Text="" BorderStyle="None" />
                     </ItemTemplate>
                 </asp:TemplateField>
             </Columns>
@@ -85,28 +92,24 @@
             <HeaderStyle CssClass="headerstyle" />
             <PagerStyle CssClass="PagerStyle" />
             <RowStyle CssClass="rowstyle" />
-        </asp:GridView>    <div>
-
-            <asp:Button runat="server" ID="btnInProgress" Text="" BorderStyle="None" BackColor="#FFFF6C" /><b>In Progress</b><br />
-            <asp:Button runat="server" ID="btnComplete" Text="" BorderStyle="None" BackColor="#FF7251" />
+        </asp:GridView>
+        <div>
+            <asp:Button runat="server" ID="btnInProgress" Enabled="false" Text="" BorderStyle="None" BackColor="#FFFF6C" /><b>In Progress</b><br />
+            <asp:Button runat="server" ID="btnComplete" Enabled="false" Text="" BorderStyle="None" BackColor="#FF7251" />
             <b>Completed</b>
-
         </div>
-
-        <br />
-
         <br />
     </div>
     <asp:Panel ID="pnlApproval" runat="server">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                                 <label class="label-info">
-                                                       <asp:Label ID="lblOverSpendrefund" runat="server" Text="Over Spend Refund :- " Visible="true" CssClass="label"></asp:Label>
-                                                      
-                                                        <asp:Label ID="lblOverSpend" runat="server" Text="-" Visible="true" CssClass="label"></asp:Label>
-                                                   
-                                                </label>
+                    <label class="label-info">
+                        <asp:Label ID="lblOverSpendrefund" runat="server" Text="Over Spend Refund :- " Visible="true" CssClass="label"></asp:Label>
+
+                        <asp:Label ID="lblOverSpend" runat="server" Text="-" Visible="true" CssClass="label"></asp:Label>
+
+                    </label>
                 </div>
                 <div class="modal-body no-padding">
                     <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
@@ -140,7 +143,7 @@
                                         <div class="row">
                                             <section class="col col-6">
                                                 <asp:Label ID="lblAttachments" runat="server" Text="Attachments" CssClass="label"></asp:Label>
-                                               <asp:GridView ID="grvAttachments"
+                                                <asp:GridView ID="grvAttachments"
                                                     runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
                                                     CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
                                                     <RowStyle CssClass="rowstyle" />
@@ -158,7 +161,7 @@
                                                     <RowStyle CssClass="rowstyle" />
                                                 </asp:GridView>
                                             </section>
-                                           
+
                                         </div>
                                     </fieldset>
                                     <footer>
@@ -208,13 +211,13 @@
                                             </ItemTemplate>
 
                                         </asp:TemplateColumn>
-                                
+
                                         <asp:TemplateColumn HeaderText="Actual Expenditure">
                                             <ItemTemplate>
                                                 <%# DataBinder.Eval(Container.DataItem, "ActualExpenditure")%>
                                             </ItemTemplate>
                                         </asp:TemplateColumn>
-                                        
+
                                         <asp:TemplateColumn HeaderText="Project ID">
                                             <ItemTemplate>
                                                 <%# DataBinder.Eval(Container.DataItem, "PaymentReimbursementRequest.Project.ProjectCode")%>
@@ -236,7 +239,7 @@
             </div>
         </div>
     </asp:Panel>
-    <div id="divprint" style="display:none;">
+    <div id="divprint" style="display: none;">
         <fieldset>
             <table style="width: 100%;">
                 <tr>
@@ -265,26 +268,28 @@
                         <asp:Label ID="lblRequestNoResult" runat="server"></asp:Label>
                     </td>
                     <td style="width: 389px">
-                            <strong>
+                        <strong>
                             <asp:Label ID="lblRequestedDate" runat="server" Text="Requested Date:"></asp:Label>
                         </strong>
-                       </td>
-                    <td style="width: 389px"> <asp:Label ID="lblRequestedDateResult" runat="server"></asp:Label></td>
-                   
+                    </td>
+                    <td style="width: 389px">
+                        <asp:Label ID="lblRequestedDateResult" runat="server"></asp:Label></td>
+
                 </tr>
                 <tr>
-                   
+
                     <td style="width: 389px"><strong>
-                            <asp:Label ID="lblAdvanceTaken" runat="server" Text="Total Advance Taken:"></asp:Label>
-                        </strong></td>
-                    <td style="width: 389px"><asp:Label ID="lbladvancetakenresult" runat="server"></asp:Label></td>
+                        <asp:Label ID="lblAdvanceTaken" runat="server" Text="Total Advance Taken:"></asp:Label>
+                    </strong></td>
+                    <td style="width: 389px">
+                        <asp:Label ID="lbladvancetakenresult" runat="server"></asp:Label></td>
                     <td style="width: 848px">
-                       <strong>
+                        <strong>
                             <asp:Label ID="lblActualExpenditure" runat="server" Text="Total Expenditure:"></asp:Label>
                         </strong>
-                    <td style="width: 390px">
-                       <asp:Label ID="lblActualExpenditureresult" runat="server"></asp:Label>
-                    </td>
+                        <td style="width: 390px">
+                            <asp:Label ID="lblActualExpenditureresult" runat="server"></asp:Label>
+                        </td>
                 </tr>
                 <tr>
                     <td style="width: 848px">
@@ -303,7 +308,7 @@
                     </td>
                     <td>&nbsp;</td>
                 </tr>
-                
+
                 <tr>
                     <td style="width: 848px; height: 18px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>
                         <asp:Label ID="lblCommentPrint" runat="server" Text="Comment:"></asp:Label>

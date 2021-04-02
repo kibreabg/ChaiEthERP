@@ -66,6 +66,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
            return _requestController.GetPaymentReimbursementRequest(Id);
         }
+        public IList<AppUser> GetEmployeeList()
+        {
+            return _settingController.GetEmployeeList();
+        }
         public IList<AppUser> GetDrivers()
         {
             return _adminController.GetDrivers();
@@ -98,9 +102,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             _controller.DeleteEntity(PaymentReimbursementRequest);
         }
-        public IList<PaymentReimbursementRequest> ListPaymentReimbursementRequests(string RequestDate, string ProgressStatus)
+        public IList<PaymentReimbursementRequest> ListPaymentReimbursementRequests(string RequestDate, string ProgressStatus, string Requester)
         {
-            return _controller.ListPaymentReimbursementRequests(RequestDate, ProgressStatus);
+            return _controller.ListPaymentReimbursementRequests(RequestDate, ProgressStatus, Requester);
         }
         public AppUser CurrentUser()
         {

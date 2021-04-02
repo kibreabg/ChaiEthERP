@@ -33,6 +33,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 this._presenter.OnViewInitialized();
                 PopProgressStatus();
+                PopRequesters(ddlSrchRequester);
             }
             this._presenter.OnViewLoaded();
             BindSearchPaymentReimbursementRequestGrid();
@@ -89,6 +90,16 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 return true;
             else
                 return false;
+        }
+        private void PopRequesters(DropDownList ddl)
+        {
+            ddl.DataSource = _presenter.GetEmployeeList();
+            ddl.DataTextField = "FullName";
+            ddl.DataValueField = "ID";
+            ddl.DataBind();
+
+            ddl.Items.Insert(0, new ListItem("Select Requester", "0"));
+            ddl.SelectedIndex = 0;
         }
         private void PopProgressStatus()
         {
@@ -166,7 +177,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void BindSearchPaymentReimbursementRequestGrid()
         {
-            grvPaymentReimbursementRequestList.DataSource = _presenter.ListPaymentReimbursementRequests(txtSrchRequestDate.Text, ddlSrchProgressStatus.SelectedValue);
+            grvPaymentReimbursementRequestList.DataSource = _presenter.ListPaymentReimbursementRequests(txtSrchRequestDate.Text, ddlSrchProgressStatus.SelectedValue, ddlSrchRequester.SelectedValue);
             grvPaymentReimbursementRequestList.DataBind();
         }
         private void BindPaymentReimbursementRequestStatus()
