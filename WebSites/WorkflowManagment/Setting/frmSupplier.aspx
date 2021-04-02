@@ -32,7 +32,7 @@
                     </fieldset>
                     <footer>
                         <asp:Button ID="btnFind" runat="server" Text="Find" OnClick="btnFind_Click" CssClass="btn btn-primary"></asp:Button>
-                          <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" PostBackUrl="../Default.aspx"></asp:Button>
+                        <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" PostBackUrl="../Default.aspx"></asp:Button>
                     </footer>
                 </div>
             </div>
@@ -41,7 +41,7 @@
 
         <asp:DataGrid ID="dgSupplier" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
             CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
-            GridLines="None"
+            GridLines="None" PageSize="10" AllowPaging="true" OnPageIndexChanged="dgSupplier_PageIndexChanged"
             OnCancelCommand="dgSupplier_CancelCommand" OnDeleteCommand="dgSupplier_DeleteCommand" OnEditCommand="dgSupplier_EditCommand"
             OnItemCommand="dgSupplier_ItemCommand" OnItemDataBound="dgSupplier_ItemDataBound" OnUpdateCommand="dgSupplier_UpdateCommand"
             ShowFooter="True">
@@ -75,7 +75,7 @@
                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" CssClass="validator" ControlToValidate="txtSupplierName" ErrorMessage="Supplier Name Required" ValidationGroup="1">*</asp:RequiredFieldValidator>
                     </EditItemTemplate>
                     <FooterTemplate>
-                        <asp:TextBox ID="txtFSupplierName" runat="server" CssClass="form-control"></asp:TextBox>
+                        <asp:TextBox ID="txtFSupplierName" runat="server" CssClass="form-control" placeholder="Supplier Name"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" CssClass="validator" ControlToValidate="txtFSupplierName" ErrorMessage="Supplier Name Required" ValidationGroup="2">*</asp:RequiredFieldValidator>
                     </FooterTemplate>
                 </asp:TemplateColumn>
@@ -85,11 +85,31 @@
                     </ItemTemplate>
                     <EditItemTemplate>
                         <asp:TextBox ID="txtSupplierAddress" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "SupplierAddress")%>'></asp:TextBox>
-
                     </EditItemTemplate>
                     <FooterTemplate>
-                        <asp:TextBox ID="txtFSupplierAddress" runat="server" CssClass="form-control"></asp:TextBox>
-
+                        <asp:TextBox ID="txtFSupplierAddress" runat="server" placeholder="Supplier Address" CssClass="form-control"></asp:TextBox>
+                    </FooterTemplate>
+                </asp:TemplateColumn>
+                <asp:TemplateColumn HeaderText="Bank Name">
+                    <ItemTemplate>
+                        <%# DataBinder.Eval(Container.DataItem, "BankName")%>
+                    </ItemTemplate>
+                    <EditItemTemplate>
+                        <asp:TextBox ID="txtBankName" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "BankName")%>'></asp:TextBox>
+                    </EditItemTemplate>
+                    <FooterTemplate>
+                        <asp:TextBox ID="txtFBankName" runat="server" placeholder="Bank Name" CssClass="form-control"></asp:TextBox>
+                    </FooterTemplate>
+                </asp:TemplateColumn>
+                <asp:TemplateColumn HeaderText="Bank Account No.">
+                    <ItemTemplate>
+                        <%# DataBinder.Eval(Container.DataItem, "AccountNumber")%>
+                    </ItemTemplate>
+                    <EditItemTemplate>
+                        <asp:TextBox ID="txtBankAccount" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "AccountNumber")%>'></asp:TextBox>
+                    </EditItemTemplate>
+                    <FooterTemplate>
+                        <asp:TextBox ID="txtFBankAccount" runat="server" placeholder="Account Number" CssClass="form-control"></asp:TextBox>
                     </FooterTemplate>
                 </asp:TemplateColumn>
                 <asp:TemplateColumn HeaderText="Supplier Contact">
@@ -100,7 +120,7 @@
                         <asp:TextBox ID="txtSupplierContact" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "SupplierContact")%>'></asp:TextBox>
                     </EditItemTemplate>
                     <FooterTemplate>
-                        <asp:TextBox ID="txtFSupplierContact" runat="server" CssClass="form-control"></asp:TextBox>
+                        <asp:TextBox ID="txtFSupplierContact" runat="server" placeholder="Supplier Contact" CssClass="form-control"></asp:TextBox>
                     </FooterTemplate>
                 </asp:TemplateColumn>
                 <asp:TemplateColumn HeaderText="Supplier Contact Phone No">
@@ -111,10 +131,10 @@
                         <asp:TextBox ID="txtSupplierphoneContact" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "ContactPhone")%>'></asp:TextBox>
                     </EditItemTemplate>
                     <FooterTemplate>
-                        <asp:TextBox ID="txtFSupplierphoneContact" runat="server" CssClass="form-control"></asp:TextBox>
+                        <asp:TextBox ID="txtFSupplierphoneContact" runat="server" placeholder="Contact Phone" CssClass="form-control"></asp:TextBox>
                     </FooterTemplate>
                 </asp:TemplateColumn>
-                 <asp:TemplateColumn HeaderText="Email">
+                <asp:TemplateColumn HeaderText="Email">
                     <ItemTemplate>
                         <%# DataBinder.Eval(Container.DataItem, "Email")%>
                     </ItemTemplate>
@@ -122,10 +142,10 @@
                         <asp:TextBox ID="txtSupplierEmail" runat="server" CssClass="form-control" Text=' <%# DataBinder.Eval(Container.DataItem, "Email")%>'></asp:TextBox>
                     </EditItemTemplate>
                     <FooterTemplate>
-                        <asp:TextBox ID="txtFSupplierEmail" runat="server" CssClass="form-control"></asp:TextBox>
+                        <asp:TextBox ID="txtFSupplierEmail" runat="server" placeholder="Email" CssClass="form-control"></asp:TextBox>
                     </FooterTemplate>
                 </asp:TemplateColumn>
-                
+
                 <asp:TemplateColumn HeaderText="Actions">
                     <EditItemTemplate>
                         <asp:LinkButton ID="lnkUpdate" runat="server" CommandName="Update" ValidationGroup="1" CssClass="btn btn-xs btn-default"><i class="fa fa-save"></i></asp:LinkButton>
@@ -140,7 +160,7 @@
                     </ItemTemplate>
                 </asp:TemplateColumn>
             </Columns>
-            <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
+            <PagerStyle CssClass="paginate_button active" Mode="NumericPages" HorizontalAlign="Center" />
         </asp:DataGrid>
     </div>
 

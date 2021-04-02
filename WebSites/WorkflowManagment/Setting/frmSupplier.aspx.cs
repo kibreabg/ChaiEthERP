@@ -71,7 +71,11 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         }
 
         #region interface
-        public IList<CoreDomain.Setting.Supplier> Supplier
+        public string SupplierName
+        {
+            get { return txtSupplierName.Text; }
+        }
+        public IList<Supplier> Supplier
         {
             get
             {
@@ -121,6 +125,10 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                     supplier.SupplierType = _presenter.GetSupplierTypeById(Convert.ToInt32(ddlSuppliertype.SelectedValue));
                     TextBox txtFSupplierName = e.Item.FindControl("txtFSupplierName") as TextBox;
                     supplier.SupplierName = txtFSupplierName.Text;
+                    TextBox txtFBankName = e.Item.FindControl("txtFBankName") as TextBox;
+                    supplier.BankName = txtFBankName.Text;
+                    TextBox txtFBankAccount = e.Item.FindControl("txtFBankAccount") as TextBox;
+                    supplier.AccountNumber = txtFBankAccount.Text;
                     TextBox txtFSupplierAddress = e.Item.FindControl("txtFSupplierAddress") as TextBox;
                     supplier.SupplierAddress = txtFSupplierAddress.Text;
                     TextBox txtFSupplierContact = e.Item.FindControl("txtFSupplierContact") as TextBox;
@@ -137,12 +145,11 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
                 }
                 catch (Exception ex)
                 {
-                    Master.ShowMessage(new AppMessage("Error: Unable to Add Supplier " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Error: Unable to Add Supplier " + ex.Message, RMessageType.Error));
                 }
             }
         }
-
-        private void SaveSupplier(Chai.WorkflowManagment.CoreDomain.Setting.Supplier Supplier)
+        private void SaveSupplier(Supplier Supplier)
         {
             try
             {
@@ -191,38 +198,40 @@ namespace Chai.WorkflowManagment.Modules.Setting.Views
         {
 
             int id = (int)dgSupplier.DataKeys[e.Item.ItemIndex];
-            Supplier Supplier = _presenter.GetSupplierById(id);
+            Supplier supplier = _presenter.GetSupplierById(id);
 
             try
             {
                 DropDownList ddlSuppliertype = e.Item.FindControl("ddledtSupplierType") as DropDownList;
-                Supplier.SupplierType = _presenter.GetSupplierTypeById(Convert.ToInt32(ddlSuppliertype.SelectedValue));
+                supplier.SupplierType = _presenter.GetSupplierTypeById(Convert.ToInt32(ddlSuppliertype.SelectedValue));
                 TextBox txtName = e.Item.FindControl("txtSupplierName") as TextBox;
-                Supplier.SupplierName = txtName.Text;
+                supplier.SupplierName = txtName.Text;
                 TextBox txtSupplierAddress = e.Item.FindControl("txtSupplierAddress") as TextBox;
-                Supplier.SupplierAddress = txtSupplierAddress.Text;
+                supplier.SupplierAddress = txtSupplierAddress.Text;
+                TextBox txtBankName = e.Item.FindControl("txtBankName") as TextBox;
+                supplier.BankName = txtBankName.Text;
+                TextBox txtBankAccount = e.Item.FindControl("txtBankAccount") as TextBox;
+                supplier.AccountNumber = txtBankAccount.Text;
                 TextBox txtSupplierContact = e.Item.FindControl("txtSupplierContact") as TextBox;
-                Supplier.SupplierContact = txtSupplierContact.Text;
+                supplier.SupplierContact = txtSupplierContact.Text;
                 TextBox txtSupplierphoneContact = e.Item.FindControl("txtSupplierphoneContact") as TextBox;
-                Supplier.ContactPhone = txtSupplierphoneContact.Text;
+                supplier.ContactPhone = txtSupplierphoneContact.Text;
                 TextBox txtFSupplierEmail = e.Item.FindControl("txtSupplierEmail") as TextBox;
-                Supplier.Email = txtFSupplierEmail.Text;
-                Supplier.SupplierNameType = String.Format(Supplier.SupplierName + " -- " + Supplier.SupplierType.SupplierTypeName);
-                SaveSupplier(Supplier);
+                supplier.Email = txtFSupplierEmail.Text;
+                supplier.SupplierNameType = String.Format(supplier.SupplierName + " -- " + supplier.SupplierType.SupplierTypeName);
+                SaveSupplier(supplier);
                 dgSupplier.EditItemIndex = -1;
                 BindSupplier();
             }
             catch (Exception ex)
             {
-                Master.ShowMessage(new AppMessage("Error: Unable to Update Supplier. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+                Master.ShowMessage(new AppMessage("Error: Unable to Update Supplier. " + ex.Message, RMessageType.Error));
             }
         }
-
-
-        public string SupplierName
+        protected void dgSupplier_PageIndexChanged(object source, DataGridPageChangedEventArgs e)
         {
-            get { return txtSupplierName.Text; }
-        }
-
+            dgSupplier.CurrentPageIndex = e.NewPageIndex;
+            btnFind_Click(source, e);
+        }        
     }
 }
