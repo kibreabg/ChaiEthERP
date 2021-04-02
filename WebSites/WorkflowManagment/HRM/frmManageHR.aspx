@@ -406,7 +406,7 @@
                     </div>
 
                     <div class="modal fade" id="empHistory" tabindex="-1" role="dialog">
-                        <div class="modal-dialog" style="width: 100%;">
+                        <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -563,16 +563,8 @@
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="icon-append fa fa-calendar"></i></span>
-                                                    <asp:TextBox ID="txtEffectDate" runat="server" CssClass="form-control datepicker" placeholder="Change Effective Date" data-dateformat="mm/dd/yy"></asp:TextBox>
-                                                    <cc1:MaskedEditExtender ID="meeEffectiveDate" runat="server"
-                                                        CultureAMPMPlaceholder="" CultureCurrencySymbolPlaceholder=""
-                                                        CultureDateFormat="" CultureDatePlaceholder="" CultureDecimalPlaceholder=""
-                                                        CultureThousandsPlaceholder="" CultureTimePlaceholder="" Enabled="True"
-                                                        Mask="99/99/99" MaskType="Date" TargetControlID="txtEffectDate">
-                                                    </cc1:MaskedEditExtender>
-                                                    <cc1:MaskedEditValidator ID="mevEffectiveDate" runat="server" ControlToValidate="txtEffectDate"
-                                                        ControlExtender="meeEffectiveDate" InvalidValueMessage="Invalid Date Format"
-                                                        IsValidEmpty="False" />
+                                                    <asp:TextBox ID="txtEffectDate" runat="server" CssClass="form-control datepicker" placeholder="Change Effective Date"></asp:TextBox>
+                                                    <cc1:CalendarExtender ID="ceEffectiveDate" CssClass="MyCalendar" TargetControlID="txtEffectDate" runat="server"></cc1:CalendarExtender>
                                                 </div>
                                             </div>
                                         </div>
@@ -602,11 +594,10 @@
                                     <div class="widget-body no-padding">
                                         <div class="smart-form">
                                             <asp:GridView ID="dgChange" runat="server" AutoGenerateColumns="False" CellPadding="3"
-                                                DataKeyNames="Id" ForeColor="#333333"
-                                                GridLines="Horizontal" CssClass="table table-striped table-bordered table-hover"
+                                                DataKeyNames="Id" ForeColor="#333333" GridLines="Horizontal" CssClass="table table-striped table-bordered table-hover"
                                                 PagerStyle-CssClass="paginate_button active" AlternatingRowStyle-CssClass=""
-                                                Width="100%" Style="text-align: left"
-                                                AllowPaging="True" PageSize="20" OnRowCommand="dgChange_RowCommand" OnRowDataBound="dgChange_RowDataBound" OnRowDeleting="dgChange_RowDeleting1">
+                                                Width="100%" Style="text-align: left" AllowPaging="True" PageSize="20" OnRowCommand="dgChange_RowCommand"
+                                                OnRowDataBound="dgChange_RowDataBound" OnRowDeleting="dgChange_RowDeleting1">
                                                 <Columns>
 
                                                     <asp:BoundField DataField="Position.PositionName" HeaderText="Position" />
@@ -648,10 +639,10 @@
 
                     <table style="width: 100%;">
                         <tr>
-                            <td align="right" style="">&nbsp;</td>
-                            <td align="right" style="width: 244px" class="inbox-data-from">&nbsp;</td>
-                            <td align="right" style="width: 271px">&nbsp;</td>
-                            <td align="right" style="width: 389px">&nbsp;</td>
+                            <td style="">&nbsp;</td>
+                            <td style="width: 244px" class="inbox-data-from">&nbsp;</td>
+                            <td style="width: 271px">&nbsp;</td>
+                            <td style="width: 389px">&nbsp;</td>
                             <td>&nbsp;</td>
                         </tr>
 

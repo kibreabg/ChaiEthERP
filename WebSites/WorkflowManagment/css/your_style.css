@@ -50,3 +50,10 @@
 .PagerStyle td {
     padding-left: 2px;
 }
+
+.MyCalendar .ajax__calendar_container {
+    z-index: 1000;
+    border: 1px solid #646464;
+    background-color: dimgrey;
+    color: lightgray;
+}
