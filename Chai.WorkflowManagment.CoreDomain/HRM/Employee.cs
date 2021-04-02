@@ -75,12 +75,10 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
 
         public virtual Contract GetActiveContractForEmp()
         {
-
             foreach (Contract contt in Contracts)
             {
                 if (contt.Status == "Active")
                     return contt;
-
             }
             return null;
         }
@@ -147,8 +145,6 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             }
             else
                 return null;
-
-
         }
         public virtual void RemoveContract(int Id)
         {

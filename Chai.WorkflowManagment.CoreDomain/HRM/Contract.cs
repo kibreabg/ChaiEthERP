@@ -12,8 +12,6 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         public Contract()
         {
             this.EmployeeDetails = new List<EmployeeDetail>();
-
-
         }
         public int Id { get; set; }
         public DateTime ContractStartDate { get; set; }
@@ -27,7 +25,6 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         #region Employee Detail/History
         public virtual EmployeeDetail GetEmployeeDetails(int Id)
         {
-
             foreach (EmployeeDetail TR in EmployeeDetails)
             {
                 if (TR.Id == Id)
@@ -35,8 +32,16 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
             }
             return null;
         }
-
-
+        public virtual EmployeeDetail GetLastEmployeeDetail()
+        {
+            if (EmployeeDetails.Count > 0)
+            {
+                EmployeeDetail theLastDetail = EmployeeDetails.Last();
+                return theLastDetail;
+            }
+            else
+                return null;
+        }
         public virtual void RemoveEmployeeDetail(int Id)
         {
             foreach (EmployeeDetail TR in EmployeeDetails)
@@ -50,6 +55,6 @@ namespace Chai.WorkflowManagment.CoreDomain.HRM
         }
         #endregion
 
-    
+
     }
 }

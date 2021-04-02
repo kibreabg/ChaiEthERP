@@ -135,25 +135,25 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
 
 
         }
-        private void BindEmpDetail(Contract con)
+        private void BindEmpDetail(Contract contract)
         {
-            selectedContract = Session["selectedContract"] as Contract;
-            var prevCont = selectedContract.Employee.GetPreviousContract();
+            EmployeeDetail employeeDetail = contract.GetLastEmployeeDetail();
+            ddlPosition.SelectedValue = employeeDetail.Position.Id.ToString();
+            ddlProgram.SelectedValue = employeeDetail.Program.Id.ToString();
+            ddlDutyStation.SelectedValue = employeeDetail.DutyStation;
+            txtSalary.Text = employeeDetail.Salary.ToString();
+            txtEmployeeStatus.SelectedValue = employeeDetail.EmploymentStatus;
+            txtClass.SelectedValue = employeeDetail.Class;
+            txtHoursPerWeek.Text = employeeDetail.HoursPerWeek;
+            txtBaseCount.Text = employeeDetail.BaseCountry;
+            txtBaseCity.Text = employeeDetail.BaseCity;
+            txtBaseState.Text = employeeDetail.BaseState;
+            txtCountryTeam.Text = employeeDetail.CountryTeam;
+            txtEffectDate.Text = employeeDetail.EffectiveDateOfChange.ToShortDateString();
+            ddlSuperVisor.SelectedValue = employeeDetail.Supervisor.ToString();
 
-            if (prevCont != null && prevCont.EmployeeDetails.Count > 0)
-            {
-                int prevcontId = prevCont.Id;
-                if (prevcontId > 0)
-                {
-                    dgChange.DataSource = prevCont.EmployeeDetails;
-                    dgChange.DataBind();
-                }
-            }
-            else
-            {
-                dgChange.DataSource = selectedContract.EmployeeDetails;
-                dgChange.DataBind();
-            }
+            dgChange.DataSource = contract.EmployeeDetails;
+            dgChange.DataBind();
         }
         protected void dgContractDetail_ItemCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
         {
@@ -456,10 +456,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     }
 
                     _presenter.SaveOrUpdateEmployeeActivity(selectedContract.Employee);
-
-                    BindEmpDetail(empdetail.Contract);
-
-                    ClearEmpDetailFormFields();
+                    BindEmpDetail(_presenter.CurrentEmployee.GetActiveContractForEmp());
                     ScriptManager.RegisterStartupScript(this, GetType(), "showEmpHistoryModal", "showEmpHistoryModal();", true);
                     Master.ShowMessage(new AppMessage("Employee History Successfully Updated!", RMessageType.Info));
                 }
@@ -491,11 +488,10 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     _presenter.CurrentEmployee.GetContract(Convert.ToInt32(hfDetailId.Value)).EmployeeDetails.Add(empdetail);
                 else
                     _presenter.CurrentEmployee.Contracts[Convert.ToInt32(hfDetailId.Value)].EmployeeDetails.Add(empdetail);
-
-                BindEmpDetail(empdetail.Contract);
+                                
                 _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
-                // ClearEmpDetailFormFields();
-                ScriptManager.RegisterStartupScript(this, GetType(), "showEmpHistoryModal", "showEmpHistoryModal();", true);                
+                BindEmpDetail(_presenter.CurrentEmployee.GetActiveContractForEmp());
+                ScriptManager.RegisterStartupScript(this, GetType(), "showEmpHistoryModal", "showEmpHistoryModal();", true);
                 Master.ShowMessage(new AppMessage("Employee History Successfully Added!", RMessageType.Info));
             }
         }

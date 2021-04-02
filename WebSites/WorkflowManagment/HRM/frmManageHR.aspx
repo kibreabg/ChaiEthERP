@@ -431,7 +431,6 @@
                                                     <asp:DropDownList ID="ddlProgram" runat="server" CssClass="form-control" placeholder="Program" AppendDataBoundItems="True"></asp:DropDownList>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidatorProgram" runat="server" Display="Dynamic" ValidationGroup="Savedetail" ErrorMessage="Program Required" InitialValue="0" ControlToValidate="ddlProgram" ForeColor="Red"></asp:RequiredFieldValidator>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
@@ -457,8 +456,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <div class="input-group">
@@ -499,7 +496,6 @@
                                                         <asp:ListItem Value="Volunteer">Volunteer</asp:ListItem>
                                                         <asp:ListItem Value="TCN">TCN</asp:ListItem>
                                                         <asp:ListItem Value="Independent Contractor">Independent Contractor</asp:ListItem>
-
                                                     </asp:DropDownList>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidatorClass" runat="server" Display="Dynamic" ValidationGroup="Savedetail" ErrorMessage="Class Required" InitialValue="0" ControlToValidate="txtClass" ForeColor="Red"></asp:RequiredFieldValidator>
                                                 </div>
