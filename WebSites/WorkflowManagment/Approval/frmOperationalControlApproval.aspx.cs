@@ -236,9 +236,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void SendEmailToSettelmentRequester(PaymentReimbursementRequest settelment)
         {
-
             // if (_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementStatus != "Bank Payment")
-            EmailSender.Send(_presenter.GetUser(settelment.CashPaymentRequest.AppUser.Id).Email, "Settlement", "Your Settlement Request for Cash Payment - '" + (settelment.CashPaymentRequest.RequestNo).ToUpper() + "' was Completed. Please collect your Money");
+            EmailSender.Send(_presenter.GetUser(settelment.CashPaymentRequest.AppUser.Id).Email, "Settlement", "Your Settlement Request for Cash Payment - '" + (settelment.CashPaymentRequest.RequestNo).ToUpper() + "' was Completed. Please follow up with your Bank.");
         }
         private void SendEmail(OperationalControlRequestStatus OCRS)
         {
@@ -291,15 +290,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void SendEmailToTravelRequester(TravelAdvanceRequest tar)
         {
-            EmailSender.Send(_presenter.GetUser(tar.AppUser.Id).Email, "Travel Advance Payment Ready", "The Advance Payment for your Travel Advance Request with Request No. - '" + (tar.TravelAdvanceNo.ToString()).ToUpper() + "' is ready. You can collect your money.");
+            EmailSender.Send(_presenter.GetUser(tar.AppUser.Id).Email, "Travel Advance Payment Ready", "The Advance Payment for your Travel Advance Request with Request No. - '" + (tar.TravelAdvanceNo.ToString()).ToUpper() + "' is ready. Please follow up with your Bank.");
         }
         private void SendEmailToLiquidationRequester(ExpenseLiquidationRequest elr)
         {
-            EmailSender.Send(_presenter.GetUser(elr.TravelAdvanceRequest.AppUser.Id).Email, "Travel Liquidation Payment Ready", "Your Payment for your Travel Liquidation Request with Request No. - '" + (elr.TravelAdvanceRequest.TravelAdvanceNo.ToString()).ToUpper() + "' is ready. You can collect your money.");
+            EmailSender.Send(_presenter.GetUser(elr.TravelAdvanceRequest.AppUser.Id).Email, "Travel Liquidation Payment Ready", "Your Payment for your Travel Liquidation Request with Request No. - '" + (elr.TravelAdvanceRequest.TravelAdvanceNo.ToString()).ToUpper() + "' is ready. Please follow up with your Bank.");
         }
         private void SendEmailToPaymentRequester(CashPaymentRequest cpr)
         {
-            EmailSender.Send(_presenter.GetUser(cpr.AppUser.Id).Email, "Payment Ready", "Your Payment for your Payment Request with Request No. - '" + (cpr.RequestNo.ToString()).ToUpper() + "' is ready. You can collect your money.");
+            EmailSender.Send(_presenter.GetUser(cpr.AppUser.Id).Email, "Payment Ready", "Your Payment for your Payment Request with Request No. - '" + (cpr.RequestNo.ToString()).ToUpper() + "' is ready. Please follow up with your Bank.");
         }
         private void SendEmailPaymentRejected(CashPaymentRequest cpr, string rejectedReason)
         {
