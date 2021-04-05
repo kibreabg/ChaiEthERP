@@ -656,7 +656,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 if (ddlProject != null)
                 {
                     BindProject(ddlProject);
-                    if (_presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestDetails[e.Item.DataSetIndex].Project.Id != 0)
+                    if (_presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestDetails[e.Item.DataSetIndex].Project != null)
                     {
                         ListItem liI = ddlProject.Items.FindByValue(_presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestDetails[e.Item.DataSetIndex].Project.Id.ToString());
                         if (liI != null)
@@ -667,7 +667,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 if (ddlAccountDescription != null)
                 {
                     BindAccountDescription(ddlAccountDescription);
-                    if (_presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestDetails[e.Item.DataSetIndex].ItemAccount.Id != 0)
+                    if (_presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestDetails[e.Item.DataSetIndex].ItemAccount != null)
                     {
                         ListItem liI = ddlAccountDescription.Items.FindByValue(_presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestDetails[e.Item.DataSetIndex].ItemAccount.Id.ToString());
                         if (liI != null)

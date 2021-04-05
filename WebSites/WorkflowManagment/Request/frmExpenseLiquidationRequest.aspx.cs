@@ -583,37 +583,59 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             try
             {
-                if ((Convert.ToDecimal(txtTotalAdvance.Text) <= Convert.ToDecimal(txtTotActual.Text)))
+                decimal totalAdvance = Convert.ToDecimal(txtTotalAdvance.Text);
+                decimal totalActual = Convert.ToDecimal(txtTotActual.Text);
+                bool emptyAccountExists = false;
+                foreach (ExpenseLiquidationRequestDetail elrd in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
                 {
-                    if (CheckReceiptsAttached())
+                    if (elrd.ItemAccount == null)
                     {
-                        //For update cases make the totals equal to zero first then add up the individuals
-                        _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure = 0;
-                        _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance = 0;
-                        foreach (ExpenseLiquidationRequestDetail detail in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
-                        {
-                            _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure + detail.ActualExpenditure;
-                            _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance + detail.AmountAdvanced;
-                            txtTotActual.Text = (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure).ToString();
-                            txtTotalAdvance.Text = (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance).ToString();
-                        }
-
-                        int tarID = Convert.ToInt32(Session["tarId"]);
-                        _presenter.SaveOrUpdateExpenseLiquidationRequest(tarID);
-                        BindExpenseLiquidationRequests();
-                        PrintTransaction();
-                        Master.ShowMessage(new AppMessage("Travel Expense Liquidation Successfully Requested!", RMessageType.Info));
-                        Log.Info(_presenter.CurrentUser().FullName + " has requested an Expense Liquidation for a total amount of " + _presenter.CurrentTravelAdvanceRequest.TotalTravelAdvance.ToString());
-                        btnSave.Visible = false;
-                        btnPrint.Enabled = true;
-                        Session["tarId"] = null;
+                        emptyAccountExists = true;
                     }
-                    else { Master.ShowMessage(new AppMessage("Please attach the required receipts", RMessageType.Error)); }
+                }
+
+                if (!emptyAccountExists)
+                {
+                    if ((totalAdvance == totalActual) || (totalAdvance < totalActual && !String.IsNullOrEmpty(txtAdditionalComment.Text)))
+                    {
+                        if (CheckReceiptsAttached())
+                        {
+                            //For update cases make the totals equal to zero first then add up the individuals
+                            _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure = 0;
+                            _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance = 0;
+                            foreach (ExpenseLiquidationRequestDetail detail in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
+                            {
+                                _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure + detail.ActualExpenditure;
+                                _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance + detail.AmountAdvanced;
+                                txtTotActual.Text = (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure).ToString();
+                                txtTotalAdvance.Text = (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance).ToString();
+                            }
+
+                            int tarID = Convert.ToInt32(Session["tarId"]);
+                            _presenter.SaveOrUpdateExpenseLiquidationRequest(tarID);
+                            BindExpenseLiquidationRequests();
+                            PrintTransaction();
+                            Master.ShowMessage(new AppMessage("Travel Expense Liquidation Successfully Requested!", RMessageType.Info));
+                            Log.Info(_presenter.CurrentUser().FullName + " has requested an Expense Liquidation for a total amount of " + _presenter.CurrentTravelAdvanceRequest.TotalTravelAdvance.ToString());
+                            btnSave.Visible = false;
+                            btnPrint.Enabled = true;
+                            Session["tarId"] = null;
+                        }
+                        else { Master.ShowMessage(new AppMessage("Please attach the required receipts", RMessageType.Error)); }
+                    }
+                    else if (totalAdvance < totalActual && String.IsNullOrEmpty(txtAdditionalComment.Text))
+                    {
+                        Master.ShowMessage(new AppMessage("Please specify your reason for the OVERSPENT expenses!", RMessageType.Error));
+                    }
+                    else
+                    {
+                        decimal variance = (Convert.ToDecimal(txtTotalAdvance.Text) - Convert.ToDecimal(txtTotActual.Text));
+                        Master.ShowMessage(new AppMessage("Please liquidate the remaining " + variance.ToString() + " birr with your receipt from Bank!", RMessageType.Error));
+                    }
                 }
                 else
                 {
-                    decimal variance = (Convert.ToDecimal(txtTotalAdvance.Text) - Convert.ToDecimal(txtTotActual.Text));
-                    Master.ShowMessage(new AppMessage("Please liquidate the remaining " + variance.ToString() + " birr with your receipt from Bank!", RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("Please update all Chart of Accounts!", RMessageType.Error));
                 }
             }
             catch (Exception ex)

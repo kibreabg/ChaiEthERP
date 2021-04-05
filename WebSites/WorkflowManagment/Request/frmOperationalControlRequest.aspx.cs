@@ -211,12 +211,15 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         {
                             _presenter.CurrentOperationalControlRequest.LiquidationId = liquidationId;
                             txtOriginalRequester.Text = ELR.TravelAdvanceRequest.AppUser.FullName;
+                            txtDescription.Text = ELR.AdditionalComment;
 
-                            OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
-                            OCRD.Amount = ELR.TotalActualExpenditure - ELR.TotalTravelAdvance;
-                            OCRD.ItemAccount = _presenter.GetDefaultItemAccount();
-                            OCRD.Project = ELR.ExpenseLiquidationRequestDetails[0].Project;
-                            OCRD.Grant = ELR.ExpenseLiquidationRequestDetails[0].Grant;
+                            OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail
+                            {
+                                Amount = ELR.TotalActualExpenditure - ELR.TotalTravelAdvance,
+                                ItemAccount = _presenter.GetDefaultItemAccount(),
+                                Project = ELR.ExpenseLiquidationRequestDetails[0].Project,
+                                Grant = ELR.ExpenseLiquidationRequestDetails[0].Grant
+                            };
 
                             _presenter.CurrentOperationalControlRequest.TotalAmount = OCRD.Amount;
                             _presenter.CurrentOperationalControlRequest.TotalActualExpendture = OCRD.Amount;
@@ -299,7 +302,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void BindOperationalControlDetails()
         {
-            txtDescription.Text = _presenter.CurrentOperationalControlRequest.Description;
+            if (_presenter.CurrentOperationalControlRequest.TotalActualExpendture - _presenter.CurrentOperationalControlRequest.TotalAmount > 0)
+                txtDescription.Text = _presenter.CurrentOperationalControlRequest.Description;
             if (_presenter.CurrentOperationalControlRequest.Supplier != null)
             {
                 ddlBeneficiary.SelectedValue = _presenter.CurrentOperationalControlRequest.Supplier.Id.ToString();

@@ -144,7 +144,7 @@
                                                     <section class="col col-6">
                                                         <label class="label">Total Actual Expenditure </label>
                                                         <label class="input">
-                                                            <asp:TextBox ID="txtTotActual" runat="server" ReadOnly="true"></asp:TextBox>
+                                                            <asp:TextBox ID="txtTotActual" Text="0" runat="server" ReadOnly="true"></asp:TextBox>
                                                         </label>
                                                     </section>
                                                     <section class="col col-6">
@@ -163,7 +163,7 @@
                                                         </label>
                                                     </section>
                                                     <section class="col col-6">
-                                                        <label class="label">Comment</label>
+                                                        <label class="label">Additional Comment <span style="color: red;">(Please specify reason for OVERSPENT expenses!)</span></label>
                                                         <label class="input">
                                                             <asp:TextBox ID="txtAdditionalComment" runat="server"></asp:TextBox>
                                                         </label>
