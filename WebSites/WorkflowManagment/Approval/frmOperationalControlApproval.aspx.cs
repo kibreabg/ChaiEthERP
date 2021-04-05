@@ -258,11 +258,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     if (Payer.IsAssignedJob != true)
                     {
-                        EmailSender.Send(Payer.Email, "Bank Payment Approval", (_presenter.CurrentOperationalControlRequest.AppUser.FullName).ToUpper() + " Requests for Bank Payment with Request No. " + (_presenter.CurrentOperationalControlRequest.RequestNo).ToUpper());
+                        //Commented out because Finance team got tired of emails
+                        //EmailSender.Send(Payer.Email, "Bank Payment Approval", (_presenter.CurrentOperationalControlRequest.AppUser.FullName).ToUpper() + " Requests for Bank Payment with Request No. " + (_presenter.CurrentOperationalControlRequest.RequestNo).ToUpper());
                     }
                     else
                     {
-                        EmailSender.Send(_presenter.GetUser(_presenter.GetAssignedJobbycurrentuser(Payer.Id).AssignedTo).Email, "Bank Payment Approval", (_presenter.CurrentOperationalControlRequest.AppUser.FullName).ToUpper() + " Requests for Bank Payment with Request No. '" + (_presenter.CurrentOperationalControlRequest.RequestNo).ToUpper());
+                        //Commented out because Finance team got tired of emails
+                        //EmailSender.Send(_presenter.GetUser(_presenter.GetAssignedJobbycurrentuser(Payer.Id).AssignedTo).Email, "Bank Payment Approval", (_presenter.CurrentOperationalControlRequest.AppUser.FullName).ToUpper() + " Requests for Bank Payment with Request No. '" + (_presenter.CurrentOperationalControlRequest.RequestNo).ToUpper());
                     }
                 }
             }

@@ -247,11 +247,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     if (Payer.IsAssignedJob != true)
                     {
-                        EmailSender.Send(Payer.Email, "Settlement Approval", (_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.AppUser.FullName).ToUpper() + " Settlement for Payment with Request No. " + (_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.RequestNo).ToUpper());
+                        //Commented out because Finance team got tired of emails
+                        //EmailSender.Send(Payer.Email, "Settlement Approval", (_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.AppUser.FullName).ToUpper() + " Settlement for Payment with Request No. " + (_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.RequestNo).ToUpper());
                     }
                     else
                     {
-                        EmailSender.Send(_presenter.GetUser(_presenter.GetAssignedJobbycurrentuser(Payer.Id).AssignedTo).Email, "Settlement Approval", (_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.AppUser.FullName).ToUpper() + " Settlement for Payment with Request No. '" + (_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.RequestNo).ToUpper());
+                        //Commented out because Finance team got tired of emails
+                        //EmailSender.Send(_presenter.GetUser(_presenter.GetAssignedJobbycurrentuser(Payer.Id).AssignedTo).Email, "Settlement Approval", (_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.AppUser.FullName).ToUpper() + " Settlement for Payment with Request No. '" + (_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.RequestNo).ToUpper());
                     }
                 }
             }

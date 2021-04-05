@@ -224,11 +224,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     if (Payer.IsAssignedJob != true)
                     {
-                        EmailSender.Send(Payer.Email, "Travel Advance Approval", (_presenter.CurrentTravelAdvanceRequest.AppUser.FullName).ToUpper() + " Requests for Travel Advance with Travel Advance No. - " + (_presenter.CurrentTravelAdvanceRequest.TravelAdvanceNo).ToUpper());
+                        //Commented out because Finance team got tired of emails
+                        //EmailSender.Send(Payer.Email, "Travel Advance Approval", (_presenter.CurrentTravelAdvanceRequest.AppUser.FullName).ToUpper() + " Requests for Travel Advance with Travel Advance No. - " + (_presenter.CurrentTravelAdvanceRequest.TravelAdvanceNo).ToUpper());
                     }
                     else
                     {
-                        EmailSender.Send(_presenter.GetUser(_presenter.GetAssignedJobbycurrentuser(Payer.Id).AssignedTo).Email, "Travel Advance Approval", (_presenter.CurrentTravelAdvanceRequest.AppUser.FullName).ToUpper() + " Requests for Travel Advance with Travel Advance No. - " + (_presenter.CurrentTravelAdvanceRequest.TravelAdvanceNo).ToUpper());
+                        //Commented out because Finance team got tired of emails
+                        //EmailSender.Send(_presenter.GetUser(_presenter.GetAssignedJobbycurrentuser(Payer.Id).AssignedTo).Email, "Travel Advance Approval", (_presenter.CurrentTravelAdvanceRequest.AppUser.FullName).ToUpper() + " Requests for Travel Advance with Travel Advance No. - " + (_presenter.CurrentTravelAdvanceRequest.TravelAdvanceNo).ToUpper());
                     }
                 }
             }

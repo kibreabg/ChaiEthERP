@@ -262,11 +262,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     if (Payer.IsAssignedJob != true)
                     {
-                        EmailSender.Send(Payer.Email, "Expense Liquidation Request", (_presenter.CurrentExpenseLiquidationRequest.TravelAdvanceRequest.AppUser.FullName).ToUpper() + " Requests for Expense Liquidation to Travel Advance No. '" + (_presenter.CurrentExpenseLiquidationRequest.TravelAdvanceRequest.TravelAdvanceNo).ToUpper() + "'");
+                        //Commented out because Finance team got tired of emails
+                        //EmailSender.Send(Payer.Email, "Expense Liquidation Request", (_presenter.CurrentExpenseLiquidationRequest.TravelAdvanceRequest.AppUser.FullName).ToUpper() + " Requests for Expense Liquidation to Travel Advance No. '" + (_presenter.CurrentExpenseLiquidationRequest.TravelAdvanceRequest.TravelAdvanceNo).ToUpper() + "'");
                     }
                     else
                     {
-                        EmailSender.Send(_presenter.GetUser(_presenter.GetAssignedJobbycurrentuser(Payer.Id).AssignedTo).Email, "Expense Liquidation Request", (_presenter.CurrentExpenseLiquidationRequest.TravelAdvanceRequest.AppUser.FullName).ToUpper() + " Requests for Expense Liquidation to Travel Advance No. '" + (_presenter.CurrentExpenseLiquidationRequest.TravelAdvanceRequest.TravelAdvanceNo).ToUpper() + "'");
+                        //Commented out because Finance team got tired of emails
+                        //EmailSender.Send(_presenter.GetUser(_presenter.GetAssignedJobbycurrentuser(Payer.Id).AssignedTo).Email, "Expense Liquidation Request", (_presenter.CurrentExpenseLiquidationRequest.TravelAdvanceRequest.AppUser.FullName).ToUpper() + " Requests for Expense Liquidation to Travel Advance No. '" + (_presenter.CurrentExpenseLiquidationRequest.TravelAdvanceRequest.TravelAdvanceNo).ToUpper() + "'");
                     }
                 }
             }
