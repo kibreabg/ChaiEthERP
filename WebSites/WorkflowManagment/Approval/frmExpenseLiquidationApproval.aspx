@@ -110,11 +110,12 @@
             <RowStyle CssClass="rowstyle" />
         </asp:GridView>
         <div>
-            <asp:Button runat="server" ID="btnInProgress" Text="" BorderStyle="None" BackColor="#FFFF6C" />
+            <asp:Button runat="server" ID="btnInProgress" Enabled="false" Text="" BorderStyle="None" BackColor="#FFFF6C" />
             <b>In Progress</b><br />
-            <asp:Button runat="server" ID="btnComplete" Text="" BorderStyle="None" BackColor="#FF7251" />
-            <b>Completed</b>
-
+            <asp:Button runat="server" ID="btnComplete" Enabled="false" Text="" BorderStyle="None" BackColor="#FF7251" />
+            <b>Completed</b><br />
+            <asp:Button runat="server" ID="btnAwaitBank" Enabled="false" Text="" BorderStyle="None" BackColor="Green" />
+            <b>Awaiting Bank Payment</b>
         </div>
         <br />
     </div>

@@ -42,7 +42,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 PrintTransaction();
             }
-           
+
         }
         [CreateNew]
         public PaymentReimbursementApprovalPresenter Presenter
@@ -86,6 +86,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         private bool IsBankPaymentRequested()
         {
             OperationalControlRequest ocr = _presenter.GetOperationalControlRequestByLiquidationId(_presenter.CurrentPaymentReimbursementRequest.Id);
+            if (ocr != null)
+                return true;
+            else
+                return false;
+        }
+        private bool IsBankPaymentRequested(int settlmentId)
+        {
+            OperationalControlRequest ocr = _presenter.GetOperationalControlRequestByLiquidationId(settlmentId);
             if (ocr != null)
                 return true;
             else
@@ -189,9 +197,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 {
                     btnApprove.Enabled = true;
                 }
-                else
+                //else
                 // btnApprove.Enabled = false;
-           if (PRRS.WorkflowLevel == _presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Count && PRRS.ApprovalStatus != null)
+                if (PRRS.WorkflowLevel == _presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Count && PRRS.ApprovalStatus != null)
                 {
                     btnPrint.Enabled = true;
                     btnApprove.Enabled = false;
@@ -210,7 +218,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             //Bank Payment should be initiated if CHAI is the one who's going to pay (variance is Positive)
             decimal variance = _presenter.CurrentPaymentReimbursementRequest.TotalAmount - _presenter.CurrentPaymentReimbursementRequest.ReceivableAmount;
 
-            if (_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Last().ApprovalStatus == "Bank Payment" && variance > 0  && !IsBankPaymentRequested() &&  _presenter.CurrentPaymentReimbursementRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
+            if (_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Last().ApprovalStatus == "Bank Payment" && variance > 0 && !IsBankPaymentRequested() && _presenter.CurrentPaymentReimbursementRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
                 btnBankPayment.Visible = true;
             else
                 btnBankPayment.Visible = false;
@@ -273,7 +281,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         if (_presenter.CurrentPaymentReimbursementRequest.CurrentLevel == _presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Count)
                         {
                             _presenter.CurrentPaymentReimbursementRequest.ProgressStatus = ProgressStatus.Completed.ToString();
-                            if(_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Last().ApprovalStatus != "Bank Payment")
+                            if (_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Last().ApprovalStatus != "Bank Payment")
                                 _presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.PaymentReimbursementStatus = "Finished";
 
                         }
@@ -312,7 +320,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
 
             if (_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Count == _presenter.CurrentPaymentReimbursementRequest.CurrentLevel)
-            EmailSender.Send(_presenter.GetUser(_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.AppUser.Id).Email, "Settlement", "Your Settlement Request for Cash Payment - '" + (_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.RequestNo).ToUpper() + "' was Completed");
+                EmailSender.Send(_presenter.GetUser(_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.AppUser.Id).Email, "Settlement", "Your Settlement Request for Cash Payment - '" + (_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.RequestNo).ToUpper() + "' was Completed");
         }
         private void GetNextApprover()
         {
@@ -355,7 +363,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             //grvPaymentReimbursementRequestList.SelectedDataKey.Value
             _presenter.OnViewLoaded();
-            lblOverSpend.Text = (_presenter.CurrentPaymentReimbursementRequest.ReceivableAmount- _presenter.CurrentPaymentReimbursementRequest.TotalAmount).ToString();
+            lblOverSpend.Text = (_presenter.CurrentPaymentReimbursementRequest.ReceivableAmount - _presenter.CurrentPaymentReimbursementRequest.TotalAmount).ToString();
             if (_presenter.CurrentPaymentReimbursementRequest.ProgressStatus == ProgressStatus.Completed.ToString())
             {
                 PrintTransaction();
@@ -372,20 +380,25 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         protected void grvPaymentReimbursementRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             Button btnStatus = e.Row.FindControl("btnStatus") as Button;
-            PaymentReimbursementRequest CSR = e.Row.DataItem as PaymentReimbursementRequest;
+            PaymentReimbursementRequest PRR = e.Row.DataItem as PaymentReimbursementRequest;
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                if (CSR != null)
+                if (PRR != null)
                 {
-                    if (CSR.ProgressStatus == ProgressStatus.InProgress.ToString())
+                    //Bank Payment should be initiated if CHAI is the one who's going to pay (variance is Positive)
+                    decimal variance = PRR.TotalAmount - PRR.ReceivableAmount;
+
+                    if (PRR.ProgressStatus == ProgressStatus.InProgress.ToString())
                     {
                         btnStatus.BackColor = System.Drawing.ColorTranslator.FromHtml("#FFFF6C");
-
                     }
-                    else if (CSR.ProgressStatus == ProgressStatus.Completed.ToString())
+                    else if (PRR.PaymentReimbursementRequestStatuses.Last().ApprovalStatus == "Bank Payment" && variance > 0 && !IsBankPaymentRequested(PRR.Id) && PRR.CurrentStatus != ApprovalStatus.Rejected.ToString())
+                    {
+                        btnStatus.BackColor = System.Drawing.Color.Green;
+                    }
+                    else if (PRR.ProgressStatus == ProgressStatus.Completed.ToString())
                     {
                         btnStatus.BackColor = System.Drawing.ColorTranslator.FromHtml("#FF7251");
-
                     }
                 }
             }

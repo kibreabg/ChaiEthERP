@@ -219,6 +219,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             else
                 return false;
         }
+        private bool IsBankPaymentRequested(int liquidationId)
+        {
+            OperationalControlRequest ocr = _presenter.GetOperationalControlRequestByLiquidationId(liquidationId);
+            if (ocr != null)
+                return true;
+            else
+                return false;
+        }
         private void BindAttachments()
         {
             List<ELRAttachment> attachments = new List<ELRAttachment>();
@@ -402,22 +410,28 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         protected void grvExpenseLiquidationRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             Button btnStatus = e.Row.FindControl("btnStatus") as Button;
-            ExpenseLiquidationRequest CSR = e.Row.DataItem as ExpenseLiquidationRequest;
-            if (CSR != null)
+            ExpenseLiquidationRequest ELR = e.Row.DataItem as ExpenseLiquidationRequest;            
+
+            if (ELR != null)
             {
+                //Bank Payment should be initiated if CHAI is the one who's going to pay (variance is Positive)
+                decimal variance = ELR.TotalActualExpenditure - ELR.TotalTravelAdvance;
+
                 if (e.Row.RowType == DataControlRowType.DataRow)
                 {
-
-                    if (CSR.ProgressStatus == ProgressStatus.InProgress.ToString())
+                    if (ELR.ProgressStatus == ProgressStatus.InProgress.ToString())
                     {
                         btnStatus.BackColor = System.Drawing.ColorTranslator.FromHtml("#FFFF6C");
 
                     }
-                    else if (CSR.ProgressStatus == ProgressStatus.Completed.ToString())
+                    else if (ELR.ExpenseLiquidationRequestStatuses.Last().ApprovalStatus == "Bank Payment" && !IsBankPaymentRequested(ELR.Id) && variance > 0 && ELR.CurrentStatus != ApprovalStatus.Rejected.ToString())
+                    {
+                        btnStatus.BackColor = System.Drawing.Color.Green;
+                    }
+                    else if (ELR.ProgressStatus == ProgressStatus.Completed.ToString())
                     {
                         btnStatus.BackColor = System.Drawing.ColorTranslator.FromHtml("#FF7251");
-
-                    }
+                    }                    
                 }
             }
         }
@@ -538,7 +552,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         BindSearchExpenseLiquidationRequestGrid();
                         ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true); ;
                         PrintTransaction();
-                    }                    
+                    }
                 }
             }
             catch (Exception ex)

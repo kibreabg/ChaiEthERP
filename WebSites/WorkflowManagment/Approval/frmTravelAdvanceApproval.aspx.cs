@@ -262,6 +262,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             else
                 return false;
         }
+        private bool IsBankPaymentRequested(int travelId)
+        {
+            OperationalControlRequest ocr = _presenter.GetOperationalControlRequestByTravelId(travelId);
+            if (ocr != null)
+                return true;
+            else
+                return false;
+        }
         private void GetNextApprover()
         {
             foreach (TravelAdvanceRequestStatus TARS in _presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestStatuses)
@@ -384,20 +392,22 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         protected void grvTravelAdvanceRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             Button btnStatus = e.Row.FindControl("btnStatus") as Button;
-            TravelAdvanceRequest CSR = e.Row.DataItem as TravelAdvanceRequest;
-            if (CSR != null)
+            TravelAdvanceRequest TAR = e.Row.DataItem as TravelAdvanceRequest;
+            if (TAR != null)
             {
                 if (e.Row.RowType == DataControlRowType.DataRow)
                 {
-                    if (CSR.ProgressStatus == ProgressStatus.InProgress.ToString())
+                    if (TAR.ProgressStatus == ProgressStatus.InProgress.ToString())
                     {
                         btnStatus.BackColor = System.Drawing.ColorTranslator.FromHtml("#FFFF6C");
-
                     }
-                    else if (CSR.ProgressStatus == ProgressStatus.Completed.ToString())
+                    else if (TAR.TravelAdvanceRequestStatuses.Last().ApprovalStatus == "Bank Payment" && !IsBankPaymentRequested(TAR.Id) && TAR.CurrentStatus != ApprovalStatus.Rejected.ToString())
+                    {
+                        btnStatus.BackColor = System.Drawing.Color.Green;
+                    }
+                    else if (TAR.ProgressStatus == ProgressStatus.Completed.ToString())
                     {
                         btnStatus.BackColor = System.Drawing.ColorTranslator.FromHtml("#FF7251");
-
                     }
                 }
             }
