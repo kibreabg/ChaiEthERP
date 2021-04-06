@@ -5,6 +5,7 @@
 
 <%@ Register TagPrefix="asp" Namespace="AjaxControlToolkit" Assembly="AjaxControlToolkit" %>
 <asp:Content ID="Content2" ContentPlaceHolderID="DefaultContent" runat="Server">
+    <script src="../js/libs/jquery-2.0.2.min.js"></script>
     <script type="text/javascript">
         function Clickheretoprint(theid) {
             var disp_setting = "toolbar=yes,location=no,directories=yes,menubar=yes,";
@@ -19,6 +20,17 @@
             docprint.document.write('</center></body></html>');
             docprint.document.close();
             docprint.focus();
+        }
+        function showApprovalModal() {
+            $(document).ready(function () {
+                $('#approvalModal').modal('show');
+            });
+        }
+
+        function showDetailModal() {
+            $(document).ready(function () {
+                $('#detailModal').modal('show');
+            });
         }
     </script>
     <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
@@ -103,145 +115,144 @@
         </div>
         <br />
     </div>
-    <asp:Panel ID="pnlApproval" runat="server">
-        <div class="modal-dialog">
+    <div class="modal fade" id="approvalModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" style="width: 800px;">
             <div class="modal-content">
                 <div class="modal-header">
-                    <label class="label-info">
-                        <asp:Label ID="lblOverSpendrefund" runat="server" Text="Over Spend Refund :- " Visible="true" CssClass="label"></asp:Label>
-
-                        <asp:Label ID="lblOverSpend" runat="server" Text="-" Visible="true" CssClass="label"></asp:Label>
-
-                    </label>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Process Payment Settlement Request</h4>
+                    <asp:Label ID="lblOverSpendrefund" ForeColor="Red" runat="server" Font-Size="Medium" Text="Over Spend Refund :- " Visible="true"></asp:Label>
+                    <asp:Label ID="lblOverSpend" runat="server" ForeColor="Red" Font-Size="Medium" Text="-" Visible="true"></asp:Label>
                 </div>
-                <div class="modal-body no-padding">
-                    <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
-                        <header>
-                            <span class="widget-icon"><i class="fa fa-edit"></i></span>
-                            <h2>Process Payment Settlement Request</h2>
-                        </header>
-                        <div>
-                            <div class="jarviswidget-editbox"></div>
-                            <div class="widget-body no-padding">
-                                <div class="smart-form">
-                                    <fieldset>
-                                        <div class="row">
-                                            <section class="col col-6">
-                                                <asp:Label ID="lblApprovalStatus" runat="server" Text="Approval Status" CssClass="label"></asp:Label>
-                                                <label class="select">
-                                                    <asp:DropDownList ID="ddlApprovalStatus" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlApprovalStatus_SelectedIndexChanged">
-                                                        <asp:ListItem Value="0">Select Status</asp:ListItem>
-                                                    </asp:DropDownList><i></i>
-                                                    <asp:RequiredFieldValidator ID="RfvApprovalStatus" runat="server" ValidationGroup="save" ErrorMessage="Approval Status Required" InitialValue="0" ControlToValidate="ddlApprovalStatus"></asp:RequiredFieldValidator>
-                                                </label>
-                                            </section>
-                                            <section class="col col-6">
-                                                <asp:Label ID="lblRejectedReason" runat="server" Text="Rejected Reason" Visible="false" CssClass="label"></asp:Label>
-                                                <label class="input">
-                                                    <asp:TextBox ID="txtRejectedReason" Visible="false" runat="server"></asp:TextBox>
-                                                    <asp:RequiredFieldValidator ID="rfvRejectedReason" runat="server" Enabled="false" CssClass="validator" ValidationGroup="save" ErrorMessage="Must Enter Rejection Reason" ControlToValidate="txtRejectedReason"></asp:RequiredFieldValidator>
-                                                </label>
-                                            </section>
-                                        </div>
-                                        <div class="row">
-                                            <section class="col col-6">
-                                                <asp:Label ID="lblAttachments" runat="server" Text="Attachments" CssClass="label"></asp:Label>
-                                                <asp:GridView ID="grvAttachments"
-                                                    runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                                                    CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
-                                                    <RowStyle CssClass="rowstyle" />
-                                                    <Columns>
-                                                        <asp:BoundField DataField="FilePath" HeaderText="File Name" SortExpression="FilePath" />
-                                                        <asp:TemplateField>
-                                                            <ItemTemplate>
-                                                                <asp:LinkButton ID="lnkDownload" Text="Download" CommandArgument='<%# Eval("FilePath") %>' runat="server" OnClick="DownloadFile"></asp:LinkButton>
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>
-                                                    </Columns>
-                                                    <FooterStyle CssClass="FooterStyle" />
-                                                    <HeaderStyle CssClass="headerstyle" />
-                                                    <PagerStyle CssClass="PagerStyle" />
-                                                    <RowStyle CssClass="rowstyle" />
-                                                </asp:GridView>
-                                            </section>
-
-                                        </div>
-                                    </fieldset>
-                                    <footer>
-                                        <asp:Button ID="btnApprove" runat="server" ValidationGroup="save" Text="Save" OnClick="btnApprove_Click" Enabled="false" CssClass="btn btn-primary"></asp:Button>
-                                        <asp:Button ID="btnCancelPopup" runat="server" Text="Close" CssClass="btn btn-primary" OnClick="btnCancelPopup_Click"></asp:Button>
-                                        <asp:Button ID="btnBankPayment" runat="server" CssClass="btn btn-default" OnClick="btnBankPayment_Click" Text="Bank Payment" Visible="False" />
-                                        <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-primary" Enabled="false" OnClientClick="javascript:Clickheretoprint('divprint')"></asp:Button>
-                                    </footer>
+                <div class="modal-body">
+                    <div class="jarviswidget-editbox"></div>
+                    <div class="widget-body no-padding">
+                        <div class="smart-form">
+                            <fieldset>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <asp:Label ID="lblApprovalStatus" runat="server" Text="Approval Status" CssClass="label"></asp:Label>
+                                        <label class="select">
+                                            <asp:DropDownList ID="ddlApprovalStatus" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlApprovalStatus_SelectedIndexChanged">
+                                                <asp:ListItem Value="0">Select Status</asp:ListItem>
+                                            </asp:DropDownList><i></i>
+                                            <asp:RequiredFieldValidator ID="RfvApprovalStatus" runat="server" ValidationGroup="save" ErrorMessage="Approval Status Required" InitialValue="0" ControlToValidate="ddlApprovalStatus"></asp:RequiredFieldValidator>
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <asp:Label ID="lblRejectedReason" runat="server" Text="Rejected Reason" Visible="false" CssClass="label"></asp:Label>
+                                        <label class="input">
+                                            <asp:TextBox ID="txtRejectedReason" Visible="false" runat="server"></asp:TextBox>
+                                            <asp:RequiredFieldValidator ID="rfvRejectedReason" runat="server" Enabled="false" CssClass="validator" ValidationGroup="save" ErrorMessage="Must Enter Rejection Reason" ControlToValidate="txtRejectedReason"></asp:RequiredFieldValidator>
+                                        </label>
+                                    </section>
                                 </div>
-                            </div>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <asp:Label ID="lblAttachments" runat="server" Text="Attachments" CssClass="label"></asp:Label>
+                                        <asp:GridView ID="grvAttachments"
+                                            runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                                            CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
+                                            <RowStyle CssClass="rowstyle" />
+                                            <Columns>
+                                                <asp:BoundField DataField="FilePath" HeaderText="File Name" SortExpression="FilePath" />
+                                                <asp:TemplateField>
+                                                    <ItemTemplate>
+                                                        <asp:LinkButton ID="lnkDownload" Text="Download" CommandArgument='<%# Eval("FilePath") %>' runat="server" OnClick="DownloadFile"></asp:LinkButton>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                            </Columns>
+                                            <FooterStyle CssClass="FooterStyle" />
+                                            <HeaderStyle CssClass="headerstyle" />
+                                            <PagerStyle CssClass="PagerStyle" />
+                                            <RowStyle CssClass="rowstyle" />
+                                        </asp:GridView>
+                                    </section>
+
+                                </div>
+                            </fieldset>
+                            <footer>
+                                <asp:Button ID="btnApprove" runat="server" ValidationGroup="save" Text="Save" OnClick="btnApprove_Click" Enabled="false" CssClass="btn btn-primary"></asp:Button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                <asp:Button ID="btnBankPayment" runat="server" CssClass="btn btn-default" OnClick="btnBankPayment_Click" Text="Bank Payment" Visible="False" />
+                                <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-primary" Enabled="false" OnClientClick="javascript:Clickheretoprint('divprint')"></asp:Button>
+                            </footer>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- /.modal-content -->
-    </asp:Panel>
-    <asp:ModalPopupExtender runat="server" BackgroundCssClass="modalBackground" Enabled="True"
-        PopupControlID="pnlApproval" TargetControlID="btnPop"
-        ID="pnlApproval_ModalPopupExtender">
-    </asp:ModalPopupExtender>
-    <asp:Panel ID="pnlDetail" Visible="false" Style="position: absolute; top: 10%; left: 10%;" runat="server">
-        <div class="modal-content">
-            <div class="modal-body no-padding">
-                <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false">
-                    <header>
-                        <span class="widget-icon"><i class="fa fa-edit"></i></span>
-                        <h2>Reimbursement Details</h2>
-                    </header>
-                    <div>
-                        <div class="jarviswidget-editbox"></div>
-                        <div class="widget-body no-padding">
-                            <div class="smart-form">
+    </div>
+    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" style="width: 100%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;</button>
+                    <h4 class="modal-title">Advance Settlement Detail</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="jarviswidget-editbox"></div>
+                    <div class="widget-body no-padding">
+                        <div class="smart-form">
+                            <div style="overflow-x: auto;">
                                 <asp:DataGrid ID="dgReimbursementDetail" runat="server"
                                     AutoGenerateColumns="False" CellPadding="0" CssClass="table table-striped table-bordered table-hover"
-                                    DataKeyField="Id" GridLines="None" PagerStyle-CssClass="paginate_button active" ShowFooter="True">
+                                    DataKeyField="Id" GridLines="None" PagerStyle-CssClass="paginate_button active" ShowFooter="True"
+                                    OnItemDataBound="dgReimbursementDetail_ItemDataBound" OnEditCommand="dgReimbursementDetail_EditCommand"
+                                    OnUpdateCommand="dgReimbursementDetail_UpdateCommand">
                                     <Columns>
                                         <asp:TemplateColumn HeaderText="Account Name">
                                             <ItemTemplate>
                                                 <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountName")%>
                                             </ItemTemplate>
-
+                                            <EditItemTemplate>
+                                                <asp:DropDownList ID="ddlEdtAccountDescription" CssClass="form-control" OnSelectedIndexChanged="ddlEdtAccountDescription_SelectedIndexChanged" runat="server" AppendDataBoundItems="true" AutoPostBack="True">
+                                                    <asp:ListItem Value="0">Select Account</asp:ListItem>
+                                                </asp:DropDownList>
+                                                <i></i>
+                                            </EditItemTemplate>
                                         </asp:TemplateColumn>
                                         <asp:TemplateColumn HeaderText="Account Code">
                                             <ItemTemplate>
                                                 <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountCode")%>
                                             </ItemTemplate>
-
+                                            <EditItemTemplate>
+                                                <asp:TextBox ID="txtEdtAccountCode" ReadOnly="true" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountCode")%>'></asp:TextBox>
+                                            </EditItemTemplate>
                                         </asp:TemplateColumn>
-
                                         <asp:TemplateColumn HeaderText="Actual Expenditure">
                                             <ItemTemplate>
                                                 <%# DataBinder.Eval(Container.DataItem, "ActualExpenditure")%>
                                             </ItemTemplate>
                                         </asp:TemplateColumn>
-
                                         <asp:TemplateColumn HeaderText="Project ID">
                                             <ItemTemplate>
                                                 <%# DataBinder.Eval(Container.DataItem, "PaymentReimbursementRequest.Project.ProjectCode")%>
                                             </ItemTemplate>
-
                                         </asp:TemplateColumn>
-
-
+                                        <asp:TemplateColumn HeaderText="Actions">
+                                            <EditItemTemplate>
+                                                <asp:LinkButton ID="lnkUpdate" runat="server" CausesValidation="true" CommandName="Update" CssClass="btn btn-xs btn-default" ValidationGroup="edit"><i class="fa fa-save"></i></asp:LinkButton>
+                                            </EditItemTemplate>
+                                            <ItemTemplate>
+                                                <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
+                                            </ItemTemplate>
+                                        </asp:TemplateColumn>
                                     </Columns>
                                     <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
                                 </asp:DataGrid>
-                                <footer>
-                                    <asp:Button ID="btnCancelPopup2" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" OnClick="btnCancelPopup2_Click"></asp:Button>
-                                </footer>
                             </div>
+                            <footer>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            </footer>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </asp:Panel>
+    </div>
     <div id="divprint" style="display: none;">
         <fieldset>
             <table style="width: 100%;">
@@ -363,5 +374,4 @@
             </asp:GridView>
         </fieldset>
     </div>
-
 </asp:Content>

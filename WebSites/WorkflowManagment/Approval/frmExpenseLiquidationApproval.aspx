@@ -258,7 +258,6 @@
                                                 <%# DataBinder.Eval(Container.DataItem, "Project.ProjectCode")%>
                                             </ItemTemplate>
                                         </asp:TemplateColumn>
-
                                         <asp:TemplateColumn HeaderText="Actions">
                                             <EditItemTemplate>
                                                 <asp:LinkButton ID="lnkUpdate" runat="server" CausesValidation="true" CommandName="Update" CssClass="btn btn-xs btn-default" ValidationGroup="edit"><i class="fa fa-save"></i></asp:LinkButton>

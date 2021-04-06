@@ -99,6 +99,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             else
                 return false;
         }
+        private void BindAccountDescription(DropDownList ddlAccountDescription)
+        {
+            ddlAccountDescription.DataSource = _presenter.GetItemAccountList();
+            ddlAccountDescription.DataValueField = "Id";
+            ddlAccountDescription.DataTextField = "AccountName";
+            ddlAccountDescription.DataBind();
+        }
         private void PopRequesters(DropDownList ddl)
         {
             ddl.DataSource = _presenter.GetEmployeeList();
@@ -374,7 +381,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             BindPaymentReimbursementRequestStatus();
             txtRejectedReason.Visible = false;
             rfvRejectedReason.Enabled = false;
-            pnlApproval_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
 
         }
         protected void grvPaymentReimbursementRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -412,13 +419,66 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 //_presenter.OnViewLoaded();
                 dgReimbursementDetail.DataSource = _presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestDetails;
                 dgReimbursementDetail.DataBind();
-                pnlDetail.Visible = true;
+                ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
             }
         }
         protected void grvPaymentReimbursementRequestList_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             grvPaymentReimbursementRequestList.PageIndex = e.NewPageIndex;
             btnFind_Click(sender, e);
+        }
+        protected void dgReimbursementDetail_ItemDataBound(object sender, DataGridItemEventArgs e)
+        {
+            if (_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestDetails != null)
+            {
+                DropDownList ddlEdtAccountDescription = e.Item.FindControl("ddlEdtAccountDescription") as DropDownList;
+                if (ddlEdtAccountDescription != null)
+                {
+                    BindAccountDescription(ddlEdtAccountDescription);
+                    if (_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestDetails[e.Item.DataSetIndex].ItemAccount != null)
+                    {
+                        ListItem liI = ddlEdtAccountDescription.Items.FindByValue(_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestDetails[e.Item.DataSetIndex].ItemAccount.Id.ToString());
+                        if (liI != null)
+                            liI.Selected = true;
+                    }
+                }
+            }
+        }
+        protected void dgReimbursementDetail_EditCommand(object source, DataGridCommandEventArgs e)
+        {
+            this.dgReimbursementDetail.EditItemIndex = e.Item.ItemIndex;
+            dgReimbursementDetail.DataSource = _presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestDetails;
+            dgReimbursementDetail.DataBind();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
+        }
+        protected void dgReimbursementDetail_UpdateCommand(object source, DataGridCommandEventArgs e)
+        {
+            int prdId = (int)dgReimbursementDetail.DataKeys[e.Item.ItemIndex];
+            PaymentReimbursementRequestDetail prrd;
+
+            if (prdId > 0)
+                prrd = _presenter.CurrentPaymentReimbursementRequest.GetPaymentReimbursementRequestDetail(prdId);
+            else
+                prrd = _presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestDetails[e.Item.ItemIndex];
+
+            try
+            {
+                prrd.PaymentReimbursementRequest = _presenter.CurrentPaymentReimbursementRequest;
+                DropDownList ddlEdtAccountDescription = e.Item.FindControl("ddlEdtAccountDescription") as DropDownList;
+                prrd.ItemAccount = _presenter.GetItemAccount(Convert.ToInt32(ddlEdtAccountDescription.SelectedValue));
+
+                dgReimbursementDetail.EditItemIndex = -1;
+                dgReimbursementDetail.DataSource = _presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestDetails;
+                dgReimbursementDetail.DataBind();
+                ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
+                Master.ShowMessage(new AppMessage("Advance Settlement Detail Successfully Updated!", RMessageType.Info));
+            }
+            catch (Exception ex)
+            {
+                Master.ShowMessage(new AppMessage("Error: Unable to Update Expense Liquidation Detail. " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
+            }
         }
         protected void ddlApprovalStatus_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -434,7 +494,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 txtRejectedReason.Visible = false;
                 rfvRejectedReason.Enabled = false;
             }
-            pnlApproval_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
+        }
+        protected void ddlEdtAccountDescription_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DropDownList ddl = (DropDownList)sender;
+            TextBox txtAccountCode = ddl.FindControl("txtEdtAccountCode") as TextBox;
+            txtAccountCode.Text = _presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)).AccountCode;
+            ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
         }
         protected void btnFind_Click(object sender, EventArgs e)
         {
@@ -451,7 +518,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     ShowPrint();
                     btnApprove.Enabled = false;
                     BindSearchPaymentReimbursementRequestGrid();
-                    pnlApproval_ModalPopupExtender.Show();
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
                 }
                 Master.ShowMessage(new AppMessage("Payment Settlement Approval Processed", Chai.WorkflowManagment.Enums.RMessageType.Info));
             }
@@ -462,13 +529,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }
         }
-        protected void btnCancelPopup_Click(object sender, EventArgs e)
-        {
-            pnlApproval_ModalPopupExtender.Hide();
-        }
         private void PrintTransaction()
         {
-            pnlApproval_ModalPopupExtender.Hide();
             if (_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest != null)
                 lblRequestNoResult.Text = _presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.RequestNo.ToString();
             lblRequestedDateResult.Text = _presenter.CurrentPaymentReimbursementRequest.RequestDate.Value.ToShortDateString();
@@ -492,11 +554,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             Response.WriteFile(filePath);
             Response.End();
 
-            pnlApproval_ModalPopupExtender.Show();
-        }
-        protected void btnCancelPopup2_Click(object sender, EventArgs e)
-        {
-            pnlDetail.Visible = false;
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
         }
         protected void grvStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
         {

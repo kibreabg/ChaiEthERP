@@ -508,7 +508,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 lblRejectedReason.Visible = false;
                 txtRejectedReason.Visible = false;
             }
-            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true); ;
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
         }
         protected void ddlEdtAccountDescription_SelectedIndexChanged(object sender, EventArgs e)
         {

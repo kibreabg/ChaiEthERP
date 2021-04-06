@@ -64,7 +64,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         public PaymentReimbursementRequest GetPaymentReimbursementRequest(int Id)
         {
-           return _requestController.GetPaymentReimbursementRequest(Id);
+            return _requestController.GetPaymentReimbursementRequest(Id);
         }
         public IList<AppUser> GetEmployeeList()
         {
@@ -85,6 +85,14 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         public CarRental GetCarRental(int Id)
         {
             return _settingController.GetCarRental(Id);
+        }
+        public ItemAccount GetItemAccount(int id)
+        {
+            return _settingController.GetItemAccount(id);
+        }
+        public IList<ItemAccount> GetItemAccountList()
+        {
+            return _settingController.GetItemAccounts();
         }
         public PRAttachment GetAttachment(int attachmentId)
         {
@@ -133,7 +141,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         public void Commit()
         {
             _controller.Commit();
-        }        
+        }
     }
 }
 
