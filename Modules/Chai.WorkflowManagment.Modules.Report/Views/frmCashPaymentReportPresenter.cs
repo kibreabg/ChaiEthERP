@@ -5,6 +5,7 @@ using Microsoft.Practices.ObjectBuilder;
 using Microsoft.Practices.CompositeWeb;
 using Chai.WorkflowManagment.CoreDomain.Report;
 using System.Data;
+using Chai.WorkflowManagment.CoreDomain.Users;
 
 namespace Chai.WorkflowManagment.Modules.Report.Views
 {
@@ -28,6 +29,10 @@ namespace Chai.WorkflowManagment.Modules.Report.Views
         public override void OnViewInitialized()
         {
             // TODO: Implement code that will be executed the first time the view loads
+        }
+        public AppUser CurrentUser()
+        {
+            return _controller.GetCurrentUser();
         }
         public IList<CashPaymentReport> GetCashPaymentReporto(string DateFrom, string DateTo)
         {

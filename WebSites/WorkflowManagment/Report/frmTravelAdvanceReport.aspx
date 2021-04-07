@@ -28,7 +28,6 @@
                                     <i class="icon-append fa fa-calendar"></i>
                                     <asp:TextBox ID="txtDateTo" runat="server" CssClass="form-control datepicker" data-dateformat="mm/dd/yy"></asp:TextBox></label>
                             </section>
-
                         </div>
                     </fieldset>
                     <footer>
@@ -40,13 +39,7 @@
             </div>
         </div>
     </div>
-    <asp:Panel ID="Panel1" runat="server" BackColor="White" Visible="false">
-        <rsweb:ReportViewer ID="ReportViewer1" runat="server"></rsweb:ReportViewer>
+    <asp:Panel ID="pnlTravelReport" runat="server" Width="100%" BackColor="White" Visible="false">
+        <rsweb:ReportViewer ID="rvTravel" Width="100%" runat="server"></rsweb:ReportViewer>
     </asp:Panel>
-    <asp:ObjectDataSource ID="ObjectDataSource1" runat="server" SelectMethod="GetLeaveReport" TypeName="Chai.WorkflowManagment.Modules.Report.ReportController">
-        <SelectParameters>
-            <asp:FormParameter FormField="txtDateFrom" Name="DateFrom" Type="String" />
-            <asp:FormParameter FormField="txtDateTo" Name="DateTo" Type="String" />
-        </SelectParameters>
-    </asp:ObjectDataSource>
 </asp:Content>
