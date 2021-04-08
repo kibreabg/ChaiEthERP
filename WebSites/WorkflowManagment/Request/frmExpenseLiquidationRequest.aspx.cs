@@ -506,14 +506,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (fileName != String.Empty)
             {
                 List<ELRAttachment> attachments = (List<ELRAttachment>)Session["attachments"];
-                foreach (ELRAttachment attachment in attachments)
+                if (attachments != null)
                 {
-                    if (attachment.ItemAccountChecklists[0].ChecklistName == attachmentRow.Cells[2].Text && attachmentRow.DataItemIndex == index)
+                    foreach (ELRAttachment attachment in attachments)
                     {
-                        attachment.FilePath = "~/ELUploads/" + fileName + DateTime.Now.ToString("ddMMyyyyHHmmss") + extension;
-                        fuReciept.PostedFile.SaveAs(Server.MapPath("~/ELUploads/") + fileName + DateTime.Now.ToString("ddMMyyyyHHmmss") + extension);
+                        if (attachment.ItemAccountChecklists[0].ChecklistName == attachmentRow.Cells[2].Text && attachmentRow.DataItemIndex == index)
+                        {
+                            attachment.FilePath = "~/ELUploads/" + fileName + DateTime.Now.ToString("ddMMyyyyHHmmss") + extension;
+                            fuReciept.PostedFile.SaveAs(Server.MapPath("~/ELUploads/") + fileName + DateTime.Now.ToString("ddMMyyyyHHmmss") + extension);
+                        }
+                        index++;
                     }
-                    index++;
                 }
 
                 BindAttachments();

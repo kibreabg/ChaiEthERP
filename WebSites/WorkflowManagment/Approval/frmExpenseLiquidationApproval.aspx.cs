@@ -410,7 +410,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         protected void grvExpenseLiquidationRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             Button btnStatus = e.Row.FindControl("btnStatus") as Button;
-            ExpenseLiquidationRequest ELR = e.Row.DataItem as ExpenseLiquidationRequest;            
+            ExpenseLiquidationRequest ELR = e.Row.DataItem as ExpenseLiquidationRequest;
 
             if (ELR != null)
             {
@@ -431,7 +431,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     else if (ELR.ProgressStatus == ProgressStatus.Completed.ToString())
                     {
                         btnStatus.BackColor = System.Drawing.ColorTranslator.FromHtml("#FF7251");
-                    }                    
+                    }
                 }
             }
         }
@@ -473,11 +473,20 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void DownloadFile(object sender, EventArgs e)
         {
-            string filePath = (sender as LinkButton).CommandArgument;
-            Response.ContentType = ContentType;
-            Response.AppendHeader("Content-Disposition", "attachment; filename=" + Path.GetFileName(filePath));
-            Response.WriteFile(filePath);
-            Response.End();
+            try
+            {
+                string filePath = (sender as LinkButton).CommandArgument;
+                Response.ContentType = ContentType;
+                Response.AppendHeader("Content-Disposition", "attachment; filename=" + Path.GetFileName(filePath));
+                Response.WriteFile(filePath);
+                Response.End();
+            }
+            catch (Exception ex)
+            {
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
+            }
+
         }
         protected void grvDetails_RowDataBound(object sender, GridViewRowEventArgs e)
         {
