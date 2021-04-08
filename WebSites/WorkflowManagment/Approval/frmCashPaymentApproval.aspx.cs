@@ -181,6 +181,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 ddlSrchProgressStatus.Items.Add(new ListItem(s[i].Replace('_', ' '), s[i].Replace('_', ' ')));
                 ddlSrchProgressStatus.DataBind();
             }
+            ddlSrchProgressStatus.Items.Add(new ListItem("Reviewed", "Reviewed"));
         }
         private void BindSearchCashPaymentRequestGrid()
         {
@@ -481,6 +482,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     else if (CPR.ProgressStatus == ProgressStatus.Completed.ToString())
                     {
                         btnStatus.BackColor = System.Drawing.ColorTranslator.FromHtml("#FF7251");
+                    }
+
+                    if (ddlSrchProgressStatus.SelectedValue == "Reviewed")
+                    {
+                        e.Row.Cells[8].Enabled = false;
                     }
                 }
             }

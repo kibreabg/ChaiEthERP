@@ -23,11 +23,9 @@ namespace Chai.WorkflowManagment.Enums
         Store_Request,
     }
    public enum ProgressStatus
-    {
+    {        
         InProgress,
         Completed,
-        
-
     }
     public enum ApprovalStatus
     {

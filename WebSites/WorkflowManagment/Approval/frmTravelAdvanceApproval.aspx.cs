@@ -147,6 +147,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 ddlSrchProgressStatus.Items.Add(new ListItem(s[i].Replace('_', ' '), s[i].Replace('_', ' ')));
                 ddlSrchProgressStatus.DataBind();
             }
+            ddlSrchProgressStatus.Items.Add(new ListItem("Reviewed", "Reviewed"));
         }
         private void PopRequesters(DropDownList ddl)
         {
@@ -408,6 +409,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     else if (TAR.ProgressStatus == ProgressStatus.Completed.ToString())
                     {
                         btnStatus.BackColor = System.Drawing.ColorTranslator.FromHtml("#FF7251");
+                    }
+
+                    if (ddlSrchProgressStatus.SelectedValue == "Reviewed")
+                    {
+                        e.Row.Cells[9].Enabled = false;
                     }
                 }
             }
