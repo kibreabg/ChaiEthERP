@@ -143,7 +143,7 @@
                                     <section class="col col-6">
                                         <asp:Label ID="lblAccount" Visible="false" runat="server" CssClass="label">Payment Type</asp:Label>
                                         <asp:Label ID="lblAccountdd" Visible="false" runat="server" CssClass="select">
-                                            <asp:DropDownList ID="ddlAccount" runat="server">
+                                            <asp:DropDownList ID="ddlAccount" AutoPostBack="true" OnSelectedIndexChanged="ddlAccount_SelectedIndexChanged" runat="server">
                                                 <asp:ListItem Value=" ">Select Payment Type</asp:ListItem>
                                                 <asp:ListItem>Petty Cash</asp:ListItem>
                                                 <asp:ListItem>Bank Payment</asp:ListItem>

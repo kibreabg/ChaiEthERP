@@ -93,6 +93,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             ddlApprovalStatus.Items.Clear();
             ddlApprovalStatus.Items.Add(new ListItem("Select Status", "0"));
+
             string[] s = Enum.GetNames(typeof(ApprovalStatus));
 
             for (int i = 0; i < s.Length; i++)
@@ -105,9 +106,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     }
                 }
             }
-            if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses.Count == _presenter.CurrentCashPaymentRequest.CurrentLevel)
+            if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses.Count == _presenter.CurrentCashPaymentRequest.CurrentLevel && ddlAccount.SelectedValue.Equals(ApprovalStatus.Bank_Payment.ToString().Replace('_', ' ')))
             {
                 ddlApprovalStatus.Items.Add(new ListItem(ApprovalStatus.Bank_Payment.ToString().Replace('_', ' '), ApprovalStatus.Bank_Payment.ToString().Replace('_', ' ')));
+                ddlApprovalStatus.Items.Remove(new ListItem("Pay"));
             }
             ddlApprovalStatus.Items.Add(new ListItem(ApprovalStatus.Rejected.ToString().Replace('_', ' '), ApprovalStatus.Rejected.ToString().Replace('_', ' ')));
 
@@ -498,7 +500,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 PrintTransaction();
             }
-            PopApprovalStatus();
             Session["PaymentId"] = _presenter.CurrentCashPaymentRequest.Id;
             btnApprove.Enabled = true;
             BindAccounts();
@@ -754,6 +755,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 Master.ShowMessage(new AppMessage("Error: Unable to Update Payment Detail. " + ex.Message, RMessageType.Error));
             }
+        }
+        protected void ddlAccount_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PopApprovalStatus();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
         }
         protected void ddlEdtAccountDescription_SelectedIndexChanged(object sender, EventArgs e)
         {
