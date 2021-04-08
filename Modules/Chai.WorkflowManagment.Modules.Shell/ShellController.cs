@@ -35,8 +35,13 @@ namespace Chai.WorkflowManagment.Modules.Shell
         {
             int userId = GetCurrentUser().Id;
             IList<AssignJob> AJ = _workspace.All<AssignJob>(x => x.AssignedTo == userId && x.Status == true).ToList();
-            if (AJ.Count != 0)
-            { return AJ[0].AssignedTo; }
+            if (AJ.Count > 0)
+            {
+                if (AJ[0] != null)
+                    return AJ[0].AssignedTo;
+                else
+                    return 0;
+            }
             else
                 return 0;
         }
@@ -51,7 +56,7 @@ namespace Chai.WorkflowManagment.Modules.Shell
         public AppUser GetUserByUserName(string userName)
         {
             return _workspace.Single<AppUser>(x => x.UserName == userName, x => x.AppUserRoles.Select(y => y.Role));
-        }        
+        }
         public Node ActiveNode(int nodeid)
         {
             using (var vr = WorkspaceFactory.CreateReadOnly())

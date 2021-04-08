@@ -138,6 +138,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             _presenter.CurrentOperationalControlRequest.PaymentId = paymentId;
                             _presenter.CurrentOperationalControlRequest.Supplier = CPR.Supplier;
                             txtOriginalRequester.Text = CPR.AppUser.FullName;
+                            txtDescription.Text = CPR.Description;
 
                             foreach (CashPaymentRequestDetail CPRD in CPR.CashPaymentRequestDetails)
                             {
@@ -179,6 +180,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             _presenter.CurrentOperationalControlRequest.Description = TAR.PurposeOfTravel;
                             _presenter.CurrentOperationalControlRequest.TravelAdvanceId = travelAdvId;
                             txtOriginalRequester.Text = TAR.AppUser.FullName;
+                            txtDescription.Text = TAR.PurposeOfTravel;
 
                             foreach (TravelAdvanceRequestDetail TARD in TAR.TravelAdvanceRequestDetails)
                             {
@@ -225,7 +227,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             _presenter.CurrentOperationalControlRequest.TotalActualExpendture = OCRD.Amount;
                             OCRD.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
                             _presenter.CurrentOperationalControlRequest.OperationalControlRequestDetails.Add(OCRD);
-
                         }
                     }
                 }
@@ -233,13 +234,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (Request.QueryString["SettlementId"] != null)
                     {
-
                         int SettlementId = Convert.ToInt32(Request.QueryString["SettlementId"]);
                         PaymentReimbursementRequest PRR = _presenter.GetReimbursementRequest(SettlementId);
                         if (PRR != null)
                         {
                             _presenter.CurrentOperationalControlRequest.Description = PRR.Comment;
                             _presenter.CurrentOperationalControlRequest.SettlementId = SettlementId;
+                            txtDescription.Text = PRR.Comment;
+
                             foreach (PaymentReimbursementRequestDetail detail in PRR.PaymentReimbursementRequestDetails)
                             {
                                 OperationalControlRequestDetail OCRD = new OperationalControlRequestDetail();
@@ -255,10 +257,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                                 {
                                     foreach (PRAttachment CP in detail.PRAttachments)
                                     {
-                                        OCRAttachment OPA = new OCRAttachment();
-
-                                        OPA.FilePath = CP.FilePath;
-                                        OPA.OperationalControlRequest = _presenter.CurrentOperationalControlRequest;
+                                        OCRAttachment OPA = new OCRAttachment
+                                        {
+                                            FilePath = CP.FilePath,
+                                            OperationalControlRequest = _presenter.CurrentOperationalControlRequest
+                                        };
                                         _presenter.CurrentOperationalControlRequest.OCRAttachments.Add(OPA);
                                     }
                                 }
@@ -301,9 +304,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ddlBeneficiary.DataBind();
         }
         private void BindOperationalControlDetails()
-        {
-            if (_presenter.CurrentOperationalControlRequest.TotalActualExpendture - _presenter.CurrentOperationalControlRequest.TotalAmount > 0)
-                txtDescription.Text = _presenter.CurrentOperationalControlRequest.Description;
+        {            
             if (_presenter.CurrentOperationalControlRequest.Supplier != null)
             {
                 ddlBeneficiary.SelectedValue = _presenter.CurrentOperationalControlRequest.Supplier.Id.ToString();
