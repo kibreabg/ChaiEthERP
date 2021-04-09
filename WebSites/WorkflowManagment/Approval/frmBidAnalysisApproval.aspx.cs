@@ -76,7 +76,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 return "{BF5943CA-07E5-4817-93EC-DE39D67D5562}";
             }
         }
-        public CoreDomain.Requests.BidAnalysisRequest BidAnalysisRequest
+        public BidAnalysisRequest BidAnalysisRequest
         {
             get
             {
@@ -259,6 +259,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         else
                         {
                             _presenter.CurrentBidAnalysisRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                            _presenter.CurrentBidAnalysisRequest.CurrentStatus = ApprovalStatus.Rejected.ToString();
                             PRS.Approver = _presenter.CurrentUser().Id;
                             SendEmailRejected(PRS);
                             Log.Info(_presenter.GetUser(PRS.Approver).FullName + " has " + PRS.ApprovalStatus + " Bid Analysis Request made by " + _presenter.GetUser(_presenter.CurrentBidAnalysisRequest.AppUser.Id).FullName);
@@ -382,12 +383,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         EnableControls();
                         if (ddlApprovalStatus.SelectedValue != "Rejected")
                         {
-                            Master.ShowMessage(new AppMessage("Purchase  Approval Processed ", Chai.WorkflowManagment.Enums.RMessageType.Info));
-
+                            Master.ShowMessage(new AppMessage("Purchase Approval Processed ", RMessageType.Info));
                         }
                         else
                         {
-                            Master.ShowMessage(new AppMessage("Purchase  Approval Rejected ", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                            Master.ShowMessage(new AppMessage("Purchase Approval Rejected ", RMessageType.Info));
                             PD.BidAnalysisRequestStatus = "InProgress";
                         }
                         btnApprove.Enabled = false;

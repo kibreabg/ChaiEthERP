@@ -43,7 +43,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
             //btnPrint.Attributes.Add("onclick", "javascript:Clickheretoprint('divprint'); return false;");
 
-        }        
+        }
         [CreateNew]
         public LeaveApprovalPresenter Presenter
         {
@@ -169,7 +169,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             if (_presenter.CurrentLeaveRequest.CurrentLevel == _presenter.CurrentLeaveRequest.LeaveRequestStatuses.Count && _presenter.CurrentLeaveRequest.ProgressStatus == ProgressStatus.Completed.ToString())
             {
                 btnPrint.Enabled = true;
-               
+
 
             }
 
@@ -233,11 +233,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     LRS.AssignedBy = _presenter.GetAssignedJobbycurrentuser(LRS.Approver) != null ? _presenter.GetAssignedJobbycurrentuser(LRS.Approver).AppUser.FullName : "";
                     if (LRS.ApprovalStatus != ApprovalStatus.Rejected.ToString())
                     {
-
-                        
-                            _presenter.CurrentLeaveRequest.CurrentApprover = LRS.Approver;
-                            _presenter.CurrentLeaveRequest.CurrentLevel = LRS.WorkflowLevel;
-                            _presenter.CurrentLeaveRequest.CurrentStatus = LRS.ApprovalStatus;
+                        _presenter.CurrentLeaveRequest.CurrentApprover = LRS.Approver;
+                        _presenter.CurrentLeaveRequest.CurrentLevel = LRS.WorkflowLevel;
+                        _presenter.CurrentLeaveRequest.CurrentStatus = LRS.ApprovalStatus;
                         if (_presenter.CurrentLeaveRequest.CurrentLevel == _presenter.CurrentLeaveRequest.LeaveRequestStatuses.Count)
                         {
                             _presenter.CurrentLeaveRequest.ProgressStatus = ProgressStatus.Completed.ToString();
@@ -272,7 +270,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     _presenter.SaveOrUpdateLeaveRequest(_presenter.CurrentLeaveRequest);
                     //CalculateLeavetaken();
                     ShowPrint();
-                   
+
                     if (ddlApprovalStatus.SelectedValue != "Rejected")
                     {
                         Master.ShowMessage(new AppMessage("Leave Approval Processed ", Chai.WorkflowManagment.Enums.RMessageType.Info));
@@ -335,7 +333,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 lblViewBalance.Visible = true;
                 lblViewBalRes.Visible = true;
                 Employee employee = _presenter.GetEmployee(_presenter.CurrentLeaveRequest.Requester);
-               // lblEDS.Text = employee.GetEmployeeDutyStation();
+                // lblEDS.Text = employee.GetEmployeeDutyStation();
                 if (employee != null)
                 {
                     lblViewBalRes.Text = (Math.Round((employee.EmployeeLeaveBalance() - Convert.ToDouble(_presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value))) * 2, MidpointRounding.AwayFromZero) / 2).ToString();
@@ -452,7 +450,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void lnkEduDownload_Clicked(object sender, EventArgs e)
         {
-            
+
             string certificatePath = (sender as LinkButton).CommandArgument;
             Response.AppendHeader("Content-Type", "application/octet-stream");
             Response.AppendHeader("Content-Disposition", "attachment; filename=" + Path.GetFileName(_presenter.CurrentLeaveRequest.FilePath));

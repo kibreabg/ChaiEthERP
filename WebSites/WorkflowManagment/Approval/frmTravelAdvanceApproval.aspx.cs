@@ -345,7 +345,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
                             TARS.Approver = _presenter.CurrentUser().Id;
                             _presenter.CurrentTravelAdvanceRequest.CurrentStatus = TARS.ApprovalStatus;
-                            _presenter.CurrentTravelAdvanceRequest.CurrentStatus = TARS.ApprovalStatus;
                             if (ddlApprovalStatus.SelectedValue == "Bank Payment")
                             {
                                 btnBankPayment.Visible = true;
@@ -362,6 +361,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     else
                     {
                         _presenter.CurrentTravelAdvanceRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                        _presenter.CurrentTravelAdvanceRequest.CurrentStatus = ApprovalStatus.Rejected.ToString();
+                        _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationStatus = "Finished";
+
                         TARS.Approver = _presenter.CurrentUser().Id;
                         SendEmailRejected(TARS);
                         Log.Info(_presenter.GetUser(TARS.Approver).FullName + " has " + TARS.ApprovalStatus + " Travel Advance Request made by " + _presenter.CurrentTravelAdvanceRequest.AppUser.FullName);
@@ -459,14 +461,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 if (_presenter.CurrentTravelAdvanceRequest.ProgressStatus != ProgressStatus.Completed.ToString())
                 {
                     SaveTravelAdvanceRequestStatus();
-
                     //_presenter.CurrentTravelAdvanceRequest.Account = _presenter.GetAccount(Convert.ToInt32(ddlAccount.SelectedValue));
                     _presenter.SaveOrUpdateTravelAdvanceRequest(_presenter.CurrentTravelAdvanceRequest);
                     ShowPrint();
                     if (ddlApprovalStatus.SelectedValue != "Rejected")
-                        Master.ShowMessage(new AppMessage("Travel Advance  Approval Processed", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                        Master.ShowMessage(new AppMessage("Travel Advance  Approval Processed", RMessageType.Info));
                     else
-                        Master.ShowMessage(new AppMessage("Travel Advance  Approval Rejected", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                        Master.ShowMessage(new AppMessage("Travel Advance  Approval Rejected", RMessageType.Info));
                     btnApprove.Enabled = false;
                     BindSearchTravelAdvanceRequestGrid();
                     ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);

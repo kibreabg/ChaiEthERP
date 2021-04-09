@@ -290,9 +290,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                             _presenter.CurrentPaymentReimbursementRequest.ProgressStatus = ProgressStatus.Completed.ToString();
                             if (_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Last().ApprovalStatus != "Bank Payment")
                                 _presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.PaymentReimbursementStatus = "Finished";
-
                         }
-
 
                         GetNextApprover();
                         PRRS.Approver = _presenter.CurrentUser().Id;

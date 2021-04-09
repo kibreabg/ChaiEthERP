@@ -263,7 +263,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     SVRS.AssignedBy = _presenter.GetAssignedJobbycurrentuser(SVRS.Approver) != null ? _presenter.GetAssignedJobbycurrentuser(SVRS.Approver).AppUser.FullName : "";
                     if (SVRS.ApprovalStatus != ApprovalStatus.Rejected.ToString())
                     {
-
                         if (_presenter.CurrentSoleVendorRequest.CurrentLevel == _presenter.CurrentSoleVendorRequest.SoleVendorRequestStatuses.Count)
                         {
                             _presenter.CurrentSoleVendorRequest.CurrentApprover = SVRS.Approver;

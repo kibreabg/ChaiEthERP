@@ -366,6 +366,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     else
                     {
                         _presenter.CurrentMaintenanceRequest.ProgressStatus = ProgressStatus.Completed.ToString();
+                        _presenter.CurrentMaintenanceRequest.CurrentStatus = ApprovalStatus.Rejected.ToString();
                         MRS.Approver = _presenter.CurrentUser().Id;
                         SendEmailRejected(MRS);
                         Log.Info(_presenter.GetUser(MRS.Approver).FullName + " has " + MRS.ApprovalStatus + "Maintenance Request made by " + _presenter.CurrentMaintenanceRequest.AppUser.FullName);
@@ -397,29 +398,21 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
                     if (mechanicApproved)
                     {
-
                         SaveMaintenanceRequestStatus();
-
                         _presenter.SaveOrUpdateMaintenanceRequest(_presenter.CurrentMaintenanceRequest);
                         ShowPrint();
                         if (ddlApprovalStatus.SelectedValue != "Rejected")
                         {
-
                             if (ddlApprovalStatus.SelectedValue == "Approved")
                             {
-
                                 Master.ShowMessage(new AppMessage("Maintenance Approval Processed", RMessageType.Info));
-
                                 // SendEmailToRequester();
                                 SendEmailToRequesterForPurchase();
-
                             }
                             else if (ddlApprovalStatus.SelectedValue == "Reviewed")
                             {
                                 Master.ShowMessage(new AppMessage("Maintenance Approval Processed", RMessageType.Info));
-
                                 // SendEmailToRequester();
-
                             }
                             else if (ddlApprovalStatus.SelectedValue == "Completed")
                             {
@@ -437,7 +430,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                             pnlApproval_ModalPopupExtender.Show();
                             ShowPrint();
                         }
-
                     }
 
                     else if (mechanicApproved || ddlApprovalStatus.SelectedValue == "Rejected")
