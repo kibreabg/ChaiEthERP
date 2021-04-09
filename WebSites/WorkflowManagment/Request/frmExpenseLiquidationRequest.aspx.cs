@@ -402,11 +402,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     dgExpenseLiquidationDetail.EditItemIndex = -1;
                     BindExpenseLiquidationDetailGrid();
 
-                    foreach (ELRAttachment attachment in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails[e.Item.ItemIndex + 1].ELRAttachments)
-                    {
-                        attachment.ExpenseLiquidationRequestDetail = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.GetExpenseLiquidationRequestDetail((int)dgExpenseLiquidationDetail.DataKeys[e.Item.ItemIndex + 1]);
-                    }
-
                     Master.ShowMessage(new AppMessage("Expense Liquidation Detail Successfully Added!", RMessageType.Info));
                 }
                 catch (Exception ex)
