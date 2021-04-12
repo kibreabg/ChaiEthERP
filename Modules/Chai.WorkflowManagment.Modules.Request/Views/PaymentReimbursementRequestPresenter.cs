@@ -146,7 +146,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
             }
         }
-        public void SaveOrUpdatePaymentReimbursementRequest(int tarId)
+        public void SaveOrUpdatePaymentReimbursementRequest(int paymentId)
         {
 
             CurrentCashPaymentRequest.PaymentReimbursementRequest.RequestDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
@@ -154,7 +154,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             CurrentCashPaymentRequest.IsLiquidated = true;
             CurrentCashPaymentRequest.PaymentReimbursementRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
 
-            CurrentCashPaymentRequest.PaymentReimbursementRequest.CashPaymentRequest = CurrentCashPaymentRequest;
+            CurrentCashPaymentRequest.PaymentReimbursementRequest.CashPaymentRequest = _controller.GetCashPaymentRequest(paymentId);
 
             if (CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestStatuses.Count == 0)
                 SavePaymentReimbursementRequestStatus();

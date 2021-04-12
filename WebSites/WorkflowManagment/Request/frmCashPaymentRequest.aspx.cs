@@ -846,14 +846,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (fileName != String.Empty)
             {
                 List<CPRAttachment> attachments = (List<CPRAttachment>)Session["attachments"];
-                foreach (CPRAttachment attachment in attachments)
+                if (attachments != null)
                 {
-                    if (attachment.ItemAccountChecklists[0].ChecklistName == attachmentRow.Cells[2].Text && attachmentRow.DataItemIndex == index)
+                    foreach (CPRAttachment attachment in attachments)
                     {
-                        attachment.FilePath = "~/CPUploads/" + fileName + DateTime.Now.ToString("ddMMyyyyHHmmss") + extension;
-                        fuReciept.PostedFile.SaveAs(Server.MapPath("~/CPUploads/") + fileName + DateTime.Now.ToString("ddMMyyyyHHmmss") + extension);
+                        if (attachment.ItemAccountChecklists[0].ChecklistName == attachmentRow.Cells[2].Text && attachmentRow.DataItemIndex == index)
+                        {
+                            attachment.FilePath = "~/CPUploads/" + fileName + DateTime.Now.ToString("ddMMyyyyHHmmss") + extension;
+                            fuReciept.PostedFile.SaveAs(Server.MapPath("~/CPUploads/") + fileName + DateTime.Now.ToString("ddMMyyyyHHmmss") + extension);
+                        }
+                        index++;
                     }
-                    index++;
                 }
 
                 BindAttachments();
