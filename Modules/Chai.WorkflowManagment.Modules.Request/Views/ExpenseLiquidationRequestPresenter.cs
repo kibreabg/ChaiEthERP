@@ -171,6 +171,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestStatuses.Count == 0)
                 SaveExpenseLiquidationRequestStatus();
             GetCurrentApprover();
+
+            //Trying to remove duplicated Empty Liquidation Details before saving.
+            foreach (ExpenseLiquidationRequestDetail elrd in CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
+            {
+                if (elrd.ItemAccount == null)
+                {
+                    CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails.Remove(elrd);
+                }
+            }
+
             _controller.SaveOrUpdateEntity(CurrentTravelAdvanceRequest);
         }
         public void CancelPage()

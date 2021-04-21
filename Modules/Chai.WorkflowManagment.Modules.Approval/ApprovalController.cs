@@ -19,6 +19,7 @@ using Chai.WorkflowManagment.CoreDomain.Requests;
 using Chai.WorkflowManagment.CoreDomain.Request;
 using Chai.WorkflowManagment.CoreDomain.Approval;
 using Chai.WorkflowManagment.CoreDomain.HRM;
+using System.Data.Entity.Validation;
 
 namespace Chai.WorkflowManagment.Modules.Approval
 {
@@ -600,8 +601,27 @@ namespace Chai.WorkflowManagment.Modules.Approval
             else
                 _workspace.Update<T>(item);
 
-            _workspace.CommitChanges();
-
+            try
+            {
+                _workspace.CommitChanges();
+            }
+            catch (DbEntityValidationException dbEx)
+            {
+                Exception raise = dbEx;
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        string message = string.Format("{0}:{1}",
+                            validationErrors.Entry.Entity.ToString(),
+                            validationError.ErrorMessage);
+                        // raise a new exception nesting  
+                        // the current instance as InnerException  
+                        raise = new InvalidOperationException(message, raise);
+                    }
+                }
+                throw raise;
+            }
             _workspace.Refresh(item);
 
         }

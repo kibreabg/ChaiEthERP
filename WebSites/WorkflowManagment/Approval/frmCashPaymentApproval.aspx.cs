@@ -31,6 +31,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 this._presenter.OnViewInitialized();
                 XmlConfigurator.Configure();
                 PopProgressStatus();
+                ddlApprovalStatus.Items.Clear();
                 PopRequesters(ddlSrchRequester);
                 BindSearchCashPaymentRequestGrid();
             }
@@ -38,7 +39,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             if (_presenter.CurrentCashPaymentRequest != null)
             {
                 if (_presenter.CurrentCashPaymentRequest.Id != 0)
+                {
                     PrintTransaction();
+                }
+
             }
         }
         [CreateNew]
@@ -235,10 +239,16 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void BindAccounts()
         {
+            ddlAccount.SelectedValue = " ";
             if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses.Count == _presenter.CurrentCashPaymentRequest.CurrentLevel && (_presenter.CurrentUser().EmployeePosition.PositionName == "Accountant"))
             {
                 lblAccount.Visible = true;
                 lblAccountdd.Visible = true;
+            }
+            else
+            {
+                lblAccount.Visible = false;
+                lblAccountdd.Visible = false;
             }
         }
         private void BindProgram(DropDownList ddlProgram)
@@ -503,6 +513,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             Session["PaymentId"] = _presenter.CurrentCashPaymentRequest.Id;
             btnApprove.Enabled = true;
             BindAccounts();
+            if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses.Count != _presenter.CurrentCashPaymentRequest.CurrentLevel)
+                PopApprovalStatus();
+            else
+                ddlApprovalStatus.Items.Clear();
             BindCashPaymentRequestStatus();
             txtRejectedReason.Visible = false;
             rfvRejectedReason.Enabled = false;

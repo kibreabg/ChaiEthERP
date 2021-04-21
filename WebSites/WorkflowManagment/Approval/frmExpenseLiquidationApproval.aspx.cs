@@ -473,19 +473,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void DownloadFile(object sender, EventArgs e)
         {
-            try
-            {
-                string filePath = (sender as LinkButton).CommandArgument;
-                Response.ContentType = ContentType;
-                Response.AppendHeader("Content-Disposition", "attachment; filename=" + Path.GetFileName(filePath));
-                Response.WriteFile(filePath);
-                Response.End();
-            }
-            catch (Exception ex)
-            {
-                ExceptionUtility.LogException(ex, ex.Source);
-                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
-            }
+            string filePath = (sender as LinkButton).CommandArgument;
+            Response.ContentType = ContentType;
+            Response.AppendHeader("Content-Disposition", "attachment; filename=" + Path.GetFileName(filePath));
+            Response.WriteFile(filePath);
+            Response.End();
 
         }
         protected void grvDetails_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -523,7 +515,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             DropDownList ddl = (DropDownList)sender;
             TextBox txtAccountCode = ddl.FindControl("txtEdtAccountCode") as TextBox;
-            txtAccountCode.Text = _presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)).AccountCode;
+            if (_presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)) != null)
+                txtAccountCode.Text = _presenter.GetItemAccount(Convert.ToInt32(ddl.SelectedValue)).AccountCode;
+            ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
         }
         protected void btnFind_Click(object sender, EventArgs e)
         {

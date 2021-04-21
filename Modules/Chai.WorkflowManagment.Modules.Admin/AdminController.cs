@@ -176,7 +176,7 @@ namespace Chai.WorkflowManagment.Modules.Admin
         public AssignJob GetAssignedJobbycurrentuser()
         {
             int userId = GetCurrentUser().Id;
-            return _workspace.Single<AssignJob>(x => x.AppUser.Id == userId && x.Status == true);
+            return _workspace.First<AssignJob>(x => x.AppUser.Id == userId && x.Status == true);
         }
         public IList<AppUser> GetApprovers()
         {
