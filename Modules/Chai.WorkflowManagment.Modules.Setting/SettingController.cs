@@ -172,7 +172,7 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             string filterExpression = "";
 
-            filterExpression = "SELECT  *  FROM Suppliers Where Status = 'Active' AND 1 = Case when '" + SupplierName + "' = '' Then 1 When Suppliers.SupplierName = '" + SupplierName + "'  Then 1 END  ";
+            filterExpression = "SELECT  *  FROM Suppliers Where Status = 'Active' AND 1 = Case when '" + SupplierName + "' = '' Then 1 When Suppliers.SupplierName LIKE '%" + SupplierName + "%'  Then 1 END ORDER BY Suppliers.Id DESC ";
 
             return _workspace.SqlQuery<Supplier>(filterExpression).ToList();
 
