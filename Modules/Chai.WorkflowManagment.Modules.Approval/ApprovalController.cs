@@ -109,7 +109,7 @@ namespace Chai.WorkflowManagment.Modules.Approval
                                    " WHERE 1 = CASE WHEN '" + RequestNo + "' = '' Then 1 When CashPaymentRequests.VoucherNo = '" + RequestNo + "'  Then 1 END " +
                                    " AND 1 = CASE WHEN '" + RequestDate + "' = '' Then 1 When CashPaymentRequests.RequestDate = '" + RequestDate + "'  Then 1 END " +
                                    " AND 1 = CASE WHEN '" + Requester + "' = '0' THEN 1 WHEN CashPaymentRequests.AppUser_Id = '" + Requester + "'  THEN 1 END " +
-                                   " AND CashPaymentRequests.CurrentLevel > 1 " +
+                                   " AND CashPaymentRequests.CurrentLevel > 1 AND CashPaymentRequests.ProgressStatus != 'Completed'" +
                                    " ORDER BY CashPaymentRequests.Id DESC";
             }
             else if (ProgressStatus == "Not Retired" || ProgressStatus == "Retired")
@@ -117,7 +117,7 @@ namespace Chai.WorkflowManagment.Modules.Approval
                 filterExpression = " SELECT * FROM CashPaymentRequests " +
                                    " INNER JOIN AppUsers ON  (AppUsers.Id = CashPaymentRequests.CurrentApprover) OR (AppUsers.EmployeePosition_Id = CashPaymentRequests.CurrentApproverPosition AND AppUsers.Id = '" + CurrentUser().Id + "') " +
                                    " LEFT JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 Where 1 = Case when '" + RequestNo + "' = '' Then 1 When CashPaymentRequests.VoucherNo = '" + RequestNo + "'  Then 1 END And  1 = Case when '" + RequestDate + "' = '' Then 1 When CashPaymentRequests.RequestDate = '" + RequestDate + "'  Then 1 END " +
-                                   " AND CashPaymentRequests.ProgressStatus='Completed' AND CashPaymentRequests.PaymentReimbursementStatus = '" + ProgressStatus + "' " +
+                                   " AND CashPaymentRequests.ProgressStatus = 'Completed' AND CashPaymentRequests.PaymentReimbursementStatus = '" + ProgressStatus + "' " +
                                    " AND (CashPaymentRequests.CurrentApprover = '" + CurrentUser().Id + "') OR (CashPaymentRequests.CurrentApproverPosition = '" + CurrentUser().EmployeePosition.Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "') " +
                                    " ORDER BY CashPaymentRequests.Id DESC ";
             }
@@ -195,7 +195,7 @@ namespace Chai.WorkflowManagment.Modules.Approval
                                    " WHERE 1 = CASE WHEN '" + RequestNo + "' = '' Then 1 When OperationalControlRequests.VoucherNo = '" + RequestNo + "'  Then 1 END " +
                                    " AND 1 = CASE WHEN '" + RequestDate + "' = '' Then 1 When OperationalControlRequests.RequestDate = '" + RequestDate + "'  THEN 1 END " +
                                    " AND 1 = CASE WHEN '" + Requester + "' = '0' THEN 1 WHEN OperationalControlRequests.Supplier_Id = '" + Requester + "'  THEN 1 END " +
-                                   " AND OperationalControlRequests.CurrentLevel > 1 " +
+                                   " AND OperationalControlRequests.CurrentLevel > 1  AND OperationalControlRequests.ProgressStatus != 'Completed'" +
                                    " ORDER BY OperationalControlRequests.Id DESC";
 
             }
@@ -273,7 +273,7 @@ namespace Chai.WorkflowManagment.Modules.Approval
                                    " WHERE 1 = CASE WHEN '" + RequestNo + "' = '' Then 1 When TravelAdvanceRequests.TravelAdvanceNo = '" + RequestNo + "'  Then 1 END " +
                                    " AND 1 = CASE WHEN '" + RequestDate + "' = '' Then 1 When TravelAdvanceRequests.RequestDate = '" + RequestDate + "'  Then 1 END " +
                                    " AND 1 = CASE WHEN '" + Requester + "' = '0' THEN 1 WHEN TravelAdvanceRequests.AppUser_Id = '" + Requester + "'  THEN 1 END " +
-                                   " AND TravelAdvanceRequests.CurrentLevel > 1" +
+                                   " AND TravelAdvanceRequests.CurrentLevel > 1 AND TravelAdvanceRequests.ProgressStatus != 'Completed'" +
                                    " ORDER BY TravelAdvanceRequests.Id DESC";
             }
             else if (ProgressStatus.Equals("Completed"))
