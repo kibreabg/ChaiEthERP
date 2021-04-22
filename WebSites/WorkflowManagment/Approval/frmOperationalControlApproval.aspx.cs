@@ -185,6 +185,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 ddlSrchProgressStatus.DataBind();
             }
             ddlSrchProgressStatus.Items.Add(new ListItem("Reviewed", "Reviewed"));
+            ddlSrchProgressStatus.Items.Add(new ListItem(ApprovalStatus.Rejected.ToString(), ApprovalStatus.Rejected.ToString()));
         }
         private void BindSearchOperationalControlRequestGrid()
         {

@@ -112,6 +112,18 @@ namespace Chai.WorkflowManagment.Modules.Approval
                                    " AND CashPaymentRequests.CurrentLevel > 1 AND CashPaymentRequests.ProgressStatus != 'Completed'" +
                                    " ORDER BY CashPaymentRequests.Id DESC";
             }
+            else if (ProgressStatus == "Rejected")
+            {
+                filterExpression = " SELECT * FROM CashPaymentRequests " +
+                                   " INNER JOIN AppUsers ON (AppUsers.Id = CashPaymentRequests.CurrentApprover) OR (AppUsers.EmployeePosition_Id = CashPaymentRequests.CurrentApproverPosition AND AppUsers.Id = '" + CurrentUser().Id + "') " +
+                                   " INNER JOIN CashPaymentRequestStatuses ON CashPaymentRequests.Id = CashPaymentRequestStatuses.CashPaymentRequest_Id " +
+                                   " LEFT JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
+                                   " WHERE 1 = CASE WHEN '" + RequestNo + "' = '' Then 1 When CashPaymentRequests.VoucherNo = '" + RequestNo + "'  Then 1 END " +
+                                   " AND 1 = CASE WHEN '" + RequestDate + "' = '' Then 1 When CashPaymentRequests.RequestDate = '" + RequestDate + "'  Then 1 END " +
+                                   " AND 1 = CASE WHEN '" + Requester + "' = '0' THEN 1 WHEN CashPaymentRequests.AppUser_Id = '" + Requester + "'  THEN 1 END " +
+                                   " AND CashPaymentRequestStatuses.ApprovalStatus = 'Rejected'" +
+                                   " ORDER BY CashPaymentRequests.Id DESC";
+            }
             else if (ProgressStatus == "Not Retired" || ProgressStatus == "Retired")
             {
                 filterExpression = " SELECT * FROM CashPaymentRequests " +
@@ -199,6 +211,19 @@ namespace Chai.WorkflowManagment.Modules.Approval
                                    " ORDER BY OperationalControlRequests.Id DESC";
 
             }
+            else if (ProgressStatus == "Rejected")
+            {
+                filterExpression = " SELECT * FROM OperationalControlRequests " +
+                                   " INNER JOIN AppUsers ON (AppUsers.Id = OperationalControlRequests.CurrentApprover) OR (AppUsers.EmployeePosition_Id = OperationalControlRequests.CurrentApproverPosition AND AppUsers.Id = '" + CurrentUser().Id + "') " +
+                                   " INNER JOIN OperationalControlRequestStatuses ON OperationalControlRequests.Id = OperationalControlRequestStatuses.OperationalControlRequest_Id " +
+                                   " LEFT JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
+                                   " WHERE 1 = CASE WHEN '" + RequestNo + "' = '' Then 1 When OperationalControlRequests.VoucherNo = '" + RequestNo + "'  Then 1 END " +
+                                   " AND 1 = CASE WHEN '" + RequestDate + "' = '' Then 1 When OperationalControlRequests.RequestDate = '" + RequestDate + "'  THEN 1 END " +
+                                   " AND 1 = CASE WHEN '" + Requester + "' = '0' THEN 1 WHEN OperationalControlRequests.Supplier_Id = '" + Requester + "'  THEN 1 END " +
+                                   " AND OperationalControlRequestStatuses.ApprovalStatus = 'Rejected'" +
+                                   " ORDER BY OperationalControlRequests.Id DESC";
+
+            }
             else if (ProgressStatus == "Not Retired" || ProgressStatus == "Retired")
             {
                 filterExpression = " SELECT * FROM OperationalControlRequests " +
@@ -275,6 +300,19 @@ namespace Chai.WorkflowManagment.Modules.Approval
                                    " AND 1 = CASE WHEN '" + Requester + "' = '0' THEN 1 WHEN TravelAdvanceRequests.AppUser_Id = '" + Requester + "'  THEN 1 END " +
                                    " AND TravelAdvanceRequests.CurrentLevel > 1 AND TravelAdvanceRequests.ProgressStatus != 'Completed'" +
                                    " ORDER BY TravelAdvanceRequests.Id DESC";
+            }
+            else if (ProgressStatus == "Rejected")
+            {
+                filterExpression = " SELECT * FROM TravelAdvanceRequests " +
+                                   " INNER JOIN AppUsers ON (AppUsers.Id = TravelAdvanceRequests.CurrentApprover) OR (AppUsers.EmployeePosition_Id = TravelAdvanceRequests.CurrentApproverPosition AND AppUsers.Id = '" + CurrentUser().Id + "') " +
+                                   " INNER JOIN TravelAdvanceRequestStatuses ON TravelAdvanceRequests.Id = TravelAdvanceRequestStatuses.TravelAdvanceRequest_Id " +
+                                   " LEFT JOIN AssignJobs on AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
+                                   " WHERE 1 = CASE WHEN '" + RequestNo + "' = '' Then 1 When TravelAdvanceRequests.TravelAdvanceNo = '" + RequestNo + "'  Then 1 END " +
+                                   " AND 1 = CASE WHEN '" + RequestDate + "' = '' Then 1 When TravelAdvanceRequests.RequestDate = '" + RequestDate + "'  THEN 1 END " +
+                                   " AND 1 = CASE WHEN '" + Requester + "' = '0' THEN 1 WHEN TravelAdvanceRequests.AppUser_Id = '" + Requester + "'  THEN 1 END " +
+                                   " AND TravelAdvanceRequestStatuses.ApprovalStatus = 'Rejected'" +
+                                   " ORDER BY TravelAdvanceRequests.Id DESC";
+
             }
             else if (ProgressStatus.Equals("Completed"))
             {
