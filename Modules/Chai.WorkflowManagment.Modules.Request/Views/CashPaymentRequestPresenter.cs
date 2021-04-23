@@ -211,6 +211,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
             cashPaymentRequest.RequestDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
             cashPaymentRequest.Description = View.GetDescription;
+            cashPaymentRequest.ArrivalReturnDateTime = View.GetArrivalReturnDateTime;
             cashPaymentRequest.AmountType = View.GetAmountType;
             cashPaymentRequest.RequestType = View.GetRequestType;
             cashPaymentRequest.Program = _settingController.GetProgram(View.GetProgram);

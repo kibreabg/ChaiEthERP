@@ -92,6 +92,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return txtDescription.Text; }
         }
+        public string GetArrivalReturnDateTime
+        {
+            get { return txtArrivalReturnTime.Text; }
+        }
         public string GetVoucherNo
         {
             get { return AutoNumber(); }
@@ -519,19 +523,26 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     {
                         if (ddlAmountType.SelectedValue == "Actual Amount" && CheckReceiptsAttached())
                         {
-                            _presenter.SaveOrUpdateCashPaymentRequest();
-                            BindCashPaymentRequests();
-                            Master.ShowMessage(new AppMessage("Successfully did a Payment  Request, Reference No - <b>'" + _presenter.CurrentCashPaymentRequest.VoucherNo + "'</b>", RMessageType.Info));
-                            Log.Info(_presenter.CurrentUser().FullName + " has requested a Payment of Total Amount " + _presenter.CurrentCashPaymentRequest.TotalAmount.ToString());
-                            btnSave.Visible = false;
-
-                            //Once the Request is saved hide the Actions buttons from the Details Datagrid
-                            foreach (DataGridColumn col in dgCashPaymentDetail.Columns)
+                            if (CheckPerDiemDetailFilled())
                             {
-                                if (col.HeaderText.ToLower().Trim() == "actions")
+                                _presenter.SaveOrUpdateCashPaymentRequest();
+                                BindCashPaymentRequests();
+                                Master.ShowMessage(new AppMessage("Successfully did a Payment  Request, Reference No - <b>'" + _presenter.CurrentCashPaymentRequest.VoucherNo + "'</b>", RMessageType.Info));
+                                Log.Info(_presenter.CurrentUser().FullName + " has requested a Payment of Total Amount " + _presenter.CurrentCashPaymentRequest.TotalAmount.ToString());
+                                btnSave.Visible = false;
+
+                                //Once the Request is saved hide the Actions buttons from the Details Datagrid
+                                foreach (DataGridColumn col in dgCashPaymentDetail.Columns)
                                 {
-                                    col.Visible = false;
+                                    if (col.HeaderText.ToLower().Trim() == "actions")
+                                    {
+                                        col.Visible = false;
+                                    }
                                 }
+                            }
+                            else
+                            {
+                                Master.ShowMessage(new AppMessage("Please specify your (Arrival Date & Time) and (Return Date & Time)!", RMessageType.Error));
                             }
 
                         }
@@ -803,6 +814,23 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
             }
             return false;
+        }
+        protected bool CheckPerDiemDetailFilled()
+        {
+            int perDiemIncluded = 0;
+            foreach (CashPaymentRequestDetail detail in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
+            {
+                if (detail.ItemAccount.AccountName.Contains("Per Diem"))
+                {
+                    perDiemIncluded++;
+                }
+            }
+            if (perDiemIncluded > 0 && !String.IsNullOrEmpty(txtArrivalReturnTime.Text))
+                return true;
+            else if (perDiemIncluded == 0)
+                return true;
+            else
+                return false;
         }
         #region Attachments
         protected bool CheckReceiptsAttached()

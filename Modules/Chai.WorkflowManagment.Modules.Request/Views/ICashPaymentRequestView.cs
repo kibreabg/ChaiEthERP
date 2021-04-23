@@ -7,6 +7,7 @@
         int GetPayee { get; }
         string GetRequestType { get; }
         string GetDescription { get; }
+        string GetArrivalReturnDateTime { get; }
         string GetVoucherNo { get; }
         string GetAmountType { get; }
         int GetProgram { get; }
