@@ -152,11 +152,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 Text = " Select Payee ",
                 Value = "0"
             };
-            ListItem empPayee = new ListItem();
-            empPayee.Text = _presenter.CurrentUser().FullName;
-            empPayee.Value = "-1";
             ddlPayee.Items.Add(lst);
-            ddlPayee.Items.Add(empPayee);
             ddlPayee.DataSource = _presenter.GetSuppliers();
             ddlPayee.DataBind();
 

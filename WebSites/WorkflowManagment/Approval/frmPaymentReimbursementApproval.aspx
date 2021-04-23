@@ -89,6 +89,7 @@
             <Columns>
                 <asp:BoundField DataField="CashPaymentRequest.RequestNo" HeaderText="Cash Payment Request No." SortExpression="Cash Payment Request No" />
                 <asp:BoundField DataField="CashPaymentRequest.AppUser.FullName" HeaderText="Requester" />
+                <asp:BoundField DataField="CashPaymentRequest.Supplier.SupplierName" HeaderText="Payable To" />
                 <asp:BoundField DataField="RequestDate" HeaderText="Request Date" SortExpression="RequestDate" />
                 <asp:BoundField DataField="ReceivableAmount" HeaderText="Amount Advanced Taken" SortExpression="ReceivableAmount" />
                 <asp:BoundField DataField="TotalAmount" HeaderText="Total Expenditure" SortExpression="TotalAmount" />

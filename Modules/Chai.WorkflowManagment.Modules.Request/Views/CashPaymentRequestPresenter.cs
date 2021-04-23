@@ -216,11 +216,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             cashPaymentRequest.Program = _settingController.GetProgram(View.GetProgram);
             cashPaymentRequest.ProgressStatus = ProgressStatus.InProgress.ToString();
             cashPaymentRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
-            //Check if the Payee is the logged in employee or a supplier
-            if (View.GetPayee == -1)
-                cashPaymentRequest.Payee = CurrentUser().FullName;
-            else
-                cashPaymentRequest.Supplier = _settingController.GetSupplier(View.GetPayee);
+            cashPaymentRequest.Supplier = _settingController.GetSupplier(View.GetPayee);
 
             if (View.GetAmountType != "Actual Amount")
             {

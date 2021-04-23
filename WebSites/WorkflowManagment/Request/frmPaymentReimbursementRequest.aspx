@@ -23,7 +23,7 @@
                                 <asp:BoundField DataField="RequestNo" HeaderText="RequestNo" />
                                 <asp:BoundField DataField="RequestDate" HeaderText="Request Date" />
                                 <asp:BoundField DataField="VoucherNo" HeaderText="Voucher No" />
-                                <asp:BoundField DataField="Payee" HeaderText="Payee" />
+                                <asp:BoundField DataField="Supplier.SupplierName" HeaderText="Payee" />
                                 <asp:BoundField DataField="TotalAmount" HeaderText="Total Amount" />
                                 <asp:CommandField ShowSelectButton="True" />
                             </Columns>
