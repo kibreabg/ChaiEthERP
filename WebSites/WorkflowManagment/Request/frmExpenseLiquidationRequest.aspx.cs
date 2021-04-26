@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -166,19 +168,30 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void PopulateLiquidation()
         {
+            int index = 0;
+            DataTable dt = new DataTable();
+            dt.Columns.Add("AmountAdvanced", Type.GetType("System.String"));
+            dt.Columns.Add("ExpenseType", Type.GetType("System.String"));
+
             foreach (TravelAdvanceRequestDetail TAD in _presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestDetails)
             {
                 foreach (TravelAdvanceCost TAC in TAD.TravelAdvanceCosts)
                 {
-                    ExpenseLiquidationRequestDetail ELD = new ExpenseLiquidationRequestDetail();
-                    ELD.AmountAdvanced = TAC.Total;
-                    ELD.ExpenseType = TAC.ExpenseType;
+                    //ExpenseLiquidationRequestDetail ELD = new ExpenseLiquidationRequestDetail();
+                    //ELD.AmountAdvanced = TAC.Total;
+                    //ELD.ExpenseType = TAC.ExpenseType;
                     //ELD.ItemAccount = TAC.ItemAccount;
-                    ELD.Project = TAC.TravelAdvanceRequestDetail.TravelAdvanceRequest.Project;
-                    ELD.Grant = TAC.TravelAdvanceRequestDetail.TravelAdvanceRequest.Grant;
-                    _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails.Add(ELD);
+                    //ELD.Project = TAC.TravelAdvanceRequestDetail.TravelAdvanceRequest.Project;
+                    //ELD.Grant = TAC.TravelAdvanceRequestDetail.TravelAdvanceRequest.Grant;
+                    //_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails.Add(ELD);
+                    dt.Rows.Add();
+                    dt.Rows[index]["AmountAdvanced"] = TAC.Total.ToString();
+                    dt.Rows[index]["ExpenseType"] = TAC.ExpenseType.ExpenseTypeName;
+                    index++;
                 }
             }
+            grvAdvancedDetails.DataSource = dt;
+            grvAdvancedDetails.DataBind();
         }
         private void BindAttachments()
         {
@@ -271,7 +284,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             tarId = Convert.ToInt32(grvTravelAdvances.SelectedDataKey[0]);
             Session["tarId"] = Convert.ToInt32(grvTravelAdvances.SelectedDataKey[0]);
             _presenter.OnViewLoaded();
-            _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest = new ExpenseLiquidationRequest();
             btnSave.Visible = true;
             grvTravelAdvances.Visible = false;
             pnlInfo.Visible = false;
@@ -294,8 +306,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 DropDownList ddlProject = e.Item.FindControl("ddlFProject") as DropDownList;
                 BindProject(ddlProject);
+                ListItem liP = ddlProject.Items.FindByValue(_presenter.CurrentTravelAdvanceRequest.Project.Id.ToString());
+                if (liP != null)
+                    liP.Selected = true;
                 DropDownList ddlGrant = e.Item.FindControl("ddlFGrant") as DropDownList;
                 BindGrant(ddlGrant, Convert.ToInt32(ddlProject.SelectedValue));
+                ListItem liG = ddlGrant.Items.FindByValue(_presenter.CurrentTravelAdvanceRequest.Grant.Id.ToString());
+                if (liG != null)
+                    liG.Selected = true;
                 DropDownList ddlAccountDescription = e.Item.FindControl("ddlFAccountDescription") as DropDownList;
                 BindAccountDescription(ddlAccountDescription);
                 DropDownList ddlExpenseType = e.Item.FindControl("ddlExpenseType") as DropDownList;
@@ -364,20 +382,21 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     ExpenseLiquidationRequestDetail elrd = new ExpenseLiquidationRequestDetail();
                     elrd.ExpenseLiquidationRequest = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest;
-                    DropDownList ddlFAccountDescription1 = e.Item.FindControl("ddlFAccountDescription") as DropDownList;
-                    elrd.ItemAccount = _presenter.GetItemAccount(Convert.ToInt32(ddlFAccountDescription1.SelectedValue));
+                    DropDownList ddlFAccountDescription = e.Item.FindControl("ddlFAccountDescription") as DropDownList;
+                    elrd.ItemAccount = _presenter.GetItemAccount(Convert.ToInt32(ddlFAccountDescription.SelectedValue));
                     DropDownList ddlExpenseType = e.Item.FindControl("ddlExpenseType") as DropDownList;
                     elrd.ExpenseType = _presenter.GetExpenseType(Convert.ToInt32(ddlExpenseType.SelectedValue));
-                    DropDownList ddlFProject1 = e.Item.FindControl("ddlFProject") as DropDownList;
-                    elrd.Project = _presenter.GetProject(Convert.ToInt32(ddlFProject1.SelectedValue));
+                    DropDownList ddlFProject = e.Item.FindControl("ddlFProject") as DropDownList;
+                    elrd.Project = _presenter.GetProject(Convert.ToInt32(ddlFProject.SelectedValue));
                     DropDownList ddlFGrant = e.Item.FindControl("ddlFGrant") as DropDownList;
                     elrd.Grant = _presenter.GetGrant(Convert.ToInt32(ddlFGrant.SelectedValue));
-                    TextBox txtFAmount1 = e.Item.FindControl("txtFAmount") as TextBox;
-                    elrd.AmountAdvanced = Convert.ToDecimal(txtFAmount1.Text);
-                    TextBox txtFActualExpenditure1 = e.Item.FindControl("txtFActualExpenditure") as TextBox;
-                    elrd.ActualExpenditure = Convert.ToDecimal(txtFActualExpenditure1.Text);
-                    TextBox txtFVariance1 = e.Item.FindControl("txtFVariance") as TextBox;
-                    elrd.Variance = Convert.ToDecimal(txtFVariance1.Text);
+                    TextBox txtFAmount = e.Item.FindControl("txtFAmount") as TextBox;
+                    elrd.AmountAdvanced = Convert.ToDecimal(txtFAmount.Text);
+                    TextBox txtFActualExpenditure = e.Item.FindControl("txtFActualExpenditure") as TextBox;
+                    elrd.ActualExpenditure = Convert.ToDecimal(txtFActualExpenditure.Text);
+                    TextBox txtFVariance = e.Item.FindControl("txtFVariance") as TextBox;
+                    txtFVariance.Text = (elrd.AmountAdvanced - elrd.ActualExpenditure).ToString();
+                    elrd.Variance = Convert.ToDecimal(txtFVariance.Text);
 
                     //Add Checklists for attachments if available                    
                     foreach (ItemAccountChecklist checklist in elrd.ItemAccount.ItemAccountChecklists)
@@ -431,9 +450,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 elrd.Project = _presenter.GetProject(Convert.ToInt32(ddlProject.SelectedValue));
                 DropDownList ddlGrant = e.Item.FindControl("ddlGrant") as DropDownList;
                 elrd.Grant = _presenter.GetGrant(Convert.ToInt32(ddlGrant.SelectedValue));
+                TextBox txtAmount = e.Item.FindControl("txtAmount") as TextBox;
+                elrd.AmountAdvanced = Convert.ToDecimal(txtAmount.Text);
                 TextBox txtActualExpenditure = e.Item.FindControl("txtActualExpenditure") as TextBox;
                 elrd.ActualExpenditure = Convert.ToDecimal(txtActualExpenditure.Text);
                 TextBox txtVariance = e.Item.FindControl("txtVariance") as TextBox;
+                txtVariance.Text = (elrd.AmountAdvanced - elrd.ActualExpenditure).ToString();
                 elrd.Variance = Convert.ToDecimal(txtVariance.Text);
 
                 foreach (ExpenseLiquidationRequestDetail eld in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
@@ -470,25 +492,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             this.dgExpenseLiquidationDetail.EditItemIndex = e.Item.ItemIndex;
             BindExpenseLiquidationDetailGrid();
-        }
-        protected void txtActualExpenditure_TextChanged(object sender, EventArgs e)
-        {
-            TextBox txt = (TextBox)sender;
-            HiddenField hfAmountAdvanced = txt.FindControl("hfAmountAdvanced") as HiddenField;
-            TextBox txtActualExpenditure = txt.FindControl("txtActualExpenditure") as TextBox;
-            TextBox txtVariance = txt.FindControl("txtVariance") as TextBox;
-            txtVariance.Text = ((Convert.ToDecimal(hfAmountAdvanced.Value) - Convert.ToDecimal(txtActualExpenditure.Text))).ToString();
-
-
-        }
-        protected void txtFActualExpenditure_TextChanged(object sender, EventArgs e)
-        {
-            TextBox txt = (TextBox)sender;
-            TextBox txtFAmount = txt.FindControl("txtFAmount") as TextBox;
-            TextBox txtFActualExpenditure = txt.FindControl("txtFActualExpenditure") as TextBox;
-            TextBox txtFVariance = txt.FindControl("txtFVariance") as TextBox;
-            txtFVariance.Text = ((Convert.ToDecimal(txtFAmount.Text) - Convert.ToDecimal(txtFActualExpenditure.Text))).ToString();
-
         }
         protected void btnUpload_Click(object sender, EventArgs e)
         {
@@ -583,57 +586,53 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 decimal totalAdvance = Convert.ToDecimal(txtTotalAdvance.Text);
                 decimal totalActual = Convert.ToDecimal(txtTotActual.Text);
-                bool emptyAccountExists = false;
+                decimal advancesFilled = 0;
                 foreach (ExpenseLiquidationRequestDetail elrd in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
                 {
-                    if (elrd.ItemAccount == null)
-                    {
-                        emptyAccountExists = true;
-                    }
+                    advancesFilled += elrd.AmountAdvanced;
                 }
 
-                if (!emptyAccountExists)
+                if (advancesFilled != totalAdvance)
                 {
-                    if ((totalAdvance == totalActual) || (totalAdvance < totalActual && !String.IsNullOrEmpty(txtAdditionalComment.Text)))
-                    {
-                        if (CheckReceiptsAttached())
-                        {
-                            //For update cases make the totals equal to zero first then add up the individuals
-                            _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure = 0;
-                            _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance = 0;
-                            foreach (ExpenseLiquidationRequestDetail detail in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
-                            {
-                                _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure + detail.ActualExpenditure;
-                                _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance + detail.AmountAdvanced;
-                                txtTotActual.Text = (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure).ToString();
-                                txtTotalAdvance.Text = (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance).ToString();
-                            }
+                    Master.ShowMessage(new AppMessage("The Amount Advanced you entered do not equal to " + totalAdvance.ToString() + "!", RMessageType.Error));
+                    return;
+                }
 
-                            int tarID = Convert.ToInt32(Session["tarId"]);
-                            _presenter.SaveOrUpdateExpenseLiquidationRequest(tarID);
-                            BindExpenseLiquidationRequests();
-                            PrintTransaction();
-                            Master.ShowMessage(new AppMessage("Travel Expense Liquidation Successfully Requested!", RMessageType.Info));
-                            Log.Info(_presenter.CurrentUser().FullName + " has requested an Expense Liquidation for a total amount of " + _presenter.CurrentTravelAdvanceRequest.TotalTravelAdvance.ToString());
-                            btnSave.Visible = false;
-                            btnPrint.Enabled = true;
-                            Session["tarId"] = null;
+                if ((totalAdvance == totalActual) || (totalAdvance < totalActual && !String.IsNullOrEmpty(txtAdditionalComment.Text)))
+                {
+                    if (CheckReceiptsAttached())
+                    {
+                        //For update cases make the totals equal to zero first then add up the individuals
+                        _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure = 0;
+                        _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance = 0;
+                        foreach (ExpenseLiquidationRequestDetail detail in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
+                        {
+                            _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure + detail.ActualExpenditure;
+                            _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance + detail.AmountAdvanced;
+                            txtTotActual.Text = (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure).ToString();
+                            txtTotalAdvance.Text = (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance).ToString();
                         }
-                        else { Master.ShowMessage(new AppMessage("Please attach the required receipts", RMessageType.Error)); }
+
+                        int tarID = Convert.ToInt32(Session["tarId"]);
+                        _presenter.SaveOrUpdateExpenseLiquidationRequest(tarID);
+                        BindExpenseLiquidationRequests();
+                        PrintTransaction();
+                        Master.ShowMessage(new AppMessage("Travel Expense Liquidation Successfully Requested!", RMessageType.Info));
+                        Log.Info(_presenter.CurrentUser().FullName + " has requested an Expense Liquidation for a total amount of " + _presenter.CurrentTravelAdvanceRequest.TotalTravelAdvance.ToString());
+                        btnSave.Visible = false;
+                        btnPrint.Enabled = true;
+                        Session["tarId"] = null;
                     }
-                    else if (totalAdvance < totalActual && String.IsNullOrEmpty(txtAdditionalComment.Text))
-                    {
-                        Master.ShowMessage(new AppMessage("Please specify your reason for the OVERSPENT expenses!", RMessageType.Error));
-                    }
-                    else
-                    {
-                        decimal variance = (Convert.ToDecimal(txtTotalAdvance.Text) - Convert.ToDecimal(txtTotActual.Text));
-                        Master.ShowMessage(new AppMessage("Please liquidate the remaining " + variance.ToString() + " birr with your receipt from Bank!", RMessageType.Error));
-                    }
+                    else { Master.ShowMessage(new AppMessage("Please attach the required receipts", RMessageType.Error)); }
+                }
+                else if (totalAdvance < totalActual && String.IsNullOrEmpty(txtAdditionalComment.Text))
+                {
+                    Master.ShowMessage(new AppMessage("Please specify your reason for the OVERSPENT expenses!", RMessageType.Error));
                 }
                 else
                 {
-                    Master.ShowMessage(new AppMessage("Please update all Chart of Accounts!", RMessageType.Error));
+                    decimal variance = (Convert.ToDecimal(txtTotalAdvance.Text) - Convert.ToDecimal(txtTotActual.Text));
+                    Master.ShowMessage(new AppMessage("Please liquidate the remaining " + variance.ToString() + " birr with your receipt from Bank!", RMessageType.Error));
                 }
             }
             catch (Exception ex)
