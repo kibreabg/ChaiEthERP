@@ -213,6 +213,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
             txtTravelAdvReqDate.Text = _presenter.CurrentTravelAdvanceRequest.RequestDate.Value.ToShortDateString();
             txtTotalAdvance.Text = _presenter.CurrentTravelAdvanceRequest.TotalTravelAdvance.ToString();
+            txtTotActual.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure.ToString();
             txtComment.Text = _presenter.CurrentTravelAdvanceRequest.PurposeOfTravel;
             BindExpenseLiquidationDetailGrid();
         }
@@ -484,6 +485,44 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             catch (Exception ex)
             {
                 Master.ShowMessage(new AppMessage("Error: Unable to Update liquidation detail. " + ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
+            }
+        }
+        protected void dgExpenseLiquidationDetail_DeleteCommand(object source, DataGridCommandEventArgs e)
+        {
+            int eldId = (int)dgExpenseLiquidationDetail.DataKeys[e.Item.ItemIndex];
+            ExpenseLiquidationRequestDetail elrd;
+            decimal totalActExp = 0;
+
+            if (eldId > 0)
+                elrd = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.GetExpenseLiquidationRequestDetail(eldId);
+            else
+                elrd = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails[e.Item.ItemIndex];
+            try
+            {
+                if (eldId > 0)
+                {
+                    _presenter.DeleteExpenseLiquidationRequestDetail(elrd);
+                    _presenter.SaveOrUpdateExpenseLiquidationRequest(_presenter.CurrentTravelAdvanceRequest.Id);
+                }
+                else
+                    _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails.Remove(elrd);
+
+                foreach (ExpenseLiquidationRequestDetail eld in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
+                {
+                    totalActExp += eld.ActualExpenditure;
+                }
+
+                _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure = totalActExp;
+
+                BindExpenseLiquidationDetails();
+
+                Master.ShowMessage(new AppMessage("Liquidation Detail was removed successfully!", RMessageType.Info));
+            }
+            catch (Exception ex)
+            {
+                Master.ShowMessage(new AppMessage("Error: Unable to delete Payment Request Detail. " + ex.Message, RMessageType.Error));
                 ExceptionUtility.LogException(ex, ex.Source);
                 ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName);
             }

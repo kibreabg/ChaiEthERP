@@ -187,9 +187,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             _controller.Navigate(String.Format("~/Request/Default.aspx?{0}=3", AppConstants.TABID));
         }
-        public void DeleteExpenseLiquidationRequest(ExpenseLiquidationRequest ExpenseLiquidationRequest)
+        public void DeleteExpenseLiquidationRequest(ExpenseLiquidationRequest expenseLiquidationRequest)
         {
-            _controller.DeleteEntity(ExpenseLiquidationRequest);
+            _controller.DeleteEntity(expenseLiquidationRequest);
+        }
+        public void DeleteExpenseLiquidationRequestDetail(ExpenseLiquidationRequestDetail expenseLiquidationRequestDetail)
+        {
+            _controller.DeleteEntity(expenseLiquidationRequestDetail);
         }
         public ExpenseLiquidationRequest GetExpenseLiquidationRequest(int id)
         {

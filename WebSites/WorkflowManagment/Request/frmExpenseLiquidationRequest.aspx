@@ -187,7 +187,7 @@
                                                 <br />
                                                 <asp:DataGrid ID="dgExpenseLiquidationDetail" runat="server" AlternatingRowStyle-CssClass="" AutoGenerateColumns="False" CellPadding="0"
                                                     CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active" DataKeyField="Id"
-                                                    OnEditCommand="dgExpenseLiquidationDetail_EditCommand" OnUpdateCommand="dgExpenseLiquidationDetail_UpdateCommand"
+                                                    OnEditCommand="dgExpenseLiquidationDetail_EditCommand" OnDeleteCommand="dgExpenseLiquidationDetail_DeleteCommand" OnUpdateCommand="dgExpenseLiquidationDetail_UpdateCommand"
                                                     GridLines="None" OnItemDataBound="dgExpenseLiquidationDetail_ItemDataBound" ShowFooter="True" OnItemCommand="dgExpenseLiquidationDetail_ItemCommand">
 
                                                     <Columns>
@@ -312,7 +312,7 @@
                                                         <asp:TemplateColumn HeaderText="Actions">
                                                             <EditItemTemplate>
                                                                 <asp:LinkButton ID="lnkUpdate" runat="server" CausesValidation="true" CommandName="Update" CssClass="btn btn-xs btn-default" ValidationGroup="edit"><i class="fa fa-save"></i></asp:LinkButton>
-                                                                <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default"><i class="fa fa-times"></i></asp:LinkButton>
+                                                                <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" OnClientClick="javascript:return confirm('Are you sure you want to delete this entry?');" CssClass="btn btn-xs btn-default"><i class="fa fa-times"></i></asp:LinkButton>
                                                             </EditItemTemplate>
                                                             <FooterTemplate>
                                                                 <asp:LinkButton ID="lnkAddNew" runat="server" CausesValidation="true" CommandName="AddNew" CssClass="btn btn-sm btn-success" ValidationGroup="save"><i class="fa fa-save"></i></asp:LinkButton>
