@@ -186,7 +186,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     //_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails.Add(ELD);
                     dt.Rows.Add();
                     dt.Rows[index]["AmountAdvanced"] = TAC.Total.ToString();
-                    dt.Rows[index]["ExpenseType"] = TAC.ExpenseType.ExpenseTypeName;
+                    if (TAC.ExpenseType != null)
+                        dt.Rows[index]["ExpenseType"] = TAC.ExpenseType.ExpenseTypeName;
+                    else
+                        dt.Rows[index]["ExpenseType"] = String.Empty;
                     index++;
                 }
             }
