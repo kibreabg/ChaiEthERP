@@ -288,6 +288,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             btnSave.Visible = true;
             grvTravelAdvances.Visible = false;
             pnlInfo.Visible = false;
+            _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest = new ExpenseLiquidationRequest();
             BindExpenseLiquidationDetails();
         }
         protected void grvStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
