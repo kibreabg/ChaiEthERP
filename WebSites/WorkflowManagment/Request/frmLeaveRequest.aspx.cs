@@ -394,12 +394,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 if (leaverequest != null)
                 {
-                    if (leaverequest.GetLeaveRequestStatusworkflowLevel(1).ApprovalStatus != null)
+                    if (leaverequest.GetLeaveRequestStatusworkflowLevel(1) != null)
                     {
-                        e.Row.Cells[5].Enabled = false;
+                        if (leaverequest.GetLeaveRequestStatusworkflowLevel(1).ApprovalStatus != null)
+                        {
+                            e.Row.Cells[5].Enabled = false;
 
+                        }
                     }
-
                 }
                 //LinkButton db = (LinkButton)e.Row.Cells[5].Controls[0];
                 //db.OnClientClick = "return confirm('Are you sure you want to delete this Recieve?');";

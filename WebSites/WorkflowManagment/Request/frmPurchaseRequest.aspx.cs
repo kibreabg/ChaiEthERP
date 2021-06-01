@@ -623,9 +623,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     TextBox txtFRemark = e.Item.FindControl("txtFRemark") as TextBox;
                     Detail.Remark = txtFRemark.Text;
                     DropDownList ddlFProject = e.Item.FindControl("ddlFProject") as DropDownList;
-                    Detail.Project = _presenter.GetProject(int.Parse(ddlFProject.SelectedValue));
+                    Detail.Project = _presenter.GetProject(Convert.ToInt32(ddlFProject.SelectedValue));
                     DropDownList ddlFGrant = e.Item.FindControl("ddlFGrant") as DropDownList;
-                    Detail.Grant = _presenter.GetGrant(int.Parse(ddlFGrant.SelectedValue));
+                    Detail.Grant = _presenter.GetGrant(Convert.ToInt32(ddlFGrant.SelectedValue));
                     Detail.BidAnalysisRequestStatus = "InProgress";
                     Detail.PurchaseRequest = _presenter.CurrentPurchaseRequest;
                     _presenter.CurrentPurchaseRequest.PurchaseRequestDetails.Add(Detail);

@@ -229,6 +229,37 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             ddlAccountDescription.DataTextField = "AccountName";
             ddlAccountDescription.DataBind();
         }
+        private void DeleteLiquidationIfRejected(ExpenseLiquidationRequest theLiquidation, string rejectedReason)
+        {
+            theLiquidation.TravelAdvanceRequest.ExpenseLiquidationStatus = "Completed";
+            theLiquidation.TravelAdvanceRequest.LiquidationRejectionCount = theLiquidation.TravelAdvanceRequest.LiquidationRejectionCount + 1;
+            theLiquidation.TravelAdvanceRequest.LiquidationRejectionReasons = theLiquidation.TravelAdvanceRequest.LiquidationRejectionReasons + "," + rejectedReason;
+            theLiquidation.TravelAdvanceRequest.LiquidationRejectedBy = theLiquidation.TravelAdvanceRequest.LiquidationRejectedBy + "," + _presenter.CurrentUser().Id;
+            IList<ExpenseLiquidationRequestDetail> detailList = theLiquidation.ExpenseLiquidationRequestDetails.ToList();
+            foreach (ExpenseLiquidationRequestDetail detail in detailList)
+            {
+                if (detail.ELRAttachments != null)
+                {
+                    IList<ELRAttachment> attachemntList = detail.ELRAttachments.ToList();
+                    foreach (ELRAttachment attach in attachemntList)
+                    {
+                        string filePath = HttpContext.Current.Server.MapPath(attach.FilePath);
+                        Response.Flush();
+                        if (File.Exists(filePath))
+                        {
+                            File.Delete(filePath);
+                        }
+                        detail.RemoveELAttachment(filePath);
+                    }
+                }
+                theLiquidation.RemoveExpenseLiquidationRequestDetail(detail.Id);
+            }
+
+            theLiquidation.ExpenseLiquidationRequestStatuses.Clear();
+            ExpenseLiquidationRequest request = theLiquidation;
+            _presenter.SaveOrUpdateExpenseLiquidationRequest(theLiquidation);
+            _presenter.DeleteExpenseLiquidationRequest(request);
+        }
         private void ShowPrint()
         {
             if (_presenter.CurrentOperationalControlRequest.CurrentLevel == _presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses.Count && _presenter.CurrentOperationalControlRequest.ProgressStatus == ProgressStatus.Completed.ToString())
@@ -311,6 +342,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             foreach (CashPaymentRequestStatus CPRS in cpr.CashPaymentRequestStatuses)
             {
                 EmailSender.Send(_presenter.GetUser(CPRS.Approver).Email, "Cash Payment Request Rejection", "The Cash Payment Request with Request No. - '" + (cpr.RequestNo.ToString()).ToUpper() + "' made by " + (_presenter.GetUser(cpr.AppUser.Id).FullName).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (rejectedReason).ToUpper() + "'");
+            }
+        }
+        private void SendEmailLiquidationRejected(ExpenseLiquidationRequest elr, string rejectedReason)
+        {
+            EmailSender.Send(_presenter.GetUser(elr.TravelAdvanceRequest.AppUser.Id).Email, "Expense Liquidation Request Rejection", "Your Expense Liquidation Request with Request No. - '" + (elr.TravelAdvanceRequest.TravelAdvanceNo.ToString()).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (rejectedReason).ToUpper() + "'");
+
+            foreach (ExpenseLiquidationRequestStatus ELRS in elr.ExpenseLiquidationRequestStatuses)
+            {
+                EmailSender.Send(_presenter.GetUser(ELRS.Approver).Email, "Expense Liquidation Request Rejection", "The Expense Liquidation Request with Request No. - '" + (elr.TravelAdvanceRequest.TravelAdvanceNo.ToString()).ToUpper() + "' made by " + (_presenter.GetUser(elr.TravelAdvanceRequest.AppUser.Id).FullName).ToUpper() + " was Rejected by " + _presenter.CurrentUser().FullName + " for this reason - '" + (rejectedReason).ToUpper() + "'");
             }
         }
         private void GetNextApprover()
@@ -402,6 +442,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                             theCashPayment.CashPaymentRequestStatuses.Last().RejectedReason = OCRS.RejectedReason;
                             _presenter.SaveOrUpdateCashPaymentRequest(theCashPayment);
                             SendEmailPaymentRejected(theCashPayment, OCRS.RejectedReason);
+                        }
+                        else if (_presenter.CurrentOperationalControlRequest.LiquidationId > 0)
+                        {
+                            ExpenseLiquidationRequest theLiquidation = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId);
+                            theLiquidation.CurrentStatus = ApprovalStatus.Rejected.ToString();
+                            theLiquidation.ExpenseLiquidationRequestStatuses.Last().RejectedReason = OCRS.RejectedReason;
+                            _presenter.SaveOrUpdateExpenseLiquidationRequest(theLiquidation);
+                            SendEmailLiquidationRejected(theLiquidation, OCRS.RejectedReason);
+                            DeleteLiquidationIfRejected(theLiquidation, OCRS.RejectedReason);                            
                         }
 
                         _presenter.CurrentOperationalControlRequest.ProgressStatus = ProgressStatus.Completed.ToString();

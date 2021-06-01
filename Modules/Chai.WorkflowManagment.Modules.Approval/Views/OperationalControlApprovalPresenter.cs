@@ -65,9 +65,17 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _adminController.GetUser(UserId);
         }
+        public void DeleteExpenseLiquidationRequest(ExpenseLiquidationRequest expenseLiquidationRequest)
+        {
+            _controller.DeleteEntity(expenseLiquidationRequest);
+        }
         public void SaveOrUpdateOperationalControlRequest(OperationalControlRequest OperationalControlRequest)
         {
             _controller.SaveOrUpdateEntity(OperationalControlRequest);
+        }
+        public void SaveOrUpdateExpenseLiquidationRequest(ExpenseLiquidationRequest ExpenseLiquidationRequest)
+        {
+            _controller.SaveOrUpdateEntity(ExpenseLiquidationRequest);
         }
         public void SaveOrUpdateTravelAdvanceRequest(TravelAdvanceRequest travelAdvanceRequest)
         {
