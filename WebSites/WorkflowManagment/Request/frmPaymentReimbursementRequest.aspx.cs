@@ -200,7 +200,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             btnSave.Visible = true;
             btnSave.Enabled = true;
             txtReceivables.Text = grvCashPayments.SelectedRow.Cells[4].Text;
-            //grvCashPayments.Visible = false;
+            grvCashPayments.Visible = false;
             pnlInfo.Visible = false;
             CheckandBindCashPaymentDetails();
             BindPaymentReimbursementRequestDetails();

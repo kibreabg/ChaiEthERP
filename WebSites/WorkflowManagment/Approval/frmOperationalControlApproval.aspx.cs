@@ -118,10 +118,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
 
             ddlApprovalStatus.Items.Add(new ListItem("Reject Bank Payment", ApprovalStatus.Rejected.ToString().Replace('_', ' ')));
-            if (_presenter.CurrentOperationalControlRequest.PaymentId > 0 || _presenter.CurrentOperationalControlRequest.TravelAdvanceId > 0)
-            {
-                ddlApprovalStatus.Items.Add(new ListItem("Reject Whole Process", ApprovalStatus.Reject_Whole_Process.ToString().Replace('_', ' ')));
-            }
+            ddlApprovalStatus.Items.Add(new ListItem("Reject Whole Process", ApprovalStatus.Reject_Whole_Process.ToString().Replace('_', ' ')));
 
         }
         private void PopRequesters(DropDownList ddl)
@@ -450,7 +447,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                             theLiquidation.ExpenseLiquidationRequestStatuses.Last().RejectedReason = OCRS.RejectedReason;
                             _presenter.SaveOrUpdateExpenseLiquidationRequest(theLiquidation);
                             SendEmailLiquidationRejected(theLiquidation, OCRS.RejectedReason);
-                            DeleteLiquidationIfRejected(theLiquidation, OCRS.RejectedReason);                            
+                            DeleteLiquidationIfRejected(theLiquidation, OCRS.RejectedReason);
                         }
 
                         _presenter.CurrentOperationalControlRequest.ProgressStatus = ProgressStatus.Completed.ToString();
