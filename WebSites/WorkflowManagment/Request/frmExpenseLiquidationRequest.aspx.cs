@@ -455,6 +455,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 elrd.Project = _presenter.GetProject(Convert.ToInt32(ddlProject.SelectedValue));
                 DropDownList ddlGrant = e.Item.FindControl("ddlGrant") as DropDownList;
                 elrd.Grant = _presenter.GetGrant(Convert.ToInt32(ddlGrant.SelectedValue));
+                DropDownList ddlEdtExpenseType = e.Item.FindControl("ddlEdtExpenseType") as DropDownList;
+                elrd.ExpenseType = _presenter.GetExpenseType(Convert.ToInt32(ddlEdtExpenseType.SelectedValue));
                 TextBox txtAmount = e.Item.FindControl("txtAmount") as TextBox;
                 elrd.AmountAdvanced = Convert.ToDecimal(txtAmount.Text);
                 TextBox txtActualExpenditure = e.Item.FindControl("txtActualExpenditure") as TextBox;
@@ -623,6 +625,23 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             else
                 return false;
         }
+        protected bool CheckPerDiemDetailFilled()
+        {
+            int perDiemIncluded = 0;
+            foreach (ExpenseLiquidationRequestDetail detail in _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails)
+            {
+                if (detail.ItemAccount.AccountName.Contains("Per Diem"))
+                {
+                    perDiemIncluded++;
+                }
+            }
+            if (perDiemIncluded > 0 && !String.IsNullOrEmpty(txtArrivalReturnTime.Text))
+                return true;
+            else if (perDiemIncluded == 0)
+                return true;
+            else
+                return false;
+        }
         protected void btnSave_Click(object sender, EventArgs e)
         {
             try
@@ -638,6 +657,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 if (advancesFilled != totalAdvance)
                 {
                     Master.ShowMessage(new AppMessage("The Amount Advanced you entered do not equal to " + totalAdvance.ToString() + "!", RMessageType.Error));
+                    return;
+                }
+
+                if (!CheckPerDiemDetailFilled())
+                {
+                    Master.ShowMessage(new AppMessage("Please specify your (Arrival Date & Time) and (Return Date & Time)!", RMessageType.Error));
                     return;
                 }
 
