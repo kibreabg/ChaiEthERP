@@ -338,16 +338,44 @@ namespace Chai.WorkflowManagment.Modules.Approval
         {
             string filterExpression = "";
 
-            filterExpression = " SELECT * FROM ExpenseLiquidationRequests " +
+            if (ProgressStatus.Equals("InProgress") || ProgressStatus.Equals("Completed"))
+            {
+                filterExpression = " SELECT * FROM ExpenseLiquidationRequests " +
+                                       " INNER JOIN TravelAdvanceRequests ON TravelAdvanceRequests.Id = ExpenseLiquidationRequests.Id " +
+                                       " INNER JOIN AppUsers ON (AppUsers.Id = ExpenseLiquidationRequests.CurrentApprover) OR (AppUsers.EmployeePosition_Id = ExpenseLiquidationRequests.CurrentApproverPosition AND AppUsers.Id = '" + CurrentUser().Id + "') " +
+                                       " LEFT JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
+                                       " WHERE 1 = CASE WHEN '" + ExpenseType + "' = '' THEN 1 WHEN ExpenseLiquidationRequests.ExpenseType = '" + ExpenseType + "' THEN 1 END " +
+                                       " AND 1 = CASE WHEN '" + RequestDate + "' = '' THEN 1 WHEN ExpenseLiquidationRequests.RequestDate = '" + RequestDate + "' THEN 1 END " +
+                                       " AND 1 = CASE WHEN '" + Requester + "' = '0' THEN 1 WHEN TravelAdvanceRequests.AppUser_Id = '" + Requester + "'  THEN 1 END " +
+                                       " AND ExpenseLiquidationRequests.ProgressStatus='" + ProgressStatus + "' " +
+                                       " AND ((ExpenseLiquidationRequests.CurrentApprover = '" + CurrentUser().Id + "') OR (ExpenseLiquidationRequests.CurrentApproverPosition = '" + CurrentUser().EmployeePosition.Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) " +
+                                       " ORDER BY ExpenseLiquidationRequests.Id DESC ";
+            }
+            else if (ProgressStatus == "Reviewed")
+            {
+                filterExpression = " SELECT * FROM ExpenseLiquidationRequests " +
                                    " INNER JOIN TravelAdvanceRequests ON TravelAdvanceRequests.Id = ExpenseLiquidationRequests.Id " +
                                    " INNER JOIN AppUsers ON (AppUsers.Id = ExpenseLiquidationRequests.CurrentApprover) OR (AppUsers.EmployeePosition_Id = ExpenseLiquidationRequests.CurrentApproverPosition AND AppUsers.Id = '" + CurrentUser().Id + "') " +
                                    " LEFT JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
                                    " WHERE 1 = CASE WHEN '" + ExpenseType + "' = '' THEN 1 WHEN ExpenseLiquidationRequests.ExpenseType = '" + ExpenseType + "' THEN 1 END " +
                                    " AND 1 = CASE WHEN '" + RequestDate + "' = '' THEN 1 WHEN ExpenseLiquidationRequests.RequestDate = '" + RequestDate + "' THEN 1 END " +
                                    " AND 1 = CASE WHEN '" + Requester + "' = '0' THEN 1 WHEN TravelAdvanceRequests.AppUser_Id = '" + Requester + "'  THEN 1 END " +
-                                   " AND ExpenseLiquidationRequests.ProgressStatus='" + ProgressStatus + "' " +
-                                   " AND ((ExpenseLiquidationRequests.CurrentApprover = '" + CurrentUser().Id + "') OR (ExpenseLiquidationRequests.CurrentApproverPosition = '" + CurrentUser().EmployeePosition.Id + "') OR (AssignJobs.AssignedTo = '" + GetAssignedUserbycurrentuser() + "')) " +
-                                   " ORDER BY ExpenseLiquidationRequests.Id DESC ";
+                                   " AND ExpenseLiquidationRequests.CurrentLevel > 1 AND ExpenseLiquidationRequests.ProgressStatus != 'Completed'" +
+                                   " ORDER BY ExpenseLiquidationRequests.Id DESC";
+            }
+            else if (ProgressStatus == "Rejected")
+            {
+                filterExpression = " SELECT * FROM ExpenseLiquidationRequests " +
+                                   " INNER JOIN TravelAdvanceRequests ON TravelAdvanceRequests.Id = ExpenseLiquidationRequests.Id " +
+                                   " INNER JOIN AppUsers ON (AppUsers.Id = ExpenseLiquidationRequests.CurrentApprover) OR (AppUsers.EmployeePosition_Id = ExpenseLiquidationRequests.CurrentApproverPosition AND AppUsers.Id = '" + CurrentUser().Id + "') " +
+                                   " LEFT JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
+                                   " INNER JOIN ExpenseLiquidationRequestStatuses ON ExpenseLiquidationRequests.Id = ExpenseLiquidationRequestStatuses.ExpenseLiquidationRequest_Id " +
+                                   " WHERE 1 = CASE WHEN '" + ExpenseType + "' = '' THEN 1 WHEN ExpenseLiquidationRequests.ExpenseType = '" + ExpenseType + "' THEN 1 END " +
+                                   " AND 1 = CASE WHEN '" + RequestDate + "' = '' THEN 1 WHEN ExpenseLiquidationRequests.RequestDate = '" + RequestDate + "' THEN 1 END " +
+                                   " AND 1 = CASE WHEN '" + Requester + "' = '0' THEN 1 WHEN TravelAdvanceRequests.AppUser_Id = '" + Requester + "'  THEN 1 END " +
+                                   " AND ExpenseLiquidationRequestStatuses.ApprovalStatus = 'Rejected'" +
+                                   " ORDER BY ExpenseLiquidationRequests.Id DESC";
+            }
 
             return _workspace.SqlQuery<ExpenseLiquidationRequest>(filterExpression).ToList();
         }
