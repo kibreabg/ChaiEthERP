@@ -93,6 +93,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return txtAdditionalComment.Text; }
         }
+        public string GetArrivalReturnDateTime
+        {
+            get { return txtArrivalReturnTime.Text; }
+        }
         public IList<ExpenseLiquidationRequest> ExpenseLiquidationRequests
         {
             get
