@@ -386,7 +386,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     OCRS.Account = _presenter.GetAccount(_presenter.CurrentOperationalControlRequest.Account.Id);
                     OCRS.Date = DateTime.Now;
                     OCRS.AssignedBy = _presenter.GetAssignedJobbycurrentuser(OCRS.Approver) != null ? _presenter.GetAssignedJobbycurrentuser(OCRS.Approver).AppUser.FullName : "";
-                    if (OCRS.ApprovalStatus != ApprovalStatus.Rejected.ToString() && OCRS.ApprovalStatus != ApprovalStatus.Reject_Whole_Process.ToString())
+                    if (OCRS.ApprovalStatus != ApprovalStatus.Rejected.ToString() && OCRS.ApprovalStatus != ApprovalStatus.Reject_Whole_Process.ToString().Replace('_', ' '))
                     {
                         if (_presenter.CurrentOperationalControlRequest.CurrentLevel == _presenter.CurrentOperationalControlRequest.OperationalControlRequestStatuses.Count)
                         {
@@ -422,7 +422,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         _presenter.CurrentOperationalControlRequest.CurrentStatus = OCRS.ApprovalStatus;
                         Log.Info(_presenter.GetUser(OCRS.Approver).FullName + " has " + OCRS.ApprovalStatus + " Bank Payment Request made by " + _presenter.CurrentOperationalControlRequest.AppUser.FullName);
                     }
-                    else if (OCRS.ApprovalStatus == ApprovalStatus.Reject_Whole_Process.ToString())
+                    else if (OCRS.ApprovalStatus == ApprovalStatus.Reject_Whole_Process.ToString().Replace('_', ' '))
                     {
                         if (_presenter.CurrentOperationalControlRequest.TravelAdvanceId > 0)
                         {
@@ -451,7 +451,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                         }
 
                         _presenter.CurrentOperationalControlRequest.ProgressStatus = ProgressStatus.Completed.ToString();
-                        _presenter.CurrentOperationalControlRequest.CurrentStatus = ApprovalStatus.Rejected.ToString();
+                        _presenter.CurrentOperationalControlRequest.CurrentStatus = OCRS.ApprovalStatus;
                         OCRS.Approver = _presenter.CurrentUser().Id;
                         SendEmailRejected(OCRS);
                         Log.Info(_presenter.GetUser(OCRS.Approver).FullName + " has " + OCRS.ApprovalStatus + " Bank Payment Request made by " + _presenter.CurrentOperationalControlRequest.AppUser.FullName);
