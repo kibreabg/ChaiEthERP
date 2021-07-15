@@ -511,14 +511,24 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             {
                 if (_presenter.CurrentPaymentReimbursementRequest.ProgressStatus != ProgressStatus.Completed.ToString())
                 {
-                    SavePaymentReimbursementRequestStatus();
+                    decimal totalAmount = _presenter.CurrentPaymentReimbursementRequest.TotalAmount;
+                    decimal totalReceivableAmount = _presenter.CurrentPaymentReimbursementRequest.ReceivableAmount;
+                    decimal variance = totalAmount - totalReceivableAmount;
 
-                    ShowPrint();
-                    btnApprove.Enabled = false;
-                    BindSearchPaymentReimbursementRequestGrid();
-                    ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
+                    if (variance > 0 && ddlApprovalStatus.SelectedValue == ProgressStatus.Completed.ToString())
+                    {
+                        Master.ShowMessage(new AppMessage("Please initiate a bank payment for the remaining " + variance.ToString() + " birr to be paid for the requester!", RMessageType.Error));
+                    }
+                    else
+                    {
+                        SavePaymentReimbursementRequestStatus();
+                        ShowPrint();
+                        btnApprove.Enabled = false;
+                        BindSearchPaymentReimbursementRequestGrid();
+                        ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
+                    }
                 }
-                Master.ShowMessage(new AppMessage("Payment Settlement Approval Processed", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Payment Settlement Approval Processed", RMessageType.Info));
             }
             catch (Exception ex)
             {
