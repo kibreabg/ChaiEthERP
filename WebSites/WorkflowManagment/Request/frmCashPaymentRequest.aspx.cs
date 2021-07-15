@@ -478,6 +478,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void btnSave_Click(object sender, EventArgs e)
         {
+            btnSave.Visible = false;
             try
             {
                 if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails.Count != 0)
@@ -529,8 +530,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                                 BindCashPaymentRequests();
                                 Master.ShowMessage(new AppMessage("Successfully did a Payment  Request, Reference No - <b>'" + _presenter.CurrentCashPaymentRequest.VoucherNo + "'</b>", RMessageType.Info));
                                 Log.Info(_presenter.CurrentUser().FullName + " has requested a Payment of Total Amount " + _presenter.CurrentCashPaymentRequest.TotalAmount.ToString());
-                                btnSave.Visible = false;
-
+                                
                                 //Once the Request is saved hide the Actions buttons from the Details Datagrid
                                 foreach (DataGridColumn col in dgCashPaymentDetail.Columns)
                                 {
