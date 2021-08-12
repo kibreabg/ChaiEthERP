@@ -263,15 +263,20 @@ namespace Chai.WorkflowManagment.Modules.Inventory.Views
             }
             else
             {
-                int storeId = theIssueDetail.Store.Id;
-                int sectionId = theIssueDetail.Section.Id;
-                int shelfId = theIssueDetail.Shelf.Id;
+                if (theIssueDetail.Store != null && theIssueDetail.Section != null && theIssueDetail.Shelf != null)
+                {
+                    int storeId = theIssueDetail.Store.Id;
+                    int sectionId = theIssueDetail.Section.Id;
+                    int shelfId = theIssueDetail.Shelf.Id;
 
-                ddlStore.SelectedValue = storeId.ToString();
-                PopSections(storeId);
-                ddlSection.SelectedValue = sectionId.ToString();
-                PopShelves(sectionId);
-                ddlShelf.SelectedValue = shelfId.ToString();
+                    ddlStore.SelectedValue = storeId.ToString();
+                    PopSections(storeId);
+                    ddlSection.SelectedValue = sectionId.ToString();
+                    PopShelves(sectionId);
+                    ddlShelf.SelectedValue = shelfId.ToString();
+                }
+
+
                 txtQuantity.Text = theIssueDetail.Quantity.ToString();
                 txtUnitCost.Text = theIssueDetail.UnitCost.ToString();
                 txtRemark.Text = theIssueDetail.Remark;

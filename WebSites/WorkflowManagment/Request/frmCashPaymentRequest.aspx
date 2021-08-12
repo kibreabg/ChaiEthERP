@@ -288,7 +288,10 @@
 
                     </div>
                     <footer>
-                        <asp:Button ID="btnSave" runat="server" Text="Request" OnClick="btnSave_Click" class="btn btn-primary" ValidationGroup="request"></asp:Button>
+                        <asp:Button ID="btnSave" runat="server" Text="Request" OnClick="btnSave_Click" class="btn btn-primary"
+                            UseSubmitBehavior="false" OnClientClick="this.disabled = true; this.value = 'Submitting...';"
+                            ValidationGroup="request"></asp:Button>
+
                         <%--<asp:Button ID="btnSearch" runat="server" Text="Search" class="btn btn-primary" />--%>
                         <a data-toggle="modal" runat="server" id="searchLink" href="#searchModal" class="btn btn-primary"><i class="fa fa-circle-arrow-up fa-lg"></i>Search</a>
                         <asp:Button ID="btnDelete" runat="server" CausesValidation="False" class="btn btn-primary"

@@ -263,7 +263,8 @@
                     </fieldset>
 
                     <footer>
-                        <asp:Button ID="btnSave" ValidationGroup="saveMain" runat="server" Text="Request" OnClick="btnSave_Click" CssClass="btn btn-primary"></asp:Button>
+                        <asp:Button ID="btnSave" ValidationGroup="saveMain" runat="server" Text="Request" OnClick="btnSave_Click" CssClass="btn btn-primary"
+                            UseSubmitBehavior="false" OnClientClick="this.disabled = true; this.value = 'Submitting...';"></asp:Button>
                         <a data-toggle="modal" runat="server" id="searchLink" href="#searchModal" class="btn btn-default"><i class="fa fa-circle-arrow-up fa-lg"></i>Search</a>
                         <asp:Button ID="btnDelete" runat="server" CausesValidation="False" CssClass="btn btn-default"
                             Text="Delete" OnClick="btnDelete_Click" Visible="false"></asp:Button>

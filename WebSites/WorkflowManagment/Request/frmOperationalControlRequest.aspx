@@ -119,7 +119,7 @@
                                     <label class="label">Telephone Number</label>
                                     <label class="input">
                                         <asp:TextBox ID="txtTelephoneNo" runat="server"></asp:TextBox>
-                                    </label>                                    
+                                    </label>
                                 </section>
                             </div>
                         </asp:Panel>
@@ -314,7 +314,8 @@
 
                     </div>
                     <footer>
-                        <asp:Button ID="btnSave" runat="server" Text="Request" OnClick="btnSave_Click" CssClass="btn btn-primary" CausesValidation="true" ValidationGroup="saveMain"></asp:Button>
+                        <asp:Button ID="btnSave" runat="server" Text="Request" OnClick="btnSave_Click" CssClass="btn btn-primary" CausesValidation="true" ValidationGroup="saveMain"
+                            UseSubmitBehavior="false" OnClientClick="this.disabled = true; this.value = 'Submitting...';"></asp:Button>
                         <%--<asp:Button ID="btnSearch" runat="server" Text="Search" class="btn btn-primary" />--%>
                         <a data-toggle="modal" runat="server" id="searchLink" href="#searchModal" class="btn btn-default"><i class="fa fa-circle-arrow-up fa-lg"></i>Search</a>
                         <asp:Button ID="btnDelete" runat="server" CausesValidation="False" class="btn btn-default"

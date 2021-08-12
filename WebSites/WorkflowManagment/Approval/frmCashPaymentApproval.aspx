@@ -438,6 +438,7 @@
                                                             <asp:BoundField HeaderText="Name" />
                                                             <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
                                                             <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus" />
+                                                            <asp:BoundField HeaderText="Rejected Reason" DataField="RejectedReason" />
                                                         </Columns>
                                                         <FooterStyle CssClass="FooterStyle" />
                                                         <HeaderStyle CssClass="headerstyle" />

@@ -50,56 +50,56 @@
             <div class="widget-body no-padding">
                 <div class="smart-form">
                     <fieldset>
-                                                <div class="row">
-                                                    <section class="col col-6">
-                                                        <label class="label">Request Date</label>
-                                                        <label class="input">
-                                                            <i class="icon-append fa fa-calendar"></i>
-                                                            <asp:TextBox ID="txtRequestDate" ReadOnly="true" runat="server"></asp:TextBox>
-                                                        </label>
-                                                    </section>
-                                                       <section class="col col-6">
-                                                        <label class="label">Comment</label>
-                                                        <label class="input">
-                                                            <asp:TextBox ID="txtComment" runat="server"></asp:TextBox>
-                                                        </label>
-                                                    </section>
-                                                    </div>
-                                                <div class="row">
-                                                    <section class="col col-6">
-                                                        <label class="label">Project</label>
-                                                        <label class="input">
-                                                             <asp:TextBox ID="txtProject" ReadOnly="true" runat="server"></asp:TextBox>
-                                                        </label>
-                                                    </section>
-                                                       <section class="col col-6">
-                                                        <label class="label">Grant</label>
-                                                        <label class="input">
-                                                            <asp:TextBox ID="txtGrant" runat="server"></asp:TextBox>
-                                                        </label>
-                                                    </section>
-                                                    </div>
-                                                <div class="row">
-                                                    <section class="col col-6">
-                                                        <label class="label">Account Receivables</label>
-                                                        <label class="input">
-                                                            
-                                                            <asp:TextBox ID="txtReceivables" ReadOnly="true" runat="server"></asp:TextBox>
-                                                        </label>
-                                                    </section>
-                                                       <section class="col col-6">
-                                                        <label class="label">Total Settlement </label>
-                                                        <label class="input">
-                                                            <asp:TextBox ID="txtImbursement" ReadOnly="true" runat="server"></asp:TextBox>
-                                                        </label>
-                                                    </section>
-                                                    </div>
-                                                
-                                                
-                                                
-                                            </fieldset>
+                        <div class="row">
+                            <section class="col col-6">
+                                <label class="label">Request Date</label>
+                                <label class="input">
+                                    <i class="icon-append fa fa-calendar"></i>
+                                    <asp:TextBox ID="txtRequestDate" ReadOnly="true" runat="server"></asp:TextBox>
+                                </label>
+                            </section>
+                            <section class="col col-6">
+                                <label class="label">Comment</label>
+                                <label class="input">
+                                    <asp:TextBox ID="txtComment" runat="server"></asp:TextBox>
+                                </label>
+                            </section>
+                        </div>
+                        <div class="row">
+                            <section class="col col-6">
+                                <label class="label">Project</label>
+                                <label class="input">
+                                    <asp:TextBox ID="txtProject" ReadOnly="true" runat="server"></asp:TextBox>
+                                </label>
+                            </section>
+                            <section class="col col-6">
+                                <label class="label">Grant</label>
+                                <label class="input">
+                                    <asp:TextBox ID="txtGrant" runat="server"></asp:TextBox>
+                                </label>
+                            </section>
+                        </div>
+                        <div class="row">
+                            <section class="col col-6">
+                                <label class="label">Account Receivables</label>
+                                <label class="input">
+
+                                    <asp:TextBox ID="txtReceivables" ReadOnly="true" runat="server"></asp:TextBox>
+                                </label>
+                            </section>
+                            <section class="col col-6">
+                                <label class="label">Total Settlement </label>
+                                <label class="input">
+                                    <asp:TextBox ID="txtImbursement" ReadOnly="true" runat="server"></asp:TextBox>
+                                </label>
+                            </section>
+                        </div>
+
+
+
+                    </fieldset>
                     <div role="content">
-                                                <!-- widget edit box -->
+                        <!-- widget edit box -->
                         <div class="jarviswidget-editbox">
                             <!-- This area used as dropdown edit box -->
                         </div>
@@ -132,7 +132,7 @@
 
                                     <ul class="nav nav-tabs">
                                         <li class="active">
-                                            <a href="#iss1"  data-toggle="tab">Add Detail</a>
+                                            <a href="#iss1" data-toggle="tab">Add Detail</a>
                                         </li>
                                         <li class="">
                                             <a href="#iss2" data-toggle="tab">Attach Invoice</a>
@@ -141,92 +141,92 @@
                                     <div class="tab-content padding-10">
                                         <div class="tab-pane active" id="iss1">
                                             <asp:DataGrid ID="dgCashPaymentDetail" runat="server" AutoGenerateColumns="false"
-                                                    CellPadding="0" CssClass="table table-striped table-bordered table-hover" DataKeyField="Id"
-                                                    GridLines="None" OnCancelCommand="dgCashPaymentDetail_CancelCommand" OnDeleteCommand="dgCashPaymentDetail_DeleteCommand"
-                                                    OnEditCommand="dgCashPaymentDetail_EditCommand" OnItemCommand="dgCashPaymentDetail_ItemCommand"
-                                                    OnItemDataBound="dgCashPaymentDetail_ItemDataBound" OnUpdateCommand="dgCashPaymentDetail_UpdateCommand"
-                                                    PagerStyle-CssClass="paginate_button active" ShowFooter="True" Visible="true">
-                                                    <Columns>
-                                                        <asp:TemplateColumn HeaderText="Account Name">
-                                                            <ItemTemplate>
-                                                                <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountName")%>
-                                                            </ItemTemplate>
-                                                            <EditItemTemplate>
-                                                                <asp:DropDownList ID="ddlEdtAccountDescription" runat="server" CssClass="form-control" AppendDataBoundItems="true" AutoPostBack="True" OnSelectedIndexChanged="ddlEdtAccountDescription_SelectedIndexChanged">
-                                                                    <asp:ListItem Value="0">Select Account</asp:ListItem>
-                                                                </asp:DropDownList>
-                                                                <i></i>
-                                                                <asp:RequiredFieldValidator ID="rfvdddlEdtAccountDescription" runat="server" ControlToValidate="ddlEdtAccountDescription" CssClass="validator" Display="Dynamic" ErrorMessage="Account Name must be selected" InitialValue="0" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
-                                                            </EditItemTemplate>
-                                                            <FooterTemplate>
-                                                                <asp:DropDownList ID="ddlAccountDescription" runat="server" CssClass="form-control" AppendDataBoundItems="true" AutoPostBack="True" OnSelectedIndexChanged="ddlAccountDescription_SelectedIndexChanged">
-                                                                    <asp:ListItem Value="0">Select Account</asp:ListItem>
-                                                                </asp:DropDownList>
-                                                                <i></i>
-                                                                <asp:RequiredFieldValidator ID="rfvddlddlAccountDescription" runat="server" ControlToValidate="ddlAccountDescription" CssClass="validator" Display="Dynamic" ErrorMessage="Account Name must be selected" InitialValue="0" SetFocusOnError="true" ValidationGroup="save"></asp:RequiredFieldValidator>
-                                                            </FooterTemplate>
-                                                        </asp:TemplateColumn>
-                                                        <asp:TemplateColumn HeaderText="Account Code">
-                                                            <ItemTemplate>
-                                                                <%# DataBinder.Eval(Container.DataItem, "AccountCode")%>
-                                                            </ItemTemplate>
-                                                            <EditItemTemplate>
-                                                                <asp:TextBox ID="txtEdtAccountCode" Enabled="false" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "AccountCode")%>'></asp:TextBox>
-                                                            </EditItemTemplate>
-                                                            <FooterTemplate>
-                                                                <asp:TextBox ID="txtAccountCode" runat="server" Enabled="false" CssClass="form-control"></asp:TextBox>
+                                                CellPadding="0" CssClass="table table-striped table-bordered table-hover" DataKeyField="Id"
+                                                GridLines="None" OnCancelCommand="dgCashPaymentDetail_CancelCommand" OnDeleteCommand="dgCashPaymentDetail_DeleteCommand"
+                                                OnEditCommand="dgCashPaymentDetail_EditCommand" OnItemCommand="dgCashPaymentDetail_ItemCommand"
+                                                OnItemDataBound="dgCashPaymentDetail_ItemDataBound" OnUpdateCommand="dgCashPaymentDetail_UpdateCommand"
+                                                PagerStyle-CssClass="paginate_button active" ShowFooter="True" Visible="true">
+                                                <Columns>
+                                                    <asp:TemplateColumn HeaderText="Account Name">
+                                                        <ItemTemplate>
+                                                            <%# DataBinder.Eval(Container.DataItem, "ItemAccount.AccountName")%>
+                                                        </ItemTemplate>
+                                                        <EditItemTemplate>
+                                                            <asp:DropDownList ID="ddlEdtAccountDescription" runat="server" CssClass="form-control" AppendDataBoundItems="true" AutoPostBack="True" OnSelectedIndexChanged="ddlEdtAccountDescription_SelectedIndexChanged">
+                                                                <asp:ListItem Value="0">Select Account</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                            <i></i>
+                                                            <asp:RequiredFieldValidator ID="rfvdddlEdtAccountDescription" runat="server" ControlToValidate="ddlEdtAccountDescription" CssClass="validator" Display="Dynamic" ErrorMessage="Account Name must be selected" InitialValue="0" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                                        </EditItemTemplate>
+                                                        <FooterTemplate>
+                                                            <asp:DropDownList ID="ddlAccountDescription" runat="server" CssClass="form-control" AppendDataBoundItems="true" AutoPostBack="True" OnSelectedIndexChanged="ddlAccountDescription_SelectedIndexChanged">
+                                                                <asp:ListItem Value="0">Select Account</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                            <i></i>
+                                                            <asp:RequiredFieldValidator ID="rfvddlddlAccountDescription" runat="server" ControlToValidate="ddlAccountDescription" CssClass="validator" Display="Dynamic" ErrorMessage="Account Name must be selected" InitialValue="0" SetFocusOnError="true" ValidationGroup="save"></asp:RequiredFieldValidator>
+                                                        </FooterTemplate>
+                                                    </asp:TemplateColumn>
+                                                    <asp:TemplateColumn HeaderText="Account Code">
+                                                        <ItemTemplate>
+                                                            <%# DataBinder.Eval(Container.DataItem, "AccountCode")%>
+                                                        </ItemTemplate>
+                                                        <EditItemTemplate>
+                                                            <asp:TextBox ID="txtEdtAccountCode" Enabled="false" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "AccountCode")%>'></asp:TextBox>
+                                                        </EditItemTemplate>
+                                                        <FooterTemplate>
+                                                            <asp:TextBox ID="txtAccountCode" runat="server" Enabled="false" CssClass="form-control"></asp:TextBox>
 
-                                                            </FooterTemplate>
-                                                        </asp:TemplateColumn>
-                                                        <asp:TemplateColumn HeaderText="Amount">
-                                                            <ItemTemplate>
-                                                                <%# DataBinder.Eval(Container.DataItem, "ActualExpenditure")%>
-                                                            </ItemTemplate>
-                                                            <EditItemTemplate>
-                                                                <asp:TextBox ID="txtEdtAmount" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "ActualExpenditure")%>'></asp:TextBox>
-                                                                <cc1:FilteredTextBoxExtender ID="txtEdtAmount_FilteredTextBoxExtender" runat="server" Enabled="True" FilterType="Custom, Numbers" TargetControlID="txtEdtAmount" ValidChars="&quot;.&quot;">
-                                                                </cc1:FilteredTextBoxExtender>
-                                                                <asp:RequiredFieldValidator ID="rfvtxtEdtAmount" runat="server" ControlToValidate="txtEdtAmount" CssClass="validator" Display="Dynamic" ErrorMessage="Amount is required" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
-                                                            </EditItemTemplate>
-                                                            <FooterTemplate>
-                                                                <asp:TextBox ID="txtAmount" runat="server" CssClass="form-control"></asp:TextBox>
-                                                                <cc1:FilteredTextBoxExtender ID="txtAmount_FilteredTextBoxExtender" runat="server" Enabled="True" FilterType="Custom, Numbers" TargetControlID="txtAmount" ValidChars="&quot;.&quot;">
-                                                                </cc1:FilteredTextBoxExtender>
-                                                                <asp:RequiredFieldValidator ID="rfvtxtAmount" runat="server" ControlToValidate="txtAmount" CssClass="validator" Display="Dynamic" ErrorMessage="Amount is required" SetFocusOnError="true" ValidationGroup="save"></asp:RequiredFieldValidator>
-                                                            </FooterTemplate>
-                                                        </asp:TemplateColumn>
-                                                   
-                                                        <asp:TemplateColumn HeaderText="Supporting Doc Attached">
-                                                            <ItemTemplate>
-                                                                <%# DataBinder.Eval(Container.DataItem, "SupportDocAttached")%>
-                                                            </ItemTemplate>
-                                                            <FooterTemplate>
-                                                                <label class="checkbox">
-                                                                    <asp:CheckBox runat="server" ID="ckSupDocAttached" /><i></i>
-                                                                </label>
-                                                            </FooterTemplate>
-                                                            <EditItemTemplate>
-                                                                <label class="checkbox">
-                                                                    <asp:CheckBox runat="server" ID="ckEdtSupDocAttached" /><i></i>
-                                                                </label>
-                                                            </EditItemTemplate>
-                                                        </asp:TemplateColumn>
-                                                        <asp:TemplateColumn HeaderText="Actions">
-                                                            <EditItemTemplate>
-                                                                <asp:LinkButton ID="lnkUpdate" runat="server" CausesValidation="true" CommandName="Update" CssClass="btn btn-xs btn-default" ValidationGroup="edit"><i class="fa fa-save"></i></asp:LinkButton>
-                                                                <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default"><i class="fa fa-times"></i></asp:LinkButton>
-                                                            </EditItemTemplate>
-                                                            <FooterTemplate>
-                                                                <asp:LinkButton ID="lnkAddNew" runat="server" CausesValidation="true" CommandName="AddNew" CssClass="btn btn-sm btn-success" ValidationGroup="save"><i class="fa fa-save"></i></asp:LinkButton>
-                                                            </FooterTemplate>
-                                                            <ItemTemplate>
-                                                                <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
-                                                                <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default" OnClientClick="javascript:return confirm('Are you sure you want to delete this entry?');"><i class="fa fa-times"></i></asp:LinkButton>
-                                                            </ItemTemplate>
-                                                        </asp:TemplateColumn>
-                                                    </Columns>
-                                                    <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
-                                                </asp:DataGrid>
+                                                        </FooterTemplate>
+                                                    </asp:TemplateColumn>
+                                                    <asp:TemplateColumn HeaderText="Amount">
+                                                        <ItemTemplate>
+                                                            <%# DataBinder.Eval(Container.DataItem, "ActualExpenditure")%>
+                                                        </ItemTemplate>
+                                                        <EditItemTemplate>
+                                                            <asp:TextBox ID="txtEdtAmount" runat="server" CssClass="form-control" Text='<%# DataBinder.Eval(Container.DataItem, "ActualExpenditure")%>'></asp:TextBox>
+                                                            <cc1:FilteredTextBoxExtender ID="txtEdtAmount_FilteredTextBoxExtender" runat="server" Enabled="True" FilterType="Custom, Numbers" TargetControlID="txtEdtAmount" ValidChars="&quot;.&quot;">
+                                                            </cc1:FilteredTextBoxExtender>
+                                                            <asp:RequiredFieldValidator ID="rfvtxtEdtAmount" runat="server" ControlToValidate="txtEdtAmount" CssClass="validator" Display="Dynamic" ErrorMessage="Amount is required" SetFocusOnError="true" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                                        </EditItemTemplate>
+                                                        <FooterTemplate>
+                                                            <asp:TextBox ID="txtAmount" runat="server" CssClass="form-control"></asp:TextBox>
+                                                            <cc1:FilteredTextBoxExtender ID="txtAmount_FilteredTextBoxExtender" runat="server" Enabled="True" FilterType="Custom, Numbers" TargetControlID="txtAmount" ValidChars="&quot;.&quot;">
+                                                            </cc1:FilteredTextBoxExtender>
+                                                            <asp:RequiredFieldValidator ID="rfvtxtAmount" runat="server" ControlToValidate="txtAmount" CssClass="validator" Display="Dynamic" ErrorMessage="Amount is required" SetFocusOnError="true" ValidationGroup="save"></asp:RequiredFieldValidator>
+                                                        </FooterTemplate>
+                                                    </asp:TemplateColumn>
+
+                                                    <asp:TemplateColumn HeaderText="Supporting Doc Attached">
+                                                        <ItemTemplate>
+                                                            <%# DataBinder.Eval(Container.DataItem, "SupportDocAttached")%>
+                                                        </ItemTemplate>
+                                                        <FooterTemplate>
+                                                            <label class="checkbox">
+                                                                <asp:CheckBox runat="server" ID="ckSupDocAttached" /><i></i>
+                                                            </label>
+                                                        </FooterTemplate>
+                                                        <EditItemTemplate>
+                                                            <label class="checkbox">
+                                                                <asp:CheckBox runat="server" ID="ckEdtSupDocAttached" /><i></i>
+                                                            </label>
+                                                        </EditItemTemplate>
+                                                    </asp:TemplateColumn>
+                                                    <asp:TemplateColumn HeaderText="Actions">
+                                                        <EditItemTemplate>
+                                                            <asp:LinkButton ID="lnkUpdate" runat="server" CausesValidation="true" CommandName="Update" CssClass="btn btn-xs btn-default" ValidationGroup="edit"><i class="fa fa-save"></i></asp:LinkButton>
+                                                            <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default"><i class="fa fa-times"></i></asp:LinkButton>
+                                                        </EditItemTemplate>
+                                                        <FooterTemplate>
+                                                            <asp:LinkButton ID="lnkAddNew" runat="server" CausesValidation="true" CommandName="AddNew" CssClass="btn btn-sm btn-success" ValidationGroup="save"><i class="fa fa-save"></i></asp:LinkButton>
+                                                        </FooterTemplate>
+                                                        <ItemTemplate>
+                                                            <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
+                                                            <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CssClass="btn btn-xs btn-default" OnClientClick="javascript:return confirm('Are you sure you want to delete this entry?');"><i class="fa fa-times"></i></asp:LinkButton>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateColumn>
+                                                </Columns>
+                                                <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
+                                            </asp:DataGrid>
                                         </div>
                                         <div class="tab-pane" id="iss2">
                                             <div class="jarviswidget-editbox"></div>
@@ -235,37 +235,37 @@
                                                     <fieldset>
                                                         <div class="row">
                                                             <section class="col col-6">
-                                                                    <label class="label">Attach Reciepts</label>
+                                                                <label class="label">Attach Reciepts</label>
                                                             </section>
-                                                     
+
                                                         </div>
                                                     </fieldset>
                                                     <asp:GridView ID="grvAttachments"
-                                                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                                                CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
-                                                <RowStyle CssClass="rowstyle" />
-                                                <Columns>
-                                                    <asp:BoundField DataField="FilePath" HeaderText="File Name" SortExpression="FilePath" />
-                                                    <asp:BoundField DataField="ItemAccountChecklists[0].ChecklistName" HeaderText="Checklist Name" SortExpression="ItemAccountChecklists[0].ChecklistName" />
-                                                    <asp:TemplateField>
-                                                        <ItemTemplate>
-                                                            <div class="input input-file">
-                                                                <asp:FileUpload ID="fuReciept" runat="server" />
-                                                                <asp:Button ID="btnUpload" Text="Upload" CssClass="btn btn-primary" CommandArgument='<%# Eval("FilePath") %>' runat="server" OnClick="btnUpload_Click"></asp:Button>
-                                                            </div>
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
-                                                    <asp:TemplateField>
-                                                        <ItemTemplate>
-                                                            <asp:LinkButton ID="lnkDownload" Text="Download" CommandArgument='<%# Eval("FilePath") %>' runat="server" OnClick="DownloadFile"></asp:LinkButton>
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
-                                                </Columns>
-                                                <FooterStyle CssClass="FooterStyle" />
-                                                <HeaderStyle CssClass="headerstyle" />
-                                                <PagerStyle CssClass="PagerStyle" />
-                                                <RowStyle CssClass="rowstyle" />
-                                            </asp:GridView>
+                                                        runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                                                        CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
+                                                        <RowStyle CssClass="rowstyle" />
+                                                        <Columns>
+                                                            <asp:BoundField DataField="FilePath" HeaderText="File Name" SortExpression="FilePath" />
+                                                            <asp:BoundField DataField="ItemAccountChecklists[0].ChecklistName" HeaderText="Checklist Name" SortExpression="ItemAccountChecklists[0].ChecklistName" />
+                                                            <asp:TemplateField>
+                                                                <ItemTemplate>
+                                                                    <div class="input input-file">
+                                                                        <asp:FileUpload ID="fuReciept" runat="server" />
+                                                                        <asp:Button ID="btnUpload" Text="Upload" CssClass="btn btn-primary" CommandArgument='<%# Eval("FilePath") %>' runat="server" OnClick="btnUpload_Click"></asp:Button>
+                                                                    </div>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                            <asp:TemplateField>
+                                                                <ItemTemplate>
+                                                                    <asp:LinkButton ID="lnkDownload" Text="Download" CommandArgument='<%# Eval("FilePath") %>' runat="server" OnClick="DownloadFile"></asp:LinkButton>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                        </Columns>
+                                                        <FooterStyle CssClass="FooterStyle" />
+                                                        <HeaderStyle CssClass="headerstyle" />
+                                                        <PagerStyle CssClass="PagerStyle" />
+                                                        <RowStyle CssClass="rowstyle" />
+                                                    </asp:GridView>
                                                 </div>
                                             </div>
                                         </div>
@@ -276,7 +276,8 @@
                         <!-- end widget content -->
                     </div>
                     <footer>
-                        <asp:Button ID="btnSave" runat="server" CausesValidation="true" ValidationGroup="request" Enabled="false" Text="Request" OnClick="btnSave_Click" CssClass="btn btn-primary"></asp:Button>
+                        <asp:Button ID="btnSave" runat="server" CausesValidation="true" ValidationGroup="request" Enabled="false" Text="Request" OnClick="btnSave_Click" CssClass="btn btn-primary"
+                            UseSubmitBehavior="false" OnClientClick="this.disabled = true; this.value = 'Submitting...';"></asp:Button>
                         <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary" Text="Search" />
                         <asp:Button ID="btnDelete" runat="server" CausesValidation="False" class="btn btn-primary"
                             Text="Delete" OnClick="btnDelete_Click" Visible="False"></asp:Button>
@@ -284,7 +285,7 @@
                             ConfirmText="Are you sure" Enabled="True" TargetControlID="btnDelete">
                         </cc1:ConfirmButtonExtender>
                         <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-primary" OnClick="btnCancel_Click" Text="New" />
-                          <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" PostBackUrl="../Default.aspx"></asp:Button>
+                        <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" PostBackUrl="../Default.aspx"></asp:Button>
                     </footer>
                 </div>
             </div>
@@ -323,14 +324,14 @@
                         </div>
                     </div>
                     <section class="col col-6">
-                                <label class="label">Program</label>
-                                <label class="select">
-                                    <asp:DropDownList ID="ddlProgram" AutoPostBack="true" DataTextField="ProgramName" DataValueField="Id" AppendDataBoundItems="true" runat="server" OnSelectedIndexChanged="ddlProgram_SelectedIndexChanged">
-                                        <asp:ListItem Value="0">Select Program</asp:ListItem>
-                                    </asp:DropDownList><i></i>
-                                </label>
-                                <asp:RequiredFieldValidator ID="rfvProgram" runat="server" ControlToValidate="ddlProgram" CssClass="validator" Display="Dynamic" ErrorMessage="Select Program" SetFocusOnError="true" ValidationGroup="request"></asp:RequiredFieldValidator>
-                            </section>
+                        <label class="label">Program</label>
+                        <label class="select">
+                            <asp:DropDownList ID="ddlProgram" AutoPostBack="true" DataTextField="ProgramName" DataValueField="Id" AppendDataBoundItems="true" runat="server" OnSelectedIndexChanged="ddlProgram_SelectedIndexChanged">
+                                <asp:ListItem Value="0">Select Program</asp:ListItem>
+                            </asp:DropDownList><i></i>
+                        </label>
+                        <asp:RequiredFieldValidator ID="rfvProgram" runat="server" ControlToValidate="ddlProgram" CssClass="validator" Display="Dynamic" ErrorMessage="Select Program" SetFocusOnError="true" ValidationGroup="request"></asp:RequiredFieldValidator>
+                    </section>
                 </div>
                 <div class="row" style="text-align: right;">
                     <div class="col-md-12">

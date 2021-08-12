@@ -152,9 +152,9 @@
                                 <label class="input">
                                     <asp:TextBox ID="txtDestination" runat="server"></asp:TextBox>
                                 </label>
-                            </section>                            
+                            </section>
                         </div>
-                        <div class="row">                            
+                        <div class="row">
                             <section class="col col-6">
                                 <label class="label">Comment </label>
                                 <label style="color: green;">(Please add additional info about your travel)</label>
@@ -173,7 +173,8 @@
                     </fieldset>
 
                     <footer>
-                        <asp:Button ID="btnSave" runat="server" Text="Request" OnClick="btnSave_Click" CausesValidation="true" ValidationGroup="save" CssClass="btn btn-primary"></asp:Button>
+                        <asp:Button ID="btnSave" runat="server" Text="Request" OnClick="btnSave_Click" CausesValidation="true" ValidationGroup="save" CssClass="btn btn-primary"
+                            UseSubmitBehavior="false" OnClientClick="this.disabled = true; this.value = 'Submitting...';"></asp:Button>
                         <%--<asp:Button ID="btnSearch" data-toggle="modal" href="#myModal" Text="Search" CssClass="btn btn-primary"></asp:Button>--%>
                         <a data-toggle="modal" runat="server" id="searchLink" href="#searchModal" class="btn btn-primary"><i class="fa fa-circle-arrow-up fa-lg"></i>Search</a>
                         <asp:Button ID="btnDelete" runat="server" CausesValidation="False" CssClass="btn btn-primary" Text="Delete" OnClick="btnDelete_Click"></asp:Button>

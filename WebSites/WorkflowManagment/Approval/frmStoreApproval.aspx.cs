@@ -48,7 +48,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     PrintTransaction();
                 }
             }
-       
+
         }
         [CreateNew]
         public StoreApprovalPresenter Presenter
@@ -142,7 +142,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void BindGrant(TextBox txtGrant, int projectId)
         {
-            txtGrant.Text = _presenter.GetGrantbyprojectId(projectId).First().GrantCode;            
+            txtGrant.Text = _presenter.GetGrantbyprojectId(projectId).First().GrantCode;
         }
         private void BindSearchStoreRequestGrid()
         {
@@ -171,7 +171,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     ddlApprovalStatus.Enabled = true;
                 }
             }
-            
+
         }
         private void ShowPrint()
         {
@@ -257,7 +257,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
 
             }
-        }    
+        }
         protected void ddlProject_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
@@ -281,11 +281,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             lblRequestNoResult.Text = _presenter.CurrentStoreRequest.RequestNo.ToString();
             lblRequestedDateResult.Text = _presenter.CurrentStoreRequest.RequestedDate.ToShortDateString();
             lblRequesterResult.Text = _presenter.GetUser(_presenter.CurrentStoreRequest.Requester).FullName;
-           
+
 
             lblRemarkResult.Text = _presenter.CurrentStoreRequest.Comment;
             lblDelivertoResult.Text = _presenter.CurrentStoreRequest.DeliverTo;
-           
+
             grvDetails.DataSource = _presenter.CurrentStoreRequest.StoreRequestDetails;
             grvDetails.DataBind();
 
@@ -320,9 +320,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     if (_presenter.CurrentUser().EmployeePosition.PositionName == "Logistic Assistant" && _presenter.CurrentStoreRequest.CurrentStatus != ApprovalStatus.Rejected.ToString())
                     {
                         //lnkBidRequest.Visible = true;
-                       // lnkSoleVendor.Visible = true;
+                        // lnkSoleVendor.Visible = true;
                     }
-                    ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);                    
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showApprovalModal", "showApprovalModal();", true);
                 }
             }
             catch (Exception ex)
@@ -336,7 +336,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             reqID = (int)grvStoreRequestList.DataKeys[Convert.ToInt32(e.CommandArgument)].Value;
             if (e.CommandName == "ViewItem")
-            {                
+            {
                 Session["storeReqId"] = reqID;
                 _presenter.CurrentStoreRequest = _presenter.GetStoreRequestById(reqID);
                 //_presenter.OnViewLoaded();
@@ -344,7 +344,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 dgStoreRequestDetail.DataBind();
                 pnlDetail_ModalPopupExtender.Show();
             }
-            else if(e.CommandName == "Issue")
+            else if (e.CommandName == "Issue")
             {
                 Response.Redirect("../Inventory/frmIssue.aspx?StoreReqId=" + reqID);
             }
@@ -386,7 +386,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         protected void grvStoreRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            Button btnStatus = e.Row.FindControl("btnStatus") as Button;            
+            Button btnStatus = e.Row.FindControl("btnStatus") as Button;
             StoreRequest CSR = e.Row.DataItem as StoreRequest;
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
@@ -490,7 +490,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     }
                 }
                 DropDownList ddlUnitOfMeasurment = e.Item.FindControl("ddlUnitOfMeasurment") as DropDownList;
-                if(ddlUnitOfMeasurment != null)
+                if (ddlUnitOfMeasurment != null)
                 {
                     ListItem liI = ddlUnitOfMeasurment.Items.FindByValue(_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].UnitOfMeasurment);
                     if (liI != null)
@@ -498,7 +498,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 }
 
                 TextBox txtApproved = e.Item.FindControl("txtQtyApp") as TextBox;
-                txtApproved.Text = Convert.ToInt32(_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].Qty).ToString();
+                if (txtApproved != null)
+                    txtApproved.Text = Convert.ToInt32(_presenter.CurrentStoreRequest.StoreRequestDetails[e.Item.DataSetIndex].Qty).ToString();
 
             }
 
