@@ -417,7 +417,17 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 //_presenter.OnViewLoaded();
                 dgReimbursementDetail.DataSource = _presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestDetails;
                 dgReimbursementDetail.DataBind();
+                grvPaymentReimbursementRequestStatuses.DataSource = _presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses;
+                grvPaymentReimbursementRequestStatuses.DataBind();
                 ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
+            }
+        }
+        protected void grvPaymentReimbursementRequestStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                if (_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses[e.Row.RowIndex].Approver > 0)
+                    e.Row.Cells[1].Text = _presenter.GetUser(_presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestStatuses[e.Row.RowIndex].Approver).FullName;
             }
         }
         protected void grvPaymentReimbursementRequestList_PageIndexChanging(object sender, GridViewPageEventArgs e)

@@ -388,9 +388,19 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
                     dgTravelAdvanceRequestDetail.DataSource = _presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestDetails;
                     dgTravelAdvanceRequestDetail.DataBind();
+                    grvTravelRequestStatuses.DataSource = _presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestStatuses;
+                    grvTravelRequestStatuses.DataBind();
                     grvTravelAdvanceCosts.DataSource = null;
                     grvTravelAdvanceCosts.DataBind();
                 }
+            }
+        }
+        protected void grvTravelRequestStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                if (_presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestStatuses[e.Row.RowIndex].Approver > 0)
+                    e.Row.Cells[1].Text = _presenter.GetUser(_presenter.CurrentTravelAdvanceRequest.TravelAdvanceRequestStatuses[e.Row.RowIndex].Approver).FullName;
             }
         }
         protected void grvTravelAdvanceRequestList_RowDataBound(object sender, GridViewRowEventArgs e)

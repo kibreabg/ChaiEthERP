@@ -244,6 +244,30 @@
                                     </Columns>
                                     <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
                                 </asp:DataGrid>
+                                <br />
+                                <div style="text-align: center;">
+                                    <asp:Label ID="lblSettlmentApprovalStatus" Font-Size="Large" Font-Bold="true" runat="server" Text="Approval Status"></asp:Label>
+                                </div>
+                                <asp:GridView ID="grvPaymentReimbursementRequestStatuses"
+                                    runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                                    CssClass="table table-striped table-bordered table-hover" OnRowDataBound="grvPaymentReimbursementRequestStatuses_RowDataBound">
+                                    <RowStyle CssClass="rowstyle" />
+                                    <Columns>
+                                        <asp:TemplateField HeaderText="Date">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblDate" runat="server" Text='<%# Eval("Date", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:BoundField HeaderText="Name" />
+                                        <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
+                                        <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus" />
+                                        <asp:BoundField HeaderText="Rejected Reason" DataField="RejectedReason" />
+                                    </Columns>
+                                    <FooterStyle CssClass="FooterStyle" />
+                                    <HeaderStyle CssClass="headerstyle" />
+                                    <PagerStyle CssClass="PagerStyle" />
+                                    <RowStyle CssClass="rowstyle" />
+                                </asp:GridView>
                             </div>
                             <footer>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

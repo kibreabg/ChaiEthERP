@@ -449,8 +449,18 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                     //_presenter.OnViewLoaded();
                     dgLiquidationRequestDetail.DataSource = _presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestDetails;
                     dgLiquidationRequestDetail.DataBind();
+                    grvLiquidationRequestStatuses.DataSource = _presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestStatuses;
+                    grvLiquidationRequestStatuses.DataBind();
                     ScriptManager.RegisterStartupScript(this, GetType(), "showDetailModal", "showDetailModal();", true);
                 }
+            }
+        }
+        protected void grvLiquidationRequestStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                if (_presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestStatuses[e.Row.RowIndex].Approver > 0)
+                    e.Row.Cells[1].Text = _presenter.GetUser(_presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestStatuses[e.Row.RowIndex].Approver).FullName;
             }
         }
         protected void grvExpenseLiquidationRequestList_PageIndexChanging(object sender, GridViewPageEventArgs e)

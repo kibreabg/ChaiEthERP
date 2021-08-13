@@ -269,6 +269,7 @@
                                                                 <asp:BoundField HeaderText="Name" />
                                                                 <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
                                                                 <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus" />
+                                                                <asp:BoundField HeaderText="Rejected Reason" DataField="RejectedReason" />
                                                             </Columns>
                                                             <FooterStyle CssClass="FooterStyle" />
                                                             <HeaderStyle CssClass="headerstyle" />
@@ -281,7 +282,8 @@
                                                                 <asp:Label ID="lblPaymentReqDetail" Font-Size="Large" Font-Bold="true" runat="server" Text="Payment Detail"></asp:Label>
                                                             </div>
                                                             <br />
-                                                            <span style="color: green; font-weight: bold;">Payment Requester : </span><asp:Label ID="lblPaymentRequester" runat="server"></asp:Label>
+                                                            <span style="color: green; font-weight: bold;">Payment Requester : </span>
+                                                            <asp:Label ID="lblPaymentRequester" runat="server"></asp:Label>
                                                             <asp:GridView ID="grvPaymentRequestStatuses"
                                                                 runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
                                                                 CssClass="table table-striped table-bordered table-hover" OnRowDataBound="grvPaymentStatuses_RowDataBound">
@@ -294,7 +296,7 @@
                                                                     </asp:TemplateField>
                                                                     <asp:BoundField HeaderText="Name" />
                                                                     <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
-                                                                    <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus" />
+                                                                    <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus" />                                                                    
                                                                 </Columns>
                                                                 <FooterStyle CssClass="FooterStyle" />
                                                                 <HeaderStyle CssClass="headerstyle" />
@@ -307,7 +309,8 @@
                                                                 <asp:Label ID="lblTravelDetail" Font-Size="Large" Font-Bold="true" runat="server" Text="Travel Advance Detail"></asp:Label>
                                                             </div>
                                                             <br />
-                                                            <span style="color: green; font-weight: bold;">Travel Requester : </span><asp:Label ID="lblTravelRequester" runat="server"></asp:Label>
+                                                            <span style="color: green; font-weight: bold;">Travel Requester : </span>
+                                                            <asp:Label ID="lblTravelRequester" runat="server"></asp:Label>
                                                             <asp:DataGrid ID="dgTravelAdvanceRequestDetail" runat="server" OnSelectedIndexChanged="dgTravelAdvanceRequestDetail_SelectedIndexChanged"
                                                                 AutoGenerateColumns="False" CellPadding="0" CssClass="table table-striped table-bordered table-hover"
                                                                 DataKeyField="Id" GridLines="None" PagerStyle-CssClass="paginate_button active" ShowFooter="True">
@@ -391,7 +394,8 @@
                                                                 <asp:Label ID="lblLiquidationDetail" Font-Size="Large" Font-Bold="true" runat="server" Text="Travel Expense Liquidation Detail"></asp:Label>
                                                             </div>
                                                             <br />
-                                                            <span style="color: green; font-weight: bold;">Liquidation Requester : </span><asp:Label ID="lblLiquidationRequester" runat="server"></asp:Label>
+                                                            <span style="color: green; font-weight: bold;">Liquidation Requester : </span>
+                                                            <asp:Label ID="lblLiquidationRequester" runat="server"></asp:Label>
                                                             <asp:DataGrid ID="dgLiquidationRequestDetail" runat="server"
                                                                 AutoGenerateColumns="False" CellPadding="0" CssClass="table table-striped table-bordered table-hover"
                                                                 DataKeyField="Id" GridLines="None" PagerStyle-CssClass="paginate_button active"
