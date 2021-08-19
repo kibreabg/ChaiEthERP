@@ -491,7 +491,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                             {
                                 _presenter.SaveOrUpdateCashPaymentRequest();
                                 BindCashPaymentRequests();
-                                Master.ShowMessage(new AppMessage("Successfully did a Payment  Request, Reference No - <b>'" + _presenter.CurrentCashPaymentRequest.VoucherNo + "'</b>", RMessageType.Info));
+                                Master.ShowMessage(new AppMessage("Successfully did a Payment Request, Reference No - <b>'" + _presenter.CurrentCashPaymentRequest.VoucherNo + "'</b> & Total Amount of - <b>'" + _presenter.CurrentCashPaymentRequest.TotalAmount.ToString() + "'Birr!</b>", RMessageType.Info));
                                 Log.Info(_presenter.CurrentUser().FullName + " has requested a Payment of Total Amount " + _presenter.CurrentCashPaymentRequest.TotalAmount.ToString());
                                 btnSave.Visible = false;
 
