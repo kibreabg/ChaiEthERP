@@ -143,7 +143,7 @@ namespace Chai.WorkflowManagment.Modules.Request
         public IList<CashPaymentRequest> ListCashPaymentsNotExpensed()
         {
             int currentUserId = GetCurrentUser().Id;
-            return WorkspaceFactory.CreateReadOnly().Query<CashPaymentRequest>(x => x.IsLiquidated == false && x.AmountType == "Advanced" && x.ProgressStatus == "Completed" && currentUserId == x.AppUser.Id).ToList();
+            return WorkspaceFactory.CreateReadOnly().Query<CashPaymentRequest>(x => x.IsLiquidated == false && x.AmountType == "Advanced" && x.ProgressStatus == "Completed" && x.CurrentStatus != "Rejected" && currentUserId == x.AppUser.Id).ToList();
         }
         public IList<CashPaymentRequest> GetAllOutPatMedCPReqsThisYear()
         {
