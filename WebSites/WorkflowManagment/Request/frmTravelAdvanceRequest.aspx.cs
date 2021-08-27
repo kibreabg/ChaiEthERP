@@ -128,7 +128,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
         }
         private bool DoesNonLiquidatedAdvancesExist()
-        {            
+        {
             if (_presenter.ListUnliquidatedTravelAdvances().Count() > 0)
             {
                 return true;
@@ -267,7 +267,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     Master.ShowMessage(new AppMessage("You have Unliquidated Travel Advances. Please Liquidate them before requesting another Travel Advance!", RMessageType.Error));
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -640,15 +640,19 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     if (ddlEdtExpenseType != null)
                     {
                         PopExpenseTypes(ddlEdtExpenseType);
-                        if (_presenter.CurrentTravelAdvanceRequest.GetTravelAdvanceRequestDetail(Convert.ToInt32(hfDetailId.Value)).TravelAdvanceCosts[e.Item.DataSetIndex].ExpenseType != null)
+                        if (_presenter.CurrentTravelAdvanceRequest.GetTravelAdvanceRequestDetail(Convert.ToInt32(hfDetailId.Value)) != null)
                         {
-                            if (_presenter.CurrentTravelAdvanceRequest.GetTravelAdvanceRequestDetail(Convert.ToInt32(hfDetailId.Value)).TravelAdvanceCosts[e.Item.DataSetIndex].ExpenseType.Id != 0)
+                            if (_presenter.CurrentTravelAdvanceRequest.GetTravelAdvanceRequestDetail(Convert.ToInt32(hfDetailId.Value)).TravelAdvanceCosts[e.Item.DataSetIndex].ExpenseType != null)
                             {
-                                ListItem liI = ddlEdtExpenseType.Items.FindByValue(_presenter.CurrentTravelAdvanceRequest.GetTravelAdvanceRequestDetail(Convert.ToInt32(hfDetailId.Value)).TravelAdvanceCosts[e.Item.DataSetIndex].ExpenseType.Id.ToString());
-                                if (liI != null)
-                                    liI.Selected = true;
+                                if (_presenter.CurrentTravelAdvanceRequest.GetTravelAdvanceRequestDetail(Convert.ToInt32(hfDetailId.Value)).TravelAdvanceCosts[e.Item.DataSetIndex].ExpenseType.Id != 0)
+                                {
+                                    ListItem liI = ddlEdtExpenseType.Items.FindByValue(_presenter.CurrentTravelAdvanceRequest.GetTravelAdvanceRequestDetail(Convert.ToInt32(hfDetailId.Value)).TravelAdvanceCosts[e.Item.DataSetIndex].ExpenseType.Id.ToString());
+                                    if (liI != null)
+                                        liI.Selected = true;
+                                }
                             }
                         }
+
                     }
 
                 }
