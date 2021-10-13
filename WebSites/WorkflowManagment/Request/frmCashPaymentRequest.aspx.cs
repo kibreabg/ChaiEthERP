@@ -92,9 +92,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return txtDescription.Text; }
         }
-        public string GetArrivalReturnDateTime
+        public string GetArrivalDateTime
         {
-            get { return txtArrivalReturnTime.Text; }
+            get { return txtArrivalTime.Text; }
+        }
+        public string GetReturnDateTime
+        {
+            get { return txtReturnTime.Text; }
         }
         public string GetVoucherNo
         {
@@ -154,7 +158,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ListItem lst = new ListItem
             {
                 Text = " Select Payee ",
-                Value = "0"
+                Value = ""
             };
             ddlPayee.Items.Add(lst);
             ddlPayee.DataSource = _presenter.GetSuppliers();
@@ -164,7 +168,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ListItem lstItem = new ListItem
             {
                 Text = " Select Payee ",
-                Value = "0"
+                Value = ""
             };
             ddlSrchSupplier.Items.Add(lstItem);
             ddlSrchSupplier.DataSource = _presenter.GetSuppliers();
@@ -175,17 +179,19 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             _presenter.OnViewLoaded();
             if (_presenter.CurrentCashPaymentRequest != null)
             {
-                // txtRequestNo.Text = _presenter.CurrentCashPaymentRequest.RequestNo.ToString();
                 if (_presenter.CurrentCashPaymentRequest.Supplier != null)
-                {
                     ddlPayee.SelectedValue = _presenter.CurrentCashPaymentRequest.Supplier.Id.ToString();
-                }
                 else
-                {
-                    ddlPayee.SelectedValue = "0";
-                }
+                    ddlPayee.SelectedValue = "";
+                if (_presenter.CurrentCashPaymentRequest.Program != null)
+                    ddlProgram.SelectedValue = _presenter.CurrentCashPaymentRequest.Program.Id.ToString();
+                else
+                    ddlProgram.SelectedValue = "";
+                ddlRequestType.SelectedValue = _presenter.CurrentCashPaymentRequest.RequestType;
+                ddlAmountType.SelectedValue = _presenter.CurrentCashPaymentRequest.AmountType;
                 txtDescription.Text = _presenter.CurrentCashPaymentRequest.Description;
-                //txtVoucherNo.Text = _presenter.CurrentCashPaymentRequest.VoucherNo.ToString();
+                txtArrivalTime.Text = _presenter.CurrentCashPaymentRequest.ArrivalDateTime;
+                txtReturnTime.Text = _presenter.CurrentCashPaymentRequest.ReturnDateTime;
                 ddlAmountType.SelectedValue = _presenter.CurrentCashPaymentRequest.AmountType;
                 BindCashPaymentDetails();
                 BindCashPaymentRequests();
@@ -430,7 +436,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         protected void grvCashPaymentRequestList_SelectedIndexChanged(object sender, EventArgs e)
         {
             Session["CashPaymentRequest"] = true;
-            //ClearForm();
             BindCashPaymentRequestFields();
             BindAttachments();
             if (_presenter.CurrentCashPaymentRequest.CurrentStatus != null)
@@ -461,9 +466,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void grvCashPaymentRequestList_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
-            btnFind_Click(sender, e);
             grvCashPaymentRequestList.PageIndex = e.NewPageIndex;
-
+            btnFind_Click(sender, e);
         }
         protected void grvCashPaymentRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
         {
@@ -573,7 +577,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 else
                 {
                     Master.ShowMessage(new AppMessage("Please insert at least one Payment Detail", RMessageType.Error));
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -594,7 +598,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         protected void btnFind_Click(object sender, EventArgs e)
         {
             BindCashPaymentRequests();
-            //pnlSearch_ModalPopupExtender.Show();
             ScriptManager.RegisterStartupScript(this, GetType(), "showSearch", "showSearch();", true);
         }
         protected void btnCancel_Click(object sender, EventArgs e)
@@ -825,7 +828,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     perDiemIncluded++;
                 }
             }
-            if (perDiemIncluded > 0 && !String.IsNullOrEmpty(txtArrivalReturnTime.Text))
+            if (perDiemIncluded > 0 && !String.IsNullOrEmpty(txtArrivalTime.Text) && !String.IsNullOrEmpty(txtReturnTime.Text))
                 return true;
             else if (perDiemIncluded == 0)
                 return true;

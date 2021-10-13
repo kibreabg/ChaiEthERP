@@ -21,7 +21,8 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public string Payee { get; set; }
         public string Description { get; set; }
         public string VoucherNo { get; set; }
-        public string ArrivalReturnDateTime { get; set; }
+        public string ArrivalDateTime { get; set; }
+        public string ReturnDateTime { get; set; }
         public int CurrentApprover { get; set; }
         public int CurrentApproverPosition { get; set; }
         public int CurrentLevel { get; set; }

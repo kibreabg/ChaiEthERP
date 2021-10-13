@@ -85,10 +85,16 @@
                             </section>
                         </div>
                         <div class="row">
-                            <section class="col" style="width: 100%;">
-                                <label class="label">Arrival Time / Return Time <span style="color: red;">(If you're requesting Per Diems Please specify your Arrival Date & Time and Return Date & Time!)</span></label>
+                            <section class="col col-6">
+                                <label class="label">Arrival Time <span style="color: red;">(For Per Diems Please specify your Arrival Date & Time!)</span></label>
                                 <label class="input">
-                                    <asp:TextBox ID="txtArrivalReturnTime" runat="server"></asp:TextBox>
+                                    <asp:TextBox ID="txtArrivalTime" runat="server"></asp:TextBox>
+                                </label>
+                            </section>
+                            <section class="col col-6">
+                                <label class="label">Return Time <span style="color: red;">(For Per Diems Please specify your Return Date & Time!)</span></label>
+                                <label class="input">
+                                    <asp:TextBox ID="txtReturnTime" runat="server"></asp:TextBox>
                                 </label>
                             </section>
                         </div>
