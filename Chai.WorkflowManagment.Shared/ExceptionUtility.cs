@@ -53,7 +53,7 @@ namespace Chai.WorkflowManagment.Shared
             StringBuilder body = new StringBuilder();
             body.AppendLine("<b>Error generated from</b>" + sourceUser + System.Environment.NewLine + "<b>Inner Exception</b> " + exc.InnerException + System.Environment.NewLine + "<b>Stacktrace</b> " + exc.StackTrace + System.Environment.NewLine + "<b>Source</b> " + exc.Source + System.Environment.NewLine + "  <b>Target Site</b>  " + exc.TargetSite);
             //EmailSender.SendEmails("Exception Detail", "supportwfms@clintonhealthaccess.org", "Exception Raised", exc.StackTrace);
-            EmailSender.SendException("kgizatu@clintonhealthaccess.org,dhaddis@clintonhealthaccess.org,ygossaye@clintonhealthaccess.org,gbirega@clintonhealthaccess.org,bseifu@clintonhealthaccess.org", exc.Message, body.ToString());
+            EmailSender.SendException("kgizatu@clintonhealthaccess.org,gbirega@clintonhealthaccess.org,bseifu@clintonhealthaccess.org", exc.Message, body.ToString());
         }
     }
 }
