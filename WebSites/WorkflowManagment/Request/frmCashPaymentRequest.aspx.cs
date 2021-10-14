@@ -82,7 +82,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         public int GetPayee
         {
-            get { return Convert.ToInt32(ddlPayee.SelectedValue); }
+            get
+            {
+                if (String.IsNullOrEmpty(ddlPayee.SelectedValue))
+                    return 0;
+                else
+                    return Convert.ToInt32(ddlPayee.SelectedValue);
+            }
         }
         public string GetRequestType
         {
