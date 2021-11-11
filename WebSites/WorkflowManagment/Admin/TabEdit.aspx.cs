@@ -5,13 +5,14 @@ using Chai.WorkflowManagment.Enums;
 using Chai.WorkflowManagment.CoreDomain.Admins;
 using Chai.WorkflowManagment.CoreDomain.Users;
 using Chai.WorkflowManagment.Shared;
+using System.Web.UI;
+using Page = Microsoft.Practices.CompositeWeb.Web.UI.Page;
 
 namespace Chai.WorkflowManagment.Modules.Admin.Views
 {
-    public partial class TabEdit : Microsoft.Practices.CompositeWeb.Web.UI.Page, ITabEditView
+    public partial class TabEdit : Page, ITabEditView
     {
         private TabEditPresenter _presenter;
-
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!this.IsPostBack)
@@ -20,11 +21,10 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                 this._presenter.OnViewInitialized();
                 PopNodesToDdl();
                 btnDelete.Attributes.Add("onclick", "return confirm(\"Are you sure?\")");
-                
+
             }
             this._presenter.OnViewLoaded();
         }
-
         [CreateNew]
         public TabEditPresenter Presenter
         {
@@ -41,7 +41,28 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                 this._presenter.View = this;
             }
         }
-
+        #region ITabEditView Members
+        public string GetTabId
+        {
+            get { return Request.QueryString[AppConstants.TABID]; }
+        }
+        public string GetNodeId
+        {
+            get { return Request.QueryString[AppConstants.NODEID]; }
+        }
+        public string GetModuleId
+        {
+            get { return ddlModule.SelectedValue; }
+        }
+        public string GetTabName
+        {
+            get { return txtTitle.Text; }
+        }
+        public string GetDescription
+        {
+            get { return txtDescription.Text; }
+        }
+        #endregion
         public void BindTab()
         {
             Tab tab = _presenter.CurrentTab;
@@ -65,7 +86,6 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                 ibtUp.Enabled = false;
             }
         }
-
         private void PopModuleToDDL()
         {
             ddlModule.DataSource = _presenter.GetModules();
@@ -74,7 +94,6 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
             ddlModule.Items.Insert(0, new ListItem("---Select Module---", "0"));
             ddlModule.SelectedIndex = 0;
         }
-
         private void PopNodesToDdl()
         {
             ddlNodes.Items.Clear();
@@ -87,11 +106,10 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
             ddlNodes.Items.Insert(0, new ListItem("---Select Node---", "0"));
             ddlNodes.SelectedIndex = 0;
         }
-
         public void BindPopupMenus()
         {
             lsbNodes.Items.Clear();
-            foreach (PopupMenu  tn in _presenter.CurrentTab.PopupMenus)
+            foreach (PopupMenu tn in _presenter.CurrentTab.PopupMenus)
             {
                 lsbNodes.Items.Add(new ListItem(tn.Node.Title, tn.Id.ToString()));
             }
@@ -101,17 +119,16 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
             else
                 butRemoveaction.Enabled = false;
         }
-
         protected void butAddaction_Click(object sender, EventArgs e)
         {
             try
             {
-                PopupMenu  pm = new PopupMenu();
+                PopupMenu pm = new PopupMenu();
                 pm.Tab = _presenter.CurrentTab;
                 pm.Node = _presenter.GetNode(int.Parse(ddlNodes.SelectedValue));
                 pm.Position = _presenter.CurrentTab.PopupMenus.Count + 1;
                 _presenter.CurrentTab.PopupMenus.Add(pm);
-                                                
+
                 _presenter.SaveOrUpdateTab();
                 PopNodesToDdl();
                 BindPopupMenus();
@@ -123,11 +140,10 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
             }
 
         }
-       
         protected void butRemoveaction_Click(object sender, EventArgs e)
         {
             int id = int.Parse(lsbNodes.SelectedValue);
-            
+
             try
             {
                 PopupMenu pm = _presenter.CurrentTab.GetPopupMenu(id);
@@ -146,14 +162,12 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                 Master.ShowMessage(new AppMessage("Error: Unable to remove popup menu. " + ex.Message, RMessageType.Error));
             }
         }
-
         public void BindTaskPans()
         {
             grvTaskpans.DataSource = _presenter.CurrentTab.TaskPans;
             grvTaskpans.DataBind();
         }
-
-        protected void grvNodes_RowDataBound(object sender, System.Web.UI.WebControls.GridViewRowEventArgs e)
+        protected void grvNodes_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             TaskPan pan = e.Row.DataItem as TaskPan;
             if (pan != null)
@@ -169,16 +183,14 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                 ibt.CommandArgument = pan.Id.ToString();
             }
         }
-
         public void BindRoles()
         {
             this.rptRoles.DataSource = _presenter.GetRoles();
             this.rptRoles.DataBind();
         }
-
         public void SetRoles(Tab tab)
         {
-            _presenter.RemoveTabRoles();
+            //_presenter.RemoveTabRoles();
 
             foreach (RepeaterItem ri in rptRoles.Items)
             {
@@ -187,17 +199,16 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                 {
                     if (!tab.Exists(Convert.ToInt32(ViewState[ri.UniqueID])))
                     {
-                        TabRole np = new TabRole();
-                        np.Tab = tab;
-                        np.Role = _presenter.GetRole((int)ViewState[ri.UniqueID]);
-                        np.ViewAllowed = chkView.Checked;
+                        TabRole tabRole = new TabRole();
+                        tabRole.Tab = tab;
+                        tabRole.Role = _presenter.GetRole((int)ViewState[ri.UniqueID]);
+                        tabRole.ViewAllowed = chkView.Checked;
 
-                        tab.TabRoles.Add(np);
+                        tab.TabRoles.Add(tabRole);
                     }
                 }
             }
         }
-
         protected void rptRoles_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             Role role = e.Item.DataItem as Role;
@@ -206,38 +217,35 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                 CheckBox chkView = (CheckBox)e.Item.FindControl("chkViewAllowed");
                 if (_presenter.CurrentTab != null)
                     chkView.Checked = this._presenter.CurrentTab.ViewAllowed(role);
-                
+
                 this.ViewState[e.Item.UniqueID] = role.Id;
             }
 
         }
-
         protected void btnSave_Click(object sender, EventArgs e)
         {
             //try
             //{
-                int id = _presenter.SaveOrUpdateTab();
+            int id = _presenter.SaveOrUpdateTab();
 
-                if (int.Parse(GetNodeId) <= 0)
-                {
-                    Master.TransferMessage(new AppMessage("Tab was saved successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                    string url = String.Format("~/Admin/TabEdit.aspx?{0}=0&{1}={2}", AppConstants.TABID, AppConstants.NODEID, id);
-                    _presenter.Navigate(url);
-                }
-                else
-                    Master.ShowMessage(new AppMessage("Tab was saved successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
+            if (int.Parse(GetNodeId) <= 0)
+            {
+                Master.TransferMessage(new AppMessage("Tab was saved successfully", RMessageType.Info));
+                string url = String.Format("~/Admin/TabEdit.aspx?{0}=0&{1}={2}", AppConstants.TABID, AppConstants.NODEID, id);
+                _presenter.Navigate(url);
+            }
+            else
+                Master.ShowMessage(new AppMessage("Tab was saved successfully", RMessageType.Info));
             //}
             //catch (Exception ex)
             //{
             //    Master.ShowMessage(new AppMessage("Error: Unable to save Tab. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
             //}
         }
-
         protected void btnCancel_Click(object sender, EventArgs e)
         {
             _presenter.CancelIt();
         }
-
         protected void btnDelete_Click(object sender, EventArgs e)
         {
             try
@@ -251,41 +259,11 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                 Master.ShowMessage(new AppMessage("Error: Unable to delete Tab. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
             }
         }
-
-        #region ITabEditView Members
-
-        public string GetTabId
-        {
-            get { return Request.QueryString[AppConstants.TABID]; }
-        }
-
-        public string GetNodeId
-        {
-            get { return Request.QueryString[AppConstants.NODEID]; }
-        }
-            
-        public string GetModuleId
-        {
-            get { return ddlModule.SelectedValue; }
-        }
-
-        public string GetTabName
-        {
-            get { return txtTitle.Text; }
-        }
-
-        public string GetDescription
-        {
-            get { return txtDescription.Text; }
-        }
-
-        #endregion
-
         private string SelfUrl()
         {
             return String.Format("~/Admin/TabEdit.aspx?{0}=0&{1}={2}", AppConstants.TABID, AppConstants.NODEID, _presenter.CurrentTab.Id);
         }
-        protected void ibtUp_Click(object sender, System.Web.UI.ImageClickEventArgs e)
+        protected void ibtUp_Click(object sender, ImageClickEventArgs e)
         {
             if (_presenter.CurrentTab.Id > 0)
             {
@@ -294,23 +272,21 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                 _presenter.Navigate(url);
             }
         }
-        
-        protected void ibtDown_Click(object sender, System.Web.UI.ImageClickEventArgs e)
+        protected void ibtDown_Click(object sender, ImageClickEventArgs e)
         {
-            if (_presenter.CurrentTab.Id >0)
+            if (_presenter.CurrentTab.Id > 0)
             {
                 string url = SelfUrl();
-                _presenter.MoveDownTab();                
+                _presenter.MoveDownTab();
                 _presenter.Navigate(url);
             }
         }
-
         protected void grvTaskpans_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             string url = SelfUrl();
 
-            if(e.CommandName =="MoveUp")
-            {                                
+            if (e.CommandName == "MoveUp")
+            {
                 _presenter.MoveUpTaskPan(Convert.ToInt32(e.CommandArgument));
                 _presenter.Navigate(url);
             }
@@ -320,6 +296,6 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                 _presenter.Navigate(url);
             }
         }
-}
+    }
 }
 

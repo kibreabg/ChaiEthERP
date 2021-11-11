@@ -34,9 +34,9 @@ namespace Chai.WorkflowManagment.CoreDomain.Admins
         public virtual bool Exists(int id)
         {
             bool val = false;
-            foreach(TabRole NR in TabRoles)
+            foreach(TabRole tabRole in TabRoles)
             {
-                if (NR.Role.Id == Id)
+                if (tabRole.Role.Id == id)
                 {
                     val = true;
                     break;

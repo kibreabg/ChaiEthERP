@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Web.Compilation;
 using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Web.UI.HtmlControls;
 using System.IO;
 using Microsoft.Practices.ObjectBuilder;
-
 using Chai.WorkflowManagment.Shared;
 using Chai.WorkflowManagment.CoreDomain.Admins;
 using Chai.WorkflowManagment.CoreDomain.Users;
 using Chai.WorkflowManagment.Enums;
 using Chai.WorkflowManagment.Modules.Admin.Util;
+using Microsoft.Practices.CompositeWeb.Web.UI;
 
 namespace Chai.WorkflowManagment.Modules.Admin.Views
 {
-    public partial class NodeEdit : Microsoft.Practices.CompositeWeb.Web.UI.Page, INodeEditView
+    public partial class NodeEdit : Page, INodeEditView
     {
         private NodeEditPresenter _presenter;
         private string _vertualPath;
@@ -30,7 +28,6 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
             }
             this._presenter.OnViewLoaded();
         }
-
         [CreateNew]
         public NodeEditPresenter Presenter
         {
@@ -47,92 +44,41 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                 this._presenter.View = this;
             }
         }
-
-        private ListOfDirectoryItems GetDirItems(int rootlen, string lPath)
+        #region INodeEditView Members
+        public string GetModuleId
         {
-            ListOfDirectoryItems dirItems = new ListOfDirectoryItems(rootlen, lPath);
-
-            if (Directory.Exists(lPath))
-            {
-                DirectoryInfo dr = new DirectoryInfo(lPath);
-
-                foreach (DirectoryInfo sdr in dr.GetDirectories())
-                {
-                    dirItems.Add(new DirectoryItem(sdr.FullName, sdr.Name, DirectoryItemType.DIRECTORY));
-                }
-
-                foreach (FileInfo fi in dr.GetFiles("*.aspx"))
-                {
-                    dirItems.Add(new DirectoryItem(fi.FullName, fi.Name, DirectoryItemType.FILE));
-                }
-            }
-            return dirItems;
+            get { return ddlModule.SelectedValue; }
         }
-
-        private string ReadPageId(string pagePath)
+        public string GetTitle
         {
-            Type type = BuildManager.GetCompiledType(pagePath);
-
-            // if type is null, could not determine page type
-            if (type == null)
-                throw new ApplicationException("Page " + pagePath + " not found");
-
-            POCBasePage page = (POCBasePage)Activator.CreateInstance(type);
-            return page.PageID;
+            get { return txtTitle.Text; }
         }
-
+        public string GetDescription
+        {
+            get { return txtDescription.Text; }
+        }
+        public string GetFolderPath
+        {
+            get { return txtFolderpath.Text; }
+        }
+        public string GetImagePath
+        {
+            get { return txtImagePath.Text; }
+        }
         public string GetTabId
         {
             get { return Request.QueryString[AppConstants.TABID]; }
         }
-
         public string GetNodeId
         {
             get { return Request.QueryString[AppConstants.NODEID]; }
         }
-
-        public string GetPageID { get { return _pageId; } }
-        
-        protected void btnSave_Click(object sender, EventArgs e)
+        public string GetPageID
         {
-            if (!txtFolderpath.Text.Contains(".aspx"))
-            {
-                Master.ShowMessage(new AppMessage("Error: You must select ASPX page." , Chai.WorkflowManagment.Enums.RMessageType.Error));
-                return;
-            }
-
-            try
-            {
-                _pageId = ReadPageId(GetVirtualPath());
-                _presenter.SaveOrUpdateNode();
-                Master.ShowMessage(new AppMessage("Node was saved successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
-            }
-            catch (Exception ex)
-            {
-                Master.ShowMessage(new AppMessage("Error: Unable to save node. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
-            }
+            get { return _pageId; }
         }
-
-        protected void btnCancel_Click(object sender, EventArgs e)
-        {
-            _presenter.CancelIt();
-        }
-
-        protected void btnDelete_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                _presenter.DeleteIt();
-                Master.ShowMessage(new AppMessage("Node was deleted successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
-            }
-            catch (Exception ex)
-            {
-                Master.ShowMessage(new AppMessage("Error: Unable to delete node. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
-            }
-        }
-
+        #endregion
         #region INodeEditView Members
-
         public void BindNode()
         {
             PopModules();
@@ -165,7 +111,6 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                 imbMoveup.Enabled = false;
             }
         }
-
         private void PopModules()
         {
             ddlModule.DataSource = _presenter.GetModules;
@@ -174,15 +119,78 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
             ddlModule.Items.Insert(0, new ListItem("---Select Module---", "0"));
             ddlModule.SelectedIndex = 0;
         }
-
         public void BindRoles()
         {
             this.rptRoles.DataSource = _presenter.GetRoles;
             this.rptRoles.DataBind();
         }
-
         #endregion
+        private ListOfDirectoryItems GetDirItems(int rootlen, string lPath)
+        {
+            ListOfDirectoryItems dirItems = new ListOfDirectoryItems(rootlen, lPath);
 
+            if (Directory.Exists(lPath))
+            {
+                DirectoryInfo dr = new DirectoryInfo(lPath);
+
+                foreach (DirectoryInfo sdr in dr.GetDirectories())
+                {
+                    dirItems.Add(new DirectoryItem(sdr.FullName, sdr.Name, DirectoryItemType.DIRECTORY));
+                }
+
+                foreach (FileInfo fi in dr.GetFiles("*.aspx"))
+                {
+                    dirItems.Add(new DirectoryItem(fi.FullName, fi.Name, DirectoryItemType.FILE));
+                }
+            }
+            return dirItems;
+        }
+        private string ReadPageId(string pagePath)
+        {
+            Type type = BuildManager.GetCompiledType(pagePath);
+
+            // if type is null, could not determine page type
+            if (type == null)
+                throw new ApplicationException("Page " + pagePath + " not found");
+
+            POCBasePage page = (POCBasePage)Activator.CreateInstance(type);
+            return page.PageID;
+        }
+        protected void btnSave_Click(object sender, EventArgs e)
+        {
+            if (!txtFolderpath.Text.Contains(".aspx"))
+            {
+                Master.ShowMessage(new AppMessage("Error: You must select ASPX page.", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                return;
+            }
+
+            try
+            {
+                _pageId = ReadPageId(GetVirtualPath());
+                _presenter.SaveOrUpdateNode();
+                Master.ShowMessage(new AppMessage("Node was saved successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
+            }
+            catch (Exception ex)
+            {
+                Master.ShowMessage(new AppMessage("Error: Unable to save node. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+            }
+        }
+        protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            _presenter.CancelIt();
+        }
+        protected void btnDelete_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                _presenter.DeleteIt();
+                Master.ShowMessage(new AppMessage("Node was deleted successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
+            }
+            catch (Exception ex)
+            {
+                Master.ShowMessage(new AppMessage("Error: Unable to delete node. " + ex.Message, Chai.WorkflowManagment.Enums.RMessageType.Error));
+            }
+        }
         public void SetRoles(Node node)
         {
             //foreach (NodeRole np in node.NodeRoles)
@@ -209,7 +217,6 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                 }
             }
         }
-
         protected void rptRoles_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             Role role = e.Item.DataItem as Role;
@@ -227,36 +234,6 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
             }
 
         }
-
-        #region INodeEditView Members
-
-        public string GetModuleId
-        {
-            get { return ddlModule.SelectedValue; }
-        }
-
-        public string GetTitle
-        {
-            get { return txtTitle.Text; }
-        }
-
-        public string GetDescription
-        {
-            get { return txtDescription.Text; }
-        }
-
-        public string GetFolderPath
-        {
-            get { return txtFolderpath.Text; }
-        }
-
-        public string GetImagePath
-        {
-            get { return txtImagePath.Text; }
-        }
-
-        #endregion
-
         protected void ddlModule_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (ddlModule.SelectedValue != "0")
@@ -271,7 +248,6 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
 
             PopDirectoryItems();
         }
-
         private void PopDirectoryItems()
         {
             lstDirectory.Items.Clear();
@@ -296,7 +272,6 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                     imbMoveup.Enabled = true;
             }
         }
-
         protected void lstDirectory_SelectedIndexChanged(object sender, EventArgs e)
         {
             DirectoryItem di = _presenter.DirectoryItems.DirectoryItems[lstDirectory.SelectedIndex];
@@ -313,13 +288,11 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
             }
 
         }
-
         private string GetVirtualPath()
         {
-            PocModule m= _presenter.GetModuleById(int.Parse(ddlModule.SelectedValue));
+            PocModule m = _presenter.GetModuleById(int.Parse(ddlModule.SelectedValue));
             return "~/" + m.FolderPath + "/" + txtFolderpath.Text;
         }
-
         protected void imbMoveup_Click(object sender, System.Web.UI.ImageClickEventArgs e)
         {
             ListOfDirectoryItems di = _presenter.DirectoryItems;
