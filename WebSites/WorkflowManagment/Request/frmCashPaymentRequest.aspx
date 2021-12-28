@@ -7,6 +7,19 @@
 <asp:Content ID="content" ContentPlaceHolderID="DefaultContent" runat="Server">
     <script src="../js/libs/jquery-2.0.2.min.js"></script>
     <script type="text/javascript">
+        function printPaymentDetail(id) {
+            var disp_setting = "toolbar=yes,location=no,directories=yes,menubar=yes,";
+            disp_setting += "scrollbars=yes,width=750, height=600, left=100, top=25";
+            var content_value = document.getElementById(id).innerHTML;
+            var docprint = window.open("", "", disp_setting);
+            docprint.document.open();
+            docprint.document.write('<html><head><title>CHAI Ethiopia ERP</title>');
+            docprint.document.write('</head><body onLoad="self.print()"><center>');
+            docprint.document.write(content_value);
+            docprint.document.write('</center></body></html>');
+            docprint.document.close();
+            docprint.focus();
+        }
         function showSearch() {
             $(document).ready(function () {
                 $('#searchModal').modal('show');
@@ -302,6 +315,8 @@
                         <a data-toggle="modal" runat="server" id="searchLink" href="#searchModal" class="btn btn-primary"><i class="fa fa-circle-arrow-up fa-lg"></i>Search</a>
                         <asp:Button ID="btnDelete" runat="server" CausesValidation="False" class="btn btn-primary"
                             Text="Delete" OnClick="btnDelete_Click" Visible="false"></asp:Button>
+                        <asp:Button ID="btnPrint" runat="server" class="btn btn-primary"
+                            Text="Print" OnClientClick="javascript:printPaymentDetail('divprint'); return false;" Visible="false"></asp:Button>
                         <cc1:ConfirmButtonExtender ID="btnDelete_ConfirmButtonExtender" runat="server"
                             ConfirmText="Are you sure you want to delete this record?" Enabled="True" TargetControlID="btnDelete">
                         </cc1:ConfirmButtonExtender>
@@ -420,4 +435,154 @@
         <!-- /.modal-content -->
 
     </asp:Panel>
+    <div id="divprint" style="display: none;">
+        <fieldset>
+            <table style="width: 100%;">
+                <tr>
+                    <td style="font-size: large; text-align: center;">
+                        <img src="../img/CHAI%20Logo.png" width="130" height="80" />
+                        <br />
+                        <strong>CHAI ETHIOPIA
+                            <br />
+                            PAYMENT REQUEST FORM</strong></td>
+                </tr>
+            </table>
+            <table style="width: 100%; border-spacing: 30px;">
+                <tr>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblVoucherNo" runat="server" Text="Voucher No:"></asp:Label>
+                        </strong></td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblVoucherNoResult" runat="server"></asp:Label>
+                    </td>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblPostingRef" runat="server" Text="Posting Ref:"></asp:Label>
+                        </strong>
+                    </td>
+                    <td style="width: 25%;">__________
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblRequester" runat="server" Text="Requester:"></asp:Label>
+                        </strong></td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblRequesterResult" runat="server"></asp:Label>
+                    </td>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblRequestedDate" runat="server" Text="Requested Date:"></asp:Label>
+                        </strong></td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblRequestedDateResult" runat="server"></asp:Label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblPayee" runat="server" Text="Payee:"></asp:Label>
+                        </strong>
+                    </td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblPayeeResult" runat="server"></asp:Label>
+                    </td>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblSupplier" runat="server" Text="Supplier:"></asp:Label>
+                        </strong>
+                    </td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblSupplierRes" runat="server"></asp:Label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblDescriptionP" runat="server" Text="Description :"></asp:Label>
+                        </strong>
+                    </td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblDescResult" runat="server"></asp:Label>
+                    </td>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblTotalAmount" runat="server" Text="Total Amount Paid:"></asp:Label>
+                        </strong></td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblTotalAmountResult" runat="server"></asp:Label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 25%; text-align: right;"><strong>
+                        <asp:Label ID="lblApprovalStatusPrint" runat="server" Text="Approval Status:"></asp:Label>
+                    </strong>
+                    </td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblApprovalStatusResult" runat="server"></asp:Label>
+                    </td>
+                    <td style="width: 25%;"><strong></strong>
+                    </td>
+                    <td style="width: 25%;"></td>
+                </tr>
+            </table>
+            <br />
+            <asp:GridView ID="grvDetails"
+                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                CssClass="table table-striped table-bordered table-hover">
+                <RowStyle CssClass="rowstyle" />
+                <Columns>
+                    <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="AccountName" SortExpression="ItemAccount.AccountName" />
+                    <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
+                    <asp:BoundField DataField="Amount" HeaderText="Amount Requested" SortExpression="Amount" />
+                    <asp:BoundField DataField="Project.ProjectCode" HeaderText="Project Code" />
+                    <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant Code" />
+                </Columns>
+                <FooterStyle CssClass="FooterStyle" />
+                <HeaderStyle CssClass="headerstyle" />
+                <PagerStyle CssClass="PagerStyle" />
+                <RowStyle CssClass="rowstyle" />
+            </asp:GridView>
+            <br />
+            <asp:GridView ID="grvStatuses"
+                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                CssClass="table table-striped table-bordered table-hover" OnRowDataBound="grvStatuses_RowDataBound">
+                <RowStyle CssClass="rowstyle" />
+                <Columns>
+                    <asp:TemplateField HeaderText="Date">
+                        <ItemTemplate>
+                            <asp:Label ID="lblDate" runat="server" Text='<%# Eval("Date", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:BoundField HeaderText="Name" />
+                    <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
+                    <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus" />
+                </Columns>
+                <FooterStyle CssClass="FooterStyle" />
+                <HeaderStyle CssClass="headerstyle" />
+                <PagerStyle CssClass="PagerStyle" />
+                <RowStyle CssClass="rowstyle" />
+            </asp:GridView>
+            <br />
+            <table style="width: 100%;">
+                <tr>
+                    <td></td>
+                    <td>Signature</td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: right; padding-right: 6%;">Recieved By </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>___________________</td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: right;">___________________</td>
+                </tr>
+            </table>
+        </fieldset>
+    </div>
 </asp:Content>

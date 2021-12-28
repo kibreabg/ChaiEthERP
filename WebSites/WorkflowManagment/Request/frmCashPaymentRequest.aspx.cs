@@ -158,6 +158,26 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             grvAttachments.DataSource = attachments;
             grvAttachments.DataBind();
         }
+        private void PrintTransaction()
+        {
+
+            lblRequesterResult.Text = _presenter.CurrentCashPaymentRequest.AppUser.FullName;
+            lblRequestedDateResult.Text = _presenter.CurrentCashPaymentRequest.RequestDate.Value.ToShortDateString();
+            if (_presenter.CurrentCashPaymentRequest.Supplier != null)
+            {
+                lblSupplierRes.Text = _presenter.CurrentCashPaymentRequest.Supplier.SupplierName.ToString() != null ? _presenter.CurrentCashPaymentRequest.Supplier.SupplierName.ToString() : "";
+            }
+            lblPayeeResult.Text = _presenter.CurrentCashPaymentRequest.Payee;
+            lblVoucherNoResult.Text = _presenter.CurrentCashPaymentRequest.VoucherNo;
+            lblTotalAmountResult.Text = _presenter.CurrentCashPaymentRequest.TotalAmount.ToString();
+            lblApprovalStatusResult.Text = _presenter.CurrentCashPaymentRequest.ProgressStatus.ToString();
+            lblDescResult.Text = _presenter.CurrentCashPaymentRequest.Description;
+            grvDetails.DataSource = _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails;
+            grvDetails.DataBind();
+
+            grvStatuses.DataSource = _presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses;
+            grvStatuses.DataBind();
+        }
         private void PopPayee()
         {
             ddlPayee.Items.Clear();
@@ -448,6 +468,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 btnSave.Visible = false;
                 btnDelete.Visible = false;
+                btnPrint.Visible = true;
+                PrintTransaction();
                 //If the Request has undergone approval process hide the Actions buttons from the Details Datagrid
                 foreach (DataGridColumn col in dgCashPaymentDetail.Columns)
                 {
@@ -460,7 +482,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             else
             {
                 btnSave.Visible = true;
-                btnDelete.Visible = true;
+                btnDelete.Visible = true;                
                 foreach (DataGridColumn col in dgCashPaymentDetail.Columns)
                 {
                     if (col.HeaderText.ToLower().Trim() == "actions")
@@ -483,6 +505,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 if (cashPayment.CurrentStatus == "Rejected")
                 {
                     e.Row.ForeColor = System.Drawing.Color.Red;
+                }
+            }
+        }
+        protected void grvStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses != null)
+            {
+                if (e.Row.RowType == DataControlRowType.DataRow)
+                {
+                    if (_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses[e.Row.RowIndex].Approver != 0)
+                        e.Row.Cells[1].Text = _presenter.GetUser(_presenter.CurrentCashPaymentRequest.CashPaymentRequestStatuses[e.Row.RowIndex].Approver).FullName;
                 }
             }
         }
