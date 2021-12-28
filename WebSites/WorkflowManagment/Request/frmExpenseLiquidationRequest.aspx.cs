@@ -236,8 +236,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             tarId = (int)grvExpenseLiquidationRequestList.DataKeys[grvExpenseLiquidationRequestList.SelectedIndex].Value;
             Session["tarId"] = (int)grvExpenseLiquidationRequestList.DataKeys[grvExpenseLiquidationRequestList.SelectedIndex].Value;
             BindExpenseLiquidationRequestFields();
-            PrintTransaction();
-            btnPrint.Enabled = true;
+            
             //This is done so that the user can not ammend a liquidation while it's in an approval process. But one can ammend a rejected liquidation.
             if (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.CurrentStatus != null)
             {
@@ -250,6 +249,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     btnSave.Visible = false;
                     btnDelete.Visible = false;
+                    PrintTransaction();
+                    btnPrint.Enabled = true;
                 }
 
             }
@@ -759,12 +760,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             if (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest != null)
             {
-                lblRequestNoResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TravelAdvanceRequest.TravelAdvanceNo.ToString();
-                lblRequestedDateResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.RequestDate.ToString();
-                lblRequesterResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TravelAdvanceRequest.AppUser.UserName;
-                // lblExpenseTypeResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseType.ToString();
-                lblCommentResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.Comment.ToString();
+                lblRequestNoResult.Text = _presenter.CurrentTravelAdvanceRequest.TravelAdvanceNo;
+                lblRequestedDateResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.RequestDate.Value.ToShortDateString();
+                if (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TravelAdvRequestDate != null)
+                    lblTravelAdvReqDateResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TravelAdvRequestDate.Value.ToShortDateString();
+                lblRequesterResult.Text = _presenter.CurrentTravelAdvanceRequest.AppUser.FullName;
+                //lblExpenseTypeResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseType.ToString();
+                lblPurposeofAdvanceResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.Comment.ToString();
                 lblApprovalStatusResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ProgressStatus.ToString();
+                //lblRetirmentTypeResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseReimbersmentType;
+                lblRetirmenNoResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ReimbersmentNo;
 
                 grvDetails.DataSource = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails;
                 grvDetails.DataBind();

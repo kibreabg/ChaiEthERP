@@ -7,7 +7,7 @@
 <asp:Content ID="content" ContentPlaceHolderID="DefaultContent" runat="Server">
     <script src="../js/libs/jquery-2.0.2.min.js"></script>
     <script type="text/javascript">
-        function Clickheretoprint(theid) {
+        function printLiquidationForm(theid) {
             var disp_setting = "toolbar=yes,location=no,directories=yes,menubar=yes,";
             disp_setting += "scrollbars=yes,width=750, height=600, left=100, top=25";
             var content_vlue = document.getElementById(theid).innerHTML;
@@ -80,19 +80,11 @@
             <div class="widget-body no-padding">
                 <div class="smart-form">
                     <div role="content">
-
-                        <!-- widget edit box -->
                         <div class="jarviswidget-editbox">
-                            <!-- This area used as dropdown edit box -->
                         </div>
-                        <!-- end widget edit box -->
-
-                        <!-- widget content -->
                         <div class="widget-body">
-
                             <div class="tab-content">
                                 <div class="tab-pane" id="hr1">
-
                                     <div class="tabbable tabs-below">
                                         <div class="tab-content padding-10">
                                             <div class="tab-pane" id="AA">
@@ -111,7 +103,6 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane active" id="hr2">
-
                                     <ul class="nav nav-tabs">
                                         <li class="active">
                                             <a href="#iss1" data-toggle="tab">Expense Form</a>
@@ -381,21 +372,19 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- end widget content -->
                     </div>
                     <footer>
                         <asp:Button ID="btnSave" runat="server" CausesValidation="true" ValidationGroup="request" Visible="false" Text="Request" OnClick="btnSave_Click" class="btn btn-primary"
                             UseSubmitBehavior="false" OnClientClick="this.disabled = true; this.value = 'Submitting...';"></asp:Button>
-                        <%--<asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary" Text="Search" />--%>
-                        <a data-toggle="modal" runat="server" id="searchLink" href="#searchModal" class="btn btn-primary"><i class="fa fa-circle-arrow-up fa-lg"></i>Search</a>
-                        <asp:Button ID="btnDelete" runat="server" CausesValidation="False" class="btn btn-primary"
+                        <a data-toggle="modal" runat="server" id="searchLink" href="#searchModal" class="btn btn-default"><i class="fa fa-circle-arrow-up fa-lg"></i>Search</a>
+                        <asp:Button ID="btnDelete" runat="server" CausesValidation="False" class="btn btn-default"
                             Text="Delete" OnClick="btnDelete_Click" Visible="False"></asp:Button>
                         <cc1:ConfirmButtonExtender ID="btnDelete_ConfirmButtonExtender" runat="server"
                             ConfirmText="Are you sure" Enabled="True" TargetControlID="btnDelete">
                         </cc1:ConfirmButtonExtender>
-                        <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-primary" OnClick="btnCancel_Click" Text="New" />
-                        <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-primary" Enabled="false" OnClientClick="javascript:Clickheretoprint('divprint')"></asp:Button>
-                        <asp:Button ID="btnClosepage" runat="server" Text="Close" CssClass="btn btn-primary" PostBackUrl="../Default.aspx"></asp:Button>
+                        <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-default" OnClick="btnCancel_Click" Text="New" />
+                        <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-default" Enabled="false" OnClientClick="javascript:printLiquidationForm('divprint')"></asp:Button>
+                        <asp:Button ID="btnClosepage" runat="server" Text="Close" CssClass="btn btn-default" PostBackUrl="../Default.aspx"></asp:Button>
                     </footer>
                 </div>
             </div>
@@ -503,98 +492,85 @@
                 </div>
             </div>
         </div>
-        <!-- /.modal-content -->
     </asp:Panel>
     <div id="divprint" style="display: none;">
         <fieldset>
             <table style="width: 100%;">
                 <tr>
-                    <td style="width: 17%; text-align: left;">
-                        <img src="../img/CHAI%20Logo.png" width="70" height="50" /></td>
                     <td style="font-size: large; text-align: center;">
-                        <strong>CHAI Ethiopia ERP
+                        <img src="../img/CHAI%20Logo.png" width="130" height="80" />
+                        <br />
+                        <strong>CHAI ETHIOPIA ERP
                             <br />
-                            LIQUIDATION EXPENSE TRANSACTION FORM</strong></td>
+                            EXPENSE LIQUIDATION TRANSACTION FORM</strong></td>
                 </tr>
             </table>
-            <table style="width: 100%;">
-
+            <table style="width: 100%; border-spacing: 30px;">
                 <tr>
-                    <td align="right" style="width: 738px">&nbsp;</td>
-                    <td align="right">&nbsp;</td>
-                    <td align="right" style="width: 389px">&nbsp;</td>
-                    <td align="right" style="width: 389px">&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td style="width: 738px">
+                    <td style="width: 25%; text-align: right;">
                         <strong>
-                            <asp:Label ID="lblRequestNo" runat="server" Text="Request No:"></asp:Label>
+                            <asp:Label ID="lblRequestNo" runat="server" Text="Reference No:"></asp:Label>
                         </strong></td>
-                    <td>
+                    <td style="width: 25%;">
                         <asp:Label ID="lblRequestNoResult" runat="server"></asp:Label>
                     </td>
-                    <td style="width: 389px">&nbsp;</td>
-                    <td style="width: 389px"></td>
-                    <td>&nbsp;</td>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblRequester" runat="server" Text="Requester:"></asp:Label>
+                        </strong>
+                    </td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblRequesterResult" runat="server"></asp:Label>
+                    </td>
                 </tr>
                 <tr>
-                    <td style="width: 738px">
+                    <td style="width: 25%; text-align: right;">
                         <strong>
                             <asp:Label ID="lblRequestedDate" runat="server" Text="Requested Date:"></asp:Label>
                         </strong></td>
-                    <td>
+                    <td style="width: 25%;">
                         <asp:Label ID="lblRequestedDateResult" runat="server"></asp:Label>
                     </td>
-                    <td style="width: 389px">&nbsp;</td>
-                    <td style="width: 389px"></td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td style="width: 738px">
+                    <td style="width: 25%; text-align: right;">
                         <strong>
-                            <asp:Label ID="lblRequester" runat="server" Text="Requester:"></asp:Label>
-                        </strong></td>
-                    <td>
-                        <asp:Label ID="lblRequesterResult" runat="server"></asp:Label>
-                    </td>
-                    <td style="width: 389px">&nbsp;</td>
-                    <td style="width: 389px"></td>
-                    <td>&nbsp;</td>
-                </tr>
-
-                <tr>
-                    <%-- <td style="width: 738px; height: 18px; padding-left: 20%;">
-                        <strong>
-                            <asp:Label ID="lblExpenseTypePrint" runat="server" Text="Expense Type:"></asp:Label>
+                            <asp:Label ID="lblApprovalStatusPrint1" runat="server" Text="Retirment No:"></asp:Label>
                         </strong>
                     </td>
-                    <td style="height: 18px;">
-                        <asp:Label ID="lblExpenseTypeResult" runat="server"></asp:Label>
-                    </td>--%>
-                    <td style="width: 389px; height: 18px;"></td>
-                    <td style="width: 389px; height: 18px;"></td>
-                    <td style="height: 18px">&nbsp;</td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblRetirmenNoResult" runat="server"></asp:Label>
+                    </td>
                 </tr>
                 <tr>
-                    <td style="width: 389px; height: 18px;"><strong>
-                        <asp:Label ID="lblCommentPrint" runat="server" Text="Purpose of Advance:"></asp:Label>
-                    </strong>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblCommentPrint" runat="server" Text="Purpose of Advance :"></asp:Label>
+                        </strong>
                     </td>
-                    <td style="height: 18px;">
-                        <asp:Label ID="lblCommentResult" runat="server"></asp:Label>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblPurposeofAdvanceResult" runat="server"></asp:Label>
                     </td>
-                    <td style="width: 848px; height: 18px;">
+                    <td style="width: 25%; text-align: right;">
                         <strong>
                             <asp:Label ID="lblApprovalStatusPrint" runat="server" Text="Approval Status:"></asp:Label>
                         </strong>
                     </td>
-                    <td style="width: 390px; height: 18px;">
+                    <td style="width: 25%;">
                         <asp:Label ID="lblApprovalStatusResult" runat="server"></asp:Label>
                     </td>
-                    <td style="width: 389px; height: 18px;"></td>
-                    <td style="width: 389px; height: 18px;"></td>
-                    <td style="height: 18px">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblTravelAdvReqDatePrint" runat="server" Text="Travel Advance Request Date:"></asp:Label>
+                        </strong>
+                    </td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblTravelAdvReqDateResult" runat="server"></asp:Label>
+                    </td>
+                    <td style="width: 25%; text-align: right;">
+                        <strong></strong>
+                    </td>
+                    <td style="width: 25%;"></td>
                 </tr>
             </table>
             <asp:GridView ID="grvDetails"
@@ -632,6 +608,23 @@
                 <PagerStyle CssClass="PagerStyle" />
                 <RowStyle CssClass="rowstyle" />
             </asp:GridView>
+            <br />
+            <table style="width: 100%;">
+                <tr>
+                    <td></td>
+                    <td>Signature</td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: right; padding-right: 6%;">Recieved By </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>___________________</td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: right;">___________________</td>
+                </tr>
+            </table>
         </fieldset>
     </div>
 </asp:Content>
