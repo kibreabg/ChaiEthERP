@@ -312,16 +312,16 @@
                             ValidationGroup="request"></asp:Button>
 
                         <%--<asp:Button ID="btnSearch" runat="server" Text="Search" class="btn btn-primary" />--%>
-                        <a data-toggle="modal" runat="server" id="searchLink" href="#searchModal" class="btn btn-primary"><i class="fa fa-circle-arrow-up fa-lg"></i>Search</a>
-                        <asp:Button ID="btnDelete" runat="server" CausesValidation="False" class="btn btn-primary"
+                        <a data-toggle="modal" runat="server" id="searchLink" href="#searchModal" class="btn btn-default"><i class="fa fa-circle-arrow-up fa-lg"></i>Search</a>
+                        <asp:Button ID="btnDelete" runat="server" CausesValidation="False" class="btn btn-default"
                             Text="Delete" OnClick="btnDelete_Click" Visible="false"></asp:Button>
-                        <asp:Button ID="btnPrint" runat="server" class="btn btn-primary"
+                        <asp:Button ID="btnPrint" runat="server" class="btn btn-default"
                             Text="Print" OnClientClick="javascript:printPaymentDetail('divprint'); return false;" Visible="false"></asp:Button>
                         <cc1:ConfirmButtonExtender ID="btnDelete_ConfirmButtonExtender" runat="server"
                             ConfirmText="Are you sure you want to delete this record?" Enabled="True" TargetControlID="btnDelete">
                         </cc1:ConfirmButtonExtender>
-                        <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-primary" OnClick="btnCancel_Click" Text="New" />
-                        <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" PostBackUrl="../Default.aspx"></asp:Button>
+                        <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-default" OnClick="btnCancel_Click" Text="New" />
+                        <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-default" PostBackUrl="../Default.aspx"></asp:Button>
                     </footer>
                 </div>
             </div>

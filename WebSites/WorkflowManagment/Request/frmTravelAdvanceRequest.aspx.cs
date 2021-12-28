@@ -38,14 +38,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
             txtRequestDate.Text = DateTime.Today.Date.ToShortDateString();
             this._presenter.OnViewLoaded();
-            if (_presenter.CurrentTravelAdvanceRequest != null)
-            {
-                if (_presenter.CurrentTravelAdvanceRequest.Id != 0)
-                {
-                    PrintTransaction();
-                    btnPrint.Enabled = true;
-                }
-            }
 
         }
         [CreateNew]
@@ -313,13 +305,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             Session["TravelAdvanceRequest"] = true;
             //ClearForm();
             BindTravelAdvanceRequestFields();
-            btnDelete.Visible = true;
-            btnPrint.Enabled = true;
-            PrintTransaction();
             if (_presenter.CurrentTravelAdvanceRequest.CurrentStatus != null)
             {
                 btnSave.Visible = false;
                 btnDelete.Visible = false;
+                btnPrint.Enabled = true;
+                PrintTransaction();
             }
             else
             {
