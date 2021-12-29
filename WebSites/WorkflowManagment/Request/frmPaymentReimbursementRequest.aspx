@@ -5,6 +5,30 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 
 <asp:Content ID="content" ContentPlaceHolderID="DefaultContent" runat="Server">
+    <script src="../js/libs/jquery-2.0.2.min.js"></script>
+    <script type="text/javascript">
+        function printSettlementForm(theid) {
+            var disp_setting = "toolbar=yes,location=no,directories=yes,menubar=yes,";
+            disp_setting += "scrollbars=yes,width=750, height=600, left=100, top=25";
+            var content_vlue = document.getElementById(theid).innerHTML;
+
+            var docprint = window.open("", "", disp_setting);
+            docprint.document.open();
+            docprint.document.write('<html><head><title>CHAI Ethiopia ERP</title>');
+            docprint.document.write('</head><body onLoad="self.print()"><center>');
+            docprint.document.write(content_vlue);
+            docprint.document.write('</center></body></html>');
+            docprint.document.close();
+            docprint.focus();
+        }
+
+        function showSearch() {
+            $(document).ready(function () {
+                $('#searchModal').modal('show');
+            });
+        }
+
+    </script>
     <div class="jarviswidget" id="wid-id-8" data-widget-editbutton="false" data-widget-custombutton="false">
         <header>
             <span class="widget-icon"><i class="fa fa-edit"></i></span>
@@ -75,7 +99,7 @@
                             <section class="col col-6">
                                 <label class="label">Grant</label>
                                 <label class="input">
-                                    <asp:TextBox ID="txtGrant" runat="server"></asp:TextBox>
+                                    <asp:TextBox ID="txtGrant" ReadOnly="true" runat="server"></asp:TextBox>
                                 </label>
                             </section>
                         </div>
@@ -94,20 +118,11 @@
                                 </label>
                             </section>
                         </div>
-
-
-
                     </fieldset>
                     <div role="content">
-                        <!-- widget edit box -->
                         <div class="jarviswidget-editbox">
-                            <!-- This area used as dropdown edit box -->
                         </div>
-                        <!-- end widget edit box -->
-
-                        <!-- widget content -->
                         <div class="widget-body">
-
                             <div class="tab-content">
                                 <div class="tab-pane" id="hr1">
 
@@ -273,106 +288,82 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- end widget content -->
                     </div>
                     <footer>
                         <asp:Button ID="btnSave" runat="server" CausesValidation="true" ValidationGroup="request" Enabled="false" Text="Request" OnClick="btnSave_Click" CssClass="btn btn-primary"
                             UseSubmitBehavior="false" OnClientClick="this.disabled = true; this.value = 'Submitting...';"></asp:Button>
-                        <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary" Text="Search" />
-                        <asp:Button ID="btnDelete" runat="server" CausesValidation="False" class="btn btn-primary"
+                        <a data-toggle="modal" runat="server" id="searchLink" href="#searchModal" class="btn btn-default"><i class="fa fa-circle-arrow-up fa-lg"></i>Search</a>
+                        <asp:Button ID="btnDelete" runat="server" CausesValidation="False" class="btn btn-default"
                             Text="Delete" OnClick="btnDelete_Click" Visible="False"></asp:Button>
                         <cc1:ConfirmButtonExtender ID="btnDelete_ConfirmButtonExtender" runat="server"
                             ConfirmText="Are you sure" Enabled="True" TargetControlID="btnDelete">
                         </cc1:ConfirmButtonExtender>
-                        <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-primary" OnClick="btnCancel_Click" Text="New" />
-                        <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" PostBackUrl="../Default.aspx"></asp:Button>
+                        <asp:Button ID="btnPrint" runat="server" Text="Print" CssClass="btn btn-default" Enabled="false" OnClientClick="javascript:printSettlementForm('divprint')"></asp:Button>
+                        <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-default" OnClick="btnCancel_Click" Text="New" />
+                        <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-default" PostBackUrl="../Default.aspx"></asp:Button>
                     </footer>
                 </div>
             </div>
         </div>
     </div>
 
-    <%-- Modal --%>
-
-    <asp:Panel ID="pnlSearch" runat="server">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    &times;</button>
-                <h4 class="modal-title" id="myModalLabel">Search Payment Reimbursement Requests</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <div class="input-group">
+    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Search Payment Reimbursement Requests</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
                                 <label for="txtSrchRequestDate">Requested Date</label>
-                                <i class="icon-append fa fa-calendar"></i>
-                                <asp:TextBox ID="txtSrchRequestDate" CssClass="datepicker form-control"
-                                    data-dateformat="mm/dd/yy" ToolTip="Request Date" runat="server"></asp:TextBox>
+                                <label class="input" style="position: relative; display: block; font-weight: 400;">
+                                    <i class="icon-append fa fa-calendar" style="position: absolute; top: 5px; width: 22px; height: 22px; font-size: 14px; line-height: 22px; text-align: center; right: 5px; padding-left: 3px; border-left-width: 1px; border-left-style: solid; color: #A2A2A2;"></i>
+                                    <asp:TextBox ID="txtSrchRequestDate" CssClass="form-control datepicker"
+                                        data-dateformat="mm/dd/yy" ToolTip="Request Date" runat="server"></asp:TextBox>
+                                </label>
                             </div>
-
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="ddlSrchExpenseType">Expense Type</label><br />
-                            <asp:DropDownList ID="ddlSrchExpenseType" CssClass="form-control" runat="server">
-                                <asp:ListItem Value="Advance">Advance</asp:ListItem>
-                                <asp:ListItem Value="Claim">Claim</asp:ListItem>
-                            </asp:DropDownList><i></i>
+                    <div class="row" style="text-align: right;">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <asp:Button ID="btnFind" runat="server" OnClick="btnFind_Click" Text="Find" CssClass="btn btn-primary"></asp:Button>
+                            </div>
                         </div>
                     </div>
-                    <section class="col col-6">
-                        <label class="label">Program</label>
-                        <label class="select">
-                            <asp:DropDownList ID="ddlProgram" AutoPostBack="true" DataTextField="ProgramName" DataValueField="Id" AppendDataBoundItems="true" runat="server" OnSelectedIndexChanged="ddlProgram_SelectedIndexChanged">
-                                <asp:ListItem Value="0">Select Program</asp:ListItem>
-                            </asp:DropDownList><i></i>
-                        </label>
-                        <asp:RequiredFieldValidator ID="rfvProgram" runat="server" ControlToValidate="ddlProgram" CssClass="validator" Display="Dynamic" ErrorMessage="Select Program" SetFocusOnError="true" ValidationGroup="request"></asp:RequiredFieldValidator>
-                    </section>
-                </div>
-                <div class="row" style="text-align: right;">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <asp:Button ID="btnFind" runat="server" OnClick="btnFind_Click" Text="Find" CssClass="btn btn-primary"></asp:Button>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <div class="well well-sm well-primary">
-                                <asp:GridView ID="grvPaymentReimbursementRequestList"
-                                    runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                                    OnRowDataBound="grvPaymentReimbursementRequestList_RowDataBound" OnSelectedIndexChanged="grvPaymentReimbursementRequestList_SelectedIndexChanged" AllowPaging="True" OnPageIndexChanging="grvPaymentReimbursementRequestList_PageIndexChanging"
-                                    CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
-                                    <RowStyle CssClass="rowstyle" />
-                                    <Columns>
-                                        <asp:BoundField DataField="RequestDate" HeaderText="Request Date" SortExpression="RequestDate" />
-                                        <asp:BoundField DataField="ExpenseType" HeaderText="Expense Type" SortExpression="ExpenseType" />
-                                        <asp:CommandField ShowSelectButton="True" />
-                                    </Columns>
-                                    <FooterStyle CssClass="FooterStyle" />
-                                    <HeaderStyle CssClass="headerstyle" />
-                                    <PagerStyle CssClass="PagerStyle" />
-                                    <RowStyle CssClass="rowstyle" />
-                                </asp:GridView>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="well well-sm well-primary">
+                                    <asp:GridView ID="grvPaymentReimbursementRequestList"
+                                        runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                                        OnRowDataBound="grvPaymentReimbursementRequestList_RowDataBound" OnSelectedIndexChanged="grvPaymentReimbursementRequestList_SelectedIndexChanged" AllowPaging="True" OnPageIndexChanging="grvPaymentReimbursementRequestList_PageIndexChanging"
+                                        CssClass="table table-striped table-bordered table-hover" PagerStyle-CssClass="paginate_button active">
+                                        <RowStyle CssClass="rowstyle" />
+                                        <Columns>
+                                            <asp:BoundField DataField="RequestDate" HeaderText="Request Date" SortExpression="RequestDate" />
+                                            <asp:BoundField DataField="TotalAmount" HeaderText="Total Settlement" SortExpression="TotalAmount" />
+                                            <asp:BoundField DataField="Comment" HeaderText="Comment" SortExpression="Comment" />
+                                            <asp:CommandField ShowSelectButton="True" />
+                                        </Columns>
+                                        <FooterStyle CssClass="FooterStyle" />
+                                        <HeaderStyle CssClass="headerstyle" />
+                                        <PagerStyle CssClass="PagerStyle" />
+                                        <RowStyle CssClass="rowstyle" />
+                                    </asp:GridView>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <asp:Button ID="btnCancelSearch" runat="server" CssClass="btn btn-primary" Text="Cancel" />
             </div>
         </div>
-    </asp:Panel>
+    </div>
 
-    <cc1:ModalPopupExtender runat="server" Enabled="True" TargetControlID="btnSearch" CancelControlID="btnCancelSearch"
-        PopupControlID="pnlSearch" ID="pnlSearch_ModalPopupExtender" BackgroundCssClass="modalBackground">
-    </cc1:ModalPopupExtender>
     <asp:Panel ID="pnlWarning" Visible="false" Style="position: absolute; top: 55px; left: 108px;" runat="server">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -400,6 +391,132 @@
                 </div>
             </div>
         </div>
-        <!-- /.modal-content -->
     </asp:Panel>
+    <div id="divprint" style="display: none;">
+        <fieldset>
+            <table style="width: 100%;">
+                <tr>
+                    <td style="font-size: large; text-align: center;">
+                        <img src="../img/CHAI%20Logo.png" width="130" height="80" />
+                        <br />
+                        <strong>CHAI ETHIOPIA ERP
+                            <br />
+                            CASH PAYMENT SETTLEMENT TRANSACTION FORM</strong></td>
+                </tr>
+            </table>
+            <table style="width: 100%; border-spacing: 30px;">
+                <tr>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblRequestNo" runat="server" Text="Payment Request No:"></asp:Label>
+                        </strong>
+                    </td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblRequestNoResult" runat="server"></asp:Label>
+                    </td>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblRequestedDate" runat="server" Text="Requested Date:"></asp:Label>
+                        </strong>
+                    </td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblRequestedDateResult" runat="server"></asp:Label></td>
+                </tr>
+                <tr>
+                    <td style="width: 25%; text-align: right;"><strong>
+                        <asp:Label ID="lblAdvanceTaken" runat="server" Text="Total Advance Taken:"></asp:Label>
+                    </strong></td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lbladvancetakenresult" runat="server"></asp:Label></td>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblActualExpenditure" runat="server" Text="Total Expenditure:"></asp:Label>
+                        </strong>
+                    </td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblActualExpenditureresult" runat="server"></asp:Label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblRequester" runat="server" Text="Requester:"></asp:Label>
+                        </strong></td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblRequesterResult" runat="server"></asp:Label>
+                    </td>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblEmployeeNo" runat="server" Text="Employee No:"></asp:Label>
+                        </strong></td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblEmpNoResult" runat="server"></asp:Label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblCommentPrint" runat="server" Text="Comment:"></asp:Label>
+                        </strong>
+                    </td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblCommentResult" runat="server"></asp:Label>
+                    </td>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblApprovalStatusPrint" runat="server" Text="Approval Status:"></asp:Label>
+                        </strong>
+                    </td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblApprovalStatusResult" runat="server"></asp:Label>
+                    </td>
+                </tr>
+            </table>
+            <asp:GridView ID="grvDetails"
+                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                CssClass="table table-striped table-bordered table-hover">
+                <RowStyle CssClass="rowstyle" />
+                <Columns>
+                    <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="Account Name" />
+                    <asp:BoundField DataField="ActualExpenditure" HeaderText="Actual Expenditure" />
+                    <asp:BoundField DataField="PaymentReimbursementRequest.Project.ProjectCode" HeaderText="Project" />
+                </Columns>
+                <FooterStyle CssClass="FooterStyle" />
+                <HeaderStyle CssClass="headerstyle" />
+                <PagerStyle CssClass="PagerStyle" />
+                <RowStyle CssClass="rowstyle" />
+            </asp:GridView>
+            <br />
+            <asp:GridView ID="grvStatuses"
+                runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                CssClass="table table-striped table-bordered table-hover" OnRowDataBound="grvStatuses_RowDataBound">
+                <RowStyle CssClass="rowstyle" />
+                <Columns>
+                    <asp:BoundField DataField="Date" HeaderText="Date" SortExpression="Date" />
+                    <asp:BoundField DataField="Approver" HeaderText="Approver" SortExpression="Approver" />
+                </Columns>
+                <FooterStyle CssClass="FooterStyle" />
+                <HeaderStyle CssClass="headerstyle" />
+                <PagerStyle CssClass="PagerStyle" />
+                <RowStyle CssClass="rowstyle" />
+            </asp:GridView>
+            <br />
+            <table style="width: 100%;">
+                <tr>
+                    <td></td>
+                    <td>Signature</td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: right; padding-right: 6%;">Received By </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>___________________</td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: right;">___________________</td>
+                </tr>
+            </table>
+        </fieldset>
+    </div>
 </asp:Content>

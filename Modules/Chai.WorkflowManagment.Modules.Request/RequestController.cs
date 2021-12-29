@@ -225,7 +225,7 @@ namespace Chai.WorkflowManagment.Modules.Request
         {
             string filterExpression = "";
 
-            filterExpression = "SELECT * FROM PaymentReimbursementRequests Where 1 = Case when '" + RequestDate + "' = '' Then 1 When PaymentReimbursementRequests.RequestDate = '" + RequestDate + "'  Then 1 END ORDER BY PaymentReimbursementRequests.Id Desc ";
+            filterExpression = "SELECT * FROM PaymentReimbursementRequests INNER JOIN CashPaymentRequests ON CashPaymentRequests.Id = PaymentReimbursementRequests.Id Where 1 = Case when '" + RequestDate + "' = '' Then 1 When PaymentReimbursementRequests.RequestDate = '" + RequestDate + "'  Then 1 END AND CashPaymentRequests.AppUser_Id='" + GetCurrentUser().Id + "' ORDER BY PaymentReimbursementRequests.Id Desc ";
 
             return _workspace.SqlQuery<PaymentReimbursementRequest>(filterExpression).ToList();
         }
@@ -237,10 +237,6 @@ namespace Chai.WorkflowManagment.Modules.Request
         {
             return WorkspaceFactory.CreateReadOnly().Query<PaymentReimbursementRequest>(null).ToList();
         }
-        //public ELRAttachment GetELRAttachment(int attachmentId)
-        //{
-        //    return _workspace.Single<ELRAttachment>(x => x.Id == attachmentId);
-        //}
         #endregion
         #region Bank Payment
         public BankPaymentRequest GetBankPaymentRequest(int RequestId)

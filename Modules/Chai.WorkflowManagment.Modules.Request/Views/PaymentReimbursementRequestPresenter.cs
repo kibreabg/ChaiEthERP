@@ -178,9 +178,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.GetPaymentReimbursementRequest(id);
         }
-        public IList<PaymentReimbursementRequest> ListPaymentReimbursementRequests(string RequestDate)
+        public IList<PaymentReimbursementRequest> ListPaymentReimbursementRequests(string requestDate)
         {
-            return _controller.ListPaymentReimbursementRequests(RequestDate);
+            return _controller.ListPaymentReimbursementRequests(requestDate);
         }
         public void DeletePaymentReimbursementRequestDetail(PaymentReimbursementRequestDetail PaymentReimbursementRequestDetailt)
         {

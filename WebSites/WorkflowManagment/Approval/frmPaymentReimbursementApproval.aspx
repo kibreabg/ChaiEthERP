@@ -282,91 +282,80 @@
         <fieldset>
             <table style="width: 100%;">
                 <tr>
-                    <td style="width: 17%; text-align: left;">
-                        <img src="../img/CHAI%20Logo.png" width="70" height="50" /></td>
                     <td style="font-size: large; text-align: center;">
-                        <strong>CHAI Ethiopia ERP
+                        <img src="../img/CHAI%20Logo.png" width="130" height="80" />
+                        <br />
+                        <strong>CHAI ETHIOPIA ERP
                             <br />
                             CASH PAYMENT SETTLEMENT TRANSACTION FORM</strong></td>
                 </tr>
             </table>
-            <table style="width: 100%;">
+            <table style="width: 100%; border-spacing: 30px;">
                 <tr>
-                    <td align="right" style="width: 848px">&nbsp;</td>
-                    <td align="right" style="width: 390px">&nbsp;</td>
-                    <td align="right" style="width: 389px">&nbsp;</td>
-                    <td align="right" style="width: 389px">&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td style="width: 848px">
+                    <td style="width: 25%; text-align: right;">
                         <strong>
                             <asp:Label ID="lblRequestNo" runat="server" Text="Payment Request No:"></asp:Label>
-                        </strong></td>
-                    <td style="width: 390px">
+                        </strong>
+                    </td>
+                    <td style="width: 25%;">
                         <asp:Label ID="lblRequestNoResult" runat="server"></asp:Label>
                     </td>
-                    <td style="width: 389px">
+                    <td style="width: 25%; text-align: right;">
                         <strong>
                             <asp:Label ID="lblRequestedDate" runat="server" Text="Requested Date:"></asp:Label>
                         </strong>
                     </td>
-                    <td style="width: 389px">
+                    <td style="width: 25%;">
                         <asp:Label ID="lblRequestedDateResult" runat="server"></asp:Label></td>
-
                 </tr>
                 <tr>
-
-                    <td style="width: 389px"><strong>
+                    <td style="width: 25%; text-align: right;"><strong>
                         <asp:Label ID="lblAdvanceTaken" runat="server" Text="Total Advance Taken:"></asp:Label>
                     </strong></td>
-                    <td style="width: 389px">
+                    <td style="width: 25%;">
                         <asp:Label ID="lbladvancetakenresult" runat="server"></asp:Label></td>
-                    <td style="width: 848px">
+                    <td style="width: 25%; text-align: right;">
                         <strong>
                             <asp:Label ID="lblActualExpenditure" runat="server" Text="Total Expenditure:"></asp:Label>
                         </strong>
-                        <td style="width: 390px">
-                            <asp:Label ID="lblActualExpenditureresult" runat="server"></asp:Label>
-                        </td>
+                    </td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblActualExpenditureresult" runat="server"></asp:Label>
+                    </td>
                 </tr>
                 <tr>
-                    <td style="width: 848px">
+                    <td style="width: 25%; text-align: right;">
                         <strong>
                             <asp:Label ID="lblRequester" runat="server" Text="Requester:"></asp:Label>
                         </strong></td>
-                    <td style="width: 390px">
+                    <td style="width: 25%;">
                         <asp:Label ID="lblRequesterResult" runat="server"></asp:Label>
                     </td>
-                    <td style="width: 848px; height: 18px;">
+                    <td style="width: 25%; text-align: right;">
                         <strong>
                             <asp:Label ID="lblEmployeeNo" runat="server" Text="Employee No:"></asp:Label>
                         </strong></td>
-                    <td style="width: 390px; height: 18px;">
+                    <td style="width: 25%;">
                         <asp:Label ID="lblEmpNoResult" runat="server"></asp:Label>
                     </td>
-                    <td>&nbsp;</td>
                 </tr>
-
                 <tr>
-                    <td style="width: 848px; height: 18px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>
-                        <asp:Label ID="lblCommentPrint" runat="server" Text="Comment:"></asp:Label>
-                    </strong>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblCommentPrint" runat="server" Text="Comment:"></asp:Label>
+                        </strong>
                     </td>
-                    <td style="width: 390px; height: 18px;">
+                    <td style="width: 25%;">
                         <asp:Label ID="lblCommentResult" runat="server"></asp:Label>
                     </td>
-                    <td style="width: 848px; height: 18px;">
+                    <td style="width: 25%; text-align: right;">
                         <strong>
                             <asp:Label ID="lblApprovalStatusPrint" runat="server" Text="Approval Status:"></asp:Label>
                         </strong>
                     </td>
-                    <td style="width: 390px; height: 18px;">
+                    <td style="width: 25%;">
                         <asp:Label ID="lblApprovalStatusResult" runat="server"></asp:Label>
                     </td>
-                    <td style="width: 389px; height: 18px;"></td>
-                    <td style="width: 389px; height: 18px;"></td>
-                    <td style="height: 18px">&nbsp;</td>
                 </tr>
             </table>
             <asp:GridView ID="grvDetails"
@@ -397,6 +386,23 @@
                 <PagerStyle CssClass="PagerStyle" />
                 <RowStyle CssClass="rowstyle" />
             </asp:GridView>
+            <br />
+            <table style="width: 100%;">
+                <tr>
+                    <td></td>
+                    <td>Signature</td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: right; padding-right: 6%;">Received By </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>___________________</td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: right;">___________________</td>
+                </tr>
+            </table>
         </fieldset>
     </div>
 </asp:Content>

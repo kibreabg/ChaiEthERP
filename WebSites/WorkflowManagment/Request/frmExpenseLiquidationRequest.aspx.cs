@@ -726,7 +726,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         protected void btnFind_Click(object sender, EventArgs e)
         {
             BindExpenseLiquidationRequests();
-            //pnlSearch_ModalPopupExtender.Show();
             ScriptManager.RegisterStartupScript(this, GetType(), "showSearch", "showSearch();", true);
         }
         protected void btnCancelPopup_Click(object sender, EventArgs e)

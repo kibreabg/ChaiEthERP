@@ -18,7 +18,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
     {
         private PaymentReimbursementRequestPresenter _presenter;
         private IList<PaymentReimbursementRequest> _PaymentReimbursementRequests;
-        int tarId;
+        int cprId;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!this.IsPostBack)
@@ -60,9 +60,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get
             {
-                if (tarId != 0)
+                if (cprId != 0)
                 {
-                    return Convert.ToInt32(tarId);
+                    return Convert.ToInt32(cprId);
                 }
                 else
                 {
@@ -103,11 +103,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             grvCashPayments.DataSource = _presenter.ListCashPaymentsNotExpensed();
             grvCashPayments.DataBind();
         }
-        private void BindPrograms()
-        {
-            ddlProgram.DataSource = _presenter.GetPrograms();
-            ddlProgram.DataBind();
-        }
         private void BindAttachments()
         {
             List<PRAttachment> attachments = new List<PRAttachment>();
@@ -126,15 +121,15 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (_presenter.CurrentCashPaymentRequest != null)
             {
                 txtComment.Text = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.Comment;
-                _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.TotalAmount = 0;
-                _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails = null;
+                txtProject.Text = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.Project.ProjectCode;
+                txtGrant.Text = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.Grant.GrantCode;
+                BindPaymentReimbursementRequestDetails();
                 BindPaymentReimbursementRequests();
-                //grvAttachments.DataSource = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.CPRAttachments;
-                //grvAttachments.DataBind();
+                BindAttachments();
             }
         }
         private void PopulateReimbursement()
-        {
+        {            
             foreach (CashPaymentRequestDetail CPRD in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
             {
 
@@ -145,6 +140,24 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 txtGrant.Text = CPRD.Grant.GrantCode;
 
             }
+        }
+        private void PrintTransaction()
+        {
+            if (_presenter.CurrentCashPaymentRequest != null)
+            {
+                lblRequestNoResult.Text = _presenter.CurrentCashPaymentRequest.RequestNo.ToString();
+                lblRequesterResult.Text = _presenter.CurrentCashPaymentRequest.AppUser.UserName;
+            }
+            lblRequestedDateResult.Text = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.RequestDate.Value.ToShortDateString();
+            lblCommentResult.Text = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.Comment.ToString();
+            lblApprovalStatusResult.Text = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.ProgressStatus.ToString();
+            lbladvancetakenresult.Text = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.ReceivableAmount.ToString();
+            lblActualExpenditureresult.Text = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.TotalAmount.ToString();
+            grvDetails.DataSource = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails;
+            grvDetails.DataBind();
+
+            grvStatuses.DataSource = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestStatuses;
+            grvStatuses.DataBind();
         }
         private void BindPaymentReimbursementRequestDetails()
         {
@@ -165,10 +178,33 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void grvPaymentReimbursementRequestList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Session["PaymentReimbursementRequest"] = true;
-            //ClearForm();
+            Session["PaymentReimbursementRequest"] = true;            
+            cprId = (int)grvPaymentReimbursementRequestList.DataKeys[grvPaymentReimbursementRequestList.SelectedIndex].Value;
+            Session["cprId"] = (int)grvPaymentReimbursementRequestList.DataKeys[grvPaymentReimbursementRequestList.SelectedIndex].Value;
             BindPaymentReimbursementRequestFields();
-            btnSave.Visible = true;
+
+            //This is done so that the user can not ammend a settlement while it's in an approval process. But one can ammend a rejected settlement.
+            if (_presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.CurrentStatus != null)
+            {
+                if (_presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.CurrentStatus == ApprovalStatus.Rejected.ToString())
+                {
+                    btnSave.Visible = true;
+                    btnDelete.Visible = true;
+                }
+                else
+                {
+                    btnSave.Visible = false;
+                    btnDelete.Visible = false;
+                    PrintTransaction();
+                    btnPrint.Enabled = true;
+                }
+
+            }
+            else
+            {
+                btnSave.Visible = true;
+                btnDelete.Visible = true;
+            }
         }
         protected void grvPaymentReimbursementRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
         {
@@ -194,8 +230,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void grvCashPayments_SelectedIndexChanged(object sender, EventArgs e)
         {
-            tarId = Convert.ToInt32(grvCashPayments.SelectedDataKey[0]);
-            Session["tarId"] = Convert.ToInt32(grvCashPayments.SelectedDataKey[0]);
+            cprId = Convert.ToInt32(grvCashPayments.SelectedDataKey[0]);
+            Session["cprId"] = Convert.ToInt32(grvCashPayments.SelectedDataKey[0]);
             _presenter.OnViewLoaded();
             btnSave.Visible = true;
             btnSave.Enabled = true;
@@ -206,6 +242,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             CheckandBindCashPaymentDetails();
             BindPaymentReimbursementRequestDetails();
             BindAttachments();
+        }
+        protected void grvStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (_presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestStatuses != null)
+            {
+                if (e.Row.RowType == DataControlRowType.DataRow)
+                {
+                    if (_presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestStatuses[e.Row.RowIndex].Approver != 0)
+                        e.Row.Cells[1].Text = _presenter.GetUser(_presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestStatuses[e.Row.RowIndex].Approver).FullName;
+                }
+            }
         }
         protected void ddlAccountDescription_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -226,21 +273,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ddlAccountDescription.DataValueField = "Id";
             ddlAccountDescription.DataTextField = "AccountName";
             ddlAccountDescription.DataBind();
-        }
-        private void BindProject(DropDownList ddlProject, int programID)
-        {
-            ddlProject.DataSource = _presenter.ListProjects(programID);
-            ddlProject.DataValueField = "Id";
-            ddlProject.DataTextField = "ProjectCode";
-            ddlProject.DataBind();
-        }
-        private void BindGrant(DropDownList ddlGrant, int ProjectId)
-        {
-            ddlGrant.Items.Clear();
-            ddlGrant.DataSource = _presenter.GetGrantbyprojectId(ProjectId);
-            ddlGrant.DataValueField = "Id";
-            ddlGrant.DataTextField = "GrantCode";
-            ddlGrant.DataBind();
         }
         protected void dgCashPaymentDetail_CancelCommand(object source, DataGridCommandEventArgs e)
         {
@@ -263,7 +295,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.RemovePaymentReimbursementRequestDetail(id);
                     if (_presenter.GetPaymentReimbursementRequestDetail(id) != null)
                         _presenter.DeletePaymentReimbursementRequestDetail(_presenter.GetPaymentReimbursementRequestDetail(id));
-                    _presenter.SaveOrUpdatePaymentReimbursementRequest(tarId);
+                    _presenter.SaveOrUpdatePaymentReimbursementRequest(cprId);
                 }
                 else { _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails.Remove(cprd); }
                 txtImbursement.Text = ((txtImbursement.Text != "" ? Convert.ToDecimal(txtImbursement.Text) : 0) - cprd.ActualExpenditure).ToString();
@@ -431,11 +463,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (CheckReceiptsAttached() == true)
                     {
-                        _presenter.SaveOrUpdatePaymentReimbursementRequest(Convert.ToInt32(Session["tarId"]));
+                        _presenter.SaveOrUpdatePaymentReimbursementRequest(Convert.ToInt32(Session["cprId"]));
                         BindPaymentReimbursementRequests();
                         Master.ShowMessage(new AppMessage("Payment Settlement Request Successfully Saved, If you have over spend refund please Contact Finance", RMessageType.Info));
                         btnSave.Visible = false;
-                        Session["tarId"] = null;
+                        Session["cprId"] = null;
                     }
                     else { Master.ShowMessage(new AppMessage("Please attach the required receipts!", RMessageType.Error)); }
                 }
@@ -462,7 +494,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         protected void btnFind_Click(object sender, EventArgs e)
         {
             BindPaymentReimbursementRequests();
-            pnlSearch_ModalPopupExtender.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "showSearch", "showSearch();", true);
         }
         protected void btnCancelPopup_Click(object sender, EventArgs e)
         {
@@ -477,10 +509,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             dgCashPaymentDetail.DataSource = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails;
             dgCashPaymentDetail.DataBind();
-        }
-        protected void ddlProgram_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            BindCashPaymentDetails();
         }
         #region Attachments
         protected bool CheckReceiptsAttached()

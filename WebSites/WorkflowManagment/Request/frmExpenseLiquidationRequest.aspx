@@ -461,7 +461,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -615,7 +614,7 @@
                     <td>Signature</td>
                     <td></td>
                     <td></td>
-                    <td style="text-align: right; padding-right: 6%;">Recieved By </td>
+                    <td style="text-align: right; padding-right: 6%;">Received By </td>
                 </tr>
                 <tr>
                     <td></td>
