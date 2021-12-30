@@ -34,6 +34,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 CheckApprovalSettings();
                 BindTravelAdvances();
                 BindExpenseLiquidationRequests();
+                txtArrivalReturnTime.Attributes.Add("readonly", "readonly");
             }
 
             this._presenter.OnViewLoaded();
@@ -726,7 +727,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         protected void btnFind_Click(object sender, EventArgs e)
         {
             BindExpenseLiquidationRequests();
-            ScriptManager.RegisterStartupScript(this, GetType(), "showSearch", "showSearch();", true);
+            ScriptManager.RegisterStartupScript(this, GetType(), "showLiquidationSearch", "showLiquidationSearch();", true);
         }
         protected void btnCancelPopup_Click(object sender, EventArgs e)
         {

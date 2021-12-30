@@ -5,7 +5,24 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 
 <asp:Content ID="content" ContentPlaceHolderID="DefaultContent" runat="Server">
+    <style>
+        .popover-title {
+            padding: 8px 14px;
+        }
+
+        .popover-content {
+            padding: 9px 14px;
+        }
+
+        .editable-buttons {
+            margin-left: 7px;
+        }
+    </style>
     <script src="../js/libs/jquery-2.0.2.min.js"></script>
+    <script src="../js/bootstrap/bootstrap.min.js"></script>
+    <script src="../js/plugin/x-editable/moment.min.js"></script>
+    <script src="../js/plugin/x-editable/jquery.mockjax.min.js"></script>
+    <script src="../js/plugin/x-editable/x-editable.min.js"></script>
     <script type="text/javascript">
         function printLiquidationForm(theid) {
             var disp_setting = "toolbar=yes,location=no,directories=yes,menubar=yes,";
@@ -22,10 +39,8 @@
             docprint.focus();
         }
 
-        function showSearch() {
-            $(document).ready(function () {
-                $('#searchModal').modal('show');
-            });
+        function showLiquidationSearch() {
+            $('#searchModal').modal('show');
         }
 
         function IsOneDecimalPoint(evt) {
@@ -35,6 +50,21 @@
                 return false;
             return true;
         }
+
+        function setArrivalReturnTimeVal() {
+            $('#DefaultContent_txtArrivalReturnTime').val($('#DefaultContent_lnkArrivalReturnTime').text());
+        }
+
+        $(document).ready(function () {
+            $('#DefaultContent_lnkArrivalReturnTime').editable({
+                placement: 'right',
+                combodate: {
+                    firstItem: 'name',
+                    minYear: 2015,
+                    maxYear: 2040
+                }
+            });
+        });
     </script>
     <div class="jarviswidget" id="wid-id-8" data-widget-editbutton="false" data-widget-custombutton="false">
         <header>
@@ -162,8 +192,19 @@
                                                 </div>
                                                 <div class="row">
                                                     <section class="col" style="width: 100%;">
-                                                        <label class="label">Arrival Time / Return Time <span style="color: red;">(If you're requesting Per Diems Please specify your Arrival Date & Time and Return Date & Time!)</span></label>
+                                                        <label class="label">
+                                                            Arrival Time / Return Time 
+                                                            <span style="color: red;">(If you're requesting Per Diems Please specify your Arrival Date & Time and Return Date & Time!)</span>
+                                                        </label>
                                                         <label class="input">
+                                                            <asp:LinkButton ID="lnkArrivalReturnTime" runat="server" Text="Choose Time"
+                                                                CssClass="btn btn-success" data-type="combodate" data-format="DD-MM-YYYY h:mm a"
+                                                                data-template="DD / MM / YYYY hh : mm a" data-viewformat="MMM D YYYY HH:mm a"
+                                                                data-pk="1" data-original-title="Setup event date and time"
+                                                                Style="padding: 6px 12px;"></asp:LinkButton>
+                                                            <asp:LinkButton ID="lnkSetArrivalReturnTime" CssClass="btn btn-primary" runat="server"
+                                                                OnClientClick="setArrivalReturnTimeVal(); return false;"
+                                                                Style="padding: 6px 12px;" Text="Set Arrival/Return Time"></asp:LinkButton>
                                                             <asp:TextBox ID="txtArrivalReturnTime" runat="server"></asp:TextBox>
                                                         </label>
                                                     </section>
@@ -376,7 +417,8 @@
                     <footer>
                         <asp:Button ID="btnSave" runat="server" CausesValidation="true" ValidationGroup="request" Visible="false" Text="Request" OnClick="btnSave_Click" class="btn btn-primary"
                             UseSubmitBehavior="false" OnClientClick="this.disabled = true; this.value = 'Submitting...';"></asp:Button>
-                        <a data-toggle="modal" runat="server" id="searchLink" href="#searchModal" class="btn btn-default"><i class="fa fa-circle-arrow-up fa-lg"></i>Search</a>
+                        <asp:Button ID="btnSearch" runat="server" OnClientClick="showLiquidationSearch(); return false;" Text="Search" class="btn btn-default" />
+                        <%--<a data-toggle="modal" runat="server" id="searchLink" href="#searchModal" class="btn btn-default"><i class="fa fa-circle-arrow-up fa-lg"></i>Search</a>--%>
                         <asp:Button ID="btnDelete" runat="server" CausesValidation="False" class="btn btn-default"
                             Text="Delete" OnClick="btnDelete_Click" Visible="False"></asp:Button>
                         <cc1:ConfirmButtonExtender ID="btnDelete_ConfirmButtonExtender" runat="server"
