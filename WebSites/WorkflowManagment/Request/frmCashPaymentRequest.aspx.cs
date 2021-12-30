@@ -32,6 +32,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 BindCashPaymentDetails();
                 PopPayee();
                 BindPrograms();
+                txtArrivalTime.Attributes.Add("readonly", "readonly");
+                txtReturnTime.Attributes.Add("readonly", "readonly");
             }
             txtRequestDate.Text = DateTime.Today.Date.ToShortDateString();
             this._presenter.OnViewLoaded();
@@ -482,7 +484,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             else
             {
                 btnSave.Visible = true;
-                btnDelete.Visible = true;                
+                btnDelete.Visible = true;
                 foreach (DataGridColumn col in dgCashPaymentDetail.Columns)
                 {
                     if (col.HeaderText.ToLower().Trim() == "actions")
@@ -637,7 +639,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         protected void btnFind_Click(object sender, EventArgs e)
         {
             BindCashPaymentRequests();
-            ScriptManager.RegisterStartupScript(this, GetType(), "showSearch", "showSearch();", true);
+            ScriptManager.RegisterStartupScript(this, GetType(), "showPaymentSearch", "showPaymentSearch();", true);
         }
         protected void btnCancel_Click(object sender, EventArgs e)
         {
