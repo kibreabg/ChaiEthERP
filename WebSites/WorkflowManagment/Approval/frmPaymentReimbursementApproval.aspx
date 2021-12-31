@@ -287,14 +287,32 @@
                         <br />
                         <strong>CHAI ETHIOPIA ERP
                             <br />
-                            CASH PAYMENT SETTLEMENT TRANSACTION FORM</strong></td>
+                            PAYMENT SETTLEMENT TRANSACTION FORM</strong></td>
                 </tr>
             </table>
             <table style="width: 100%; border-spacing: 30px;">
                 <tr>
                     <td style="width: 25%; text-align: right;">
                         <strong>
-                            <asp:Label ID="lblRequestNo" runat="server" Text="Payment Request No:"></asp:Label>
+                            <asp:Label ID="lblJournalVouchNo" runat="server" Text="Journal Voucher No:"></asp:Label>
+                        </strong>
+                    </td>
+                    <td style="width: 25%;">
+                        ____________________
+                    </td>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblCheckPayVouchNo" runat="server" Text="Check Payment Voucher No:"></asp:Label>
+                        </strong>
+                    </td>
+                    <td style="width: 25%;">
+                        ____________________
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblRequestNo" runat="server" Text="Payment Request No (Non-Travel Settlement No):"></asp:Label>
                         </strong>
                     </td>
                     <td style="width: 25%;">
@@ -302,7 +320,7 @@
                     </td>
                     <td style="width: 25%; text-align: right;">
                         <strong>
-                            <asp:Label ID="lblRequestedDate" runat="server" Text="Requested Date:"></asp:Label>
+                            <asp:Label ID="lblRequestedDate" runat="server" Text="Settlement Date:"></asp:Label>
                         </strong>
                     </td>
                     <td style="width: 25%;">
@@ -333,16 +351,16 @@
                     </td>
                     <td style="width: 25%; text-align: right;">
                         <strong>
-                            <asp:Label ID="lblEmployeeNo" runat="server" Text="Employee No:"></asp:Label>
+                            <asp:Label ID="lblVariance" runat="server" Text="Variance:"></asp:Label>
                         </strong></td>
                     <td style="width: 25%;">
-                        <asp:Label ID="lblEmpNoResult" runat="server"></asp:Label>
+                        <asp:Label ID="lblVarianceResult" runat="server"></asp:Label>
                     </td>
                 </tr>
                 <tr>
                     <td style="width: 25%; text-align: right;">
                         <strong>
-                            <asp:Label ID="lblCommentPrint" runat="server" Text="Comment:"></asp:Label>
+                            <asp:Label ID="lblCommentPrint" runat="server" Text="Description/Purpose:"></asp:Label>
                         </strong>
                     </td>
                     <td style="width: 25%;">
@@ -362,10 +380,12 @@
                 runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
                 CssClass="table table-striped table-bordered table-hover">
                 <RowStyle CssClass="rowstyle" />
-                <Columns>
+                <Columns>                    
                     <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="Account Name" />
+                    <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" />
                     <asp:BoundField DataField="ActualExpenditure" HeaderText="Actual Expenditure" />
-                    <asp:BoundField DataField="PaymentReimbursementRequest.Project.ProjectCode" HeaderText="Project" />
+                    <asp:BoundField DataField="PaymentReimbursementRequest.Project.ProjectCode" HeaderText="Project ID" />
+                    <asp:BoundField DataField="PaymentReimbursementRequest.Grant.GrantCode" HeaderText="Grant ID" />
                 </Columns>
                 <FooterStyle CssClass="FooterStyle" />
                 <HeaderStyle CssClass="headerstyle" />
@@ -380,6 +400,8 @@
                 <Columns>
                     <asp:BoundField DataField="Date" HeaderText="Date" SortExpression="Date" />
                     <asp:BoundField DataField="Approver" HeaderText="Approver" SortExpression="Approver" />
+                    <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
+                    <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus" />
                 </Columns>
                 <FooterStyle CssClass="FooterStyle" />
                 <HeaderStyle CssClass="headerstyle" />
@@ -393,14 +415,12 @@
                     <td>Signature</td>
                     <td></td>
                     <td></td>
-                    <td style="text-align: right; padding-right: 6%;">Received By </td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>___________________</td>
                     <td></td>
                     <td></td>
-                    <td style="text-align: right;">___________________</td>
                 </tr>
             </table>
         </fieldset>

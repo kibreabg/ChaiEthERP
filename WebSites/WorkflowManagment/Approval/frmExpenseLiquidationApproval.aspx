@@ -314,14 +314,32 @@
                         <br />
                         <strong>CHAI ETHIOPIA ERP
                             <br />
-                            EXPENSE LIQUIDATION TRANSACTION FORM</strong></td>
+                            TRAVEL ADVANCE LIQUIDATION TRANSACTION FORM</strong></td>
                 </tr>
             </table>
             <table style="width: 100%; border-spacing: 30px;">
                 <tr>
                     <td style="width: 25%; text-align: right;">
                         <strong>
-                            <asp:Label ID="lblRequestNo" runat="server" Text="Reference No:"></asp:Label>
+                            <asp:Label ID="lblJournalVouchNo" runat="server" Text="Journal Voucher No:"></asp:Label>
+                        </strong>
+                    </td>
+                    <td style="width: 25%;">
+                        ____________________
+                    </td>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblCheckPayVouchNo" runat="server" Text="Check Payment Voucher No:"></asp:Label>
+                        </strong>
+                    </td>
+                    <td style="width: 25%;">
+                        ____________________
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblRequestNo" runat="server" Text="Travel Advance No:"></asp:Label>
                         </strong></td>
                     <td style="width: 25%;">
                         <asp:Label ID="lblRequestNoResult" runat="server"></asp:Label>
@@ -338,24 +356,24 @@
                 <tr>
                     <td style="width: 25%; text-align: right;">
                         <strong>
-                            <asp:Label ID="lblRequestedDate" runat="server" Text="Requested Date:"></asp:Label>
+                            <asp:Label ID="lblRequestedDate" runat="server" Text="Liquidation Date:"></asp:Label>
                         </strong></td>
                     <td style="width: 25%;">
                         <asp:Label ID="lblRequestedDateResult" runat="server"></asp:Label>
                     </td>
                     <td style="width: 25%; text-align: right;">
                         <strong>
-                            <asp:Label ID="lblApprovalStatusPrint1" runat="server" Text="Retirment No:"></asp:Label>
+                            <asp:Label ID="lblArrRetTime" runat="server" Text="Arrival/Return Date & Time:"></asp:Label>
                         </strong>
                     </td>
                     <td style="width: 25%;">
-                        <asp:Label ID="lblRetirmenNoResult" runat="server"></asp:Label>
+                        <asp:Label ID="lblArrRetTimeResult" runat="server"></asp:Label>
                     </td>
                 </tr>
                 <tr>
                     <td style="width: 25%; text-align: right;">
                         <strong>
-                            <asp:Label ID="lblCommentPrint" runat="server" Text="Purpose of Advance :"></asp:Label>
+                            <asp:Label ID="lblCommentPrint" runat="server" Text="Purpose of Travel:"></asp:Label>
                         </strong>
                     </td>
                     <td style="width: 25%;">
@@ -369,21 +387,7 @@
                     <td style="width: 25%;">
                         <asp:Label ID="lblApprovalStatusResult" runat="server"></asp:Label>
                     </td>
-                </tr>
-                <tr>
-                    <td style="width: 25%; text-align: right;">
-                        <strong>
-                            <asp:Label ID="lblTravelAdvReqDatePrint" runat="server" Text="Travel Advance Request Date:"></asp:Label>
-                        </strong>
-                    </td>
-                    <td style="width: 25%;">
-                        <asp:Label ID="lblTravelAdvReqDateResult" runat="server"></asp:Label>
-                    </td>
-                    <td style="width: 25%; text-align: right;">
-                        <strong></strong>
-                    </td>
-                    <td style="width: 25%;"></td>
-                </tr>
+                </tr>                
             </table>
             <asp:GridView ID="grvDetails"
                 runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
@@ -391,7 +395,7 @@
                 <RowStyle CssClass="rowstyle" />
                 <Columns>
                     <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" />
-                    <asp:TemplateField HeaderText="Project">
+                    <asp:TemplateField HeaderText="Project ID">
                         <ItemTemplate>
                             <div style="text-align: right;">
                                 <asp:Label ID="lblProject" runat="server" Text='<%# Eval("Project.ProjectCode") %>' />
@@ -403,7 +407,7 @@
                             </div>
                         </FooterTemplate>
                     </asp:TemplateField>
-                    <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant" />
+                    <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant ID" />
                     <asp:TemplateField HeaderText="Amount Advanced">
                         <ItemTemplate>
                             <div style="text-align: right;">
@@ -416,7 +420,7 @@
                             </div>
                         </FooterTemplate>
                     </asp:TemplateField>
-                    <asp:TemplateField HeaderText="ActualExpenditure">
+                    <asp:TemplateField HeaderText="Actual Expenditure">
                         <ItemTemplate>
                             <div style="text-align: right;">
                                 <asp:Label ID="lblActualExpenditure" runat="server" Text='<%# Eval("ActualExpenditure") %>' />
@@ -473,14 +477,12 @@
                     <td>Signature</td>
                     <td></td>
                     <td></td>
-                    <td style="text-align: right; padding-right: 6%;">Recieved By </td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>___________________</td>
                     <td></td>
                     <td></td>
-                    <td style="text-align: right;">___________________</td>
                 </tr>
             </table>
         </fieldset>

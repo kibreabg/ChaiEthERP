@@ -300,6 +300,23 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest = new ExpenseLiquidationRequest();
             BindExpenseLiquidationDetails();
         }
+        protected void grvDetails_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+            }
+            if (e.Row.RowType == DataControlRowType.Footer)
+            {
+                Label lblTotalAmountAdv = (Label)e.Row.FindControl("lblTotalAmountAdv");
+                lblTotalAmountAdv.Text = _presenter.CurrentTravelAdvanceRequest.TotalTravelAdvance.ToString();
+
+                Label lblTotalActualExp = (Label)e.Row.FindControl("lblTotalActualExp");
+                lblTotalActualExp.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure.ToString();
+
+                Label lblTotalVariance = (Label)e.Row.FindControl("lblTotalVariance");
+                lblTotalVariance.Text = (_presenter.CurrentTravelAdvanceRequest.TotalTravelAdvance - _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure).ToString();
+            }
+        }
         protected void grvStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestStatuses != null)
@@ -762,14 +779,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 lblRequestNoResult.Text = _presenter.CurrentTravelAdvanceRequest.TravelAdvanceNo;
                 lblRequestedDateResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.RequestDate.Value.ToShortDateString();
-                if (_presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TravelAdvRequestDate != null)
-                    lblTravelAdvReqDateResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TravelAdvRequestDate.Value.ToShortDateString();
                 lblRequesterResult.Text = _presenter.CurrentTravelAdvanceRequest.AppUser.FullName;
-                //lblExpenseTypeResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseType.ToString();
                 lblPurposeofAdvanceResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.Comment.ToString();
                 lblApprovalStatusResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ProgressStatus.ToString();
-                //lblRetirmentTypeResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseReimbersmentType;
-                lblRetirmenNoResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ReimbersmentNo;
+                lblArrRetTimeResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ArrivalReturnDateTime;
 
                 grvDetails.DataSource = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails;
                 grvDetails.DataBind();

@@ -544,14 +544,30 @@
                         <br />
                         <strong>CHAI ETHIOPIA ERP
                             <br />
-                            EXPENSE LIQUIDATION TRANSACTION FORM</strong></td>
+                            TRAVEL ADVANCE LIQUIDATION TRANSACTION FORM</strong></td>
                 </tr>
             </table>
             <table style="width: 100%; border-spacing: 30px;">
                 <tr>
                     <td style="width: 25%; text-align: right;">
                         <strong>
-                            <asp:Label ID="lblRequestNo" runat="server" Text="Reference No:"></asp:Label>
+                            <asp:Label ID="lblJournalVouchNo" runat="server" Text="Journal Voucher No:"></asp:Label>
+                        </strong>
+                    </td>
+                    <td style="width: 25%;">____________________
+                    </td>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblCheckPayVouchNo" runat="server" Text="Check Payment Voucher No:"></asp:Label>
+                        </strong>
+                    </td>
+                    <td style="width: 25%;">____________________
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblRequestNo" runat="server" Text="Travel Advance No:"></asp:Label>
                         </strong></td>
                     <td style="width: 25%;">
                         <asp:Label ID="lblRequestNoResult" runat="server"></asp:Label>
@@ -568,24 +584,24 @@
                 <tr>
                     <td style="width: 25%; text-align: right;">
                         <strong>
-                            <asp:Label ID="lblRequestedDate" runat="server" Text="Requested Date:"></asp:Label>
+                            <asp:Label ID="lblRequestedDate" runat="server" Text="Liquidation Date:"></asp:Label>
                         </strong></td>
                     <td style="width: 25%;">
                         <asp:Label ID="lblRequestedDateResult" runat="server"></asp:Label>
                     </td>
                     <td style="width: 25%; text-align: right;">
                         <strong>
-                            <asp:Label ID="lblApprovalStatusPrint1" runat="server" Text="Retirment No:"></asp:Label>
+                            <asp:Label ID="lblArrRetTime" runat="server" Text="Arrival/Return Date & Time:"></asp:Label>
                         </strong>
                     </td>
                     <td style="width: 25%;">
-                        <asp:Label ID="lblRetirmenNoResult" runat="server"></asp:Label>
+                        <asp:Label ID="lblArrRetTimeResult" runat="server"></asp:Label>
                     </td>
                 </tr>
                 <tr>
                     <td style="width: 25%; text-align: right;">
                         <strong>
-                            <asp:Label ID="lblCommentPrint" runat="server" Text="Purpose of Advance :"></asp:Label>
+                            <asp:Label ID="lblCommentPrint" runat="server" Text="Purpose of Travel:"></asp:Label>
                         </strong>
                     </td>
                     <td style="width: 25%;">
@@ -600,32 +616,62 @@
                         <asp:Label ID="lblApprovalStatusResult" runat="server"></asp:Label>
                     </td>
                 </tr>
-                <tr>
-                    <td style="width: 25%; text-align: right;">
-                        <strong>
-                            <asp:Label ID="lblTravelAdvReqDatePrint" runat="server" Text="Travel Advance Request Date:"></asp:Label>
-                        </strong>
-                    </td>
-                    <td style="width: 25%;">
-                        <asp:Label ID="lblTravelAdvReqDateResult" runat="server"></asp:Label>
-                    </td>
-                    <td style="width: 25%; text-align: right;">
-                        <strong></strong>
-                    </td>
-                    <td style="width: 25%;"></td>
-                </tr>
             </table>
             <asp:GridView ID="grvDetails"
                 runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
-                CssClass="table table-striped table-bordered table-hover">
+                CssClass="table table-striped table-bordered table-hover" OnRowDataBound="grvDetails_RowDataBound" ShowFooter="True">
                 <RowStyle CssClass="rowstyle" />
                 <Columns>
                     <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" />
-                    <asp:BoundField DataField="AmountAdvanced" HeaderText="Amount Advanced" />
-                    <asp:BoundField DataField="ActualExpenditure" HeaderText="Actual Expenditure" />
-                    <asp:BoundField DataField="Variance" HeaderText="Variance" />
-                    <asp:BoundField DataField="Project.ProjectCode" HeaderText="Project" />
-                    <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant" />
+                    <asp:TemplateField HeaderText="Project ID">
+                        <ItemTemplate>
+                            <div style="text-align: right;">
+                                <asp:Label ID="lblProject" runat="server" Text='<%# Eval("Project.ProjectCode") %>' />
+                            </div>
+                        </ItemTemplate>
+                        <FooterTemplate>
+                            <div style="text-align: right;">
+                                <asp:Label ID="lblTotal" Text="Total" runat="server" />
+                            </div>
+                        </FooterTemplate>
+                    </asp:TemplateField>
+                    <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant ID" />
+                    <asp:TemplateField HeaderText="Amount Advanced">
+                        <ItemTemplate>
+                            <div style="text-align: right;">
+                                <asp:Label ID="lblAmountAdvanced" runat="server" Text='<%# Eval("AmountAdvanced") %>' />
+                            </div>
+                        </ItemTemplate>
+                        <FooterTemplate>
+                            <div style="text-align: right;">
+                                <asp:Label ID="lblTotalAmountAdv" runat="server" />
+                            </div>
+                        </FooterTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Actual Expenditure">
+                        <ItemTemplate>
+                            <div style="text-align: right;">
+                                <asp:Label ID="lblActualExpenditure" runat="server" Text='<%# Eval("ActualExpenditure") %>' />
+                            </div>
+                        </ItemTemplate>
+                        <FooterTemplate>
+                            <div style="text-align: right;">
+                                <asp:Label ID="lblTotalActualExp" runat="server" />
+                            </div>
+                        </FooterTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Variance">
+                        <ItemTemplate>
+                            <div style="text-align: right;">
+                                <asp:Label ID="lblVariance" runat="server" Text='<%# Eval("Variance") %>' />
+                            </div>
+                        </ItemTemplate>
+                        <FooterTemplate>
+                            <div style="text-align: right;">
+                                <asp:Label ID="lblTotalVariance" runat="server" />
+                            </div>
+                        </FooterTemplate>
+                    </asp:TemplateField>
                 </Columns>
                 <FooterStyle CssClass="FooterStyle" />
                 <HeaderStyle CssClass="headerstyle" />
@@ -643,7 +689,9 @@
                             <asp:Label ID="lblDate" runat="server" Text='<%# Eval("Date", "{0:dd/MM/yyyy}")%>'></asp:Label>
                         </ItemTemplate>
                     </asp:TemplateField>
-                    <asp:BoundField DataField="Approver" HeaderText="Approver" SortExpression="Approver" />
+                    <asp:BoundField DataField="Approver" HeaderText="Reviewer" SortExpression="Approver" />
+                    <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
+                    <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus" />
                 </Columns>
                 <FooterStyle CssClass="FooterStyle" />
                 <HeaderStyle CssClass="headerstyle" />
@@ -657,14 +705,12 @@
                     <td>Signature</td>
                     <td></td>
                     <td></td>
-                    <td style="text-align: right; padding-right: 6%;">Received By </td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>___________________</td>
                     <td></td>
                     <td></td>
-                    <td style="text-align: right;">___________________</td>
                 </tr>
             </table>
         </fieldset>

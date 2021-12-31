@@ -553,11 +553,12 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 lblRequestNoResult.Text = _presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.RequestNo.ToString();
             lblRequestedDateResult.Text = _presenter.CurrentPaymentReimbursementRequest.RequestDate.Value.ToShortDateString();
             if (_presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest != null)
-                lblRequesterResult.Text = _presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.AppUser.UserName;
+                lblRequesterResult.Text = _presenter.CurrentPaymentReimbursementRequest.CashPaymentRequest.AppUser.FullName;
             lblCommentResult.Text = _presenter.CurrentPaymentReimbursementRequest.Comment.ToString();
             lblApprovalStatusResult.Text = _presenter.CurrentPaymentReimbursementRequest.ProgressStatus.ToString();
             lbladvancetakenresult.Text = _presenter.CurrentPaymentReimbursementRequest.ReceivableAmount.ToString();
             lblActualExpenditureresult.Text = _presenter.CurrentPaymentReimbursementRequest.TotalAmount.ToString();
+            lblVarianceResult.Text = (_presenter.CurrentPaymentReimbursementRequest.ReceivableAmount - _presenter.CurrentPaymentReimbursementRequest.TotalAmount).ToString();
             grvDetails.DataSource = _presenter.CurrentPaymentReimbursementRequest.PaymentReimbursementRequestDetails;
             grvDetails.DataBind();
 

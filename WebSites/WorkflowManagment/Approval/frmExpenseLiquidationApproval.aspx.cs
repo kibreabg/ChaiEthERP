@@ -583,18 +583,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void PrintTransaction()
         {
-            //pnlApproval_ModalPopupExtender.Hide();
             TravelAdvanceRequest taRequest = _presenter.GetTravelAdvanceRequest(_presenter.CurrentExpenseLiquidationRequest.Id);
             lblRequestNoResult.Text = taRequest.TravelAdvanceNo;
             lblRequestedDateResult.Text = _presenter.CurrentExpenseLiquidationRequest.RequestDate.Value.ToShortDateString();
-            if (_presenter.CurrentExpenseLiquidationRequest.TravelAdvRequestDate != null)
-                lblTravelAdvReqDateResult.Text = _presenter.CurrentExpenseLiquidationRequest.TravelAdvRequestDate.Value.ToShortDateString();
             lblRequesterResult.Text = taRequest.AppUser.FullName;
-            //lblExpenseTypeResult.Text = _presenter.CurrentExpenseLiquidationRequest.ExpenseType.ToString();
             lblPurposeofAdvanceResult.Text = _presenter.CurrentExpenseLiquidationRequest.Comment.ToString();
             lblApprovalStatusResult.Text = _presenter.CurrentExpenseLiquidationRequest.ProgressStatus.ToString();
-            //lblRetirmentTypeResult.Text = _presenter.CurrentExpenseLiquidationRequest.ExpenseReimbersmentType;
-            lblRetirmenNoResult.Text = _presenter.CurrentExpenseLiquidationRequest.ReimbersmentNo;
+            lblArrRetTimeResult.Text = _presenter.CurrentExpenseLiquidationRequest.ArrivalReturnDateTime;
             grvDetails.DataSource = _presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestDetails;
             grvDetails.DataBind();
 
