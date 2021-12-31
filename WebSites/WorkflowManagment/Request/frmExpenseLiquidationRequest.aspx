@@ -52,7 +52,8 @@
         }
 
         function setArrivalReturnTimeVal() {
-            $('#DefaultContent_txtArrivalReturnTime').val($('#DefaultContent_lnkArrivalReturnTime').text());
+            if ($('#DefaultContent_lnkArrivalReturnTime').text() != 'Choose Time')
+                $('#DefaultContent_txtArrivalReturnTime').val($('#DefaultContent_lnkArrivalReturnTime').text());
         }
 
         $(document).ready(function () {
@@ -199,7 +200,7 @@
                                                         <label class="input">
                                                             <asp:LinkButton ID="lnkArrivalReturnTime" runat="server" Text="Choose Time"
                                                                 CssClass="btn btn-success" data-type="combodate" data-format="DD-MM-YYYY h:mm a"
-                                                                data-template="DD / MM / YYYY hh : mm a" data-viewformat="MMM D YYYY HH:mm a"
+                                                                data-template="DD / MM / YYYY hh : mm a" data-viewformat="MMM D YYYY hh:mm a"
                                                                 data-pk="1" data-original-title="Setup event date and time"
                                                                 Style="padding: 6px 12px;"></asp:LinkButton>
                                                             <asp:LinkButton ID="lnkSetArrivalReturnTime" CssClass="btn btn-primary" runat="server"

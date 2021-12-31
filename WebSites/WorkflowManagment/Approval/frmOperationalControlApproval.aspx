@@ -296,7 +296,7 @@
                                                                     </asp:TemplateField>
                                                                     <asp:BoundField HeaderText="Name" />
                                                                     <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
-                                                                    <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus" />                                                                    
+                                                                    <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus" />
                                                                 </Columns>
                                                                 <FooterStyle CssClass="FooterStyle" />
                                                                 <HeaderStyle CssClass="headerstyle" />
@@ -602,14 +602,14 @@
                 <tr>
                     <td style="width: 25%; text-align: right;">
                         <strong>
-                            <asp:Label ID="lblVoucherNo" runat="server" Text="Voucher No:"></asp:Label>
+                            <asp:Label ID="lblBankPaymentNo" runat="server" Text="Bank Payment No:"></asp:Label>
                         </strong></td>
                     <td style="width: 25%;">
                         <asp:Label ID="lblVoucherNoResult" runat="server"></asp:Label>
                     </td>
                     <td style="width: 25%; text-align: right;">
                         <strong>
-                            <asp:Label ID="lblPostingRef" runat="server" Text="Posting Ref:"></asp:Label>
+                            <asp:Label ID="lblCheckPayVouchNo" runat="server" Text="Check Payment Voucher No:"></asp:Label>
                         </strong>
                     </td>
                     <td style="width: 25%;">__________
@@ -714,6 +714,16 @@
                         <asp:Label ID="lblChaiBankAccResult" runat="server"></asp:Label>
                     </td>
                 </tr>
+                <tr>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblReqNo" runat="server" Text="Payment/Travel/Liquidation/Settlement No:"></asp:Label>
+                        </strong>
+                    </td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblReqNoResult" runat="server"></asp:Label>
+                    </td>
+                </tr>
             </table>
             <br />
             <asp:GridView ID="grvDetails"
@@ -721,7 +731,7 @@
                 CssClass="table table-striped table-bordered table-hover">
                 <RowStyle CssClass="rowstyle" />
                 <Columns>
-                    <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="AccountName" SortExpression="ItemAccount.AccountName" />
+                    <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="Account Name" SortExpression="ItemAccount.AccountName" />
                     <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
                     <asp:BoundField DataField="Amount" HeaderText="Amount" SortExpression="Amount" />
                     <%--<asp:BoundField DataField="ActualExpendture" HeaderText="Actual Expendture" SortExpression="ActualExpendture" />--%>
@@ -924,14 +934,25 @@
                     <asp:Label ID="lblPaymentDetail" Text="Payment Request Details" Font-Bold="true" Font-Size="Large" runat="server" />
                 </div>
                 <br />
+                <table style="width: 100%; border-spacing: 10px;">
+                    <tr>
+                        <td style="width: 25%; text-align: right;">
+                            <strong>
+                                <asp:Label ID="lblArrRetTime" runat="server" Text="Arrival/Return Date & time:"></asp:Label>
+                            </strong></td>
+                        <td style="width: 25%;">
+                            <asp:Label ID="lblArrRetTimeResult" runat="server"></asp:Label>
+                        </td>
+                    </tr>
+                </table>
+                <br />
                 <asp:GridView ID="grvPaymentDetails"
                     runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
                     CssClass="table table-striped table-bordered table-hover">
                     <RowStyle CssClass="rowstyle" />
                     <Columns>
-                        <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="AccountName" SortExpression="ItemAccount.AccountName" />
+                        <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="Account Name" SortExpression="ItemAccount.AccountName" />
                         <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
-                        <asp:BoundField DataField="Amount" HeaderText="Amount" SortExpression="Amount" />
                         <asp:BoundField DataField="ActualExpendture" HeaderText="Actual Expendture" SortExpression="ActualExpendture" />
                         <asp:BoundField DataField="Project.ProjectCode" HeaderText="Project Code" />
                         <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant Code" />
@@ -1003,14 +1024,12 @@
                     <td>Signature</td>
                     <td></td>
                     <td></td>
-                    <td style="text-align: right; padding-right: 10%;">Recieved By </td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>___________________</td>
                     <td></td>
                     <td></td>
-                    <td style="text-align: right;">___________________</td>
                 </tr>
             </table>
         </fieldset>

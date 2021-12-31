@@ -42,11 +42,13 @@
         }
 
         function setArrivalTimeVal() {
-            $('#DefaultContent_txtArrivalTime').val($('#DefaultContent_lnkArrivalTime').text());
+            if ($('#DefaultContent_lnkArrivalTime').text() != 'Choose Time')
+                $('#DefaultContent_txtArrivalTime').val($('#DefaultContent_lnkArrivalTime').text());
         }
 
         function setReturnTimeVal() {
-            $('#DefaultContent_txtReturnTime').val($('#DefaultContent_lnkReturnTime').text());
+            if ($('#DefaultContent_lnkReturnTime').text() != 'Choose Time')
+                $('#DefaultContent_txtReturnTime').val($('#DefaultContent_lnkReturnTime').text());
         }
 
         $(document).ready(function () {
@@ -148,7 +150,7 @@
                                 <label class="input">
                                     <asp:LinkButton ID="lnkArrivalTime" runat="server" Text="Choose Time"
                                         CssClass="btn btn-success" data-type="combodate" data-format="DD-MM-YYYY h:mm a"
-                                        data-template="DD / MM / YYYY hh : mm a" data-viewformat="MMM D YYYY HH:mm a"
+                                        data-template="DD / MM / YYYY hh : mm a" data-viewformat="MMM D YYYY hh:mm a"
                                         data-pk="1" data-original-title="Setup event date and time"
                                         Style="padding: 6px 12px;"></asp:LinkButton>
                                     <asp:LinkButton ID="lnkSetArrivalTime" CssClass="btn btn-primary" runat="server"
@@ -165,7 +167,7 @@
                                 <label class="input">
                                     <asp:LinkButton ID="lnkReturnTime" runat="server" Text="Choose Time"
                                         CssClass="btn btn-success" data-type="combodate" data-format="DD-MM-YYYY h:mm a"
-                                        data-template="DD / MM / YYYY hh : mm a" data-viewformat="MMM D YYYY HH:mm a"
+                                        data-template="DD / MM / YYYY hh : mm a" data-viewformat="MMM D YYYY hh:mm a"
                                         data-pk="1" data-original-title="Setup event date and time"
                                         Style="padding: 6px 12px;"></asp:LinkButton>
                                     <asp:LinkButton ID="lnkSetReturnTime" Style="padding: 6px 12px;"

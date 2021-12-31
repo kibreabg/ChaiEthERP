@@ -814,8 +814,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             if (_presenter.CurrentOperationalControlRequest.TravelAdvanceId > 0)
             {
-                lblProjectCodeResult.Text = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).Project.ProjectCode;
-                lblGrantCodeResult.Text = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).Grant.GrantCode;
+                TravelAdvanceRequest theTravelAdvance = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId);
+                lblProjectCodeResult.Text = theTravelAdvance.Project.ProjectCode;
+                lblGrantCodeResult.Text = theTravelAdvance.Grant.GrantCode;
+                lblReqNoResult.Text = theTravelAdvance.TravelAdvanceNo;
 
                 pnlTravelDetail.Visible = true;
                 pnlPaymentDetail.Visible = false;
@@ -823,15 +825,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 lblTravelDetails.Visible = true;
                 pnlLiquidationDetail.Visible = false;
                 pnlSettelementDetail.Visible = false;
-                grvTravelDetails.DataSource = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).TravelAdvanceRequestDetails;
+                grvTravelDetails.DataSource = theTravelAdvance.TravelAdvanceRequestDetails;
                 grvTravelDetails.DataBind();
 
-                grvTravelStatuses.DataSource = _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).TravelAdvanceRequestStatuses;
+                grvTravelStatuses.DataSource = theTravelAdvance.TravelAdvanceRequestStatuses;
                 grvTravelStatuses.DataBind();
 
                 IList<TravelAdvanceCost> allCosts = new List<TravelAdvanceCost>();
 
-                foreach (TravelAdvanceRequestDetail detail in _presenter.GetTravelAdvanceRequest(_presenter.CurrentOperationalControlRequest.TravelAdvanceId).TravelAdvanceRequestDetails)
+                foreach (TravelAdvanceRequestDetail detail in theTravelAdvance.TravelAdvanceRequestDetails)
                 {
                     foreach (TravelAdvanceCost cost in detail.TravelAdvanceCosts)
                     {
@@ -843,24 +845,29 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             }
             if (_presenter.CurrentOperationalControlRequest.LiquidationId > 0)
             {
-                lblProjectCodeResult.Text = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId).ExpenseLiquidationRequestDetails[0].Project.ProjectCode;
-                lblGrantCodeResult.Text = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId).ExpenseLiquidationRequestDetails[0].Grant.GrantCode;
+                ExpenseLiquidationRequest theLiquidation = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId);
+                lblProjectCodeResult.Text = theLiquidation.ExpenseLiquidationRequestDetails[0].Project.ProjectCode;
+                lblGrantCodeResult.Text = theLiquidation.ExpenseLiquidationRequestDetails[0].Grant.GrantCode;
+                lblReqNoResult.Text = theLiquidation.TravelAdvanceRequest.TravelAdvanceNo;
 
                 pnlLiquidationDetail.Visible = true;
                 pnlPaymentDetail.Visible = false;
                 pnlSettelementDetail.Visible = false;
                 pnlTravelDetail.Visible = false;
-                dgLiquidationDetail.DataSource = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId).ExpenseLiquidationRequestDetails;
+                dgLiquidationDetail.DataSource = theLiquidation.ExpenseLiquidationRequestDetails;
                 dgLiquidationDetail.DataBind();
 
-                grvLiquidationPrintStatuses.DataSource = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId).ExpenseLiquidationRequestStatuses;
+                grvLiquidationPrintStatuses.DataSource = theLiquidation.ExpenseLiquidationRequestStatuses;
                 grvLiquidationPrintStatuses.DataBind();
             }
 
             if (_presenter.CurrentOperationalControlRequest.PaymentId > 0)
             {
-                lblProjectCodeResult.Text = _presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId).CashPaymentRequestDetails[0].Project.ProjectCode;
-                lblGrantCodeResult.Text = _presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId).CashPaymentRequestDetails[0].Grant.GrantCode;
+                CashPaymentRequest theCashPayment = _presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId);
+                lblProjectCodeResult.Text = theCashPayment.CashPaymentRequestDetails[0].Project.ProjectCode;
+                lblGrantCodeResult.Text = theCashPayment.CashPaymentRequestDetails[0].Grant.GrantCode;
+                lblReqNoResult.Text = theCashPayment.RequestNo;
+                lblArrRetTimeResult.Text = theCashPayment.ArrivalDateTime;
 
                 pnlPaymentDetail.Visible = true;
                 pnlTravelDetail.Visible = false;
@@ -868,23 +875,25 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 pnlSettelementDetail.Visible = false;
                 pnlSettelementDetail.Visible = false;
                 lblPaymentDetail.Visible = true;
-                grvPaymentDetails.DataSource = _presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId).CashPaymentRequestDetails;
+                grvPaymentDetails.DataSource = theCashPayment.CashPaymentRequestDetails;
                 grvPaymentDetails.DataBind();
 
-                grvPaymentStatuses.DataSource = _presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId).CashPaymentRequestStatuses;
+                grvPaymentStatuses.DataSource = theCashPayment.CashPaymentRequestStatuses;
                 grvPaymentStatuses.DataBind();
             }
             if (_presenter.CurrentOperationalControlRequest.SettlementId > 0)
             {
+                PaymentReimbursementRequest theReimbursement = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId);
+                lblReqNoResult.Text = theReimbursement.CashPaymentRequest.RequestNo;
                 pnlSettelementDetail.Visible = true;
                 pnlTravelDetail.Visible = false;
                 pnlPaymentDetail.Visible = false;
                 pnlLiquidationDetail.Visible = false;
                 lblSettelementDetails.Visible = true;
-                grvReDetail.DataSource = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId).PaymentReimbursementRequestDetails;
+                grvReDetail.DataSource = theReimbursement.PaymentReimbursementRequestDetails;
                 grvReDetail.DataBind();
 
-                grvPRstatus.DataSource = _presenter.GetPaymentReimbursementRequest(_presenter.CurrentOperationalControlRequest.SettlementId).PaymentReimbursementRequestStatuses;
+                grvPRstatus.DataSource = theReimbursement.PaymentReimbursementRequestStatuses;
                 grvPRstatus.DataBind();
             }
 
