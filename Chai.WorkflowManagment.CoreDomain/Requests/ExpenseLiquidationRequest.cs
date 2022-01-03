@@ -29,7 +29,8 @@ namespace Chai.WorkflowManagment.CoreDomain.Requests
         public decimal TotalActualExpenditure { get; set; }
         public decimal TotalTravelAdvance { get; set; }
         public string AdditionalComment { get; set; }
-        public string ArrivalReturnDateTime { get; set; }
+        public string ArrivalDateTime { get; set; }
+        public string ReturnDateTime { get; set; }
 
         [Required]
         public virtual TravelAdvanceRequest TravelAdvanceRequest { get; set; }

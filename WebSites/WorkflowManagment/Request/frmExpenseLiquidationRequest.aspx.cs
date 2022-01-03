@@ -34,7 +34,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 CheckApprovalSettings();
                 BindTravelAdvances();
                 BindExpenseLiquidationRequests();
-                txtArrivalReturnTime.Attributes.Add("readonly", "readonly");
+                txtArrivalTime.Attributes.Add("readonly", "readonly");
+                txtReturnTime.Attributes.Add("readonly", "readonly");
             }
 
             this._presenter.OnViewLoaded();
@@ -94,9 +95,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get { return txtAdditionalComment.Text; }
         }
-        public string GetArrivalReturnDateTime
+        public string GetArrivalDateTime
         {
-            get { return txtArrivalReturnTime.Text; }
+            get { return txtArrivalTime.Text; }
+        }
+        public string GetReturnDateTime
+        {
+            get { return txtReturnTime.Text; }
         }
         public IList<ExpenseLiquidationRequest> ExpenseLiquidationRequests
         {
@@ -658,7 +663,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     perDiemIncluded++;
                 }
             }
-            if (perDiemIncluded > 0 && !String.IsNullOrEmpty(txtArrivalReturnTime.Text))
+            if (perDiemIncluded > 0 && !String.IsNullOrEmpty(txtArrivalTime.Text) && !String.IsNullOrEmpty(txtReturnTime.Text))
                 return true;
             else if (perDiemIncluded == 0)
                 return true;
@@ -782,7 +787,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 lblRequesterResult.Text = _presenter.CurrentTravelAdvanceRequest.AppUser.FullName;
                 lblPurposeofAdvanceResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.Comment.ToString();
                 lblApprovalStatusResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ProgressStatus.ToString();
-                lblArrRetTimeResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ArrivalReturnDateTime;
+                lblArrRetTimeResult.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ArrivalDateTime + " - " + _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ReturnDateTime;
 
                 grvDetails.DataSource = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseLiquidationRequestDetails;
                 grvDetails.DataBind();

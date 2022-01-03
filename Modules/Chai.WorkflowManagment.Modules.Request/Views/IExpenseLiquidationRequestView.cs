@@ -12,7 +12,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         string GetComment { get; }
         string GetAdditionalComment { get; }
         string GetTravelAdvReqDate { get; }
-        string GetArrivalReturnDateTime { get; }
+        string GetArrivalDateTime { get; }
+        string GetReturnDateTime { get; }
 
     }
 }

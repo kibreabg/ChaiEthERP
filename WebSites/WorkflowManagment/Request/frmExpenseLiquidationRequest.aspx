@@ -51,13 +51,26 @@
             return true;
         }
 
-        function setArrivalReturnTimeVal() {
-            if ($('#DefaultContent_lnkArrivalReturnTime').text() != 'Choose Time')
-                $('#DefaultContent_txtArrivalReturnTime').val($('#DefaultContent_lnkArrivalReturnTime').text());
+        function setArrivalTimeVal() {
+            if ($('#DefaultContent_lnkArrivalTime').text() != 'Choose Time')
+                $('#DefaultContent_txtArrivalTime').val($('#DefaultContent_lnkArrivalTime').text());
+        }
+
+        function setReturnTimeVal() {
+            if ($('#DefaultContent_lnkReturnTime').text() != 'Choose Time')
+                $('#DefaultContent_txtReturnTime').val($('#DefaultContent_lnkReturnTime').text());
         }
 
         $(document).ready(function () {
-            $('#DefaultContent_lnkArrivalReturnTime').editable({
+            $('#DefaultContent_lnkArrivalTime').editable({
+                placement: 'right',
+                combodate: {
+                    firstItem: 'name',
+                    minYear: 2015,
+                    maxYear: 2040
+                }
+            });
+            $('#DefaultContent_lnkReturnTime').editable({
                 placement: 'right',
                 combodate: {
                     firstItem: 'name',
@@ -192,21 +205,38 @@
                                                     </section>
                                                 </div>
                                                 <div class="row">
-                                                    <section class="col" style="width: 100%;">
+                                                    <section class="col col-6">
                                                         <label class="label">
-                                                            Arrival Time / Return Time 
-                                                            <span style="color: red;">(If you're requesting Per Diems Please specify your Arrival Date & Time and Return Date & Time!)</span>
+                                                            Arrival Date/Time 
+                                    <span style="color: red;">(For Per Diems Please specify your Arrival Date & Time!)</span>
                                                         </label>
                                                         <label class="input">
-                                                            <asp:LinkButton ID="lnkArrivalReturnTime" runat="server" Text="Choose Time"
+                                                            <asp:LinkButton ID="lnkArrivalTime" runat="server" Text="Choose Time"
                                                                 CssClass="btn btn-success" data-type="combodate" data-format="DD-MM-YYYY h:mm a"
                                                                 data-template="DD / MM / YYYY hh : mm a" data-viewformat="MMM D YYYY hh:mm a"
                                                                 data-pk="1" data-original-title="Setup event date and time"
                                                                 Style="padding: 6px 12px;"></asp:LinkButton>
-                                                            <asp:LinkButton ID="lnkSetArrivalReturnTime" CssClass="btn btn-primary" runat="server"
-                                                                OnClientClick="setArrivalReturnTimeVal(); return false;"
-                                                                Style="padding: 6px 12px;" Text="Set Arrival/Return Time"></asp:LinkButton>
-                                                            <asp:TextBox ID="txtArrivalReturnTime" runat="server"></asp:TextBox>
+                                                            <asp:LinkButton ID="lnkSetArrivalTime" CssClass="btn btn-primary" runat="server"
+                                                                OnClientClick="setArrivalTimeVal(); return false;"
+                                                                Style="padding: 6px 12px;" Text="Set Arrival Time"></asp:LinkButton>
+                                                            <asp:TextBox ID="txtArrivalTime" runat="server"></asp:TextBox>
+                                                        </label>
+                                                    </section>
+                                                    <section class="col col-6">
+                                                        <label class="label">
+                                                            Return Date/Time 
+                                    <span style="color: red;">(For Per Diems Please specify your Return Date & Time!)</span>
+                                                        </label>
+                                                        <label class="input">
+                                                            <asp:LinkButton ID="lnkReturnTime" runat="server" Text="Choose Time"
+                                                                CssClass="btn btn-success" data-type="combodate" data-format="DD-MM-YYYY h:mm a"
+                                                                data-template="DD / MM / YYYY hh : mm a" data-viewformat="MMM D YYYY hh:mm a"
+                                                                data-pk="1" data-original-title="Setup event date and time"
+                                                                Style="padding: 6px 12px;"></asp:LinkButton>
+                                                            <asp:LinkButton ID="lnkSetReturnTime" Style="padding: 6px 12px;"
+                                                                CssClass="btn btn-primary" runat="server" OnClientClick="setReturnTimeVal(); return false;"
+                                                                Text="Set Return Time"></asp:LinkButton>
+                                                            <asp:TextBox ID="txtReturnTime" runat="server"></asp:TextBox>
                                                         </label>
                                                     </section>
                                                 </div>

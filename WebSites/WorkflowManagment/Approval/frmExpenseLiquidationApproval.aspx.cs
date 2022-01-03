@@ -589,7 +589,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             lblRequesterResult.Text = taRequest.AppUser.FullName;
             lblPurposeofAdvanceResult.Text = _presenter.CurrentExpenseLiquidationRequest.Comment.ToString();
             lblApprovalStatusResult.Text = _presenter.CurrentExpenseLiquidationRequest.ProgressStatus.ToString();
-            lblArrRetTimeResult.Text = _presenter.CurrentExpenseLiquidationRequest.ArrivalReturnDateTime;
+            lblArrRetTimeResult.Text = _presenter.CurrentExpenseLiquidationRequest.ArrivalDateTime + " - " + _presenter.CurrentExpenseLiquidationRequest.ReturnDateTime;
             grvDetails.DataSource = _presenter.CurrentExpenseLiquidationRequest.ExpenseLiquidationRequestDetails;
             grvDetails.DataBind();
 
