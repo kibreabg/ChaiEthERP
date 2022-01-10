@@ -207,8 +207,8 @@
                                                 <div class="row">
                                                     <section class="col col-6">
                                                         <label class="label">
-                                                            Arrival Date/Time 
-                                    <span style="color: red;">(For Per Diems Please specify your Arrival Date & Time!)</span>
+                                                            Departure Date/Time 
+                                    <span style="color: red;">(For Per Diems Please specify your Departure Date & Time!)</span>
                                                         </label>
                                                         <label class="input">
                                                             <asp:LinkButton ID="lnkArrivalTime" runat="server" Text="Choose Time"
@@ -218,7 +218,7 @@
                                                                 Style="padding: 6px 12px;"></asp:LinkButton>
                                                             <asp:LinkButton ID="lnkSetArrivalTime" CssClass="btn btn-primary" runat="server"
                                                                 OnClientClick="setArrivalTimeVal(); return false;"
-                                                                Style="padding: 6px 12px;" Text="Set Arrival Time"></asp:LinkButton>
+                                                                Style="padding: 6px 12px;" Text="Set Departure Time"></asp:LinkButton>
                                                             <asp:TextBox ID="txtArrivalTime" runat="server"></asp:TextBox>
                                                         </label>
                                                     </section>
@@ -621,7 +621,7 @@
                     </td>
                     <td style="width: 25%; text-align: right;">
                         <strong>
-                            <asp:Label ID="lblArrRetTime" runat="server" Text="Arrival/Return Date & Time:"></asp:Label>
+                            <asp:Label ID="lblArrRetTime" runat="server" Text="Departure/Return Date & Time:"></asp:Label>
                         </strong>
                     </td>
                     <td style="width: 25%;">

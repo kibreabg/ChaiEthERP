@@ -99,7 +99,7 @@
                     <asp:BoundField DataField="Supplier.SupplierName" HeaderText="Supplier" SortExpression="Supplier.SupplierName" />
                     <asp:BoundField DataField="RequestType" HeaderText="Request Type" SortExpression="RequestType" />
                     <asp:BoundField DataField="Description" HeaderText="Description" SortExpression="Description" />
-                    <asp:BoundField DataField="ArrivalDateTime" HeaderText="Arrival Time" SortExpression="ArrivalDateTime" />
+                    <asp:BoundField DataField="ArrivalDateTime" HeaderText="Departure Time" SortExpression="ArrivalDateTime" />
                     <asp:BoundField DataField="ReturnDateTime" HeaderText="Return Time" SortExpression="ReturnDateTime" />
                     <asp:BoundField DataField="TotalAmount" HeaderText="Total Amount" SortExpression="TotalAmount" />
 

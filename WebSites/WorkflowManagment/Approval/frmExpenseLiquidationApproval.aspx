@@ -92,7 +92,7 @@
                 <asp:BoundField DataField="ExpenseType" HeaderText="Expense Type" SortExpression="ExpenseType" />
                 <asp:BoundField DataField="TotalActualExpenditure" HeaderText="Total Actual Expenditure" SortExpression="TotalActualExpenditure" />
                 <asp:BoundField DataField="AdditionalComment" HeaderText="Comment" SortExpression="AdditionalComment" />
-                <asp:BoundField DataField="ArrivalDateTime" HeaderText="Arrival Time" SortExpression="ArrivalDateTime" />
+                <asp:BoundField DataField="ArrivalDateTime" HeaderText="Departure Time" SortExpression="ArrivalDateTime" />
                 <asp:BoundField DataField="ReturnDateTime" HeaderText="Return Time" SortExpression="ReturnDateTime" />
                 <asp:TemplateField HeaderText="Request Date">
                     <ItemTemplate>
@@ -362,7 +362,7 @@
                     </td>
                     <td style="width: 25%; text-align: right;">
                         <strong>
-                            <asp:Label ID="lblArrRetTime" runat="server" Text="Arrival/Return Date & Time:"></asp:Label>
+                            <asp:Label ID="lblArrRetTime" runat="server" Text="Departure/Return Date & Time:"></asp:Label>
                         </strong>
                     </td>
                     <td style="width: 25%;">
