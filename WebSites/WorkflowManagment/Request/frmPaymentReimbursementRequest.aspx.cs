@@ -11,6 +11,7 @@ using Chai.WorkflowManagment.Enums;
 using Chai.WorkflowManagment.Shared;
 using Microsoft.Practices.ObjectBuilder;
 using Chai.WorkflowManagment.CoreDomain.Setting;
+using System.Text.RegularExpressions;
 
 namespace Chai.WorkflowManagment.Modules.Request.Views
 {
@@ -542,7 +543,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             Button uploadBtn = (Button)sender;
             GridViewRow attachmentRow = (GridViewRow)uploadBtn.NamingContainer;
             FileUpload fuReciept = attachmentRow.FindControl("fuReciept") as FileUpload;
-            string fileName = Path.GetFileName(fuReciept.PostedFile.FileName);
+            string fileName = Path.GetFileNameWithoutExtension(fuReciept.PostedFile.FileName);
+            Regex rx = new Regex(@"[^A-Za-z0-9]");
+            fileName = rx.Replace(fileName, "");
+            string extension = Path.GetExtension(fuReciept.PostedFile.FileName);
+
             if (fileName != String.Empty)
             {
                 List<PRAttachment> attachments = (List<PRAttachment>)Session["attachments"];
@@ -551,8 +556,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (attachment.ItemAccountChecklists[0].ChecklistName == attachmentRow.Cells[1].Text && attachmentRow.DataItemIndex == index)
                     {
-                        attachment.FilePath = "~/PRUploads/" + fileName;
-                        fuReciept.PostedFile.SaveAs(Server.MapPath("~/PRUploads/") + fileName);
+                        attachment.FilePath = "~/PRUploads/" + fileName + DateTime.Now.ToString("ddMMyyyyHHmmss") + extension;
+                        fuReciept.PostedFile.SaveAs(Server.MapPath("~/PRUploads/") + fileName + DateTime.Now.ToString("ddMMyyyyHHmmss") + extension);
                     }
                     index++;
                 }

@@ -5,6 +5,7 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -572,6 +573,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             GridViewRow attachmentRow = (GridViewRow)uploadBtn.NamingContainer;
             FileUpload fuReciept = attachmentRow.FindControl("fuReciept") as FileUpload;
             string fileName = Path.GetFileNameWithoutExtension(fuReciept.PostedFile.FileName);
+            Regex rx = new Regex(@"[^A-Za-z0-9]");
+            fileName = rx.Replace(fileName,"");
             string extension = Path.GetExtension(fuReciept.PostedFile.FileName);
             int index = 0;
             if (fileName != String.Empty)

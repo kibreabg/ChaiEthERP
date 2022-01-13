@@ -14,6 +14,7 @@ using log4net;
 using log4net.Config;
 using Microsoft.Practices.ObjectBuilder;
 using System.Web.Configuration;
+using System.Text.RegularExpressions;
 
 namespace Chai.WorkflowManagment.Modules.Request.Views
 {
@@ -909,6 +910,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             GridViewRow attachmentRow = (GridViewRow)uploadBtn.NamingContainer;
             FileUpload fuReciept = attachmentRow.FindControl("fuReciept") as FileUpload;
             string fileName = Path.GetFileNameWithoutExtension(fuReciept.PostedFile.FileName);
+            Regex rx = new Regex(@"[^A-Za-z0-9]");
+            fileName = rx.Replace(fileName, "");
             string extension = Path.GetExtension(fuReciept.PostedFile.FileName);
             int index = 0;
             if (fileName != String.Empty)
