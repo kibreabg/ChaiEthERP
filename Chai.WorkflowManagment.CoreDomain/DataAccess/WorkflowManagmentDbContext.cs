@@ -13,13 +13,14 @@ using Chai.WorkflowManagment.CoreDomain.Request;
 using Chai.WorkflowManagment.CoreDomain.Approval;
 using Chai.WorkflowManagment.CoreDomain.HRM;
 using Chai.WorkflowManagment.CoreDomain.Inventory;
+using System.Web.Configuration;
 
 namespace Chai.WorkflowManagment.CoreDomain.DataAccess
 {
     public class WorkflowManagmentDbContext : BaseDbContext
     {
         public WorkflowManagmentDbContext(bool disableProxy)
-            : base("CHAIEthERPTest")
+            : base(WebConfigurationManager.AppSettings["Database"])
         {
             if (disableProxy)
                 ObjContext().ContextOptions.ProxyCreationEnabled = false;
