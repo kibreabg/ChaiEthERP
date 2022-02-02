@@ -38,8 +38,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 XmlConfigurator.Configure();
                 PopLeaveType();
                 BindSearchLeaveRequestGrid();
-
-
             }
             this._presenter.OnViewLoaded();
             employee = _presenter.GetEmployee(_presenter.CurrentUser().Id);
@@ -49,12 +47,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 BindInitialValues();
             if (_presenter.NotCompletRequest(_presenter.CurrentUser().Id))
             {
-                Master.ShowMessage(new AppMessage("Your Previous Leave Request is not completed. Please review the dashboard and contact the approver ", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Your Previous Leave Request is not completed. Please review the dashboard and contact the approver ", RMessageType.Info));
                 btnRequest.Enabled = false;
             }
 
         }
-
         private string AutoNumber()
         {
             return "LR-" + _presenter.CurrentUser().Id.ToString() + "-" + (_presenter.GetLastLeaveRequestId() + 1).ToString();
@@ -161,7 +158,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (ex.InnerException.InnerException.Message.Contains("Violation of UNIQUE KEY"))
                     {
-                        Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                        Master.ShowMessage(new AppMessage("Please Click Request button Again,There is a duplicate Number", RMessageType.Error));
                         //AutoNumber();
                     }
                 }
@@ -236,7 +233,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 EmailSender.Send(_presenter.GetSuperviser(_presenter.GetAssignedJobbycurrentuser(LRS.Approver).AssignedTo).Email, "Leave Request", "'" + (_presenter.GetUser(_presenter.CurrentLeaveRequest.Requester).FullName).ToUpper() + "' Requests for Leave Request No. '" + (_presenter.CurrentLeaveRequest.RequestNo).ToUpper() + "' ");
             }
         }
-        public CoreDomain.Request.LeaveRequest LeaveRequest
+        public LeaveRequest LeaveRequest
         {
             get
             {
@@ -283,12 +280,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         {
                             GetCurrentApprover();
                             _presenter.SaveOrUpdateLeaveRequest(_presenter.CurrentLeaveRequest);
-
                             ClearForm();
                             BindSearchLeaveRequestGrid();
-                            Master.TransferMessage(new AppMessage("Successfully did a Leave  Request, Reference No - <b>'" + _presenter.CurrentLeaveRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                            _presenter.RedirectPage(String.Format("frmLeaveRequest.aspx?{0}=0", AppConstants.TABID));
-                            // Master.ShowMessage(new AppMessage("Successfully did a Leave  Request, Reference No - <b>'" + _presenter.CurrentLeaveRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                            Master.ShowMessage(new AppMessage("Successfully did a Leave Request, Reference No - <b>'" + _presenter.CurrentLeaveRequest.RequestNo + "'</b>", RMessageType.Info));
+                            //_presenter.RedirectPage(String.Format("frmLeaveRequest.aspx?{0}=0", AppConstants.TABID));
                             Log.Info(_presenter.CurrentUser().FullName + " has requested for a Leave Type of " + ddlLeaveType.SelectedValue);
                         }
                         else if (ddlLeaveType.SelectedItem.Text == "Sick Leave" || ddlLeaveType.SelectedItem.Text == "Exam Leave" || ddlLeaveType.SelectedItem.Text != "Maternity Leave" || ddlLeaveType.SelectedItem.Text == "Paternity Leave" || ddlLeaveType.SelectedItem.Text == "Other Leaves")
@@ -303,18 +298,18 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                                     ClearForm();
                                     BindSearchLeaveRequestGrid();
 
-                                    Master.TransferMessage(new AppMessage("Successfully did a Leave  Request, Reference No - <b>'" + _presenter.CurrentLeaveRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                                    _presenter.RedirectPage(String.Format("frmLeaveRequest.aspx?{0}=0", AppConstants.TABID));
+                                    Master.ShowMessage(new AppMessage("Successfully did a Leave  Request, Reference No - <b>'" + _presenter.CurrentLeaveRequest.RequestNo + "'</b>", RMessageType.Info));
+                                    //_presenter.RedirectPage(String.Format("frmLeaveRequest.aspx?{0}=0", AppConstants.TABID));
                                     Log.Info(_presenter.CurrentUser().FullName + " has requested for a Leave Type of " + ddlLeaveType.SelectedValue);
                                 }
                                 else
                                 {
-                                    Master.ShowMessage(new AppMessage("Please contact HR, Your Sick Leave balance exceeded from your Entitlement", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                                    Master.ShowMessage(new AppMessage("Please contact HR, Your Sick Leave balance exceeded from your Entitlement", RMessageType.Error));
                                 }
                             }
                             else
                             {
-                                Master.ShowMessage(new AppMessage("Please Attach  letter", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                                Master.ShowMessage(new AppMessage("Please Attach  letter", RMessageType.Error));
                             }
 
                         }
@@ -326,17 +321,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         _presenter.SaveOrUpdateLeaveRequest(_presenter.CurrentLeaveRequest);
                         ClearForm();
                         BindSearchLeaveRequestGrid();
-                        Master.TransferMessage(new AppMessage("Successfully did a Leave  Request, Reference No - <b>'" + _presenter.CurrentLeaveRequest.RequestNo + "'</b>", Chai.WorkflowManagment.Enums.RMessageType.Info));
-                        _presenter.RedirectPage(String.Format("frmLeaveRequest.aspx?{0}=0", AppConstants.TABID));
+                        Master.ShowMessage(new AppMessage("Successfully did a Leave Request, Reference No - <b>'" + _presenter.CurrentLeaveRequest.RequestNo + "'</b>", RMessageType.Info));
+                        //_presenter.RedirectPage(String.Format("frmLeaveRequest.aspx?{0}=0", AppConstants.TABID));
                         Log.Info(_presenter.CurrentUser().FullName + " has requested for a Leave Type of " + ddlLeaveType.SelectedValue);
                     }
                     else
-                    { Master.ShowMessage(new AppMessage("You don't have sufficient Annual Leave days", Chai.WorkflowManagment.Enums.RMessageType.Error)); }
+                    { Master.ShowMessage(new AppMessage("You don't have sufficient Annual Leave days", RMessageType.Error)); }
 
                 }
                 else
                 {
-                    Master.ShowMessage(new AppMessage("There is an error constracting Approval Process", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                    Master.ShowMessage(new AppMessage("There is an error constracting Approval Process", RMessageType.Error));
 
                 }
             }
@@ -361,7 +356,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             txtforward.Text = "";
 
         }
-
         protected void grvLeaveRequestList_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Session["ApprovalLevel"] = true;
@@ -383,7 +377,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             _presenter.DeleteLeaveRequestg(_presenter.GetLeaveRequestById(Convert.ToInt32(grvLeaveRequestList.DataKeys[e.RowIndex].Value)));
 
             btnFind_Click(sender, e);
-            Master.ShowMessage(new AppMessage("Leave Request Successfully Deleted", Chai.WorkflowManagment.Enums.RMessageType.Info));
+            Master.ShowMessage(new AppMessage("Leave Request Successfully Deleted", RMessageType.Info));
 
         }
         protected void grvLeaveRequestList_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -588,7 +582,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 ClearForm();
 
                 btnDelete.Visible = false;
-                Master.ShowMessage(new AppMessage("Leave Request Successfully Deleted", Chai.WorkflowManagment.Enums.RMessageType.Info));
+                Master.ShowMessage(new AppMessage("Leave Request Successfully Deleted", RMessageType.Info));
             }
         }
         private void GetLeaveBalance()
@@ -606,7 +600,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
                 //else
                 //{
-                //    Master.ShowMessage(new AppMessage("Please Insert Leave day's brought forward OR I wish to apply for ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                //    Master.ShowMessage(new AppMessage("Please Insert Leave day's brought forward OR I wish to apply for ",  RMessageType.Error));
                 //}
             }
         }
@@ -636,7 +630,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ddltype_SelectedIndexChanged(sender, e);
             // GetLeaveBalance();
         }
-
         protected void FileUpload1_DataBinding(object sender, EventArgs e)
         {
             UploadFile();
@@ -653,11 +646,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
             else
             {
-                // Master.ShowMessage(new AppMessage("Please select file ", Chai.WorkflowManagment.Enums.RMessageType.Error));
+                // Master.ShowMessage(new AppMessage("Please select file ",  RMessageType.Error));
                 return "";
             }
         }
-
         protected void ddltype_SelectedIndexChanged(object sender, EventArgs e)
         {
             DateTime Datefrom = Convert.ToDateTime(txtDateFrom.Text);

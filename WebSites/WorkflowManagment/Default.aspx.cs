@@ -525,13 +525,25 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
                 OperationalControlRequest theBankPayment = _presenter.ListBankPaymentApprovalProgress()[e.Row.RowIndex];
                 e.Row.Cells[3].Text = _presenter.GetUser(Guard.Against.Zero(theBankPayment.CurrentApprover, theBankPayment.RequestNo + " CurrentApprover")).FullName;
                 if (theBankPayment.PaymentId > 0)
-                    e.Row.Cells[2].Text = Guard.Against.Null(_presenter.GetCashPaymentRequest(theBankPayment.PaymentId).AppUser, _presenter.GetCashPaymentRequest(theBankPayment.PaymentId).RequestNo + " AppUser)").FullName;
+                {
+                    CashPaymentRequest thePayment = _presenter.GetCashPaymentRequest(theBankPayment.PaymentId);
+                    e.Row.Cells[2].Text = Guard.Against.Null(Guard.Against.Null(thePayment, " CashPaymentRequest ID: " + theBankPayment.PaymentId.ToString()).AppUser, " AppUser").FullName;
+                }
                 else if (theBankPayment.TravelAdvanceId > 0)
-                    e.Row.Cells[2].Text = Guard.Against.Null(_presenter.GetTravelAdvanceRequest(theBankPayment.TravelAdvanceId).AppUser, _presenter.GetTravelAdvanceRequest(theBankPayment.TravelAdvanceId).TravelAdvanceNo + " AppUser").FullName;
+                {
+                    TravelAdvanceRequest theTravel = _presenter.GetTravelAdvanceRequest(theBankPayment.TravelAdvanceId);
+                    e.Row.Cells[2].Text = Guard.Against.Null(Guard.Against.Null(theTravel, " TravelAdvanceRequest ID: " + theBankPayment.TravelAdvanceId.ToString()).AppUser, " AppUser").FullName;
+                }                    
                 else if (theBankPayment.LiquidationId > 0)
-                    e.Row.Cells[2].Text = Guard.Against.Null(_presenter.GetExpenseLiquidationRequest(theBankPayment.LiquidationId).TravelAdvanceRequest.AppUser, _presenter.GetExpenseLiquidationRequest(theBankPayment.LiquidationId).TravelAdvanceRequest.TravelAdvanceNo + " AppUser").FullName;
+                {
+                    ExpenseLiquidationRequest theLiquidation = _presenter.GetExpenseLiquidationRequest(theBankPayment.LiquidationId);
+                    e.Row.Cells[2].Text = Guard.Against.Null(Guard.Against.Null(theLiquidation, " ExpenseLiquidationRequest ID: " + theBankPayment.LiquidationId.ToString()).TravelAdvanceRequest.AppUser, " AppUser").FullName;
+                }                    
                 else if (theBankPayment.SettlementId > 0)
-                    e.Row.Cells[2].Text = Guard.Against.Null(_presenter.GetPaymentReimbursementRequest(theBankPayment.SettlementId).CashPaymentRequest.AppUser, _presenter.GetPaymentReimbursementRequest(theBankPayment.SettlementId).CashPaymentRequest.RequestNo + " AppUser").FullName;
+                {
+                    PaymentReimbursementRequest theReimbursement = _presenter.GetPaymentReimbursementRequest(theBankPayment.SettlementId);
+                    e.Row.Cells[2].Text = Guard.Against.Null(Guard.Against.Null(theReimbursement, " PaymentReimbursement ID: " + theBankPayment.SettlementId.ToString()).CashPaymentRequest.AppUser, " AppUser").FullName;
+                }                    
             }
         }
     }
