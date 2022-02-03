@@ -523,7 +523,8 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
                 OperationalControlRequest theBankPayment = _presenter.ListBankPaymentApprovalProgress()[e.Row.RowIndex];
-                e.Row.Cells[3].Text = _presenter.GetUser(Guard.Against.Zero(theBankPayment.CurrentApprover, theBankPayment.RequestNo + " CurrentApprover")).FullName;
+                if (theBankPayment.CurrentApprover != 0)
+                    e.Row.Cells[3].Text = _presenter.GetUser(theBankPayment.CurrentApprover).FullName;
                 if (theBankPayment.PaymentId > 0)
                 {
                     CashPaymentRequest thePayment = _presenter.GetCashPaymentRequest(theBankPayment.PaymentId);
@@ -533,17 +534,17 @@ public partial class ShellDefault : Microsoft.Practices.CompositeWeb.Web.UI.Page
                 {
                     TravelAdvanceRequest theTravel = _presenter.GetTravelAdvanceRequest(theBankPayment.TravelAdvanceId);
                     e.Row.Cells[2].Text = Guard.Against.Null(Guard.Against.Null(theTravel, " TravelAdvanceRequest ID: " + theBankPayment.TravelAdvanceId.ToString()).AppUser, " AppUser").FullName;
-                }                    
+                }
                 else if (theBankPayment.LiquidationId > 0)
                 {
                     ExpenseLiquidationRequest theLiquidation = _presenter.GetExpenseLiquidationRequest(theBankPayment.LiquidationId);
                     e.Row.Cells[2].Text = Guard.Against.Null(Guard.Against.Null(theLiquidation, " ExpenseLiquidationRequest ID: " + theBankPayment.LiquidationId.ToString()).TravelAdvanceRequest.AppUser, " AppUser").FullName;
-                }                    
+                }
                 else if (theBankPayment.SettlementId > 0)
                 {
                     PaymentReimbursementRequest theReimbursement = _presenter.GetPaymentReimbursementRequest(theBankPayment.SettlementId);
                     e.Row.Cells[2].Text = Guard.Against.Null(Guard.Against.Null(theReimbursement, " PaymentReimbursement ID: " + theBankPayment.SettlementId.ToString()).CashPaymentRequest.AppUser, " AppUser").FullName;
-                }                    
+                }
             }
         }
     }
