@@ -41,10 +41,13 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
             this._presenter.OnViewLoaded();
             employee = _presenter.GetEmployee(_presenter.CurrentUser().Id);
-            //txtLeaveAsOfCalEndDate.Text = (Math.Round((employee.EmployeeLeaveBalanceYE() - _presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value)) * 2, MidpointRounding.AwayFromZero) / 2).ToString();
-            txtLeaveAsOfToday.Text = (Math.Round((employee.EmployeeLeaveBalance() - Convert.ToDouble(_presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value))) * 2, MidpointRounding.AwayFromZero) / 2).ToString();
             if (employee != null)
+            {
+                //txtLeaveAsOfCalEndDate.Text = (Math.Round((employee.EmployeeLeaveBalanceYE() - _presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value)) * 2, MidpointRounding.AwayFromZero) / 2).ToString();
+                txtLeaveAsOfToday.Text = (Math.Round((employee.EmployeeLeaveBalance() - Convert.ToDouble(_presenter.EmpLeaveTaken(employee.Id, employee.LeaveSettingDate.Value))) * 2, MidpointRounding.AwayFromZero) / 2).ToString();
                 BindInitialValues();
+            }
+
             if (_presenter.NotCompletRequest(_presenter.CurrentUser().Id))
             {
                 Master.ShowMessage(new AppMessage("Your Previous Leave Request is not completed. Please review the dashboard and contact the approver ", RMessageType.Info));
@@ -100,10 +103,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             txtEmployeeNo.Text = CurrentUser.EmployeeNo;
             if (_presenter.CurrentLeaveRequest.Id <= 0)
             {
-
                 txtRequestDate.Text = DateTime.Today.Date.ToShortDateString();
-
-
             }
         }
         private void BindLeaveRequest()
