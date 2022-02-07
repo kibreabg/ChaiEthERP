@@ -89,9 +89,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _requestController.GetExpenseLiquidationRequest(liqID);
         }
-        public IList<ExpenseLiquidationRequest> ListExpenseLiquidationRequests(string ExpenseType, string RequestDate, string ProgressStatus, string Requester)
+        public IList<ExpenseLiquidationRequest> ListExpenseLiquidationRequests(string TravelAdvanceNo, string RequestDate, string ProgressStatus, string Requester)
         {
-            return _controller.ListExpenseLiquidationRequests(ExpenseType, RequestDate, ProgressStatus, Requester);
+            return _controller.ListExpenseLiquidationRequests(TravelAdvanceNo, RequestDate, ProgressStatus, Requester);
         }
         public ItemAccount GetItemAccount(int id)
         {

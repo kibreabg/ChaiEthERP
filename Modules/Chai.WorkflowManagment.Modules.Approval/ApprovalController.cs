@@ -334,7 +334,7 @@ namespace Chai.WorkflowManagment.Modules.Approval
         }
         #endregion
         #region Expense Liquidation Approval
-        public IList<ExpenseLiquidationRequest> ListExpenseLiquidationRequests(string ExpenseType, string RequestDate, string ProgressStatus, string Requester)
+        public IList<ExpenseLiquidationRequest> ListExpenseLiquidationRequests(string TravelAdvanceNo, string RequestDate, string ProgressStatus, string Requester)
         {
             string filterExpression = "";
 
@@ -344,7 +344,7 @@ namespace Chai.WorkflowManagment.Modules.Approval
                                        " INNER JOIN TravelAdvanceRequests ON TravelAdvanceRequests.Id = ExpenseLiquidationRequests.Id " +
                                        " INNER JOIN AppUsers ON (AppUsers.Id = ExpenseLiquidationRequests.CurrentApprover) OR (AppUsers.EmployeePosition_Id = ExpenseLiquidationRequests.CurrentApproverPosition AND AppUsers.Id = '" + CurrentUser().Id + "') " +
                                        " LEFT JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
-                                       " WHERE 1 = CASE WHEN '" + ExpenseType + "' = '' THEN 1 WHEN ExpenseLiquidationRequests.ExpenseType = '" + ExpenseType + "' THEN 1 END " +
+                                       " WHERE 1 = CASE WHEN '" + TravelAdvanceNo + "' = '' THEN 1 WHEN TravelAdvanceRequests.TravelAdvanceNo = '" + TravelAdvanceNo + "' THEN 1 END " +
                                        " AND 1 = CASE WHEN '" + RequestDate + "' = '' THEN 1 WHEN ExpenseLiquidationRequests.RequestDate = '" + RequestDate + "' THEN 1 END " +
                                        " AND 1 = CASE WHEN '" + Requester + "' = '0' THEN 1 WHEN TravelAdvanceRequests.AppUser_Id = '" + Requester + "'  THEN 1 END " +
                                        " AND ExpenseLiquidationRequests.ProgressStatus='" + ProgressStatus + "' " +
@@ -357,7 +357,7 @@ namespace Chai.WorkflowManagment.Modules.Approval
                                    " INNER JOIN TravelAdvanceRequests ON TravelAdvanceRequests.Id = ExpenseLiquidationRequests.Id " +
                                    " INNER JOIN AppUsers ON (AppUsers.Id = ExpenseLiquidationRequests.CurrentApprover) OR (AppUsers.EmployeePosition_Id = ExpenseLiquidationRequests.CurrentApproverPosition AND AppUsers.Id = '" + CurrentUser().Id + "') " +
                                    " LEFT JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
-                                   " WHERE 1 = CASE WHEN '" + ExpenseType + "' = '' THEN 1 WHEN ExpenseLiquidationRequests.ExpenseType = '" + ExpenseType + "' THEN 1 END " +
+                                   " WHERE 1 = CASE WHEN '" + TravelAdvanceNo + "' = '' THEN 1 WHEN TravelAdvanceRequests.TravelAdvanceNo = '" + TravelAdvanceNo + "' THEN 1 END " +
                                    " AND 1 = CASE WHEN '" + RequestDate + "' = '' THEN 1 WHEN ExpenseLiquidationRequests.RequestDate = '" + RequestDate + "' THEN 1 END " +
                                    " AND 1 = CASE WHEN '" + Requester + "' = '0' THEN 1 WHEN TravelAdvanceRequests.AppUser_Id = '" + Requester + "'  THEN 1 END " +
                                    " AND ExpenseLiquidationRequests.CurrentLevel > 1 AND ExpenseLiquidationRequests.ProgressStatus != 'Completed'" +
@@ -370,7 +370,7 @@ namespace Chai.WorkflowManagment.Modules.Approval
                                    " INNER JOIN AppUsers ON (AppUsers.Id = ExpenseLiquidationRequests.CurrentApprover) OR (AppUsers.EmployeePosition_Id = ExpenseLiquidationRequests.CurrentApproverPosition AND AppUsers.Id = '" + CurrentUser().Id + "') " +
                                    " LEFT JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
                                    " INNER JOIN ExpenseLiquidationRequestStatuses ON ExpenseLiquidationRequests.Id = ExpenseLiquidationRequestStatuses.ExpenseLiquidationRequest_Id " +
-                                   " WHERE 1 = CASE WHEN '" + ExpenseType + "' = '' THEN 1 WHEN ExpenseLiquidationRequests.ExpenseType = '" + ExpenseType + "' THEN 1 END " +
+                                   " WHERE 1 = CASE WHEN '" + TravelAdvanceNo + "' = '' THEN 1 WHEN TravelAdvanceRequests.TravelAdvanceNo = '" + TravelAdvanceNo + "' THEN 1 END " +
                                    " AND 1 = CASE WHEN '" + RequestDate + "' = '' THEN 1 WHEN ExpenseLiquidationRequests.RequestDate = '" + RequestDate + "' THEN 1 END " +
                                    " AND 1 = CASE WHEN '" + Requester + "' = '0' THEN 1 WHEN TravelAdvanceRequests.AppUser_Id = '" + Requester + "'  THEN 1 END " +
                                    " AND ExpenseLiquidationRequestStatuses.ApprovalStatus = 'Rejected'" +

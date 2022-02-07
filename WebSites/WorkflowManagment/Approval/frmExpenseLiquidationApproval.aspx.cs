@@ -176,7 +176,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void BindSearchExpenseLiquidationRequestGrid()
         {
-            grvExpenseLiquidationRequestList.DataSource = _presenter.ListExpenseLiquidationRequests(txtSrchExpenseType.Text, txtSrchRequestDate.Text, ddlSrchProgressStatus.SelectedValue, ddlSrchRequester.SelectedValue);
+            grvExpenseLiquidationRequestList.DataSource = _presenter.ListExpenseLiquidationRequests(txtSrchTravelAdvanceNo.Text, txtSrchRequestDate.Text, ddlSrchProgressStatus.SelectedValue, ddlSrchRequester.SelectedValue);
             grvExpenseLiquidationRequestList.DataBind();
         }
         private void BindExpenseLiquidationRequestStatus()
