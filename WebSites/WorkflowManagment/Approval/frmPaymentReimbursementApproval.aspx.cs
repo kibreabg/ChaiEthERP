@@ -192,7 +192,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private void BindSearchPaymentReimbursementRequestGrid()
         {
-            grvPaymentReimbursementRequestList.DataSource = _presenter.ListPaymentReimbursementRequests(txtSrchRequestDate.Text, ddlSrchProgressStatus.SelectedValue, ddlSrchRequester.SelectedValue);
+            grvPaymentReimbursementRequestList.DataSource = _presenter.ListPaymentReimbursementRequests(txtSrchRequestNo.Text, txtSrchRequestDate.Text, ddlSrchProgressStatus.SelectedValue, ddlSrchRequester.SelectedValue);
             grvPaymentReimbursementRequestList.DataBind();
         }
         private void BindPaymentReimbursementRequestStatus()

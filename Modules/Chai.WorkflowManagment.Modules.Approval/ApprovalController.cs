@@ -254,7 +254,7 @@ namespace Chai.WorkflowManagment.Modules.Approval
         }
         #endregion
         #region Payment Reimbursement Approval
-        public IList<PaymentReimbursementRequest> ListPaymentReimbursementRequests(string RequestDate, string ProgressStatus, string Requester)
+        public IList<PaymentReimbursementRequest> ListPaymentReimbursementRequests(string RequestNo, string RequestDate, string ProgressStatus, string Requester)
         {
             string filterExpression = "";
 
@@ -262,7 +262,8 @@ namespace Chai.WorkflowManagment.Modules.Approval
                                " INNER JOIN CashPaymentRequests ON CashPaymentRequests.Id = PaymentReimbursementRequests.Id " +
                                " LEFT JOIN AppUsers ON AppUsers.Id = PaymentReimbursementRequests.CurrentApprover " +
                                " LEFT JOIN AssignJobs ON AssignJobs.AppUser_Id = AppUsers.Id AND AssignJobs.Status = 1 " +
-                               " WHERE 1 = CASE WHEN '" + RequestDate + "' = '' THEN 1 WHEN PaymentReimbursementRequests.RequestDate = '" + RequestDate + "'  THEN 1 END " +
+                               " WHERE 1 = CASE WHEN '" + RequestNo + "' = '' THEN 1 WHEN CashPaymentRequests.RequestNo = '" + RequestNo + "' THEN 1 END " +
+                               " AND 1 = CASE WHEN '" + RequestDate + "' = '' THEN 1 WHEN PaymentReimbursementRequests.RequestDate = '" + RequestDate + "'  THEN 1 END " +
                                " AND 1 = CASE WHEN '" + Requester + "' = '0' THEN 1 WHEN CashPaymentRequests.AppUser_Id = '" + Requester + "'  THEN 1 END " +
                                " AND PaymentReimbursementRequests.ProgressStatus='" + ProgressStatus + "' " +
                                " AND ((PaymentReimbursementRequests.CurrentApprover = '" + CurrentUser().Id + "') " +

@@ -110,9 +110,9 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             _controller.DeleteEntity(PaymentReimbursementRequest);
         }
-        public IList<PaymentReimbursementRequest> ListPaymentReimbursementRequests(string RequestDate, string ProgressStatus, string Requester)
+        public IList<PaymentReimbursementRequest> ListPaymentReimbursementRequests(string RequestNo, string RequestDate, string ProgressStatus, string Requester)
         {
-            return _controller.ListPaymentReimbursementRequests(RequestDate, ProgressStatus, Requester);
+            return _controller.ListPaymentReimbursementRequests(RequestNo, RequestDate, ProgressStatus, Requester);
         }
         public AppUser CurrentUser()
         {
