@@ -767,6 +767,25 @@
                     <asp:Label ID="lblTravelDetails" Text="Travel Advance Details" Font-Bold="true" Font-Size="Large" runat="server" Visible="false" />
                 </div>
                 <br />
+                <table style="width: 100%; border-spacing: 10px;">
+                    <tr>
+                        <td style="width: 25%; text-align: right;">
+                            <strong>
+                                <asp:Label ID="lblTravelReqDate" runat="server" Text="Requested Date:"></asp:Label>
+                            </strong></td>
+                        <td style="width: 25%;">
+                            <asp:Label ID="lblTravelReqDateResult" runat="server"></asp:Label>
+                        </td>
+                        <td style="width: 25%; text-align: right;">
+                            <strong>
+                                <asp:Label ID="lblOrigTravelReq" runat="server" Text="Requester:"></asp:Label>
+                            </strong></td>
+                        <td style="width: 25%;">
+                            <asp:Label ID="lblOrigTravelReqResult" runat="server"></asp:Label>
+                        </td>
+                    </tr>
+                </table>
+                <br />
                 <asp:GridView ID="grvTravelDetails"
                     runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
                     CssClass="table table-striped table-bordered table-hover">
@@ -897,14 +916,6 @@
                                 <%# DataBinder.Eval(Container.DataItem, "Project.ProjectCode")%>
                             </ItemTemplate>
                         </asp:TemplateColumn>
-                        <asp:TemplateColumn HeaderText="Actions">
-                            <EditItemTemplate>
-                                <asp:LinkButton ID="lnkUpdate" runat="server" CausesValidation="true" CommandName="Update" CssClass="btn btn-xs btn-default" ValidationGroup="edit"><i class="fa fa-save"></i></asp:LinkButton>
-                            </EditItemTemplate>
-                            <ItemTemplate>
-                                <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CssClass="btn btn-xs btn-default"><i class="fa fa-pencil"></i></asp:LinkButton>
-                            </ItemTemplate>
-                        </asp:TemplateColumn>
                     </Columns>
                     <PagerStyle CssClass="paginate_button active" HorizontalAlign="Center" />
                 </asp:DataGrid>
@@ -938,10 +949,33 @@
                     <tr>
                         <td style="width: 25%; text-align: right;">
                             <strong>
-                                <asp:Label ID="lblArrRetTime" runat="server" Text="Arrival/Return Date & time:"></asp:Label>
+                                <asp:Label ID="lblPaymentReqDate" runat="server" Text="Requested Date:"></asp:Label>
                             </strong></td>
                         <td style="width: 25%;">
-                            <asp:Label ID="lblArrRetTimeResult" runat="server"></asp:Label>
+                            <asp:Label ID="lblPaymentReqDateResult" runat="server"></asp:Label>
+                        </td>
+                        <td style="width: 25%; text-align: right;">
+                            <strong>
+                                <asp:Label ID="lblOrigPaymentRequester" runat="server" Text="Requester:"></asp:Label>
+                            </strong></td>
+                        <td style="width: 25%;">
+                            <asp:Label ID="lblOrigPaymentRequesterResult" runat="server"></asp:Label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%; text-align: right;">
+                            <strong>
+                                <asp:Label ID="lblDepTime" runat="server" Text="Departure Date & time:"></asp:Label>
+                            </strong></td>
+                        <td style="width: 25%;">
+                            <asp:Label ID="lblDepTimeResult" runat="server"></asp:Label>
+                        </td>
+                        <td style="width: 25%; text-align: right;">
+                            <strong>
+                                <asp:Label ID="lblRetTime" runat="server" Text="Return Date & time:"></asp:Label>
+                            </strong></td>
+                        <td style="width: 25%;">
+                            <asp:Label ID="lblRetTimeResult" runat="server"></asp:Label>
                         </td>
                     </tr>
                 </table>

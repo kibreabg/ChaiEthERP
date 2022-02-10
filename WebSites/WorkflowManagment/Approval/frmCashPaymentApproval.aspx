@@ -563,6 +563,22 @@
                     </td>
                 </tr>
                 <tr>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblDepTime" runat="server" Text="Departure Date & time:"></asp:Label>
+                        </strong></td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblDepTimeResult" runat="server"></asp:Label>
+                    </td>
+                    <td style="width: 25%; text-align: right;">
+                        <strong>
+                            <asp:Label ID="lblRetTime" runat="server" Text="Return Date & time:"></asp:Label>
+                        </strong></td>
+                    <td style="width: 25%;">
+                        <asp:Label ID="lblRetTimeResult" runat="server"></asp:Label>
+                    </td>
+                </tr>
+                <tr>
                     <td style="width: 25%; text-align: right;"><strong>
                         <asp:Label ID="lblApprovalStatusPrint" runat="server" Text="Approval Status:"></asp:Label>
                     </strong>
@@ -617,16 +633,10 @@
                 <tr>
                     <td></td>
                     <td>Signature</td>
-                    <td></td>
-                    <td></td>
-                    <td style="text-align: right; padding-right: 6%;">Recieved By </td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>___________________</td>
-                    <td></td>
-                    <td></td>
-                    <td style="text-align: right;">___________________</td>
                 </tr>
             </table>
         </fieldset>

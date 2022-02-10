@@ -818,6 +818,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 lblProjectCodeResult.Text = theTravelAdvance.Project.ProjectCode;
                 lblGrantCodeResult.Text = theTravelAdvance.Grant.GrantCode;
                 lblReqNoResult.Text = theTravelAdvance.TravelAdvanceNo;
+                lblTravelReqDateResult.Text = theTravelAdvance.RequestDate.ToString();
+                lblOrigTravelReqResult.Text = theTravelAdvance.AppUser.FullName;
 
                 pnlTravelDetail.Visible = true;
                 pnlPaymentDetail.Visible = false;
@@ -867,7 +869,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
                 lblProjectCodeResult.Text = theCashPayment.CashPaymentRequestDetails[0].Project.ProjectCode;
                 lblGrantCodeResult.Text = theCashPayment.CashPaymentRequestDetails[0].Grant.GrantCode;
                 lblReqNoResult.Text = theCashPayment.RequestNo;
-                lblArrRetTimeResult.Text = theCashPayment.ArrivalDateTime;
+                lblDepTimeResult.Text = theCashPayment.ArrivalDateTime;
+                lblRetTimeResult.Text = theCashPayment.ReturnDateTime;
+                lblPaymentReqDateResult.Text = theCashPayment.RequestDate.ToString();
+                lblOrigPaymentRequesterResult.Text = theCashPayment.AppUser.FullName;
 
                 pnlPaymentDetail.Visible = true;
                 pnlTravelDetail.Visible = false;

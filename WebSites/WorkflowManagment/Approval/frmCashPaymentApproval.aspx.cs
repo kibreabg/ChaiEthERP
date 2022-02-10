@@ -617,6 +617,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             lblTotalAmountResult.Text = _presenter.CurrentCashPaymentRequest.TotalAmount.ToString();
             lblApprovalStatusResult.Text = _presenter.CurrentCashPaymentRequest.ProgressStatus.ToString();
             lblDescResult.Text = _presenter.CurrentCashPaymentRequest.Description;
+            lblDepTimeResult.Text = _presenter.CurrentCashPaymentRequest.ArrivalDateTime;
+            lblRetTimeResult.Text = _presenter.CurrentCashPaymentRequest.ReturnDateTime;
             grvDetails.DataSource = _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails;
             grvDetails.DataBind();
 
