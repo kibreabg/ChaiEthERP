@@ -267,26 +267,34 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void dgCashPaymentDetail_DeleteCommand(object source, DataGridCommandEventArgs e)
         {
-            int id = (int)dgCashPaymentDetail.DataKeys[e.Item.ItemIndex];
-            int CPRDId = (int)dgCashPaymentDetail.DataKeys[e.Item.ItemIndex];
+            int cprId = (int)dgCashPaymentDetail.DataKeys[e.Item.ItemIndex];
             CashPaymentRequestDetail cprd;
+            decimal totalAmount = 0;
 
-            if (CPRDId > 0)
-                cprd = _presenter.CurrentCashPaymentRequest.GetCashPaymentRequestDetail(CPRDId);
+            if (cprId > 0)
+                cprd = _presenter.CurrentCashPaymentRequest.GetCashPaymentRequestDetail(cprId);
             else
-                cprd = (CashPaymentRequestDetail)_presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[e.Item.ItemIndex];
+                cprd = _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[e.Item.ItemIndex];
             try
             {
-                if (CPRDId > 0)
-                {
-                    //Remove the detail amaount from the Total Amount before deleting the detail record
-                    _presenter.CurrentCashPaymentRequest.TotalAmount -= cprd.Amount;
-                    _presenter.CurrentCashPaymentRequest.RemoveCashPaymentRequestDetail(id);
-                    if (_presenter.GetCashPaymentRequestDetail(id) != null)
-                        _presenter.DeleteCashPaymentRequestDetail(_presenter.GetCashPaymentRequestDetail(id));
+                if (cprId > 0)
+                {                    
+                    _presenter.CurrentCashPaymentRequest.RemoveCashPaymentRequestDetail(cprId);
+                    _presenter.DeleteCashPaymentRequestDetail(cprd);
                     _presenter.SaveOrUpdateCashPaymentRequest(_presenter.CurrentCashPaymentRequest);
                 }
-                else { _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails.Remove(cprd); }
+                else { 
+                    _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails.Remove(cprd); 
+                }
+
+                foreach(CashPaymentRequestDetail cpd in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
+                {
+                    totalAmount += cpd.Amount;
+                }
+
+                //Update the Total Amount
+                _presenter.CurrentCashPaymentRequest.TotalAmount = totalAmount;
+
                 BindCashPaymentDetails();
 
                 Master.ShowMessage(new AppMessage("Payment Request Detail was Removed Successfully", RMessageType.Info));
