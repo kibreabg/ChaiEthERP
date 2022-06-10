@@ -130,16 +130,11 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             }
         }
         private void PopulateReimbursement()
-        {            
-            foreach (CashPaymentRequestDetail CPRD in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
+        {
+            foreach (CashPaymentRequestDetail cprd in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
             {
-
-                _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.ReceivableAmount += CPRD.Amount;
-                _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.Project = CPRD.Project;
-                _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.Grant = CPRD.Grant;
-                txtProject.Text = CPRD.Project.ProjectCode;
-                txtGrant.Text = CPRD.Grant.GrantCode;
-
+                txtProject.Text = cprd.Project.ProjectCode;
+                txtGrant.Text = cprd.Grant.GrantCode;
             }
         }
         private void PrintTransaction()
@@ -179,7 +174,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         protected void grvPaymentReimbursementRequestList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Session["PaymentReimbursementRequest"] = true;            
+            Session["PaymentReimbursementRequest"] = true;
             cprId = (int)grvPaymentReimbursementRequestList.DataKeys[grvPaymentReimbursementRequestList.SelectedIndex].Value;
             Session["cprId"] = (int)grvPaymentReimbursementRequestList.DataKeys[grvPaymentReimbursementRequestList.SelectedIndex].Value;
             BindPaymentReimbursementRequestFields();
@@ -199,7 +194,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     PrintTransaction();
                     btnPrint.Enabled = true;
                 }
-
             }
             else
             {
@@ -329,7 +323,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     DropDownList ddlProject = e.Item.FindControl("ddlProject") as DropDownList;
                     CheckBox ckSupDocAttached = e.Item.FindControl("ckSupDocAttached") as CheckBox;
                     cprd.SupportDocAttached = ckSupDocAttached.Checked;
-                    _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.TotalAmount += cprd.ActualExpenditure;
                     txtImbursement.Text = ((txtImbursement.Text != "" ? Convert.ToDecimal(txtImbursement.Text) : 0) + cprd.ActualExpenditure).ToString();
                     //Add Checklists for attachments if available                    
                     foreach (ItemAccountChecklist checklist in cprd.ItemAccount.ItemAccountChecklists)
@@ -389,8 +382,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 cprd.ItemAccount = _presenter.GetItemAccount(Convert.ToInt32(ddlAccountDescription.SelectedValue));
                 CheckBox ckEdtSupDocAttached = e.Item.FindControl("ckEdtSupDocAttached") as CheckBox;
                 cprd.SupportDocAttached = ckEdtSupDocAttached.Checked;
-                _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.TotalAmount -= previousAmount; //Subtract the previous Total amount
-                _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.TotalAmount += cprd.ActualExpenditure; //Then add the new individual amounts to the Total amount
                 txtImbursement.Text = ((txtImbursement.Text != "" ? Convert.ToDecimal(txtImbursement.Text) : 0) - previousAmount).ToString();
                 txtImbursement.Text = (Convert.ToDecimal(txtImbursement.Text) + cprd.ActualExpenditure).ToString();
 
@@ -464,9 +455,22 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (CheckReceiptsAttached() == true)
                     {
+                        foreach (CashPaymentRequestDetail cprd in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
+                        {
+                            _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.ReceivableAmount += cprd.Amount;
+                            _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.Project = cprd.Project;
+                            _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.Grant = cprd.Grant;
+                        }
+                        //For update cases make the totals equal to zero first then add up the individuals
+                        _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.TotalAmount = 0;
+                        foreach (PaymentReimbursementRequestDetail prrd in _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails)
+                        {
+                            _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.TotalAmount += prrd.ActualExpenditure;
+                        }
+
                         _presenter.SaveOrUpdatePaymentReimbursementRequest(Convert.ToInt32(Session["cprId"]));
                         BindPaymentReimbursementRequests();
-                        Master.ShowMessage(new AppMessage("Payment Settlement Request Successfully Saved, If you have over spend refund please Contact Finance", RMessageType.Info));
+                        Master.ShowMessage(new AppMessage("Payment Settlement Request Successfully Saved! (If you have over-spend refund, please contact finance.)", RMessageType.Info));
                         btnSave.Visible = false;
                         Session["cprId"] = null;
                     }

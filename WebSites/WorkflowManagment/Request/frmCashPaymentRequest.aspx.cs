@@ -489,6 +489,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         col.Visible = false;
                     }
                 }
+                grvAttachments.Visible = false;
             }
             else
             {
@@ -501,6 +502,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         col.Visible = true;
                     }
                 }
+                grvAttachments.Visible = true;
             }
         }
         protected void grvCashPaymentRequestList_PageIndexChanging(object sender, GridViewPageEventArgs e)
