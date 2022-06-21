@@ -12,6 +12,7 @@ using Chai.WorkflowManagment.Shared;
 using Microsoft.Practices.ObjectBuilder;
 using Chai.WorkflowManagment.CoreDomain.Setting;
 using System.Text.RegularExpressions;
+using System.Data.Entity.Infrastructure;
 
 namespace Chai.WorkflowManagment.Modules.Request.Views
 {
@@ -157,12 +158,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         private void BindPaymentReimbursementRequestDetails()
         {
+            PopulateReimbursement();
             dgCashPaymentDetail.DataSource = _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails;
             dgCashPaymentDetail.DataBind();
         }
         private void CheckandBindCashPaymentDetails()
         {
-            PopulateReimbursement();
             if (_presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails.Count > 0)
             {
                 foreach (PaymentReimbursementRequestDetail detail in _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails)
@@ -455,12 +456,10 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 {
                     if (CheckReceiptsAttached() == true)
                     {
-                        foreach (CashPaymentRequestDetail cprd in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
-                        {
-                            _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.ReceivableAmount += cprd.Amount;
-                            _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.Project = cprd.Project;
-                            _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.Grant = cprd.Grant;
-                        }
+                        _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.ReceivableAmount = _presenter.CurrentCashPaymentRequest.TotalAmount;
+                        _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.Project = _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Project;
+                        _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.Grant = _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Grant;
+
                         //For update cases make the totals equal to zero first then add up the individuals
                         _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.TotalAmount = 0;
                         foreach (PaymentReimbursementRequestDetail prrd in _presenter.CurrentCashPaymentRequest.PaymentReimbursementRequest.PaymentReimbursementRequestDetails)
@@ -478,7 +477,20 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                 }
                 else
                 {
-                    Master.ShowMessage(new AppMessage("Please Make sure that settled amount is greater than or equal to advance taken.", RMessageType.Error));
+                    decimal variance = (Convert.ToDecimal(txtReceivables.Text) - Convert.ToDecimal(txtImbursement.Text));
+                    Master.ShowMessage(new AppMessage("Please settle the remaining " + variance.ToString() + " birr with your receipt from Bank!", RMessageType.Error));
+                }
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                Master.ShowMessage(new AppMessage(ex.Message, RMessageType.Error));
+                ExceptionUtility.LogException(ex, ex.Source);
+                ExceptionUtility.NotifySystemOps(ex, _presenter.CurrentUser().FullName + " (Handled Concurrency Exception)");
+
+                foreach (var entry in ex.Entries)
+                {
+                    // Update original values from the database
+                    entry.OriginalValues.SetValues(entry.GetDatabaseValues());
                 }
             }
             catch (Exception ex)
