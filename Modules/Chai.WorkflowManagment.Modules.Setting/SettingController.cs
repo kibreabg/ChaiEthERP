@@ -551,6 +551,10 @@ namespace Chai.WorkflowManagment.Modules.Setting
         {
             return _workspace.Single<ApprovalSetting>(x => x.CriteriaCondition == "MedicalExpense");
         }
+        public ApprovalSetting GetApprovalSettingPurchaseGS()
+        {
+            return _workspace.Single<ApprovalSetting>(x => x.CriteriaCondition == "PurchaseGS");
+        }
         public ApprovalLevel GetApprovalLevel(int ApprovalLevelId)
         {
             return _workspace.Single<ApprovalLevel>(x => x.Id == ApprovalLevelId);

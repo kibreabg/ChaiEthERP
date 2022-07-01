@@ -161,26 +161,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             if (_presenter.CurrentPurchaseRequest.Id <= 0)
             {
-                if (_presenter.GetApprovalSettingforPurchaseProcess(RequestType.Purchase_Request.ToString().Replace('_', ' '), 0) != null)
+                if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[0].Project.ProjectCode == "CHET-GS")
                 {
                     int i = 1;
-                    foreach (ApprovalLevel AL in _presenter.GetApprovalSettingforPurchaseProcess(RequestType.Purchase_Request.ToString().Replace('_', ' '), 0).ApprovalLevels)
+                    foreach (ApprovalLevel AL in _presenter.GetApprovalSettingPurchaseGS().ApprovalLevels)
                     {
                         PurchaseRequestStatus PRS = new PurchaseRequestStatus();
                         PRS.PurchaseRequest = _presenter.CurrentPurchaseRequest;
-                        if (AL.EmployeePosition.PositionName == "Superviser/Line Manager")
-                        {
-                            if (_presenter.CurrentUser().Superviser.Value != 0)
-                            {
-                                PRS.Approver = _presenter.CurrentUser().Superviser.Value;
-                            }
-                            else
-                            {
-                                PRS.ApprovalStatus = ApprovalStatus.Approved.ToString();
-                                PRS.ApprovalDate = DateTime.Today.Date;
-                            }
-                        }
-                        else if (AL.EmployeePosition.PositionName == "Program Manager")
+                        if (AL.EmployeePosition.PositionName == "Program Manager")
                         {
                             if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[0].Project != null)
                             {
@@ -203,7 +191,53 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         _presenter.CurrentPurchaseRequest.PurchaseRequestStatuses.Add(PRS);
                     }
                 }
-                else { pnlWarning.Visible = true; }
+                else
+                {
+                    if (_presenter.GetApprovalSettingforPurchaseProcess(RequestType.Purchase_Request.ToString().Replace('_', ' '), 0) != null)
+                    {
+                        int i = 1;
+                        foreach (ApprovalLevel AL in _presenter.GetApprovalSettingforPurchaseProcess(RequestType.Purchase_Request.ToString().Replace('_', ' '), 0).ApprovalLevels)
+                        {
+                            PurchaseRequestStatus PRS = new PurchaseRequestStatus();
+                            PRS.PurchaseRequest = _presenter.CurrentPurchaseRequest;
+                            if (AL.EmployeePosition.PositionName == "Superviser/Line Manager")
+                            {
+                                if (_presenter.CurrentUser().Superviser.Value != 0)
+                                {
+                                    PRS.Approver = _presenter.CurrentUser().Superviser.Value;
+                                }
+                                else
+                                {
+                                    PRS.ApprovalStatus = ApprovalStatus.Approved.ToString();
+                                    PRS.ApprovalDate = DateTime.Today.Date;
+                                }
+                            }
+                            else if (AL.EmployeePosition.PositionName == "Program Manager")
+                            {
+                                if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[0].Project != null)
+                                {
+                                    if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[0].Project.AppUser.Id != _presenter.CurrentUser().Id)
+                                    {
+                                        PRS.Approver = _presenter.GetProject(_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[0].Project.Id).AppUser.Id;
+                                    }
+                                    else
+                                    {
+                                        PRS.Approver = _presenter.CurrentUser().Superviser.Value;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                PRS.Approver = _presenter.Approver(AL.EmployeePosition.Id).Id;
+                            }
+                            PRS.WorkflowLevel = i;
+                            i++;
+                            _presenter.CurrentPurchaseRequest.PurchaseRequestStatuses.Add(PRS);
+                        }
+                    }
+                    else { pnlWarning.Visible = true; }
+                }
+
             }
         }
         private void GetCurrentApprover()

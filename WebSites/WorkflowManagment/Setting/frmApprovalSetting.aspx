@@ -68,6 +68,7 @@
                                                 <asp:ListItem Value="&gt;">Greater Than</asp:ListItem>
                                                 <asp:ListItem Value="Payment">Payment</asp:ListItem>
                                                 <asp:ListItem Value="MedicalExpense">Medical Expense</asp:ListItem>
+                                                <asp:ListItem Value="PurchaseGS">Purchase GS</asp:ListItem>
                                             </asp:DropDownList><i></i>
                                             <asp:RequiredFieldValidator ID="RfvCondition" runat="server" ControlToValidate="ddlCriteria" ErrorMessage="Condition Required" InitialValue=" " SetFocusOnError="True" ValidationGroup="Save">*</asp:RequiredFieldValidator>
                                         </label>

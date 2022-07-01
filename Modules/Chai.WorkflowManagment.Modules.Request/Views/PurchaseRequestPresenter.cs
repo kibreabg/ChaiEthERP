@@ -16,19 +16,15 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 {
     public class PurchaseRequestPresenter : Presenter<IPurchaseRequestView>
     {
-
-        // NOTE: Uncomment the following code if you want ObjectBuilder to inject the module controller
-        //       The code will not work in the Shell module, as a module controller is not created by default
-        //
         private RequestController _controller;
-        private SettingController _settingcontroller;
-        private InventoryController _inventorycontroller;
-        private PurchaseRequest _purchaserequest;
-        public PurchaseRequestPresenter([CreateNew] Chai.WorkflowManagment.Modules.Request.RequestController controller, [CreateNew] Chai.WorkflowManagment.Modules.Setting.SettingController settingcontroller, [CreateNew] Chai.WorkflowManagment.Modules.Inventory.InventoryController inventorycontroller)
+        private SettingController _settingController;
+        private InventoryController _inventoryController;
+        private PurchaseRequest _purchaseRequest;
+        public PurchaseRequestPresenter([CreateNew] RequestController controller, [CreateNew] SettingController settingController, [CreateNew] InventoryController inventoryController)
         {
             _controller = controller;
-            _settingcontroller = settingcontroller;
-            _inventorycontroller = inventorycontroller;
+            _settingController = settingController;
+            _inventoryController = inventoryController;
         }
 
         public override void OnViewLoaded()
@@ -43,21 +39,21 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             get
             {
-                if (_purchaserequest == null)
+                if (_purchaseRequest == null)
                 {
                     int id = View.PurchaseRequestId;
                     if (id > 0)
-                        _purchaserequest = _controller.GetPurchaseRequest(id);
+                        _purchaseRequest = _controller.GetPurchaseRequest(id);
                     else
-                        _purchaserequest = new PurchaseRequest();
+                        _purchaseRequest = new PurchaseRequest();
                 }
-                return _purchaserequest;
+                return _purchaseRequest;
             }
-            set { _purchaserequest = value; }
+            set { _purchaseRequest = value; }
         }
         public override void OnViewInitialized()
         {
-            if (_purchaserequest == null)
+            if (_purchaseRequest == null)
             {
                 int id = View.PurchaseRequestId;
                 if (id > 0)
@@ -104,11 +100,15 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         public ApprovalSetting GetApprovalSetting(string RequestType, decimal value)
         {
-            return _settingcontroller.GetApprovalSettingforProcess(RequestType, value);
+            return _settingController.GetApprovalSettingforProcess(RequestType, value);
+        }
+        public ApprovalSetting GetApprovalSettingPurchaseGS()
+        {
+            return _settingController.GetApprovalSettingPurchaseGS();
         }
         public ApprovalSetting GetApprovalSettingforPurchaseProcess(string RequestType, decimal value)
         {
-            return _settingcontroller.GetApprovalSettingforPurchaseProcess(RequestType, value);
+            return _settingController.GetApprovalSettingforPurchaseProcess(RequestType, value);
         }
         public AssignJob GetAssignedJobbycurrentuser()
         {
@@ -125,41 +125,41 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         public IList<ItemAccount> GetItemAccounts()
         {
-            return _settingcontroller.GetItemAccounts();
+            return _settingController.GetItemAccounts();
 
         }
         public ItemAccount GetItemAccount(int Id)
         {
-            return _settingcontroller.GetItemAccount(Id);
+            return _settingController.GetItemAccount(Id);
         }
         public IList<Project> GetProjects()
         {
-            return _settingcontroller.GetProjects();
+            return _settingController.GetProjects();
 
         }
         public Project GetProject(int Id)
         {
-            return _settingcontroller.GetProject(Id);
+            return _settingController.GetProject(Id);
 
         }
         public IList<Grant> GetGrants()
         {
-            return _settingcontroller.GetGrants();
+            return _settingController.GetGrants();
 
         }
         public IList<Item> GetItems()
         {
-            return _settingcontroller.GetItems();
+            return _settingController.GetItems();
 
         }
         public Item GetItemByName(string Name)
         {
-            return _inventorycontroller.GetItemByName(Name);
+            return _inventoryController.GetItemByName(Name);
 
         }
         public Grant GetGrant(int Id)
         {
-            return _settingcontroller.GetGrant(Id);
+            return _settingController.GetGrant(Id);
 
         }
         public PurchaseRequestDetail GetPurchaseRequestDetail(int Id)
@@ -181,12 +181,12 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         public IList<Grant> GetGrantbyprojectId(int projectId)
         {
-            return _settingcontroller.GetProjectGrantsByprojectId(projectId);
+            return _settingController.GetProjectGrantsByprojectId(projectId);
 
         }
         public IList<Vehicle> GetVehicles()
         {
-            return _settingcontroller.GetVehicles();
+            return _settingController.GetVehicles();
         }
         public IList<MaintenanceRequest> GetMaintenanceRequestCompleted()
         {
@@ -194,7 +194,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         }
         public MaintenanceRequest GetMaintenanceRequestById(int Id)
         {
-            return _settingcontroller.GetMaintenanceRequestById(Id);
+            return _settingController.GetMaintenanceRequestById(Id);
 
         }
     }
