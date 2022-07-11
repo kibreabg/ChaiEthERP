@@ -133,6 +133,10 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         {
             return _settingcontroller.GetApprovalSettingforProcess(RequestType, value);
         }
+        public ApprovalSetting GetApprovalSettingPurchaseGS()
+        {
+            return _settingController.GetApprovalSettingPurchaseGS();
+        }
         public IList<PurchaseRequest> ListPurchaseRequests(string requestNo, string RequestDate, string ProgressStatus)
         {
             return _controller.ListPurchaseRequests(requestNo, RequestDate, ProgressStatus);

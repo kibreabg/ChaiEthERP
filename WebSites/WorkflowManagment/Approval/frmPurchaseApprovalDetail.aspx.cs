@@ -103,7 +103,16 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         private string GetWillStatus()
         {
-            ApprovalSetting AS = _presenter.GetApprovalSetting(RequestType.Purchase_Request.ToString().Replace('_', ' ').ToString(), 0);
+            ApprovalSetting AS = null;
+            if (_presenter.CurrentPurchaseRequest.PurchaseRequestDetails[0].Project.ProjectCode == "CHET-GS")
+            {
+                AS = _presenter.GetApprovalSettingPurchaseGS();
+            }
+            else
+            {
+                AS = _presenter.GetApprovalSetting(RequestType.Purchase_Request.ToString().Replace('_', ' ').ToString(), 0);
+            }
+            
             string will = "";
             foreach (ApprovalLevel AL in AS.ApprovalLevels)
             {
@@ -474,7 +483,6 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             grvPurchaseRequestList.PageIndex = e.NewPageIndex;
             btnFind_Click(sender, e);
         }
-
         protected void grvMaintenanceStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (_presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestStatuses != null)
