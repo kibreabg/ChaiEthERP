@@ -21,13 +21,13 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         //       The code will not work in the Shell module, as a module controller is not created by default
         //
         private ApprovalController _controller;
-        private SettingController _settingcontroller;
+        private SettingController _settingController;
         private AdminController _admincontroller;
         private PurchaseRequest _purchaserequest;
         public PurchaseApprovalDetailPresenter([CreateNew] ApprovalController controller, [CreateNew] Setting.SettingController settingcontroller, [CreateNew] AdminController admincontroller)
         {
             _controller = controller;
-            _settingcontroller = settingcontroller;
+            _settingController = settingcontroller;
             _admincontroller = admincontroller;
         }
         public override void OnViewLoaded()
@@ -67,31 +67,31 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         public IList<ItemAccount> GetItemAccounts()
         {
-            return _settingcontroller.GetItemAccounts();
+            return _settingController.GetItemAccounts();
         }
         public ItemAccount GetItemAccount(int Id)
         {
-            return _settingcontroller.GetItemAccount(Id);
+            return _settingController.GetItemAccount(Id);
         }
         public IList<Project> GetProjects()
         {
-            return _settingcontroller.GetProjects();
+            return _settingController.GetProjects();
         }
         public Project GetProject(int Id)
         {
-            return _settingcontroller.GetProject(Id);
+            return _settingController.GetProject(Id);
         }
         public IList<Grant> GetGrantbyprojectId(int projectId)
         {
-            return _settingcontroller.GetProjectGrantsByprojectId(projectId);
+            return _settingController.GetProjectGrantsByprojectId(projectId);
         }
         public IList<Grant> GetGrants()
         {
-            return _settingcontroller.GetGrants();
+            return _settingController.GetGrants();
         }
         public Grant GetGrantByCode(string grantCode)
         {
-            return _settingcontroller.GetGrantByCode(grantCode);
+            return _settingController.GetGrantByCode(grantCode);
         }
         public AppUser Approver(int Position)
         {
@@ -131,7 +131,7 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         public ApprovalSetting GetApprovalSetting(string RequestType, int value)
         {
-            return _settingcontroller.GetApprovalSettingforProcess(RequestType, value);
+            return _settingController.GetApprovalSettingforProcess(RequestType, value);
         }
         public ApprovalSetting GetApprovalSettingPurchaseGS()
         {
@@ -143,23 +143,23 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
         }
         public IList<Supplier> GetSuppliers()
         {
-            return _settingcontroller.GetSuppliers();
+            return _settingController.GetSuppliers();
         }
         public IList<Supplier> GetSuppliers(int SupplierTypeId)
         {
-            return _settingcontroller.GetSuppliers(SupplierTypeId);
+            return _settingController.GetSuppliers(SupplierTypeId);
         }
         public IList<SupplierType> GetSupplierTypes()
         {
-            return _settingcontroller.GetSupplierTypes();
+            return _settingController.GetSupplierTypes();
         }
         public Supplier GetSupplier(int Id)
         {
-            return _settingcontroller.GetSupplier(Id);
+            return _settingController.GetSupplier(Id);
         }
         public SupplierType GetSupplierType(int Id)
         {
-            return _settingcontroller.GetSupplierType(Id);
+            return _settingController.GetSupplierType(Id);
         }
         public AppUser CurrentUser()
         {
