@@ -303,9 +303,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             grvDetails.DataBind();
             if (_presenter.CurrentPurchaseRequest.MaintenanceId > 0)
             {
-                lblApprovalDet.Visible = true;
-                lblMainDetail.Visible = true;
-                lblReqItems.Visible = true;
+                lblApprovalDetPrint.Visible = true;
+                lblMainDetailPrint.Visible = true;
                 grvMaintenaceDet.DataSource = _presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestDetails;
                 grvMaintenaceDet.DataBind();
                 grvMainSta.DataSource = _presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestStatuses;
@@ -316,18 +315,11 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
 
             else
             {
-                lblApprovalDet.Visible = false;
-                lblMainDetail.Visible = false;
-                lblReqItems.Visible = false;
+                lblApprovalDetPrint.Visible = false;
+                lblMainDetailPrint.Visible = false;
                 grvStatuses.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestStatuses;
                 grvStatuses.DataBind();
             }
-
-           
-
-           
-
-
         }
         private void SendCanceledEmail()
         {

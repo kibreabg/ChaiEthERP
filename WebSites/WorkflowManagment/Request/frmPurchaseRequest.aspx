@@ -11,6 +11,19 @@
                 $('#searchModal').modal('show');
             });
         }
+        function printPurchaseDetail(id) {
+            var disp_setting = "toolbar=yes,location=no,directories=yes,menubar=yes,";
+            disp_setting += "scrollbars=yes,width=750, height=600, left=100, top=25";
+            var content_value = document.getElementById(id).innerHTML;
+            var docprint = window.open("", "", disp_setting);
+            docprint.document.open();
+            docprint.document.write('<html><head><title>CHAI Ethiopia ERP</title>');
+            docprint.document.write('</head><body onLoad="self.print()"><center>');
+            docprint.document.write(content_value);
+            docprint.document.write('</center></body></html>');
+            docprint.document.close();
+            docprint.focus();
+        }
     </script>
     <asp:ValidationSummary ID="VSPurchaseRequest" runat="server"
         CssClass="alert alert-danger fade in" DisplayMode="SingleParagraph"
@@ -372,7 +385,8 @@
                         <a data-toggle="modal" runat="server" id="searchLink" href="#searchModal" class="btn btn-primary"><i class="fa fa-circle-arrow-up fa-lg"></i>Search</a>
                         <%--<asp:Button ID="btnsearch2" runat="server" CssClass="btn btn-primary" Text="Search" />--%>
                         <asp:Button ID="btnDelete" runat="server" CssClass="btn btn-primary" Text="Delete" OnClick="btnDelete_Click" OnClientClick="javascript:return confirm('Are you sure you want to delete this entry?');" TabIndex="9" Visible="False" />
-
+                        <asp:Button ID="btnPrint" runat="server" class="btn btn-default"
+                            Text="Print" OnClientClick="javascript:printPurchaseDetail('divprint'); return false;" Visible="false"></asp:Button>
                         <%--<asp:Button ID="btnSearch" data-toggle="modal" runat="server" OnClientClick="#myModal" Text="Search" ></asp:Button>--%>
                         <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-primary" OnClick="btnCancel_Click" Text="New" />
                         <asp:Button ID="btnClosepage" runat="server" Text="Close" data-dismiss="modal" CssClass="btn btn-primary" PostBackUrl="../Default.aspx"></asp:Button>
@@ -387,7 +401,6 @@
         <!-- end widget div -->
 
     </div>
-
     <div class="modal fade" id="searchModal" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -471,11 +484,6 @@
             </div>
         </div>
     </div>
-    <!-- /.modal-content -->
-    <%--<asp:ModalPopupExtender runat="server" Enabled="True" PopupControlID="pnlSearch"
-        TargetControlID="btnsearch2" CancelControlID="Button1" BackgroundCssClass="modalBackground" ID="pnlSearch_ModalPopupExtender">
-    </asp:ModalPopupExtender>--%>
-
     <asp:Panel ID="pnlWarning" Visible="false" Style="position: absolute; top: 370px; left: 84px;" runat="server">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -505,7 +513,166 @@
         </div>
         <!-- /.modal-content -->
     </asp:Panel>
-</asp:Content>
-<asp:Content ID="Content3" ContentPlaceHolderID="menuContent" runat="Server">
+    <div id="divprint" style="display: none; text-align: center;">
+        <table style="width: 100%;">
+            <tr>
+                <td style="font-size: large; text-align: center;">
+                    <img src="../img/CHAI%20Logo.png" width="130" height="80" />
+                    <br />
+                    <strong>CHAI ETHIOPIA
+                            <br />
+                        PURCHASE REQUEST FORM</strong></td>
+            </tr>
+        </table>
+        <table style="width: 75%;">
+            <tr>
+                <td style="width: 25%;">
+                    <strong>
+                        <asp:Label ID="lblRequestNo" runat="server" Text="Request No:"></asp:Label>
+                    </strong></td>
+                <td style="width: 25%;">
+                    <asp:Label ID="lblRequestNoResult" runat="server"></asp:Label>
+                </td>
+                <td style="width: 25%;">
+                    <strong>
+                        <asp:Label ID="lblReqDateofDelivery" runat="server" Text="Required Date of Delivery:"></asp:Label>
+                    </strong>
+                </td>
+                <td style="width: 25%;">
+                    <asp:Label ID="lblReqDateofDeliveryResult" runat="server"></asp:Label>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 25%;">
+                    <strong>
+                        <asp:Label ID="lblRequestedDate" runat="server" Text="Requested Date:"></asp:Label>
+                    </strong></td>
+                <td style="width: 25%;">
+                    <asp:Label ID="lblRequestedDateResult" runat="server"></asp:Label>
+                </td>
+                <td style="width: 25%;">
+                    <strong>
+                        <asp:Label ID="lblSuggestedSupplier" runat="server" Text="Suggested Supplier:"></asp:Label>
+                    </strong>
+                </td>
+                <td style="width: 25%;">
+                    <asp:Label ID="lblSuggestedSupplierResult" runat="server"></asp:Label>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 25%;">
+                    <strong>
+                        <asp:Label ID="lblSpecialNeed" runat="server" Text="Comment:"></asp:Label>
+                    </strong></td>
+                <td style="width: 25%;">
+                    <asp:Label ID="lblRemarkResult" runat="server"></asp:Label>
+                </td>
+                <td style="width: 25%;">
+                    <strong>
+                        <asp:Label ID="Label1" runat="server" Text="Deliver To:"></asp:Label>
+                    </strong>
+                </td>
+                <td style="width: 25%;">
+                    <asp:Label ID="lblDelivertoResult" runat="server"></asp:Label>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 25%;">
+                    <strong>
+                        <asp:Label ID="lblRequester" runat="server" Text="Requester:"></asp:Label>
+                    </strong></td>
+                <td style="width: 25%;">
+                    <asp:Label ID="lblRequesterResult" runat="server"></asp:Label>
+                </td>
+                <td style="width: 25%;">
+                <td style="width: 25%;"></td>
+            </tr>
+        </table>
+        <br />
+        <asp:GridView ID="grvDetails"
+            runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+            CssClass="table table-striped table-bordered table-hover">
+            <RowStyle CssClass="rowstyle" />
+            <Columns>
+                <asp:BoundField DataField="ItemAccount.AccountName" HeaderText="AccountName" SortExpression="ItemAccount.AccountName" />
+                <asp:BoundField DataField="ItemAccount.AccountCode" HeaderText="Account Code" SortExpression="ItemAccount.AccountCode" />
+                <asp:BoundField DataField="Qty" HeaderText="Quantity" SortExpression="Qty" />
+                <asp:BoundField DataField="PurposeOfPurchase" HeaderText="Purpose of Purchase" SortExpression="PurposeOfPurchase" />
+                <asp:BoundField DataField="ItemDescription" HeaderText="Item" SortExpression="ItemDescription" />
+                <asp:BoundField DataField="Remark" HeaderText="Remark" SortExpression="Remark" />
+                <asp:BoundField DataField="Project.ProjectCode" HeaderText="Project Code" />
+                <asp:BoundField DataField="Grant.GrantCode" HeaderText="Grant Code" />
+            </Columns>
+            <FooterStyle CssClass="FooterStyle" />
+            <HeaderStyle CssClass="headerstyle" />
+            <PagerStyle CssClass="PagerStyle" />
+            <RowStyle CssClass="rowstyle" />
+        </asp:GridView>
+
+        <div style="text-align: center;">
+            <asp:Label ID="lblMainDetailPrint" Font-Bold="true" runat="server" Text="Maintenance Request Review Detail"></asp:Label>
+        </div>
+        <asp:GridView ID="grvMaintenaceDet" CellPadding="5" CellSpacing="3"
+            runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+            CssClass="table table-striped table-bordered table-hover">
+            <Columns>
+                <asp:BoundField DataField="ServiceType.Name" HeaderText="Service Type" SortExpression="ServiceType.Name" />
+                <asp:BoundField DataField="DriverServiceTypeDetail.Description" HeaderText="Driver's Service Type Request" SortExpression="DriverServiceTypeDetail.Description" />
+                <asp:BoundField DataField="MechanicServiceTypeDetail.Description" HeaderText="Mechanic's Service Type Reccomendation" SortExpression="MechanicServiceTypeDetail.Description" />
+                <asp:BoundField DataField="TechnicianRemark" HeaderText="Mechanic's Remark" SortExpression="TechnicianRemark" />
+
+            </Columns>
+            <FooterStyle CssClass="FooterStyle" />
+            <HeaderStyle CssClass="headerstyle" />
+            <PagerStyle CssClass="PagerStyle" />
+            <RowStyle CssClass="rowstyle" />
+        </asp:GridView>
+
+        <div style="text-align: center;">
+            <asp:Label ID="lblApprovalDetPrint" runat="server" Text="Maintenance Approval Detail"></asp:Label>
+        </div>
+        <asp:GridView ID="grvMainSta" OnRowDataBound="grvMaintenanceStatuses_RowDataBound"
+            runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+            CssClass="table table-striped table-bordered table-hover">
+            <RowStyle CssClass="rowstyle" />
+            <Columns>
+                <asp:TemplateField HeaderText="Date">
+                    <ItemTemplate>
+                        <asp:Label ID="lblDate" runat="server" Text='<%# Eval("Date", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                    </ItemTemplate>
+                </asp:TemplateField>
+                <asp:BoundField HeaderText="Name" />
+                <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
+                <asp:BoundField HeaderText="Approval Status" DataField="ApprovalStatus" />
+            </Columns>
+            <FooterStyle CssClass="FooterStyle" />
+            <HeaderStyle CssClass="headerstyle" />
+            <PagerStyle CssClass="PagerStyle" />
+            <RowStyle CssClass="rowstyle" />
+        </asp:GridView>
+        <br />
+        <br />
+        <asp:GridView ID="grvStatuses" CellPadding="5" CellSpacing="3"
+            runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+            CssClass="table table-striped table-bordered table-hover" OnRowDataBound="grvStatuses_RowDataBound">
+            <RowStyle CssClass="rowstyle" />
+            <Columns>
+                <asp:TemplateField HeaderText="Date">
+                    <ItemTemplate>
+                        <asp:Label ID="lblDate" runat="server" Text='<%# Eval("ApprovalDate", "{0:dd/MM/yyyy}")%>'></asp:Label>
+                    </ItemTemplate>
+                </asp:TemplateField>
+
+                <asp:BoundField HeaderText="Approver" />
+                <asp:BoundField DataField="AssignedBy" HeaderText="Assignee Approver" SortExpression="AssignedBy" />
+                <asp:BoundField DataField="ApprovalStatus" HeaderText="Approval Status" SortExpression="ApprovalStatus" />
+
+            </Columns>
+            <FooterStyle CssClass="FooterStyle" />
+            <HeaderStyle CssClass="headerstyle" />
+            <PagerStyle CssClass="PagerStyle" />
+            <RowStyle CssClass="rowstyle" />
+        </asp:GridView>
+    </div>
 </asp:Content>
 

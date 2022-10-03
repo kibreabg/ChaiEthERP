@@ -369,6 +369,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 btnRequest.Visible = false;
                 btnDelete.Visible = false;
+                btnPrint.Visible = true;
+                PrintTransaction();
                 dgPurchaseRequestDetail.Columns[8].Visible = false;
             }
             else
@@ -411,6 +413,28 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             ScriptManager.RegisterStartupScript(this, GetType(), "showSearch", "showSearch();", true);
             //pnlSearch_ModalPopupExtender.Show();
         }
+        protected void grvMaintenanceStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (_presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestStatuses != null)
+            {
+                if (e.Row.RowType == DataControlRowType.DataRow)
+                {
+                    if (_presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestStatuses[e.Row.RowIndex].Approver > 0)
+                        e.Row.Cells[1].Text = _presenter.GetUser(_presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestStatuses[e.Row.RowIndex].Approver).FullName;
+                }
+            }
+        }
+        protected void grvStatuses_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (_presenter.CurrentPurchaseRequest.PurchaseRequestStatuses != null)
+            {
+                if (e.Row.RowType == DataControlRowType.DataRow)
+                {
+                    if (_presenter.CurrentPurchaseRequest.PurchaseRequestStatuses[e.Row.RowIndex].Approver != 0)
+                        e.Row.Cells[1].Text = _presenter.GetUser(_presenter.CurrentPurchaseRequest.PurchaseRequestStatuses[e.Row.RowIndex].Approver).FullName;
+                }
+            }
+        }
         protected void btnFind_Click(object sender, EventArgs e)
         {
             BindSearchPurchaseRequestGrid();
@@ -421,6 +445,38 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             grvPurchaseRequestList.DataSource = _presenter.ListPurchaseRequests(txtRequestNosearch.Text, txtRequestDatesearch.Text);
             grvPurchaseRequestList.DataBind();
+        }
+        private void PrintTransaction()
+        {
+            lblRequestNoResult.Text = _presenter.CurrentPurchaseRequest.RequestNo.ToString();
+            lblRequestedDateResult.Text = _presenter.CurrentPurchaseRequest.RequestedDate.ToShortDateString();
+            lblRequesterResult.Text = _presenter.GetUser(_presenter.CurrentPurchaseRequest.Requester).FullName;
+            lblSuggestedSupplierResult.Text = _presenter.CurrentPurchaseRequest.SuggestedSupplier.ToString();
+
+            lblRemarkResult.Text = _presenter.CurrentPurchaseRequest.Comment;
+            lblDelivertoResult.Text = _presenter.CurrentPurchaseRequest.DeliverTo;
+            lblReqDateofDeliveryResult.Text = _presenter.CurrentPurchaseRequest.Requireddateofdelivery.ToShortDateString();
+            grvDetails.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails;
+            grvDetails.DataBind();
+            if (_presenter.CurrentPurchaseRequest.MaintenanceId > 0)
+            {
+                lblApprovalDetPrint.Visible = true;
+                lblMainDetailPrint.Visible = true;
+                grvMaintenaceDet.DataSource = _presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestDetails;
+                grvMaintenaceDet.DataBind();
+                grvMainSta.DataSource = _presenter.GetMaintenanceRequestById(_presenter.CurrentPurchaseRequest.MaintenanceId).MaintenanceRequestStatuses;
+                grvMainSta.DataBind();
+                grvStatuses.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestStatuses;
+                grvStatuses.DataBind();
+            }
+
+            else
+            {
+                lblApprovalDetPrint.Visible = false;
+                lblMainDetailPrint.Visible = false;
+                grvStatuses.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestStatuses;
+                grvStatuses.DataBind();
+            }
         }
         protected void btnCancelPopup_Click(object sender, EventArgs e)
         {
@@ -798,6 +854,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             dgPurchaseRequestDetail.DataSource = _presenter.CurrentPurchaseRequest.PurchaseRequestDetails;
             dgPurchaseRequestDetail.DataBind();
 
-        }
+        }        
     }
 }

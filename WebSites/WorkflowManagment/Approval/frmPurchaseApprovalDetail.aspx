@@ -481,7 +481,7 @@
         </asp:GridView>
 
         <div style="text-align: center;">
-            <asp:Label ID="Label2" Font-Bold="true" runat="server" Text="Maintenance Request Review Detail"></asp:Label>
+            <asp:Label ID="lblMainDetailPrint" Font-Bold="true" runat="server" Text="Maintenance Request Review Detail"></asp:Label>
         </div>
         <asp:GridView ID="grvMaintenaceDet" CellPadding="5" CellSpacing="3"
             runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
@@ -499,9 +499,8 @@
             <RowStyle CssClass="rowstyle" />
         </asp:GridView>
 
-
         <div style="text-align: center;">
-            <asp:Label ID="Label3" runat="server" Text="Maintenance Approval Detail"></asp:Label>
+            <asp:Label ID="lblApprovalDetPrint" runat="server" Text="Maintenance Approval Detail"></asp:Label>
         </div>
         <asp:GridView ID="grvMainSta" OnRowDataBound="grvMaintenanceStatuses_RowDataBound"
             runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
