@@ -1,15 +1,10 @@
-﻿using System;
-using Microsoft.Practices.ObjectBuilder;
-using Chai.WorkflowManagment.Shared;
+﻿using Chai.WorkflowManagment.CoreDomain.HRM;
 using Chai.WorkflowManagment.Enums;
-using Chai.WorkflowManagment.CoreDomain.HRM;
-using System.Collections.Generic;
-using System.Web.UI.WebControls;
-using System.Reflection;
-
-using System.IO;
-using System.Diagnostics;
+using Chai.WorkflowManagment.Shared;
+using Microsoft.Practices.ObjectBuilder;
+using System;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace Chai.WorkflowManagment.Modules.HRM.Views
 {
@@ -488,7 +483,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                     _presenter.CurrentEmployee.GetContract(Convert.ToInt32(hfDetailId.Value)).EmployeeDetails.Add(empdetail);
                 else
                     _presenter.CurrentEmployee.Contracts[Convert.ToInt32(hfDetailId.Value)].EmployeeDetails.Add(empdetail);
-                                
+
                 _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
                 BindEmpDetail(_presenter.CurrentEmployee.GetActiveContractForEmp());
                 ScriptManager.RegisterStartupScript(this, GetType(), "showEmpHistoryModal", "showEmpHistoryModal();", true);
@@ -572,12 +567,15 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
                         newContract.Status = ddlStatus.SelectedItem.Text;
 
                         Contract previousContract = _presenter.CurrentEmployee.GetActiveContractForEmp();
-                        foreach (EmployeeDetail employeeDetail in previousContract.EmployeeDetails)
+                        if (previousContract != null)
                         {
-                            newContract.EmployeeDetails.Add(employeeDetail);
+                            foreach (EmployeeDetail employeeDetail in previousContract.EmployeeDetails)
+                            {
+                                newContract.EmployeeDetails.Add(employeeDetail);
+                            }
+                            previousContract.Status = "In Active";
+                            _presenter.SaveOrUpdateContract(previousContract);
                         }
-                        previousContract.Status = "In Active";
-                        _presenter.SaveOrUpdateContract(previousContract);
 
                         _presenter.CurrentEmployee.Contracts.Add(newContract);
                         _presenter.SaveOrUpdateEmployeeActivity(_presenter.CurrentEmployee);
