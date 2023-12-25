@@ -133,7 +133,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
         private void BindEmpDetail(Contract contract)
         {
             EmployeeDetail employeeDetail = contract.GetLastEmployeeDetail();
-            ddlPosition.SelectedValue = employeeDetail.Position.Id.ToString();
+            ddlPosition.SelectedValue = employeeDetail.Position != null ? employeeDetail.Position.Id.ToString() : "";
             ddlProgram.SelectedValue = employeeDetail.Program.Id.ToString();
             ddlDutyStation.SelectedValue = employeeDetail.DutyStation;
             txtSalary.Text = employeeDetail.Salary.ToString();
@@ -150,7 +150,7 @@ namespace Chai.WorkflowManagment.Modules.HRM.Views
             dgChange.DataSource = contract.EmployeeDetails;
             dgChange.DataBind();
         }
-        protected void dgContractDetail_ItemCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
+        protected void dgContractDetail_ItemCommand(object source, DataGridCommandEventArgs e)
         {
 
         }
