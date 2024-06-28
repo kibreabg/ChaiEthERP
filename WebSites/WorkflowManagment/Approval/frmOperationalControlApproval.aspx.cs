@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using Chai.WorkflowManagment.CoreDomain.Requests;
+﻿using Chai.WorkflowManagment.CoreDomain.Requests;
 using Chai.WorkflowManagment.CoreDomain.Setting;
+using Chai.WorkflowManagment.CoreDomain.Users;
 using Chai.WorkflowManagment.Enums;
-using Chai.WorkflowManagment.Modules.Approval.Views;
 using Chai.WorkflowManagment.Shared;
 using Chai.WorkflowManagment.Shared.MailSender;
 using log4net;
 using log4net.Config;
 using Microsoft.Practices.ObjectBuilder;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using Chai.WorkflowManagment.CoreDomain.Users;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace Chai.WorkflowManagment.Modules.Approval.Views
 {
@@ -848,8 +846,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             if (_presenter.CurrentOperationalControlRequest.LiquidationId > 0)
             {
                 ExpenseLiquidationRequest theLiquidation = _presenter.GetExpenseLiquidationRequest(_presenter.CurrentOperationalControlRequest.LiquidationId);
-                lblProjectCodeResult.Text = theLiquidation.ExpenseLiquidationRequestDetails[0].Project.ProjectCode;
-                lblGrantCodeResult.Text = theLiquidation.ExpenseLiquidationRequestDetails[0].Grant.GrantCode;
+                lblProjectCodeResult.Text = theLiquidation.ExpenseLiquidationRequestDetails.Any() ? theLiquidation.ExpenseLiquidationRequestDetails[0].Project.ProjectCode : "";
+                lblGrantCodeResult.Text = theLiquidation.ExpenseLiquidationRequestDetails.Any() ? theLiquidation.ExpenseLiquidationRequestDetails[0].Grant.GrantCode : "";
                 lblReqNoResult.Text = theLiquidation.TravelAdvanceRequest.TravelAdvanceNo;
 
                 pnlLiquidationDetail.Visible = true;
@@ -866,8 +864,8 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             if (_presenter.CurrentOperationalControlRequest.PaymentId > 0)
             {
                 CashPaymentRequest theCashPayment = _presenter.GetCashPaymentRequest(_presenter.CurrentOperationalControlRequest.PaymentId);
-                lblProjectCodeResult.Text = theCashPayment.CashPaymentRequestDetails[0].Project.ProjectCode;
-                lblGrantCodeResult.Text = theCashPayment.CashPaymentRequestDetails[0].Grant.GrantCode;
+                lblProjectCodeResult.Text = theCashPayment.CashPaymentRequestDetails.Any() ? theCashPayment.CashPaymentRequestDetails[0].Project.ProjectCode : "";
+                lblGrantCodeResult.Text = theCashPayment.CashPaymentRequestDetails.Any() ? theCashPayment.CashPaymentRequestDetails[0].Grant.GrantCode : "";
                 lblReqNoResult.Text = theCashPayment.RequestNo;
                 lblDepTimeResult.Text = theCashPayment.ArrivalDateTime;
                 lblRetTimeResult.Text = theCashPayment.ReturnDateTime;

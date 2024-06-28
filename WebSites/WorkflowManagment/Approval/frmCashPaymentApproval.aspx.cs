@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using Chai.WorkflowManagment.CoreDomain.Requests;
+﻿using Chai.WorkflowManagment.CoreDomain.Requests;
 using Chai.WorkflowManagment.CoreDomain.Setting;
 using Chai.WorkflowManagment.CoreDomain.Users;
 using Chai.WorkflowManagment.Enums;
-using Chai.WorkflowManagment.Modules.Approval.Views;
 using Chai.WorkflowManagment.Shared;
 using Chai.WorkflowManagment.Shared.MailSender;
 using log4net;
 using log4net.Config;
 using Microsoft.Practices.ObjectBuilder;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace Chai.WorkflowManagment.Modules.Approval.Views
 {
@@ -143,15 +140,15 @@ namespace Chai.WorkflowManagment.Modules.Approval.Views
             string will = "";
             foreach (ApprovalLevel AL in AS.ApprovalLevels)
             {
-                if ((AL.EmployeePosition.PositionName == "Superviser/Line Manager" || AL.EmployeePosition.PositionName == "Program Manager") && AL.WorkflowLevel == _presenter.CurrentCashPaymentRequest.CurrentLevel)
+                //If the approver is a Superviser/Line Manager OR
+                //If the approver is a Program Manager OR
+                //If the current approver is the supervisor of the requester
+                //Eg. Dr. Rahel is supervisor of Seble and she must approve Medical requested by Seble rather than Seble approving her requests
+                if ((AL.EmployeePosition.PositionName == "Superviser/Line Manager"
+                    || AL.EmployeePosition.PositionName == "Program Manager"
+                    || _presenter.CurrentCashPaymentRequest.AppUser.Superviser == _presenter.CurrentCashPaymentRequest.CurrentApprover)
+                    && AL.WorkflowLevel == _presenter.CurrentCashPaymentRequest.CurrentLevel)
                 {
-                    will = "Approve";
-                    break;
-                }
-                else if (_presenter.CurrentCashPaymentRequest.AppUser.Superviser == _presenter.CurrentCashPaymentRequest.CurrentApprover && AL.WorkflowLevel == _presenter.CurrentCashPaymentRequest.CurrentLevel)
-                {
-                    //If the current approver is the supervisor of the requester
-                    //Eg. Dr. Rahel is supervisor of Seble and she must approve Medical requested by Seble rather than Seble approving her requests
                     will = "Approve";
                     break;
                 }
