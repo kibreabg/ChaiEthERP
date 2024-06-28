@@ -140,6 +140,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             {
                 ddlPExpenseType.SelectedValue = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.ExpenseType;
                 txtComment.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.Comment;
+                txtTravelAdvReqDate.Text = _presenter.CurrentTravelAdvanceRequest.RequestDate.ToString();
                 txtTotActual.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalActualExpenditure.ToString();
                 txtTotalAdvance.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.TotalTravelAdvance.ToString();
                 txtAdditionalComment.Text = _presenter.CurrentTravelAdvanceRequest.ExpenseLiquidationRequest.AdditionalComment;

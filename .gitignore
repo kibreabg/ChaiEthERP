@@ -335,3 +335,9 @@ ASALocalRun/
 /WebSites/WorkflowManagment/BAUploads
 /WebSites/WorkflowManagment/SVUploads
 /WebSites/WorkflowManagment/PRUploads
+/WebSites/WorkflowManagment/App_Code/PaymentDataSource.xsd
+/WebSites/WorkflowManagment/App_Code/SqlServerTypes/Loader.cs
+/WebSites/WorkflowManagment/App_Code/ReportingDataSet.xsd
+/WebSites/WorkflowManagment/App_Code/TravelDataSet.xsd
+/WebSites/WorkflowManagment/SqlServerTypes/readme.htm
+*.config
