@@ -1,27 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Web;
-using System.Linq;
-using System.Linq.Expressions;
-using Microsoft.Practices.CompositeWeb;
-using Microsoft.Practices.CompositeWeb.Interfaces;
-using Microsoft.Practices.CompositeWeb.Utility;
-using Microsoft.Practices.ObjectBuilder;
-
 using Chai.WorkflowManagment.CoreDomain;
 using Chai.WorkflowManagment.CoreDomain.DataAccess;
-using Chai.WorkflowManagment.CoreDomain.Admins;
+using Chai.WorkflowManagment.CoreDomain.HRM;
+using Chai.WorkflowManagment.CoreDomain.Request;
+using Chai.WorkflowManagment.CoreDomain.Requests;
+using Chai.WorkflowManagment.CoreDomain.TravelLogs;
 using Chai.WorkflowManagment.CoreDomain.Users;
 using Chai.WorkflowManagment.Services;
 using Chai.WorkflowManagment.Shared.Navigation;
-
-
-using System.Data;
-using Chai.WorkflowManagment.CoreDomain.Requests;
-using Chai.WorkflowManagment.CoreDomain.TravelLogs;
-using Chai.WorkflowManagment.Enums;
-using Chai.WorkflowManagment.CoreDomain.Request;
-using Chai.WorkflowManagment.CoreDomain.HRM;
+using Microsoft.Practices.CompositeWeb;
+using Microsoft.Practices.CompositeWeb.Interfaces;
+using Microsoft.Practices.ObjectBuilder;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Chai.WorkflowManagment.Modules.Request
 {
@@ -45,7 +36,7 @@ namespace Chai.WorkflowManagment.Modules.Request
         }
         public AppUser Approver(int position)
         {
-            return _workspace.SqlQuery<AppUser>("SELECT * FROM AppUsers WHERE IsActive = 1 AND EmployeePosition_Id = " + position).ToList().Last<AppUser>();
+            return _workspace.SqlQuery<AppUser>("SELECT * FROM AppUsers WHERE IsActive = 1 AND EmployeePosition_Id = " + position).AsEnumerable().LastOrDefault();
         }
 
         #region CurrenrObject
