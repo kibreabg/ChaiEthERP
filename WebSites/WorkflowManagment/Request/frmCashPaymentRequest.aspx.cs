@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using Chai.WorkflowManagment.CoreDomain.Requests;
+﻿using Chai.WorkflowManagment.CoreDomain.Requests;
 using Chai.WorkflowManagment.CoreDomain.Setting;
 using Chai.WorkflowManagment.Enums;
 using Chai.WorkflowManagment.Shared;
 using log4net;
 using log4net.Config;
 using Microsoft.Practices.ObjectBuilder;
-using System.Web.Configuration;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Text.RegularExpressions;
+using System.Web.Configuration;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace Chai.WorkflowManagment.Modules.Request.Views
 {
@@ -278,16 +275,17 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             try
             {
                 if (cprId > 0)
-                {                    
+                {
                     _presenter.CurrentCashPaymentRequest.RemoveCashPaymentRequestDetail(cprId);
                     _presenter.DeleteCashPaymentRequestDetail(cprd);
                     _presenter.SaveOrUpdateCashPaymentRequest(_presenter.CurrentCashPaymentRequest);
                 }
-                else { 
-                    _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails.Remove(cprd); 
+                else
+                {
+                    _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails.Remove(cprd);
                 }
 
-                foreach(CashPaymentRequestDetail cpd in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
+                foreach (CashPaymentRequestDetail cpd in _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails)
                 {
                     totalAmount += cpd.Amount;
                 }
@@ -716,6 +714,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     }
                     totalRequestedAmount = previousAmounts + requestedAmount;
 
+                    //If the requested amount is greater than the total allowed medical expense
+                    //We allow the user to use the available amount and discard the rest of his requested amoount
                     if (totalRequestedAmount > totalAllowedExp)
                     {
                         if (totalAllowedExp - previousAmounts <= 0)
@@ -725,6 +725,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         else
                         {
                             _presenter.CurrentCashPaymentRequest.TotalAmount = totalAllowedExp - previousAmounts;
+                            _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Amount = totalAllowedExp - previousAmounts;
                             return true;
                         }
                     }
@@ -768,7 +769,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         totalRequestedAmount = previousAmounts + requestedAmount;
                     }
 
-
+                    //If the requested amount is greater than the total allowed medical expense
+                    //We allow the user to use the available amount and discard the rest of his requested amoount
                     if (totalRequestedAmount > Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]))
                     {
                         if (Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]) - (previousAmounts + sharedFromOutPatient) <= 0)
@@ -778,6 +780,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         else
                         {
                             _presenter.CurrentCashPaymentRequest.TotalAmount = Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]) - (previousAmounts + sharedFromOutPatient);
+                            _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Amount = Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]) - (previousAmounts + sharedFromOutPatient);
                             return true;
                         }
                     }
@@ -798,7 +801,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         requestedAmount += cprd.Amount;
                     }
                     totalRequestedAmount = previousAmounts + requestedAmount;
-
+                    //If the requested amount is greater than the total allowed medical expense
+                    //We allow the user to use the available amount and discard the rest of his requested amoount
                     if (totalRequestedAmount > totalAllowedExp)
                     {
                         if (totalAllowedExp - previousAmounts <= 0)
@@ -808,6 +812,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         else
                         {
                             _presenter.CurrentCashPaymentRequest.TotalAmount = totalAllowedExp - previousAmounts;
+                            _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Amount = totalAllowedExp - previousAmounts;
                             return true;
                         }
                     }
@@ -851,7 +856,8 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         totalRequestedAmount = previousAmounts + requestedAmount;
                     }
 
-
+                    //If the requested amount is greater than the total allowed medical expense
+                    //We allow the user to use the available amount and discard the rest of his requested amoount
                     if (totalRequestedAmount > Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]))
                     {
                         if (Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]) - previousAmounts <= 0)
@@ -861,6 +867,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                         else
                         {
                             _presenter.CurrentCashPaymentRequest.TotalAmount = Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]) - previousAmounts;
+                            _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Amount = Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]) - previousAmounts;
                             return true;
                         }
                     }

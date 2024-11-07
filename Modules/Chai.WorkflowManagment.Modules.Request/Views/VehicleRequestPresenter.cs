@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Practices.ObjectBuilder;
-using Microsoft.Practices.CompositeWeb;
+﻿using Chai.WorkflowManagment.CoreDomain.Requests;
 using Chai.WorkflowManagment.CoreDomain.Setting;
-using Chai.WorkflowManagment.Shared;
-using Chai.WorkflowManagment.CoreDomain.Requests;
-using Chai.WorkflowManagment.Modules.Admin;
 using Chai.WorkflowManagment.CoreDomain.Users;
-using Chai.WorkflowManagment.Modules.Setting;
 using Chai.WorkflowManagment.Enums;
+using Chai.WorkflowManagment.Modules.Admin;
+using Chai.WorkflowManagment.Modules.Setting;
+using Chai.WorkflowManagment.Shared;
 using Chai.WorkflowManagment.Shared.MailSender;
+using Microsoft.Practices.CompositeWeb;
+using Microsoft.Practices.ObjectBuilder;
+using System;
+using System.Collections.Generic;
 
 namespace Chai.WorkflowManagment.Modules.Request.Views
 {
@@ -87,9 +86,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
                     }
                     else if (AL.EmployeePosition.PositionName == "Program Manager")
                     {
-                        if (CurrentVehicleRequest.Project.Id != 0)
+                        if (CurrentVehicleRequest.Project != null)
                         {
-                            VRS.Approver = GetProject(CurrentVehicleRequest.Project.Id).AppUser.Id;
+                            if (GetProject(CurrentVehicleRequest.Project.Id).AppUser.Id != CurrentUser().Id)
+                            {
+                                VRS.Approver = GetProject(CurrentVehicleRequest.Project.Id).AppUser.Id;
+                            }
+                            else
+                            {
+                                VRS.Approver = CurrentUser().Superviser.Value;
+                            }
                         }
                     }
                     else
@@ -140,14 +146,14 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             VehicleRequest.TravelLogStatus = "Pending";
             VehicleRequest.IsExtension = View.GetIsExtension;
             VehicleRequest.TravelLogAttachment = View.GetTravelLogAttachment;
-           
+
 
             if (View.GetProjectId != 0)
                 VehicleRequest.Project = _settingController.GetProject(View.GetProjectId);
             if (View.GetGrantId != 0)
                 VehicleRequest.Grant = _settingController.GetGrant(View.GetGrantId);
             VehicleRequest.AppUser = _adminController.GetUser(CurrentUser().Id);
-            if (View.GetExtRefRequest !=0)
+            if (View.GetExtRefRequest != 0)
             {
                 VehicleRequest.ExtRefRequest_Id = Convert.ToInt32(View.GetExtRefRequest);
             }
@@ -158,7 +164,7 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
             if (CurrentVehicleRequest.VehicleRequestStatuses.Count == 0)
                 SaveVehicleRequestStatus();
             GetCurrentApprover();
-            
+
             _controller.SaveOrUpdateEntity(VehicleRequest);
             _controller.CurrentObject = null;
         }
@@ -178,7 +184,6 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
         {
             return _controller.ListVehicleRequests(RequestNo, RequestDate);
         }
-
         public AppUser Approver(int Position)
         {
             return _controller.Approver(Position);
