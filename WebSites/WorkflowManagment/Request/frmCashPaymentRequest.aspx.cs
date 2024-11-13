@@ -829,9 +829,9 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                     //If aggregate of In-Patient expenses exceed the In-Patient limit, that means
                     //we have shared a portion from the Out-Patient expense
-                    if (previousInPatientAmounts > Convert.ToDecimal(WebConfigurationManager.AppSettings["InPatientMarried"]))
+                    if (previousInPatientAmounts > Convert.ToDecimal(WebConfigurationManager.AppSettings["InPatientSingle"]))
                     {
-                        sharedFromOutPatient = previousInPatientAmounts - Convert.ToDecimal(WebConfigurationManager.AppSettings["InPatientMarried"]);
+                        sharedFromOutPatient = previousInPatientAmounts - Convert.ToDecimal(WebConfigurationManager.AppSettings["InPatientSingle"]);
 
                         foreach (CashPaymentRequest cpr in _presenter.GetAllOutPatMedCPReqsThisYear())
                         {
@@ -858,16 +858,16 @@ namespace Chai.WorkflowManagment.Modules.Request.Views
 
                     //If the requested amount is greater than the total allowed medical expense
                     //We allow the user to use the available amount and discard the rest of his requested amoount
-                    if (totalRequestedAmount > Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]))
+                    if (totalRequestedAmount > Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientSingle"]))
                     {
-                        if (Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]) - previousAmounts <= 0)
+                        if (Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientSingle"]) - previousAmounts <= 0)
                         {
                             return false;
                         }
                         else
                         {
-                            _presenter.CurrentCashPaymentRequest.TotalAmount = Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]) - previousAmounts;
-                            _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Amount = Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientMarried"]) - previousAmounts;
+                            _presenter.CurrentCashPaymentRequest.TotalAmount = Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientSingle"]) - previousAmounts;
+                            _presenter.CurrentCashPaymentRequest.CashPaymentRequestDetails[0].Amount = Convert.ToDecimal(WebConfigurationManager.AppSettings["OutPatientSingle"]) - previousAmounts;
                             return true;
                         }
                     }
