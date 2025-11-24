@@ -181,7 +181,11 @@ namespace Chai.WorkflowManagment.Modules.Admin
         public IList<AppUser> GetApprovers()
         {
             int userId = GetCurrentUser().Id;
-            return _workspace.SqlQuery<AppUser>("SELECT DISTINCT(AppUsers.Id), AppUsers.* FROM AppUsers INNER JOIN AppUserRoles ON AppUserRoles.AppUser_Id = AppUsers.Id INNER JOIN Roles ON AppUserRoles.Role_Id = Roles.Id WHERE (Roles.Name != 'Requester' AND Roles.Name != 'Administrator' AND Roles.Name != 'Preparer' AND AppUsers.Id != '" + userId + "') ORDER BY AppUsers.Id;").ToList();
+            return _workspace.SqlQuery<AppUser>("SELECT DISTINCT(AppUsers.Id), AppUsers.* FROM AppUsers " + 
+                " INNER JOIN AppUserRoles ON AppUserRoles.AppUser_Id = AppUsers.Id " + 
+                " INNER JOIN Roles ON AppUserRoles.Role_Id = Roles.Id " +
+				" WHERE (Roles.Name != 'Requester' AND Roles.Name != 'Administrator' AND Roles.Name != 'Preparer' AND AppUsers.IsActive = 1 AND AppUsers.Id != '" + userId + "') " +
+                " ORDER BY AppUsers.Id;").ToList();
         }
         #endregion
         #region Drivers

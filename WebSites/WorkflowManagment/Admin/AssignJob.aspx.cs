@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web.UI.WebControls;
-using Microsoft.Practices.ObjectBuilder;
-using Chai.WorkflowManagment.Shared;
-using Chai.WorkflowManagment.Shared.Settings;
-using Chai.WorkflowManagment.CoreDomain.Users;
-using Chai.WorkflowManagment.Enums;
+﻿using Chai.WorkflowManagment.Shared;
 using Chai.WorkflowManagment.Shared.MailSender;
+using Microsoft.Practices.ObjectBuilder;
+using System;
+using System.Web.UI.WebControls;
 
 namespace Chai.WorkflowManagment.Modules.Admin.Views
 {
@@ -22,7 +18,6 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
 
                 PopUser();
                 BindUserControls();
-
             }
             this._presenter.OnViewLoaded();
             if (_presenter.CurrentAssignJob.Status == true)
@@ -61,9 +56,7 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
         }
         private void BindUserControls()
         {
-
             this.ddlAssignTo.SelectedValue = _presenter.CurrentAssignJob.AssignedTo.ToString();
-
         }
         protected void btnSave_Click(object sender, EventArgs e)
         {
@@ -71,13 +64,10 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
             {
                 try
                 {
-
                     _presenter.SaveOrUpdateAssignJob();
                     _presenter.SaveorUpdateUser(true);
                     SendEmail(true);
                     Master.ShowMessage(new AppMessage("Assigned successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
-
-
                 }
                 catch (Exception ex)
                 {
@@ -95,10 +85,6 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
             {
                 EmailSender.Send(_presenter.GetUser(_presenter.CurrentAssignJob.AssignedTo).Email, "You are Unassigned from your approver by '" + _presenter.CurrentAssignJob.AppUser.FullName + "'", "Unassigned Job");
             }
-
-
-
-
         }
         protected void btnCancel_Click(object sender, EventArgs e)
         {
@@ -120,10 +106,7 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                     return _presenter.GetAssignedJobbycurrentuser().Id;
                 else
                     return 0;
-
             }
-
-
         }
         protected void btnUnassign_Click(object sender, EventArgs e)
         {
@@ -135,8 +118,6 @@ namespace Chai.WorkflowManagment.Modules.Admin.Views
                 SendEmail(false);
 
                 Master.ShowMessage(new AppMessage("Unassigned successfully", Chai.WorkflowManagment.Enums.RMessageType.Info));
-
-
             }
             catch (Exception ex)
             {
