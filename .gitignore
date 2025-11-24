@@ -341,3 +341,5 @@ ASALocalRun/
 /WebSites/WorkflowManagment/App_Code/TravelDataSet.xsd
 /WebSites/WorkflowManagment/SqlServerTypes/readme.htm
 *.config
+/.vscode
+WebSites/WorkflowManagment/Web.config
